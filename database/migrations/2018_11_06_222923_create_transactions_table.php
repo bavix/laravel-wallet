@@ -21,7 +21,7 @@ class CreateTransactionsTable extends Migration
      */
     public function up(): void
     {
-        Schema::create($this->table(), function (Blueprint $table) {
+        Schema::create($this->table(), function(Blueprint $table) {
             $table->increments('id');
             $table->morphs('payable');
             $table->enum('type', ['deposit', 'withdraw']);
