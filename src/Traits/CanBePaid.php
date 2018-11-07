@@ -6,6 +6,7 @@ use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 trait CanBePaid
 {
@@ -45,15 +46,18 @@ trait CanBePaid
         /**
          * @var Model $product
          */
-        $this->transfers()
+        $transfer = $this->transfers()
             ->where('to_type', $product->getMorphClass())
             ->where('to_id', $product->getKey())
+            ->where('refund', 0)
             ->orderBy('id', 'desc')
             ->firstOrFail();
 
-        return $product
-            ->transfer($this, $product->getAmountProduct(), $product->getMetaProduct())
-            ->exists;
+        return DB::transaction(function () use ($product, $transfer) {
+            return $transfer->update(['refund', 1]) && $product
+                ->transfer($this, $product->getAmountProduct(), $product->getMetaProduct())
+                ->exists;
+        });
     }
 
     /**
