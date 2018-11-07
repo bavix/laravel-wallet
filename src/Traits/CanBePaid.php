@@ -54,9 +54,8 @@ trait CanBePaid
             ->firstOrFail();
 
         return DB::transaction(function () use ($product, $transfer) {
-            return $transfer->update(['refund', 1]) && $product
-                ->transfer($this, $product->getAmountProduct(), $product->getMetaProduct())
-                ->exists;
+            $product->transfer($this, $product->getAmountProduct(), $product->getMetaProduct());
+            return $transfer->update(['refund' => 1]);
         });
     }
 
