@@ -19,6 +19,46 @@ laravel-wallet - Easy work with virtual wallet.
 * **PHP Version**: 7.1+ 
 * **[Composer](https://getcomposer.org/):** `composer require bavix/laravel-wallet`
 
+### Run Migrations
+Publish the migrations with this artisan command:
+```
+php artisan vendor:publish --provider="Depsimon\Wallet\WalletServiceProvider" --tag=migrations
+```
+
+### Configuration
+You can publish the config file with this artisan command:
+```
+php artisan vendor:publish --provider="Depsimon\Wallet\WalletServiceProvider" --tag=config
+```
+
+### Usage
+Add the HasWallet trait to model.
+```
+use Bavix\Wallet\Traits\HasWallet;
+use Bavix\Wallet\Interfaces\Wallet;
+
+class User extends Model implements Wallet
+{
+    use HasWallet;
+}
+```
+
+Now we make transactions.
+
+```
+$user = User::first();
+$user->balance; // int(0)
+
+$user->deposit(10);
+$user->balance; // int(10)
+
+$user->withdraw(1);
+$user->balance; // int(9)
+
+$user->forceWithdraw(200);
+$user->balance; // -191
+```
+
 ---
 Supported by
 
