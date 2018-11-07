@@ -22,7 +22,9 @@ class UpdateTransfersTable extends Migration
     public function up(): void
     {
         Schema::table($this->table(), function(Blueprint $table) {
-            $table->boolean('refund')->default(0);
+            $table->boolean('refund')
+                ->after('withdraw_id')
+                ->default(0);
         });
     }
 
