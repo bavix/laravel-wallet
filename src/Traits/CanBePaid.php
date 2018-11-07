@@ -45,7 +45,7 @@ trait CanBePaid
         /**
          * @var Model $product
          */
-        $transfer = $this->transfers()
+        $this->transfers()
             ->where('to_type', $product->getMorphClass())
             ->where('to_id', $product->getKey())
             ->orderBy('id', 'desc')
