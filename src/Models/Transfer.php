@@ -19,6 +19,7 @@ class Transfer extends Model
         'from_id',
         'to_type',
         'to_id',
+        'refund',
         'uuid',
     ];
 
