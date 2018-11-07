@@ -22,13 +22,13 @@ laravel-wallet - Easy work with virtual wallet.
 ### Run Migrations
 Publish the migrations with this artisan command:
 ```
-php artisan vendor:publish --provider="Depsimon\Wallet\WalletServiceProvider" --tag=migrations
+php artisan vendor:publish --tag=laravel-wallet-migrations
 ```
 
 ### Configuration
 You can publish the config file with this artisan command:
 ```
-php artisan vendor:publish --provider="Depsimon\Wallet\WalletServiceProvider" --tag=config
+php artisan vendor:publish --tag=laravel-wallet-config
 ```
 
 ### Usage
