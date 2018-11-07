@@ -56,7 +56,7 @@ $user->withdraw(1);
 $user->balance; // int(9)
 
 $user->forceWithdraw(200);
-$user->balance; // -191
+$user->balance; // int(-191)
 ```
 
 ---
