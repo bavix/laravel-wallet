@@ -31,9 +31,9 @@ class CreateTransactionsTable extends Migration
             $table->uuid('uuid')->unique();
             $table->timestamps();
 
-            $table->index(['payable_type', 'payable_id', 'type']);
-            $table->index(['payable_type', 'payable_id', 'confirmed']);
-            $table->index(['payable_type', 'payable_id', 'type', 'confirmed']);
+            $table->index(['payable_type', 'payable_id', 'type'], 'payable_type_ind');
+            $table->index(['payable_type', 'payable_id', 'confirmed'], 'payable_confirmed_ind');
+            $table->index(['payable_type', 'payable_id', 'type', 'confirmed'], 'payable_type_confirmed_ind');
         });
     }
 
