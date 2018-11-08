@@ -236,7 +236,7 @@ trait HasWallet
              */
             $collection = $this->getRelation('balance');
             $relation = $collection->first();
-            static::$cachedBalances[$this->getKey()] = (int)($relation->total ?? 0);
+            static::$cachedBalances[$this->getKey()] = (int) ($relation->total ?? 0);
         }
 
         return static::$cachedBalances[$this->getKey()];
