@@ -25,7 +25,8 @@ class UpdateTransfersTable extends Migration
             $table->boolean('refund')
                 ->after('withdraw_id')
                 ->default(0);
-
+            
+            $table->index(['from_type', 'from_id', 'to_type', 'to_id', 'refund']);
             $table->index(['from_type', 'from_id', 'refund']);
             $table->index(['to_type', 'to_id', 'refund']);
         });
