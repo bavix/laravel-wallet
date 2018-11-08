@@ -6,6 +6,11 @@ interface Product extends Wallet
 {
 
     /**
+     * @return bool
+     */
+    public function canBuy(): bool;
+
+    /**
      * @return int
      */
     public function getAmountProduct(): int;
