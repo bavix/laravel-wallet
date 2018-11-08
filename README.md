@@ -59,6 +59,79 @@ $user->forceWithdraw(200);
 $user->balance; // int(-191)
 ```
 
+### Purchases
+
+Add the CanBePaid trait to your User model.
+```php
+use Bavix\Wallet\Traits\CanBePaid;
+use Bavix\Wallet\Interfaces\Customer;
+
+class User extends Model implements Customer
+{
+    use CanBePaid;
+}
+```
+
+Add the HasWallet trait to Item model.
+```php
+use Bavix\Wallet\Traits\HasWallet;
+use Bavix\Wallet\Interfaces\Product;
+
+class Item extends Model implements Product
+{
+    use HasWallet;
+
+    public function canBuy(Customer $customer): bool
+    {
+        /**
+         * If the service can be purchased once, then
+         *  return !$customer->paid($this);
+         */
+        return true; 
+    }
+    
+    public function getAmountProduct(): int
+    {
+        return 100;
+    }
+
+    public function getMetaProduct(): ?array
+    {
+        return [
+            'title' => $this->title, 
+            'description' => $this->description, 
+            'price' => $this->getAmountProduct(),
+        ];
+    }
+}
+```
+
+Proceed to purchase.
+
+```php
+$user = User::first();
+$user->balance; // int(100)
+
+$item = Item::first();
+$user->pay($item); // If you do not have enough money, throw an exception
+var_dump($user->balance); // int(0)
+
+if ($user->safePay($item)) {
+  // try to buy again )
+}
+
+var_dump((bool)$user->paid($item)); // bool(true)
+
+var_dump($user->refund($item)); // bool(true)
+var_dump((bool)$user->paid($item)); // bool(false)
+```
+
+### Eager Loading
+
+```php
+User::with('balance');
+```
+
 ---
 Supported by
 
