@@ -24,9 +24,9 @@ trait HasWallet
 {
 
     /**
-     * @var int
+     * @var array
      */
-    protected $cachedBalance;
+    protected static $cachedBalances = [];
 
     /**
      * @param int $amount
@@ -167,7 +167,7 @@ trait HasWallet
     protected function change(int $amount, ?array $meta, bool $confirmed): Transaction
     {
         $this->getBalanceAttribute();
-        $this->cachedBalance += $amount;
+        static::$cachedBalances[$this->getKey()] += $amount;
         return $this->transactions()->create([
             'type' => $amount > 0 ? 'deposit' : 'withdraw',
             'payable_type' => $this->getMorphClass(),
@@ -206,11 +206,27 @@ trait HasWallet
     }
 
     /**
+     * Example:
+     *  $user1 = User::first()->load('balance');
+     *  $user2 = User::first()->load('balance');
+     *
+     * Without static:
+     *  var_dump($user1->balance, $user2->balance); // 100 100
+     *  $user1->deposit(100);
+     *  $user2->deposit(100);
+     *  var_dump($user1->balance, $user2->balance); // 200 200
+     *
+     * With static:
+     *  var_dump($user1->balance, $user2->balance); // 100 100
+     *  $user1->deposit(100);
+     *  $user2->deposit(100);
+     *  var_dump($user1->balance, $user2->balance); // 200 300
+     *
      * @return int
      */
     public function getBalanceAttribute(): int
     {
-        if (null === $this->cachedBalance) {
+        if (!\array_key_exists($this->getKey(), static::$cachedBalances)) {
             if (!\array_key_exists('balance', $this->relations)) {
                 $this->load('balance');
             }
@@ -220,10 +236,10 @@ trait HasWallet
              */
             $collection = $this->getRelation('balance');
             $relation = $collection->first();
-            $this->cachedBalance = (int)($relation->total ?? 0);
+            static::$cachedBalances[$this->getKey()] = (int)($relation->total ?? 0);
         }
 
-        return $this->cachedBalance;
+        return static::$cachedBalances[$this->getKey()];
     }
 
 }
