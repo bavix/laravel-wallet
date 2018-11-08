@@ -21,5 +21,5 @@ interface Product extends Wallet
      * @return array
      */
     public function getMetaProduct(): ?array;
-    
+
 }
