@@ -7,7 +7,6 @@ use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\DB;
 
 trait CanBePaid
@@ -22,7 +21,7 @@ trait CanBePaid
      */
     public function pay(Product $product): Transfer
     {
-        if (!$product->canBuy()) {
+        if (!$product->canBuy($this)) {
             throw new ProductEnded('The product is out of stock');
         }
 

@@ -6,9 +6,11 @@ interface Product extends Wallet
 {
 
     /**
+     * @param Customer $customer
+     *
      * @return bool
      */
-    public function canBuy(): bool;
+    public function canBuy(Customer $customer): bool;
 
     /**
      * @return int
