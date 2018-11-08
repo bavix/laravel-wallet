@@ -55,7 +55,7 @@ trait CanBePaid
             ->where('to_id', $product->getKey())
             ->where('refund', 0)
             ->orderBy('id', 'desc')
-            ->firstOrFail();
+            ->first();
     }
 
     /**
