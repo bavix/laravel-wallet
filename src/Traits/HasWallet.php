@@ -220,8 +220,9 @@ trait HasWallet
      * With static:
      *  var_dump($user1->balance, $user2->balance); // 100 100
      *  $user1->deposit(100);
+     *  var_dump($user1->balance); // 200
      *  $user2->deposit(100);
-     *  var_dump($user1->balance, $user2->balance); // 200 300
+     *  var_dump($user2->balance); // 300
      *
      * @return int
      */
