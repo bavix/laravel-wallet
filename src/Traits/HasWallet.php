@@ -9,6 +9,7 @@ use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -195,25 +196,34 @@ trait HasWallet
     }
 
     /**
+     * @return MorphMany
+     */
+    public function balance(): MorphMany
+    {
+        return $this->transactions()
+            ->selectRaw('payable_id, sum(amount) as total')
+            ->groupBy('payable_id');
+    }
+
+    /**
      * @return int
      */
     public function getBalanceAttribute(): int
     {
-        if (!$this->cachedBalance) {
-            $this->cachedBalance = $this->transactions()
-                ->where('confirmed', true)
-                ->sum('amount');
+        if (null === $this->cachedBalance) {
+            if (!\array_key_exists('balance', $this->relations)) {
+                $this->load('balance');
+            }
+
+            /**
+             * @var Collection $collection
+             */
+            $collection = $this->getRelation('balance');
+            $relation = $collection->first();
+            $this->cachedBalance = (int)($relation->total ?? 0);
         }
 
         return $this->cachedBalance;
-    }
-
-    /**
-     * @return void
-     */
-    public function resetBalance(): void
-    {
-        $this->cachedBalance = null;
     }
 
 }

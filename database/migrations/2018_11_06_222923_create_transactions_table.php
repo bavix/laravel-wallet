@@ -24,11 +24,11 @@ class CreateTransactionsTable extends Migration
         Schema::create($this->table(), function(Blueprint $table) {
             $table->increments('id');
             $table->morphs('payable');
-            $table->enum('type', ['deposit', 'withdraw']);
+            $table->enum('type', ['deposit', 'withdraw'])->index();
             $table->bigInteger('amount');
             $table->boolean('confirmed');
             $table->json('meta')->nullable();
-            $table->uuid('uuid')->index();
+            $table->uuid('uuid')->unique();
             $table->timestamps();
 
             $table->index(['payable_type', 'payable_id', 'type']);
