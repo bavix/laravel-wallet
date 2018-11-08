@@ -3,9 +3,10 @@
 namespace Bavix\Wallet\Traits;
 
 use Bavix\Wallet\Interfaces\Product;
-use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\DB;
 
 trait CanBePaid
@@ -38,20 +39,34 @@ trait CanBePaid
 
     /**
      * @param Product $product
-     * @return bool
-     * @throws
+     * @return null|Transfer
      */
-    public function refund(Product $product): bool
+    public function paid(Product $product): ?Transfer
     {
         /**
          * @var Model $product
          */
-        $transfer = $this->transfers()
+        return $this->transfers()
             ->where('to_type', $product->getMorphClass())
             ->where('to_id', $product->getKey())
             ->where('refund', 0)
             ->orderBy('id', 'desc')
             ->firstOrFail();
+    }
+
+    /**
+     * @param Product $product
+     * @return bool
+     * @throws
+     */
+    public function refund(Product $product): bool
+    {
+        $transfer = $this->paid($product);
+
+        if (!$transfer) {
+            throw (new ModelNotFoundException())
+                ->setModel($this->transfers()->getMorphClass());
+        }
 
         return DB::transaction(function () use ($product, $transfer) {
             $product->transfer($this, $product->getAmountProduct(), $product->getMetaProduct());

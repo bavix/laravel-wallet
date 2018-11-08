@@ -23,6 +23,12 @@ interface Customer extends Wallet
 
     /**
      * @param Product $product
+     * @return null|Transfer
+     */
+    public function paid(Product $product): ?Transfer;
+
+    /**
+     * @param Product $product
      * @return bool
      * @throws 
      */

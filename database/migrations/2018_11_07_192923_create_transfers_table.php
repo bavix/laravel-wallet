@@ -36,7 +36,7 @@ class CreateTransfersTable extends Migration
             $table->morphs('to');
             $table->unsignedInteger('deposit_id');
             $table->unsignedInteger('withdraw_id');
-            $table->uuid('uuid')->index();
+            $table->uuid('uuid')->unique();
             $table->timestamps();
 
             $table->foreign('deposit_id')
