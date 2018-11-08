@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\Eloquent\Model;
@@ -21,6 +22,10 @@ trait CanBePaid
      */
     public function pay(Product $product): Transfer
     {
+        if (!$product->canBuy()) {
+            throw new ProductEnded('The product is out of stock');
+        }
+
         return $this->transfer($product, $product->getAmountProduct(), $product->getMetaProduct());
     }
 
