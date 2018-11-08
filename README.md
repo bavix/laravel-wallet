@@ -21,19 +21,19 @@ laravel-wallet - Easy work with virtual wallet.
 
 ### Run Migrations
 Publish the migrations with this artisan command:
-```
+```bash
 php artisan vendor:publish --tag=laravel-wallet-migrations
 ```
 
 ### Configuration
 You can publish the config file with this artisan command:
-```
+```bash
 php artisan vendor:publish --tag=laravel-wallet-config
 ```
 
 ### Usage
 Add the HasWallet trait to model.
-```
+```php
 use Bavix\Wallet\Traits\HasWallet;
 use Bavix\Wallet\Interfaces\Wallet;
 
@@ -45,7 +45,7 @@ class User extends Model implements Wallet
 
 Now we make transactions.
 
-```
+```php
 $user = User::first();
 $user->balance; // int(0)
 
