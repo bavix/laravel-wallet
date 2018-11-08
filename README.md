@@ -32,7 +32,7 @@ php artisan vendor:publish --tag=laravel-wallet-config
 ```
 
 ### Usage
-Add the `HasWallet` trait to model.
+Add the `HasWallet` trait and `Wallet` interface to model.
 ```php
 use Bavix\Wallet\Traits\HasWallet;
 use Bavix\Wallet\Interfaces\Wallet;
@@ -61,7 +61,7 @@ $user->balance; // int(-191)
 
 ### Purchases
 
-Add the `CanBePaid` trait to your `User` model.
+Add the `CanBePaid` trait and `Customer` interface to your `User` model.
 ```php
 use Bavix\Wallet\Traits\CanBePaid;
 use Bavix\Wallet\Interfaces\Customer;
@@ -72,7 +72,7 @@ class User extends Model implements Customer
 }
 ```
 
-Add the `HasWallet` trait to `Item` model.
+Add the `HasWallet` trait and `Product` interface to `Item` model.
 ```php
 use Bavix\Wallet\Traits\HasWallet;
 use Bavix\Wallet\Interfaces\Product;
