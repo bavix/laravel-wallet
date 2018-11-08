@@ -202,6 +202,7 @@ trait HasWallet
     {
         return $this->transactions()
             ->selectRaw('payable_id, sum(amount) as total')
+            ->where('confirmed', 1)
             ->groupBy('payable_id');
     }
 
