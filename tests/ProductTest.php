@@ -18,20 +18,14 @@ class ProductTest extends TestCase
     }
 
     /**
-     * @return Item
-     */
-    public function getItem(): Item
-    {
-        return factory(Item::class)->create();
-    }
-
-    /**
      * @return void
      */
     public function testPay(): void
     {
         $buyer = $this->getBuyer();
-        $product = $this->getItem();
+        $product = factory(Item::class)->create([
+            'quantity' => 1,
+        ]);
         $this->assertEquals($buyer->balance, 0);
         $buyer->deposit($product->price);
         $this->assertEquals($buyer->balance, $product->price);
