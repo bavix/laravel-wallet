@@ -36,7 +36,7 @@ class UpdateTransfersTable extends Migration
      */
     public function down(): void
     {
-        Schema::table($this->table(), function (Blueprint $table) {
+        Schema::table($this->table(), function(Blueprint $table) {
             $table->dropColumn('refund');
         });
     }
