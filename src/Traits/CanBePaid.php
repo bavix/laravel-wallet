@@ -72,7 +72,7 @@ trait CanBePaid
                 ->setModel($this->transfers()->getMorphClass());
         }
 
-        return DB::transaction(function () use ($product, $transfer) {
+        return DB::transaction(function() use ($product, $transfer) {
             $product->transfer($this, $product->getAmountProduct(), $product->getMetaProduct());
             return $transfer->update(['refund' => 1]);
         });
