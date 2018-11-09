@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class HasWallet
@@ -141,6 +141,7 @@ trait HasWallet
      * @param Transaction $withdraw
      * @param Transaction $deposit
      * @return Transfer
+     * @throws
      */
     protected function assemble(Wallet $wallet, Transaction $withdraw, Transaction $deposit): Transfer
     {
@@ -154,7 +155,7 @@ trait HasWallet
             'from_id' => $this->getKey(),
             'to_type' => $wallet->getMorphClass(),
             'to_id' => $wallet->getKey(),
-            'uuid' => Str::uuid()->toString(),
+            'uuid' => Uuid::uuid4()->toString(),
         ]);
     }
 
@@ -163,6 +164,7 @@ trait HasWallet
      * @param array|null $meta
      * @param bool $confirmed
      * @return Transaction
+     * @throws
      */
     protected function change(int $amount, ?array $meta, bool $confirmed): Transaction
     {
@@ -172,7 +174,7 @@ trait HasWallet
             'type' => $amount > 0 ? 'deposit' : 'withdraw',
             'payable_type' => $this->getMorphClass(),
             'payable_id' => $this->getKey(),
-            'uuid' => Str::uuid()->toString(),
+            'uuid' => Uuid::uuid4()->toString(),
             'confirmed' => $confirmed,
             'amount' => $amount,
             'meta' => $meta,
