@@ -99,7 +99,7 @@ trait HasWallet
      */
     public function transfer(Wallet $wallet, int $amount, ?array $meta = null): Transfer
     {
-        return DB::transaction(function () use ($amount, $wallet, $meta) {
+        return DB::transaction(function() use ($amount, $wallet, $meta) {
             $withdraw = $this->withdraw($amount, $meta);
             $deposit = $wallet->deposit($amount, $meta);
             return $this->assemble($wallet, $withdraw, $deposit);
@@ -129,7 +129,7 @@ trait HasWallet
      */
     public function forceTransfer(Wallet $wallet, int $amount, ?array $meta = null): Transfer
     {
-        return DB::transaction(function () use ($amount, $wallet, $meta) {
+        return DB::transaction(function() use ($amount, $wallet, $meta) {
             $withdraw = $this->forceWithdraw($amount, $meta);
             $deposit = $wallet->deposit($amount, $meta);
             return $this->assemble($wallet, $withdraw, $deposit);
@@ -238,7 +238,7 @@ trait HasWallet
              */
             $collection = $this->getRelation('balance');
             $relation = $collection->first();
-            static::$cachedBalances[$this->getKey()] = (int)($relation->total ?? 0);
+            static::$cachedBalances[$this->getKey()] = (int) ($relation->total ?? 0);
         }
 
         return static::$cachedBalances[$this->getKey()];
