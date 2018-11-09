@@ -16,8 +16,14 @@ class TestCase extends OrchestraTestCase
     {
         parent::setUp();
         $this->withFactories(__DIR__ . '/factories');
-        $this->loadMigrationsFrom(__DIR__ . '/migrations');
-        $this->loadMigrationsFrom(\dirname(__DIR__) . '/database/migrations');
+        $this->loadMigrationsFrom([
+            '--database' => 'testbench',
+            '--path' => __DIR__ . '/migrations'
+        ]);
+        $this->loadMigrationsFrom([
+            '--database' => 'testbench',
+            '--path' => \dirname(__DIR__) . '/database/migrations'
+        ]);
     }
 
     /**

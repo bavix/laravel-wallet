@@ -8,19 +8,11 @@ class WalletTest extends TestCase
 {
 
     /**
-     * @return User
-     */
-    public function getUser(): User
-    {
-        return factory(User::class)->create();
-    }
-
-    /**
      * @return void
      */
     public function testDeposit(): void
     {
-        $user = $this->getUser();
+        $user = factory(User::class)->create();
         $this->assertEquals($user->balance, 0);
 
         $user->deposit(10);
@@ -44,7 +36,7 @@ class WalletTest extends TestCase
      */
     public function testInvalidDeposit(): void
     {
-        $user = $this->getUser();
+        $user = factory(User::class)->create();
         $user->deposit(-1);
     }
 
@@ -54,7 +46,7 @@ class WalletTest extends TestCase
      */
     public function testWithdraw(): void
     {
-        $user = $this->getUser();
+        $user = factory(User::class)->create();
         $this->assertEquals($user->balance, 0);
 
         $user->deposit(100);
@@ -78,7 +70,7 @@ class WalletTest extends TestCase
      */
     public function testInvalidWithdraw(): void
     {
-        $user = $this->getUser();
+        $user = factory(User::class)->create();
         $user->withdraw(-1);
     }
 
@@ -116,6 +108,18 @@ class WalletTest extends TestCase
 
         $first->withdraw($first->balance);
         $this->assertEquals($first->balance, 0);
+
+        $this->assertNull($first->safeTransfer($second, 100));
+        $this->assertEquals($first->balance, 0);
+        $this->assertEquals($second->balance, 0);
+
+        $this->assertNotNull($first->forceTransfer($second, 100));
+        $this->assertEquals($first->balance, -100);
+        $this->assertEquals($second->balance, 100);
+
+        $this->assertNotNull($second->forceTransfer($first, 100));
+        $this->assertEquals($first->balance, 0);
+        $this->assertEquals($second->balance, 0);
     }
 
     /**
