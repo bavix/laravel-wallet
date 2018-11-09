@@ -14,7 +14,7 @@ use Bavix\Wallet\Test\Models\Buyer;
 |
 */
 
-$factory->define(Buyer::class, function (Faker $faker) {
+$factory->define(Buyer::class, function(Faker $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
