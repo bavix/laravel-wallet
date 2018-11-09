@@ -6,7 +6,7 @@ use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-interface Wallet 
+interface Wallet
 {
     /**
      * @param int $amount
@@ -55,7 +55,7 @@ interface Wallet
      * @return Transfer
      */
     public function forceTransfer(Wallet $wallet, int $amount, ?array $meta = null): Transfer;
-    
+
     /**
      * @param int $amount
      * @return bool

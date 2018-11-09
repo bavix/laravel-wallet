@@ -10,14 +10,14 @@ interface Customer extends Wallet
     /**
      * @param Product $product
      * @return Transfer
-     * @throws 
+     * @throws
      */
     public function pay(Product $product): Transfer;
 
     /**
      * @param Product $product
      * @return null|Transfer
-     * @throws 
+     * @throws
      */
     public function safePay(Product $product): ?Transfer;
 
@@ -30,7 +30,7 @@ interface Customer extends Wallet
     /**
      * @param Product $product
      * @return bool
-     * @throws 
+     * @throws
      */
     public function refund(Product $product): bool;
 

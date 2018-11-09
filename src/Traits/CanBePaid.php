@@ -17,7 +17,7 @@ trait CanBePaid
     /**
      * @param Product $product
      * @return Transfer
-     * @throws 
+     * @throws
      */
     public function pay(Product $product): Transfer
     {

@@ -1,7 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\SQLiteConnection;
 use Illuminate\Database\Migrations\Migration;
 use Bavix\Wallet\Models\Transfer;
 
@@ -38,9 +40,12 @@ class UpdateTransfersTable extends Migration
     public function down(): void
     {
         Schema::table($this->table(), function(Blueprint $table) {
-            $table->dropIndex('from_to_refund_ind');
-            $table->dropIndex('from_refund_ind');
-            $table->dropIndex('to_refund_ind');
+            if (!(DB::connection() instanceof SQLiteConnection)) {
+                $table->dropIndex('from_to_refund_ind');
+                $table->dropIndex('from_refund_ind');
+                $table->dropIndex('to_refund_ind');
+            }
+
             $table->dropColumn('refund');
         });
     }

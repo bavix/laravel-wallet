@@ -2,3 +2,4 @@ composer.phar
 /vendor/
 composer.lock
 .idea/
+build/
