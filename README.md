@@ -82,7 +82,7 @@ class Item extends Model implements Product
 {
     use HasWallet;
 
-    public function canBuy(Customer $customer): bool
+    public function canBuy(Customer $customer, bool $force = false): bool
     {
         /**
          * If the service can be purchased once, then
