@@ -56,7 +56,7 @@ $user->balance; // int(10)
 $user->withdraw(1);
 $user->balance; // int(9)
 
-$user->forceWithdraw(200);
+$user->forceWithdraw(200, ['description' => 'payment of taxes']);
 $user->balance; // int(-191)
 ```
 
@@ -100,7 +100,7 @@ class Item extends Model implements Product
     {
         return [
             'title' => $this->title, 
-            'description' => $this->description, 
+            'description' => 'Purchase of Product #' . $this->id, 
             'price' => $this->getAmountProduct(),
         ];
     }
