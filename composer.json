@@ -1,6 +1,15 @@
 {
   "name": "bavix/laravel-wallet",
   "description": "Easy work with virtual wallet.",
+  "keywords": [
+    "credits",
+    "bavix",
+    "currency",
+    "laravel-wallet",
+    "virtual",
+    "wallet",
+    "payments"
+  ],
   "minimum-stability": "stable",
   "homepage": "https://github.com/bavix/laravel-wallet",
   "license": "MIT",
