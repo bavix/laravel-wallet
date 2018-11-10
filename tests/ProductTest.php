@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\Item;
 
@@ -13,6 +14,10 @@ class ProductTest extends TestCase
      */
     public function testPay(): void
     {
+        /**
+         * @var Buyer $buyer
+         * @var Item $product
+         */
         $buyer = factory(Buyer::class)->create();
         $product = factory(Item::class)->create([
             'quantity' => 1,
@@ -22,7 +27,30 @@ class ProductTest extends TestCase
         $buyer->deposit($product->price);
 
         $this->assertEquals($buyer->balance, $product->price);
-        $this->assertNotNull($buyer->pay($product));
+        $transfer = $buyer->pay($product);
+        $this->assertNotNull($transfer);
+
+        /**
+         * @var Transaction $withdraw
+         * @var Transaction $deposit
+         */
+        $withdraw = $transfer->withdraw;
+        $deposit = $transfer->deposit;
+
+        $this->assertInstanceOf(Transaction::class, $withdraw);
+        $this->assertInstanceOf(Transaction::class, $deposit);
+
+        $this->assertInstanceOf(Buyer::class, $withdraw->payable);
+        $this->assertInstanceOf(Item::class, $deposit->payable);
+
+        $this->assertEquals($buyer->getKey(), $withdraw->payable->getKey());
+        $this->assertEquals($product->getKey(), $deposit->payable->getKey());
+
+        $this->assertInstanceOf(Buyer::class, $transfer->from);
+        $this->assertInstanceOf(Item::class, $transfer->to);
+
+        $this->assertEquals($buyer->getKey(), $transfer->from->getKey());
+        $this->assertEquals($product->getKey(), $transfer->to->getKey());
 
         $this->assertEquals($buyer->balance, 0);
         $this->assertNull($buyer->safePay($product));
@@ -33,6 +61,10 @@ class ProductTest extends TestCase
      */
     public function testRefund(): void
     {
+        /**
+         * @var Buyer $buyer
+         * @var Item $product
+         */
         $buyer = factory(Buyer::class)->create();
         $product = factory(Item::class)->create([
             'quantity' => 1,
@@ -113,6 +145,29 @@ class ProductTest extends TestCase
         $buyer->deposit($product->price);
         $buyer->pay($product);
         $buyer->pay($product);
+    }
+
+    /**
+     * @return void
+     */
+    public function testForcePay(): void
+    {
+        /**
+         * @var Buyer $buyer
+         * @var Item $product
+         */
+        $buyer = factory(Buyer::class)->create();
+        $product = factory(Item::class)->create([
+            'quantity' => 1,
+        ]);
+
+        $this->assertEquals($buyer->balance, 0);
+        $buyer->forcePay($product);
+
+        $this->assertEquals($buyer->balance, -$product->price);
+
+        $buyer->deposit(-$buyer->balance);
+        $this->assertEquals($buyer->balance, 0);
     }
 
 }

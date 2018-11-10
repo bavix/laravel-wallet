@@ -27,12 +27,19 @@ class Item extends Model implements Product
 
     /**
      * @param Customer $customer
+     * @param bool $force
      *
      * @return bool
      */
-    public function canBuy(Customer $customer): bool
+    public function canBuy(Customer $customer, bool $force = false): bool
     {
-        return $this->quantity > 0 && !$customer->paid($this);
+        $result = $this->quantity > 0;
+
+        if ($force) {
+            return $result;
+        }
+
+        return $result && !$customer->paid($this);
     }
 
     /**
