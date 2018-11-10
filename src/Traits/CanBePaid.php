@@ -60,10 +60,11 @@ trait CanBePaid
 
     /**
      * @param Product $product
+     * @param bool $force
      * @return bool
      * @throws
      */
-    public function refund(Product $product): bool
+    public function refund(Product $product, bool $force = false): bool
     {
         $transfer = $this->paid($product);
 
@@ -72,23 +73,38 @@ trait CanBePaid
                 ->setModel($this->transfers()->getMorphClass());
         }
 
-        return DB::transaction(function() use ($product, $transfer) {
-            $product->transfer($this, $product->getAmountProduct(), $product->getMetaProduct());
+        return DB::transaction(function() use ($product, $transfer, $force) {
+            if ($force) {
+                $product->forceTransfer($this, $product->getAmountProduct(), $product->getMetaProduct());
+            } else {
+                $product->transfer($this, $product->getAmountProduct(), $product->getMetaProduct());
+            }
+
             return $transfer->update(['refund' => 1]);
         });
     }
 
     /**
      * @param Product $product
+     * @param bool $force
      * @return bool
      */
-    public function safeRefund(Product $product): bool
+    public function safeRefund(Product $product, bool $force = false): bool
     {
         try {
-            return $this->refund($product);
+            return $this->refund($product, $force);
         } catch (\Throwable $throwable) {
             return false;
         }
+    }
+
+    /**
+     * @param Product $product
+     * @return bool
+     */
+    public function forceRefund(Product $product): bool
+    {
+        return $this->refund($product, true);
     }
 
 }
