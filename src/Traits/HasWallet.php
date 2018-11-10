@@ -168,8 +168,11 @@ trait HasWallet
      */
     protected function change(int $amount, ?array $meta, bool $confirmed): Transaction
     {
-        $this->getBalanceAttribute();
-        static::$cachedBalances[$this->getKey()] += $amount;
+        if ($confirmed) {
+            $this->getBalanceAttribute();
+            static::$cachedBalances[$this->getKey()] += $amount;
+        }
+
         return $this->transactions()->create([
             'type' => $amount > 0 ? 'deposit' : 'withdraw',
             'payable_type' => $this->getMorphClass(),

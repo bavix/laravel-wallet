@@ -16,13 +16,18 @@ trait CanBePaid
 
     /**
      * @param Product $product
+     * @param bool $force
      * @return Transfer
      * @throws
      */
-    public function pay(Product $product): Transfer
+    public function pay(Product $product, bool $force = false): Transfer
     {
-        if (!$product->canBuy($this)) {
+        if (!$product->canBuy($this, $force)) {
             throw new ProductEnded('The product is out of stock');
+        }
+
+        if ($force) {
+            return $this->forceTransfer($product, $product->getAmountProduct(), $product->getMetaProduct());
         }
 
         return $this->transfer($product, $product->getAmountProduct(), $product->getMetaProduct());
@@ -30,15 +35,26 @@ trait CanBePaid
 
     /**
      * @param Product $product
+     * @param bool $force
      * @return Transfer|null
      */
-    public function safePay(Product $product): ?Transfer
+    public function safePay(Product $product, bool $force = false): ?Transfer
     {
         try {
-            return $this->pay($product);
+            return $this->pay($product, $force);
         } catch (\Throwable $throwable) {
             return null;
         }
+    }
+
+    /**
+     * @param Product $product
+     * @return Transfer
+     * @throws
+     */
+    public function forcePay(Product $product): Transfer
+    {
+        return $this->pay($product, true);
     }
 
     /**
@@ -60,10 +76,11 @@ trait CanBePaid
 
     /**
      * @param Product $product
+     * @param bool $force
      * @return bool
      * @throws
      */
-    public function refund(Product $product): bool
+    public function refund(Product $product, bool $force = false): bool
     {
         $transfer = $this->paid($product);
 
@@ -72,23 +89,39 @@ trait CanBePaid
                 ->setModel($this->transfers()->getMorphClass());
         }
 
-        return DB::transaction(function() use ($product, $transfer) {
-            $product->transfer($this, $product->getAmountProduct(), $product->getMetaProduct());
+        return DB::transaction(function() use ($product, $transfer, $force) {
+            if ($force) {
+                $product->forceTransfer($this, $product->getAmountProduct(), $product->getMetaProduct());
+            } else {
+                $product->transfer($this, $product->getAmountProduct(), $product->getMetaProduct());
+            }
+
             return $transfer->update(['refund' => 1]);
         });
     }
 
     /**
      * @param Product $product
+     * @param bool $force
      * @return bool
      */
-    public function safeRefund(Product $product): bool
+    public function safeRefund(Product $product, bool $force = false): bool
     {
         try {
-            return $this->refund($product);
+            return $this->refund($product, $force);
         } catch (\Throwable $throwable) {
             return false;
         }
+    }
+
+    /**
+     * @param Product $product
+     * @return bool
+     * @throws
+     */
+    public function forceRefund(Product $product): bool
+    {
+        return $this->refund($product, true);
     }
 
 }
