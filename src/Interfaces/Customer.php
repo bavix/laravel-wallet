@@ -21,7 +21,7 @@ interface Customer extends Wallet
      * @return null|Transfer
      * @throws
      */
-    public function safePay(Product $product): ?Transfer;
+    public function safePay(Product $product, bool $force = false): ?Transfer;
 
     /**
      * @param Product $product
