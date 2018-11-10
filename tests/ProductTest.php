@@ -95,4 +95,24 @@ class ProductTest extends TestCase
         $this->assertEquals($buyer->balance, 0);
     }
 
+    /**
+     * @return void
+     * @expectedException \Bavix\Wallet\Exceptions\ProductEnded
+     */
+    public function testOutOfStock(): void
+    {
+        /**
+         * @var Buyer $buyer
+         * @var Item $product
+         */
+        $buyer = factory(Buyer::class)->create();
+        $product = factory(Item::class)->create([
+            'quantity' => 1,
+        ]);
+
+        $buyer->deposit($product->price);
+        $buyer->pay($product);
+        $buyer->pay($product);
+    }
+
 }

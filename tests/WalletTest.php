@@ -141,4 +141,39 @@ class WalletTest extends TestCase
         $this->assertEquals($user->balance, 0);
     }
 
+    /**
+     * @return void
+     * @expectedException \Bavix\Wallet\Exceptions\BalanceIsEmpty
+     */
+    public function testBalanceIsEmpty(): void
+    {
+        /**
+         * @var User $user
+         */
+        $user = factory(User::class)->create();
+        $this->assertEquals($user->balance, 0);
+        $user->withdraw(1);
+    }
+
+    /**
+     * @return void
+     */
+    public function testConfirmed(): void
+    {
+        /**
+         * @var User $user
+         */
+        $user = factory(User::class)->create();
+        $this->assertEquals($user->balance, 0);
+
+        $user->deposit(1);
+        $this->assertEquals($user->balance, 1);
+
+        $user->withdraw(1, null, false);
+        $this->assertEquals($user->balance, 1);
+
+        $user->withdraw(1);
+        $this->assertEquals($user->balance, 0);
+    }
+
 }
