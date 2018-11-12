@@ -133,6 +133,30 @@ var_dump((bool)$user->paid($item)); // bool(false)
 User::with('balance');
 ```
 
+### How to work with fractional numbers?
+Add the `HasWalletFloat` trait and `WalletFloat` interface to model.
+```php
+use Bavix\Wallet\Traits\HasWalletFloat;
+use Bavix\Wallet\Interfaces\WalletFloat;
+
+class User extends Model implements WalletFloat
+{
+    use HasWalletFloat;
+}
+```
+
+Now we make transactions.
+
+```php
+$user = User::first();
+$user->balance; // int(100)
+$user->balanceFloat; // float(1.00)
+
+$user->depositFloat(1.37);
+$user->balance; // int(237)
+$user->balanceFloat; // float(2.37)
+```
+
 ---
 Supported by
 

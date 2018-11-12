@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Class HasWallet
+ * Trait HasWallet
  *
  * @package Bavix\Wallet\Traits
  *
