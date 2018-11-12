@@ -93,36 +93,36 @@ class WalletFloatTest extends TestCase
         $this->assertEquals($first->balanceFloat, 0);
         $this->assertEquals($second->balanceFloat, 0);
 
-        $first->deposit(100);
-        $this->assertEquals($first->balanceFloat, 100);
+        $first->depositFloat(1);
+        $this->assertEquals($first->balanceFloat, 1);
 
-        $second->deposit(100);
-        $this->assertEquals($second->balanceFloat, 100);
+        $second->depositFloat(1);
+        $this->assertEquals($second->balanceFloat, 1);
 
-        $first->transfer($second, 100);
+        $first->transferFloat($second, 1);
         $this->assertEquals($first->balanceFloat, 0);
-        $this->assertEquals($second->balanceFloat, 200);
+        $this->assertEquals($second->balanceFloat, 2);
 
-        $second->transfer($first, 100);
-        $this->assertEquals($second->balanceFloat, 100);
-        $this->assertEquals($first->balanceFloat, 100);
+        $second->transferFloat($first, 1);
+        $this->assertEquals($second->balanceFloat, 1);
+        $this->assertEquals($first->balanceFloat, 1);
 
-        $second->transfer($first, 100);
+        $second->transferFloat($first, 1);
         $this->assertEquals($second->balanceFloat, 0);
-        $this->assertEquals($first->balanceFloat, 200);
+        $this->assertEquals($first->balanceFloat, 2);
 
-        $first->withdraw($first->balanceFloat);
+        $first->withdrawFloat($first->balanceFloat);
         $this->assertEquals($first->balanceFloat, 0);
 
-        $this->assertNull($first->safeTransfer($second, 100));
+        $this->assertNull($first->safeTransferFloat($second, 1));
         $this->assertEquals($first->balanceFloat, 0);
         $this->assertEquals($second->balanceFloat, 0);
 
-        $this->assertNotNull($first->forceTransfer($second, 100));
-        $this->assertEquals($first->balanceFloat, -100);
-        $this->assertEquals($second->balanceFloat, 100);
+        $this->assertNotNull($first->forceTransferFloat($second, 1));
+        $this->assertEquals($first->balanceFloat, -1);
+        $this->assertEquals($second->balanceFloat, 1);
 
-        $this->assertNotNull($second->forceTransfer($first, 100));
+        $this->assertNotNull($second->forceTransferFloat($first, 1));
         $this->assertEquals($first->balanceFloat, 0);
         $this->assertEquals($second->balanceFloat, 0);
     }
@@ -136,13 +136,13 @@ class WalletFloatTest extends TestCase
          * @var User $user
          */
         $user = factory(User::class)->create();
-        $this->assertEquals($user->balance, 0);
+        $this->assertEquals($user->balanceFloat, 0);
 
-        $user->deposit(100);
-        $user->transfer($user, 100);
+        $user->depositFloat(1);
+        $user->transferFloat($user, 1);
         $this->assertEquals($user->balance, 100);
 
-        $user->withdraw($user->balance);
+        $user->withdrawFloat($user->balanceFloat);
         $this->assertEquals($user->balance, 0);
     }
 
@@ -157,7 +157,7 @@ class WalletFloatTest extends TestCase
          */
         $user = factory(User::class)->create();
         $this->assertEquals($user->balance, 0);
-        $user->withdraw(1);
+        $user->withdrawFloat(1);
     }
 
     /**
@@ -171,14 +171,19 @@ class WalletFloatTest extends TestCase
         $user = factory(User::class)->create();
         $this->assertEquals($user->balance, 0);
 
-        $user->deposit(1);
-        $this->assertEquals($user->balance, 1);
+        $user->depositFloat(1);
+        $this->assertEquals($user->balanceFloat, 1);
 
-        $user->withdraw(1, null, false);
-        $this->assertEquals($user->balance, 1);
+        $user->withdrawFloat(1, null, false);
+        $this->assertEquals($user->balanceFloat, 1);
 
-        $user->withdraw(1);
-        $this->assertEquals($user->balance, 0);
+        $this->assertTrue($user->canWithdrawFloat(1));
+        $user->withdrawFloat(1);
+        $this->assertFalse($user->canWithdrawFloat(1));
+        $user->forceWithdrawFloat(1);
+        $this->assertEquals($user->balanceFloat, -1);
+        $user->depositFloat(1);
+        $this->assertEquals($user->balanceFloat, 0);
     }
 
 }
