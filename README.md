@@ -138,8 +138,9 @@ Add the `HasWalletFloat` trait and `WalletFloat` interface to model.
 ```php
 use Bavix\Wallet\Traits\HasWalletFloat;
 use Bavix\Wallet\Interfaces\WalletFloat;
+use Bavix\Wallet\Interfaces\Wallet;
 
-class User extends Model implements WalletFloat
+class User extends Model implements Wallet, WalletFloat
 {
     use HasWalletFloat;
 }
