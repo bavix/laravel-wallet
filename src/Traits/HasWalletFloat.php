@@ -26,7 +26,7 @@ trait HasWalletFloat
      */
     public function forceWithdrawFloat(float $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        return $this->forceWithdraw($amount * 100, $meta, $confirmed);
+        return $this->forceWithdraw($amount * $this->coefficient(), $meta, $confirmed);
     }
 
     /**
@@ -38,7 +38,7 @@ trait HasWalletFloat
      */
     public function depositFloat(float $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        return $this->deposit($amount * 100, $meta, $confirmed);
+        return $this->deposit($amount * $this->coefficient(), $meta, $confirmed);
     }
 
     /**
@@ -50,7 +50,7 @@ trait HasWalletFloat
      */
     public function withdrawFloat(float $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        return $this->withdraw($amount * 100, $meta, $confirmed);
+        return $this->withdraw($amount * $this->coefficient(), $meta, $confirmed);
     }
 
     /**
@@ -59,7 +59,7 @@ trait HasWalletFloat
      */
     public function canWithdrawFloat($amount): bool
     {
-        return $this->canWithdraw($amount * 100);
+        return $this->canWithdraw($amount * $this->coefficient());
     }
 
     /**
@@ -71,7 +71,7 @@ trait HasWalletFloat
      */
     public function transferFloat(Wallet $wallet, float $amount, ?array $meta = null): Transfer
     {
-        return $this->transfer($wallet, $amount * 100, $meta);
+        return $this->transfer($wallet, $amount * $this->coefficient(), $meta);
     }
 
     /**
@@ -82,7 +82,7 @@ trait HasWalletFloat
      */
     public function safeTransferFloat(Wallet $wallet, float $amount, ?array $meta = null): ?Transfer
     {
-        return $this->safeTransfer($wallet, $amount * 100, $meta);
+        return $this->safeTransfer($wallet, $amount * $this->coefficient(), $meta);
     }
 
     /**
@@ -93,7 +93,7 @@ trait HasWalletFloat
      */
     public function forceTransferFloat(Wallet $wallet, float $amount, ?array $meta = null): Transfer
     {
-        return $this->forceTransfer($wallet, $amount * 100, $meta);
+        return $this->forceTransfer($wallet, $amount * $this->coefficient(), $meta);
     }
 
     /**
@@ -101,7 +101,15 @@ trait HasWalletFloat
      */
     public function getBalanceFloatAttribute(): float
     {
-        return $this->balance / 100;
+        return $this->balance / $this->coefficient();
+    }
+
+    /**
+     * @return int
+     */
+    private function coefficient(): int
+    {
+        return 100;
     }
 
 }
