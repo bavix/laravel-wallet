@@ -57,7 +57,7 @@ trait HasWalletFloat
      * @param float $amount
      * @return bool
      */
-    public function canWithdrawFloat($amount): bool
+    public function canWithdrawFloat(float $amount): bool
     {
         return $this->canWithdraw($amount * $this->coefficient());
     }
