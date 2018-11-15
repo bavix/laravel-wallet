@@ -105,11 +105,11 @@ trait HasWalletFloat
     }
 
     /**
-     * @return int
+     * @return float
      */
-    private function coefficient(): int
+    private function coefficient(): float
     {
-        return 100;
+        return config('wallet.package.coefficient', 100.);
     }
 
 }

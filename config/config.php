@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'package' => [
+        'coefficient' => 100.,
+    ],
     'transaction' => [
         'table' => 'transactions',
         'model' => \Bavix\Wallet\Models\Transaction::class,
