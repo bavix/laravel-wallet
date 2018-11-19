@@ -168,7 +168,7 @@ trait HasWallet
      */
     protected function change(int $amount, ?array $meta, bool $confirmed): Transaction
     {
-        return DB::transaction(function () use ($amount, $meta, $confirmed) {
+        return DB::transaction(function() use ($amount, $meta, $confirmed) {
 
             if ($this instanceof WalletModel) {
                 $payable = $this->holder;
