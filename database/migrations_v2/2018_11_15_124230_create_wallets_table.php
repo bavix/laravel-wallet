@@ -39,8 +39,8 @@ class CreateWalletsTable extends Migration
         /**
          * migrate v1 to v2
          */
-        $default = config('wallet.wallet.data.name', 'Default Wallet');
-        $slug = config('wallet.wallet.data.slug', 'default');
+        $default = config('wallet.wallet.default.name', 'Default Wallet');
+        $slug = config('wallet.wallet.default.slug', 'default');
         $query = Transaction::query()->distinct()
             ->selectRaw('payable_type as holder_type')
             ->selectRaw('payable_id as holder_id')

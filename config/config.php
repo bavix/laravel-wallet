@@ -15,7 +15,7 @@ return [
     'wallet' => [
         'table' => 'wallets',
         'model' => \Bavix\Wallet\Models\Wallet::class,
-        'data' => [
+        'default' => [
             'name' => 'Default Wallet',
             'slug' => 'default',
         ],
