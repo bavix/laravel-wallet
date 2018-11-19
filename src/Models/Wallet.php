@@ -56,7 +56,6 @@ class Wallet extends Model implements Customer, WalletFloat
      */
     public function calculateBalance(): bool
     {
-        $this->getBalanceAttribute();
         $balance = $this->transactions()
             ->where('wallet_id', $this->getKey())
             ->where('confirmed', true)
