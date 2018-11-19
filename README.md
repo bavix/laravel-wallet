@@ -1,4 +1,4 @@
-# laravel-wallet
+![Laravel Wallet](https://user-images.githubusercontent.com/5111255/48687709-a7c2fa00-ebd3-11e8-8714-c4f3efe93f02.png)
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bavix/laravel-wallet/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/bavix/laravel-wallet/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/bavix/laravel-wallet/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/bavix/laravel-wallet/?branch=master)
