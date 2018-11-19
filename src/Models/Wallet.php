@@ -6,6 +6,7 @@ use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Traits\CanBePaidFloat;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Class Wallet
@@ -59,6 +60,14 @@ class Wallet extends Model implements Customer, WalletFloat
             ->sum('amount');
 
         return $this->save();
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function holder(): BelongsToMany
+    {
+        return $this->belongsToMany('holder');
     }
 
 }

@@ -172,15 +172,19 @@ trait HasWallet
                 $this->addBalance($amount);
             }
 
-            if (!$this->wallet->exists) {
-                $this->wallet->save();
+            if ($this instanceof WalletModel) {
+                $payable = $this->holder;
+                $wallet = $this;
+            } else {
+                $payable = $this;
+                $wallet = $this->wallet;
             }
 
             return $this->transactions()->create([
                 'type' => $amount > 0 ? 'deposit' : 'withdraw',
-                'payable_type' => $this->getMorphClass(),
-                'payable_id' => $this->getKey(),
-                'wallet_id' => $this->wallet->id,
+                'payable_type' => $payable->getMorphClass(),
+                'payable_id' => $payable->getKey(),
+                'wallet_id' => $wallet->getKey(),
                 'uuid' => Uuid::uuid4()->toString(),
                 'confirmed' => $confirmed,
                 'amount' => $amount,
