@@ -84,6 +84,7 @@ class ProductTest extends TestCase
 
         $this->assertNotNull($buyer->pay($product));
         $this->assertEquals($buyer->balance, 0);
+        $this->assertEquals($product->balance, $product->price);
     }
 
     /**
@@ -100,9 +101,7 @@ class ProductTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $this->assertNotEquals($product->balance, 0);
-        $product->withdraw($product->balance);
-
+        $this->assertEquals($product->balance, 0);
         $this->assertEquals($buyer->balance, 0);
         $buyer->deposit($product->price);
 

@@ -5,10 +5,12 @@ namespace Bavix\Wallet\Traits;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
@@ -18,15 +20,12 @@ use Ramsey\Uuid\Uuid;
  *
  * @package Bavix\Wallet\Traits
  *
+ * @property-read WalletModel $wallet
+ * @property-read Collection|WalletModel[] $wallets
  * @property-read int $balance
  */
 trait HasWallet
 {
-
-    /**
-     * @var array
-     */
-    protected static $cachedBalances = [];
 
     /**
      * @param int $amount
@@ -168,20 +167,21 @@ trait HasWallet
      */
     protected function change(int $amount, ?array $meta, bool $confirmed): Transaction
     {
-        if ($confirmed) {
-            $this->getBalanceAttribute();
-            static::$cachedBalances[$this->getKey()] += $amount;
-        }
+        return DB::transaction(function () use ($amount, $meta, $confirmed) {
+            if ($confirmed) {
+                $this->addBalance($amount);
+            }
 
-        return $this->transactions()->create([
-            'type' => $amount > 0 ? 'deposit' : 'withdraw',
-            'payable_type' => $this->getMorphClass(),
-            'payable_id' => $this->getKey(),
-            'uuid' => Uuid::uuid4()->toString(),
-            'confirmed' => $confirmed,
-            'amount' => $amount,
-            'meta' => $meta,
-        ]);
+            return $this->transactions()->create([
+                'type' => $amount > 0 ? 'deposit' : 'withdraw',
+                'payable_type' => $this->getMorphClass(),
+                'payable_id' => $this->getKey(),
+                'uuid' => Uuid::uuid4()->toString(),
+                'confirmed' => $confirmed,
+                'amount' => $amount,
+                'meta' => $meta,
+            ]);
+        });
     }
 
     /**
@@ -203,12 +203,22 @@ trait HasWallet
     /**
      * @return MorphMany
      */
-    public function balance(): MorphMany
+    public function wallets(): MorphMany
     {
-        return $this->transactions()
-            ->selectRaw('payable_id, sum(amount) as total')
-            ->where('confirmed', true)
-            ->groupBy('payable_id');
+        return $this->morphMany(config('wallet.wallet.model'), 'holder');
+    }
+
+    /**
+     * @return MorphOne
+     */
+    public function wallet(): MorphOne
+    {
+        return $this->morphOne(config('wallet.wallet.model'), 'holder')
+            ->withDefault([
+                'name' => config('wallet.wallet.default.name'),
+                'slug' => config('wallet.wallet.default.slug'),
+                'balance' => 0,
+            ]);
     }
 
     /**
@@ -233,20 +243,32 @@ trait HasWallet
      */
     public function getBalanceAttribute(): int
     {
-        if (!\array_key_exists($this->getKey(), static::$cachedBalances)) {
-            if (!\array_key_exists('balance', $this->relations)) {
-                $this->load('balance');
-            }
-
-            /**
-             * @var Collection $collection
-             */
-            $collection = $this->getRelation('balance');
-            $relation = $collection->first();
-            static::$cachedBalances[$this->getKey()] = (int) ($relation->total ?? 0);
+        if ($this instanceof WalletModel) {
+            return (int) ($this->attributes['balance'] ?? 0);
         }
 
-        return static::$cachedBalances[$this->getKey()];
+        if (!\array_key_exists('wallet', $this->relations)) {
+            $this->load('wallet');
+        }
+
+        return $this->wallet->balance;
+    }
+
+    /**
+     * @param int $amount
+     * @return bool
+     */
+    protected function addBalance(int $amount): bool
+    {
+        $wallet = $this;
+
+        if (!($this instanceof WalletModel)) {
+            $this->getBalanceAttribute();
+            $wallet = $this->wallet;
+        }
+
+        $wallet->balance += $amount;
+        return $wallet->save();
     }
 
 }

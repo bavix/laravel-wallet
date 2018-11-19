@@ -29,7 +29,7 @@ class CreateWalletsTable extends Migration
             $table->morphs('holder');
             $table->string('name');
             $table->string('slug')->index();
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->bigInteger('balance')->default(0);
             $table->timestamps();
 
@@ -47,7 +47,10 @@ class CreateWalletsTable extends Migration
             ->selectRaw('? as name', [$default])
             ->selectRaw('? as slug', [$slug])
             ->selectRaw('sum(amount) as balance')
-            ->groupBy('holder_type', 'holder_id');
+            ->selectRaw('? as created_at', [\Carbon\Carbon::now()])
+            ->selectRaw('? as updated_at', [\Carbon\Carbon::now()])
+            ->groupBy('holder_type', 'holder_id')
+            ->orderBy('holder_type');
 
         DB::transaction(function () use ($query) {
             $query->chunk(1000, function (Collection $transactions) {
