@@ -24,8 +24,17 @@ class WalletServiceProvider extends ServiceProvider
         ], 'laravel-wallet-config');
 
         $this->publishes([
-            \dirname(__DIR__) . '/database/migrations/' => database_path('migrations'),
+            \dirname(__DIR__) . '/database/migrations_v1/' => database_path('migrations'),
+            \dirname(__DIR__) . '/database/migrations_v2/' => database_path('migrations'),
         ], 'laravel-wallet-migrations');
+
+        $this->publishes([
+            \dirname(__DIR__) . '/database/migrations_v1/' => database_path('migrations'),
+        ], 'laravel-wallet-migrations-v1');
+
+        $this->publishes([
+            \dirname(__DIR__) . '/database/migrations_v2/' => database_path('migrations'),
+        ], 'laravel-wallet-migrations-v2');
     }
 
     /**
@@ -35,7 +44,10 @@ class WalletServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->mergeConfigFrom(\dirname(__DIR__) . '/config/config.php', 'wallet');
+        $this->mergeConfigFrom(
+            \dirname(__DIR__) . '/config/config.php',
+            'wallet'
+        );
     }
 
 }

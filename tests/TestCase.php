@@ -22,7 +22,11 @@ class TestCase extends OrchestraTestCase
         ]);
         $this->loadMigrationsFrom([
             '--database' => 'testbench',
-            '--path' => \dirname(__DIR__) . '/database/migrations'
+            '--path' => \dirname(__DIR__) . '/database/migrations_v1'
+        ]);
+        $this->loadMigrationsFrom([
+            '--database' => 'testbench',
+            '--path' => \dirname(__DIR__) . '/database/migrations_v2'
         ]);
     }
 

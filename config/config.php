@@ -12,4 +12,12 @@ return [
         'table' => 'transfers',
         'model' => \Bavix\Wallet\Models\Transfer::class,
     ],
+    'wallet' => [
+        'table' => 'wallets',
+        'model' => \Bavix\Wallet\Models\Wallet::class,
+        'data' => [
+            'name' => 'Default Wallet',
+            'slug' => 'default',
+        ],
+    ],
 ];
