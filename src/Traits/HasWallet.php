@@ -172,10 +172,15 @@ trait HasWallet
                 $this->addBalance($amount);
             }
 
+            if (!$this->wallet->exists) {
+                $this->wallet->save();
+            }
+
             return $this->transactions()->create([
                 'type' => $amount > 0 ? 'deposit' : 'withdraw',
                 'payable_type' => $this->getMorphClass(),
                 'payable_id' => $this->getKey(),
+                'wallet_id' => $this->wallet->id,
                 'uuid' => Uuid::uuid4()->toString(),
                 'confirmed' => $confirmed,
                 'amount' => $amount,
@@ -223,8 +228,8 @@ trait HasWallet
 
     /**
      * Example:
-     *  $user1 = User::first()->load('balance');
-     *  $user2 = User::first()->load('balance');
+     *  $user1 = User::first()->load('wallet');
+     *  $user2 = User::first()->load('wallet');
      *
      * Without static:
      *  var_dump($user1->balance, $user2->balance); // 100 100
@@ -245,10 +250,6 @@ trait HasWallet
     {
         if ($this instanceof WalletModel) {
             return (int) ($this->attributes['balance'] ?? 0);
-        }
-
-        if (!\array_key_exists('wallet', $this->relations)) {
-            $this->load('wallet');
         }
 
         return $this->wallet->balance;

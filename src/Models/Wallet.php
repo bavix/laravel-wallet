@@ -48,4 +48,17 @@ class Wallet extends Model implements Customer, WalletFloat
         return parent::getTable();
     }
 
+    /**
+     * @return bool
+     */
+    public function calculateBalance(): bool
+    {
+        $this->attributes['balance'] = $this->transactions()
+            ->where('wallet_id', $this->getKey())
+            ->where('confirmed', true)
+            ->sum('amount');
+
+        return $this->save();
+    }
+
 }
