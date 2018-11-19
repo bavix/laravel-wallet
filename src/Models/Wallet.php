@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Models;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Traits\CanBePaidFloat;
+use Bavix\Wallet\WalletProxy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * Class Wallet
  * @package Bavix\Wallet\Models
  * @property int $balance
+ * @property \Bavix\Wallet\Interfaces\Wallet $holder
  */
 class Wallet extends Model implements Customer, WalletFloat
 {
@@ -54,10 +56,14 @@ class Wallet extends Model implements Customer, WalletFloat
      */
     public function calculateBalance(): bool
     {
-        $this->attributes['balance'] = $this->transactions()
+        $this->getBalanceAttribute();
+        $balance = $this->transactions()
             ->where('wallet_id', $this->getKey())
             ->where('confirmed', true)
             ->sum('amount');
+
+        WalletProxy::set($this->getKey(), $balance);
+        $this->attributes['balance'] = $balance;
 
         return $this->save();
     }

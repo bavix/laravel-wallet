@@ -130,7 +130,7 @@ var_dump((bool)$user->paid($item)); // bool(false)
 ### Eager Loading
 
 ```php
-User::with('balance');
+User::with('wallet');
 ```
 
 ### How to work with fractional numbers?

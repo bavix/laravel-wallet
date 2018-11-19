@@ -101,7 +101,6 @@ class ProductTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $this->assertEquals($product->balance, 0);
         $this->assertEquals($buyer->balance, 0);
         $buyer->deposit($product->price);
 

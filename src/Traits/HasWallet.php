@@ -8,6 +8,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\WalletProxy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -168,9 +169,6 @@ trait HasWallet
     protected function change(int $amount, ?array $meta, bool $confirmed): Transaction
     {
         return DB::transaction(function () use ($amount, $meta, $confirmed) {
-            if ($confirmed) {
-                $this->addBalance($amount);
-            }
 
             if ($this instanceof WalletModel) {
                 $payable = $this->holder;
@@ -178,6 +176,10 @@ trait HasWallet
             } else {
                 $payable = $this;
                 $wallet = $this->wallet;
+            }
+
+            if ($confirmed) {
+                $this->addBalance($wallet, $amount);
             }
 
             return $this->transactions()->create([
@@ -249,31 +251,38 @@ trait HasWallet
      *  var_dump($user2->balance); // 300
      *
      * @return int
+     * @throws
      */
     public function getBalanceAttribute(): int
     {
         if ($this instanceof WalletModel) {
-            return (int) ($this->attributes['balance'] ?? 0);
+            $this->exists or $this->save();
+            if (!WalletProxy::has($this->getKey())) {
+                WalletProxy::set($this->getKey(), (int) ($this->attributes['balance'] ?? 0));
+            }
+
+            return WalletProxy::get($this->getKey());
         }
 
         return $this->wallet->balance;
     }
 
     /**
+     * @param WalletModel $wallet
      * @param int $amount
      * @return bool
      */
-    protected function addBalance(int $amount): bool
+    protected function addBalance(WalletModel $wallet, int $amount): bool
     {
-        $wallet = $this;
+        $newBalance = $this->getBalanceAttribute() + $amount;
+        $wallet->balance = $newBalance;
 
-        if (!($this instanceof WalletModel)) {
-            $this->getBalanceAttribute();
-            $wallet = $this->wallet;
+        if ($wallet->save()) {
+            WalletProxy::set($wallet->getKey(), $newBalance);
+            return true;
         }
 
-        $wallet->balance += $amount;
-        return $wallet->save();
+        return false;
     }
 
 }
