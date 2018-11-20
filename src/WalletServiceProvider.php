@@ -15,6 +15,11 @@ class WalletServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->loadTranslationsFrom(
+            \dirname(__DIR__) . '/resources/lang',
+            'wallet'
+        );
+
         if (!$this->app->runningInConsole()) {
             return;
         }

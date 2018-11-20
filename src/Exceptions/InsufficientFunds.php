@@ -2,7 +2,7 @@
 
 namespace Bavix\Wallet\Exceptions;
 
-class BalanceIsEmpty extends InsufficientFunds
+class InsufficientFunds extends \LogicException
 {
 
 }

@@ -71,7 +71,7 @@ class WalletFloatTest extends TestCase
 
     /**
      * @return void
-     * @expectedException \Bavix\Wallet\Exceptions\AmountInvalid
+     * @expectedException \Bavix\Wallet\Exceptions\BalanceIsEmpty
      */
     public function testInvalidWithdraw(): void
     {

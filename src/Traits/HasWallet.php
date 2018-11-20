@@ -4,6 +4,7 @@ namespace Bavix\Wallet\Traits;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Tax;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
@@ -46,8 +47,8 @@ trait HasWallet
      */
     private function checkAmount(int $amount): void
     {
-        if ($amount <= 0) {
-            throw new AmountInvalid('The amount must be greater than zero');
+        if ($amount < 0) {
+            throw new AmountInvalid(trans('wallet::errors.price_positive'));
         }
     }
 
@@ -92,8 +93,12 @@ trait HasWallet
      */
     public function withdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
+        if (!$this->balance) {
+            throw new BalanceIsEmpty(trans('wallet::errors.wallet_empty'));
+        }
+
         if (!$this->canWithdraw($amount)) {
-            throw new BalanceIsEmpty('Balance insufficient for write-off');
+            throw new InsufficientFunds(trans('wallet::errors.insufficient_funds'));
         }
 
         return $this->forceWithdraw($amount, $meta, $confirmed);
