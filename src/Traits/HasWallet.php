@@ -358,12 +358,12 @@ trait HasWallet
         $newBalance = $this->getBalanceAttribute() + $amount;
         $wallet->balance = $newBalance;
 
-        if ($wallet->save()) {
-            WalletProxy::set($wallet->getKey(), $newBalance);
-            return true;
-        }
+        return
+            // update database wallet
+            $wallet->save() &&
 
-        return false;
+            // update static wallet
+            WalletProxy::set($wallet->getKey(), $newBalance);
     }
 
 }

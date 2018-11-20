@@ -31,10 +31,12 @@ class WalletProxy
     /**
      * @param int $key
      * @param int $value
+     * @return bool
      */
-    public static function set(int $key, int $value): void
+    public static function set(int $key, int $value): bool
     {
         static::$rows[$key] = $value;
+        return true;
     }
 
     /**
