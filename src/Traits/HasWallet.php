@@ -29,6 +29,17 @@ trait HasWallet
 {
 
     /**
+     * The variable is used for the cache, so as not to request wallets many times.
+     * WalletProxy keeps the money wallets in the memory to avoid errors when you
+     * purchase/transfer, etc.
+     *
+     * @var array
+     */
+    private $_wallets = [];
+
+    /**
+     * The amount of checks for errors
+     *
      * @param int $amount
      * @throws
      */
@@ -40,6 +51,8 @@ trait HasWallet
     }
 
     /**
+     * Forced to withdraw funds from system
+     *
      * @param int $amount
      * @param array|null $meta
      * @param bool $confirmed
@@ -53,6 +66,8 @@ trait HasWallet
     }
 
     /**
+     * The input means in the system
+     *
      * @param int $amount
      * @param array|null $meta
      * @param bool $confirmed
@@ -66,6 +81,8 @@ trait HasWallet
     }
 
     /**
+     * Withdrawals from the system
+     *
      * @param int $amount
      * @param array|null $meta
      * @param bool $confirmed
@@ -82,6 +99,8 @@ trait HasWallet
     }
 
     /**
+     * Checks if you can withdraw funds
+     *
      * @param int $amount
      * @return bool
      */
@@ -91,6 +110,8 @@ trait HasWallet
     }
 
     /**
+     * A method that transfers funds from host to host
+     *
      * @param Wallet $wallet
      * @param int $amount
      * @param array|null $meta
@@ -107,6 +128,8 @@ trait HasWallet
     }
 
     /**
+     * This method ignores errors that occur when transferring funds
+     *
      * @param Wallet $wallet
      * @param int $amount
      * @param array|null $meta
@@ -122,6 +145,9 @@ trait HasWallet
     }
 
     /**
+     * the forced transfer is needed when the user does not have the money and we drive it.
+     * Sometimes you do. Depends on business logic.
+     *
      * @param Wallet $wallet
      * @param int $amount
      * @param array|null $meta
@@ -137,6 +163,8 @@ trait HasWallet
     }
 
     /**
+     * this method adds a new transfer to the transfer table
+     *
      * @param Wallet $wallet
      * @param Transaction $withdraw
      * @param Transaction $deposit
@@ -160,6 +188,8 @@ trait HasWallet
     }
 
     /**
+     * this method adds a new transaction to the translation table
+     *
      * @param int $amount
      * @param array|null $meta
      * @param bool $confirmed
@@ -196,6 +226,8 @@ trait HasWallet
     }
 
     /**
+     * all user actions on wallets will be in this method
+     *
      * @return MorphMany
      */
     public function transactions(): MorphMany
@@ -204,6 +236,9 @@ trait HasWallet
     }
 
     /**
+     * the transfer table is used to confirm the payment
+     * this method receives all transfers
+     *
      * @return MorphMany
      */
     public function transfers(): MorphMany
@@ -212,6 +247,8 @@ trait HasWallet
     }
 
     /**
+     * method of obtaining all wallets
+     *
      * @return MorphMany
      */
     public function wallets(): MorphMany
@@ -220,7 +257,36 @@ trait HasWallet
     }
 
     /**
-     * @return MorphOne
+     * Get wallet by slug
+     *
+     *  $user->wallet->balance // 200
+     *  or short recording $user->balance; // 200
+     *
+     *  $defaultSlug = config('wallet.wallet.default.slug');
+     *  $user->getWallet($defaultSlug)->balance; // 200
+     *
+     *  $user->getWallet('usd')->balance; // 50
+     *  $user->getWallet('rub')->balance; // 100
+     *
+     * @param string $slug
+     * @return WalletModel|null
+     */
+    public function getWallet(string $slug): ?WalletModel
+    {
+        if (!\array_key_exists($slug, $this->_wallets)) {
+            $this->_wallets[$slug] = $this->wallets()
+                ->where('slug', $slug)
+                ->first();
+        }
+
+        return $this->_wallets[$slug];
+    }
+
+    /**
+     * Get default Wallet
+     * this method is used for Eager Loading
+     *
+     * @return MorphOne|WalletModel
      */
     public function wallet(): MorphOne
     {
@@ -233,6 +299,9 @@ trait HasWallet
     }
 
     /**
+     * Magic laravel framework method, makes it
+     *  possible to call property balance
+     *
      * Example:
      *  $user1 = User::first()->load('wallet');
      *  $user2 = User::first()->load('wallet');
@@ -268,6 +337,9 @@ trait HasWallet
     }
 
     /**
+     * This method automatically updates the balance in the
+     * database and the project statics
+     *
      * @param WalletModel $wallet
      * @param int $amount
      * @return bool
