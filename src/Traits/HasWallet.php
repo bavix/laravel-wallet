@@ -4,6 +4,7 @@ namespace Bavix\Wallet\Traits;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Tax;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Models\Transaction;
@@ -121,7 +122,8 @@ trait HasWallet
     public function transfer(Wallet $wallet, int $amount, ?array $meta = null): Transfer
     {
         return DB::transaction(function() use ($amount, $wallet, $meta) {
-            $withdraw = $this->withdraw($amount, $meta);
+            $fee = Tax::fee($wallet, $amount);
+            $withdraw = $this->withdraw($amount + $fee, $meta);
             $deposit = $wallet->deposit($amount, $meta);
             return $this->assemble($wallet, $withdraw, $deposit);
         });
@@ -156,7 +158,8 @@ trait HasWallet
     public function forceTransfer(Wallet $wallet, int $amount, ?array $meta = null): Transfer
     {
         return DB::transaction(function() use ($amount, $wallet, $meta) {
-            $withdraw = $this->forceWithdraw($amount, $meta);
+            $fee = Tax::fee($wallet, $amount);
+            $withdraw = $this->forceWithdraw($amount + $fee, $meta);
             $deposit = $wallet->deposit($amount, $meta);
             return $this->assemble($wallet, $withdraw, $deposit);
         });
@@ -183,6 +186,7 @@ trait HasWallet
             'from_id' => $this->getKey(),
             'to_type' => $wallet->getMorphClass(),
             'to_id' => $wallet->getKey(),
+            'fee' => $withdraw->amount - $deposit->amount,
             'uuid' => Uuid::uuid4()->toString(),
         ]);
     }

@@ -19,6 +19,7 @@ trait CanBePaidFloat
         CanBePaid::transactions insteadof HasWalletFloat;
         CanBePaid::transfers insteadof HasWalletFloat;
         CanBePaid::wallets insteadof HasWalletFloat;
+        CanBePaid::getWallet insteadof HasWalletFloat;
         CanBePaid::wallet insteadof HasWalletFloat;
         CanBePaid::getBalanceAttribute insteadof HasWalletFloat;
         CanBePaid::addBalance insteadof HasWalletFloat;
