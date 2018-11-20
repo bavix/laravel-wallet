@@ -104,9 +104,9 @@ trait CanBePaid
 
         return DB::transaction(function() use ($product, $transfer, $force) {
             if ($force) {
-                $product->forceTransfer($this, $product->getAmountProduct(), $product->getMetaProduct());
+                $product->forceTransfer($this, $transfer->deposit->amount, $product->getMetaProduct());
             } else {
-                $product->transfer($this, $product->getAmountProduct(), $product->getMetaProduct());
+                $product->transfer($this, $transfer->deposit->amount, $product->getMetaProduct());
             }
 
             return $transfer->update(['refund' => 1]);

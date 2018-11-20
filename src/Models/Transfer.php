@@ -19,6 +19,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property bool $refund
  * @property string $uuid
  * @property int $fee
+ *
+ * @property Transaction $deposit
+ * @property Transaction $withdraw
  */
 class Transfer extends Model
 {
