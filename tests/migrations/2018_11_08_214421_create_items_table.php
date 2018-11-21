@@ -7,7 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 class CreateItemsTable extends Migration
 {
     /**
-     * Run the migrations_v2.
+     * Run the migrations.
      *
      * @return void
      */
@@ -23,7 +23,7 @@ class CreateItemsTable extends Migration
     }
 
     /**
-     * Reverse the migrations_v2.
+     * Reverse the migrations.
      *
      * @return void
      */

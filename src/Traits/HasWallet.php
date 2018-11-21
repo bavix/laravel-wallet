@@ -55,7 +55,7 @@ trait HasWallet
     public function forceWithdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         $this->checkAmount($amount);
-        return $this->change(-$amount, $meta, $confirmed);
+        return $this->change(Transaction::TYPE_WITHDRAW, -$amount, $meta, $confirmed);
     }
 
     /**
@@ -70,7 +70,7 @@ trait HasWallet
     public function deposit(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         $this->checkAmount($amount);
-        return $this->change($amount, $meta, $confirmed);
+        return $this->change(Transaction::TYPE_DEPOSIT, $amount, $meta, $confirmed);
     }
 
     /**
@@ -190,15 +190,16 @@ trait HasWallet
     /**
      * this method adds a new transaction to the translation table
      *
+     * @param string $type
      * @param int $amount
      * @param array|null $meta
      * @param bool $confirmed
      * @return Transaction
      * @throws
      */
-    protected function change(int $amount, ?array $meta, bool $confirmed): Transaction
+    protected function change(string $type, int $amount, ?array $meta, bool $confirmed): Transaction
     {
-        return DB::transaction(function () use ($amount, $meta, $confirmed) {
+        return DB::transaction(function () use ($type, $amount, $meta, $confirmed) {
 
             $wallet = $this;
             if (!($this instanceof WalletModel)) {
@@ -210,7 +211,7 @@ trait HasWallet
             }
 
             return $this->transactions()->create([
-                'type' => $amount > 0 ? 'deposit' : 'withdraw',
+                'type' => $type,
                 'wallet_id' => $wallet->getKey(),
                 'uuid' => Uuid::uuid4()->toString(),
                 'confirmed' => $confirmed,
