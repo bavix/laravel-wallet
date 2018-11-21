@@ -16,6 +16,19 @@ trait CanBePaid
 
     /**
      * @param Product $product
+     * @return Transfer
+     */
+    public function payFree(Product $product): Transfer
+    {
+        if (!$product->canBuy($this)) {
+            throw new ProductEnded(trans('wallet::errors.product_stock'));
+        }
+
+        return $this->transfer($product, 0, $product->getMetaProduct());
+    }
+
+    /**
+     * @param Product $product
      * @param bool $force
      * @return Transfer
      * @throws
@@ -23,7 +36,7 @@ trait CanBePaid
     public function pay(Product $product, bool $force = false): Transfer
     {
         if (!$product->canBuy($this, $force)) {
-            throw new ProductEnded('The product is out of stock');
+            throw new ProductEnded(trans('wallet::errors.product_stock'));
         }
 
         if ($force) {
@@ -89,11 +102,11 @@ trait CanBePaid
                 ->setModel($this->transfers()->getMorphClass());
         }
 
-        return DB::transaction(function() use ($product, $transfer, $force) {
+        return DB::transaction(function () use ($product, $transfer, $force) {
             if ($force) {
-                $product->forceTransfer($this, $product->getAmountProduct(), $product->getMetaProduct());
+                $product->forceTransfer($this, $transfer->deposit->amount, $product->getMetaProduct());
             } else {
-                $product->transfer($this, $product->getAmountProduct(), $product->getMetaProduct());
+                $product->transfer($this, $transfer->deposit->amount, $product->getMetaProduct());
             }
 
             return $transfer->update(['refund' => 1]);

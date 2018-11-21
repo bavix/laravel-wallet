@@ -5,8 +5,23 @@ namespace Bavix\Wallet\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
+/**
+ * Class Transaction
+ * @package Bavix\Wallet\Models
+ *
+ * @property string $payable_type
+ * @property int $payable_id
+ * @property string $uuid
+ * @property string $type
+ * @property int $amount
+ * @property bool $confirmed
+ * @property array $meta
+ */
 class Transaction extends Model
 {
+
+    public const TYPE_DEPOSIT = 'deposit';
+    public const TYPE_WITHDRAW = 'withdraw';
 
     /**
      * @var array
@@ -14,6 +29,7 @@ class Transaction extends Model
     protected $fillable = [
         'payable_type',
         'payable_id',
+        'wallet_id',
         'uuid',
         'type',
         'amount',

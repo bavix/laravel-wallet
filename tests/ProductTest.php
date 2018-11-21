@@ -84,6 +84,7 @@ class ProductTest extends TestCase
 
         $this->assertNotNull($buyer->pay($product));
         $this->assertEquals($buyer->balance, 0);
+        $this->assertEquals($product->balance, $product->price);
     }
 
     /**
@@ -99,9 +100,6 @@ class ProductTest extends TestCase
         $product = factory(Item::class)->create([
             'quantity' => 1,
         ]);
-
-        $this->assertNotEquals($product->balance, 0);
-        $product->withdraw($product->balance);
 
         $this->assertEquals($buyer->balance, 0);
         $buyer->deposit($product->price);
@@ -168,6 +166,53 @@ class ProductTest extends TestCase
 
         $buyer->deposit(-$buyer->balance);
         $this->assertEquals($buyer->balance, 0);
+    }
+
+    /**
+     * @return void
+     */
+    public function testPayFree(): void
+    {
+        /**
+         * @var Buyer $buyer
+         * @var Item $product
+         */
+        $buyer = factory(Buyer::class)->create();
+        $product = factory(Item::class)->create([
+            'quantity' => 1,
+        ]);
+
+        $this->assertEquals($buyer->balance, 0);
+
+        $transfer = $buyer->payFree($product);
+        $this->assertEquals($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
+        $this->assertEquals($transfer->withdraw->type, Transaction::TYPE_WITHDRAW);
+
+        $this->assertEquals($buyer->balance, 0);
+        $this->assertEquals($product->balance, 0);
+
+        $buyer->refund($product);
+        $this->assertEquals($buyer->balance, 0);
+        $this->assertEquals($product->balance, 0);
+    }
+
+    /**
+     * @return void
+     * @expectedException \Bavix\Wallet\Exceptions\ProductEnded
+     */
+    public function testPayFreeOutOfStock(): void
+    {
+        /**
+         * @var Buyer $buyer
+         * @var Item $product
+         */
+        $buyer = factory(Buyer::class)->create();
+        $product = factory(Item::class)->create([
+            'quantity' => 1,
+        ]);
+
+        $this->assertNotNull($buyer->payFree($product));
+        $buyer->payFree($product);
     }
 
 }

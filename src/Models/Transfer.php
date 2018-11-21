@@ -6,6 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
+/**
+ * Class Transfer
+ * @package Bavix\Wallet\Models
+ *
+ * @property int $deposit_id
+ * @property int $withdraw_id
+ * @property string $from_type
+ * @property int $from_id
+ * @property string $to_type
+ * @property int $to_id
+ * @property bool $refund
+ * @property string $uuid
+ * @property int $fee
+ *
+ * @property Transaction $deposit
+ * @property Transaction $withdraw
+ */
 class Transfer extends Model
 {
 
@@ -21,6 +38,7 @@ class Transfer extends Model
         'to_id',
         'refund',
         'uuid',
+        'fee',
     ];
 
     /**
