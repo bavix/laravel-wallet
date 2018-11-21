@@ -5,11 +5,11 @@ namespace Bavix\Wallet\Traits;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
-use Bavix\Wallet\Tax;
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Models\Wallet as WalletModel;
+use Bavix\Wallet\Tax;
 use Bavix\Wallet\WalletProxy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -117,7 +117,7 @@ trait HasWallet
      */
     public function transfer(Wallet $wallet, int $amount, ?array $meta = null): Transfer
     {
-        return DB::transaction(function() use ($amount, $wallet, $meta) {
+        return DB::transaction(function () use ($amount, $wallet, $meta) {
             $fee = Tax::fee($wallet, $amount);
             $withdraw = $this->withdraw($amount + $fee, $meta);
             $deposit = $wallet->deposit($amount, $meta);
@@ -153,7 +153,7 @@ trait HasWallet
      */
     public function forceTransfer(Wallet $wallet, int $amount, ?array $meta = null): Transfer
     {
-        return DB::transaction(function() use ($amount, $wallet, $meta) {
+        return DB::transaction(function () use ($amount, $wallet, $meta) {
             $fee = Tax::fee($wallet, $amount);
             $withdraw = $this->forceWithdraw($amount + $fee, $meta);
             $deposit = $wallet->deposit($amount, $meta);
@@ -198,13 +198,10 @@ trait HasWallet
      */
     protected function change(int $amount, ?array $meta, bool $confirmed): Transaction
     {
-        return DB::transaction(function() use ($amount, $meta, $confirmed) {
+        return DB::transaction(function () use ($amount, $meta, $confirmed) {
 
-            if ($this instanceof WalletModel) {
-                $payable = $this->holder;
-                $wallet = $this;
-            } else {
-                $payable = $this;
+            $wallet = $this;
+            if (!($this instanceof WalletModel)) {
                 $wallet = $this->wallet;
             }
 
@@ -212,7 +209,7 @@ trait HasWallet
                 $this->addBalance($wallet, $amount);
             }
 
-            return $payable->transactions()->create([
+            return $this->transactions()->create([
                 'type' => $amount > 0 ? 'deposit' : 'withdraw',
                 'wallet_id' => $wallet->getKey(),
                 'uuid' => Uuid::uuid4()->toString(),
@@ -230,7 +227,8 @@ trait HasWallet
      */
     public function transactions(): MorphMany
     {
-        return $this->morphMany(config('wallet.transaction.model'), 'payable');
+        return ($this instanceof WalletModel ? $this->holder : $this)
+            ->morphMany(config('wallet.transaction.model'), 'payable');
     }
 
     /**
@@ -241,7 +239,8 @@ trait HasWallet
      */
     public function transfers(): MorphMany
     {
-        return $this->morphMany(config('wallet.transfer.model'), 'from');
+        return ($this instanceof WalletModel ? $this->holder : $this)
+            ->morphMany(config('wallet.transfer.model'), 'from');
     }
 
     /**
@@ -252,7 +251,8 @@ trait HasWallet
      */
     public function wallet(): MorphOne
     {
-        return $this->morphOne(config('wallet.wallet.model'), 'holder')
+        return ($this instanceof WalletModel ? $this->holder : $this)
+            ->morphOne(config('wallet.wallet.model'), 'holder')
             ->withDefault([
                 'name' => config('wallet.wallet.default.name'),
                 'slug' => config('wallet.wallet.default.slug'),
@@ -289,7 +289,7 @@ trait HasWallet
         if ($this instanceof WalletModel) {
             $this->exists or $this->save();
             if (!WalletProxy::has($this->getKey())) {
-                WalletProxy::set($this->getKey(), (int) ($this->attributes['balance'] ?? 0));
+                WalletProxy::set($this->getKey(), (int)($this->attributes['balance'] ?? 0));
             }
 
             return WalletProxy::get($this->getKey());

@@ -18,7 +18,7 @@ class Tax
     public static function fee(Wallet $wallet, int $amount): int
     {
         if ($wallet instanceof Taxing) {
-            return (int) ($amount * $wallet->getFeePercent() / 100);
+            return (int)($amount * $wallet->getFeePercent() / 100);
         }
 
         return 0;

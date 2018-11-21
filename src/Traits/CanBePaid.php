@@ -102,7 +102,7 @@ trait CanBePaid
                 ->setModel($this->transfers()->getMorphClass());
         }
 
-        return DB::transaction(function() use ($product, $transfer, $force) {
+        return DB::transaction(function () use ($product, $transfer, $force) {
             if ($force) {
                 $product->forceTransfer($this, $transfer->deposit->amount, $product->getMetaProduct());
             } else {

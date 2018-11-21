@@ -25,7 +25,7 @@ class WalletProxy
      */
     public static function get(int $key): int
     {
-        return (int) (static::$rows[$key] ?? 0);
+        return (int)(static::$rows[$key] ?? 0);
     }
 
     /**
