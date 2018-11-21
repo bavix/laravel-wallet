@@ -184,7 +184,10 @@ class ProductTest extends TestCase
 
         $this->assertEquals($buyer->balance, 0);
 
-        $buyer->payFree($product);
+        $transfer = $buyer->payFree($product);
+        $this->assertEquals($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
+        $this->assertEquals($transfer->withdraw->type, Transaction::TYPE_WITHDRAW);
+
         $this->assertEquals($buyer->balance, 0);
         $this->assertEquals($product->balance, 0);
 
