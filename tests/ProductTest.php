@@ -168,4 +168,48 @@ class ProductTest extends TestCase
         $this->assertEquals($buyer->balance, 0);
     }
 
+    /**
+     * @return void
+     */
+    public function testPayFree(): void
+    {
+        /**
+         * @var Buyer $buyer
+         * @var Item $product
+         */
+        $buyer = factory(Buyer::class)->create();
+        $product = factory(Item::class)->create([
+            'quantity' => 1,
+        ]);
+
+        $this->assertEquals($buyer->balance, 0);
+
+        $buyer->payFree($product);
+        $this->assertEquals($buyer->balance, 0);
+        $this->assertEquals($product->balance, 0);
+
+        $buyer->refund($product);
+        $this->assertEquals($buyer->balance, 0);
+        $this->assertEquals($product->balance, 0);
+    }
+
+    /**
+     * @return void
+     * @expectedException \Bavix\Wallet\Exceptions\ProductEnded
+     */
+    public function testPayFreeOutOfStock(): void
+    {
+        /**
+         * @var Buyer $buyer
+         * @var Item $product
+         */
+        $buyer = factory(Buyer::class)->create();
+        $product = factory(Item::class)->create([
+            'quantity' => 1,
+        ]);
+
+        $this->assertNotNull($buyer->payFree($product));
+        $buyer->payFree($product);
+    }
+
 }

@@ -60,7 +60,14 @@ class Wallet extends Model implements Customer, WalletFloat
     public function setNameAttribute(string $name): void
     {
         $this->attributes['name'] = $name;
-        $this->attributes['slug'] = Str::slug($name);
+
+        /**
+         * Must be updated only if the model does not exist
+         *  or the slug is empty
+         */
+        if (!$this->exists && !\array_key_exists('slug', $this->attributes)) {
+            $this->attributes['slug'] = Str::slug($name);
+        }
     }
 
     /**

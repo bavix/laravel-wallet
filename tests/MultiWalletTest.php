@@ -251,4 +251,32 @@ class MultiWalletTest extends TestCase
         ]);
     }
 
+    /**
+     * @return void
+     */
+    public function testGetWallet(): void
+    {
+        /**
+         * @var UserMulti $user
+         */
+        $user = factory(UserMulti::class)->create();
+
+        $firstWallet = $user->createWallet([
+            'name' => 'My Test',
+            'slug' => 'test',
+        ]);
+
+        $secondWallet = $user->getWallet('test');
+        $this->assertEquals($secondWallet->getKey(), $firstWallet->getKey());
+
+        $test2 = $user->wallets()->create([
+            'name' => 'Test2'
+        ]);
+
+        $this->assertEquals(
+            $test2->getKey(),
+            $user->getWallet('test2')->getKey()
+        );
+    }
+
 }

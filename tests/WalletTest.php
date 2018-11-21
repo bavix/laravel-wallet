@@ -76,6 +76,17 @@ class WalletTest extends TestCase
 
     /**
      * @return void
+     * @expectedException \Bavix\Wallet\Exceptions\InsufficientFunds
+     */
+    public function testInsufficientFundsWithdraw(): void
+    {
+        $user = factory(User::class)->create();
+        $user->deposit(1);
+        $user->withdraw(2);
+    }
+
+    /**
+     * @return void
      */
     public function testTransfer(): void
     {

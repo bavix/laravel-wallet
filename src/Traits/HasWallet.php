@@ -84,7 +84,7 @@ trait HasWallet
      */
     public function withdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        if (!$this->balance) {
+        if ($amount && !$this->balance) {
             throw new BalanceIsEmpty(trans('wallet::errors.wallet_empty'));
         }
 

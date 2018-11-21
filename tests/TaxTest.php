@@ -1,0 +1,55 @@
+<?php
+
+namespace Bavix\Wallet\Test;
+
+use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Test\Models\Buyer;
+use Bavix\Wallet\Test\Models\ItemTax;
+
+class TaxTest extends TestCase
+{
+
+    /**
+     * @return void
+     */
+    public function testPay(): void
+    {
+        /**
+         * @var Buyer $buyer
+         * @var ItemTax $product
+         */
+        $buyer = factory(Buyer::class)->create();
+        $product = factory(ItemTax::class)->create([
+            'quantity' => 1,
+        ]);
+
+        $balance = (int) ($product->price +
+            $product->price * $product->getFeePercent() / 100);
+
+        $this->assertEquals($buyer->balance, 0);
+        $buyer->deposit($balance);
+
+        $this->assertNotEquals($buyer->balance, 0);
+        $transfer = $buyer->pay($product);
+        $this->assertNotNull($transfer);
+
+        /**
+         * @var Transaction $withdraw
+         * @var Transaction $deposit
+         */
+        $withdraw = $transfer->withdraw;
+        $deposit = $transfer->deposit;
+
+        $this->assertEquals($withdraw->amount, -$balance);
+        $this->assertEquals($deposit->amount, $product->getAmountProduct());
+        $this->assertNotEquals($deposit->amount, $withdraw->amount);
+
+        $buyer->refund($product);
+        $this->assertEquals($buyer->balance, $deposit->amount);
+        $this->assertEquals($product->balance, 0);
+
+        $buyer->withdraw($buyer->balance);
+        $this->assertEquals($buyer->balance, 0);
+    }
+
+}
