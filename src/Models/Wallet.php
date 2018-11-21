@@ -71,15 +71,22 @@ class Wallet extends Model implements Customer, WalletFloat
     }
 
     /**
+     * @return int
+     */
+    public function getAvailableBalance(): int
+    {
+        return $this->transactions()
+            ->where('wallet_id', $this->getKey())
+            ->where('confirmed', true)
+            ->sum('amount');
+    }
+
+    /**
      * @return bool
      */
     public function calculateBalance(): bool
     {
-        $balance = $this->transactions()
-            ->where('wallet_id', $this->getKey())
-            ->where('confirmed', true)
-            ->sum('amount');
-
+        $balance = $this->getBalanceAttribute();
         WalletProxy::set($this->getKey(), $balance);
         $this->attributes['balance'] = $balance;
 
