@@ -53,6 +53,11 @@ class WalletServiceProvider extends ServiceProvider
             \dirname(__DIR__) . '/config/config.php',
             'wallet'
         );
+
+        // Bind eloquent models to IoC container
+        $this->app->singleton('bavix.wallet::transaction', config('wallet.transaction.model'));
+        $this->app->singleton('bavix.wallet::transfer', config('wallet.transfer.model'));
+        $this->app->singleton('bavix.wallet::wallet', config('wallet.wallet.model'));
     }
 
 }

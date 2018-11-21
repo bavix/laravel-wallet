@@ -7,11 +7,13 @@ use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Traits\CanBePaidFloat;
 use Bavix\Wallet\WalletProxy;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Str;
 
 /**
  * Class Wallet
  * @package Bavix\Wallet\Models
+ * @property string $slug
  * @property int $balance
  * @property \Bavix\Wallet\Interfaces\Wallet $holder
  */
@@ -52,6 +54,16 @@ class Wallet extends Model implements Customer, WalletFloat
     }
 
     /**
+     * @param string $name
+     * @return void
+     */
+    public function setNameAttribute(string $name): void
+    {
+        $this->attributes['name'] = $name;
+        $this->attributes['slug'] = Str::slug($name);
+    }
+
+    /**
      * @return bool
      */
     public function calculateBalance(): bool
@@ -68,11 +80,11 @@ class Wallet extends Model implements Customer, WalletFloat
     }
 
     /**
-     * @return BelongsToMany
+     * @return MorphTo
      */
-    public function holder(): BelongsToMany
+    public function holder(): MorphTo
     {
-        return $this->belongsToMany('holder');
+        return $this->morphTo();
     }
 
 }

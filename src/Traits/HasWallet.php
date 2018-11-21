@@ -175,7 +175,7 @@ trait HasWallet
         /**
          * @var Model $wallet
          */
-        return \app(config('wallet.transfer.model'))->create([
+        return \app('bavix.wallet::transfer')->create([
             'deposit_id' => $deposit->getKey(),
             'withdraw_id' => $withdraw->getKey(),
             'from_type' => $this->getMorphClass(),
@@ -212,10 +212,8 @@ trait HasWallet
                 $this->addBalance($wallet, $amount);
             }
 
-            return $this->transactions()->create([
+            return $payable->transactions()->create([
                 'type' => $amount > 0 ? 'deposit' : 'withdraw',
-                'payable_type' => $payable->getMorphClass(),
-                'payable_id' => $payable->getKey(),
                 'wallet_id' => $wallet->getKey(),
                 'uuid' => Uuid::uuid4()->toString(),
                 'confirmed' => $confirmed,
