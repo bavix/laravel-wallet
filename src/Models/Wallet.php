@@ -86,7 +86,7 @@ class Wallet extends Model implements Customer, WalletFloat
      */
     public function calculateBalance(): bool
     {
-        $balance = $this->getBalanceAttribute();
+        $balance = $this->getAvailableBalance();
         WalletProxy::set($this->getKey(), $balance);
         $this->attributes['balance'] = $balance;
 
