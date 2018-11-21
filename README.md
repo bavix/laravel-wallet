@@ -16,6 +16,9 @@ laravel-wallet - Easy work with virtual wallet.
 [[Documentation](https://laravel-wallet.bavix.ru/)] 
 [[Get Started](https://laravel-wallet.bavix.ru/2.0/basic-usage)] 
 
+[[Документация](https://laravel-wallet.bavix.ru/2.0-ru)] 
+[[Как начать](https://laravel-wallet.bavix.ru/2.0-ru/basic-usage)] 
+
 * **Vendor**: bavix
 * **Package**: laravel-wallet
 * **Version**: [![Latest Stable Version](https://poser.pugx.org/bavix/laravel-wallet/v/stable)](https://packagist.org/packages/bavix/laravel-wallet)
