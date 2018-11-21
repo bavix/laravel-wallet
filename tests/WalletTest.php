@@ -176,4 +176,27 @@ class WalletTest extends TestCase
         $this->assertEquals($user->balance, 0);
     }
 
+    /**
+     * @return void
+     */
+    public function testRecalculate(): void
+    {
+        /**
+         * @var User $user
+         */
+        $user = factory(User::class)->create();
+        $this->assertEquals($user->balance, 0);
+
+        $user->deposit(100, null, false);
+        $this->assertEquals($user->balance, 0);
+
+        $user->transactions()->update(['confirmed' => true]);
+        $this->assertEquals($user->balance, 0);
+
+        $user->wallet->calculateBalance();
+        $this->assertEquals($user->balance, 100);
+
+        $user->withdraw($user->balance);
+    }
+
 }
