@@ -232,4 +232,23 @@ class MultiWalletTest extends TestCase
         $this->assertEquals($wallet->balance, 0);
     }
 
+    /**
+     * @expectedException \Illuminate\Database\QueryException
+     */
+    public function testWalletUnique(): void
+    {
+        /**
+         * @var UserMulti $user
+         */
+        $user = factory(UserMulti::class)->create();
+
+        $user->createWallet([
+            'name' => 'deposit'
+        ]);
+
+        $user->createWallet([
+            'name' => 'deposit'
+        ]);
+    }
+
 }
