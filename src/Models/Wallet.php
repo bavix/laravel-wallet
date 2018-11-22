@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Models;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Traits\CanBePaidFloat;
+use Bavix\Wallet\Traits\HasGift;
 use Bavix\Wallet\WalletProxy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -21,6 +22,7 @@ class Wallet extends Model implements Customer, WalletFloat
 {
 
     use CanBePaidFloat;
+    use HasGift;
 
     /**
      * @var array

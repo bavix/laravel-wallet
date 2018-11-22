@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int $amount
  * @property bool $confirmed
  * @property array $meta
+ * @property \Bavix\Wallet\Interfaces\Wallet $payable
  */
 class Transaction extends Model
 {

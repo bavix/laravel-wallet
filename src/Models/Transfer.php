@@ -10,13 +10,13 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * Class Transfer
  * @package Bavix\Wallet\Models
  *
+ * @property string $status
  * @property int $deposit_id
  * @property int $withdraw_id
  * @property string $from_type
  * @property int $from_id
  * @property string $to_type
  * @property int $to_id
- * @property bool $refund
  * @property string $uuid
  * @property int $fee
  *
@@ -26,17 +26,21 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class Transfer extends Model
 {
 
+    public const STATUS_PAID = 'paid';
+    public const STATUS_REFUND = 'refund';
+    public const STATUS_GIFT = 'gift';
+
     /**
      * @var array
      */
     protected $fillable = [
+        'status',
         'deposit_id',
         'withdraw_id',
         'from_type',
         'from_id',
         'to_type',
         'to_id',
-        'refund',
         'uuid',
         'fee',
     ];

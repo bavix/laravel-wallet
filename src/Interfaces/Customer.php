@@ -32,29 +32,33 @@ interface Customer extends Wallet
 
     /**
      * @param Product $product
+     * @param bool $gifts
      * @return null|Transfer
      */
-    public function paid(Product $product): ?Transfer;
+    public function paid(Product $product, bool $gifts = false): ?Transfer;
 
     /**
      * @param Product $product
      * @param bool $force
+     * @param bool $gifts
      * @return bool
      * @throws
      */
-    public function refund(Product $product, bool $force = false): bool;
+    public function refund(Product $product, bool $force = false, bool $gifts = false): bool;
 
     /**
      * @param Product $product
      * @param bool $force
+     * @param bool $gifts
      * @return bool
      */
-    public function safeRefund(Product $product, bool $force = false): bool;
+    public function safeRefund(Product $product, bool $force = false, bool $gifts = false): bool;
 
     /**
      * @param Product $product
+     * @param bool $gifts
      * @return bool
      */
-    public function forceRefund(Product $product): bool;
+    public function forceRefund(Product $product, bool $gifts = false): bool;
 
 }

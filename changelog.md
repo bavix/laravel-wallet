@@ -6,10 +6,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added 
-- File changelog.md
+- File changelog.
+- Add `HasGift` trait.
+- Added status column to the `transfers` table.
+- Added status_last column to the `transfers` table.
+
+### Fixed
+- Due to the addition of new functionality "gifts" 
+there are possible problems that need to be addressed. 
+Namely, when returning the goods, 
+the funds would not be returned to 
+the person who paid for it. 
+Which would raise a lot of questions.
 
 ### Changed
 - Composer.json: add new keywords.
+- the $gifts argument (Boolean type) is added to 
+the paid, refund, safeRefund, forceRefund method's.
+
+### Removed
+- Removed column `refund` from `transfers` table. 
+Now it has been replaced by the status column.
 
 ## [2.0.1] - 2018-11-21
 ### Added 
