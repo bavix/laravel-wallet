@@ -173,6 +173,20 @@ trait CanBePaid
 
     /**
      * @param Product $product
+     * @param bool $force
+     * @return bool
+     */
+    public function safeRefundGift(Product $product, bool $force = false): bool
+    {
+        try {
+            return $this->refundGift($product, $force);
+        } catch (\Throwable $throwable) {
+            return false;
+        }
+    }
+
+    /**
+     * @param Product $product
      * @return bool
      * @throws
      */
