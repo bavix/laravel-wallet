@@ -5,14 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.1.0] - 2018-11-22
 ### Added 
 - File changelog.
 - Add `HasGift` trait.
 - Added status column to the `transfers` table.
 - Added status_last column to the `transfers` table.
+- Added methods: refundGift, safeRefundGift, forceRefundGift
+- A new argument is added to the "old `refund`" methods `$gifts`.
 
 ### Fixed
-- Due to the addition of new functionality "gifts" 
+- Due to the addition of new functionality `gifts` 
 there are possible problems that need to be addressed. 
 Namely, when returning the goods, 
 the funds would not be returned to 
@@ -182,8 +186,9 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Models: Transfer, Transaction.
 
 [Unreleased]: https://github.com/bavix/laravel-wallet/compare/2.0.1...HEAD
-[2.0.1]: https://github.com/bavix/laravel-wallet/compare/2.0.1...1.0.0
-[2.0.0]: https://github.com/bavix/laravel-wallet/compare/2.0.0...1.0.0
+[2.1.0]: https://github.com/bavix/laravel-wallet/compare/2.0.1...2.1.0
+[2.0.1]: https://github.com/bavix/laravel-wallet/compare/2.0.0...2.0.1
+[2.0.0]: https://github.com/bavix/laravel-wallet/compare/1.2.3...2.0.0
 [1.2.3]: https://github.com/bavix/laravel-wallet/compare/1.2.2...1.2.3
 [1.2.2]: https://github.com/bavix/laravel-wallet/compare/1.2.1...1.2.2
 [1.2.1]: https://github.com/bavix/laravel-wallet/compare/1.2.0...1.2.1
