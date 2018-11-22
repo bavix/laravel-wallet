@@ -46,9 +46,9 @@ trait HasGift
              * Santa pays taxes
              */
             if ($force) {
-                $withdraw = $santa->withdraw($amount + $fee, $meta);
-            } else {
                 $withdraw = $santa->forceWithdraw($amount + $fee, $meta);
+            } else {
+                $withdraw = $santa->withdraw($amount + $fee, $meta);
             }
 
             $deposit = $product->deposit($amount, $meta);
