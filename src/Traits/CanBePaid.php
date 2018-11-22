@@ -161,4 +161,24 @@ trait CanBePaid
         return $this->refund($product, true, $gifts);
     }
 
+    /**
+     * @param Product $product
+     * @param bool $force
+     * @return bool
+     */
+    public function refundGift(Product $product, bool $force = false): bool
+    {
+        return $this->refund($product, $force, true);
+    }
+
+    /**
+     * @param Product $product
+     * @return bool
+     * @throws
+     */
+    public function forceRefundGift(Product $product): bool
+    {
+        return $this->refundGift($product, true);
+    }
+
 }

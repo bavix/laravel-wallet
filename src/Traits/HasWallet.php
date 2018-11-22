@@ -164,6 +164,7 @@ trait HasWallet
     /**
      * this method adds a new transfer to the transfer table
      *
+     * @param string $status
      * @param Wallet $wallet
      * @param Transaction $withdraw
      * @param Transaction $deposit
@@ -172,10 +173,17 @@ trait HasWallet
      */
     protected function assemble(Wallet $wallet, Transaction $withdraw, Transaction $deposit): Transfer
     {
+        $status = Transfer::STATUS_PAID;
+        if ($this->getMorphClass() !== $withdraw->payable_type ||
+            $this->getKey() !== $withdraw->payable_id) {
+            $status = Transfer::STATUS_GIFT;
+        }
+
         /**
          * @var Model $wallet
          */
         return \app('bavix.wallet::transfer')->create([
+            'status' => $status,
             'deposit_id' => $deposit->getKey(),
             'withdraw_id' => $withdraw->getKey(),
             'from_type' => $this->getMorphClass(),
