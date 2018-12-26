@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2018-12-25
+### Added 
+- Add trait `CanPay`.
+- Add trait `CanPayFloat`.
+
+### Deprecated
+- Trait `CanBePaid`.
+- Trait `CanBePaidFloat`.
+
 ## [2.1.0] - 2018-11-22
 ### Added 
 - File changelog.

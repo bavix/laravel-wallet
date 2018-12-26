@@ -2,8 +2,8 @@
 
 namespace Bavix\Wallet\Test\Models;
 
-use Bavix\Wallet\Traits\CanBePaid;
 use Bavix\Wallet\Interfaces\Customer;
+use Bavix\Wallet\Traits\CanPay;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Buyer extends Model implements Customer
 {
-    use CanBePaid;
+    use CanPay;
 
     /**
      * @return string

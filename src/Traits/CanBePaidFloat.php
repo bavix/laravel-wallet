@@ -2,25 +2,13 @@
 
 namespace Bavix\Wallet\Traits;
 
+/**
+ * Trait CanBePaidFloat
+ * @package Bavix\Wallet\Traits
+ * @deprecated use trait CanPayFloat
+ * @see https://github.com/bavix/laravel-wallet/issues/19
+ */
 trait CanBePaidFloat
 {
-
-    use HasWalletFloat, CanBePaid {
-        CanBePaid::checkAmount insteadof HasWalletFloat;
-        CanBePaid::deposit insteadof HasWalletFloat;
-        CanBePaid::withdraw insteadof HasWalletFloat;
-        CanBePaid::canWithdraw insteadof HasWalletFloat;
-        CanBePaid::forceWithdraw insteadof HasWalletFloat;
-        CanBePaid::transfer insteadof HasWalletFloat;
-        CanBePaid::safeTransfer insteadof HasWalletFloat;
-        CanBePaid::forceTransfer insteadof HasWalletFloat;
-        CanBePaid::assemble insteadof HasWalletFloat;
-        CanBePaid::change insteadof HasWalletFloat;
-        CanBePaid::transactions insteadof HasWalletFloat;
-        CanBePaid::transfers insteadof HasWalletFloat;
-        CanBePaid::wallet insteadof HasWalletFloat;
-        CanBePaid::getBalanceAttribute insteadof HasWalletFloat;
-        CanBePaid::addBalance insteadof HasWalletFloat;
-    }
-
+    use CanPayFloat;
 }

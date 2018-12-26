@@ -14,10 +14,10 @@
 laravel-wallet - Easy work with virtual wallet.
 
 [[Documentation](https://laravel-wallet.bavix.ru/)] 
-[[Get Started](https://laravel-wallet.bavix.ru/2.0/basic-usage)] 
+[[Get Started](https://laravel-wallet.bavix.ru/2.2/basic-usage)] 
 
-[[Документация](https://laravel-wallet.bavix.ru/2.0-ru)] 
-[[Как начать](https://laravel-wallet.bavix.ru/2.0-ru/basic-usage)] 
+[[Документация](https://laravel-wallet.bavix.ru/2.2-ru)] 
+[[Как начать](https://laravel-wallet.bavix.ru/2.2-ru/basic-usage)] 
 
 * **Vendor**: bavix
 * **Package**: laravel-wallet
@@ -26,9 +26,9 @@ laravel-wallet - Easy work with virtual wallet.
 * **Laravel Version**: `5.5`, `5.6`, `5.7`
 * **[Composer](https://getcomposer.org/):** `composer require bavix/laravel-wallet`
 
-### Switching from 1.x.x → 2.x.x
+### Upgrade Guide
 
-To perform the migration, you will be [helped by the instruction](https://laravel-wallet.bavix.ru/2.0/upgrade-guide).
+To perform the migration, you will be [helped by the instruction](https://laravel-wallet.bavix.ru/2.2/upgrade-guide).
 
 ### Run Migrations
 Publish the migrations with this artisan command:
