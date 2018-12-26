@@ -72,14 +72,14 @@ $user->balance; // int(-191)
 
 ### Purchases
 
-Add the `CanBePaid` trait and `Customer` interface to your `User` model.
+Add the `CanPay` trait and `Customer` interface to your `User` model.
 ```php
-use Bavix\Wallet\Traits\CanBePaid;
+use Bavix\Wallet\Traits\CanPay;
 use Bavix\Wallet\Interfaces\Customer;
 
 class User extends Model implements Customer
 {
-    use CanBePaid;
+    use CanPay;
 }
 ```
 
