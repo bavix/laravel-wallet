@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [2.2.1] - 2019-02-17
+### Added 
+- Add support Laravel 5.8.
+
 ## [2.2.0] - 2018-12-25
 ### Added 
 - Add trait `CanPay`.
@@ -194,7 +199,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/2.2.0...HEAD
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/2.2.1...HEAD
+[2.2.1]: https://github.com/bavix/laravel-wallet/compare/2.2.0...2.2.1
 [2.2.0]: https://github.com/bavix/laravel-wallet/compare/2.1.0...2.2.0
 [2.1.0]: https://github.com/bavix/laravel-wallet/compare/2.0.1...2.1.0
 [2.0.1]: https://github.com/bavix/laravel-wallet/compare/2.0.0...2.0.1
