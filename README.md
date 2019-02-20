@@ -23,7 +23,7 @@ laravel-wallet - Easy work with virtual wallet.
 * **Package**: laravel-wallet
 * **Version**: [![Latest Stable Version](https://poser.pugx.org/bavix/laravel-wallet/v/stable)](https://packagist.org/packages/bavix/laravel-wallet)
 * **PHP Version**: 7.1+ 
-* **Laravel Version**: `5.5`, `5.6`, `5.7`
+* **Laravel Version**: `5.5`, `5.6`, `5.7`, `5.8`
 * **[Composer](https://getcomposer.org/):** `composer require bavix/laravel-wallet`
 
 ### Upgrade Guide
