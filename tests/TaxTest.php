@@ -23,8 +23,8 @@ class TaxTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $balance = (int) ($product->price +
-            $product->price * $product->getFeePercent() / 100);
+        $fee = (int) ($product->price * $product->getFeePercent() / 100);
+        $balance = $product->price + $fee;
 
         $this->assertEquals($buyer->balance, 0);
         $buyer->deposit($balance);
@@ -43,6 +43,7 @@ class TaxTest extends TestCase
         $this->assertEquals($withdraw->amount, -$balance);
         $this->assertEquals($deposit->amount, $product->getAmountProduct());
         $this->assertNotEquals($deposit->amount, $withdraw->amount);
+        $this->assertEquals($transfer->fee, $fee);
 
         $buyer->refund($product);
         $this->assertEquals($buyer->balance, $deposit->amount);
