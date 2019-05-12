@@ -190,7 +190,7 @@ trait HasWallet
             'from_id' => $this->getKey(),
             'to_type' => $wallet->getMorphClass(),
             'to_id' => $wallet->getKey(),
-            'fee' => $withdraw->amount - $deposit->amount,
+            'fee' => \abs($withdraw->amount) - \abs($deposit->amount),
             'uuid' => Uuid::uuid4()->toString(),
         ]);
     }
