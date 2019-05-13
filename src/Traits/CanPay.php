@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Traits;
 use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Models\Wallet;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
@@ -156,7 +157,7 @@ trait CanPay
          * @var Model $product
          * @var Transfer $query
          */
-        $query = $this->transfers();
+        $query = $this->holderTransfers();
         return $query
             ->where('to_type', $product->getMorphClass())
             ->where('to_id', $product->getKey())

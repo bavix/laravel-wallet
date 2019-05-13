@@ -297,6 +297,20 @@ trait HasWallet
     }
 
     /**
+     * holder transfers
+     *
+     * @return MorphMany
+     */
+    public function holderTransfers(): MorphMany
+    {
+        if ($this instanceof WalletModel) {
+            return $this->holder->transfers();
+        }
+
+        return $this->transfers();
+    }
+
+    /**
      * the transfer table is used to confirm the payment
      * this method receives all transfers
      *
@@ -304,8 +318,7 @@ trait HasWallet
      */
     public function transfers(): MorphMany
     {
-        return ($this instanceof WalletModel ? $this->holder : $this)
-            ->morphMany(config('wallet.transfer.model'), 'from');
+        return $this->morphMany(config('wallet.transfer.model'), 'from');
     }
 
     /**
