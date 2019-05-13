@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class Transfer extends Model
 {
 
+    public const STATUS_TRANSFER = 'transfer';
     public const STATUS_PAID = 'paid';
     public const STATUS_REFUND = 'refund';
     public const STATUS_GIFT = 'gift';

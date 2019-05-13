@@ -27,16 +27,6 @@ trait HasWallets
     private $_wallets = [];
 
     /**
-     * method of obtaining all wallets
-     *
-     * @return MorphMany
-     */
-    public function wallets(): MorphMany
-    {
-        return $this->morphMany(config('wallet.wallet.model'), 'holder');
-    }
-
-    /**
      * Get wallet by slug
      *
      *  $user->wallet->balance // 200
@@ -60,6 +50,16 @@ trait HasWallets
         }
 
         return $this->_wallets[$slug];
+    }
+
+    /**
+     * method of obtaining all wallets
+     *
+     * @return MorphMany
+     */
+    public function wallets(): MorphMany
+    {
+        return $this->morphMany(config('wallet.wallet.model'), 'holder');
     }
 
     /**

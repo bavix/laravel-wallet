@@ -24,26 +24,12 @@ trait CanPay
             throw new ProductEnded(trans('wallet::errors.product_stock'));
         }
 
-        return $this->transfer($product, 0, $product->getMetaProduct());
-    }
-
-    /**
-     * @param Product $product
-     * @param bool $force
-     * @return Transfer
-     * @throws
-     */
-    public function pay(Product $product, bool $force = false): Transfer
-    {
-        if (!$product->canBuy($this, $force)) {
-            throw new ProductEnded(trans('wallet::errors.product_stock'));
-        }
-
-        if ($force) {
-            return $this->forceTransfer($product, $product->getAmountProduct(), $product->getMetaProduct());
-        }
-
-        return $this->transfer($product, $product->getAmountProduct(), $product->getMetaProduct());
+        return $this->transfer(
+            $product,
+            0,
+            $product->getMetaProduct(),
+            Transfer::STATUS_PAID
+        );
     }
 
     /**
@@ -62,6 +48,35 @@ trait CanPay
 
     /**
      * @param Product $product
+     * @param bool $force
+     * @return Transfer
+     * @throws
+     */
+    public function pay(Product $product, bool $force = false): Transfer
+    {
+        if (!$product->canBuy($this, $force)) {
+            throw new ProductEnded(trans('wallet::errors.product_stock'));
+        }
+
+        if ($force) {
+            return $this->forceTransfer(
+                $product,
+                $product->getAmountProduct(),
+                $product->getMetaProduct(),
+                Transfer::STATUS_PAID
+            );
+        }
+
+        return $this->transfer(
+            $product,
+            $product->getAmountProduct(),
+            $product->getMetaProduct(),
+            Transfer::STATUS_PAID
+        );
+    }
+
+    /**
+     * @param Product $product
      * @return Transfer
      * @throws
      */
@@ -72,27 +87,17 @@ trait CanPay
 
     /**
      * @param Product $product
+     * @param bool $force
      * @param bool $gifts
-     * @return null|Transfer
+     * @return bool
      */
-    public function paid(Product $product, bool $gifts = false): ?Transfer
+    public function safeRefund(Product $product, bool $force = false, bool $gifts = false): bool
     {
-        $status = [Transfer::STATUS_PAID];
-        if ($gifts) {
-            $status[] = Transfer::STATUS_GIFT;
+        try {
+            return $this->refund($product, $force, $gifts);
+        } catch (\Throwable $throwable) {
+            return false;
         }
-        
-        /**
-         * @var Model $product
-         * @var Transfer $query
-         */
-        $query = $this->transfers();
-        return $query
-            ->where('to_type', $product->getMorphClass())
-            ->where('to_id', $product->getKey())
-            ->whereIn('status', $status)
-            ->orderBy('id', 'desc')
-            ->first();
     }
 
     /**
@@ -137,17 +142,27 @@ trait CanPay
 
     /**
      * @param Product $product
-     * @param bool $force
      * @param bool $gifts
-     * @return bool
+     * @return null|Transfer
      */
-    public function safeRefund(Product $product, bool $force = false, bool $gifts = false): bool
+    public function paid(Product $product, bool $gifts = false): ?Transfer
     {
-        try {
-            return $this->refund($product, $force, $gifts);
-        } catch (\Throwable $throwable) {
-            return false;
+        $status = [Transfer::STATUS_PAID];
+        if ($gifts) {
+            $status[] = Transfer::STATUS_GIFT;
         }
+
+        /**
+         * @var Model $product
+         * @var Transfer $query
+         */
+        $query = $this->transfers();
+        return $query
+            ->where('to_type', $product->getMorphClass())
+            ->where('to_id', $product->getKey())
+            ->whereIn('status', $status)
+            ->orderBy('id', 'desc')
+            ->first();
     }
 
     /**
@@ -166,16 +181,6 @@ trait CanPay
      * @param bool $force
      * @return bool
      */
-    public function refundGift(Product $product, bool $force = false): bool
-    {
-        return $this->refund($product, $force, true);
-    }
-
-    /**
-     * @param Product $product
-     * @param bool $force
-     * @return bool
-     */
     public function safeRefundGift(Product $product, bool $force = false): bool
     {
         try {
@@ -183,6 +188,16 @@ trait CanPay
         } catch (\Throwable $throwable) {
             return false;
         }
+    }
+
+    /**
+     * @param Product $product
+     * @param bool $force
+     * @return bool
+     */
+    public function refundGift(Product $product, bool $force = false): bool
+    {
+        return $this->refund($product, $force, true);
     }
 
     /**

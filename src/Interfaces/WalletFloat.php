@@ -35,25 +35,28 @@ interface WalletFloat
      * @param Wallet $wallet
      * @param float $amount
      * @param array|null $meta
+     * @param string $status
      * @return Transfer
      */
-    public function transferFloat(Wallet $wallet, float $amount, ?array $meta = null): Transfer;
+    public function transferFloat(Wallet $wallet, float $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer;
 
     /**
      * @param Wallet $wallet
      * @param float $amount
      * @param array|null $meta
+     * @param string $status
      * @return null|Transfer
      */
-    public function safeTransferFloat(Wallet $wallet, float $amount, ?array $meta = null): ?Transfer;
+    public function safeTransferFloat(Wallet $wallet, float $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): ?Transfer;
 
     /**
      * @param Wallet $wallet
      * @param float $amount
      * @param array|null $meta
+     * @param string $status
      * @return Transfer
      */
-    public function forceTransferFloat(Wallet $wallet, float $amount, ?array $meta = null): Transfer;
+    public function forceTransferFloat(Wallet $wallet, float $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer;
 
     /**
      * @param float $amount

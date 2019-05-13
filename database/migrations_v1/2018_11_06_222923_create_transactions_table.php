@@ -1,27 +1,19 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 use Bavix\Wallet\Models\Transaction;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateTransactionsTable extends Migration
 {
-
-    /**
-     * @return string
-     */
-    protected function table(): string
-    {
-        return (new Transaction())->getTable();
-    }
 
     /**
      * @return void
      */
     public function up(): void
     {
-        Schema::create($this->table(), function(Blueprint $table) {
+        Schema::create($this->table(), function (Blueprint $table) {
             $table->increments('id');
             $table->morphs('payable');
             $table->enum('type', ['deposit', 'withdraw'])->index();
@@ -35,6 +27,14 @@ class CreateTransactionsTable extends Migration
             $table->index(['payable_type', 'payable_id', 'confirmed'], 'payable_confirmed_ind');
             $table->index(['payable_type', 'payable_id', 'type', 'confirmed'], 'payable_type_confirmed_ind');
         });
+    }
+
+    /**
+     * @return string
+     */
+    protected function table(): string
+    {
+        return (new Transaction())->getTable();
     }
 
     /**

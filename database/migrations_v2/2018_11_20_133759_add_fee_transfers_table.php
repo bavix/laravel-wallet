@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 use Bavix\Wallet\Models\Transfer;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddFeeTransfersTable extends Migration
 {
@@ -21,7 +21,7 @@ class AddFeeTransfersTable extends Migration
      */
     public function up(): void
     {
-        Schema::table($this->table(), function(Blueprint $table) {
+        Schema::table($this->table(), function (Blueprint $table) {
             $table->bigInteger('fee')
                 ->default(0)
                 ->after('withdraw_id');

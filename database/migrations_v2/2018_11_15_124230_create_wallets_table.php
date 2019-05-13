@@ -1,12 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Wallet;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class CreateWalletsTable extends Migration
 {
@@ -24,7 +24,7 @@ class CreateWalletsTable extends Migration
      */
     public function up(): void
     {
-        Schema::create($this->table(), function(Blueprint $table) {
+        Schema::create($this->table(), function (Blueprint $table) {
             $table->increments('id');
             $table->morphs('holder');
             $table->string('name');

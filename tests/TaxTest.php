@@ -23,7 +23,7 @@ class TaxTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $fee = (int) ($product->price * $product->getFeePercent() / 100);
+        $fee = (int)($product->price * $product->getFeePercent() / 100);
         $balance = $product->price + $fee;
 
         $this->assertEquals($buyer->balance, 0);

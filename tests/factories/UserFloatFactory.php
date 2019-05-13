@@ -1,7 +1,7 @@
 <?php
 
-use Faker\Generator as Faker;
 use Bavix\Wallet\Test\Models\UserFloat;
+use Faker\Generator as Faker;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +14,7 @@ use Bavix\Wallet\Test\Models\UserFloat;
 |
 */
 
-$factory->define(UserFloat::class, function(Faker $faker) {
+$factory->define(UserFloat::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,

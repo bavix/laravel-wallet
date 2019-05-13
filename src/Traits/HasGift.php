@@ -18,6 +18,23 @@ trait HasGift
 {
 
     /**
+     * Give the goods safely.
+     *
+     * @param Wallet $to
+     * @param Product $product
+     * @param bool $force
+     * @return Transfer|null
+     */
+    public function safeGift(Wallet $to, Product $product, bool $force = false): ?Transfer
+    {
+        try {
+            return $this->gift($to, $product, $force);
+        } catch (\Throwable $throwable) {
+            return null;
+        }
+    }
+
+    /**
      * From this moment on, each user (wallet) can give
      * the goods to another user (wallet).
      * This functionality can be organized for gifts.
@@ -52,7 +69,7 @@ trait HasGift
             }
 
             $deposit = $product->deposit($amount, $meta);
-            return $this->assemble($product, $withdraw, $deposit);
+            return $this->assemble($product, $withdraw, $deposit, Transfer::STATUS_GIFT);
         };
 
         /**
@@ -63,23 +80,6 @@ trait HasGift
         return DB::transaction(
             $callback->bindTo($to, \get_class($to))
         );
-    }
-
-    /**
-     * Give the goods safely.
-     *
-     * @param Wallet $to
-     * @param Product $product
-     * @param bool $force
-     * @return Transfer|null
-     */
-    public function safeGift(Wallet $to, Product $product, bool $force = false): ?Transfer
-    {
-        try {
-            return $this->gift($to, $product, $force);
-        } catch (\Throwable $throwable) {
-            return null;
-        }
     }
 
     /**
