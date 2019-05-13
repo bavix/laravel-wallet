@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Add support Themosis Framework
+
 ### Changed
 - In all the methods of translations have added the status of the transfer.
 
@@ -222,3 +225,4 @@ The operation is now executed in the transaction and updates the new `refund` fi
 [1.1.1]: https://github.com/bavix/laravel-wallet/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/bavix/laravel-wallet/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/bavix/laravel-wallet/compare/0.0.1...1.0.0
+[0.0.1]: https://github.com/bavix/laravel-wallet/compare/d181a99e751c5138694580ca4361d5129baa26b3...0.0.1
