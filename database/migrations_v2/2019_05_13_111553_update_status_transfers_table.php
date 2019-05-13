@@ -22,41 +22,36 @@ class UpdateStatusTransfersTable extends Migration
      */
     public function up(): void
     {
-        Schema::table($this->table(), function (Blueprint $table) {
-            $table->renameColumn('status', 'tmpStatus');
-        });
+        $enums = [
+            Transfer::STATUS_TRANSFER,
+            Transfer::STATUS_PAID,
+            Transfer::STATUS_REFUND,
+            Transfer::STATUS_GIFT,
+        ];
 
-        Schema::table($this->table(), function (Blueprint $table) {
-            $table->renameColumn('status_last', 'tmpStatusLast');
-        });
+        if (DB::connection() instanceof \Illuminate\Database\MySqlConnection) {
+            $table = $this->table();
+            $enumString = \implode('\', \'', $enums);
+            $default = Transfer::STATUS_TRANSFER;
+            DB::statement("ALTER TABLE $table CHANGE COLUMN status status ENUM('$enumString') NOT NULL DEFAULT '$default'");
+            DB::statement("ALTER TABLE $table CHANGE COLUMN status_last status_last ENUM('$enumString') NULL");
+            return;
+        }
 
-        Schema::table($this->table(), function (Blueprint $table) {
-            $enums = [
-                Transfer::STATUS_TRANSFER,
-                Transfer::STATUS_PAID,
-                Transfer::STATUS_REFUND,
-                Transfer::STATUS_GIFT,
-            ];
+        if (DB::connection() instanceof \Illuminate\Database\PostgresConnection) {
+            $this->alterEnum($this->table(), 'status', $enums);
+            $this->alterEnum($this->table(), 'status_last', $enums);
+            return;
+        }
 
-            $table->enum('status', $enums)
-                ->default(Transfer::STATUS_TRANSFER);
+        Schema::table($this->table(), function (Blueprint $table) use ($enums) {
+            $table->string('status')
+                ->default(Transfer::STATUS_TRANSFER)
+                ->change();
 
-            $table->enum('status_last', $enums)
-                ->nullable();
-        });
-
-        DB::table($this->table())
-            ->update([
-                'status' => DB::raw('tmpStatus'),
-                'status_last' => DB::raw('tmpStatusLast'),
-            ]);
-
-        Schema::table($this->table(), function (Blueprint $table) {
-            $table->dropColumn('tmpStatus');
-        });
-
-        Schema::table($this->table(), function (Blueprint $table) {
-            $table->dropColumn('tmpStatusLast');
+            $table->string('status_last')
+                ->nullable()
+                ->change();
         });
     }
 
@@ -65,48 +60,67 @@ class UpdateStatusTransfersTable extends Migration
      */
     public function down(): void
     {
-        Schema::table($this->table(), function (Blueprint $table) {
-            $table->renameColumn('status', 'tmpStatus');
-        });
-
-        Schema::table($this->table(), function (Blueprint $table) {
-            $table->renameColumn('status_last', 'tmpStatusLast');
-        });
-
-        Schema::table($this->table(), function (Blueprint $table) {
-            $enums = [
-                Transfer::STATUS_PAID,
-                Transfer::STATUS_REFUND,
-                Transfer::STATUS_GIFT,
-            ];
-
-            $table->enum('status', $enums)
-                ->default(Transfer::STATUS_PAID);
-
-            $table->enum('status_last', $enums)
-                ->nullable();
-        });
+        DB::table($this->table())
+            ->where('status', Transfer::STATUS_TRANSFER)
+            ->update(['status' => Transfer::STATUS_PAID]);
 
         DB::table($this->table())
-            ->where('tmpStatus', Transfer::STATUS_TRANSFER)
-            ->update(['tmpStatus' => Transfer::STATUS_PAID]);
+            ->where('status_last', Transfer::STATUS_TRANSFER)
+            ->update(['status_last' => Transfer::STATUS_PAID]);
 
-        DB::table($this->table())
-            ->where('tmpStatusLast', Transfer::STATUS_TRANSFER)
-            ->update(['tmpStatusLast' => Transfer::STATUS_PAID]);
+        $enums = [
+            Transfer::STATUS_PAID,
+            Transfer::STATUS_REFUND,
+            Transfer::STATUS_GIFT,
+        ];
 
-        DB::table($this->table())
-            ->update([
-                'status' => DB::raw('tmpStatus'),
-                'status_last' => DB::raw('tmpStatusLast'),
-            ]);
+        if (DB::connection() instanceof \Illuminate\Database\MySqlConnection) {
+            $table = $this->table();
+            $enumString = \implode('\', \'', $enums);
+            $default = Transfer::STATUS_PAID;
+            DB::statement("ALTER TABLE $table CHANGE COLUMN status status ENUM('$enumString') NOT NULL DEFAULT '$default'");
+            DB::statement("ALTER TABLE $table CHANGE COLUMN status_last status_last ENUM('$enumString') NULL");
+            return;
+        }
 
-        Schema::table($this->table(), function (Blueprint $table) {
-            $table->dropColumn('tmpStatus');
+        if (DB::connection() instanceof \Illuminate\Database\PostgresConnection) {
+            $this->alterEnum($this->table(), 'status', $enums);
+            $this->alterEnum($this->table(), 'status_last', $enums);
+            return;
+        }
+
+        Schema::table($this->table(), function (Blueprint $table) use ($enums) {
+            $table->string('status')
+                ->default(Transfer::STATUS_PAID)
+                ->change();
+
+            $table->string('status_last')
+                ->nullable()
+                ->change();
         });
+    }
 
-        Schema::table($this->table(), function (Blueprint $table) {
-            $table->dropColumn('tmpStatusLast');
+    /**
+     * Alter an enum field constraints
+     * @param $table
+     * @param $field
+     * @param array $options
+     */
+    protected function alterEnum($table, $field, array $options): void
+    {
+        $check = "${table}_${field}_check";
+
+        $enumList = [];
+
+        foreach($options as $option) {
+            $enumList[] = sprintf("'%s'::CHARACTER VARYING", $option);
+        }
+
+        $enumString = implode(', ', $enumList);
+
+        DB::transaction(function () use ($table, $field, $check, $options, $enumString) {
+            DB::statement(sprintf('ALTER TABLE %s DROP CONSTRAINT %s;', $table, $check));
+            DB::statement(sprintf('ALTER TABLE %s ADD CONSTRAINT %s CHECK (%s::TEXT = ANY (ARRAY[%s]::TEXT[]))', $table, $check, $field, $enumString));
         });
     }
 
