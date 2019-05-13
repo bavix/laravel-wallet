@@ -43,6 +43,17 @@ trait HasWallets
      */
     public function getWallet(string $slug): ?WalletModel
     {
+        if (\array_key_exists($slug, $this->_wallets)) {
+            return $this->_wallets[$slug];
+        }
+
+        if ($this->relationLoaded('wallets')) {
+            $wallets = $this->getRelation('wallets');
+            foreach ($wallets as $wallet) {
+                $this->_wallets[$wallet->slug] = $wallet;
+            }
+        }
+
         if (!\array_key_exists($slug, $this->_wallets)) {
             $this->_wallets[$slug] = $this->wallets()
                 ->where('slug', $slug)
