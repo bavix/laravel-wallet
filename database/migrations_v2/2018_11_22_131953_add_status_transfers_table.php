@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\DB;
 use Bavix\Wallet\Models\Transfer;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class AddStatusTransfersTable extends Migration
 {
@@ -22,7 +22,7 @@ class AddStatusTransfersTable extends Migration
      */
     public function up(): void
     {
-        Schema::table($this->table(), function(Blueprint $table) {
+        Schema::table($this->table(), function (Blueprint $table) {
             $enums = [
                 Transfer::STATUS_PAID,
                 Transfer::STATUS_REFUND,

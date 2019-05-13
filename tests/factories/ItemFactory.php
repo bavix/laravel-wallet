@@ -1,7 +1,7 @@
 <?php
 
-use Faker\Generator as Faker;
 use Bavix\Wallet\Test\Models\Item;
+use Faker\Generator as Faker;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +14,7 @@ use Bavix\Wallet\Test\Models\Item;
 |
 */
 
-$factory->define(Item::class, function(Faker $faker) {
+$factory->define(Item::class, function (Faker $faker) {
     return [
         'name' => $faker->domainName,
         'price' => \random_int(1, 100),

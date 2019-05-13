@@ -1,7 +1,7 @@
 <?php
 
-use Faker\Generator as Faker;
 use Bavix\Wallet\Test\Models\UserMulti;
+use Faker\Generator as Faker;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +14,7 @@ use Bavix\Wallet\Test\Models\UserMulti;
 |
 */
 
-$factory->define(UserMulti::class, function(Faker $faker) {
+$factory->define(UserMulti::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,

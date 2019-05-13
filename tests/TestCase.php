@@ -44,7 +44,7 @@ class TestCase extends OrchestraTestCase
     /**
      * Define environment setup.
      *
-     * @param  Application $app
+     * @param Application $app
      * @return void
      */
     protected function getEnvironmentSetUp($app): void

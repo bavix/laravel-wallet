@@ -73,17 +73,6 @@ class Wallet extends Model implements Customer, WalletFloat
     }
 
     /**
-     * @return int
-     */
-    public function getAvailableBalance(): int
-    {
-        return $this->transactions()
-            ->where('wallet_id', $this->getKey())
-            ->where('confirmed', true)
-            ->sum('amount');
-    }
-
-    /**
      * @return bool
      */
     public function calculateBalance(): bool
@@ -93,6 +82,17 @@ class Wallet extends Model implements Customer, WalletFloat
         $this->attributes['balance'] = $balance;
 
         return $this->save();
+    }
+
+    /**
+     * @return int
+     */
+    public function getAvailableBalance(): int
+    {
+        return $this->transactions()
+            ->where('wallet_id', $this->getKey())
+            ->where('confirmed', true)
+            ->sum('amount');
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Test\Models\UserMulti;
 
 class MultiWalletTest extends TestCase
@@ -136,19 +137,22 @@ class MultiWalletTest extends TestCase
         $secondWallet->deposit(100);
         $this->assertEquals($secondWallet->balance, 100);
 
-        $firstWallet->transfer($secondWallet, 100);
+        $transfer = $firstWallet->transfer($secondWallet, 100);
         $this->assertEquals($first->balance, 0);
         $this->assertEquals($firstWallet->balance, 0);
         $this->assertEquals($second->balance, 0);
         $this->assertEquals($secondWallet->balance, 200);
+        $this->assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
 
-        $secondWallet->transfer($firstWallet, 100);
+        $transfer = $secondWallet->transfer($firstWallet, 100);
         $this->assertEquals($secondWallet->balance, 100);
         $this->assertEquals($firstWallet->balance, 100);
+        $this->assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
 
-        $secondWallet->transfer($firstWallet, 100);
+        $transfer = $secondWallet->transfer($firstWallet, 100);
         $this->assertEquals($secondWallet->balance, 0);
         $this->assertEquals($firstWallet->balance, 200);
+        $this->assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
 
         $firstWallet->withdraw($firstWallet->balance);
         $this->assertEquals($firstWallet->balance, 0);
@@ -157,13 +161,17 @@ class MultiWalletTest extends TestCase
         $this->assertEquals($firstWallet->balance, 0);
         $this->assertEquals($secondWallet->balance, 0);
 
-        $this->assertNotNull($firstWallet->forceTransfer($secondWallet, 100));
+        $transfer = $firstWallet->forceTransfer($secondWallet, 100);
+        $this->assertNotNull($transfer);
         $this->assertEquals($firstWallet->balance, -100);
         $this->assertEquals($secondWallet->balance, 100);
+        $this->assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
 
-        $this->assertNotNull($secondWallet->forceTransfer($firstWallet, 100));
+        $transfer = $secondWallet->forceTransfer($firstWallet, 100);
+        $this->assertNotNull($transfer);
         $this->assertEquals($firstWallet->balance, 0);
         $this->assertEquals($secondWallet->balance, 0);
+        $this->assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
     }
 
     /**

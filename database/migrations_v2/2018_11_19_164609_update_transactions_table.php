@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Wallet;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class UpdateTransactionsTable extends Migration
 {
@@ -31,7 +31,7 @@ class UpdateTransactionsTable extends Migration
      */
     public function up(): void
     {
-        Schema::table($this->table(), function(Blueprint $table) {
+        Schema::table($this->table(), function (Blueprint $table) {
             $table->unsignedInteger('wallet_id')
                 ->nullable()
                 ->after('payable_id');

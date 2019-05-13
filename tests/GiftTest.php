@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\Item;
 
@@ -29,11 +30,12 @@ class GiftTest extends TestCase
         $first->deposit($product->getAmountProduct());
         $this->assertEquals($first->balance, $product->getAmountProduct());
 
-        $first->wallet->gift($second, $product);
+        $transfer = $first->wallet->gift($second, $product);
         $this->assertEquals($first->balance, 0);
         $this->assertEquals($second->balance, 0);
         $this->assertNull($first->paid($product, true));
         $this->assertNotNull($second->paid($product, true));
+        $this->assertEquals($transfer->status, Transfer::STATUS_GIFT);
     }
 
     /**
@@ -57,9 +59,10 @@ class GiftTest extends TestCase
         $first->deposit($product->getAmountProduct());
         $this->assertEquals($first->balance, $product->getAmountProduct());
 
-        $first->wallet->gift($second, $product);
+        $transfer = $first->wallet->gift($second, $product);
         $this->assertEquals($first->balance, 0);
         $this->assertEquals($second->balance, 0);
+        $this->assertEquals($transfer->status, Transfer::STATUS_GIFT);
 
         $this->assertFalse($second->wallet->safeRefund($product));
         $this->assertTrue($second->wallet->refundGift($product));
@@ -68,7 +71,10 @@ class GiftTest extends TestCase
         $this->assertEquals($second->balance, 0);
 
         $this->assertNull($second->wallet->safeGift($first, $product));
-        $this->assertNotNull($second->wallet->forceGift($first, $product));
+
+        $transfer = $second->wallet->forceGift($first, $product);
+        $this->assertNotNull($transfer);
+        $this->assertEquals($transfer->status, Transfer::STATUS_GIFT);
 
         $this->assertEquals($second->balance, -$product->getAmountProduct());
 
