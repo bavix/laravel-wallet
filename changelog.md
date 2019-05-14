@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Add zh-CN trans. @MoeCasts
+- Add ru trans
+- Add method `holderTransfers`
+
+### Changed
+- optimize `getWallet` method
+- optimize relations wallets
+
+### Fixed
+- fixed getting a default wallet @MoeCasts
 
 ## [2.3.2] - 2019-05-13
 ### Fixed

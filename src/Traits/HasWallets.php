@@ -27,6 +27,11 @@ trait HasWallets
     private $_wallets = [];
 
     /**
+     * @var bool
+     */
+    private $_loadedWallets = false;
+
+    /**
      * Get wallet by slug
      *
      *  $user->wallet->balance // 200
@@ -43,6 +48,14 @@ trait HasWallets
      */
     public function getWallet(string $slug): ?WalletModel
     {
+        if (!$this->_loadedWallets && $this->relationLoaded('wallets')) {
+            $this->_loadedWallets = true;
+            $wallets = $this->getRelation('wallets');
+            foreach ($wallets as $wallet) {
+                $this->_wallets[$wallet->slug] = $wallet;
+            }
+        }
+
         if (!\array_key_exists($slug, $this->_wallets)) {
             $this->_wallets[$slug] = $this->wallets()
                 ->where('slug', $slug)
