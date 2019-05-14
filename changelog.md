@@ -237,7 +237,7 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/2.4.0...HEAD
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/2.4.0...dev
 [2.4.0]: https://github.com/bavix/laravel-wallet/compare/2.3.2...2.4.0
 [2.3.2]: https://github.com/bavix/laravel-wallet/compare/2.3.1...2.3.2
 [2.3.1]: https://github.com/bavix/laravel-wallet/compare/2.3.0...2.3.1
