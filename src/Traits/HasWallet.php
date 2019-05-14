@@ -331,6 +331,7 @@ trait HasWallet
     {
         return ($this instanceof WalletModel ? $this->holder : $this)
             ->morphOne(config('wallet.wallet.model'), 'holder')
+            ->where('slug', config('wallet.wallet.default.slug'))
             ->withDefault([
                 'name' => config('wallet.wallet.default.name'),
                 'slug' => config('wallet.wallet.default.slug'),
