@@ -285,6 +285,12 @@ class MultiWalletTest extends TestCase
             $test2->getKey(),
             $user->getWallet('test2')->getKey()
         );
+
+        // check default wallet
+        $this->assertEquals(
+            $user->balance,
+            $user->wallet->balance
+        );
     }
 
 }

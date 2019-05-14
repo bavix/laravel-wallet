@@ -35,6 +35,8 @@ class GiftTest extends TestCase
         $this->assertEquals($second->balance, 0);
         $this->assertNull($first->paid($product, true));
         $this->assertNotNull($second->paid($product, true));
+        $this->assertNull($second->wallet->paid($product));
+        $this->assertNotNull($second->wallet->paid($product, true));
         $this->assertEquals($transfer->status, Transfer::STATUS_GIFT);
     }
 

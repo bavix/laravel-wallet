@@ -3,6 +3,7 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\Item;
 
@@ -29,6 +30,7 @@ class ProductTest extends TestCase
         $this->assertEquals($buyer->balance, $product->price);
         $transfer = $buyer->pay($product);
         $this->assertNotNull($transfer);
+        $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
 
         /**
          * @var Transaction $withdraw
@@ -74,7 +76,9 @@ class ProductTest extends TestCase
         $buyer->deposit($product->price);
 
         $this->assertEquals($buyer->balance, $product->price);
-        $this->assertNotNull($buyer->pay($product));
+        $transfer = $buyer->pay($product);
+        $this->assertNotNull($transfer);
+        $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
 
         $this->assertTrue($buyer->refund($product));
         $this->assertEquals($buyer->balance, $product->price);
@@ -82,9 +86,11 @@ class ProductTest extends TestCase
         $this->assertFalse($buyer->safeRefund($product));
         $this->assertEquals($buyer->balance, $product->price);
 
-        $this->assertNotNull($buyer->pay($product));
+        $transfer = $buyer->pay($product);
+        $this->assertNotNull($transfer);
         $this->assertEquals($buyer->balance, 0);
         $this->assertEquals($product->balance, $product->price);
+        $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
     }
 
     /**
