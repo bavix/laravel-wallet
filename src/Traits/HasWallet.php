@@ -267,8 +267,8 @@ trait HasWallet
             'status' => $status,
             'deposit_id' => $deposit->getKey(),
             'withdraw_id' => $withdraw->getKey(),
-            'from_type' => $this->getMorphClass(),
-            'from_id' => $this->getKey(),
+            'from_type' => ($this instanceof WalletModel ? $this : $this->wallet)->getMorphClass(),
+            'from_id' => ($this instanceof WalletModel ? $this : $this->wallet)->getKey(),
             'to_type' => $wallet->getMorphClass(),
             'to_id' => $wallet->getKey(),
             'fee' => \abs($withdraw->amount) - \abs($deposit->amount),
@@ -297,20 +297,6 @@ trait HasWallet
     }
 
     /**
-     * holder transfers
-     *
-     * @return MorphMany
-     */
-    public function holderTransfers(): MorphMany
-    {
-        if ($this instanceof WalletModel) {
-            return $this->holder->transfers();
-        }
-
-        return $this->transfers();
-    }
-
-    /**
      * the transfer table is used to confirm the payment
      * this method receives all transfers
      *
@@ -318,6 +304,10 @@ trait HasWallet
      */
     public function transfers(): MorphMany
     {
+        if (!($this instanceof WalletModel)) {
+            return $this->wallet->transfers();
+        }
+
         return $this->morphMany(config('wallet.transfer.model'), 'from');
     }
 
@@ -329,7 +319,7 @@ trait HasWallet
      */
     public function wallet(): MorphOne
     {
-        return ($this instanceof WalletModel ? $this->holder : $this)
+        return $this
             ->morphOne(config('wallet.wallet.model'), 'holder')
             ->where('slug', config('wallet.wallet.default.slug'))
             ->withDefault([

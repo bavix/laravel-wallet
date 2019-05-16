@@ -157,7 +157,7 @@ trait CanPay
          * @var Model $product
          * @var Transfer $query
          */
-        $query = $this->holderTransfers();
+        $query = $this->transfers();
         return $query
             ->where('to_type', $product->getMorphClass())
             ->where('to_id', $product->getKey())

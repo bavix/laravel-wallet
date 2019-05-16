@@ -48,7 +48,7 @@ class ProductTest extends TestCase
         $this->assertEquals($buyer->getKey(), $withdraw->payable->getKey());
         $this->assertEquals($product->getKey(), $deposit->payable->getKey());
 
-        $this->assertInstanceOf(Buyer::class, $transfer->from);
+        $this->assertInstanceOf(Buyer::class, $transfer->from->holder);
         $this->assertInstanceOf(Item::class, $transfer->to);
 
         $this->assertEquals($buyer->getKey(), $transfer->from->getKey());
