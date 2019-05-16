@@ -5,7 +5,7 @@ namespace Bavix\Wallet\Traits;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Tax;
+use Bavix\Wallet\Services\WalletService;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -57,7 +57,8 @@ trait HasGift
         $callback = function () use ($santa, $product, $force) {
             $amount = $product->getAmountProduct();
             $meta = $product->getMetaProduct();
-            $fee = Tax::fee($product, $amount);
+            $fee = app(WalletService::class)
+                ->fee($product, $amount);
 
             /**
              * Santa pays taxes

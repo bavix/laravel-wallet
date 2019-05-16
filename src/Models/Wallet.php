@@ -6,7 +6,7 @@ use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Traits\CanPayFloat;
 use Bavix\Wallet\Traits\HasGift;
-use Bavix\Wallet\WalletProxy;
+use Bavix\Wallet\Services\ProxyService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
@@ -78,9 +78,9 @@ class Wallet extends Model implements Customer, WalletFloat
     public function calculateBalance(): bool
     {
         $balance = $this->getAvailableBalance();
-        WalletProxy::set($this->getKey(), $balance);
         $this->attributes['balance'] = $balance;
-
+        $proxy = app(ProxyService::class);
+        $proxy->set($this->getKey(), $balance);
         return $this->save();
     }
 

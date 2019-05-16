@@ -1,11 +1,11 @@
 <?php
 
-namespace Bavix\Wallet;
+namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Interfaces\Taxing;
 use Bavix\Wallet\Interfaces\Wallet;
 
-class Tax
+class WalletService
 {
 
     /**
@@ -15,7 +15,7 @@ class Tax
      * @param int $amount
      * @return int
      */
-    public static function fee(Wallet $wallet, int $amount): int
+    public function fee(Wallet $wallet, int $amount): int
     {
         if ($wallet instanceof Taxing) {
             return (int)($amount * $wallet->getFeePercent() / 100);

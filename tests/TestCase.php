@@ -2,7 +2,8 @@
 
 namespace Bavix\Wallet\Test;
 
-use Bavix\Wallet\WalletProxy;
+use Bavix\Wallet\Services\ProxyService;
+use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\WalletServiceProvider;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
@@ -15,7 +16,7 @@ class TestCase extends OrchestraTestCase
      */
     public function setUp(): void
     {
-        WalletProxy::fresh();
+        app(ProxyService::class)->fresh();
         parent::setUp();
         $this->withFactories(__DIR__ . '/factories');
         $this->loadMigrationsFrom([
@@ -49,6 +50,9 @@ class TestCase extends OrchestraTestCase
      */
     protected function getEnvironmentSetUp($app): void
     {
+        $app->singleton(WalletService::class);
+        $app->singleton(ProxyService::class);
+
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
             'driver' => 'sqlite',

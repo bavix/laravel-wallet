@@ -9,8 +9,8 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
-use Bavix\Wallet\Tax;
-use Bavix\Wallet\WalletProxy;
+use Bavix\Wallet\Services\ProxyService;
+use Bavix\Wallet\Services\WalletService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -105,12 +105,13 @@ trait HasWallet
         $newBalance = $this->getBalanceAttribute() + $amount;
         $wallet->balance = $newBalance;
 
-        return
-            // update database wallet
-            $wallet->save() &&
+        if ($wallet->save()) {
+            $proxy = app(ProxyService::class);
+            $proxy->set($wallet->getKey(), $newBalance);
+            return true;
+        }
 
-            // update static wallet
-            WalletProxy::set($wallet->getKey(), $newBalance);
+        return false;
     }
 
     /**
@@ -141,11 +142,12 @@ trait HasWallet
     {
         if ($this instanceof WalletModel) {
             $this->exists or $this->save();
-            if (!WalletProxy::has($this->getKey())) {
-                WalletProxy::set($this->getKey(), (int)($this->attributes['balance'] ?? 0));
+            $proxy = app(ProxyService::class);
+            if (!$proxy->has($this->getKey())) {
+                $proxy->set($this->getKey(), (int)($this->attributes['balance'] ?? 0));
             }
 
-            return WalletProxy::get($this->getKey());
+            return $proxy[$this->getKey()];
         }
 
         return $this->wallet->balance;
@@ -193,7 +195,9 @@ trait HasWallet
     public function transfer(Wallet $wallet, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
         return DB::transaction(function () use ($amount, $wallet, $meta, $status) {
-            $fee = Tax::fee($wallet, $amount);
+            $fee = app(WalletService::class)
+                ->fee($wallet, $amount);
+
             $withdraw = $this->withdraw($amount + $fee, $meta);
             $deposit = $wallet->deposit($amount, $meta);
             return $this->assemble($wallet, $withdraw, $deposit, $status);
@@ -289,7 +293,9 @@ trait HasWallet
     public function forceTransfer(Wallet $wallet, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
         return DB::transaction(function () use ($amount, $wallet, $meta, $status) {
-            $fee = Tax::fee($wallet, $amount);
+            $fee = app(WalletService::class)
+                ->fee($wallet, $amount);
+
             $withdraw = $this->forceWithdraw($amount + $fee, $meta);
             $deposit = $wallet->deposit($amount, $meta);
             return $this->assemble($wallet, $withdraw, $deposit, $status);
