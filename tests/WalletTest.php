@@ -213,6 +213,7 @@ class WalletTest extends TestCase
         $this->assertEquals($user->balance, 100);
 
         $user->withdraw($user->balance);
+        $this->assertEquals($user->balance, 0);
     }
 
 }
