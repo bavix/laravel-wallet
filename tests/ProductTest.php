@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Test\Models\Buyer;
@@ -133,10 +134,11 @@ class ProductTest extends TestCase
 
     /**
      * @return void
-     * @expectedException \Bavix\Wallet\Exceptions\ProductEnded
      */
     public function testOutOfStock(): void
     {
+        $this->expectException(ProductEnded::class);
+
         /**
          * @var Buyer $buyer
          * @var Item $product
@@ -204,10 +206,11 @@ class ProductTest extends TestCase
 
     /**
      * @return void
-     * @expectedException \Bavix\Wallet\Exceptions\ProductEnded
      */
     public function testPayFreeOutOfStock(): void
     {
+        $this->expectException(ProductEnded::class);
+
         /**
          * @var Buyer $buyer
          * @var Item $product

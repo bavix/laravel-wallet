@@ -2,6 +2,9 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Exceptions\AmountInvalid;
+use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Test\Models\User;
 
 class WalletTest extends TestCase
@@ -32,20 +35,21 @@ class WalletTest extends TestCase
 
     /**
      * @return void
-     * @expectedException \Bavix\Wallet\Exceptions\AmountInvalid
      */
     public function testInvalidDeposit(): void
     {
+        $this->expectException(AmountInvalid::class);
         $user = factory(User::class)->create();
         $user->deposit(-1);
     }
 
     /**
      * @return void
-     * @expectedException \Bavix\Wallet\Exceptions\BalanceIsEmpty
      */
     public function testWithdraw(): void
     {
+        $this->expectException(BalanceIsEmpty::class);
+
         $user = factory(User::class)->create();
         $this->assertEquals($user->balance, 0);
 
@@ -66,20 +70,20 @@ class WalletTest extends TestCase
 
     /**
      * @return void
-     * @expectedException \Bavix\Wallet\Exceptions\BalanceIsEmpty
      */
     public function testInvalidWithdraw(): void
     {
+        $this->expectException(BalanceIsEmpty::class);
         $user = factory(User::class)->create();
         $user->withdraw(-1);
     }
 
     /**
      * @return void
-     * @expectedException \Bavix\Wallet\Exceptions\InsufficientFunds
      */
     public function testInsufficientFundsWithdraw(): void
     {
+        $this->expectException(InsufficientFunds::class);
         $user = factory(User::class)->create();
         $user->deposit(1);
         $user->withdraw(2);
@@ -154,10 +158,11 @@ class WalletTest extends TestCase
 
     /**
      * @return void
-     * @expectedException \Bavix\Wallet\Exceptions\BalanceIsEmpty
      */
     public function testBalanceIsEmpty(): void
     {
+        $this->expectException(BalanceIsEmpty::class);
+
         /**
          * @var User $user
          */

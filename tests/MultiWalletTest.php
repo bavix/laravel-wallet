@@ -2,8 +2,11 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Exceptions\AmountInvalid;
+use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Test\Models\UserMulti;
+use Illuminate\Database\QueryException;
 
 class MultiWalletTest extends TestCase
 {
@@ -45,10 +48,11 @@ class MultiWalletTest extends TestCase
 
     /**
      * @return void
-     * @expectedException \Bavix\Wallet\Exceptions\AmountInvalid
      */
     public function testInvalidDeposit(): void
     {
+        $this->expectException(AmountInvalid::class);
+
         /**
          * @var UserMulti $user
          */
@@ -62,10 +66,11 @@ class MultiWalletTest extends TestCase
 
     /**
      * @return void
-     * @expectedException \Bavix\Wallet\Exceptions\BalanceIsEmpty
      */
     public function testWithdraw(): void
     {
+        $this->expectException(BalanceIsEmpty::class);
+
         /**
          * @var UserMulti $user
          */
@@ -93,10 +98,11 @@ class MultiWalletTest extends TestCase
 
     /**
      * @return void
-     * @expectedException \Bavix\Wallet\Exceptions\BalanceIsEmpty
      */
     public function testInvalidWithdraw(): void
     {
+        $this->expectException(BalanceIsEmpty::class);
+
         /**
          * @var UserMulti $user
          */
@@ -199,10 +205,11 @@ class MultiWalletTest extends TestCase
 
     /**
      * @return void
-     * @expectedException \Bavix\Wallet\Exceptions\BalanceIsEmpty
      */
     public function testBalanceIsEmpty(): void
     {
+        $this->expectException(BalanceIsEmpty::class);
+
         /**
          * @var UserMulti $user
          */
@@ -241,10 +248,12 @@ class MultiWalletTest extends TestCase
     }
 
     /**
-     * @expectedException \Illuminate\Database\QueryException
+     * @return void
      */
     public function testWalletUnique(): void
     {
+        $this->expectException(QueryException::class);
+
         /**
          * @var UserMulti $user
          */
