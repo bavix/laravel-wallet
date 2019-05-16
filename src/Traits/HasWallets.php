@@ -29,7 +29,7 @@ trait HasWallets
     /**
      * @var bool
      */
-    private $_loadedWallets = false;
+    private $_loadedWallets;
 
     /**
      * Get wallet by slug

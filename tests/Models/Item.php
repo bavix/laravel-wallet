@@ -31,7 +31,7 @@ class Item extends Model implements Product
      *
      * @return bool
      */
-    public function canBuy(Customer $customer, bool $force = false): bool
+    public function canBuy(Customer $customer, bool $force = null): bool
     {
         $result = $this->quantity > 0;
 

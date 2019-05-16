@@ -38,7 +38,7 @@ trait CanPay
      * @param bool $force
      * @return Transfer|null
      */
-    public function safePay(Product $product, bool $force = false): ?Transfer
+    public function safePay(Product $product, bool $force = null): ?Transfer
     {
         try {
             return $this->pay($product, $force);
@@ -53,7 +53,7 @@ trait CanPay
      * @return Transfer
      * @throws
      */
-    public function pay(Product $product, bool $force = false): Transfer
+    public function pay(Product $product, bool $force = null): Transfer
     {
         if (!$product->canBuy($this, $force)) {
             throw new ProductEnded(trans('wallet::errors.product_stock'));
@@ -92,7 +92,7 @@ trait CanPay
      * @param bool $gifts
      * @return bool
      */
-    public function safeRefund(Product $product, bool $force = false, bool $gifts = false): bool
+    public function safeRefund(Product $product, bool $force = null, bool $gifts = null): bool
     {
         try {
             return $this->refund($product, $force, $gifts);
@@ -108,7 +108,7 @@ trait CanPay
      * @return bool
      * @throws
      */
-    public function refund(Product $product, bool $force = false, bool $gifts = false): bool
+    public function refund(Product $product, bool $force = null, bool $gifts = null): bool
     {
         $transfer = $this->paid($product, $gifts);
 
@@ -146,7 +146,7 @@ trait CanPay
      * @param bool $gifts
      * @return null|Transfer
      */
-    public function paid(Product $product, bool $gifts = false): ?Transfer
+    public function paid(Product $product, bool $gifts = null): ?Transfer
     {
         $status = [Transfer::STATUS_PAID];
         if ($gifts) {
@@ -172,7 +172,7 @@ trait CanPay
      * @return bool
      * @throws
      */
-    public function forceRefund(Product $product, bool $gifts = false): bool
+    public function forceRefund(Product $product, bool $gifts = null): bool
     {
         return $this->refund($product, true, $gifts);
     }
@@ -182,7 +182,7 @@ trait CanPay
      * @param bool $force
      * @return bool
      */
-    public function safeRefundGift(Product $product, bool $force = false): bool
+    public function safeRefundGift(Product $product, bool $force = null): bool
     {
         try {
             return $this->refundGift($product, $force);
@@ -196,7 +196,7 @@ trait CanPay
      * @param bool $force
      * @return bool
      */
-    public function refundGift(Product $product, bool $force = false): bool
+    public function refundGift(Product $product, bool $force = null): bool
     {
         return $this->refund($product, $force, true);
     }

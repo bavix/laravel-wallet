@@ -25,7 +25,7 @@ trait HasGift
      * @param bool $force
      * @return Transfer|null
      */
-    public function safeGift(Wallet $to, Product $product, bool $force = false): ?Transfer
+    public function safeGift(Wallet $to, Product $product, bool $force = null): ?Transfer
     {
         try {
             return $this->gift($to, $product, $force);
@@ -44,7 +44,7 @@ trait HasGift
      * @param bool $force
      * @return Transfer
      */
-    public function gift(Wallet $to, Product $product, bool $force = false): Transfer
+    public function gift(Wallet $to, Product $product, bool $force = null): Transfer
     {
         /**
          * Who's giving? Let's call him Santa Claus
