@@ -50,7 +50,7 @@
       ]
     },
     "branch-alias": {
-      "3.0.x-dev": "3.0-alpha"
+      "dev-3.0": "3.0-alpha"
     }
   },
   "config": {
