@@ -17,9 +17,10 @@ class Cart implements \Bavix\Wallet\Interfaces\Cart, Group
     /**
      * @inheritDoc
      */
-    public function addItem(Product $product): void
+    public function addItem(Product $product): Group
     {
         $this->items[] = $product;
+        return $this;
     }
 
     /**

@@ -4,7 +4,12 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Models\Wallet as WalletModel;
+use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Operation;
+use Illuminate\Database\Eloquent\Model;
+use Ramsey\Uuid\Uuid;
 
 class CommonService
 {
@@ -30,6 +35,34 @@ class CommonService
         $this->addBalance($self, $amount);
         return $objects;
     }
+
+
+    /**
+     * this method adds a new transfer to the transfer table
+     *
+     * @param Wallet $wallet
+     * @param Transaction $withdraw
+     * @param Transaction $deposit
+     * @param string $status
+     * @return Transfer
+     * @throws
+     */
+
+    /**
+     * @param Bring[] $brings
+     * @return array
+     * @throws
+     */
+    public function assemble(array $brings): array
+    {
+        $objects = [];
+        foreach ($brings as $bring) {
+            $objects[] = $bring->create();
+        }
+
+        return $objects;
+    }
+
 
     /**
      * @param Wallet $wallet

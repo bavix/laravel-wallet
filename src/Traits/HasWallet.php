@@ -8,6 +8,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
+use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Operation;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ProxyService;
@@ -232,20 +233,18 @@ trait HasWallet
      */
     protected function assemble(Wallet $wallet, Transaction $withdraw, Transaction $deposit, string $status = Transfer::STATUS_PAID): Transfer
     {
-        /**
-         * @var Model $wallet
-         */
-        return \app(Transfer::class)->create([
-            'status' => $status,
-            'deposit_id' => $deposit->getKey(),
-            'withdraw_id' => $withdraw->getKey(),
-            'from_type' => ($this instanceof WalletModel ? $this : $this->wallet)->getMorphClass(),
-            'from_id' => ($this instanceof WalletModel ? $this : $this->wallet)->getKey(),
-            'to_type' => $wallet->getMorphClass(),
-            'to_id' => $wallet->getKey(),
-            'fee' => \abs($withdraw->amount) - \abs($deposit->amount),
-            'uuid' => Uuid::uuid4()->toString(),
+        $from = ($this instanceof WalletModel ? $this : $this->wallet);
+
+        $transfers = \app(CommonService::class)->assemble([
+            (new Bring())
+                ->setStatus($status)
+                ->setDeposit($deposit)
+                ->setWithdraw($withdraw)
+                ->setFrom($from)
+                ->setTo($wallet)
         ]);
+
+        return \current($transfers);
     }
 
     /**
