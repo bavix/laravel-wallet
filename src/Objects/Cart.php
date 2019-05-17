@@ -3,9 +3,10 @@
 namespace Bavix\Wallet\Objects;
 
 use Bavix\Wallet\Interfaces\Customer;
+use Bavix\Wallet\Interfaces\Group;
 use Bavix\Wallet\Interfaces\Product;
 
-class Cart implements \Bavix\Wallet\Interfaces\Cart
+class Cart implements \Bavix\Wallet\Interfaces\Cart, Group
 {
 
     /**
@@ -14,8 +15,7 @@ class Cart implements \Bavix\Wallet\Interfaces\Cart
     protected $items = [];
 
     /**
-     * @param Product $product
-     * @return Cart
+     * @inheritDoc
      */
     public function addItem(Product $product): self
     {
@@ -24,7 +24,7 @@ class Cart implements \Bavix\Wallet\Interfaces\Cart
     }
 
     /**
-     * @return Product[]
+     * @inheritDoc
      */
     public function getItems(): array
     {
