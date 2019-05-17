@@ -41,21 +41,8 @@ trait HasWallet
      */
     public function deposit(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        $this->checkAmount($amount);
+        app(WalletService::class)->checkAmount($amount);
         return $this->change(Transaction::TYPE_DEPOSIT, $amount, $meta, $confirmed);
-    }
-
-    /**
-     * The amount of checks for errors
-     *
-     * @param int $amount
-     * @throws
-     */
-    private function checkAmount(int $amount): void
-    {
-        if ($amount < 0) {
-            throw new AmountInvalid(trans('wallet::errors.price_positive'));
-        }
     }
 
     /**
@@ -248,7 +235,7 @@ trait HasWallet
      */
     public function forceWithdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        $this->checkAmount($amount);
+        app(WalletService::class)->checkAmount($amount);
         return $this->change(Transaction::TYPE_WITHDRAW, -$amount, $meta, $confirmed);
     }
 

@@ -8,57 +8,57 @@ interface Customer extends Wallet
 {
 
     /**
-     * @param Product $product
+     * @param Cart $product
      * @param bool $force
      * @return Transfer
      * @throws
      */
-    public function pay(Product $product, bool $force = null): Transfer;
+    public function pay(Cart $product, bool $force = null): Transfer;
 
     /**
-     * @param Product $product
+     * @param Cart $product
      * @param bool $force
      * @return null|Transfer
      * @throws
      */
-    public function safePay(Product $product, bool $force = null): ?Transfer;
+    public function safePay(Cart $product, bool $force = null): ?Transfer;
 
     /**
-     * @param Product $product
+     * @param Cart $product
      * @return Transfer
      * @throws
      */
-    public function forcePay(Product $product): Transfer;
+    public function forcePay(Cart $product): Transfer;
 
     /**
-     * @param Product $product
+     * @param Cart $product
      * @param bool $gifts
      * @return null|Transfer
      */
-    public function paid(Product $product, bool $gifts = null): ?Transfer;
+    public function paid(Cart $product, bool $gifts = null): ?Transfer;
 
     /**
-     * @param Product $product
+     * @param Cart $product
      * @param bool $force
      * @param bool $gifts
      * @return bool
      * @throws
      */
-    public function refund(Product $product, bool $force = null, bool $gifts = null): bool;
+    public function refund(Cart $product, bool $force = null, bool $gifts = null): bool;
 
     /**
-     * @param Product $product
+     * @param Cart $product
      * @param bool $force
      * @param bool $gifts
      * @return bool
      */
-    public function safeRefund(Product $product, bool $force = null, bool $gifts = null): bool;
+    public function safeRefund(Cart $product, bool $force = null, bool $gifts = null): bool;
 
     /**
-     * @param Product $product
+     * @param Cart $product
      * @param bool $gifts
      * @return bool
      */
-    public function forceRefund(Product $product, bool $gifts = null): bool;
+    public function forceRefund(Cart $product, bool $gifts = null): bool;
 
 }

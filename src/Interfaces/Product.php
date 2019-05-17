@@ -2,25 +2,7 @@
 
 namespace Bavix\Wallet\Interfaces;
 
-interface Product extends Wallet
+interface Product extends Wallet, Cart
 {
-
-    /**
-     * @param Customer $customer
-     * @param bool $force
-     *
-     * @return bool
-     */
-    public function canBuy(Customer $customer, bool $force = null): bool;
-
-    /**
-     * @return int
-     */
-    public function getAmountProduct(): int;
-
-    /**
-     * @return array
-     */
-    public function getMetaProduct(): ?array;
 
 }
