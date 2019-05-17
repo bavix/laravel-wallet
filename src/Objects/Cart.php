@@ -39,7 +39,7 @@ class Cart implements \Bavix\Wallet\Interfaces\Cart
     public function canBuy(Customer $customer, bool $force = null): bool
     {
         foreach ($this->items as $item) {
-            if (!$item->canBuy($customer)) {
+            if (!$item->canBuy($customer, $force)) {
                 return false;
             }
         }
