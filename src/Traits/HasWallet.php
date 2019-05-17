@@ -300,6 +300,8 @@ trait HasWallet
      * holder transfers
      *
      * @return MorphMany
+     * @deprecated since laravel-wallet 2.5
+     * @see transfers
      */
     public function holderTransfers(): MorphMany
     {

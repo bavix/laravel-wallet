@@ -293,4 +293,25 @@ class MultiWalletTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     */
+    public function testGetWalletOptimize(): void
+    {
+        /**
+         * @var UserMulti $user
+         */
+        $user = factory(UserMulti::class)->create();
+        $names = \range('a', 'z');
+        foreach ($names as $name) {
+            $user->createWallet(\compact('name'));
+        }
+
+        $user->load('wallets'); // optimize
+
+        foreach ($names as $name) {
+            $this->assertEquals($name, $user->getWallet($name)->name);
+        }
+    }
+
 }

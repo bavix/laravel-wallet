@@ -24,9 +24,16 @@ class WalletServiceProvider extends ServiceProvider
             return;
         }
 
-        $this->publishes([
-            \dirname(__DIR__) . '/config/config.php' => config_path('wallet.php'),
-        ], 'laravel-wallet-config');
+        $this->loadMigrationsFrom([
+            __DIR__.'/../database/migrations_v1',
+            __DIR__.'/../database/migrations_v2',
+        ]);
+
+        if (\function_exists('config_path')) {
+            $this->publishes([
+                \dirname(__DIR__) . '/config/config.php' => config_path('wallet.php'),
+            ], 'laravel-wallet-config');
+        }
 
         $this->publishes([
             \dirname(__DIR__) . '/database/migrations_v1/' => database_path('migrations'),

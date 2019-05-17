@@ -74,8 +74,18 @@ class Wallet extends Model implements Customer, WalletFloat
 
     /**
      * @return bool
+     * @deprecated
+     * @see refreshBalance
      */
     public function calculateBalance(): bool
+    {
+        return $this->refreshBalance();
+    }
+
+    /**
+     * @return bool
+     */
+    public function refreshBalance(): bool
     {
         $balance = $this->getAvailableBalance();
         WalletProxy::set($this->getKey(), $balance);
