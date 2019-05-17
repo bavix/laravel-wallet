@@ -7,9 +7,8 @@ interface Group
 
     /**
      * @param Product $product
-     * @return Group
      */
-    public function addItem(Product $product): self;
+    public function addItem(Product $product): void;
 
     /**
      * @return Product[]
