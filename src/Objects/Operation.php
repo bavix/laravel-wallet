@@ -3,9 +3,10 @@
 namespace Bavix\Wallet\Objects;
 
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Models\Transaction;
 use Ramsey\Uuid\Uuid;
 
-class Transaction
+class Operation
 {
 
     /**
@@ -134,12 +135,12 @@ class Transaction
 
     /**
      * @param Wallet $wallet
-     * @return \Bavix\Wallet\Models\Transaction
+     * @return Transaction
      */
-    public function create(Wallet $wallet): \Bavix\Wallet\Models\Transaction
+    public function create(Wallet $wallet): Transaction
     {
         /**
-         * @var \Bavix\Wallet\Models\Transaction $model
+         * @var Transaction $model
          */
         $model = $wallet->transactions()->create([
             'type' => $this->getType(),

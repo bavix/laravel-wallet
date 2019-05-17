@@ -3,55 +3,55 @@
 namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Models\Wallet as WalletModel;
-use Bavix\Wallet\Objects\Transaction;
-use Illuminate\Support\Facades\DB;
+use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Objects\Operation;
 
 class CommonService
 {
 
     /**
-     * @param bool $dbTran
      * @param Wallet $self
-     * @param Transaction[] $transactions
-     * @return \Bavix\Wallet\Models\Transaction[]
+     * @param Operation[] $transactions
+     * @return Transaction[]
      */
-    public function enforce(bool $dbTran, Wallet $self, array $transactions): array
+    public function enforce(Wallet $self, array $transactions): array
     {
-        $callback = function () use ($self, $transactions) {
-            $objects = [];
+        $objects = [];
+        $amount = 0;
 
-            foreach ($transactions as $transaction) {
-                if ($transaction->isConfirmed()) {
-                    $this->addBalance($self, $transaction->getAmount());
-                }
-
-                $objects[] = $transaction->create($self);
+        foreach ($transactions as $transaction) {
+            if ($transaction->isConfirmed()) {
+                $amount += $transaction->getAmount();
             }
 
-            return $objects;
-        };
-
-        if ($dbTran) {
-            return DB::transaction($callback);
+            $objects[] = $transaction->create($self);
         }
 
-        return $callback();
+        $this->addBalance($self, $amount);
+        return $objects;
     }
 
     /**
      * @param Wallet $wallet
      * @param int $amount
      * @return bool
+     * @throws
      */
     public function addBalance(Wallet $wallet, int $amount): bool
     {
-        $newBalance = $wallet->getBalanceAttribute() + $amount;
-        $wallet->balance = $newBalance;
+        /**
+         * @var ProxyService $proxy
+         * @var \Bavix\Wallet\Models\Wallet $wallet
+         */
+        $proxy = app(ProxyService::class);
+        $balance = $wallet->balance;
+        if ($proxy->has($wallet->getKey())) {
+            $balance = $proxy->get($wallet->getKey());
+        }
 
-        if ($wallet->save()) {
-            $proxy = app(ProxyService::class);
-            $proxy->set($wallet->getKey(), $newBalance);
+        $balance += $amount;
+        if ($wallet->update(\compact('balance'))) {
+            $proxy->set($wallet->getKey(), $balance);
             return true;
         }
 

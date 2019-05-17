@@ -49,8 +49,8 @@ trait HasWallet
         $wallet = app(WalletService::class)
             ->getWallet($this);
 
-        $transactions = app(CommonService::class)->enforce(true, $wallet, [
-            (new \Bavix\Wallet\Objects\Transaction())
+        $transactions = app(CommonService::class)->enforce($wallet, [
+            (new \Bavix\Wallet\Objects\Operation())
                 ->setType(Transaction::TYPE_DEPOSIT)
                 ->setConfirmed($confirmed)
                 ->setAmount($amount)
@@ -224,8 +224,8 @@ trait HasWallet
         $wallet = app(WalletService::class)
             ->getWallet($this);
 
-        $transactions = app(CommonService::class)->enforce(true, $wallet, [
-            (new \Bavix\Wallet\Objects\Transaction())
+        $transactions = app(CommonService::class)->enforce($wallet, [
+            (new \Bavix\Wallet\Objects\Operation())
                 ->setType(Transaction::TYPE_WITHDRAW)
                 ->setConfirmed($confirmed)
                 ->setAmount(-$amount)
