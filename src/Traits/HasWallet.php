@@ -2,7 +2,6 @@
 
 namespace Bavix\Wallet\Traits;
 
-use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
@@ -59,10 +58,11 @@ trait HasWallet
     {
         return DB::transaction(function () use ($type, $amount, $meta, $confirmed) {
 
-            $wallet = $this;
-            if (!($this instanceof WalletModel)) {
-                $wallet = $this->wallet;
-            }
+            /**
+             * @var WalletModel $wallet
+             */
+            $wallet = app(WalletService::class)
+                ->getWallet($this);
 
             if ($confirmed) {
                 $this->addBalance($wallet, $amount);
@@ -297,11 +297,9 @@ trait HasWallet
      */
     public function transfers(): MorphMany
     {
-        if (!($this instanceof WalletModel)) {
-            return $this->wallet->transfers();
-        }
-
-        return $this->morphMany(config('wallet.transfer.model'), 'from');
+        return app(WalletService::class)
+            ->getWallet($this)
+            ->morphMany(config('wallet.transfer.model'), 'from');
     }
 
     /**
@@ -312,7 +310,7 @@ trait HasWallet
      */
     public function wallet(): MorphOne
     {
-        return $this
+        return ($this instanceof WalletModel ? $this->holder : $this)
             ->morphOne(config('wallet.wallet.model'), 'holder')
             ->where('slug', config('wallet.wallet.default.slug'))
             ->withDefault([

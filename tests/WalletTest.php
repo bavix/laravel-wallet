@@ -209,7 +209,7 @@ class WalletTest extends TestCase
         $user->transactions()->update(['confirmed' => true]);
         $this->assertEquals($user->balance, 0);
 
-        $user->wallet->calculateBalance();
+        $user->wallet->refreshBalance();
         $this->assertEquals($user->balance, 100);
 
         $user->withdraw($user->balance);

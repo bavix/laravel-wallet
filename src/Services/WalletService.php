@@ -5,6 +5,8 @@ namespace Bavix\Wallet\Services;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Interfaces\Taxing;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Models\Wallet as WalletModel;
+use Bavix\Wallet\Traits\HasWallet;
 
 class WalletService
 {
@@ -36,6 +38,37 @@ class WalletService
         if ($amount < 0) {
             throw new AmountInvalid(trans('wallet::errors.price_positive'));
         }
+    }
+
+    /**
+     * @param Wallet $object
+     * @return WalletModel
+     */
+    public function getWallet(Wallet $object): WalletModel
+    {
+        if ($object instanceof WalletModel) {
+            return $object;
+        }
+
+        /**
+         * @var HasWallet $object
+         */
+        return $object->wallet;
+    }
+
+    /**
+     * @param WalletModel $wallet
+     * @return bool
+     */
+    public function refresh(WalletModel $wallet): bool
+    {
+        $balance = $wallet->getAvailableBalance();
+        $wallet->balance = $balance;
+
+        $proxy = app(ProxyService::class);
+        $proxy->set($wallet->getKey(), $balance);
+
+        return $wallet->save();
     }
 
 }

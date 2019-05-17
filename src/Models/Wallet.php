@@ -4,9 +4,9 @@ namespace Bavix\Wallet\Models;
 
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\WalletFloat;
+use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Traits\CanPayFloat;
 use Bavix\Wallet\Traits\HasGift;
-use Bavix\Wallet\Services\ProxyService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
@@ -74,24 +74,10 @@ class Wallet extends Model implements Customer, WalletFloat
 
     /**
      * @return bool
-     * @deprecated
-     * @see refreshBalance
-     */
-    public function calculateBalance(): bool
-    {
-        return $this->refreshBalance();
-    }
-
-    /**
-     * @return bool
      */
     public function refreshBalance(): bool
     {
-        $balance = $this->getAvailableBalance();
-        $this->attributes['balance'] = $balance;
-        $proxy = app(ProxyService::class);
-        $proxy->set($this->getKey(), $balance);
-        return $this->save();
+        return app(WalletService::class)->refresh($this);
     }
 
     /**

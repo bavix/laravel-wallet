@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Test;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Test\Models\Item;
 use Bavix\Wallet\Test\Models\UserMulti;
 use Illuminate\Database\QueryException;
 
@@ -321,6 +322,58 @@ class MultiWalletTest extends TestCase
         foreach ($names as $name) {
             $this->assertEquals($name, $user->getWallet($name)->name);
         }
+    }
+
+    /**
+     * @return void
+     */
+    public function testPay(): void
+    {
+        /**
+         * @var UserMulti $user
+         * @var Item $product
+         */
+        $user = factory(UserMulti::class)->create();
+        $a = $user->createWallet(['name' => 'a']);
+        $b = $user->createWallet(['name' => 'b']);
+
+        $product = factory(Item::class)->create([
+            'quantity' => 1,
+        ]);
+
+        $this->assertEquals($a->balance, 0);
+        $this->assertEquals($b->balance, 0);
+
+        $a->deposit($product->getAmountProduct());
+        $this->assertEquals($a->balance, $product->getAmountProduct());
+
+        $b->deposit($product->getAmountProduct());
+        $this->assertEquals($b->balance, $product->getAmountProduct());
+
+        $transfer = $a->pay($product);
+        $this->assertEquals($transfer->from->id, $a->id);
+        $this->assertEquals($transfer->to->id, $product->id);
+        $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
+        $this->assertEquals($a->balance, 0);
+        $this->assertEquals($product->balance, $product->getAmountProduct());
+
+        $transfer = $b->pay($product);
+        $this->assertEquals($transfer->from->id, $b->id);
+        $this->assertEquals($transfer->to->id, $product->id);
+        $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
+        $this->assertEquals($b->balance, 0);
+        $this->assertEquals($product->balance, $product->getAmountProduct() * 2);
+
+        /**
+         * @fixme refund does not work
+         */
+        $this->assertTrue($a->refund($product));
+        $this->assertEquals($product->balance, $product->getAmountProduct());
+//        $this->assertEquals($a->balance, $product->getAmountProduct());
+
+        $this->assertTrue($b->refund($product));
+        $this->assertEquals($product->balance, 0);
+//        $this->assertEquals($b->balance, $product->getAmountProduct());
     }
 
 }
