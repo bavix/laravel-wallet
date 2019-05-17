@@ -8,6 +8,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
+use Bavix\Wallet\Objects\Operation;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Services\WalletService;
@@ -50,36 +51,14 @@ trait HasWallet
             ->getWallet($this);
 
         $transactions = app(CommonService::class)->enforce($wallet, [
-            (new \Bavix\Wallet\Objects\Operation())
+            (new Operation())
                 ->setType(Transaction::TYPE_DEPOSIT)
                 ->setConfirmed($confirmed)
                 ->setAmount($amount)
                 ->setMeta($meta)
         ]);
 
-        return $transactions[0];
-    }
-
-    /**
-     * This method automatically updates the balance in the
-     * database and the project statics
-     *
-     * @param WalletModel $wallet
-     * @param int $amount
-     * @return bool
-     */
-    protected function addBalance(WalletModel $wallet, int $amount): bool
-    {
-        $newBalance = $this->getBalanceAttribute() + $amount;
-        $wallet->balance = $newBalance;
-
-        if ($wallet->save()) {
-            $proxy = app(ProxyService::class);
-            $proxy->set($wallet->getKey(), $newBalance);
-            return true;
-        }
-
-        return false;
+        return \current($transactions);
     }
 
     /**
@@ -225,14 +204,14 @@ trait HasWallet
             ->getWallet($this);
 
         $transactions = app(CommonService::class)->enforce($wallet, [
-            (new \Bavix\Wallet\Objects\Operation())
+            (new Operation())
                 ->setType(Transaction::TYPE_WITHDRAW)
                 ->setConfirmed($confirmed)
                 ->setAmount(-$amount)
                 ->setMeta($meta)
         ]);
 
-        return $transactions[0];
+        return \current($transactions);
     }
 
     /**
