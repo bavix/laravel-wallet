@@ -77,7 +77,7 @@ class Wallet extends Model implements Customer, WalletFloat
      */
     public function refreshBalance(): bool
     {
-        return app(WalletService::class)->refresh($this);
+        return \app(WalletService::class)->refresh($this);
     }
 
     /**

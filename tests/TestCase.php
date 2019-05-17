@@ -2,6 +2,9 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CartService;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ProxyService;
@@ -18,7 +21,7 @@ class TestCase extends OrchestraTestCase
      */
     public function setUp(): void
     {
-        app(ProxyService::class)->fresh();
+        \app(ProxyService::class)->fresh();
         parent::setUp();
         $this->withFactories(__DIR__ . '/factories');
         $this->loadMigrationsFrom([
@@ -52,10 +55,14 @@ class TestCase extends OrchestraTestCase
      */
     protected function getEnvironmentSetUp($app): void
     {
-        $app->singleton(CommonService::class);
-        $app->singleton(WalletService::class);
-        $app->singleton(ProxyService::class);
-        $app->singleton(CartService::class);
+        // Bind eloquent models to IoC container
+        $app->singleton(Transaction::class, config('wallet.transaction.model'));
+        $app->singleton(Transfer::class, config('wallet.transfer.model'));
+        $app->singleton(Wallet::class, config('wallet.wallet.model'));
+        $app->singleton(CartService::class, config('wallet.services.cart'));
+        $app->singleton(CommonService::class, config('wallet.services.common'));
+        $app->singleton(ProxyService::class, config('wallet.services.proxy'));
+        $app->singleton(WalletService::class, config('wallet.services.wallet'));
 
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [

@@ -42,15 +42,18 @@ trait HasWallet
      */
     public function deposit(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        app(WalletService::class)->checkAmount($amount);
+        /**
+         * @var WalletService $walletService
+         */
+        $walletService = \app(WalletService::class);
+        $walletService->checkAmount($amount);
 
         /**
          * @var WalletModel $wallet
          */
-        $wallet = app(WalletService::class)
-            ->getWallet($this);
+        $wallet = $walletService->getWallet($this);
 
-        $transactions = app(CommonService::class)->enforce($wallet, [
+        $transactions = \app(CommonService::class)->enforce($wallet, [
             (new Operation())
                 ->setType(Transaction::TYPE_DEPOSIT)
                 ->setConfirmed($confirmed)
@@ -89,7 +92,7 @@ trait HasWallet
     {
         if ($this instanceof WalletModel) {
             $this->exists or $this->save();
-            $proxy = app(ProxyService::class);
+            $proxy = \app(ProxyService::class);
             if (!$proxy->has($this->getKey())) {
                 $proxy->set($this->getKey(), (int)($this->attributes['balance'] ?? 0));
             }
@@ -142,7 +145,7 @@ trait HasWallet
     public function transfer(Wallet $wallet, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
         return DB::transaction(function () use ($amount, $wallet, $meta, $status) {
-            $fee = app(WalletService::class)
+            $fee = \app(WalletService::class)
                 ->fee($wallet, $amount);
 
             $withdraw = $this->withdraw($amount + $fee, $meta);
@@ -195,15 +198,18 @@ trait HasWallet
      */
     public function forceWithdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        app(WalletService::class)->checkAmount($amount);
+        /**
+         * @var WalletService $walletService
+         */
+        $walletService = \app(WalletService::class);
+        $walletService->checkAmount($amount);
 
         /**
          * @var WalletModel $wallet
          */
-        $wallet = app(WalletService::class)
-            ->getWallet($this);
+        $wallet = $walletService->getWallet($this);
 
-        $transactions = app(CommonService::class)->enforce($wallet, [
+        $transactions = \app(CommonService::class)->enforce($wallet, [
             (new Operation())
                 ->setType(Transaction::TYPE_WITHDRAW)
                 ->setConfirmed($confirmed)
@@ -229,7 +235,7 @@ trait HasWallet
         /**
          * @var Model $wallet
          */
-        return \app('bavix.wallet::transfer')->create([
+        return \app(Transfer::class)->create([
             'status' => $status,
             'deposit_id' => $deposit->getKey(),
             'withdraw_id' => $withdraw->getKey(),
@@ -255,7 +261,7 @@ trait HasWallet
     public function forceTransfer(Wallet $wallet, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
         return DB::transaction(function () use ($amount, $wallet, $meta, $status) {
-            $fee = app(WalletService::class)
+            $fee = \app(WalletService::class)
                 ->fee($wallet, $amount);
 
             $withdraw = $this->forceWithdraw($amount + $fee, $meta);
@@ -272,7 +278,7 @@ trait HasWallet
      */
     public function transfers(): MorphMany
     {
-        return app(WalletService::class)
+        return \app(WalletService::class)
             ->getWallet($this)
             ->morphMany(config('wallet.transfer.model'), 'from');
     }

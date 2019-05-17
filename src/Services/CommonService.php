@@ -43,7 +43,7 @@ class CommonService
          * @var ProxyService $proxy
          * @var \Bavix\Wallet\Models\Wallet $wallet
          */
-        $proxy = app(ProxyService::class);
+        $proxy = \app(ProxyService::class);
         $balance = $wallet->balance;
         if ($proxy->has($wallet->getKey())) {
             $balance = $proxy->get($wallet->getKey());

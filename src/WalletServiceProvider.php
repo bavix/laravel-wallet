@@ -2,6 +2,9 @@
 
 namespace Bavix\Wallet;
 
+use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CartService;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ProxyService;
@@ -66,13 +69,13 @@ class WalletServiceProvider extends ServiceProvider
         );
 
         // Bind eloquent models to IoC container
-        $this->app->singleton('bavix.wallet::transaction', config('wallet.transaction.model'));
-        $this->app->singleton('bavix.wallet::transfer', config('wallet.transfer.model'));
-        $this->app->singleton('bavix.wallet::wallet', config('wallet.wallet.model'));
-        $this->app->singleton(CommonService::class);
-        $this->app->singleton(WalletService::class);
-        $this->app->singleton(ProxyService::class);
-        $this->app->singleton(CartService::class);
+        $this->app->singleton(Transaction::class, config('wallet.transaction.model'));
+        $this->app->singleton(Transfer::class, config('wallet.transfer.model'));
+        $this->app->singleton(Wallet::class, config('wallet.wallet.model'));
+        $this->app->singleton(CartService::class, config('wallet.services.cart'));
+        $this->app->singleton(CommonService::class, config('wallet.services.common'));
+        $this->app->singleton(ProxyService::class, config('wallet.services.proxy'));
+        $this->app->singleton(WalletService::class, config('wallet.services.wallet'));
     }
 
 }

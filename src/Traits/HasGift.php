@@ -57,7 +57,7 @@ trait HasGift
         $callback = function () use ($santa, $product, $force) {
             $amount = $product->getAmountProduct();
             $meta = $product->getMetaProduct();
-            $fee = app(WalletService::class)
+            $fee = \app(WalletService::class)
                 ->fee($product, $amount);
 
             /**

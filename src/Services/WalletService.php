@@ -65,7 +65,7 @@ class WalletService
         $balance = $wallet->getAvailableBalance();
         $wallet->balance = $balance;
 
-        $proxy = app(ProxyService::class);
+        $proxy = \app(ProxyService::class);
         $proxy->set($wallet->getKey(), $balance);
 
         return $wallet->save();
