@@ -2,6 +2,8 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Services\CartService;
+use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\WalletServiceProvider;
@@ -50,8 +52,10 @@ class TestCase extends OrchestraTestCase
      */
     protected function getEnvironmentSetUp($app): void
     {
+        $app->singleton(CommonService::class);
         $app->singleton(WalletService::class);
         $app->singleton(ProxyService::class);
+        $app->singleton(CartService::class);
 
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [

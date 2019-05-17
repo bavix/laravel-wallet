@@ -2,6 +2,8 @@
 
 namespace Bavix\Wallet;
 
+use Bavix\Wallet\Services\CartService;
+use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Services\WalletService;
 use Illuminate\Support\ServiceProvider;
@@ -67,8 +69,10 @@ class WalletServiceProvider extends ServiceProvider
         $this->app->singleton('bavix.wallet::transaction', config('wallet.transaction.model'));
         $this->app->singleton('bavix.wallet::transfer', config('wallet.transfer.model'));
         $this->app->singleton('bavix.wallet::wallet', config('wallet.wallet.model'));
+        $this->app->singleton(CommonService::class);
         $this->app->singleton(WalletService::class);
         $this->app->singleton(ProxyService::class);
+        $this->app->singleton(CartService::class);
     }
 
 }

@@ -90,9 +90,7 @@ trait HasWallets
          * @var WalletModel $wallet
          */
         $wallet = $this->wallets()->create($data);
-        if ($this->wallets()->save($wallet)) {
-            $this->_wallets[$wallet->slug] = $wallet;
-        }
+        $this->_wallets[$wallet->slug] = $wallet;
 
         return $wallet;
     }
