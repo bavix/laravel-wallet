@@ -11,12 +11,12 @@ class CommonService
 {
 
     /**
+     * @param bool $dbTran
      * @param Wallet $self
      * @param Transaction[] $transactions
-     * @param bool $dbTran
      * @return \Bavix\Wallet\Models\Transaction[]
      */
-    public function enforce(Wallet $self, array $transactions, bool $dbTran = null): array
+    public function enforce(bool $dbTran, Wallet $self, array $transactions): array
     {
         $callback = function () use ($self, $transactions) {
             $objects = [];

@@ -42,42 +42,22 @@ trait HasWallet
     public function deposit(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         app(WalletService::class)->checkAmount($amount);
-        return $this->change(Transaction::TYPE_DEPOSIT, $amount, $meta, $confirmed);
-    }
 
-    /**
-     * this method adds a new transaction to the translation table
-     *
-     * @param string $type
-     * @param int $amount
-     * @param array|null $meta
-     * @param bool $confirmed
-     * @return Transaction
-     * @throws
-     */
-    protected function change(string $type, int $amount, ?array $meta, bool $confirmed): Transaction
-    {
-        return DB::transaction(function () use ($type, $amount, $meta, $confirmed) {
+        /**
+         * @var WalletModel $wallet
+         */
+        $wallet = app(WalletService::class)
+            ->getWallet($this);
 
-            /**
-             * @var WalletModel $wallet
-             */
-            $wallet = app(WalletService::class)
-                ->getWallet($this);
+        $transactions = app(CommonService::class)->enforce(true, $wallet, [
+            (new \Bavix\Wallet\Objects\Transaction())
+                ->setType(Transaction::TYPE_DEPOSIT)
+                ->setConfirmed($confirmed)
+                ->setAmount($amount)
+                ->setMeta($meta)
+        ]);
 
-            if ($confirmed) {
-                $this->addBalance($wallet, $amount);
-            }
-
-            return $this->transactions()->create([
-                'type' => $type,
-                'wallet_id' => $wallet->getKey(),
-                'uuid' => Uuid::uuid4()->toString(),
-                'confirmed' => $confirmed,
-                'amount' => $amount,
-                'meta' => $meta,
-            ]);
-        });
+        return $transactions[0];
     }
 
     /**
@@ -237,7 +217,22 @@ trait HasWallet
     public function forceWithdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         app(WalletService::class)->checkAmount($amount);
-        return $this->change(Transaction::TYPE_WITHDRAW, -$amount, $meta, $confirmed);
+
+        /**
+         * @var WalletModel $wallet
+         */
+        $wallet = app(WalletService::class)
+            ->getWallet($this);
+
+        $transactions = app(CommonService::class)->enforce(true, $wallet, [
+            (new \Bavix\Wallet\Objects\Transaction())
+                ->setType(Transaction::TYPE_WITHDRAW)
+                ->setConfirmed($confirmed)
+                ->setAmount(-$amount)
+                ->setMeta($meta)
+        ]);
+
+        return $transactions[0];
     }
 
     /**
