@@ -48,6 +48,9 @@
       "providers": [
         "Bavix\\Wallet\\WalletServiceProvider"
       ]
+    },
+    "branch-alias": {
+      "dev-master": "3.0.x-dev"
     }
   },
   "config": {
