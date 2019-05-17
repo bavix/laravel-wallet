@@ -87,6 +87,7 @@ Add the `HasWallet` trait and `Product` interface to `Item` model.
 ```php
 use Bavix\Wallet\Traits\HasWallet;
 use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Interfaces\Customer;
 
 class Item extends Model implements Product
 {
