@@ -8,6 +8,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
+use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Services\WalletService;
 use Illuminate\Database\Eloquent\Model;
