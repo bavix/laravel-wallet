@@ -5,13 +5,11 @@ namespace PHPSTORM_META {
     use Bavix\Wallet\Models\Transaction;
     use Bavix\Wallet\Models\Transfer;
     use Bavix\Wallet\Models\Wallet;
-    use Bavix\Wallet\Services\CartService;
     use Bavix\Wallet\Services\CommonService;
     use Bavix\Wallet\Services\ProxyService;
     use Bavix\Wallet\Services\WalletService;
 
     override(\app(0), map([
-        CartService::class => CartService::class,
         CommonService::class => CommonService::class,
         ProxyService::class => ProxyService::class,
         WalletService::class => WalletService::class,

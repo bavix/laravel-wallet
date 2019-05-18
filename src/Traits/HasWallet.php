@@ -107,7 +107,7 @@ trait HasWallet
     public function transactions(): MorphMany
     {
         return ($this instanceof WalletModel ? $this->holder : $this)
-            ->morphMany(config('wallet.transaction.model'), 'payable');
+            ->morphMany(\config('wallet.transaction.model'), 'payable');
     }
 
     /**
@@ -271,7 +271,7 @@ trait HasWallet
     {
         return \app(WalletService::class)
             ->getWallet($this)
-            ->morphMany(config('wallet.transfer.model'), 'from');
+            ->morphMany(\config('wallet.transfer.model'), 'from');
     }
 
     /**
@@ -283,11 +283,11 @@ trait HasWallet
     public function wallet(): MorphOne
     {
         return ($this instanceof WalletModel ? $this->holder : $this)
-            ->morphOne(config('wallet.wallet.model'), 'holder')
-            ->where('slug', config('wallet.wallet.default.slug'))
+            ->morphOne(\config('wallet.wallet.model'), 'holder')
+            ->where('slug', \config('wallet.wallet.default.slug'))
             ->withDefault([
-                'name' => config('wallet.wallet.default.name'),
-                'slug' => config('wallet.wallet.default.slug'),
+                'name' => \config('wallet.wallet.default.name'),
+                'slug' => \config('wallet.wallet.default.slug'),
                 'balance' => 0,
             ]);
     }

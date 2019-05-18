@@ -3,10 +3,9 @@
 namespace Bavix\Wallet\Objects;
 
 use Bavix\Wallet\Interfaces\Customer;
-use Bavix\Wallet\Interfaces\Group;
 use Bavix\Wallet\Interfaces\Product;
 
-class Cart implements \Bavix\Wallet\Interfaces\Cart, Group
+class Cart
 {
 
     /**
@@ -15,16 +14,25 @@ class Cart implements \Bavix\Wallet\Interfaces\Cart, Group
     protected $items = [];
 
     /**
-     * @inheritDoc
+     * @return static
      */
-    public function addItem(Product $product): Group
+    public static function make(): self
+    {
+        return new static();
+    }
+
+    /**
+     * @param Product $product
+     * @return static
+     */
+    public function addItem(Product $product): self
     {
         $this->items[] = $product;
         return $this;
     }
 
     /**
-     * @inheritDoc
+     * @return Product[]
      */
     public function getItems(): array
     {
@@ -50,7 +58,7 @@ class Cart implements \Bavix\Wallet\Interfaces\Cart, Group
     /**
      * @return int
      */
-    public function getAmountProduct(): int
+    public function getTotal(): int
     {
         $result = 0;
         foreach ($this->items as $item) {
@@ -62,7 +70,7 @@ class Cart implements \Bavix\Wallet\Interfaces\Cart, Group
     /**
      * @return array|null
      */
-    public function getMetaProduct(): ?array
+    public function getMeta(): ?array
     {
         $meta = [];
         foreach ($this->items as $item) {

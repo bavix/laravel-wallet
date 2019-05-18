@@ -34,7 +34,7 @@ trait HasWalletFloat
      */
     private function coefficient(): float
     {
-        return config('wallet.package.coefficient', 100.);
+        return \config('wallet.package.coefficient', 100.);
     }
 
     /**
