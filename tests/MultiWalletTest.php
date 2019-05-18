@@ -351,6 +351,11 @@ class MultiWalletTest extends TestCase
         $this->assertEquals($b->balance, $product->getAmountProduct());
 
         $transfer = $a->pay($product);
+        $paidTransfer = $a->paid($product);
+        $this->assertTrue((bool)$paidTransfer);
+        $this->assertEquals($transfer->getKey(), $paidTransfer->getKey());
+        $this->assertInstanceOf(UserMulti::class, $paidTransfer->withdraw->payable);
+        $this->assertEquals($user->getKey(), $paidTransfer->withdraw->payable->getKey());
         $this->assertEquals($transfer->from->id, $a->id);
         $this->assertEquals($transfer->to->id, $product->id);
         $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
@@ -358,6 +363,11 @@ class MultiWalletTest extends TestCase
         $this->assertEquals($product->balance, $product->getAmountProduct());
 
         $transfer = $b->pay($product);
+        $paidTransfer = $b->paid($product);
+        $this->assertTrue((bool)$paidTransfer);
+        $this->assertEquals($transfer->getKey(), $paidTransfer->getKey());
+        $this->assertInstanceOf(UserMulti::class, $paidTransfer->withdraw->payable);
+        $this->assertEquals($user->getKey(), $paidTransfer->withdraw->payable->getKey());
         $this->assertEquals($transfer->from->id, $b->id);
         $this->assertEquals($transfer->to->id, $product->id);
         $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
@@ -369,11 +379,11 @@ class MultiWalletTest extends TestCase
          */
         $this->assertTrue($a->refund($product));
         $this->assertEquals($product->balance, $product->getAmountProduct());
-//        $this->assertEquals($a->balance, $product->getAmountProduct());
+        $this->assertEquals($a->balance, $product->getAmountProduct());
 
         $this->assertTrue($b->refund($product));
         $this->assertEquals($product->balance, 0);
-//        $this->assertEquals($b->balance, $product->getAmountProduct());
+        $this->assertEquals($b->balance, $product->getAmountProduct());
     }
 
 }

@@ -36,18 +36,6 @@ class CommonService
         return $objects;
     }
 
-
-    /**
-     * this method adds a new transfer to the transfer table
-     *
-     * @param Wallet $wallet
-     * @param Transaction $withdraw
-     * @param Transaction $deposit
-     * @param string $status
-     * @return Transfer
-     * @throws
-     */
-
     /**
      * @param Bring[] $brings
      * @return array

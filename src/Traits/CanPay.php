@@ -118,17 +118,17 @@ trait CanPay
         }
 
         return DB::transaction(function () use ($product, $transfer, $force) {
-            $transfer->load('withdraw.payable');
+            $transfer->load('withdraw.wallet');
 
             if ($force) {
                 $product->forceTransfer(
-                    $transfer->withdraw->payable,
+                    $transfer->withdraw->wallet,
                     $transfer->deposit->amount,
                     $product->getMetaProduct()
                 );
             } else {
                 $product->transfer(
-                    $transfer->withdraw->payable,
+                    $transfer->withdraw->wallet,
                     $transfer->deposit->amount,
                     $product->getMetaProduct()
                 );
