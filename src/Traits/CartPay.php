@@ -21,12 +21,12 @@ trait CartPay
      */
     public function payFreeCart(Cart $cart): array
     {
+        if (!$cart->canBuy($this)) {
+            throw new ProductEnded(trans('wallet::errors.product_stock'));
+        }
+
         $results = [];
         foreach ($cart->getItems() as $product) {
-            if (!$product->canBuy($this)) {
-                throw new ProductEnded(trans('wallet::errors.product_stock'));
-            }
-
             $results[] = $this->transfer(
                 $product,
                 0,
@@ -60,12 +60,12 @@ trait CartPay
      */
     public function payCart(Cart $cart, bool $force = null): array
     {
+        if (!$cart->canBuy($this, $force)) {
+            throw new ProductEnded(trans('wallet::errors.product_stock'));
+        }
+
         $results = [];
         foreach ($cart->getItems() as $product) {
-            if (!$product->canBuy($this, $force)) {
-                throw new ProductEnded(trans('wallet::errors.product_stock'));
-            }
-
             if ($force) {
                 $results[] = $this->forceTransfer(
                     $product,
