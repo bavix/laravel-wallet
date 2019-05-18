@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\DB;
 trait CanPay
 {
 
-    use HasWallet;
     use CartPay;
 
     /**
