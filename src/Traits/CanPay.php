@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\DB;
 trait CanPay
 {
 
-    use CartPay;
     use HasWallet;
+    use CartPay;
 
     /**
      * @param Product $product
