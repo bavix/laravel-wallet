@@ -13,12 +13,10 @@ use Bavix\Wallet\Objects\Operation;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Services\WalletService;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Ramsey\Uuid\Uuid;
 
 /**
  * Trait HasWallet
@@ -43,9 +41,6 @@ trait HasWallet
      */
     public function deposit(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        /**
-         * @var WalletService $walletService
-         */
         $walletService = \app(WalletService::class);
         $walletService->checkAmount($amount);
 
@@ -199,9 +194,6 @@ trait HasWallet
      */
     public function forceWithdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        /**
-         * @var WalletService $walletService
-         */
         $walletService = \app(WalletService::class);
         $walletService->checkAmount($amount);
 
