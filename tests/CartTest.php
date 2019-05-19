@@ -23,11 +23,7 @@ class CartTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $cart = Cart::make();
-        foreach ($products as $product) {
-            $cart->addItem($product);
-        }
-
+        $cart = Cart::make()->addItems($products);
         foreach ($cart->getItems() as $product) {
             $this->assertEquals($product->balance, 0);
         }

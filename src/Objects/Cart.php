@@ -103,26 +103,6 @@ class Cart implements \Countable
     }
 
     /**
-     * @return array|null
-     */
-    public function getMeta(): ?array
-    {
-        $meta = [];
-        foreach ($this->items as $item) {
-            $data = $item->getMetaProduct();
-            if ($data) {
-                $meta[] = $data;
-            }
-        }
-
-        if (empty($meta)) {
-            return null;
-        }
-
-        return $meta;
-    }
-
-    /**
      * @return int
      */
     public function count(): int
