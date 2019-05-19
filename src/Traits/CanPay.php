@@ -32,11 +32,7 @@ trait CanPay
      */
     public function safePay(Product $product, bool $force = null): ?Transfer
     {
-        try {
-            return $this->pay($product, $force);
-        } catch (\Throwable $throwable) {
-            return null;
-        }
+        return \current($this->safePayCart(Cart::make()->addItem($product), $force)) ?: null;
     }
 
     /**

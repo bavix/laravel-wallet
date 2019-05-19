@@ -94,16 +94,6 @@ class Operation
     }
 
     /**
-     * @param string $uuid
-     * @return static
-     */
-    public function setUuid(string $uuid): self
-    {
-        $this->uuid = $uuid;
-        return $this;
-    }
-
-    /**
      * @param int $amount
      * @return static
      */
