@@ -65,18 +65,15 @@ class CommonService
          * @var WalletModel $wallet
          */
         $proxy = \app(ProxyService::class);
-        $balance = $wallet->balance;
+        $balance = $wallet->balance + $amount;
         if ($proxy->has($wallet->getKey())) {
-            $balance = $proxy->get($wallet->getKey());
+            $balance = $proxy->get($wallet->getKey()) + $amount;
         }
 
-        $balance += $amount;
-        if ($wallet->update(\compact('balance'))) {
-            $proxy->set($wallet->getKey(), $balance);
-            return true;
-        }
+        $result = $wallet->update(\compact('balance'));
+        $proxy->set($wallet->getKey(), $balance);
 
-        return false;
+        return $result;
     }
 
 }
