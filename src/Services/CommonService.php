@@ -4,12 +4,10 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
-use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Operation;
-use Illuminate\Database\Eloquent\Model;
-use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Facades\DB;
 
 class CommonService
 {
@@ -21,19 +19,20 @@ class CommonService
      */
     public function enforce(Wallet $self, array $transactions): array
     {
-        $objects = [];
-        $amount = 0;
+        return DB::transaction(function () use ($self, $transactions) {
+            $amount = 0;
+            $objects = [];
+            foreach ($transactions as $transaction) {
+                if ($transaction->isConfirmed()) {
+                    $amount += $transaction->getAmount();
+                }
 
-        foreach ($transactions as $transaction) {
-            if ($transaction->isConfirmed()) {
-                $amount += $transaction->getAmount();
+                $objects[] = $transaction->create($self);
             }
 
-            $objects[] = $transaction->create($self);
-        }
-
-        $this->addBalance($self, $amount);
-        return $objects;
+            $this->addBalance($self, $amount);
+            return $objects;
+        });
     }
 
     /**
@@ -43,14 +42,15 @@ class CommonService
      */
     public function assemble(array $brings): array
     {
-        $objects = [];
-        foreach ($brings as $bring) {
-            $objects[] = $bring->create();
-        }
+        return DB::transaction(function () use ($brings) {
+            $objects = [];
+            foreach ($brings as $bring) {
+                $objects[] = $bring->create();
+            }
 
-        return $objects;
+            return $objects;
+        });
     }
-
 
     /**
      * @param Wallet $wallet
@@ -62,7 +62,7 @@ class CommonService
     {
         /**
          * @var ProxyService $proxy
-         * @var \Bavix\Wallet\Models\Wallet $wallet
+         * @var WalletModel $wallet
          */
         $proxy = \app(ProxyService::class);
         $balance = $wallet->balance;

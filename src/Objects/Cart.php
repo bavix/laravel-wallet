@@ -4,8 +4,10 @@ namespace Bavix\Wallet\Objects;
 
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Models\Transfer;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class Cart
+class Cart implements \Countable
 {
 
     /**
@@ -32,11 +34,44 @@ class Cart
     }
 
     /**
+     * @param array $products
+     * @return static
+     */
+    public function addItems(array $products): self
+    {
+        foreach ($products as $product) {
+            $this->addItem($product);
+        }
+
+        return $this;
+    }
+
+    /**
      * @return Product[]
      */
     public function getItems(): array
     {
         return $this->items;
+    }
+
+    /**
+     * @param Customer $customer
+     * @param bool|null $gifts
+     * @return Transfer[]
+     */
+    public function hasPaid(Customer $customer, bool $gifts = null): array
+    {
+        $results = [];
+        foreach ($this->getItems() as $item) {
+            $transfer = $customer->paid($item, $gifts);
+            $results[] = $transfer;
+            if (!$transfer) {
+                throw (new ModelNotFoundException())
+                    ->setModel($customer->transfers()->getMorphClass());
+            }
+        }
+
+        return $results;
     }
 
     /**
@@ -85,6 +120,14 @@ class Cart
         }
 
         return $meta;
+    }
+
+    /**
+     * @return int
+     */
+    public function count(): int
+    {
+        return \count($this->items);
     }
 
 }

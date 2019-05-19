@@ -18,6 +18,7 @@ trait CanPay
     /**
      * @param Product $product
      * @return Transfer
+     * @throws
      */
     public function payFree(Product $product): Transfer
     {

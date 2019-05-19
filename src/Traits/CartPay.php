@@ -18,6 +18,7 @@ trait CartPay
     /**
      * @param Cart $cart
      * @return Transfer[]
+     * @throws
      */
     public function payFreeCart(Cart $cart): array
     {
@@ -25,17 +26,19 @@ trait CartPay
             throw new ProductEnded(trans('wallet::errors.product_stock'));
         }
 
-        $results = [];
-        foreach ($cart->getItems() as $product) {
-            $results[] = $this->transfer(
-                $product,
-                0,
-                $product->getMetaProduct(),
-                Transfer::STATUS_PAID
-            );
-        }
+        return DB::transaction(function () use ($cart) {
+            $results = [];
+            foreach ($cart->getItems() as $product) {
+                $results[] = $this->transfer(
+                    $product,
+                    0,
+                    $product->getMetaProduct(),
+                    Transfer::STATUS_PAID
+                );
+            }
 
-        return $results;
+            return $results;
+        });
     }
 
     /**
@@ -64,28 +67,32 @@ trait CartPay
             throw new ProductEnded(trans('wallet::errors.product_stock'));
         }
 
-        $results = [];
-        foreach ($cart->getItems() as $product) {
-            if ($force) {
-                $results[] = $this->forceTransfer(
+        return DB::transaction(function () use ($cart, $force) {
+
+            $results = [];
+            foreach ($cart->getItems() as $product) {
+                if ($force) {
+                    $results[] = $this->forceTransfer(
+                        $product,
+                        $product->getAmountProduct(),
+                        $product->getMetaProduct(),
+                        Transfer::STATUS_PAID
+                    );
+
+                    continue;
+                }
+
+                $results[] = $this->transfer(
                     $product,
                     $product->getAmountProduct(),
                     $product->getMetaProduct(),
                     Transfer::STATUS_PAID
                 );
-
-                continue;
             }
 
-            $results[] = $this->transfer(
-                $product,
-                $product->getAmountProduct(),
-                $product->getMetaProduct(),
-                Transfer::STATUS_PAID
-            );
-        }
+            return $results;
 
-        return $results;
+        });
     }
 
     /**
@@ -122,17 +129,12 @@ trait CartPay
      */
     public function refundCart(Cart $cart, bool $force = null, bool $gifts = null): bool
     {
-        $results = true;
-        foreach ($cart->getItems() as $product) {
+        return DB::transaction(function () use ($cart, $force, $gifts) {
 
-            $transfer = $this->paid($product, $gifts);
-
-            if (!$transfer) {
-                throw (new ModelNotFoundException())
-                    ->setModel($this->transfers()->getMorphClass());
-            }
-
-            $results = $results && DB::transaction(function () use ($product, $transfer, $force) {
+            $results = [];
+            $transfers = $cart->hasPaid($this, $gifts);
+            foreach ($cart->getItems() as $key => $product) {
+                $transfer = $transfers[$key];
                 $transfer->load('withdraw.wallet');
 
                 if ($force) {
@@ -149,14 +151,15 @@ trait CartPay
                     );
                 }
 
-                return $transfer->update([
+                $results[] = $transfer->update([
                     'status' => Transfer::STATUS_REFUND,
                     'status_last' => $transfer->status,
                 ]);
-            });
-        }
+            }
 
-        return $results;
+            return \count(\array_unique($results)) === 1;
+
+        });
     }
 
     /**
@@ -206,6 +209,8 @@ trait CartPay
     }
 
     /**
+     * Checks acquired product your wallet.
+     *
      * @param Product $product
      * @param bool $gifts
      * @return null|Transfer
