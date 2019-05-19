@@ -34,10 +34,10 @@ class Cart implements \Countable
     }
 
     /**
-     * @param array $products
+     * @param iterable $products
      * @return static
      */
-    public function addItems(array $products): self
+    public function addItems(iterable $products): self
     {
         foreach ($products as $product) {
             $this->addItem($product);
