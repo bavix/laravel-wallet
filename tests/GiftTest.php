@@ -3,7 +3,6 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\Item;
 

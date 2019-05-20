@@ -8,6 +8,8 @@ use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Test\Models\Item;
 use Bavix\Wallet\Test\Models\UserMulti;
 use Illuminate\Database\QueryException;
+use function compact;
+use function range;
 
 class MultiWalletTest extends TestCase
 {
@@ -312,9 +314,9 @@ class MultiWalletTest extends TestCase
          * @var UserMulti $user
          */
         $user = factory(UserMulti::class)->create();
-        $names = \range('a', 'z');
+        $names = range('a', 'z');
         foreach ($names as $name) {
-            $user->createWallet(\compact('name'));
+            $user->createWallet(compact('name'));
         }
 
         $user->load('wallets'); // optimize

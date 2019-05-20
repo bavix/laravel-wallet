@@ -5,9 +5,11 @@ namespace Bavix\Wallet\Objects;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Models\Transfer;
+use Countable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use function count;
 
-class Cart implements \Countable
+class Cart implements Countable
 {
 
     /**
@@ -86,7 +88,7 @@ class Cart implements \Countable
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -107,7 +109,7 @@ class Cart implements \Countable
      */
     public function count(): int
     {
-        return \count($this->items);
+        return count($this->items);
     }
 
 }

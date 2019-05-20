@@ -2,11 +2,12 @@
 
 namespace Bavix\Wallet\Models;
 
+use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Models\Wallet as WalletModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Bavix\Wallet\Models\Wallet as WalletModel;
-use Bavix\Wallet\Interfaces\Wallet;
+use function config;
 
 /**
  * Class Transaction
@@ -57,7 +58,7 @@ class Transaction extends Model
     public function getTable(): string
     {
         if (!$this->table) {
-            $this->table = \config('wallet.transaction.table');
+            $this->table = config('wallet.transaction.table');
         }
 
         return parent::getTable();
@@ -76,7 +77,7 @@ class Transaction extends Model
      */
     public function wallet(): BelongsTo
     {
-        return $this->belongsTo(\config('wallet.wallet.model'));
+        return $this->belongsTo(config('wallet.wallet.model'));
     }
 
 }

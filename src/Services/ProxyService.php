@@ -2,7 +2,10 @@
 
 namespace Bavix\Wallet\Services;
 
-class ProxyService implements \ArrayAccess
+use ArrayAccess;
+use function array_key_exists;
+
+class ProxyService implements ArrayAccess
 {
 
     /**
@@ -24,7 +27,7 @@ class ProxyService implements \ArrayAccess
      */
     public function offsetExists($offset): bool
     {
-        return \array_key_exists($offset, $this->data);
+        return array_key_exists($offset, $this->data);
     }
 
     /**

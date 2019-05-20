@@ -17,7 +17,7 @@ use Faker\Generator as Faker;
 $factory->define(Item::class, function (Faker $faker) {
     return [
         'name' => $faker->domainName,
-        'price' => \random_int(1, 100),
-        'quantity' => \random_int(0, 10),
+        'price' => random_int(1, 100),
+        'quantity' => random_int(0, 10),
     ];
 });

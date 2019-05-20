@@ -11,6 +11,8 @@ use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\WalletServiceProvider;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
+use function app;
+use function dirname;
 
 class TestCase extends OrchestraTestCase
 {
@@ -20,7 +22,7 @@ class TestCase extends OrchestraTestCase
      */
     public function setUp(): void
     {
-        \app(ProxyService::class)->fresh();
+        app(ProxyService::class)->fresh();
         parent::setUp();
         $this->withFactories(__DIR__ . '/factories');
         $this->loadMigrationsFrom([
@@ -29,11 +31,11 @@ class TestCase extends OrchestraTestCase
         ]);
         $this->loadMigrationsFrom([
             '--database' => 'testbench',
-            '--path' => \dirname(__DIR__) . '/database/migrations_v1'
+            '--path' => dirname(__DIR__) . '/database/migrations_v1'
         ]);
         $this->loadMigrationsFrom([
             '--database' => 'testbench',
-            '--path' => \dirname(__DIR__) . '/database/migrations_v2'
+            '--path' => dirname(__DIR__) . '/database/migrations_v2'
         ]);
     }
 

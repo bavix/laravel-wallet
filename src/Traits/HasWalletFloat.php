@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Traits;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
+use function config;
 
 /**
  * Trait HasWalletFloat
@@ -34,7 +35,7 @@ trait HasWalletFloat
      */
     private function coefficient(): float
     {
-        return \config('wallet.package.coefficient', 100.);
+        return config('wallet.package.coefficient', 100.);
     }
 
     /**

@@ -7,6 +7,7 @@ use Bavix\Wallet\Interfaces\Taxing;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Traits\HasWallet;
+use function app;
 
 class WalletService
 {
@@ -65,7 +66,7 @@ class WalletService
         $balance = $wallet->getAvailableBalance();
         $wallet->balance = $balance;
 
-        $proxy = \app(ProxyService::class);
+        $proxy = app(ProxyService::class);
         $proxy->set($wallet->getKey(), $balance);
 
         return $wallet->save();

@@ -3,6 +3,7 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Services\ProxyService;
+use function app;
 
 class ProxyTest extends TestCase
 {
@@ -12,7 +13,7 @@ class ProxyTest extends TestCase
      */
     public function testSimple(): void
     {
-        $proxy = \app(ProxyService::class);
+        $proxy = app(ProxyService::class);
         for ($i = 0; $i < 10; $i++) {
             $proxy[$i] = $i;
             $this->assertEquals($proxy[$i], $i);

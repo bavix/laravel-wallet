@@ -17,6 +17,10 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Throwable;
+use function app;
+use function config;
+use function current;
 
 /**
  * Trait HasWallet
@@ -41,7 +45,7 @@ trait HasWallet
      */
     public function deposit(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        $walletService = \app(WalletService::class);
+        $walletService = app(WalletService::class);
         $walletService->checkAmount($amount);
 
         /**
@@ -49,7 +53,7 @@ trait HasWallet
          */
         $wallet = $walletService->getWallet($this);
 
-        $transactions = \app(CommonService::class)->enforce($wallet, [
+        $transactions = app(CommonService::class)->enforce($wallet, [
             (new Operation())
                 ->setType(Transaction::TYPE_DEPOSIT)
                 ->setConfirmed($confirmed)
@@ -57,7 +61,7 @@ trait HasWallet
                 ->setMeta($meta)
         ]);
 
-        return \current($transactions);
+        return current($transactions);
     }
 
     /**
@@ -88,7 +92,7 @@ trait HasWallet
     {
         if ($this instanceof WalletModel) {
             $this->exists or $this->save();
-            $proxy = \app(ProxyService::class);
+            $proxy = app(ProxyService::class);
             if (!$proxy->has($this->getKey())) {
                 $proxy->set($this->getKey(), (int)($this->attributes['balance'] ?? 0));
             }
@@ -107,7 +111,7 @@ trait HasWallet
     public function transactions(): MorphMany
     {
         return ($this instanceof WalletModel ? $this->holder : $this)
-            ->morphMany(\config('wallet.transaction.model'), 'payable');
+            ->morphMany(config('wallet.transaction.model'), 'payable');
     }
 
     /**
@@ -123,7 +127,7 @@ trait HasWallet
     {
         try {
             return $this->transfer($wallet, $amount, $meta, $status);
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             return null;
         }
     }
@@ -141,7 +145,7 @@ trait HasWallet
     public function transfer(Wallet $wallet, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
         return DB::transaction(function () use ($amount, $wallet, $meta, $status) {
-            $fee = \app(WalletService::class)
+            $fee = app(WalletService::class)
                 ->fee($wallet, $amount);
 
             $withdraw = $this->withdraw($amount + $fee, $meta);
@@ -194,7 +198,7 @@ trait HasWallet
      */
     public function forceWithdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        $walletService = \app(WalletService::class);
+        $walletService = app(WalletService::class);
         $walletService->checkAmount($amount);
 
         /**
@@ -202,7 +206,7 @@ trait HasWallet
          */
         $wallet = $walletService->getWallet($this);
 
-        $transactions = \app(CommonService::class)->enforce($wallet, [
+        $transactions = app(CommonService::class)->enforce($wallet, [
             (new Operation())
                 ->setType(Transaction::TYPE_WITHDRAW)
                 ->setConfirmed($confirmed)
@@ -210,7 +214,7 @@ trait HasWallet
                 ->setMeta($meta)
         ]);
 
-        return \current($transactions);
+        return current($transactions);
     }
 
     /**
@@ -227,7 +231,7 @@ trait HasWallet
     {
         $from = ($this instanceof WalletModel ? $this : $this->wallet);
 
-        $transfers = \app(CommonService::class)->assemble([
+        $transfers = app(CommonService::class)->assemble([
             (new Bring())
                 ->setStatus($status)
                 ->setDeposit($deposit)
@@ -236,7 +240,7 @@ trait HasWallet
                 ->setTo($wallet)
         ]);
 
-        return \current($transfers);
+        return current($transfers);
     }
 
     /**
@@ -252,7 +256,7 @@ trait HasWallet
     public function forceTransfer(Wallet $wallet, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
         return DB::transaction(function () use ($amount, $wallet, $meta, $status) {
-            $fee = \app(WalletService::class)
+            $fee = app(WalletService::class)
                 ->fee($wallet, $amount);
 
             $withdraw = $this->forceWithdraw($amount + $fee, $meta);
@@ -269,9 +273,9 @@ trait HasWallet
      */
     public function transfers(): MorphMany
     {
-        return \app(WalletService::class)
+        return app(WalletService::class)
             ->getWallet($this)
-            ->morphMany(\config('wallet.transfer.model'), 'from');
+            ->morphMany(config('wallet.transfer.model'), 'from');
     }
 
     /**
@@ -283,11 +287,11 @@ trait HasWallet
     public function wallet(): MorphOne
     {
         return ($this instanceof WalletModel ? $this->holder : $this)
-            ->morphOne(\config('wallet.wallet.model'), 'holder')
-            ->where('slug', \config('wallet.wallet.default.slug'))
+            ->morphOne(config('wallet.wallet.model'), 'holder')
+            ->where('slug', config('wallet.wallet.default.slug'))
             ->withDefault([
-                'name' => \config('wallet.wallet.default.name'),
-                'slug' => \config('wallet.wallet.default.slug'),
+                'name' => config('wallet.wallet.default.name'),
+                'slug' => config('wallet.wallet.default.slug'),
                 'balance' => 0,
             ]);
     }

@@ -7,6 +7,9 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\WalletService;
 use Illuminate\Support\Facades\DB;
+use Throwable;
+use function app;
+use function get_class;
 
 /**
  * Trait HasGift
@@ -29,7 +32,7 @@ trait HasGift
     {
         try {
             return $this->gift($to, $product, $force);
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             return null;
         }
     }
@@ -57,7 +60,7 @@ trait HasGift
         $callback = function () use ($santa, $product, $force) {
             $amount = $product->getAmountProduct();
             $meta = $product->getMetaProduct();
-            $fee = \app(WalletService::class)
+            $fee = app(WalletService::class)
                 ->fee($product, $amount);
 
             /**
@@ -79,7 +82,7 @@ trait HasGift
          * That's why I address him like this!
          */
         return DB::transaction(
-            $callback->bindTo($to, \get_class($to))
+            $callback->bindTo($to, get_class($to))
         );
     }
 

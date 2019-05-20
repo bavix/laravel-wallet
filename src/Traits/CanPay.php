@@ -2,13 +2,10 @@
 
 namespace Bavix\Wallet\Traits;
 
-use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\DB;
+use function current;
 
 trait CanPay
 {
@@ -22,7 +19,7 @@ trait CanPay
      */
     public function payFree(Product $product): Transfer
     {
-        return \current($this->payFreeCart(Cart::make()->addItem($product)));
+        return current($this->payFreeCart(Cart::make()->addItem($product)));
     }
 
     /**
@@ -32,7 +29,7 @@ trait CanPay
      */
     public function safePay(Product $product, bool $force = null): ?Transfer
     {
-        return \current($this->safePayCart(Cart::make()->addItem($product), $force)) ?: null;
+        return current($this->safePayCart(Cart::make()->addItem($product), $force)) ?: null;
     }
 
     /**
@@ -43,7 +40,7 @@ trait CanPay
      */
     public function pay(Product $product, bool $force = null): Transfer
     {
-        return \current($this->payCart(Cart::make()->addItem($product), $force));
+        return current($this->payCart(Cart::make()->addItem($product), $force));
     }
 
     /**
@@ -53,7 +50,7 @@ trait CanPay
      */
     public function forcePay(Product $product): Transfer
     {
-        return \current($this->forcePayCart(Cart::make()->addItem($product)));
+        return current($this->forcePayCart(Cart::make()->addItem($product)));
     }
 
     /**

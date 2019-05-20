@@ -5,6 +5,8 @@ namespace Bavix\Wallet\Traits;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
+use function array_key_exists;
+use function config;
 
 /**
  * Trait HasWallets
@@ -56,7 +58,7 @@ trait HasWallets
             }
         }
 
-        if (!\array_key_exists($slug, $this->_wallets)) {
+        if (!array_key_exists($slug, $this->_wallets)) {
             $this->_wallets[$slug] = $this->wallets()
                 ->where('slug', $slug)
                 ->first();
@@ -72,7 +74,7 @@ trait HasWallets
      */
     public function wallets(): MorphMany
     {
-        return $this->morphMany(\config('wallet.wallet.model'), 'holder');
+        return $this->morphMany(config('wallet.wallet.model'), 'holder');
     }
 
     /**

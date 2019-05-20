@@ -2,13 +2,9 @@
 
 namespace Bavix\Wallet\Test;
 
-use Bavix\Wallet\Models\Wallet as WalletModel;
-use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\ProxyService;
-use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Test\Models\Buyer;
-use Bavix\Wallet\Test\Models\Item;
+use function app;
 
 class BalanceTest extends TestCase
 {
@@ -29,7 +25,7 @@ class BalanceTest extends TestCase
         $wallet->deposit(1000);
         $this->assertEquals($wallet->balance, 1000);
 
-        $result = \app(CommonService::class)->addBalance($wallet, 100);
+        $result = app(CommonService::class)->addBalance($wallet, 100);
         $this->assertTrue($result);
 
         $this->assertEquals($wallet->balance, 1100);
@@ -39,7 +35,7 @@ class BalanceTest extends TestCase
 
         $this->assertTrue($wallet->delete());
         $this->assertFalse($wallet->exists);
-        $result = \app(CommonService::class)->addBalance($wallet, 100);
+        $result = app(CommonService::class)->addBalance($wallet, 100);
         $this->assertTrue($result); // automatic create default wallet
     }
 

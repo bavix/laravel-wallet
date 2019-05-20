@@ -7,8 +7,10 @@ use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
+use Throwable;
+use function array_unique;
+use function count;
 
 trait CartPay
 {
@@ -50,7 +52,7 @@ trait CartPay
     {
         try {
             return $this->payCart($cart, $force);
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             return [];
         }
     }
@@ -115,7 +117,7 @@ trait CartPay
     {
         try {
             return $this->refundCart($cart, $force, $gifts);
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             return false;
         }
     }
@@ -157,7 +159,7 @@ trait CartPay
                 ]);
             }
 
-            return \count(\array_unique($results)) === 1;
+            return count(array_unique($results)) === 1;
 
         });
     }
@@ -182,7 +184,7 @@ trait CartPay
     {
         try {
             return $this->refundGiftCart($cart, $force);
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             return false;
         }
     }

@@ -10,6 +10,9 @@ use Bavix\Wallet\Traits\HasGift;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
+use function app;
+use function array_key_exists;
+use function config;
 
 /**
  * Class Wallet
@@ -49,7 +52,7 @@ class Wallet extends Model implements Customer, WalletFloat
     public function getTable(): string
     {
         if (!$this->table) {
-            $this->table = \config('wallet.wallet.table');
+            $this->table = config('wallet.wallet.table');
         }
 
         return parent::getTable();
@@ -67,7 +70,7 @@ class Wallet extends Model implements Customer, WalletFloat
          * Must be updated only if the model does not exist
          *  or the slug is empty
          */
-        if (!$this->exists && !\array_key_exists('slug', $this->attributes)) {
+        if (!$this->exists && !array_key_exists('slug', $this->attributes)) {
             $this->attributes['slug'] = Str::slug($name);
         }
     }
@@ -77,7 +80,7 @@ class Wallet extends Model implements Customer, WalletFloat
      */
     public function refreshBalance(): bool
     {
-        return \app(WalletService::class)->refresh($this);
+        return app(WalletService::class)->refresh($this);
     }
 
     /**

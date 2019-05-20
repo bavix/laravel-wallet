@@ -6,6 +6,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Ramsey\Uuid\Uuid;
+use function abs;
 
 class Bring
 {
@@ -139,7 +140,7 @@ class Bring
             'from_id' => $this->getFrom()->getKey(),
             'to_type' => $this->getTo()->getMorphClass(),
             'to_id' => $this->getTo()->getKey(),
-            'fee' => \abs($this->getWithdraw()->amount) - \abs($this->getDeposit()->amount),
+            'fee' => abs($this->getWithdraw()->amount) - abs($this->getDeposit()->amount),
             'uuid' => Uuid::uuid4()->toString(),
         ]);
     }

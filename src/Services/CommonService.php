@@ -8,6 +8,8 @@ use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Operation;
 use Illuminate\Support\Facades\DB;
+use function app;
+use function compact;
 
 class CommonService
 {
@@ -64,13 +66,13 @@ class CommonService
          * @var ProxyService $proxy
          * @var WalletModel $wallet
          */
-        $proxy = \app(ProxyService::class);
+        $proxy = app(ProxyService::class);
         $balance = $wallet->balance + $amount;
         if ($proxy->has($wallet->getKey())) {
             $balance = $proxy->get($wallet->getKey()) + $amount;
         }
 
-        $result = $wallet->update(\compact('balance'));
+        $result = $wallet->update(compact('balance'));
         $proxy->set($wallet->getKey(), $balance);
 
         return $result;
