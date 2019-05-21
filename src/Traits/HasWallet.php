@@ -144,14 +144,8 @@ trait HasWallet
      */
     public function transfer(Wallet $wallet, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
-        return DB::transaction(function () use ($amount, $wallet, $meta, $status) {
-            $fee = app(WalletService::class)
-                ->fee($wallet, $amount);
-
-            $withdraw = $this->withdraw($amount + $fee, $meta);
-            $deposit = $wallet->deposit($amount, $meta);
-            return $this->assemble($wallet, $withdraw, $deposit, $status);
-        });
+        app(CommonService::class)->verifyWithdraw($this, $amount);
+        return $this->forceTransfer($wallet, $amount, $meta, $status);
     }
 
     /**
@@ -165,14 +159,7 @@ trait HasWallet
      */
     public function withdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        if ($amount && !$this->balance) {
-            throw new BalanceIsEmpty(trans('wallet::errors.wallet_empty'));
-        }
-
-        if (!$this->canWithdraw($amount)) {
-            throw new InsufficientFunds(trans('wallet::errors.insufficient_funds'));
-        }
-
+        app(CommonService::class)->verifyWithdraw($this, $amount);
         return $this->forceWithdraw($amount, $meta, $confirmed);
     }
 
@@ -218,32 +205,6 @@ trait HasWallet
     }
 
     /**
-     * this method adds a new transfer to the transfer table
-     *
-     * @param Wallet $wallet
-     * @param Transaction $withdraw
-     * @param Transaction $deposit
-     * @param string $status
-     * @return Transfer
-     * @throws
-     */
-    protected function assemble(Wallet $wallet, Transaction $withdraw, Transaction $deposit, string $status = Transfer::STATUS_PAID): Transfer
-    {
-        $from = ($this instanceof WalletModel ? $this : $this->wallet);
-
-        $transfers = app(CommonService::class)->assemble([
-            (new Bring())
-                ->setStatus($status)
-                ->setDeposit($deposit)
-                ->setWithdraw($withdraw)
-                ->setFrom($from)
-                ->setTo($wallet)
-        ]);
-
-        return current($transfers);
-    }
-
-    /**
      * the forced transfer is needed when the user does not have the money and we drive it.
      * Sometimes you do. Depends on business logic.
      *
@@ -261,7 +222,20 @@ trait HasWallet
 
             $withdraw = $this->forceWithdraw($amount + $fee, $meta);
             $deposit = $wallet->deposit($amount, $meta);
-            return $this->assemble($wallet, $withdraw, $deposit, $status);
+
+            $from = app(WalletService::class)
+                ->getWallet($this);
+
+            $transfers = app(CommonService::class)->assemble([
+                (new Bring())
+                    ->setStatus($status)
+                    ->setDeposit($deposit)
+                    ->setWithdraw($withdraw)
+                    ->setFrom($from)
+                    ->setTo($wallet)
+            ]);
+
+            return current($transfers);
         });
     }
 

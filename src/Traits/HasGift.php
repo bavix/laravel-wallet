@@ -5,6 +5,8 @@ namespace Bavix\Wallet\Traits;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Objects\Bring;
+use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\WalletService;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -73,7 +75,20 @@ trait HasGift
             }
 
             $deposit = $product->deposit($amount, $meta);
-            return $this->assemble($product, $withdraw, $deposit, Transfer::STATUS_GIFT);
+
+            $from = app(WalletService::class)
+                ->getWallet($this);
+
+            $transfers = app(CommonService::class)->assemble([
+                (new Bring())
+                    ->setStatus(Transfer::STATUS_GIFT)
+                    ->setDeposit($deposit)
+                    ->setWithdraw($withdraw)
+                    ->setFrom($from)
+                    ->setTo($product)
+            ]);
+
+            return current($transfers);
         };
 
         /**

@@ -35,6 +35,11 @@ class Operation
     protected $confirmed;
 
     /**
+     * @var Wallet
+     */
+    protected $wallet;
+
+    /**
      * Transaction constructor.
      * @throws
      */
@@ -124,24 +129,52 @@ class Operation
     }
 
     /**
+     * @return Wallet
+     */
+    public function getWallet(): Wallet
+    {
+        return $this->wallet;
+    }
+
+    /**
      * @param Wallet $wallet
+     * @return static
+     */
+    public function setWallet(Wallet $wallet): self
+    {
+        $this->wallet = $wallet;
+        return $this;
+    }
+
+    /**
      * @return Transaction
      */
-    public function create(Wallet $wallet): Transaction
+    public function create(): Transaction
     {
         /**
          * @var Transaction $model
          */
-        $model = $wallet->transactions()->create([
+        $model = $this->getWallet()
+            ->transactions()
+            ->create($this->toArray());
+
+        return $model;
+    }
+
+    /**
+     * @return array
+     * @throws
+     */
+    public function toArray(): array
+    {
+        return [
             'type' => $this->getType(),
-            'wallet_id' => $wallet->getKey(),
+            'wallet_id' => $this->getWallet()->getKey(),
             'uuid' => $this->getUuid(),
             'confirmed' => $this->isConfirmed(),
             'amount' => $this->getAmount(),
             'meta' => $this->getMeta(),
-        ]);
-
-        return $model;
+        ];
     }
 
 }

@@ -37,6 +37,20 @@ class Bring
     protected $withdraw;
 
     /**
+     * @var string
+     */
+    protected $uuid;
+
+    /**
+     * Bring constructor.
+     * @throws
+     */
+    public function __construct()
+    {
+        $this->uuid = Uuid::uuid4()->toString();
+    }
+
+    /**
      * @return string
      */
     public function getStatus(): string
@@ -127,12 +141,30 @@ class Bring
     }
 
     /**
+     * @return string
+     */
+    public function getUuid(): string
+    {
+        return $this->uuid;
+    }
+
+    /**
      * @return Transfer
      * @throws
      */
     public function create(): Transfer
     {
-        return app(Transfer::class)->create([
+        return app(Transfer::class)
+            ->create($this->toArray());
+    }
+
+    /**
+     * @return array
+     * @throws
+     */
+    public function toArray(): array
+    {
+        return [
             'status' => $this->getStatus(),
             'deposit_id' => $this->getDeposit()->getKey(),
             'withdraw_id' => $this->getWithdraw()->getKey(),
@@ -141,8 +173,8 @@ class Bring
             'to_type' => $this->getTo()->getMorphClass(),
             'to_id' => $this->getTo()->getKey(),
             'fee' => abs($this->getWithdraw()->amount) - abs($this->getDeposit()->amount),
-            'uuid' => Uuid::uuid4()->toString(),
-        ]);
+            'uuid' => $this->getUuid(),
+        ];
     }
 
 }
