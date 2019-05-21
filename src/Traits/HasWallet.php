@@ -45,23 +45,10 @@ trait HasWallet
      */
     public function deposit(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        $walletService = app(WalletService::class);
-        $walletService->checkAmount($amount);
-
-        /**
-         * @var WalletModel $wallet
-         */
-        $wallet = $walletService->getWallet($this);
-
-        $transactions = app(CommonService::class)->enforce($wallet, [
-            (new Operation())
-                ->setType(Transaction::TYPE_DEPOSIT)
-                ->setConfirmed($confirmed)
-                ->setAmount($amount)
-                ->setMeta($meta)
-        ]);
-
-        return current($transactions);
+        return DB::transaction(function () use ($amount, $meta, $confirmed) {
+            return app(CommonService::class)
+                ->deposit($this, $amount, $meta, $confirmed);
+        });
     }
 
     /**
@@ -120,13 +107,12 @@ trait HasWallet
      * @param Wallet $wallet
      * @param int $amount
      * @param array|null $meta
-     * @param string $status
      * @return null|Transfer
      */
-    public function safeTransfer(Wallet $wallet, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): ?Transfer
+    public function safeTransfer(Wallet $wallet, int $amount, ?array $meta = null): ?Transfer
     {
         try {
-            return $this->transfer($wallet, $amount, $meta, $status);
+            return $this->transfer($wallet, $amount, $meta);
         } catch (Throwable $throwable) {
             return null;
         }
@@ -138,14 +124,13 @@ trait HasWallet
      * @param Wallet $wallet
      * @param int $amount
      * @param array|null $meta
-     * @param string $status
      * @return Transfer
      * @throws
      */
-    public function transfer(Wallet $wallet, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
+    public function transfer(Wallet $wallet, int $amount, ?array $meta = null): Transfer
     {
         app(CommonService::class)->verifyWithdraw($this, $amount);
-        return $this->forceTransfer($wallet, $amount, $meta, $status);
+        return $this->forceTransfer($wallet, $amount, $meta);
     }
 
     /**
@@ -185,23 +170,11 @@ trait HasWallet
      */
     public function forceWithdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        $walletService = app(WalletService::class);
-        $walletService->checkAmount($amount);
+        return DB::transaction(function () use ($amount, $meta, $confirmed) {
+            return app(CommonService::class)
+                ->forceWithdraw($this, $amount, $meta, $confirmed);
 
-        /**
-         * @var WalletModel $wallet
-         */
-        $wallet = $walletService->getWallet($this);
-
-        $transactions = app(CommonService::class)->enforce($wallet, [
-            (new Operation())
-                ->setType(Transaction::TYPE_WITHDRAW)
-                ->setConfirmed($confirmed)
-                ->setAmount(-$amount)
-                ->setMeta($meta)
-        ]);
-
-        return current($transactions);
+        });
     }
 
     /**
@@ -211,31 +184,13 @@ trait HasWallet
      * @param Wallet $wallet
      * @param int $amount
      * @param array|null $meta
-     * @param string $status
      * @return Transfer
      */
-    public function forceTransfer(Wallet $wallet, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
+    public function forceTransfer(Wallet $wallet, int $amount, ?array $meta = null): Transfer
     {
-        return DB::transaction(function () use ($amount, $wallet, $meta, $status) {
-            $fee = app(WalletService::class)
-                ->fee($wallet, $amount);
-
-            $withdraw = $this->forceWithdraw($amount + $fee, $meta);
-            $deposit = $wallet->deposit($amount, $meta);
-
-            $from = app(WalletService::class)
-                ->getWallet($this);
-
-            $transfers = app(CommonService::class)->assemble([
-                (new Bring())
-                    ->setStatus($status)
-                    ->setDeposit($deposit)
-                    ->setWithdraw($withdraw)
-                    ->setFrom($from)
-                    ->setTo($wallet)
-            ]);
-
-            return current($transfers);
+        return DB::transaction(function () use ($amount, $wallet, $meta) {
+            return app(CommonService::class)
+                ->forceTransfer($this, $wallet, $amount, $meta);
         });
     }
 

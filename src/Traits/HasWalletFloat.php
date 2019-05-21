@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Traits;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Services\CommonService;
 use function config;
 
 /**
@@ -75,37 +76,34 @@ trait HasWalletFloat
      * @param Wallet $wallet
      * @param float $amount
      * @param array|null $meta
-     * @param string $status
      * @return Transfer
      * @throws
      */
-    public function transferFloat(Wallet $wallet, float $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
+    public function transferFloat(Wallet $wallet, float $amount, ?array $meta = null): Transfer
     {
-        return $this->transfer($wallet, $amount * $this->coefficient(), $meta, $status);
+        return $this->transfer($wallet, $amount * $this->coefficient(), $meta);
     }
 
     /**
      * @param Wallet $wallet
      * @param float $amount
      * @param array|null $meta
-     * @param string $status
      * @return null|Transfer
      */
-    public function safeTransferFloat(Wallet $wallet, float $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): ?Transfer
+    public function safeTransferFloat(Wallet $wallet, float $amount, ?array $meta = null): ?Transfer
     {
-        return $this->safeTransfer($wallet, $amount * $this->coefficient(), $meta, $status);
+        return $this->safeTransfer($wallet, $amount * $this->coefficient(), $meta);
     }
 
     /**
      * @param Wallet $wallet
      * @param float $amount
      * @param array|null $meta
-     * @param string $status
      * @return Transfer
      */
-    public function forceTransferFloat(Wallet $wallet, float $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
+    public function forceTransferFloat(Wallet $wallet, float $amount, ?array $meta = null): Transfer
     {
-        return $this->forceTransfer($wallet, $amount * $this->coefficient(), $meta, $status);
+        return $this->forceTransfer($wallet, $amount * $this->coefficient(), $meta);
     }
 
     /**

@@ -6,6 +6,7 @@ use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
+use Bavix\Wallet\Services\CommonService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -31,7 +32,8 @@ trait CartPay
         return DB::transaction(function () use ($cart) {
             $results = [];
             foreach ($cart->getItems() as $product) {
-                $results[] = $this->transfer(
+                $results[] = app(CommonService::class)->transfer(
+                    $this,
                     $product,
                     0,
                     $product->getMetaProduct(),
@@ -74,7 +76,8 @@ trait CartPay
             $results = [];
             foreach ($cart->getItems() as $product) {
                 if ($force) {
-                    $results[] = $this->forceTransfer(
+                    $results[] = app(CommonService::class)->forceTransfer(
+                        $this,
                         $product,
                         $product->getAmountProduct(),
                         $product->getMetaProduct(),
@@ -84,7 +87,8 @@ trait CartPay
                     continue;
                 }
 
-                $results[] = $this->transfer(
+                $results[] = app(CommonService::class)->transfer(
+                    $this,
                     $product,
                     $product->getAmountProduct(),
                     $product->getMetaProduct(),
@@ -140,13 +144,15 @@ trait CartPay
                 $transfer->load('withdraw.wallet');
 
                 if ($force) {
-                    $product->forceTransfer(
+                    app(CommonService::class)->forceTransfer(
+                        $product,
                         $transfer->withdraw->wallet,
                         $transfer->deposit->amount,
                         $product->getMetaProduct()
                     );
                 } else {
-                    $product->transfer(
+                    app(CommonService::class)->transfer(
+                        $product,
                         $transfer->withdraw->wallet,
                         $transfer->deposit->amount,
                         $product->getMetaProduct()

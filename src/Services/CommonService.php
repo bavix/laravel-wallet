@@ -6,6 +6,7 @@ use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Operation;
@@ -16,6 +17,105 @@ use function compact;
 
 class CommonService
 {
+
+    /**
+     * @param Wallet $from
+     * @param Wallet $to
+     * @param int $amount
+     * @param array|null $meta
+     * @param string $status
+     * @return Transfer
+     */
+    public function transfer(Wallet $from, Wallet $to, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
+    {
+        $this->verifyWithdraw($from, $amount);
+        return $this->forceTransfer($from, $to, $amount, $meta, $status);
+    }
+
+    /**
+     * @param Wallet $from
+     * @param Wallet $to
+     * @param int $amount
+     * @param array|null $meta
+     * @param string $status
+     * @return Transfer
+     */
+    public function forceTransfer(Wallet $from, Wallet $to, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
+    {
+        $fee = app(WalletService::class)->fee($to, $amount);
+        $withdraw = $this->forceWithdraw($from, $amount + $fee, $meta);
+        $deposit = $this->deposit($to, $amount, $meta);
+
+        $from = app(WalletService::class)
+            ->getWallet($from);
+
+        $transfers = $this->multiBrings([
+            (new Bring())
+                ->setStatus($status)
+                ->setDeposit($deposit)
+                ->setWithdraw($withdraw)
+                ->setFrom($from)
+                ->setTo($to)
+        ]);
+
+        return current($transfers);
+    }
+
+    /**
+     * @param Wallet $wallet
+     * @param int $amount
+     * @param array|null $meta
+     * @param bool|null $confirmed
+     * @return Transaction
+     */
+    public function forceWithdraw(Wallet $wallet, int $amount, ?array $meta, bool $confirmed = true): Transaction
+    {
+        $walletService = app(WalletService::class);
+        $walletService->checkAmount($amount);
+
+        /**
+         * @var WalletModel $wallet
+         */
+        $wallet = $walletService->getWallet($wallet);
+
+        $transactions = $this->multiOperation($wallet, [
+            (new Operation())
+                ->setType(Transaction::TYPE_WITHDRAW)
+                ->setConfirmed($confirmed)
+                ->setAmount(-$amount)
+                ->setMeta($meta)
+        ]);
+
+        return current($transactions);
+    }
+
+    /**
+     * @param Wallet $wallet
+     * @param int $amount
+     * @param array|null $meta
+     * @param bool $confirmed
+     * @return Transaction
+     */
+    public function deposit(Wallet $wallet, int $amount, ?array $meta, bool $confirmed = true): Transaction
+    {
+        $walletService = app(WalletService::class);
+        $walletService->checkAmount($amount);
+
+        /**
+         * @var WalletModel $wallet
+         */
+        $wallet = $walletService->getWallet($wallet);
+
+        $transactions = $this->multiOperation($wallet, [
+            (new Operation())
+                ->setType(Transaction::TYPE_DEPOSIT)
+                ->setConfirmed($confirmed)
+                ->setAmount($amount)
+                ->setMeta($meta)
+        ]);
+
+        return current($transactions);
+    }
 
     /**
      * @param Wallet $wallet
