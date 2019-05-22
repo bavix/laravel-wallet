@@ -65,23 +65,23 @@ trait HasGift
             $fee = app(WalletService::class)
                 ->fee($product, $amount);
 
+            $commonService = app(CommonService::class);
+
             /**
              * Santa pays taxes
              */
             if (!$force) {
-                app(CommonService::class)->verifyWithdraw($santa, $amount);
+                $commonService->verifyWithdraw($santa, $amount);
             }
 
-            $withdraw = app(CommonService::class)
-                ->forceWithdraw($santa, $amount + $fee, $meta);
+            $withdraw = $commonService->forceWithdraw($santa, $amount + $fee, $meta);
 
-            $deposit = app(CommonService::class)
-                ->deposit($product, $amount, $meta);
+            $deposit = $commonService->deposit($product, $amount, $meta);
 
             $from = app(WalletService::class)
                 ->getWallet($this);
 
-            $transfers = app(CommonService::class)->assemble([
+            $transfers = $commonService->assemble([
                 (new Bring())
                     ->setStatus(Transfer::STATUS_GIFT)
                     ->setDeposit($deposit)
