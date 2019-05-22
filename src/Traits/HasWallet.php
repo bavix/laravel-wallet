@@ -77,17 +77,7 @@ trait HasWallet
      */
     public function getBalanceAttribute(): int
     {
-        if ($this instanceof WalletModel) {
-            $this->exists or $this->save();
-            $proxy = app(ProxyService::class);
-            if (!$proxy->has($this->getKey())) {
-                $proxy->set($this->getKey(), (int)($this->attributes['balance'] ?? 0));
-            }
-
-            return $proxy[$this->getKey()];
-        }
-
-        return $this->wallet->balance;
+        return app(WalletService::class)->getBalance($this);
     }
 
     /**

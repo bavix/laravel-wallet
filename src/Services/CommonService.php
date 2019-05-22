@@ -139,20 +139,6 @@ class CommonService
     }
 
     /**
-     * Create Operation with DB::transaction
-     *
-     * @param Wallet $self
-     * @param Operation[] $transactions
-     * @return Transaction[]
-     */
-    public function enforce(Wallet $self, array $transactions): array
-    {
-        return DB::transaction(function () use ($self, $transactions) {
-            return $this->multiOperation($self, $transactions);
-        });
-    }
-
-    /**
      * Create Operation without DB::transaction
      *
      * @param Wallet $self

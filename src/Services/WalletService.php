@@ -58,6 +58,22 @@ class WalletService
     }
 
     /**
+     * @param Wallet $object
+     * @return int
+     */
+    public function getBalance(Wallet $object): int
+    {
+        $wallet = $this->getWallet($object);
+        $wallet->exists or $wallet->save();
+        $proxy = app(ProxyService::class);
+        if (!$proxy->has($wallet->getKey())) {
+            $proxy->set($wallet->getKey(), (int)($this->attributes['balance'] ?? 0));
+        }
+
+        return $proxy[$wallet->getKey()];
+    }
+
+    /**
      * @param WalletModel $wallet
      * @return bool
      */
