@@ -55,6 +55,9 @@ class CartTest extends TestCase
         }
     }
 
+    /**
+     * @throws
+     */
     public function testModelNotFoundException(): void
     {
         /**
@@ -64,19 +67,22 @@ class CartTest extends TestCase
         $this->expectException(ModelNotFoundException::class);
         $buyer = factory(Buyer::class)->create();
         $products = factory(Item::class, 10)->create([
-            'quantity' => 1,
+            'quantity' => 10,
         ]);
 
         $cart = Cart::make();
+        $amount = 0;
         for ($i = 0; $i < count($products) - 1; $i++) {
-            $cart->addItem($products[$i]);
-            $buyer->deposit($products[$i]->getAmountProduct());
+            $rnd = random_int(1, 5);
+            $cart->addItem($products[$i], $rnd);
+            $buyer->deposit($products[$i]->getAmountProduct() * $rnd);
+            $amount += $rnd;
         }
 
-        $this->assertCount(count($products) - 1, $cart->getItems());
+        $this->assertCount($amount, $cart->getItems());
 
         $transfers = $buyer->payCart($cart);
-        $this->assertCount(count($products) - 1, $transfers);
+        $this->assertCount($amount, $transfers);
 
         $refundCart = Cart::make()->addItems($products); // all goods
         $buyer->refundCart($refundCart);

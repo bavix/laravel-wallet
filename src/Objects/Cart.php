@@ -6,8 +6,8 @@ use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Models\Transfer;
 use Countable;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use function count;
+use function get_class;
 
 class Cart implements Countable
 {
@@ -16,6 +16,11 @@ class Cart implements Countable
      * @var Product[]
      */
     protected $items = [];
+
+    /**
+     * @var int[]
+     */
+    protected $quantity = [];
 
     /**
      * @return static
@@ -27,11 +32,15 @@ class Cart implements Countable
 
     /**
      * @param Product $product
+     * @param int $quantity
      * @return static
      */
-    public function addItem(Product $product): self
+    public function addItem(Product $product, int $quantity = 1): self
     {
-        $this->items[] = $product;
+        $this->addQuantity($product, $quantity);
+        for ($i = 0; $i < $quantity; $i++) {
+            $this->items[] = $product;
+        }
         return $this;
     }
 
@@ -84,7 +93,7 @@ class Cart implements Countable
     public function canBuy(Customer $customer, bool $force = null): bool
     {
         foreach ($this->items as $item) {
-            if (!$item->canBuy($customer, $force)) {
+            if (!$item->canBuy($customer, $this->getQuantity($item), $force)) {
                 return false;
             }
         }
@@ -110,6 +119,28 @@ class Cart implements Countable
     public function count(): int
     {
         return count($this->items);
+    }
+
+    /**
+     * @param Product $product
+     * @return int
+     */
+    protected function getQuantity(Product $product): int
+    {
+        $class = get_class($product);
+        $uniq = $product->getUniqueId();
+        return $this->quantity[$class][$uniq] ?? 0;
+    }
+
+    /**
+     * @param Product $product
+     * @param int $quantity
+     */
+    protected function addQuantity(Product $product, int $quantity): void
+    {
+        $class = get_class($product);
+        $uniq = $product->getUniqueId();
+        $this->quantity[$class][$uniq] = $this->getQuantity($product) + $quantity;
     }
 
 }
