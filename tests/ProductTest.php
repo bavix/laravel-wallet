@@ -53,6 +53,7 @@ class ProductTest extends TestCase
         $this->assertInstanceOf(Buyer::class, $transfer->from->holder);
         $this->assertInstanceOf(Wallet::class, $transfer->from);
         $this->assertInstanceOf(Item::class, $transfer->to);
+        $this->assertInstanceOf(Wallet::class, $transfer->to->wallet);
 
         $this->assertEquals($buyer->wallet->getKey(), $transfer->from->getKey());
         $this->assertEquals($buyer->getKey(), $transfer->from->holder->getKey());
