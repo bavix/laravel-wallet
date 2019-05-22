@@ -87,6 +87,10 @@ class ProductTest extends TestCase
 
         $this->assertTrue($buyer->refund($product));
         $this->assertEquals($buyer->balance, $product->price);
+        $this->assertEquals($product->balance, 0);
+
+        $transfer->refresh();
+        $this->assertEquals($transfer->status, Transfer::STATUS_REFUND);
 
         $this->assertFalse($buyer->safeRefund($product));
         $this->assertEquals($buyer->balance, $product->price);
@@ -96,6 +100,13 @@ class ProductTest extends TestCase
         $this->assertEquals($buyer->balance, 0);
         $this->assertEquals($product->balance, $product->price);
         $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
+
+        $this->assertTrue($buyer->refund($product));
+        $this->assertEquals($buyer->balance, $product->price);
+        $this->assertEquals($product->balance, 0);
+
+        $transfer->refresh();
+        $this->assertEquals($transfer->status, Transfer::STATUS_REFUND);
     }
 
     /**
