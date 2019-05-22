@@ -16,5 +16,4 @@ interface Taxing
      * @return float
      */
     public function getFeePercent(): float;
-
 }

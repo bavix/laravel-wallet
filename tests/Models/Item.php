@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Item extends Model implements Product
 {
-
     use HasWallet;
 
     /**
@@ -66,5 +65,4 @@ class Item extends Model implements Product
     {
         return $this->getKey();
     }
-
 }

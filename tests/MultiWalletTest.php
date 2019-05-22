@@ -376,9 +376,6 @@ class MultiWalletTest extends TestCase
         $this->assertEquals($b->balance, 0);
         $this->assertEquals($product->balance, $product->getAmountProduct() * 2);
 
-        /**
-         * @fixme refund does not work
-         */
         $this->assertTrue($a->refund($product));
         $this->assertEquals($product->balance, $product->getAmountProduct());
         $this->assertEquals($a->balance, $product->getAmountProduct());

@@ -29,5 +29,4 @@ class ItemTax extends Item implements Taxing
     {
         return 7.5;
     }
-
 }

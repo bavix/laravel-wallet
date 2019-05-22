@@ -15,7 +15,6 @@ use function count;
 
 trait CartPay
 {
-
     use HasWallet;
 
     /**
@@ -75,7 +74,6 @@ trait CartPay
         }
 
         return DB::transaction(function () use ($cart, $force) {
-
             $results = [];
             foreach ($cart->getItems() as $product) {
                 if ($force) {
@@ -100,7 +98,6 @@ trait CartPay
             }
 
             return $results;
-
         });
     }
 
@@ -139,7 +136,6 @@ trait CartPay
     public function refundCart(Cart $cart, bool $force = null, bool $gifts = null): bool
     {
         return DB::transaction(function () use ($cart, $force, $gifts) {
-
             $results = [];
             $transfers = $cart->alreadyBuy($this, $gifts);
             if (count($transfers) !== count($cart)) {
@@ -172,7 +168,6 @@ trait CartPay
             }
 
             return count(array_unique($results)) === 1;
-
         });
     }
 

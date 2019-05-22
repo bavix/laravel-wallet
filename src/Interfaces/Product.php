@@ -28,5 +28,4 @@ interface Product extends Wallet
      * @return string
      */
     public function getUniqueId(): string;
-
 }

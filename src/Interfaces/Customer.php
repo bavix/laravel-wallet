@@ -61,5 +61,4 @@ interface Customer extends Wallet
      * @return bool
      */
     public function forceRefund(Product $product, bool $gifts = null): bool;
-
 }

@@ -68,5 +68,4 @@ interface WalletFloat
      * @return float
      */
     public function getBalanceFloatAttribute(): float;
-
 }

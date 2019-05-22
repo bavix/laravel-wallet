@@ -163,7 +163,6 @@ trait HasWallet
         return DB::transaction(function () use ($amount, $meta, $confirmed) {
             return app(CommonService::class)
                 ->forceWithdraw($this, $amount, $meta, $confirmed);
-
         });
     }
 

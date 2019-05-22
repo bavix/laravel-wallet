@@ -37,6 +37,12 @@ class BalanceTest extends TestCase
         $this->assertFalse($wallet->exists);
         $result = app(CommonService::class)->addBalance($wallet, 100);
         $this->assertTrue($result); // automatic create default wallet
+
+        $wallet->refreshBalance();
+        $this->assertEquals($wallet->balance, 1000);
+
+        $wallet->deposit(1);
+        $this->assertEquals($wallet->balance, 1001);
     }
 
 }

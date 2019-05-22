@@ -4,7 +4,6 @@ namespace Bavix\Wallet\Traits;
 
 trait CanPayFloat
 {
-
     use HasWalletFloat, CanPay {
         CanPay::deposit insteadof HasWalletFloat;
         CanPay::withdraw insteadof HasWalletFloat;
@@ -18,5 +17,4 @@ trait CanPayFloat
         CanPay::wallet insteadof HasWalletFloat;
         CanPay::getBalanceAttribute insteadof HasWalletFloat;
     }
-
 }
