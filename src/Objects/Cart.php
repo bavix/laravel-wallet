@@ -83,7 +83,31 @@ class Cart implements Countable
      */
     public function alreadyBuy(Customer $customer, bool $gifts = null): array
     {
-        return $customer->paidCart($this, $gifts);
+        $status = [Transfer::STATUS_PAID];
+        if ($gifts) {
+            $status[] = Transfer::STATUS_GIFT;
+        }
+
+        /**
+         * @var Transfer $query
+         */
+        $result = [];
+        $query = $customer->transfers();
+        foreach ($this->getUniqueItems() as $product) {
+            $collect = (clone $query)
+                ->where('to_type', $product->getMorphClass())
+                ->where('to_id', $product->getKey())
+                ->whereIn('status', $status)
+                ->orderBy('id', 'desc')
+                ->limit($this->getQuantity($product))
+                ->get();
+
+            foreach ($collect as $datum) {
+                $result[] = $datum;
+            }
+        }
+
+        return $result;
     }
 
     /**

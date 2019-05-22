@@ -62,11 +62,4 @@ interface Customer extends Wallet
      */
     public function forceRefund(Product $product, bool $gifts = null): bool;
 
-    /**
-     * @param Cart $cart
-     * @param bool $gifts
-     * @return array
-     */
-    public function paidCart(Cart $cart, bool $gifts = null): array;
-
 }
