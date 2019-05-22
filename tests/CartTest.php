@@ -7,6 +7,7 @@ use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\Item;
 use function count;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CartTest extends TestCase
 {
@@ -52,6 +53,33 @@ class CartTest extends TestCase
             $transfer->refresh();
             $this->assertEquals($transfer->status, Transfer::STATUS_REFUND);
         }
+    }
+
+    public function testModelNotFoundException(): void
+    {
+        /**
+         * @var Buyer $buyer
+         * @var Item[] $products
+         */
+        $this->expectException(ModelNotFoundException::class);
+        $buyer = factory(Buyer::class)->create();
+        $products = factory(Item::class, 10)->create([
+            'quantity' => 1,
+        ]);
+
+        $cart = Cart::make();
+        for ($i = 0; $i < count($products) - 1; $i++) {
+            $cart->addItem($products[$i]);
+            $buyer->deposit($products[$i]->getAmountProduct());
+        }
+
+        $this->assertCount(count($products) - 1, $cart->getItems());
+
+        $transfers = $buyer->payCart($cart);
+        $this->assertCount(count($products) - 1, $transfers);
+
+        $refundCart = Cart::make()->addItems($products); // all goods
+        $buyer->refundCart($refundCart);
     }
 
 }

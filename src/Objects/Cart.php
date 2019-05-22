@@ -57,7 +57,7 @@ class Cart implements Countable
     }
 
     /**
-     *
+     * The method returns the transfers already paid for the goods
      *
      * @param Customer $customer
      * @param bool|null $gifts
@@ -68,7 +68,9 @@ class Cart implements Countable
         $results = [];
         foreach ($this->getItems() as $item) {
             $transfer = $customer->paid($item, $gifts);
-            $results[] = $transfer;
+            if ($transfer) {
+                $results[] = $transfer;
+            }
         }
 
         return $results;

@@ -140,11 +140,9 @@ trait CartPay
 
             $results = [];
             $transfers = $cart->alreadyBuy($this, $gifts);
-            foreach ($transfers as $transfer) {
-                if (!$transfer) {
-                    throw (new ModelNotFoundException())
-                        ->setModel($this->transfers()->getMorphClass());
-                }
+            if (count($transfers) !== count($cart)) {
+                throw (new ModelNotFoundException())
+                    ->setModel($this->transfers()->getMorphClass());
             }
 
             foreach ($cart->getItems() as $key => $product) {
