@@ -58,6 +58,41 @@ class CartTest extends TestCase
     /**
      * @throws
      */
+    public function testCartQuantity(): void
+    {
+        /**
+         * @var Buyer $buyer
+         * @var Item[] $products
+         */
+        $buyer = factory(Buyer::class)->create();
+        $products = factory(Item::class, 10)->create([
+            'quantity' => 10,
+        ]);
+
+        $cart = Cart::make();
+        $amount = 0;
+        for ($i = 0; $i < count($products) - 1; $i++) {
+            $rnd = random_int(1, 5);
+            $cart->addItem($products[$i], $rnd);
+            $buyer->deposit($products[$i]->getAmountProduct() * $rnd);
+            $amount += $rnd;
+        }
+
+        $this->assertCount($amount, $cart->getItems());
+
+        $transfers = $buyer->payCart($cart);
+        $this->assertCount($amount, $transfers);
+
+        $this->assertTrue($buyer->refundCart($cart));
+        foreach ($transfers as $transfer) {
+            $transfer->refresh();
+            $this->assertEquals($transfer->status, Transfer::STATUS_REFUND);
+        }
+    }
+
+    /**
+     * @throws
+     */
     public function testModelNotFoundException(): void
     {
         /**
