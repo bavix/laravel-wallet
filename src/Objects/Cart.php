@@ -57,20 +57,18 @@ class Cart implements Countable
     }
 
     /**
+     *
+     *
      * @param Customer $customer
      * @param bool|null $gifts
      * @return Transfer[]
      */
-    public function hasPaid(Customer $customer, bool $gifts = null): array
+    public function alreadyBuy(Customer $customer, bool $gifts = null): array
     {
         $results = [];
         foreach ($this->getItems() as $item) {
             $transfer = $customer->paid($item, $gifts);
             $results[] = $transfer;
-            if (!$transfer) {
-                throw (new ModelNotFoundException())
-                    ->setModel($customer->transfers()->getMorphClass());
-            }
         }
 
         return $results;

@@ -36,7 +36,7 @@ class CartTest extends TestCase
 
         $transfers = $buyer->payCart($cart);
         $this->assertCount(count($cart), $transfers);
-        $this->assertTrue((bool)$cart->hasPaid($buyer));
+        $this->assertTrue((bool)$cart->alreadyBuy($buyer));
         $this->assertEquals($buyer->balance, 0);
 
         foreach ($transfers as $transfer) {

@@ -8,6 +8,7 @@ use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\CommonService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 use function array_unique;
@@ -138,7 +139,14 @@ trait CartPay
         return DB::transaction(function () use ($cart, $force, $gifts) {
 
             $results = [];
-            $transfers = $cart->hasPaid($this, $gifts);
+            $transfers = $cart->alreadyBuy($this, $gifts);
+            foreach ($transfers as $transfer) {
+                if (!$transfer) {
+                    throw (new ModelNotFoundException())
+                        ->setModel($this->transfers()->getMorphClass());
+                }
+            }
+
             foreach ($cart->getItems() as $key => $product) {
                 $transfer = $transfers[$key];
                 $transfer->load('withdraw.wallet');
