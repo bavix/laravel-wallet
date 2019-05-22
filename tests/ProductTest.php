@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Test;
 use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\Item;
 
@@ -50,9 +51,12 @@ class ProductTest extends TestCase
         $this->assertEquals($product->getKey(), $deposit->payable->getKey());
 
         $this->assertInstanceOf(Buyer::class, $transfer->from->holder);
+        $this->assertInstanceOf(Wallet::class, $transfer->from);
         $this->assertInstanceOf(Item::class, $transfer->to);
+        $this->assertInstanceOf(Wallet::class, $transfer->to->wallet);
 
-        $this->assertEquals($buyer->getKey(), $transfer->from->getKey());
+        $this->assertEquals($buyer->wallet->getKey(), $transfer->from->getKey());
+        $this->assertEquals($buyer->getKey(), $transfer->from->holder->getKey());
         $this->assertEquals($product->getKey(), $transfer->to->getKey());
 
         $this->assertEquals($buyer->balance, 0);
@@ -83,6 +87,10 @@ class ProductTest extends TestCase
 
         $this->assertTrue($buyer->refund($product));
         $this->assertEquals($buyer->balance, $product->price);
+        $this->assertEquals($product->balance, 0);
+
+        $transfer->refresh();
+        $this->assertEquals($transfer->status, Transfer::STATUS_REFUND);
 
         $this->assertFalse($buyer->safeRefund($product));
         $this->assertEquals($buyer->balance, $product->price);
@@ -92,6 +100,13 @@ class ProductTest extends TestCase
         $this->assertEquals($buyer->balance, 0);
         $this->assertEquals($product->balance, $product->price);
         $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
+
+        $this->assertTrue($buyer->refund($product));
+        $this->assertEquals($buyer->balance, $product->price);
+        $this->assertEquals($product->balance, 0);
+
+        $transfer->refresh();
+        $this->assertEquals($transfer->status, Transfer::STATUS_REFUND);
     }
 
     /**
