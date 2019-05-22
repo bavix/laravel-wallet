@@ -8,6 +8,7 @@ use Bavix\Wallet\Models\Transfer;
 use Countable;
 use function count;
 use function get_class;
+use function array_unique;
 
 class Cart implements Countable
 {
@@ -66,6 +67,14 @@ class Cart implements Countable
     }
 
     /**
+     * @return Product[]
+     */
+    public function getUniqueItems(): array
+    {
+        return array_unique($this->items);
+    }
+
+    /**
      * The method returns the transfers already paid for the goods
      *
      * @param Customer $customer
@@ -74,15 +83,7 @@ class Cart implements Countable
      */
     public function alreadyBuy(Customer $customer, bool $gifts = null): array
     {
-        $results = [];
-        foreach ($this->getItems() as $item) {
-            $transfer = $customer->paid($item, $gifts);
-            if ($transfer) {
-                $results[] = $transfer;
-            }
-        }
-
-        return $results;
+        return $customer->paidCart($this, $gifts);
     }
 
     /**
@@ -125,7 +126,7 @@ class Cart implements Countable
      * @param Product $product
      * @return int
      */
-    protected function getQuantity(Product $product): int
+    public function getQuantity(Product $product): int
     {
         $class = get_class($product);
         $uniq = $product->getUniqueId();

@@ -223,6 +223,40 @@ trait CartPay
     }
 
     /**
+     * @param Cart $cart
+     * @param bool $gifts
+     * @return array
+     */
+    public function paidCart(Cart $cart, bool $gifts = null): array
+    {
+        $status = [Transfer::STATUS_PAID];
+        if ($gifts) {
+            $status[] = Transfer::STATUS_GIFT;
+        }
+
+        /**
+         * @var Transfer $query
+         */
+        $result = [];
+        $query = $this->transfers();
+        foreach ($cart->getUniqueItems() as $product) {
+            $collect = (clone $query)
+                ->where('to_type', $product->getMorphClass())
+                ->where('to_id', $product->getKey())
+                ->whereIn('status', $status)
+                ->orderBy('id', 'desc')
+                ->limit($cart->getQuantity($product))
+                ->get();
+
+            foreach ($collect as $datum) {
+                $result[] = $datum;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Checks acquired product your wallet.
      *
      * @param Product $product
@@ -231,22 +265,7 @@ trait CartPay
      */
     public function paid(Product $product, bool $gifts = null): ?Transfer
     {
-        $status = [Transfer::STATUS_PAID];
-        if ($gifts) {
-            $status[] = Transfer::STATUS_GIFT;
-        }
-
-        /**
-         * @var Model $product
-         * @var Transfer $query
-         */
-        $query = $this->transfers();
-        return $query
-            ->where('to_type', $product->getMorphClass())
-            ->where('to_id', $product->getKey())
-            ->whereIn('status', $status)
-            ->orderBy('id', 'desc')
-            ->first();
+        return current($this->paidCart(Cart::make()->addItem($product), $gifts)) ?: null;
     }
 
 }

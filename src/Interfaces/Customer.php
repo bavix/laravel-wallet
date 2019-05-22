@@ -3,6 +3,7 @@
 namespace Bavix\Wallet\Interfaces;
 
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Objects\Cart;
 
 interface Customer extends Wallet
 {
@@ -60,5 +61,12 @@ interface Customer extends Wallet
      * @return bool
      */
     public function forceRefund(Product $product, bool $gifts = null): bool;
+
+    /**
+     * @param Cart $cart
+     * @param bool $gifts
+     * @return array
+     */
+    public function paidCart(Cart $cart, bool $gifts = null): array;
 
 }
