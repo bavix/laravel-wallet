@@ -29,10 +29,13 @@ trait CartPay
             throw new ProductEnded(trans('wallet::errors.product_stock'));
         }
 
+        app(CommonService::class)
+            ->verifyWithdraw($this, 0);
+
         return DB::transaction(function () use ($cart) {
             $results = [];
             foreach ($cart->getItems() as $product) {
-                $results[] = app(CommonService::class)->transfer(
+                $results[] = app(CommonService::class)->forceTransfer(
                     $this,
                     $product,
                     0,
@@ -148,21 +151,19 @@ trait CartPay
                 $transfer = $transfers[$key];
                 $transfer->load('withdraw.wallet');
 
-                if ($force) {
-                    app(CommonService::class)->forceTransfer(
+                if (!$force) {
+                    app(CommonService::class)->verifyWithdraw(
                         $product,
-                        $transfer->withdraw->wallet,
-                        $transfer->deposit->amount,
-                        $product->getMetaProduct()
-                    );
-                } else {
-                    app(CommonService::class)->transfer(
-                        $product,
-                        $transfer->withdraw->wallet,
-                        $transfer->deposit->amount,
-                        $product->getMetaProduct()
+                        $transfer->deposit->amount
                     );
                 }
+
+                app(CommonService::class)->forceTransfer(
+                    $product,
+                    $transfer->withdraw->wallet,
+                    $transfer->deposit->amount,
+                    $product->getMetaProduct()
+                );
 
                 $results[] = $transfer->update([
                     'status' => Transfer::STATUS_REFUND,
