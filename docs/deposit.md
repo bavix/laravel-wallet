@@ -7,10 +7,6 @@ In this case, the Deposit is the replenishment of the wallet.
 
 ---
 
-- [User Model](#user-model)
-- [Make a Deposit](#make-a-deposit)
-
-<a name="user-model"></a>
 ## User Model
 
 Add the `HasWallet` trait and `Wallet` interface to model.
@@ -25,7 +21,6 @@ class User extends Model implements Wallet
 }
 ```
 
-<a name="make-a-deposit"></a>
 ## Make a Deposit
 
 Find user:

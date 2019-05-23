@@ -15,10 +15,6 @@
 
 ---
 
-- [Пользователь](#user-model)
-- [Создадим депозит](#make-a-deposit)
-
-<a name="user-model"></a>
 ## Пользователь
 
 Добавим `HasWallet` trait и `Wallet` interface в модель.
@@ -33,7 +29,6 @@ class User extends Model implements Wallet
 }
 ```
 
-<a name="make-a-deposit"></a>
 ## Создадим первый депозит
 
 Ищем пользователя:

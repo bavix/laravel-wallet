@@ -1,11 +1,3 @@
-# Requirements
-
----
-
-- [PHP](#php)
-- [Laravel](#laravel)
-
-<a name="php"></a>
 ## PHP
 The following versions of PHP are supported:
 
@@ -13,7 +5,6 @@ The following versions of PHP are supported:
 - PHP 7.2
 - PHP 7.3
 
-<a name="laravel"></a>
 ## Laravel Framework
 The following versions of Laravel are supported:
 

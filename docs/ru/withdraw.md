@@ -13,7 +13,6 @@
 - [Заставить вывести](#force-withdraw)
 - [Ошибки](#failed)
 
-<a name="user-model"></a>
 ## Пользователь
 
 Подготовим модель добавив `HasWallet` trait и `Wallet` interface.
@@ -28,7 +27,6 @@ class User extends Model implements Wallet
 }
 ```
 
-<a name="make-a-withdraw"></a>
 ## Вывод
 
 Найдем пользователя:
@@ -52,7 +50,6 @@ $user->balance; // int(90)
 
 Просто работает!
 
-<a name="force-withdraw"></a>
 ## Заставить вывести.
 
 Иногда требуется заставить вывести средства.
@@ -66,7 +63,6 @@ $user->forceWithdraw(101);
 $user->balance; // int(-1)
 ```
 
-<a name="failed"></a>
 ## Что будет, если средств не хватает?
 
 Этот пункт не касается `forceWithdraw`.

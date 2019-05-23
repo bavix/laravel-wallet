@@ -5,12 +5,6 @@ The main thing that they did not match the `slug`.
 
 ---
 
-- [User Model](#user-model)
-- [Create a wallet](#create-wallet)
-- [Get wallet](#find-wallet)
-- [Get default wallet](#default-wallet)
-
-<a name="user-model"></a>
 ## User Model
 
 Add the `HasWallet`, `HasWallets` trait's and `Wallet` interface to model.
@@ -26,7 +20,6 @@ class User extends Model implements Wallet
 }
 ```
 
-<a name="create-wallet"></a>
 ## Create a wallet
 
 Find user:
@@ -58,7 +51,6 @@ $user->deposit(10);
 $user->balance; // int(10)
 ```
 
-<a name="find-wallet"></a>
 ## How to get the right wallet?
 
 ```php
@@ -66,7 +58,6 @@ $myWallet = $user->getWallet('my-wallet');
 $myWallet->balance; // int(100)
 ```
 
-<a name="default-wallet"></a>
 ## How to get the default wallet?
 
 ```php

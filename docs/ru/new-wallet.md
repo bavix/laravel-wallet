@@ -5,12 +5,6 @@
 
 ---
 
-- [Пользователь](#user-model)
-- [Кошелек](#create-wallet)
-- [Получение кошелька](#find-wallet)
-- [Кошелек по умолчанию](#default-wallet)
-
-<a name="user-model"></a>
 ## Пользователь
 
 Добавим `HasWallet`, `HasWallets` trait's и `Wallet` interface в модель.
@@ -26,7 +20,6 @@ class User extends Model implements Wallet
 }
 ```
 
-<a name="create-wallet"></a>
 ## Создадим кошелек
 
 Найдем пользователя.
@@ -59,7 +52,6 @@ $user->deposit(10);
 $user->balance; // int(10)
 ```
 
-<a name="find-wallet"></a>
 ## Как обратиться к новому кошельку?
 
 ```php
@@ -67,7 +59,6 @@ $myWallet = $user->getWallet('my-wallet');
 $myWallet->balance; // int(100)
 ```
 
-<a name="default-wallet"></a>
 ## Как обратиться к кошельку по умолчанию?
 
 ```php

@@ -9,11 +9,6 @@
 
 ---
 
-- [Пользователь](#user-model)
-- [Перевод](#make-a-transfer)
-- [Заставить перевести](#force-transfer)
-
-<a name="user-model"></a>
 ## Пользователь
 
 Подготовим модель, добавив `HasWallet` trait и `Wallet` interface.
@@ -28,7 +23,6 @@ class User extends Model implements Wallet
 }
 ```
 
-<a name="make-a-transfer"></a>
 ## Перевод
 
 Найдем пользователей:
@@ -54,7 +48,6 @@ $first->balance; // int(95)
 $second->balance; // int(5)
 ```
 
-<a name="force-transfer"></a>
 ## Заставить перевести.
 
 Операция необходима, если в вашей 

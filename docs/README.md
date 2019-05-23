@@ -1,8 +1,4 @@
-<a name="introduction"></a>
 # Introduction
-
-- [Introduction](#introduction)
-- [Support](#support)
 
 How long does it take to add virtual cards to the project? Hah, we'll see.
 
@@ -23,7 +19,6 @@ How long does it take to add virtual cards to the project? Hah, we'll see.
 
 `laravel-wallet` - Easy work with virtual wallet.
 
-<a name="support"></a>
 ## Support
 
 Please ask questions on the [Github issues page](https://github.com/bavix/laravel-wallet/issues).

@@ -1,13 +1,3 @@
-# Basic Usage
-
----
-
-- [Simple Wallet](#simple-wallet)
-- [Purchases](#purchases)
-- [Eager Loading](#eager-loading)
-- [Fractional number](#fractional)
-
-<a name="simple-wallet"></a>
 ## Simple Wallet
 
 Add the `HasWallet` trait and `Wallet` interface to model.
@@ -37,7 +27,6 @@ $user->forceWithdraw(200, ['description' => 'payment of taxes']);
 $user->balance; // int(-191)
 ```
 
-<a name="purchases"></a>
 ## Purchases
 
 Add the `CanPay` trait and `Customer` interface to your `User` model.
@@ -106,14 +95,12 @@ var_dump($user->refund($item)); // bool(true)
 var_dump((bool)$user->paid($item)); // bool(false)
 ```
 
-<a name="eager-loading"></a>
 ## Eager Loading
 
 ```php
 User::with('wallet');
 ```
 
-<a name="fractional"></a>
 ## How to work with fractional numbers?
 Add the `HasWalletFloat` trait and `WalletFloat` interface to model.
 ```php

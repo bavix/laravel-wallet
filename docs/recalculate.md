@@ -7,10 +7,6 @@ You must be forced to recalculate the balance.
 
 ---
 
-- [User Model](#user-model)
-- [Recalculate](#recalculate)
-
-<a name="user-model"></a>
 ## User Model
 
 Prepare the model, add the `HasWallet` trait and `Wallet` interface.
@@ -25,7 +21,6 @@ class User extends Model implements Wallet
 }
 ```
 
-<a name="recalculate"></a>
 ## Get the current balance for your wallet
 
 Let's say the user's balance

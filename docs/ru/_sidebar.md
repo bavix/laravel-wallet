@@ -1,27 +1,27 @@
 - Начнем
 
-    - [Введение](/ru/README)
-    - [Требования](/ru/requirements)
-    - [Установка](/ru/installation)
-    - [Как использовать](/ru/basic-usage)
-    - [Обновление](/ru/upgrade-guide)
+    - [Введение](README)
+    - [Требования](requirements)
+    - [Установка](installation)
+    - [Как использовать](basic-usage)
+    - [Обновление](upgrade-guide)
 
 - Кошелек
 
-    - [Депозит](/ru/deposit)
-    - [Вывод](/ru/withdraw)
-    - [Перевод](/ru/transfer)
-    - [Пересчёт баланса](/ru/recalculate)
+    - [Депозит](deposit)
+    - [Вывод](withdraw)
+    - [Перевод](transfer)
+    - [Пересчёт баланса](recalculate)
 
 - Покупки
 
-    - [Платеж](/ru/payment)
-    - [Купить бесплатно](/ru/pay-free)
-    - [Возврат](/ru/refund)
+    - [Платеж](payment)
+    - [Купить бесплатно](pay-free)
+    - [Возврат](refund)
 
 - Кошельки
 
-    - [Создать кошелек](/ru/new-wallet)
-    - [Перевод](/ru/wallet-transfer)
+    - [Создать кошелек](new-wallet)
+    - [Перевод](wallet-transfer)
 
-- [Список изменений](/ru/changelog)
+- [Список изменений](changelog)

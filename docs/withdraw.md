@@ -8,12 +8,6 @@ For example, priority in search results.
 
 ---
 
-- [User Model](#user-model)
-- [Make a Withdraw](#make-a-withdraw)
-- [Force Withdraw](#force-withdraw)
-- [Failed](#failed)
-
-<a name="user-model"></a>
 ## User Model
 
 Prepare the model, add the `HasWallet` trait and `Wallet` interface.
@@ -28,7 +22,6 @@ class User extends Model implements Wallet
 }
 ```
 
-<a name="make-a-withdraw"></a>
 ## Make a Withdraw
 
 Find user:
@@ -53,7 +46,6 @@ $user->balance; // int(90)
 
 It worked! 
 
-<a name="force-withdraw"></a>
 ## Force Withdraw
 
 Forced withdrawal is necessary for those cases when 
@@ -65,7 +57,6 @@ $user->forceWithdraw(101);
 $user->balance; // int(-1)
 ```
 
-<a name="failed"></a>
 ## And what will happen if the money is not enough?
 
 There can be two situations:

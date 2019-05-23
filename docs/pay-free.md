@@ -1,12 +1,3 @@
-# Buy for free
-
----
-
-- [User Model](#user-model)
-- [Item Model](#item-model)
-- [Pay Free](#pay-free)
-
-<a name="user-model"></a>
 ## User Model
 
 Add the `CanPay` trait and `Customer` interface to your User model.
@@ -21,7 +12,6 @@ class User extends Model implements Customer
 }
 ```
 
-<a name="item-model"></a>
 ## Item Model
 
 Add the `HasWallet` trait and `Product` interface to Item model.
@@ -60,7 +50,6 @@ class Item extends Model implements Product
 }
 ```
 
-<a name="pay-free"></a>
 ## Pay Free
 
 Find the user and check the balance.

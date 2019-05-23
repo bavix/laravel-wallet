@@ -7,11 +7,6 @@ The transfer takes place between wallets.
 
 ---
 
-- [User Model](#user-model)
-- [Make a Transfer](#make-a-transfer)
-- [Force Transfer](#force-transfer)
-
-<a name="user-model"></a>
 ## User Model
 
 Prepare the model, add the `HasWallet` trait and `Wallet` interface.
@@ -26,7 +21,6 @@ class User extends Model implements Wallet
 }
 ```
 
-<a name="make-a-transfer"></a>
 ## Make a Transfer
 
 Find user:
@@ -55,7 +49,6 @@ $second->balance; // int(5)
 
 It worked! 
 
-<a name="force-transfer"></a>
 ## Force Transfer
 
 Check the user's balance.

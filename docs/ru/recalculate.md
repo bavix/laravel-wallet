@@ -8,10 +8,6 @@
 
 ---
 
-- [Пользователь](#user-model)
-- [Пересчёт](#recalculate)
-
-<a name="user-model"></a>
 ## Пользователь
 
 Подтоговим модель, добавив `HasWallet` trait и `Wallet` interface.
@@ -26,7 +22,6 @@ class User extends Model implements Wallet
 }
 ```
 
-<a name="recalculate"></a>
 ## Пересчёт
 
 Проверим баланс.

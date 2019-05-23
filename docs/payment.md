@@ -1,13 +1,3 @@
-# Payment
-
----
-
-- [User Model](#user-model)
-- [Item Model](#item-model)
-- [Proceed to purchase](#pay)
-- [Safe Pay](#safe-pay)
-
-<a name="user-model"></a>
 ## User Model
 
 Add the `CanPay` trait and `Customer` interface to your User model.
@@ -22,7 +12,6 @@ class User extends Model implements Customer
 }
 ```
 
-<a name="item-model"></a>
 ## Item Model
 
 Add the `HasWallet` trait and `Product` interface to Item model.
@@ -61,7 +50,6 @@ class Item extends Model implements Product
 }
 ```
 
-<a name="pay"></a>
 ## Proceed to purchase
 
 Find the user and check the balance.
@@ -100,7 +88,6 @@ The question arises, how do you know that the product is purchased?
 (bool)$user->paid($item); // bool(true)
 ```
 
-<a name="safe-pay"></a>
 ## Safe Pay
 
 To not write `try` and `catch` use `safePay` method.

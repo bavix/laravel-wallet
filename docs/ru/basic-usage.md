@@ -1,13 +1,3 @@
-# Использование
-
----
-
-- [Простые операции](#simple-wallet)
-- [Покупка](#purchases)
-- [Нетерпеливая Загрузка](#eager-loading)
-- [Дробные числа](#fractional)
-
-<a name="simple-wallet"></a>
 ## Простые операции
 
 Добавим `HasWallet` trait и `Wallet` interface в модель.
@@ -37,7 +27,6 @@ $user->forceWithdraw(200, ['description' => 'payment of taxes']);
 $user->balance; // int(-191)
 ```
 
-<a name="purchases"></a>
 ## Покупки
 
 Добавим `CanPay` trait и `Customer` interface в модель `User`.
@@ -112,7 +101,6 @@ var_dump($user->refund($item)); // bool(true)
 var_dump((bool)$user->paid($item)); // bool(false)
 ```
 
-<a name="eager-loading"></a>
 ## Нетерпеливая Загрузка
 
 Иногда нужна нетерпеливая (жадная) загрузка.
@@ -123,7 +111,6 @@ var_dump((bool)$user->paid($item)); // bool(false)
 User::with('wallet');
 ```
 
-<a name="fractional"></a>
 ## А как работать с дробными числами?
 Добавьте `HasWalletFloat` trait и `WalletFloat` interface в вашу модель.
 ```php

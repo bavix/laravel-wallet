@@ -1,13 +1,3 @@
-# Покупки
-
----
-
-- [Пользователь](#user-model)
-- [Товар](#item-model)
-- [Процесс оплаты](#pay)
-- [Безопасная оплата](#safe-pay)
-
-<a name="user-model"></a>
 ## Пользователь
 
 Добавим `CanPay` trait и `Customer` interface в модель User.
@@ -22,7 +12,6 @@ class User extends Model implements Customer
 }
 ```
 
-<a name="item-model"></a>
 ## Товар
 
 Добавим `HasWallet` trait и `Product` interface в модель Item.
@@ -61,7 +50,6 @@ class Item extends Model implements Product
 }
 ```
 
-<a name="pay"></a>
 ## Процесс оплаты
 
 Найдем пользователя и проверим его баланс.
@@ -100,7 +88,6 @@ $user->pay($item);
 (bool)$user->paid($item); // bool(true)
 ```
 
-<a name="safe-pay"></a>
 ## Безопасная оплата
 
 Чтобы не писать `try` и `catch` используй `safePay` метод.
