@@ -5,6 +5,48 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added 
+- Add service `CommonService`
+- Add service `ProxyService`
+- Add service `WalletService`
+- Add object Bring (simple transfer)
+- Add object Operation (simple transaction)
+- Add feature Cart (multi pay + quantity)
+- Add method `payFreeCart`
+- Add method `safePayCart`
+- Add method `payCart`
+- Add method `forcePayCart`
+- Add method `safeRefundCart`
+- Add method `refundCart`
+- Add method `forceRefundCart`
+- Add method `safeRefundGiftCart`
+- Add method `refundGiftCart`
+- Add method `forceRefundGiftCart`
+- Add method `getUniqueId` to Interface `Product`
+
+### Changed
+- applied fixes from cs-fixer
+- change singleton path `bavix.wallet::transaction` to `Bavix\Wallet\Models\Transaction::class`
+- change singleton path `bavix.wallet::transfer` to `Bavix\Wallet\Models\Transfer::class`
+- change singleton path `bavix.wallet::wallet` to `Bavix\Wallet\Models\Wallet::class`
+- change method `canBuy`. Added parameter `$quantity`
+
+### Removed
+- method `calculateBalance`.
+- method `holderTransfers`.
+- attribute `$status` from Interfaces/Wallet::transfer
+- attribute `$status` from Interfaces/Wallet::safeTransfer
+- attribute `$status` from Interfaces/Wallet::forceTransfer
+- attribute `$status` from Interfaces/WalletFloat::transfer
+- attribute `$status` from Interfaces/WalletFloat::safeTransfer
+- attribute `$status` from Interfaces/WalletFloat::forceTransfer
+- class `Tax`
+- class `WalletProxy`
+- protected method `checkAmount`
+- protected method `assemble`
+- protected method `change`
+- protected method `holderTransfers`
+- protected method `addBalance`
 
 ## [2.4.1] - 2019-05-17
 ### Fixed
