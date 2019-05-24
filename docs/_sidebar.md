@@ -23,5 +23,3 @@
 
     - [New Wallet](new-wallet)
     - [Transfer](wallet-transfer)
-
-- [Changelog](changelog)
