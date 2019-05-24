@@ -46,7 +46,7 @@ where confirmed=0 and
 
 ```php
 $user->balance; // int(27)
-$user->wallet->calculateBalance();
+$user->wallet->refreshBalance();
 $user->balance; // int(42)
 ```
 

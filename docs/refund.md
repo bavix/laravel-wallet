@@ -25,7 +25,7 @@ class Item extends Model implements Product
 {
     use HasWallet;
 
-    public function canBuy(Customer $customer, bool $force = false): bool
+    public function canBuy(Customer $customer, int $quantity = 1, bool $force = null): bool
     {
         /**
          * If the service can be purchased once, then
@@ -46,6 +46,11 @@ class Item extends Model implements Product
             'description' => 'Purchase of Product #' . $this->id, 
             'price' => $this->getAmountProduct(),
         ];
+    }
+    
+    public function getUniqueId(): string
+    {
+        return (string)$this->getKey();
     }
 }
 ```

@@ -72,6 +72,11 @@ class Item extends Model implements Product
             'price' => $this->getAmountProduct(),
         ];
     }
+    
+    public function getUniqueId(): string
+    {
+        return (string)$this->getKey();
+    }
 }
 ```
 
