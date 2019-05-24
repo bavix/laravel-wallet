@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use function config;
 
 /**
  * Class Transfer
@@ -52,7 +53,7 @@ class Transfer extends Model
     public function getTable(): string
     {
         if (!$this->table) {
-            $this->table = \config('wallet.transfer.table');
+            $this->table = config('wallet.transfer.table');
         }
 
         return parent::getTable();

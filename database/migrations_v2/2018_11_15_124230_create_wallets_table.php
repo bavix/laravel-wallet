@@ -2,6 +2,7 @@
 
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Wallet;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -47,8 +48,8 @@ class CreateWalletsTable extends Migration
             ->selectRaw('? as name', [$default])
             ->selectRaw('? as slug', [$slug])
             ->selectRaw('sum(amount) as balance')
-            ->selectRaw('? as created_at', [\Carbon\Carbon::now()])
-            ->selectRaw('? as updated_at', [\Carbon\Carbon::now()])
+            ->selectRaw('? as created_at', [Carbon::now()])
+            ->selectRaw('? as updated_at', [Carbon::now()])
             ->groupBy('holder_type', 'holder_id')
             ->orderBy('holder_type');
 

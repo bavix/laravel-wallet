@@ -38,7 +38,7 @@ interface WalletFloat
      * @param string $status
      * @return Transfer
      */
-    public function transferFloat(Wallet $wallet, float $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer;
+    public function transferFloat(Wallet $wallet, float $amount, ?array $meta = null): Transfer;
 
     /**
      * @param Wallet $wallet
@@ -47,7 +47,7 @@ interface WalletFloat
      * @param string $status
      * @return null|Transfer
      */
-    public function safeTransferFloat(Wallet $wallet, float $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): ?Transfer;
+    public function safeTransferFloat(Wallet $wallet, float $amount, ?array $meta = null): ?Transfer;
 
     /**
      * @param Wallet $wallet
@@ -56,7 +56,7 @@ interface WalletFloat
      * @param string $status
      * @return Transfer
      */
-    public function forceTransferFloat(Wallet $wallet, float $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer;
+    public function forceTransferFloat(Wallet $wallet, float $amount, ?array $meta = null): Transfer;
 
     /**
      * @param float $amount
@@ -68,5 +68,4 @@ interface WalletFloat
      * @return float
      */
     public function getBalanceFloatAttribute(): float;
-
 }

@@ -2,21 +2,25 @@
 
 namespace Bavix\Wallet\Traits;
 
-use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
-use Bavix\Wallet\Tax;
-use Bavix\Wallet\WalletProxy;
-use Illuminate\Database\Eloquent\Model;
+use Bavix\Wallet\Objects\Bring;
+use Bavix\Wallet\Objects\Operation;
+use Bavix\Wallet\Services\CommonService;
+use Bavix\Wallet\Services\ProxyService;
+use Bavix\Wallet\Services\WalletService;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Ramsey\Uuid\Uuid;
+use Throwable;
+use function app;
+use function config;
+use function current;
 
 /**
  * Trait HasWallet
@@ -41,76 +45,10 @@ trait HasWallet
      */
     public function deposit(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        $this->checkAmount($amount);
-        return $this->change(Transaction::TYPE_DEPOSIT, $amount, $meta, $confirmed);
-    }
-
-    /**
-     * The amount of checks for errors
-     *
-     * @param int $amount
-     * @throws
-     */
-    private function checkAmount(int $amount): void
-    {
-        if ($amount < 0) {
-            throw new AmountInvalid(trans('wallet::errors.price_positive'));
-        }
-    }
-
-    /**
-     * this method adds a new transaction to the translation table
-     *
-     * @param string $type
-     * @param int $amount
-     * @param array|null $meta
-     * @param bool $confirmed
-     * @return Transaction
-     * @throws
-     */
-    protected function change(string $type, int $amount, ?array $meta, bool $confirmed): Transaction
-    {
-        return DB::transaction(function () use ($type, $amount, $meta, $confirmed) {
-
-            $wallet = $this;
-            if (!($this instanceof WalletModel)) {
-                $wallet = $this->wallet;
-            }
-
-            if ($confirmed) {
-                $this->addBalance($wallet, $amount);
-            }
-
-            return $this->transactions()->create([
-                'type' => $type,
-                'wallet_id' => $wallet->getKey(),
-                'uuid' => Uuid::uuid4()->toString(),
-                'confirmed' => $confirmed,
-                'amount' => $amount,
-                'meta' => $meta,
-            ]);
+        return DB::transaction(function () use ($amount, $meta, $confirmed) {
+            return app(CommonService::class)
+                ->deposit($this, $amount, $meta, $confirmed);
         });
-    }
-
-    /**
-     * This method automatically updates the balance in the
-     * database and the project statics
-     *
-     * @param WalletModel $wallet
-     * @param int $amount
-     * @return bool
-     */
-    protected function addBalance(WalletModel $wallet, int $amount): bool
-    {
-        $newBalance = $this->getBalanceAttribute() + $amount;
-        $wallet->balance = $newBalance;
-
-        return
-            // update database wallet
-            $wallet->save() &&
-
-            // update static wallet
-            WalletProxy::set($wallet->getKey(), $newBalance);
     }
 
     /**
@@ -139,16 +77,7 @@ trait HasWallet
      */
     public function getBalanceAttribute(): int
     {
-        if ($this instanceof WalletModel) {
-            $this->exists or $this->save();
-            if (!WalletProxy::has($this->getKey())) {
-                WalletProxy::set($this->getKey(), (int)($this->attributes['balance'] ?? 0));
-            }
-
-            return WalletProxy::get($this->getKey());
-        }
-
-        return $this->wallet->balance;
+        return app(WalletService::class)->getBalance($this);
     }
 
     /**
@@ -168,14 +97,13 @@ trait HasWallet
      * @param Wallet $wallet
      * @param int $amount
      * @param array|null $meta
-     * @param string $status
      * @return null|Transfer
      */
-    public function safeTransfer(Wallet $wallet, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): ?Transfer
+    public function safeTransfer(Wallet $wallet, int $amount, ?array $meta = null): ?Transfer
     {
         try {
-            return $this->transfer($wallet, $amount, $meta, $status);
-        } catch (\Throwable $throwable) {
+            return $this->transfer($wallet, $amount, $meta);
+        } catch (Throwable $throwable) {
             return null;
         }
     }
@@ -186,18 +114,13 @@ trait HasWallet
      * @param Wallet $wallet
      * @param int $amount
      * @param array|null $meta
-     * @param string $status
      * @return Transfer
      * @throws
      */
-    public function transfer(Wallet $wallet, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
+    public function transfer(Wallet $wallet, int $amount, ?array $meta = null): Transfer
     {
-        return DB::transaction(function () use ($amount, $wallet, $meta, $status) {
-            $fee = Tax::fee($wallet, $amount);
-            $withdraw = $this->withdraw($amount + $fee, $meta);
-            $deposit = $wallet->deposit($amount, $meta);
-            return $this->assemble($wallet, $withdraw, $deposit, $status);
-        });
+        app(CommonService::class)->verifyWithdraw($this, $amount);
+        return $this->forceTransfer($wallet, $amount, $meta);
     }
 
     /**
@@ -211,14 +134,7 @@ trait HasWallet
      */
     public function withdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        if ($amount && !$this->balance) {
-            throw new BalanceIsEmpty(trans('wallet::errors.wallet_empty'));
-        }
-
-        if (!$this->canWithdraw($amount)) {
-            throw new InsufficientFunds(trans('wallet::errors.insufficient_funds'));
-        }
-
+        app(CommonService::class)->verifyWithdraw($this, $amount);
         return $this->forceWithdraw($amount, $meta, $confirmed);
     }
 
@@ -244,36 +160,10 @@ trait HasWallet
      */
     public function forceWithdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        $this->checkAmount($amount);
-        return $this->change(Transaction::TYPE_WITHDRAW, -$amount, $meta, $confirmed);
-    }
-
-    /**
-     * this method adds a new transfer to the transfer table
-     *
-     * @param Wallet $wallet
-     * @param Transaction $withdraw
-     * @param Transaction $deposit
-     * @param string $status
-     * @return Transfer
-     * @throws
-     */
-    protected function assemble(Wallet $wallet, Transaction $withdraw, Transaction $deposit, string $status = Transfer::STATUS_PAID): Transfer
-    {
-        /**
-         * @var Model $wallet
-         */
-        return \app('bavix.wallet::transfer')->create([
-            'status' => $status,
-            'deposit_id' => $deposit->getKey(),
-            'withdraw_id' => $withdraw->getKey(),
-            'from_type' => $this->getMorphClass(),
-            'from_id' => $this->getKey(),
-            'to_type' => $wallet->getMorphClass(),
-            'to_id' => $wallet->getKey(),
-            'fee' => \abs($withdraw->amount) - \abs($deposit->amount),
-            'uuid' => Uuid::uuid4()->toString(),
-        ]);
+        return DB::transaction(function () use ($amount, $meta, $confirmed) {
+            return app(CommonService::class)
+                ->forceWithdraw($this, $amount, $meta, $confirmed);
+        });
     }
 
     /**
@@ -283,33 +173,14 @@ trait HasWallet
      * @param Wallet $wallet
      * @param int $amount
      * @param array|null $meta
-     * @param string $status
      * @return Transfer
      */
-    public function forceTransfer(Wallet $wallet, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
+    public function forceTransfer(Wallet $wallet, int $amount, ?array $meta = null): Transfer
     {
-        return DB::transaction(function () use ($amount, $wallet, $meta, $status) {
-            $fee = Tax::fee($wallet, $amount);
-            $withdraw = $this->forceWithdraw($amount + $fee, $meta);
-            $deposit = $wallet->deposit($amount, $meta);
-            return $this->assemble($wallet, $withdraw, $deposit, $status);
+        return DB::transaction(function () use ($amount, $wallet, $meta) {
+            return app(CommonService::class)
+                ->forceTransfer($this, $wallet, $amount, $meta);
         });
-    }
-
-    /**
-     * holder transfers
-     *
-     * @return MorphMany
-     * @deprecated since laravel-wallet 2.5
-     * @see transfers
-     */
-    public function holderTransfers(): MorphMany
-    {
-        if ($this instanceof WalletModel) {
-            return $this->holder->transfers();
-        }
-
-        return $this->transfers();
     }
 
     /**
@@ -320,7 +191,9 @@ trait HasWallet
      */
     public function transfers(): MorphMany
     {
-        return $this->morphMany(config('wallet.transfer.model'), 'from');
+        return app(WalletService::class)
+            ->getWallet($this)
+            ->morphMany(config('wallet.transfer.model'), 'from');
     }
 
     /**

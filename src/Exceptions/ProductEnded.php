@@ -2,7 +2,8 @@
 
 namespace Bavix\Wallet\Exceptions;
 
-class ProductEnded extends \LogicException
-{
+use LogicException;
 
+class ProductEnded extends LogicException
+{
 }

@@ -25,13 +25,14 @@
   "require": {
     "php": "^7.1",
     "illuminate/database": "~5.5.0|~5.6.0|~5.7.0|~5.8.0",
+    "nesbot/carbon": "^1.20|^2.0",
     "doctrine/dbal": "^2.8",
     "ramsey/uuid": "^3.0"
   },
   "require-dev": {
-    "mockery/mockery": "^1.2",
     "orchestra/testbench": "^3.7",
-    "phpunit/phpunit": "^7.5"
+    "phpstan/phpstan": "^0.11.7",
+    "phpunit/phpunit": "^7.5|^8.1"
   },
   "autoload": {
     "psr-4": {

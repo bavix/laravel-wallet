@@ -4,12 +4,15 @@ namespace Bavix\Wallet\Models;
 
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\WalletFloat;
+use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Traits\CanPayFloat;
 use Bavix\Wallet\Traits\HasGift;
-use Bavix\Wallet\WalletProxy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
+use function app;
+use function array_key_exists;
+use function config;
 
 /**
  * Class Wallet
@@ -49,7 +52,7 @@ class Wallet extends Model implements Customer, WalletFloat
     public function getTable(): string
     {
         if (!$this->table) {
-            $this->table = \config('wallet.wallet.table');
+            $this->table = config('wallet.wallet.table');
         }
 
         return parent::getTable();
@@ -67,19 +70,9 @@ class Wallet extends Model implements Customer, WalletFloat
          * Must be updated only if the model does not exist
          *  or the slug is empty
          */
-        if (!$this->exists && !\array_key_exists('slug', $this->attributes)) {
+        if (!$this->exists && !array_key_exists('slug', $this->attributes)) {
             $this->attributes['slug'] = Str::slug($name);
         }
-    }
-
-    /**
-     * @return bool
-     * @deprecated
-     * @see refreshBalance
-     */
-    public function calculateBalance(): bool
-    {
-        return $this->refreshBalance();
     }
 
     /**
@@ -87,11 +80,7 @@ class Wallet extends Model implements Customer, WalletFloat
      */
     public function refreshBalance(): bool
     {
-        $balance = $this->getAvailableBalance();
-        WalletProxy::set($this->getKey(), $balance);
-        $this->attributes['balance'] = $balance;
-
-        return $this->save();
+        return app(WalletService::class)->refresh($this);
     }
 
     /**

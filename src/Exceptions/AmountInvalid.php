@@ -2,7 +2,8 @@
 
 namespace Bavix\Wallet\Exceptions;
 
-class AmountInvalid extends \InvalidArgumentException
-{
+use InvalidArgumentException;
 
+class AmountInvalid extends InvalidArgumentException
+{
 }

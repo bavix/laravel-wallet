@@ -13,11 +13,11 @@
 
 laravel-wallet - Easy work with virtual wallet.
 
-[[Documentation](https://laravel-wallet.bavix.ru/)] 
-[[Get Started](https://laravel-wallet.bavix.ru/2.2/basic-usage)] 
+[[Documentation](https://bavix.github.io/laravel-wallet/)] 
+[[Get Started](https://bavix.github.io/laravel-wallet/#/basic-usage)] 
 
-[[Документация](https://laravel-wallet.bavix.ru/2.2-ru)] 
-[[Как начать](https://laravel-wallet.bavix.ru/2.2-ru/basic-usage)] 
+[[Документация](https://bavix.github.io/laravel-wallet/#/ru/)] 
+[[Как начать](https://bavix.github.io/laravel-wallet/#/ru/basic-usage)] 
 
 * **Vendor**: bavix
 * **Package**: laravel-wallet
@@ -28,19 +28,7 @@ laravel-wallet - Easy work with virtual wallet.
 
 ### Upgrade Guide
 
-To perform the migration, you will be [helped by the instruction](https://laravel-wallet.bavix.ru/2.2/upgrade-guide).
-
-### Run Migrations
-Publish the migrations with this artisan command:
-```bash
-php artisan vendor:publish --tag=laravel-wallet-migrations
-```
-
-### Configuration
-You can publish the config file with this artisan command:
-```bash
-php artisan vendor:publish --tag=laravel-wallet-config
-```
+To perform the migration, you will be [helped by the instruction](https://bavix.github.io/laravel-wallet/#/upgrade-guide).
 
 ### Usage
 Add the `HasWallet` trait and `Wallet` interface to model.
@@ -93,7 +81,7 @@ class Item extends Model implements Product
 {
     use HasWallet;
 
-    public function canBuy(Customer $customer, bool $force = false): bool
+    public function canBuy(Customer $customer, int $quantity = 1, bool $force = null): bool
     {
         /**
          * If the service can be purchased once, then
@@ -114,6 +102,11 @@ class Item extends Model implements Product
             'description' => 'Purchase of Product #' . $this->id, 
             'price' => $this->getAmountProduct(),
         ];
+    }
+    
+    public function getUniqueId(): string
+    {
+        return (string)$this->getKey();
     }
 }
 ```

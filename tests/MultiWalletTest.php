@@ -2,8 +2,14 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Exceptions\AmountInvalid;
+use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Test\Models\Item;
 use Bavix\Wallet\Test\Models\UserMulti;
+use Illuminate\Database\QueryException;
+use function compact;
+use function range;
 
 class MultiWalletTest extends TestCase
 {
@@ -45,10 +51,11 @@ class MultiWalletTest extends TestCase
 
     /**
      * @return void
-     * @expectedException \Bavix\Wallet\Exceptions\AmountInvalid
      */
     public function testInvalidDeposit(): void
     {
+        $this->expectException(AmountInvalid::class);
+
         /**
          * @var UserMulti $user
          */
@@ -62,10 +69,11 @@ class MultiWalletTest extends TestCase
 
     /**
      * @return void
-     * @expectedException \Bavix\Wallet\Exceptions\BalanceIsEmpty
      */
     public function testWithdraw(): void
     {
+        $this->expectException(BalanceIsEmpty::class);
+
         /**
          * @var UserMulti $user
          */
@@ -93,10 +101,11 @@ class MultiWalletTest extends TestCase
 
     /**
      * @return void
-     * @expectedException \Bavix\Wallet\Exceptions\BalanceIsEmpty
      */
     public function testInvalidWithdraw(): void
     {
+        $this->expectException(BalanceIsEmpty::class);
+
         /**
          * @var UserMulti $user
          */
@@ -199,10 +208,11 @@ class MultiWalletTest extends TestCase
 
     /**
      * @return void
-     * @expectedException \Bavix\Wallet\Exceptions\BalanceIsEmpty
      */
     public function testBalanceIsEmpty(): void
     {
+        $this->expectException(BalanceIsEmpty::class);
+
         /**
          * @var UserMulti $user
          */
@@ -241,10 +251,12 @@ class MultiWalletTest extends TestCase
     }
 
     /**
-     * @expectedException \Illuminate\Database\QueryException
+     * @return void
      */
     public function testWalletUnique(): void
     {
+        $this->expectException(QueryException::class);
+
         /**
          * @var UserMulti $user
          */
@@ -302,9 +314,9 @@ class MultiWalletTest extends TestCase
          * @var UserMulti $user
          */
         $user = factory(UserMulti::class)->create();
-        $names = \range('a', 'z');
+        $names = range('a', 'z');
         foreach ($names as $name) {
-            $user->createWallet(\compact('name'));
+            $user->createWallet(compact('name'));
         }
 
         $user->load('wallets'); // optimize
@@ -312,6 +324,65 @@ class MultiWalletTest extends TestCase
         foreach ($names as $name) {
             $this->assertEquals($name, $user->getWallet($name)->name);
         }
+    }
+
+    /**
+     * @return void
+     */
+    public function testPay(): void
+    {
+        /**
+         * @var UserMulti $user
+         * @var Item $product
+         */
+        $user = factory(UserMulti::class)->create();
+        $a = $user->createWallet(['name' => 'a']);
+        $b = $user->createWallet(['name' => 'b']);
+
+        $product = factory(Item::class)->create([
+            'quantity' => 1,
+        ]);
+
+        $this->assertEquals($a->balance, 0);
+        $this->assertEquals($b->balance, 0);
+
+        $a->deposit($product->getAmountProduct());
+        $this->assertEquals($a->balance, $product->getAmountProduct());
+
+        $b->deposit($product->getAmountProduct());
+        $this->assertEquals($b->balance, $product->getAmountProduct());
+
+        $transfer = $a->pay($product);
+        $paidTransfer = $a->paid($product);
+        $this->assertTrue((bool)$paidTransfer);
+        $this->assertEquals($transfer->getKey(), $paidTransfer->getKey());
+        $this->assertInstanceOf(UserMulti::class, $paidTransfer->withdraw->payable);
+        $this->assertEquals($user->getKey(), $paidTransfer->withdraw->payable->getKey());
+        $this->assertEquals($transfer->from->id, $a->id);
+        $this->assertEquals($transfer->to->id, $product->id);
+        $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
+        $this->assertEquals($a->balance, 0);
+        $this->assertEquals($product->balance, $product->getAmountProduct());
+
+        $transfer = $b->pay($product);
+        $paidTransfer = $b->paid($product);
+        $this->assertTrue((bool)$paidTransfer);
+        $this->assertEquals($transfer->getKey(), $paidTransfer->getKey());
+        $this->assertInstanceOf(UserMulti::class, $paidTransfer->withdraw->payable);
+        $this->assertEquals($user->getKey(), $paidTransfer->withdraw->payable->getKey());
+        $this->assertEquals($transfer->from->id, $b->id);
+        $this->assertEquals($transfer->to->id, $product->id);
+        $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
+        $this->assertEquals($b->balance, 0);
+        $this->assertEquals($product->balance, $product->getAmountProduct() * 2);
+
+        $this->assertTrue($a->refund($product));
+        $this->assertEquals($product->balance, $product->getAmountProduct());
+        $this->assertEquals($a->balance, $product->getAmountProduct());
+
+        $this->assertTrue($b->refund($product));
+        $this->assertEquals($product->balance, 0);
+        $this->assertEquals($b->balance, $product->getAmountProduct());
     }
 
 }

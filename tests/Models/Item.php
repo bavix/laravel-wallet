@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Item extends Model implements Product
 {
-
     use HasWallet;
 
     /**
@@ -27,13 +26,14 @@ class Item extends Model implements Product
 
     /**
      * @param Customer $customer
+     * @param int $quantity
      * @param bool $force
      *
      * @return bool
      */
-    public function canBuy(Customer $customer, bool $force = false): bool
+    public function canBuy(Customer $customer, int $quantity = 1, bool $force = null): bool
     {
-        $result = $this->quantity > 0;
+        $result = $this->quantity >= $quantity;
 
         if ($force) {
             return $result;
@@ -58,4 +58,11 @@ class Item extends Model implements Product
         return null;
     }
 
+    /**
+     * @return string
+     */
+    public function getUniqueId(): string
+    {
+        return $this->getKey();
+    }
 }

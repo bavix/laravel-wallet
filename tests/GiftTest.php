@@ -93,8 +93,9 @@ class GiftTest extends TestCase
         $this->assertTrue($first->forceRefundGift($product));
         $this->assertEquals($product->balance, -$product->getAmountProduct());
 
-        $first->withdraw($first->balance);
-        $this->assertEquals($first->balance, 0);
+        $this->assertEquals($second->balance, $product->getAmountProduct());
+        $second->withdraw($second->balance);
+        $this->assertEquals($second->balance, 0);
     }
 
 }

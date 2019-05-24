@@ -2,8 +2,12 @@
 
 namespace Bavix\Wallet\Models;
 
+use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Models\Wallet as WalletModel;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use function config;
 
 /**
  * Class Transaction
@@ -16,7 +20,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int $amount
  * @property bool $confirmed
  * @property array $meta
- * @property \Bavix\Wallet\Interfaces\Wallet $payable
+ * @property Wallet $payable
+ * @property WalletModel $wallet
  */
 class Transaction extends Model
 {
@@ -53,7 +58,7 @@ class Transaction extends Model
     public function getTable(): string
     {
         if (!$this->table) {
-            $this->table = \config('wallet.transaction.table');
+            $this->table = config('wallet.transaction.table');
         }
 
         return parent::getTable();
@@ -65,6 +70,14 @@ class Transaction extends Model
     public function payable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function wallet(): BelongsTo
+    {
+        return $this->belongsTo(config('wallet.wallet.model'));
     }
 
 }

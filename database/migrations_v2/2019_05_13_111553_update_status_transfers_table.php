@@ -2,6 +2,8 @@
 
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\MySqlConnection;
+use Illuminate\Database\PostgresConnection;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -29,16 +31,16 @@ class UpdateStatusTransfersTable extends Migration
             Transfer::STATUS_GIFT,
         ];
 
-        if (DB::connection() instanceof \Illuminate\Database\MySqlConnection) {
+        if (DB::connection() instanceof MySqlConnection) {
             $table = $this->table();
-            $enumString = \implode('\', \'', $enums);
+            $enumString = implode('\', \'', $enums);
             $default = Transfer::STATUS_TRANSFER;
             DB::statement("ALTER TABLE $table CHANGE COLUMN status status ENUM('$enumString') NOT NULL DEFAULT '$default'");
             DB::statement("ALTER TABLE $table CHANGE COLUMN status_last status_last ENUM('$enumString') NULL");
             return;
         }
 
-        if (DB::connection() instanceof \Illuminate\Database\PostgresConnection) {
+        if (DB::connection() instanceof PostgresConnection) {
             $this->alterEnum($this->table(), 'status', $enums);
             $this->alterEnum($this->table(), 'status_last', $enums);
             return;
@@ -74,16 +76,16 @@ class UpdateStatusTransfersTable extends Migration
             Transfer::STATUS_GIFT,
         ];
 
-        if (DB::connection() instanceof \Illuminate\Database\MySqlConnection) {
+        if (DB::connection() instanceof MySqlConnection) {
             $table = $this->table();
-            $enumString = \implode('\', \'', $enums);
+            $enumString = implode('\', \'', $enums);
             $default = Transfer::STATUS_PAID;
             DB::statement("ALTER TABLE $table CHANGE COLUMN status status ENUM('$enumString') NOT NULL DEFAULT '$default'");
             DB::statement("ALTER TABLE $table CHANGE COLUMN status_last status_last ENUM('$enumString') NULL");
             return;
         }
 
-        if (DB::connection() instanceof \Illuminate\Database\PostgresConnection) {
+        if (DB::connection() instanceof PostgresConnection) {
             $this->alterEnum($this->table(), 'status', $enums);
             $this->alterEnum($this->table(), 'status_last', $enums);
             return;
@@ -112,7 +114,7 @@ class UpdateStatusTransfersTable extends Migration
 
         $enumList = [];
 
-        foreach($options as $option) {
+        foreach ($options as $option) {
             $enumList[] = sprintf("'%s'::CHARACTER VARYING", $option);
         }
 

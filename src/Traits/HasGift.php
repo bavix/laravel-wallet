@@ -5,8 +5,13 @@ namespace Bavix\Wallet\Traits;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Tax;
+use Bavix\Wallet\Objects\Bring;
+use Bavix\Wallet\Services\CommonService;
+use Bavix\Wallet\Services\WalletService;
 use Illuminate\Support\Facades\DB;
+use Throwable;
+use function app;
+use function get_class;
 
 /**
  * Trait HasGift
@@ -25,11 +30,11 @@ trait HasGift
      * @param bool $force
      * @return Transfer|null
      */
-    public function safeGift(Wallet $to, Product $product, bool $force = false): ?Transfer
+    public function safeGift(Wallet $to, Product $product, bool $force = null): ?Transfer
     {
         try {
             return $this->gift($to, $product, $force);
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             return null;
         }
     }
@@ -44,7 +49,7 @@ trait HasGift
      * @param bool $force
      * @return Transfer
      */
-    public function gift(Wallet $to, Product $product, bool $force = false): Transfer
+    public function gift(Wallet $to, Product $product, bool $force = null): Transfer
     {
         /**
          * Who's giving? Let's call him Santa Claus
@@ -57,19 +62,35 @@ trait HasGift
         $callback = function () use ($santa, $product, $force) {
             $amount = $product->getAmountProduct();
             $meta = $product->getMetaProduct();
-            $fee = Tax::fee($product, $amount);
+            $fee = app(WalletService::class)
+                ->fee($product, $amount);
+
+            $commonService = app(CommonService::class);
 
             /**
              * Santa pays taxes
              */
-            if ($force) {
-                $withdraw = $santa->forceWithdraw($amount + $fee, $meta);
-            } else {
-                $withdraw = $santa->withdraw($amount + $fee, $meta);
+            if (!$force) {
+                $commonService->verifyWithdraw($santa, $amount);
             }
 
-            $deposit = $product->deposit($amount, $meta);
-            return $this->assemble($product, $withdraw, $deposit, Transfer::STATUS_GIFT);
+            $withdraw = $commonService->forceWithdraw($santa, $amount + $fee, $meta);
+
+            $deposit = $commonService->deposit($product, $amount, $meta);
+
+            $from = app(WalletService::class)
+                ->getWallet($this);
+
+            $transfers = $commonService->assemble([
+                (new Bring())
+                    ->setStatus(Transfer::STATUS_GIFT)
+                    ->setDeposit($deposit)
+                    ->setWithdraw($withdraw)
+                    ->setFrom($from)
+                    ->setTo($product)
+            ]);
+
+            return current($transfers);
         };
 
         /**
@@ -78,7 +99,7 @@ trait HasGift
          * That's why I address him like this!
          */
         return DB::transaction(
-            $callback->bindTo($to, \get_class($to))
+            $callback->bindTo($to, get_class($to))
         );
     }
 
