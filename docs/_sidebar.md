@@ -11,7 +11,7 @@
     - [Deposit](deposit)
     - [Withdraw](withdraw)
     - [Transfer](transfer)
-    - [Recalculate balance](recalculate)
+    - [Refresh balance](refresh)
 
 - Purchases
 

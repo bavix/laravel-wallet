@@ -1,9 +1,9 @@
-# To recalculate the balance
+# To refresh the balance
 
 There are situations when you create a lot of unconfirmed operations, 
 and then abruptly confirm everything. 
 In this case, the user's balance will not change. 
-You must be forced to recalculate the balance.
+You must be forced to refresh the balance.
 
 ---
 
@@ -42,11 +42,11 @@ where confirmed=0 and
 -- 212 rows affected in 54 ms
 ```
 
-Recalculate the balance.
+Refresh the balance.
 
 ```php
 $user->balance; // int(27)
-$user->wallet->calculateBalance();
+$user->wallet->refreshBalance();
 $user->balance; // int(42)
 ```
 

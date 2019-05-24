@@ -11,3 +11,4 @@
 - Laravel 5.5
 - Laravel 5.6
 - Laravel 5.7
+- Laravel 5.8

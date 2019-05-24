@@ -10,13 +10,17 @@ composer req bavix/laravel-wallet
 
 Ensure that you’ve set up your project to [autoload Composer-installed packages](https://getcomposer.org/doc/01-basic-usage.md#autoloading).
 
-## Run Migrations
+## You can use it for customization
+
+Sometimes it is useful...
+
+### Run Migrations
 Publish the migrations with this artisan command:
 ```bash
 php artisan vendor:publish --tag=laravel-wallet-migrations
 ```
 
-## Configuration
+### Configuration
 You can publish the config file with this artisan command:
 ```bash
 php artisan vendor:publish --tag=laravel-wallet-config
