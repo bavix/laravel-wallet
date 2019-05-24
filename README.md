@@ -30,18 +30,6 @@ laravel-wallet - Easy work with virtual wallet.
 
 To perform the migration, you will be [helped by the instruction](https://laravel-wallet.bavix.ru/2.2/upgrade-guide).
 
-### Run Migrations
-Publish the migrations with this artisan command:
-```bash
-php artisan vendor:publish --tag=laravel-wallet-migrations
-```
-
-### Configuration
-You can publish the config file with this artisan command:
-```bash
-php artisan vendor:publish --tag=laravel-wallet-config
-```
-
 ### Usage
 Add the `HasWallet` trait and `Wallet` interface to model.
 ```php
@@ -93,7 +81,7 @@ class Item extends Model implements Product
 {
     use HasWallet;
 
-    public function canBuy(Customer $customer, bool $force = false): bool
+    public function canBuy(Customer $customer, int $quantity = 1, bool $force = null): bool
     {
         /**
          * If the service can be purchased once, then
@@ -114,6 +102,11 @@ class Item extends Model implements Product
             'description' => 'Purchase of Product #' . $this->id, 
             'price' => $this->getAmountProduct(),
         ];
+    }
+    
+    public function getUniqueId(): string
+    {
+        return (string)$this->getKey();
     }
 }
 ```
