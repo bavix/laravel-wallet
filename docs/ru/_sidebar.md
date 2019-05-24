@@ -23,5 +23,3 @@
 
     - [Создать кошелек](new-wallet)
     - [Перевод](wallet-transfer)
-
-- [Список изменений](changelog)
