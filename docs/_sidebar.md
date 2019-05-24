@@ -16,6 +16,7 @@
 - Purchases
 
     - [Payment](payment)
+    - [Cart](cart)
     - [Payment Free](pay-free)
     - [Refund](refund)
 
