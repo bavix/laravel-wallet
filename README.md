@@ -13,11 +13,11 @@
 
 laravel-wallet - Easy work with virtual wallet.
 
-[[Documentation](https://laravel-wallet.bavix.ru/)] 
-[[Get Started](https://laravel-wallet.bavix.ru/2.2/basic-usage)] 
+[[Documentation](https://bavix.github.io/laravel-wallet/)] 
+[[Get Started](https://bavix.github.io/laravel-wallet/#/basic-usage)] 
 
-[[Документация](https://laravel-wallet.bavix.ru/2.2-ru)] 
-[[Как начать](https://laravel-wallet.bavix.ru/2.2-ru/basic-usage)] 
+[[Документация](https://bavix.github.io/laravel-wallet/#/ru/)] 
+[[Как начать](https://bavix.github.io/laravel-wallet/#/ru/basic-usage)] 
 
 * **Vendor**: bavix
 * **Package**: laravel-wallet
@@ -28,7 +28,7 @@ laravel-wallet - Easy work with virtual wallet.
 
 ### Upgrade Guide
 
-To perform the migration, you will be [helped by the instruction](https://laravel-wallet.bavix.ru/2.2/upgrade-guide).
+To perform the migration, you will be [helped by the instruction](https://bavix.github.io/laravel-wallet/#/upgrade-guide).
 
 ### Usage
 Add the `HasWallet` trait and `Wallet` interface to model.
