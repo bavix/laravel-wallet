@@ -6,6 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\SQLiteConnection;
 
 class UpdateTransactionsTable extends Migration
 {
@@ -59,7 +60,9 @@ class UpdateTransactionsTable extends Migration
     public function down(): void
     {
         Schema::table($this->table(), function (Blueprint $table) {
-            $table->dropForeign(['wallet_id']);
+            if (!(DB::connection() instanceof SQLiteConnection)) {
+                $table->dropForeign(['wallet_id']);
+            }
             $table->dropColumn('wallet_id');
         });
     }
