@@ -44,7 +44,8 @@ class CreateTransactionsTable extends Migration
             $pdo = $conn->getPdo();
             try {
                 $sql = 'SELECT JSON_EXTRACT(\'[10, 20, [30, 40]]\', \'$[1]\');';
-                $pdo->exec($sql);
+                $prepare = $pdo->prepare($sql);
+                $prepare->fetch();
             } catch (\Throwable $throwable) {
                 return $table->text($column);
             }
