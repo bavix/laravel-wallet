@@ -67,7 +67,7 @@ class WalletService
         $wallet->exists or $wallet->save();
         $proxy = app(ProxyService::class);
         if (!$proxy->has($wallet->getKey())) {
-            $proxy->set($wallet->getKey(), (int)($wallet->attributes['balance'] ?? 0));
+            $proxy->set($wallet->getKey(), (int)$wallet->getOriginal('balance', 0));
         }
 
         return $proxy[$wallet->getKey()];
