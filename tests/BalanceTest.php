@@ -2,7 +2,9 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CommonService;
+use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Test\Models\Buyer;
 use function app;
 
@@ -11,6 +13,7 @@ class BalanceTest extends TestCase
 
     /**
      * @return void
+     * @throws
      */
     public function testSimple(): void
     {
@@ -43,6 +46,35 @@ class BalanceTest extends TestCase
 
         $wallet->deposit(1);
         $this->assertEquals($wallet->balance, 1001);
+    }
+
+    /**
+     * @return void
+     * @see https://github.com/bavix/laravel-wallet/issues/49
+     */
+    public function testForceUpdate(): void
+    {
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = factory(Buyer::class)->create();
+        $wallet = $buyer->wallet;
+
+        $this->assertEquals($wallet->balance, 0);
+
+        $wallet->deposit(1000);
+        $this->assertEquals($wallet->balance, 1000);
+
+        Wallet::whereKey($buyer->wallet->getKey())
+            ->update(['balance' => 10]);
+
+        app(ProxyService::class)->fresh();
+
+        $wallet->refresh();
+        $this->assertEquals($wallet->balance, 10);
+
+        $wallet->refreshBalance();
+        $this->assertEquals($wallet->balance, 1000);
     }
 
 }
