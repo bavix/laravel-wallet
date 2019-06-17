@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet;
 
+use Bavix\Commands\RefreshBalance;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
@@ -32,6 +33,8 @@ class WalletServiceProvider extends ServiceProvider
         if (!$this->app->runningInConsole()) {
             return;
         }
+
+        $this->commands([RefreshBalance::class]);
 
         $this->loadMigrationsFrom([
             __DIR__ . '/../database/migrations_v1',
