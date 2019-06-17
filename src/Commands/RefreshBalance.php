@@ -1,6 +1,6 @@
 <?php
 
-namespace Bavix\Commands;
+namespace Bavix\Wallet\Commands;
 
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;

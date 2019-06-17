@@ -2,7 +2,7 @@
 
 namespace Bavix\Wallet;
 
-use Bavix\Commands\RefreshBalance;
+use Bavix\Wallet\Commands\RefreshBalance;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
