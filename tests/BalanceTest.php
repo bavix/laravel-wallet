@@ -7,13 +7,13 @@ use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Test\Models\Buyer;
 use function app;
-use Illuminate\Support\Facades\DB;
 
 class BalanceTest extends TestCase
 {
 
     /**
      * @return void
+     * @throws
      */
     public function testSimple(): void
     {
@@ -72,7 +72,7 @@ class BalanceTest extends TestCase
 
         $wallet->refresh();
         $this->assertEquals($wallet->balance, 10);
-        
+
         $wallet->refreshBalance();
         $this->assertEquals($wallet->balance, 1000);
     }
