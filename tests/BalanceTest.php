@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Test\Models\Buyer;
@@ -64,12 +65,15 @@ class BalanceTest extends TestCase
         $wallet->deposit(1000);
         $this->assertEquals($wallet->balance, 1000);
 
-        $buyer->wallet->update(['balance' => 10]);
+        Wallet::whereKey($buyer->wallet->getKey())
+            ->update(['balance' => 10]);
+
         app(ProxyService::class)->fresh();
 
+        $wallet->refresh();
         $this->assertEquals($wallet->balance, 10);
-        $wallet->refreshBalance();
         
+        $wallet->refreshBalance();
         $this->assertEquals($wallet->balance, 1000);
     }
 
