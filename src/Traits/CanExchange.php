@@ -6,7 +6,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\CurrencyService;
+use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\WalletService;
 use Illuminate\Support\Facades\DB;
 
@@ -45,7 +45,7 @@ trait CanExchange
         $from = app(WalletService::class)->getWallet($this);
 
         return DB::transaction(function () use ($from, $to, $amount) {
-            $rate = app(CurrencyService::class)->rate($from, $to);
+            $rate = app(ExchangeService::class)->rate($from, $to);
             $fee = app(WalletService::class)->fee($to, $amount);
             $withdraw = $from->forceWithdraw($amount + $fee);
             $deposit = $to->deposit($amount * $rate);

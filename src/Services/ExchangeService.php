@@ -4,7 +4,7 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Interfaces\Wallet;
 
-class CurrencyService
+class ExchangeService
 {
 
     /**
