@@ -18,7 +18,7 @@ trait CanExchange
      */
     public function exchange(Wallet $to, int $amount): Transfer
     {
-        // todo: check
+        app(WalletService::class)->checkAmount($amount);
         return $this->forceExchange($to, $amount);
     }
 
@@ -46,7 +46,7 @@ trait CanExchange
 
         return DB::transaction(function () use ($from, $to, $amount) {
             $rate = app(CurrencyService::class)->rate($from, $to);
-            $withdraw = $from->withdraw($amount);
+            $withdraw = $from->forceWithdraw($amount);
             $deposit = $to->deposit($amount * $rate);
 
             $transfers = app(CommonService::class)->multiBrings([
