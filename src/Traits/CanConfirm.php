@@ -34,12 +34,7 @@ trait CanConfirm
                 );
             }
 
-            // confirm
-            return $this->forceConfirm($transaction) &&
-
-                // update balance
-                app(CommonService::class)
-                    ->addBalance($wallet, $transaction->amount);
+            return $this->forceConfirm($transaction);
         });
     }
 
@@ -64,18 +59,26 @@ trait CanConfirm
      */
     public function forceConfirm(Transaction $transaction): bool
     {
-        $wallet = app(WalletService::class)
-            ->getWallet($this);
+        return DB::transaction(function () use ($transaction) {
 
-        if ($transaction->confirmed) {
-            throw new ConfirmedInvalid(); // todo
-        }
+            $wallet = app(WalletService::class)
+                ->getWallet($this);
 
-        if ($wallet->id !== $transaction->wallet_id) {
-            throw new WalletOwnerInvalid(); // todo
-        }
+            if ($transaction->confirmed) {
+                throw new ConfirmedInvalid(); // todo
+            }
 
-        return $transaction->update(['confirmed' => true]);
+            if ($wallet->id !== $transaction->wallet_id) {
+                throw new WalletOwnerInvalid(); // todo
+            }
+
+            return $transaction->update(['confirmed' => true]) &&
+
+                // update balance
+                app(CommonService::class)
+                    ->addBalance($wallet, $transaction->amount);
+
+        });
     }
 
 }
