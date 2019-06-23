@@ -34,12 +34,12 @@ trait CanConfirm
                 );
             }
 
-            // update balance
-            return app(CommonService::class)
-                ->addBalance($wallet, $transaction->amount) &&
-                
-                // confirm
-                $this->forceConfirm($transaction);
+            // confirm
+            return $this->forceConfirm($transaction) &&
+
+                // update balance
+                app(CommonService::class)
+                    ->addBalance($wallet, $transaction->amount);
         });
     }
 
