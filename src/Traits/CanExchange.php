@@ -18,7 +18,12 @@ trait CanExchange
      */
     public function exchange(Wallet $to, int $amount): Transfer
     {
-        app(WalletService::class)->checkAmount($amount);
+        $wallet = app(WalletService::class)
+            ->getWallet($this);
+
+        app(CommonService::class)
+            ->verifyWithdraw($wallet, $amount);
+
         return $this->forceExchange($to, $amount);
     }
 

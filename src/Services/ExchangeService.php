@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Interfaces\Rateable;
 use Bavix\Wallet\Interfaces\Wallet;
 
 class ExchangeService
@@ -14,7 +15,10 @@ class ExchangeService
      */
     public function rate(Wallet $from, Wallet $to): float
     {
-        return 1.0;
+        return app(Rateable::class)
+            ->withAmount(1)
+            ->withCurrency($from)
+            ->convertTo($to);
     }
 
 }
