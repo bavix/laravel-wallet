@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Command;
 use function config;
 
+/**
+ * Class RefreshBalance
+ * @package Bavix\Wallet\Commands
+ * @codeCoverageIgnore
+ */
 class RefreshBalance extends Command
 {
 
