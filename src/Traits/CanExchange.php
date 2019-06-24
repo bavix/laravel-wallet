@@ -32,11 +32,11 @@ trait CanExchange
      */
     public function safeExchange(Wallet $to, int $amount): ?Transfer
     {
-       try {
-           return $this->exchange($to, $amount);
-       } catch (\Throwable $throwable) {
-           return null;
-       }
+        try {
+            return $this->exchange($to, $amount);
+        } catch (\Throwable $throwable) {
+            return null;
+        }
     }
 
     /**
@@ -49,7 +49,7 @@ trait CanExchange
          */
         $from = app(WalletService::class)->getWallet($this);
 
-        return DB::transaction(function () use ($from, $to, $amount) {
+        return DB::transaction(function() use ($from, $to, $amount) {
             $rate = app(ExchangeService::class)->rate($from, $to);
             $fee = app(WalletService::class)->fee($to, $amount);
             $withdraw = $from->forceWithdraw($amount + $fee);
