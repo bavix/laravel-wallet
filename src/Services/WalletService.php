@@ -79,6 +79,7 @@ class WalletService
      */
     public function refresh(WalletModel $wallet): bool
     {
+        $this->getBalance($wallet);
         $balance = $wallet->getAvailableBalance();
         $wallet->balance = $balance;
 

@@ -24,7 +24,9 @@ trait CanConfirm
                 ->getWallet($this);
 
             if (!$wallet->refreshBalance()) {
+                // @codeCoverageIgnoreStart
                 return false;
+                // @codeCoverageIgnoreEnd
             }
 
             if ($transaction->type === Transaction::TYPE_WITHDRAW) {
