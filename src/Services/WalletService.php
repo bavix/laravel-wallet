@@ -3,7 +3,7 @@
 namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
-use Bavix\Wallet\Interfaces\Taxing;
+use Bavix\Wallet\Interfaces\Taxable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Traits\HasWallet;
@@ -21,7 +21,7 @@ class WalletService
      */
     public function fee(Wallet $wallet, int $amount): int
     {
-        if ($wallet instanceof Taxing) {
+        if ($wallet instanceof Taxable) {
             return (int)($amount * $wallet->getFeePercent() / 100);
         }
 

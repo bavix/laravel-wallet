@@ -2,9 +2,9 @@
 
 namespace Bavix\Wallet\Test\Models;
 
-use Bavix\Wallet\Interfaces\Taxing;
+use Bavix\Wallet\Interfaces\Taxable;
 
-class ItemTax extends Item implements Taxing
+class ItemTax extends Item implements Taxable
 {
 
     /**

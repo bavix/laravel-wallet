@@ -2,10 +2,12 @@
 
 namespace Bavix\Wallet\Models;
 
+use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Exchangeable;
 use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Traits\CanConfirm;
 use Bavix\Wallet\Traits\CanExchange;
 use Bavix\Wallet\Traits\CanPayFloat;
 use Bavix\Wallet\Traits\HasGift;
@@ -23,9 +25,10 @@ use function config;
  * @property int $balance
  * @property \Bavix\Wallet\Interfaces\Wallet $holder
  */
-class Wallet extends Model implements Customer, WalletFloat, Exchangeable
+class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchangeable
 {
 
+    use CanConfirm;
     use CanExchange;
     use CanPayFloat;
     use HasGift;
