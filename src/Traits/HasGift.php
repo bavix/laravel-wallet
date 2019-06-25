@@ -57,9 +57,11 @@ trait HasGift
         $santa = $this;
 
         /**
-         * @return Transfer
+         * Unfortunately,
+         * I think it is wrong to make the "assemble" method public.
+         * That's why I address him like this!
          */
-        $callback = function() use ($santa, $product, $force) {
+        return DB::transaction(static function() use ($santa, $to, $product, $force) {
             $amount = $product->getAmountProduct();
             $meta = $product->getMetaProduct();
             $fee = app(WalletService::class)
@@ -79,7 +81,7 @@ trait HasGift
             $deposit = $commonService->deposit($product, $amount, $meta);
 
             $from = app(WalletService::class)
-                ->getWallet($this);
+                ->getWallet($to);
 
             $transfers = $commonService->assemble([
                 (new Bring())
@@ -91,16 +93,7 @@ trait HasGift
             ]);
 
             return current($transfers);
-        };
-
-        /**
-         * Unfortunately,
-         * I think it is wrong to make the "assemble" method public.
-         * That's why I address him like this!
-         */
-        return DB::transaction(
-            $callback->bindTo($to, get_class($to))
-        );
+        });
     }
 
     /**
