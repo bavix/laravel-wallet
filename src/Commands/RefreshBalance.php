@@ -34,7 +34,7 @@ class RefreshBalance extends Command
      */
     public function handle(): void
     {
-        DB::transaction(function () {
+        DB::transaction(function() {
             $wallet = config('wallet.wallet.table');
             $trans = config('wallet.transaction.table');
 
@@ -43,7 +43,7 @@ class RefreshBalance extends Command
                 ->where('confirmed', true)
                 ->groupBy('wallet_id');
 
-            $joinClause = function (JoinClause $join) use ($wallet) {
+            $joinClause = function(JoinClause $join) use ($wallet) {
                 $join->on("$wallet.id", '=', 'b.wallet_id');
             };
 
