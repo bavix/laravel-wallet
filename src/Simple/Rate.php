@@ -8,7 +8,6 @@ use Bavix\Wallet\Interfaces\Wallet;
 /**
  * Class Rate
  * @package Bavix\Wallet\Simple
- * @codeCoverageIgnore
  */
 class Rate implements Rateable
 {

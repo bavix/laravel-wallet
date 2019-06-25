@@ -42,7 +42,7 @@ class Rate extends \Bavix\Wallet\Simple\Rate
      */
     public function convertTo(Wallet $wallet): float
     {
-        return $this->amount * $this->rate($wallet);
+        return parent::convertTo($wallet) * $this->rate($wallet);
     }
 
 }
