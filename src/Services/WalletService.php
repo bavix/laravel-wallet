@@ -22,7 +22,7 @@ class WalletService
     public function fee(Wallet $wallet, int $amount): int
     {
         if ($wallet instanceof Taxable) {
-            return (int)($amount * $wallet->getFeePercent() / 100);
+            return (int) ($amount * $wallet->getFeePercent() / 100);
         }
 
         return 0;
@@ -67,7 +67,7 @@ class WalletService
         $wallet->exists or $wallet->save();
         $proxy = app(ProxyService::class);
         if (!$proxy->has($wallet->getKey())) {
-            $proxy->set($wallet->getKey(), (int)$wallet->getOriginal('balance', 0));
+            $proxy->set($wallet->getKey(), (int) $wallet->getOriginal('balance', 0));
         }
 
         return $proxy[$wallet->getKey()];
