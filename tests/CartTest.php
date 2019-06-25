@@ -106,18 +106,18 @@ class CartTest extends TestCase
         ]);
 
         $cart = Cart::make();
-        $amount = 0;
+        $total = 0;
         for ($i = 0; $i < count($products) - 1; $i++) {
             $rnd = random_int(1, 5);
             $cart->addItem($products[$i], $rnd);
             $buyer->deposit($products[$i]->getAmountProduct() * $rnd);
-            $amount += $rnd;
+            $total += $rnd;
         }
 
-        $this->assertCount($amount, $cart->getItems());
+        $this->assertCount($total, $cart->getItems());
 
         $transfers = $buyer->payCart($cart);
-        $this->assertCount($amount, $transfers);
+        $this->assertCount($total, $transfers);
 
         $refundCart = Cart::make()->addItems($products); // all goods
         $buyer->refundCart($refundCart);

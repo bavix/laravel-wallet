@@ -10,6 +10,7 @@ use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Test\Common\Rate;
 use Bavix\Wallet\WalletServiceProvider;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
