@@ -37,14 +37,14 @@ class Rate extends \Bavix\Wallet\Simple\Rate
      */
     protected function rate(Wallet $wallet): float
     {
-        $from = $this->withCurrency->slug;
-        $to = $wallet->slug;
-
-        if (Arr::has($this->rates, "$from.$to")) {
-            return Arr::get($this->rates, "$from.$to");
-        }
-
-        return 1;
+        /**
+         * @var \Bavix\Wallet\Models\Wallet $wallet
+         */
+        return Arr::get(
+            Arr::get($this->rates, $this->withCurrency->slug, []),
+            $wallet->slug,
+            1
+        );
     }
 
     /**
