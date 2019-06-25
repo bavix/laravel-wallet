@@ -34,7 +34,7 @@ class RefreshBalance extends Command
      */
     public function handle(): void
     {
-        DB::transaction(function() {
+        DB::transaction(static function() {
             $wallet = config('wallet.wallet.table');
             $trans = config('wallet.transaction.table');
 

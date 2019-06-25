@@ -49,13 +49,13 @@ trait CanExchange
          */
         $from = app(WalletService::class)->getWallet($this);
 
-        return DB::transaction(function() use ($from, $to, $amount, $meta) {
+        return DB::transaction(static function() use ($from, $to, $amount, $meta) {
             $rate = app(ExchangeService::class)->rate($from, $to);
             $fee = app(WalletService::class)->fee($to, $amount);
 
             $withdraw = app(CommonService::class)
                 ->forceWithdraw($from, $amount + $fee, $meta);
-            
+
             $deposit = app(CommonService::class)
                 ->deposit($to, $amount * $rate, $meta);
 

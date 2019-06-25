@@ -19,9 +19,10 @@ trait CanConfirm
      */
     public function confirm(Transaction $transaction): bool
     {
-        return DB::transaction(function() use ($transaction) {
+        $self = $this;
+        return DB::transaction(static function() use ($self, $transaction) {
             $wallet = app(WalletService::class)
-                ->getWallet($this);
+                ->getWallet($self);
 
             if (!$wallet->refreshBalance()) {
                 // @codeCoverageIgnoreStart
@@ -36,7 +37,7 @@ trait CanConfirm
                 );
             }
 
-            return $this->forceConfirm($transaction);
+            return $self->forceConfirm($transaction);
         });
     }
 
@@ -61,10 +62,11 @@ trait CanConfirm
      */
     public function forceConfirm(Transaction $transaction): bool
     {
-        return DB::transaction(function() use ($transaction) {
+        $self = $this;
+        return DB::transaction(static function() use ($self, $transaction) {
 
             $wallet = app(WalletService::class)
-                ->getWallet($this);
+                ->getWallet($self);
 
             if ($transaction->confirmed) {
                 throw new ConfirmedInvalid(); // todo
