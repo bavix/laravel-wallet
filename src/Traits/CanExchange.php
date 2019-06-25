@@ -52,8 +52,12 @@ trait CanExchange
         return DB::transaction(function() use ($from, $to, $amount, $meta) {
             $rate = app(ExchangeService::class)->rate($from, $to);
             $fee = app(WalletService::class)->fee($to, $amount);
-            $withdraw = $from->forceWithdraw($amount + $fee, $meta);
-            $deposit = $to->deposit($amount * $rate, $meta);
+
+            $withdraw = app(CommonService::class)
+                ->forceWithdraw($from, $amount + $fee, $meta);
+            
+            $deposit = app(CommonService::class)
+                ->deposit($to, $amount * $rate, $meta);
 
             $transfers = app(CommonService::class)->multiBrings([
                 (new Bring())
