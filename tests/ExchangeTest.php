@@ -47,4 +47,30 @@ class ExchangeTest extends TestCase
         $this->assertEquals($transfer->status, Transfer::STATUS_EXCHANGE);
     }
 
+    /**
+     * @return void
+     */
+    public function testSafe(): void
+    {
+        /**
+         * @var UserMulti $user
+         */
+        $user = factory(UserMulti::class)->create();
+        $usd = $user->createWallet([
+            'name' => 'My USD',
+            'slug' => 'usd',
+        ]);
+
+        $rub = $user->createWallet([
+            'name' => 'Мои рубли',
+            'slug' => 'rub',
+        ]);
+
+        $this->assertEquals($rub->balance, 0);
+        $this->assertEquals($usd->balance, 0);
+
+        $transfer = $rub->safeExchange($usd, 10000);
+        $this->assertNull($transfer);
+    }
+
 }
