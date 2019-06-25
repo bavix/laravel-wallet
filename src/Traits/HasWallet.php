@@ -45,7 +45,7 @@ trait HasWallet
      */
     public function deposit(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        return DB::transaction(function () use ($amount, $meta, $confirmed) {
+        return DB::transaction(function() use ($amount, $meta, $confirmed) {
             return app(CommonService::class)
                 ->deposit($this, $amount, $meta, $confirmed);
         });
@@ -160,7 +160,7 @@ trait HasWallet
      */
     public function forceWithdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        return DB::transaction(function () use ($amount, $meta, $confirmed) {
+        return DB::transaction(function() use ($amount, $meta, $confirmed) {
             return app(CommonService::class)
                 ->forceWithdraw($this, $amount, $meta, $confirmed);
         });
@@ -177,7 +177,7 @@ trait HasWallet
      */
     public function forceTransfer(Wallet $wallet, int $amount, ?array $meta = null): Transfer
     {
-        return DB::transaction(function () use ($amount, $wallet, $meta) {
+        return DB::transaction(function() use ($amount, $wallet, $meta) {
             return app(CommonService::class)
                 ->forceTransfer($this, $wallet, $amount, $meta);
         });

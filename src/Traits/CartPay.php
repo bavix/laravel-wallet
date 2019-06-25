@@ -31,7 +31,7 @@ trait CartPay
         app(CommonService::class)
             ->verifyWithdraw($this, 0);
 
-        return DB::transaction(function () use ($cart) {
+        return DB::transaction(function() use ($cart) {
             $results = [];
             foreach ($cart->getItems() as $product) {
                 $results[] = app(CommonService::class)->forceTransfer(
@@ -73,7 +73,7 @@ trait CartPay
             throw new ProductEnded(trans('wallet::errors.product_stock'));
         }
 
-        return DB::transaction(function () use ($cart, $force) {
+        return DB::transaction(function() use ($cart, $force) {
             $results = [];
             foreach ($cart->getItems() as $product) {
                 if ($force) {
@@ -135,7 +135,7 @@ trait CartPay
      */
     public function refundCart(Cart $cart, bool $force = null, bool $gifts = null): bool
     {
-        return DB::transaction(function () use ($cart, $force, $gifts) {
+        return DB::transaction(function() use ($cart, $force, $gifts) {
             $results = [];
             $transfers = $cart->alreadyBuy($this, $gifts);
             if (count($transfers) !== count($cart)) {

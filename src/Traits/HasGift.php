@@ -59,7 +59,7 @@ trait HasGift
         /**
          * @return Transfer
          */
-        $callback = function () use ($santa, $product, $force) {
+        $callback = function() use ($santa, $product, $force) {
             $amount = $product->getAmountProduct();
             $meta = $product->getMetaProduct();
             $fee = app(WalletService::class)
