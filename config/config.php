@@ -3,7 +3,7 @@
 return [
     'package' => [
         'coefficient' => 100.,
-        'rate' => \Bavix\Wallet\Simple\Rate::class,
+        'rateable' => \Bavix\Wallet\Simple\Rate::class,
     ],
     'services' => [
         'exchange' => \Bavix\Wallet\Services\ExchangeService::class,
