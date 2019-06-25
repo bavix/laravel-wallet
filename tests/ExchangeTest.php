@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Test\Models\UserMulti;
 
 class ExchangeTest extends TestCase
@@ -34,14 +35,16 @@ class ExchangeTest extends TestCase
         $this->assertEquals($rub->balance, 10000);
         $this->assertEquals($usd->balance, 0);
 
-        $rub->exchange($usd, 10000);
+        $transfer = $rub->exchange($usd, 10000);
         $this->assertEquals($rub->balance, 0);
         $this->assertEquals($usd->balance, 147);
         $this->assertEquals($usd->balanceFloat, 1.47); // $1.47
+        $this->assertEquals($transfer->status, Transfer::STATUS_EXCHANGE);
 
-        $usd->exchange($rub, $usd->balance);
+        $transfer = $usd->exchange($rub, $usd->balance);
         $this->assertEquals($usd->balance, 0);
         $this->assertEquals($rub->balance, 9938);
+        $this->assertEquals($transfer->status, Transfer::STATUS_EXCHANGE);
     }
 
 }
