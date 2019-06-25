@@ -2,14 +2,7 @@
 
 namespace Bavix\Wallet\Test;
 
-use Bavix\Wallet\Interfaces\Rateable;
-use Bavix\Wallet\Models\Transaction;
-use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Models\Wallet;
-use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\ProxyService;
-use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Test\Common\Rate;
 use Bavix\Wallet\WalletServiceProvider;
 use Illuminate\Foundation\Application;
@@ -48,6 +41,8 @@ class TestCase extends OrchestraTestCase
      */
     protected function getPackageProviders($app): array
     {
+        // Bind eloquent models to IoC container
+        $app['config']->set('wallet.package.rateable', Rate::class);
         return [WalletServiceProvider::class];
     }
 
@@ -59,16 +54,6 @@ class TestCase extends OrchestraTestCase
      */
     protected function getEnvironmentSetUp($app): void
     {
-        // Bind eloquent models to IoC container
-        $app->singleton(Rateable::class, Rate::class);
-        $app->singleton(Transaction::class, config('wallet.transaction.model'));
-        $app->singleton(Transfer::class, config('wallet.transfer.model'));
-        $app->singleton(Wallet::class, config('wallet.wallet.model'));
-        $app->singleton(ExchangeService::class, config('wallet.services.exchange'));
-        $app->singleton(CommonService::class, config('wallet.services.common'));
-        $app->singleton(ProxyService::class, config('wallet.services.proxy'));
-        $app->singleton(WalletService::class, config('wallet.services.wallet'));
-
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
             'driver' => 'sqlite',
