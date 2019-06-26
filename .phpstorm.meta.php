@@ -2,6 +2,7 @@
 
 namespace PHPSTORM_META {
 
+    use Bavix\Wallet\Interfaces\Rateable;
     use Bavix\Wallet\Models\Transaction;
     use Bavix\Wallet\Models\Transfer;
     use Bavix\Wallet\Models\Wallet;
@@ -18,6 +19,7 @@ namespace PHPSTORM_META {
         Wallet::class => Wallet::class,
         Transfer::class => Transfer::class,
         Transaction::class => Transaction::class,
+        Rateable::class => Rateable::class,
     ]));
 
 }

@@ -69,11 +69,11 @@ trait CanConfirm
                 ->getWallet($self);
 
             if ($transaction->confirmed) {
-                throw new ConfirmedInvalid(); // todo
+                throw new ConfirmedInvalid(trans('wallet::errors.confirmed_invalid'));
             }
 
             if ($wallet->id !== $transaction->wallet_id) {
-                throw new WalletOwnerInvalid(); // todo
+                throw new WalletOwnerInvalid(trans('wallet::errors.owner_invalid'));
             }
 
             return $transaction->update(['confirmed' => true]) &&
