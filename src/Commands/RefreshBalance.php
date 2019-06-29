@@ -43,7 +43,7 @@ class RefreshBalance extends Command
                 ->where('confirmed', true)
                 ->groupBy('wallet_id');
 
-            $joinClause = function(JoinClause $join) use ($wallet) {
+            $joinClause = static function(JoinClause $join) use ($wallet) {
                 $join->on("$wallet.id", '=', 'b.wallet_id');
             };
 
