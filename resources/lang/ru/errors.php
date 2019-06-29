@@ -6,5 +6,5 @@ return [
     'wallet_empty' => 'Кошелёк пуст',
     'insufficient_funds' => 'Недостаточно средств',
     'confirmed_invalid' => 'Перевод уже подтвержден',
-    'owner_invalid' => 'Вы не владелец перевода',
+    'owner_invalid' => 'Вы не владелец кошелька',
 ];

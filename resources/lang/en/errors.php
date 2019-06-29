@@ -6,5 +6,5 @@ return [
     'wallet_empty' => 'Wallet is empty',
     'insufficient_funds' => 'Insufficient funds',
     'confirmed_invalid' => 'The translation has already been confirmed',
-    'owner_invalid' => 'You are not the owner of the translation',
+    'owner_invalid' => 'You are not the owner of the wallet',
 ];
