@@ -13,6 +13,16 @@ class WalletService
 {
 
     /**
+     * @param Wallet $object
+     * @return int
+     */
+    public function decimalPlaces(Wallet $object): int
+    {
+        $decimalPlaces = $this->getWallet($object)->decimal_places ?: 2;
+        return 10 ** $decimalPlaces;
+    }
+
+    /**
      * Consider the fee that the system will receive.
      *
      * @param Wallet $wallet
