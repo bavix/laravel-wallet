@@ -84,15 +84,15 @@ trait HasWallets
     public function createWallet(array $data): WalletModel
     {
         /**
-         * Create a default wallet
-         */
-        $this->getBalanceAttribute();
-
-        /**
          * @var WalletModel $wallet
          */
         $wallet = $this->wallets()->create($data);
         $this->_wallets[$wallet->slug] = $wallet;
+
+        /**
+         * Create a default wallet
+         */
+        $this->getBalanceAttribute();
 
         return $wallet;
     }
