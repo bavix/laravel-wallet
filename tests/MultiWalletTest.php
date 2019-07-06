@@ -17,6 +17,25 @@ class MultiWalletTest extends TestCase
     /**
      * @return void
      */
+    public function testCreateDefault(): void
+    {
+        $slug = config('wallet.wallet.default.slug', 'default');
+
+        /**
+         * @var UserMulti $user
+         */
+        $user = factory(UserMulti::class)->create();
+        $this->assertNull($user->getWallet($slug));
+
+        $wallet = $user->createWallet(['name' => 'Simple', 'slug' => $slug]);
+        $this->assertNotNull($wallet);
+        $this->assertNotNull($user->wallet);
+        $this->assertEquals($user->wallet->id, $wallet->id);
+    }
+
+    /**
+     * @return void
+     */
     public function testDeposit(): void
     {
         /**
