@@ -3,10 +3,11 @@
 use Bavix\Wallet\Models\Transaction;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\MySqlConnection;
+use Illuminate\Database\PostgresConnection;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\ColumnDefinition;
+use Illuminate\Support\Fluent as ColumnDefinition;
 
 class CreateTransactionsTable extends Migration
 {
@@ -40,7 +41,7 @@ class CreateTransactionsTable extends Migration
     public function json(Blueprint $table, string $column): ColumnDefinition
     {
         $conn = DB::connection();
-        if ($conn instanceof MySqlConnection) {
+        if ($conn instanceof MySqlConnection || $conn instanceof PostgresConnection) {
             $pdo = $conn->getPdo();
             try {
                 $sql = 'SELECT JSON_EXTRACT(\'[10, 20, [30, 40]]\', \'$[1]\');';
