@@ -53,6 +53,7 @@ trait HasGift
     {
         /**
          * Who's giving? Let's call him Santa Claus
+         * @var Wallet $santa
          */
         $santa = $this;
 
