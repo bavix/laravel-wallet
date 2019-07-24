@@ -39,10 +39,13 @@ It is the balance of the wallet by default.
 Create a new wallet.
 
 ```php
+$user->hasWallet('my-wallet'); // bool(false)
 $wallet = $user->createWallet([
     'name' => 'New Wallet',
     'slug' => 'my-wallet',
 ]);
+
+$user->hasWallet('my-wallet'); // bool(true)
 
 $wallet->deposit(100);
 $wallet->balance; // int(100)

@@ -42,10 +42,12 @@ class MultiWalletTest extends TestCase
          * @var UserMulti $user
          */
         $user = factory(UserMulti::class)->create();
+        $this->assertFalse($user->hasWallet('deposit'));
         $wallet = $user->createWallet([
-            'name' => 'deposit'
+            'name' => 'Deposit'
         ]);
 
+        $this->assertTrue($user->hasWallet('deposit'));
         $this->assertEquals($user->balance, 0);
         $this->assertEquals($wallet->balance, 0);
 

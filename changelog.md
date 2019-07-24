@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Add exchange method's
+- Add confirm method's
+- Add method `hasWallet`
+- Add currency service (create usd, eur,...)
 
 ## [3.0.4] - 2019-07-22
 ### Fixed
