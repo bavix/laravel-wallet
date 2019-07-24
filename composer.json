@@ -31,8 +31,8 @@
   },
   "require-dev": {
     "orchestra/testbench": "^3.7",
-    "phpstan/phpstan": "^0.11.7",
-    "phpunit/phpunit": "^7.5|^8.1"
+    "phpstan/phpstan": "^0.11",
+    "phpunit/phpunit": "^7.5|^8.2"
   },
   "autoload": {
     "psr-4": {
