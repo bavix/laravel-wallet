@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add confirm method's
 - Add method `hasWallet`
 - Add currency service (create usd, eur,...)
+- Add `MinimalTaxable`
 
 ## [3.0.4] - 2019-07-22
 ### Fixed

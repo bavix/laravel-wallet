@@ -3,6 +3,7 @@
 namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
+use Bavix\Wallet\Interfaces\MinimalTaxable;
 use Bavix\Wallet\Interfaces\Taxable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
@@ -21,11 +22,25 @@ class WalletService
      */
     public function fee(Wallet $wallet, int $amount): int
     {
+        $result = 0;
+
         if ($wallet instanceof Taxable) {
-            return (int) ($amount * $wallet->getFeePercent() / 100);
+            $result = (int) ($amount * $wallet->getFeePercent() / 100);
+
+            /**
+             * Added minimum commission condition
+             *
+             * @see https://github.com/bavix/laravel-wallet/issues/64#issuecomment-514483143
+             */
+            if ($wallet instanceof MinimalTaxable) {
+                $minimal = $wallet->getMinimalFee();
+                if ($result < $minimal) {
+                    $result = $wallet->getMinimalFee();
+                }
+            }
         }
 
-        return 0;
+        return $result;
     }
 
     /**
