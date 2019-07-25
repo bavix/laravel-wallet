@@ -23,6 +23,7 @@ use function config;
  * @package Bavix\Wallet\Models
  * @property string $slug
  * @property int $balance
+ * @property int $decimal_places
  * @property \Bavix\Wallet\Interfaces\Wallet $holder
  */
 class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchangeable
@@ -43,6 +44,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         'slug',
         'description',
         'balance',
+        'decimal_places',
     ];
 
     /**
@@ -50,6 +52,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
      */
     protected $casts = [
         'balance' => 'int',
+        'decimal_places' => 'int',
     ];
 
     /**
