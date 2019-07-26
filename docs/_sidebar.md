@@ -34,4 +34,3 @@
     - [Rate Service](rate)
     - [Create Wallet](rate-wallet)
     - [Taxing](rate-taxing)
-    -

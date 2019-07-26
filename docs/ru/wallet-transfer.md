@@ -38,19 +38,19 @@ $first->getKey() !== $last->getKey(); // true
 ```php
 $name = 'New Wallet';
 $firstWallet = $first->createWallet(compact('name'));
-$secondWallet = $second->createWallet(compact('name'));
+$lastWallet = $last->createWallet(compact('name'));
 
 $firstWallet->deposit(100);
 $firstWallet->balance; // int(100)
-$secondWallet->balance; // int(0)
+$lastWallet->balance; // int(0)
 ```
 
 Выполним перевод от первого второму.
 
 ```php
-$firstWallet->transfer($secondWallet, 5); 
+$firstWallet->transfer($lastWallet, 5); 
 $firstWallet->balance; // int(95)
-$secondWallet->balance; // int(5)
+$lastWallet->balance; // int(5)
 ```
 
 ## Принудительный перевод
@@ -65,9 +65,9 @@ $lastWallet->balance; // int(0)
 Выполним перевод от первого второму.
 
 ```php
-$firstWallet->forceTransfer($secondWallet, 500); 
+$firstWallet->forceTransfer($lastWallet, 500); 
 $firstWallet->balance; // int(-400)
-$secondWallet->balance; // int(500)
+$lastWallet->balance; // int(500)
 ```
 
 Просто работает!

@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Test;
 use Bavix\Wallet\Exceptions\ConfirmedInvalid;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
 use Bavix\Wallet\Test\Models\Buyer;
+use Bavix\Wallet\Test\Models\UserConfirm;
 
 class ConfirmTest extends TestCase
 {
@@ -119,6 +120,25 @@ class ConfirmTest extends TestCase
         $this->assertFalse($transaction->confirmed);
 
         $secondWallet->confirm($transaction);
+    }
+
+    /**
+     * @return void
+     */
+    public function testUserConfirm(): void
+    {
+        /**
+         * @var UserConfirm $userConfirm
+         */
+        $userConfirm = factory(UserConfirm::class)->create();
+        $transaction = $userConfirm->deposit(100, null, false);
+        $this->assertEquals($userConfirm->wallet->id, $transaction->wallet->id);
+        $this->assertEquals($userConfirm->id, $transaction->payable_id);
+        $this->assertInstanceOf(UserConfirm::class, $transaction->payable);
+        $this->assertFalse($transaction->confirmed);
+
+        $userConfirm->confirm($transaction);
+        $this->assertTrue($transaction->confirmed);
     }
 
 }

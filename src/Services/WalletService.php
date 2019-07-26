@@ -72,14 +72,20 @@ class WalletService
      */
     public function getWallet(Wallet $object): WalletModel
     {
-        if ($object instanceof WalletModel) {
-            return $object;
+        /**
+         * @var WalletModel $wallet
+         */
+        $wallet = $object;
+
+        if (!($object instanceof WalletModel)) {
+            /**
+             * @var HasWallet $object
+             */
+            $wallet = $object->wallet;
         }
 
-        /**
-         * @var HasWallet $object
-         */
-        return $object->wallet;
+        $wallet->exists or $wallet->save();
+        return $wallet;
     }
 
     /**
@@ -89,7 +95,6 @@ class WalletService
     public function getBalance(Wallet $object): int
     {
         $wallet = $this->getWallet($object);
-        $wallet->exists or $wallet->save();
         $proxy = app(ProxyService::class);
         if (!$proxy->has($wallet->getKey())) {
             $proxy->set($wallet->getKey(), (int) $wallet->getOriginal('balance', 0));
