@@ -16,6 +16,9 @@ class UserConfirm extends Model implements Wallet, Confirmable
 
 ### Example:
 
+Sometimes you need to create an operation and confirm its field. 
+That is what this trey does.
+
 ```php
 $user->balance; // int(0)
 $transaction = $user->deposit(100, null, false); // not confirm
