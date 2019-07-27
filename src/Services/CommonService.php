@@ -172,8 +172,9 @@ class CommonService
      */
     public function assemble(array $brings): array
     {
-        return DB::transaction(function () use ($brings) {
-            return $this->multiBrings($brings);
+        $self = $this;
+        return DB::transaction(static function() use ($self, $brings) {
+            return $self->multiBrings($brings);
         });
     }
 

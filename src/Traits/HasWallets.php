@@ -97,4 +97,15 @@ trait HasWallets
         return $wallet;
     }
 
+    /**
+     * The method checks the existence of the wallet
+     *
+     * @param string $slug
+     * @return bool
+     */
+    public function hasWallet(string $slug): bool
+    {
+        return (bool) $this->getWallet($slug);
+    }
+
 }

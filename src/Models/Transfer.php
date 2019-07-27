@@ -27,6 +27,7 @@ use function config;
 class Transfer extends Model
 {
 
+    public const STATUS_EXCHANGE = 'exchange';
     public const STATUS_TRANSFER = 'transfer';
     public const STATUS_PAID = 'paid';
     public const STATUS_REFUND = 'refund';

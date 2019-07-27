@@ -3,10 +3,12 @@
 namespace Bavix\Wallet;
 
 use Bavix\Wallet\Commands\RefreshBalance;
+use Bavix\Wallet\Interfaces\Rateable;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CommonService;
+use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Services\WalletService;
 use Illuminate\Support\ServiceProvider;
@@ -74,9 +76,11 @@ class WalletServiceProvider extends ServiceProvider
         );
 
         // Bind eloquent models to IoC container
+        $this->app->singleton(Rateable::class, config('wallet.package.rateable'));
         $this->app->singleton(Transaction::class, config('wallet.transaction.model'));
         $this->app->singleton(Transfer::class, config('wallet.transfer.model'));
         $this->app->singleton(Wallet::class, config('wallet.wallet.model'));
+        $this->app->singleton(ExchangeService::class, config('wallet.services.exchange'));
         $this->app->singleton(CommonService::class, config('wallet.services.common'));
         $this->app->singleton(ProxyService::class, config('wallet.services.proxy'));
         $this->app->singleton(WalletService::class, config('wallet.services.wallet'));

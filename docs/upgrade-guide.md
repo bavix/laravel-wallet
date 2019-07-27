@@ -59,3 +59,7 @@ class Item extends Model implements Product
     
 }
 ```
+
+## 3.0.x → 3.1.x
+
+Replace `Taxing` to `Taxable`.

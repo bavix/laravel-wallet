@@ -3,7 +3,8 @@
 namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
-use Bavix\Wallet\Interfaces\Taxing;
+use Bavix\Wallet\Interfaces\MinimalTaxable;
+use Bavix\Wallet\Interfaces\Taxable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Traits\HasWallet;
@@ -11,6 +12,16 @@ use function app;
 
 class WalletService
 {
+
+    /**
+     * @param Wallet $object
+     * @return int
+     */
+    public function decimalPlaces(Wallet $object): int
+    {
+        $decimalPlaces = $this->getWallet($object)->decimal_places ?: 2;
+        return 10 ** $decimalPlaces;
+    }
 
     /**
      * Consider the fee that the system will receive.
@@ -21,11 +32,25 @@ class WalletService
      */
     public function fee(Wallet $wallet, int $amount): int
     {
-        if ($wallet instanceof Taxing) {
-            return (int)($amount * $wallet->getFeePercent() / 100);
+        $result = 0;
+
+        if ($wallet instanceof Taxable) {
+            $result = (int) ($amount * $wallet->getFeePercent() / 100);
+
+            /**
+             * Added minimum commission condition
+             *
+             * @see https://github.com/bavix/laravel-wallet/issues/64#issuecomment-514483143
+             */
+            if ($wallet instanceof MinimalTaxable) {
+                $minimal = $wallet->getMinimalFee();
+                if ($result < $minimal) {
+                    $result = $wallet->getMinimalFee();
+                }
+            }
         }
 
-        return 0;
+        return $result;
     }
 
     /**
@@ -47,14 +72,20 @@ class WalletService
      */
     public function getWallet(Wallet $object): WalletModel
     {
-        if ($object instanceof WalletModel) {
-            return $object;
+        /**
+         * @var WalletModel $wallet
+         */
+        $wallet = $object;
+
+        if (!($object instanceof WalletModel)) {
+            /**
+             * @var HasWallet $object
+             */
+            $wallet = $object->wallet;
         }
 
-        /**
-         * @var HasWallet $object
-         */
-        return $object->wallet;
+        $wallet->exists or $wallet->save();
+        return $wallet;
     }
 
     /**
@@ -64,10 +95,9 @@ class WalletService
     public function getBalance(Wallet $object): int
     {
         $wallet = $this->getWallet($object);
-        $wallet->exists or $wallet->save();
         $proxy = app(ProxyService::class);
         if (!$proxy->has($wallet->getKey())) {
-            $proxy->set($wallet->getKey(), (int)$wallet->getOriginal('balance', 0));
+            $proxy->set($wallet->getKey(), (int) $wallet->getOriginal('balance', 0));
         }
 
         return $proxy[$wallet->getKey()];
@@ -79,6 +109,7 @@ class WalletService
      */
     public function refresh(WalletModel $wallet): bool
     {
+        $this->getBalance($wallet);
         $balance = $wallet->getAvailableBalance();
         $wallet->balance = $balance;
 

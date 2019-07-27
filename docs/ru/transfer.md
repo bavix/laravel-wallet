@@ -43,9 +43,9 @@ $last->balance; // int(0)
 Сделаем перевод от первого второму.
 
 ```php
-$first->transfer($second, 5); 
+$first->transfer($last, 5); 
 $first->balance; // int(95)
-$second->balance; // int(5)
+$last->balance; // int(5)
 ```
 
 ## Заставить перевести.
@@ -61,9 +61,9 @@ $last->balance; // int(0)
 Сделаем перевод от первого второму.
 
 ```php
-$first->forceTransfer($second, 500); 
+$first->forceTransfer($last, 500); 
 $first->balance; // int(-400)
-$second->balance; // int(500)
+$last->balance; // int(500)
 ```
 
 Просто работает.

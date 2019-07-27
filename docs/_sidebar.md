@@ -12,15 +12,25 @@
     - [Withdraw](withdraw)
     - [Transfer](transfer)
     - [Refresh balance](refresh)
+    - [Confirm](confirm)
+<!--    - [Exchange](exchange)-->
+    - [Withdraw taxing](taxing)
 
 - Purchases
 
     - [Payment](payment)
-    - [Cart](cart)
     - [Payment Free](pay-free)
     - [Refund](refund)
+    - [Gift](gift)
+    - [Cart](cart)
 
 - Multi Wallets
 
     - [New Wallet](new-wallet)
     - [Transfer](wallet-transfer)
+
+<!--- Currencies-->
+
+<!--    - [Rate Service](rate)-->
+<!--    - [Create Wallet](rate-wallet)-->
+<!--    - [Taxing](rate-taxing)-->

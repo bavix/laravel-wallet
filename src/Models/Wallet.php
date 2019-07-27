@@ -2,9 +2,13 @@
 
 namespace Bavix\Wallet\Models;
 
+use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Interfaces\Customer;
+use Bavix\Wallet\Interfaces\Exchangeable;
 use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Traits\CanConfirm;
+use Bavix\Wallet\Traits\CanExchange;
 use Bavix\Wallet\Traits\CanPayFloat;
 use Bavix\Wallet\Traits\HasGift;
 use Illuminate\Database\Eloquent\Model;
@@ -19,11 +23,14 @@ use function config;
  * @package Bavix\Wallet\Models
  * @property string $slug
  * @property int $balance
+ * @property int $decimal_places
  * @property \Bavix\Wallet\Interfaces\Wallet $holder
  */
-class Wallet extends Model implements Customer, WalletFloat
+class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchangeable
 {
 
+    use CanConfirm;
+    use CanExchange;
     use CanPayFloat;
     use HasGift;
 
@@ -37,6 +44,7 @@ class Wallet extends Model implements Customer, WalletFloat
         'slug',
         'description',
         'balance',
+        'decimal_places',
     ];
 
     /**
@@ -44,6 +52,7 @@ class Wallet extends Model implements Customer, WalletFloat
      */
     protected $casts = [
         'balance' => 'int',
+        'decimal_places' => 'int',
     ];
 
     /**

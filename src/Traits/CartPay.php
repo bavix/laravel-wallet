@@ -31,11 +31,12 @@ trait CartPay
         app(CommonService::class)
             ->verifyWithdraw($this, 0);
 
-        return DB::transaction(function () use ($cart) {
+        $self = $this;
+        return DB::transaction(static function() use ($self, $cart) {
             $results = [];
             foreach ($cart->getItems() as $product) {
                 $results[] = app(CommonService::class)->forceTransfer(
-                    $this,
+                    $self,
                     $product,
                     0,
                     $product->getMetaProduct(),
@@ -73,12 +74,13 @@ trait CartPay
             throw new ProductEnded(trans('wallet::errors.product_stock'));
         }
 
-        return DB::transaction(function () use ($cart, $force) {
+        $self = $this;
+        return DB::transaction(static function() use ($self, $cart, $force) {
             $results = [];
             foreach ($cart->getItems() as $product) {
                 if ($force) {
                     $results[] = app(CommonService::class)->forceTransfer(
-                        $this,
+                        $self,
                         $product,
                         $product->getAmountProduct(),
                         $product->getMetaProduct(),
@@ -89,7 +91,7 @@ trait CartPay
                 }
 
                 $results[] = app(CommonService::class)->transfer(
-                    $this,
+                    $self,
                     $product,
                     $product->getAmountProduct(),
                     $product->getMetaProduct(),
@@ -135,12 +137,13 @@ trait CartPay
      */
     public function refundCart(Cart $cart, bool $force = null, bool $gifts = null): bool
     {
-        return DB::transaction(function () use ($cart, $force, $gifts) {
+        $self = $this;
+        return DB::transaction(static function() use ($self, $cart, $force, $gifts) {
             $results = [];
-            $transfers = $cart->alreadyBuy($this, $gifts);
+            $transfers = $cart->alreadyBuy($self, $gifts);
             if (count($transfers) !== count($cart)) {
                 throw (new ModelNotFoundException())
-                    ->setModel($this->transfers()->getMorphClass());
+                    ->setModel($self->transfers()->getMorphClass());
             }
 
             foreach ($cart->getItems() as $key => $product) {

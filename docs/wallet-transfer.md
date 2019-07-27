@@ -36,19 +36,19 @@ Create new wallets for users.
 ```php
 $name = 'New Wallet';
 $firstWallet = $first->createWallet(compact('name'));
-$secondWallet = $second->createWallet(compact('name'));
+$lastWallet = $last->createWallet(compact('name'));
 
 $firstWallet->deposit(100);
 $firstWallet->balance; // int(100)
-$secondWallet->balance; // int(0)
+$lastWallet->balance; // int(0)
 ```
 
-The transfer will be from the first user to the second.
+The transfer will be from the first user to the last.
 
 ```php
-$firstWallet->transfer($secondWallet, 5); 
+$firstWallet->transfer($lastWallet, 5); 
 $firstWallet->balance; // int(95)
-$secondWallet->balance; // int(5)
+$lastWallet->balance; // int(5)
 ```
 
 It worked! 
@@ -65,9 +65,9 @@ $lastWallet->balance; // int(0)
 The transfer will be from the first user to the second.
 
 ```php
-$firstWallet->forceTransfer($secondWallet, 500); 
+$firstWallet->forceTransfer($lastWallet, 500); 
 $firstWallet->balance; // int(-400)
-$secondWallet->balance; // int(500)
+$lastWallet->balance; // int(500)
 ```
 
 It worked! 

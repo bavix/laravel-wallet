@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Command;
 use function config;
 
+/**
+ * Class RefreshBalance
+ * @package Bavix\Wallet\Commands
+ * @codeCoverageIgnore
+ */
 class RefreshBalance extends Command
 {
 
@@ -29,7 +34,7 @@ class RefreshBalance extends Command
      */
     public function handle(): void
     {
-        DB::transaction(function () {
+        DB::transaction(static function() {
             $wallet = config('wallet.wallet.table');
             $trans = config('wallet.transaction.table');
 
@@ -38,7 +43,7 @@ class RefreshBalance extends Command
                 ->where('confirmed', true)
                 ->groupBy('wallet_id');
 
-            $joinClause = function (JoinClause $join) use ($wallet) {
+            $joinClause = static function(JoinClause $join) use ($wallet) {
                 $join->on("$wallet.id", '=', 'b.wallet_id');
             };
 

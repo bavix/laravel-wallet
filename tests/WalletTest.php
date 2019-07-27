@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Test;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
+use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Test\Models\User;
 
 class WalletTest extends TestCase
@@ -31,6 +32,22 @@ class WalletTest extends TestCase
 
         $user->withdraw($user->balance);
         $this->assertEquals($user->balance, 0);
+
+        $this->assertEquals(
+            $user->transactions()
+                ->where(['type' => Transaction::TYPE_DEPOSIT])
+                ->count(),
+            3
+        );
+
+        $this->assertEquals(
+            $user->transactions()
+                ->where(['type' => Transaction::TYPE_WITHDRAW])
+                ->count(),
+            1
+        );
+        
+        $this->assertEquals($user->transactions()->count(), 4);
     }
 
     /**

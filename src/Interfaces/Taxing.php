@@ -2,18 +2,12 @@
 
 namespace Bavix\Wallet\Interfaces;
 
-interface Taxing
+/**
+ * Interface Taxing
+ * @package Bavix\Wallet\Interfaces
+ * @deprecated use Taxable
+ */
+interface Taxing extends Taxable
 {
 
-    /**
-     * Specify the percentage of the amount.
-     * For example, the product costs $100, the equivalent of 15%.
-     * That's $115.
-     *
-     * Minimum 0; Maximum 100
-     * Example: return 7.5; // 7.5%
-     *
-     * @return float
-     */
-    public function getFeePercent(): float;
 }
