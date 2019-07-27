@@ -3,6 +3,7 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Test\Models\Item;
 use Bavix\Wallet\Test\Models\UserMulti;
 
@@ -45,6 +46,12 @@ class MultiWalletGiftTest extends TestCase
         $this->assertEquals($first->balance, 1);
         $this->assertEquals($second->balance, 2);
         $this->assertEquals($transfer->status, Transfer::STATUS_GIFT);
+
+        $this->assertEquals($transfer->withdraw->wallet->holder->id, $first->id);
+        $this->assertInstanceOf(UserMulti::class, $transfer->withdraw->wallet->holder);
+
+        $this->assertEquals($wallet->id, $transfer->withdraw->wallet->id);
+        $this->assertInstanceOf(Wallet::class, $transfer->withdraw->wallet);
 
         $this->assertEquals($second->id, $transfer->from->holder_id);
         $this->assertInstanceOf(UserMulti::class, $transfer->from->holder);
