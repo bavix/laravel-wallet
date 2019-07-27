@@ -13,6 +13,41 @@ class BalanceTest extends TestCase
 
     /**
      * @return void
+     */
+    public function testDepositWalletExists(): void
+    {
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = factory(Buyer::class)->create();
+        $this->assertFalse($buyer->relationLoaded('wallet'));
+        $buyer->deposit(1);
+
+        $this->assertTrue($buyer->relationLoaded('wallet'));
+        $this->assertTrue($buyer->wallet->exists);
+    }
+
+    /**
+     * @return void
+     */
+    public function testWithdrawWalletExists(): void
+    {
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = factory(Buyer::class)->create();
+        $this->assertFalse($buyer->relationLoaded('wallet'));
+        $this->assertEquals($buyer->balance, 0);
+        $buyer->forceWithdraw(1);
+
+        $this->assertEquals($buyer->balance, -1);
+        $this->assertTrue($buyer->relationLoaded('wallet'));
+        $this->assertTrue($buyer->wallet->exists);
+        $this->assertLessThan(0, $buyer->balance);
+    }
+
+    /**
+     * @return void
      * @throws
      */
     public function testSimple(): void
@@ -21,9 +56,13 @@ class BalanceTest extends TestCase
          * @var Buyer $buyer
          */
         $buyer = factory(Buyer::class)->create();
+
+        $this->assertFalse($buyer->relationLoaded('wallet'));
         $wallet = $buyer->wallet;
 
+        $this->assertFalse($wallet->exists);
         $this->assertEquals($wallet->balance, 0);
+        $this->assertTrue($wallet->exists);
 
         $wallet->deposit(1000);
         $this->assertEquals($wallet->balance, 1000);
