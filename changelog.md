@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New status `exchange`.
 
 ### Fixed
-- Wallet is not always created.
+- Wallet is not always created. #63 #51 
 - Migration mariadb, pgsql, mysql. 
 - Fix documentation.
 - Optimize code, fasted 1.1x.
