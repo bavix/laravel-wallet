@@ -6,11 +6,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Add exchange method's
-- Add confirm method's
-- Add method `hasWallet`
-- Add currency service (create usd, eur,...)
-- Add `MinimalTaxable`
+- Add exchange method's.
+- Add confirm method's.
+- Add method `hasWallet`, sometimes required to verify wallet existence.
+- Add currency service (create usd, eur,...).
+- Add `MinimalTaxable`.
+- Add `Taxable`.
+- New exception's.
+- Add decimal places (replacement ratio).
+
+### Changed
+- Updated dependencies (composer.json).
+- New status `exchange`.
+
+### Fixed
+- Wallet is not always created.
+- Migration mariadb, pgsql, mysql. 
+- Fix documentation.
+- Optimize code, fasted 1.1x.
+
+### Deprecated
+- class `Taxing`.
+
+### Remove
+- The ability to change the ratio  `coefficient`.
+- Removed private and protected methods, the traits turned out to be more clean.
 
 ## [3.0.4] - 2019-07-22
 ### Fixed
