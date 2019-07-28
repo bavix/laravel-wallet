@@ -30,6 +30,12 @@ laravel-wallet - Easy work with virtual wallet.
 
 To perform the migration, you will be [helped by the instruction](https://bavix.github.io/laravel-wallet/#/upgrade-guide).
 
+### Extensions
+
+| Extension | Description | 
+| ----- | ----- | 
+| [Swap](https://github.com/bavix/laravel-wallet-swap) | Addition to the laravel-wallet library for quick setting of exchange rates | 
+
 ### Usage
 Add the `HasWallet` trait and `Wallet` interface to model.
 ```php
