@@ -23,6 +23,10 @@
     - [Refund](refund)
     - [Gift](gift)
     - [Cart](cart)
+    
+- Additions
+
+    - [Wallet Swap](laravel-wallet-swap)
 
 - Multi Wallets
 
