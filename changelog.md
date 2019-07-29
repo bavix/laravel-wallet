@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.1] - 2019-07-29
+### Added 
+- Add getCurrencyAttribute
+- New unit-test's
+- Add docker for php7.4 (need to develop)
+
+### Changed
+- Travis CI
+- Update README.md
+
+### Removed
+- Deprecated interface Taxing
+
 ## [3.1.0] - 2019-07-27
 ### Added
 - Add exchange method's.
@@ -341,7 +354,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/3.1.0...HEAD
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/3.1.1...HEAD
+[3.1.1]: https://github.com/bavix/laravel-wallet/compare/3.1.0...3.1.1
 [3.1.0]: https://github.com/bavix/laravel-wallet/compare/3.0.4...3.1.0
 [3.0.4]: https://github.com/bavix/laravel-wallet/compare/3.0.3...3.0.4
 [3.0.3]: https://github.com/bavix/laravel-wallet/compare/3.0.2...3.0.3
