@@ -34,6 +34,9 @@
     "phpstan/phpstan": "^0.11",
     "phpunit/phpunit": "^7.5|^8.2"
   },
+  "suggest": {
+    "bavix/laravel-wallet-swap": "Addition to the laravel-wallet library for quick setting of exchange rates"
+  },
   "autoload": {
     "psr-4": {
       "Bavix\\Wallet\\": "src/"
