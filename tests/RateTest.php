@@ -19,7 +19,12 @@ class RateTest extends TestCase
          */
         $user = factory(UserMulti::class)->create();
         $usd = $user->createWallet(['name' => 'Dollar USA', 'slug' => 'my-usd']);
+        $this->assertEquals($usd->slug, 'my-usd');
+        $this->assertEquals($usd->currency, 'USD');
+
         $rub = $user->createWallet(['name' => 'RUB']);
+        $this->assertEquals($rub->slug, 'rub');
+        $this->assertEquals($rub->currency, 'RUB');
 
         $rate = app(Rateable::class)
             ->withAmount(1000)
@@ -39,7 +44,12 @@ class RateTest extends TestCase
          */
         $user = factory(UserMulti::class)->create();
         $usd = $user->createWallet(['name' => 'USD']);
+        $this->assertEquals($usd->slug, 'usd');
+        $this->assertEquals($usd->currency, 'USD');
+
         $rub = $user->createWallet(['name' => 'RUR', 'slug' => 'my-rub']);
+        $this->assertEquals($rub->slug, 'my-rub');
+        $this->assertEquals($rub->currency, 'RUB');
 
         $rate = app(ExchangeService::class)
             ->rate($usd, $rub);
