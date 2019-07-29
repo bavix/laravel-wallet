@@ -35,7 +35,7 @@ class WalletService
         $result = 0;
 
         if ($wallet instanceof Taxable) {
-            $result = (int)($amount * $wallet->getFeePercent() / 100);
+            $result = (int) ($amount * $wallet->getFeePercent() / 100);
 
             /**
              * Added minimum commission condition
@@ -97,7 +97,7 @@ class WalletService
         $wallet = $this->getWallet($object);
         $proxy = app(ProxyService::class);
         if (!$proxy->has($wallet->getKey())) {
-            $proxy->set($wallet->getKey(), (int)$wallet->getOriginal('balance', 0));
+            $proxy->set($wallet->getKey(), (int) $wallet->getOriginal('balance', 0));
         }
 
         return $proxy[$wallet->getKey()];

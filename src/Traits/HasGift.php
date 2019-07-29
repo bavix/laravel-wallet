@@ -61,7 +61,7 @@ trait HasGift
          * I think it is wrong to make the "assemble" method public.
          * That's why I address him like this!
          */
-        return DB::transaction(static function () use ($santa, $to, $product, $force) {
+        return DB::transaction(static function() use ($santa, $to, $product, $force) {
             $amount = $product->getAmountProduct();
             $meta = $product->getMetaProduct();
             $fee = app(WalletService::class)
