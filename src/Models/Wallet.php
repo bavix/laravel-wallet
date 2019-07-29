@@ -25,6 +25,7 @@ use function config;
  * @property int $balance
  * @property int $decimal_places
  * @property \Bavix\Wallet\Interfaces\Wallet $holder
+ * @property-read string $currency
  */
 class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchangeable
 {
@@ -109,6 +110,15 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     public function holder(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrencyAttribute(): string
+    {
+        $currencies = config('wallet.currencies', []);
+        return $currencies[$this->slug] ?? Str::upper($this->slug);
     }
 
 }

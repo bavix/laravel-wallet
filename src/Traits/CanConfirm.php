@@ -20,7 +20,7 @@ trait CanConfirm
     public function confirm(Transaction $transaction): bool
     {
         $self = $this;
-        return DB::transaction(static function() use ($self, $transaction) {
+        return DB::transaction(static function () use ($self, $transaction) {
             $wallet = app(WalletService::class)
                 ->getWallet($self);
 
@@ -63,7 +63,7 @@ trait CanConfirm
     public function forceConfirm(Transaction $transaction): bool
     {
         $self = $this;
-        return DB::transaction(static function() use ($self, $transaction) {
+        return DB::transaction(static function () use ($self, $transaction) {
 
             $wallet = app(WalletService::class)
                 ->getWallet($self);

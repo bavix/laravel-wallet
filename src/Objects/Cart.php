@@ -6,9 +6,9 @@ use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Models\Transfer;
 use Countable;
+use function array_unique;
 use function count;
 use function get_class;
-use function array_unique;
 
 class Cart implements Countable
 {

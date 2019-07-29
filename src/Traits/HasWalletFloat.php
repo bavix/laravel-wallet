@@ -5,9 +5,7 @@ namespace Bavix\Wallet\Traits;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\WalletService;
-use function config;
 
 /**
  * Trait HasWalletFloat

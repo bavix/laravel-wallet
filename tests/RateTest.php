@@ -18,7 +18,7 @@ class RateTest extends TestCase
          * @var UserMulti $user
          */
         $user = factory(UserMulti::class)->create();
-        $usd = $user->createWallet(['name' => 'USD']);
+        $usd = $user->createWallet(['name' => 'Dollar USA', 'slug' => 'my-usd']);
         $rub = $user->createWallet(['name' => 'RUB']);
 
         $rate = app(Rateable::class)
@@ -39,7 +39,7 @@ class RateTest extends TestCase
          */
         $user = factory(UserMulti::class)->create();
         $usd = $user->createWallet(['name' => 'USD']);
-        $rub = $user->createWallet(['name' => 'RUB']);
+        $rub = $user->createWallet(['name' => 'RUR', 'slug' => 'my-rub']);
 
         $rate = app(ExchangeService::class)
             ->rate($usd, $rub);

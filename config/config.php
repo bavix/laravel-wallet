@@ -1,26 +1,68 @@
 <?php
 
+use Bavix\Wallet\Services\ExchangeService;
+use Bavix\Wallet\Services\CommonService;
+use Bavix\Wallet\Services\ProxyService;
+use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Models\Wallet;
+use Bavix\Wallet\Simple\Rate;
+
 return [
+    /**
+     * The parameter is used for fast packet overload.
+     * You do not need to search for the desired class by code, the library will do it itself.
+     */
     'package' => [
-        'rateable' => \Bavix\Wallet\Simple\Rate::class,
+        'rateable' => Rate::class,
     ],
+
+    /**
+     * Sometimes a slug may not match the currency and you need the ability to add an exception.
+     * The main thing is that there are not many exceptions)
+     *
+     * Syntax:
+     *  'slug' => 'currency'
+     *
+     * @example
+     *  'my-usd' => 'USD'
+     */
+    'currencies' => [],
+
+    /**
+     * Services are the main core of the library and sometimes they need to be improved.
+     * This configuration will help you to quickly customize the library.
+     */
     'services' => [
-        'exchange' => \Bavix\Wallet\Services\ExchangeService::class,
-        'common' => \Bavix\Wallet\Services\CommonService::class,
-        'proxy' => \Bavix\Wallet\Services\ProxyService::class,
-        'wallet' => \Bavix\Wallet\Services\WalletService::class,
+        'exchange' => ExchangeService::class,
+        'common' => CommonService::class,
+        'proxy' => ProxyService::class,
+        'wallet' => WalletService::class,
     ],
+
+    /**
+     * Transaction model configuration.
+     */
     'transaction' => [
         'table' => 'transactions',
-        'model' => \Bavix\Wallet\Models\Transaction::class,
+        'model' => Transaction::class,
     ],
+
+    /**
+     * Transfer model configuration.
+     */
     'transfer' => [
         'table' => 'transfers',
-        'model' => \Bavix\Wallet\Models\Transfer::class,
+        'model' => Transfer::class,
     ],
+
+    /**
+     * Wallet model configuration.
+     */
     'wallet' => [
         'table' => 'wallets',
-        'model' => \Bavix\Wallet\Models\Wallet::class,
+        'model' => Wallet::class,
         'default' => [
             'name' => 'Default Wallet',
             'slug' => 'default',

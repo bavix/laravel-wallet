@@ -54,6 +54,15 @@ class TestCase extends OrchestraTestCase
      */
     protected function getEnvironmentSetUp($app): void
     {
+        // wallet
+        $app['config']->set('wallet.currencies', [
+            'my-usd' => 'USD',
+            'my-eur' => 'EUR',
+            'my-rub' => 'RUB',
+            'def-curr' => 'EUR',
+        ]);
+
+        // database
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
             'driver' => 'sqlite',

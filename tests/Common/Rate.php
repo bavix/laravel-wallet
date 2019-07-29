@@ -3,6 +3,7 @@
 namespace Bavix\Wallet\Test\Common;
 
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Services\WalletService;
 use Illuminate\Support\Arr;
 
 class Rate extends \Bavix\Wallet\Simple\Rate
@@ -12,8 +13,8 @@ class Rate extends \Bavix\Wallet\Simple\Rate
      * @var array
      */
     protected $rates = [
-        'usd' => [
-            'rub' => 67.61,
+        'USD' => [
+            'RUB' => 67.61,
         ],
     ];
 
@@ -37,12 +38,15 @@ class Rate extends \Bavix\Wallet\Simple\Rate
      */
     protected function rate(Wallet $wallet): float
     {
+        $from = app(WalletService::class)->getWallet($this->withCurrency);
+        $to = app(WalletService::class)->getWallet($wallet);
+
         /**
          * @var \Bavix\Wallet\Models\Wallet $wallet
          */
         return Arr::get(
-            Arr::get($this->rates, $this->withCurrency->slug, []),
-            $wallet->slug,
+            Arr::get($this->rates, $from->currency, []),
+            $to->currency,
             1
         );
     }
