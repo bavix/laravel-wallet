@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Test;
 use Bavix\Wallet\Interfaces\Rateable;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Test\Models\UserMulti;
+use Illuminate\Support\Str;
 
 class RateTest extends TestCase
 {
@@ -29,6 +30,12 @@ class RateTest extends TestCase
         $this->assertEquals($rub->currency, 'RUB');
         $this->assertEquals($rub->holder_id, $user->id);
         $this->assertInstanceOf($rub->holder_type, $user);
+
+        $superWallet = $user->createWallet(['name' => 'Super Wallet']);
+        $this->assertEquals($superWallet->slug, Str::slug('Super Wallet'));
+        $this->assertEquals($superWallet->currency, Str::upper(Str::slug('Super Wallet')));
+        $this->assertEquals($superWallet->holder_id, $user->id);
+        $this->assertInstanceOf($superWallet->holder_type, $user);
 
         $rate = app(Rateable::class)
             ->withAmount(1000)
