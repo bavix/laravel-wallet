@@ -21,10 +21,14 @@ class RateTest extends TestCase
         $usd = $user->createWallet(['name' => 'Dollar USA', 'slug' => 'my-usd']);
         $this->assertEquals($usd->slug, 'my-usd');
         $this->assertEquals($usd->currency, 'USD');
+        $this->assertEquals($usd->holder_id, $user->id);
+        $this->assertInstanceOf($usd->holder_type, $user);
 
         $rub = $user->createWallet(['name' => 'RUB']);
         $this->assertEquals($rub->slug, 'rub');
         $this->assertEquals($rub->currency, 'RUB');
+        $this->assertEquals($rub->holder_id, $user->id);
+        $this->assertInstanceOf($rub->holder_type, $user);
 
         $rate = app(Rateable::class)
             ->withAmount(1000)
@@ -46,10 +50,14 @@ class RateTest extends TestCase
         $usd = $user->createWallet(['name' => 'USD']);
         $this->assertEquals($usd->slug, 'usd');
         $this->assertEquals($usd->currency, 'USD');
+        $this->assertEquals($usd->holder_id, $user->id);
+        $this->assertInstanceOf($usd->holder_type, $user);
 
         $rub = $user->createWallet(['name' => 'RUR', 'slug' => 'my-rub']);
         $this->assertEquals($rub->slug, 'my-rub');
         $this->assertEquals($rub->currency, 'RUB');
+        $this->assertEquals($rub->holder_id, $user->id);
+        $this->assertInstanceOf($rub->holder_type, $user);
 
         $rate = app(ExchangeService::class)
             ->rate($usd, $rub);
