@@ -12,4 +12,4 @@ The following versions of Laravel are supported:
 - Laravel 5.6
 - Laravel 5.7
 - Laravel 5.8
-- Laravel 5.9
+- Laravel 6.0
