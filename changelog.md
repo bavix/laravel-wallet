@@ -65,7 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.0.2] - 2019-06-18
 ### Added
-- Add support laravel 5.9
+- Add support laravel 5.9 (new name 6.0)
 - Add support mariadb: 5.5, 10.0+
 - Add support percona: 5.6
 - Add support mysql: 5.6
