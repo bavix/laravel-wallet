@@ -219,6 +219,32 @@ class ProductTest extends TestCase
         $this->assertEquals($product->balance, 0);
     }
 
+    public function testFreePay(): void
+    {
+        /**
+         * @var Buyer $buyer
+         * @var Item $product
+         */
+        $buyer = factory(Buyer::class)->create();
+        $product = factory(Item::class)->create([
+            'quantity' => 1,
+        ]);
+
+        $buyer->forceWithdraw(1000);
+        $this->assertEquals($buyer->balance, -1000);
+
+        $transfer = $buyer->payFree($product);
+        $this->assertEquals($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
+        $this->assertEquals($transfer->withdraw->type, Transaction::TYPE_WITHDRAW);
+
+        $this->assertEquals($buyer->balance, -1000);
+        $this->assertEquals($product->balance, 0);
+
+        $buyer->refund($product);
+        $this->assertEquals($buyer->balance, -1000);
+        $this->assertEquals($product->balance, 0);
+    }
+
     /**
      * @return void
      */

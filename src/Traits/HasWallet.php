@@ -137,10 +137,18 @@ trait HasWallet
      * Checks if you can withdraw funds
      *
      * @param int $amount
+     * @param bool $allowZero
      * @return bool
      */
-    public function canWithdraw(int $amount): bool
+    public function canWithdraw(int $amount, bool $allowZero = null): bool
     {
+        /**
+         * Allow to buy for free with a negative balance
+         */
+        if ($allowZero && $amount === 0) {
+            return true;
+        }
+
         return $this->balance >= $amount;
     }
 

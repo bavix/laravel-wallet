@@ -30,6 +30,22 @@ class BalanceTest extends TestCase
     /**
      * @return void
      */
+    public function testCanWithdraw(): void
+    {
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = factory(Buyer::class)->create();
+        $this->assertTrue($buyer->canWithdraw(0));
+
+        $buyer->forceWithdraw(1);
+        $this->assertFalse($buyer->canWithdraw(0));
+        $this->assertTrue($buyer->canWithdraw(0, true));
+    }
+
+    /**
+     * @return void
+     */
     public function testWithdrawWalletExists(): void
     {
         /**

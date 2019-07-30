@@ -120,11 +120,12 @@ class CommonService
     /**
      * @param Wallet $wallet
      * @param int $amount
+     * @param bool $allowZero
      * @return void
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      */
-    public function verifyWithdraw(Wallet $wallet, int $amount): void
+    public function verifyWithdraw(Wallet $wallet, int $amount, bool $allowZero = null): void
     {
         /**
          * @var HasWallet $wallet
@@ -133,7 +134,7 @@ class CommonService
             throw new BalanceIsEmpty(trans('wallet::errors.wallet_empty'));
         }
 
-        if (!$wallet->canWithdraw($amount)) {
+        if (!$wallet->canWithdraw($amount, $allowZero)) {
             throw new InsufficientFunds(trans('wallet::errors.insufficient_funds'));
         }
     }

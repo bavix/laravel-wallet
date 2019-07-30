@@ -29,7 +29,7 @@ trait CartPay
         }
 
         app(CommonService::class)
-            ->verifyWithdraw($this, 0);
+            ->verifyWithdraw($this, 0, true);
 
         $self = $this;
         return DB::transaction(static function() use ($self, $cart) {

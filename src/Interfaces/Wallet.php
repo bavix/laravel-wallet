@@ -61,9 +61,10 @@ interface Wallet
 
     /**
      * @param int $amount
+     * @param bool $allowZero
      * @return bool
      */
-    public function canWithdraw(int $amount): bool;
+    public function canWithdraw(int $amount, bool $allowZero = null): bool;
 
     /**
      * @return int
