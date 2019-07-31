@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.3] - 2019-07-31
+### Added
+- Add support SQLite on command `RefreshBalance` 
+- Add support laravel 6.0
+- Add support php 7.4
+- Add unit-test's
+
 ## [3.1.2] - 2019-07-30
 ### Added
 - Allow to free buy with a negative balance
