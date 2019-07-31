@@ -6,6 +6,8 @@ use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Test\Models\Buyer;
+use Bavix\Wallet\Test\Models\UserMulti;
+use Illuminate\Support\Facades\DB;
 use function app;
 
 class BalanceTest extends TestCase
@@ -101,6 +103,49 @@ class BalanceTest extends TestCase
 
         $wallet->deposit(1);
         $this->assertEquals($wallet->balance, 1001);
+    }
+
+    /**
+     * @throws
+     */
+    public function testArtisanRefresh(): void
+    {
+        /**
+         * @var UserMulti $user
+         */
+        $user = factory(UserMulti::class)->create();
+        $wallets = \range('a', 'z');
+        $sums = [];
+        $ids = [];
+        foreach ($wallets as $name) {
+            $wallet = $user->createWallet(['name' => $name]);
+            $ids[] = $wallet->id;
+            $sums[$name] = 0;
+            $operations = \random_int(1, 10);
+            for ($i = 0; $i < $operations; $i++) {
+                $amount = \random_int(10, 10000);
+                $confirmed = (bool)\random_int(0, 1);
+                $deposit = $wallet->deposit($amount, null, $confirmed);
+
+                if ($confirmed) {
+                    $sums[$name] += $amount;
+                }
+
+                $this->assertEquals($amount, $deposit->amount);
+                $this->assertEquals($confirmed, $deposit->confirmed);
+                $this->assertEquals($sums[$name], $wallet->balance);
+            }
+        }
+
+        // fresh balance
+        app(ProxyService::class)->fresh();
+        DB::table(config('wallet.wallet.table'))
+            ->update(['balance' => 0]);
+
+        $this->artisan('wallet:refresh');
+        Wallet::query()->whereKey($ids)->each(function (Wallet $wallet) use ($sums) {
+            $this->assertEquals($sums[$wallet->name], $wallet->balance);
+        });
     }
 
     /**
