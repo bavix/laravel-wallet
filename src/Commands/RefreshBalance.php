@@ -13,6 +13,7 @@ use function config;
 /**
  * Class RefreshBalance
  * @package Bavix\Wallet\Commands
+ * @codeCoverageIgnore 
  */
 class RefreshBalance extends Command
 {
