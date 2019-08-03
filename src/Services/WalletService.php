@@ -68,9 +68,10 @@ class WalletService
 
     /**
      * @param Wallet $object
+     * @param bool $autoSave
      * @return WalletModel
      */
-    public function getWallet(Wallet $object): WalletModel
+    public function getWallet(Wallet $object, bool $autoSave = true): WalletModel
     {
         /**
          * @var WalletModel $wallet
@@ -84,7 +85,10 @@ class WalletService
             $wallet = $object->wallet;
         }
 
-        $wallet->exists or $wallet->save();
+        if ($autoSave) {
+            $wallet->exists or $wallet->save();
+        }
+
         return $wallet;
     }
 
