@@ -197,7 +197,7 @@ trait HasWallet
     public function transfers(): MorphMany
     {
         return app(WalletService::class)
-            ->getWallet($this)
+            ->getWallet($this, false)
             ->morphMany(config('wallet.transfer.model'), 'from');
     }
 
