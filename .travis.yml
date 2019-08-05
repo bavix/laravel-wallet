@@ -6,6 +6,9 @@ php:
 - '7.4snapshot'
 - 'nightly'
 
+services:
+  - memcached
+
 matrix:
   allow_failures:
     - php: '7.4snapshot'
