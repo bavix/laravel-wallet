@@ -7,6 +7,7 @@ use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ExchangeService;
+use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\WalletService;
 use Illuminate\Support\Facades\DB;
 
@@ -49,26 +50,28 @@ trait CanExchange
          */
         $from = app(WalletService::class)->getWallet($this);
 
-        return DB::transaction(static function() use ($from, $to, $amount, $meta) {
-            $rate = app(ExchangeService::class)->rate($from, $to);
-            $fee = app(WalletService::class)->fee($to, $amount);
+        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($from, $to, $amount, $meta) {
+            return DB::transaction(static function () use ($from, $to, $amount, $meta) {
+                $rate = app(ExchangeService::class)->rate($from, $to);
+                $fee = app(WalletService::class)->fee($to, $amount);
 
-            $withdraw = app(CommonService::class)
-                ->forceWithdraw($from, $amount + $fee, $meta);
+                $withdraw = app(CommonService::class)
+                    ->forceWithdraw($from, $amount + $fee, $meta);
 
-            $deposit = app(CommonService::class)
-                ->deposit($to, $amount * $rate, $meta);
+                $deposit = app(CommonService::class)
+                    ->deposit($to, $amount * $rate, $meta);
 
-            $transfers = app(CommonService::class)->multiBrings([
-                (new Bring())
-                    ->setStatus(Transfer::STATUS_EXCHANGE)
-                    ->setDeposit($deposit)
-                    ->setWithdraw($withdraw)
-                    ->setFrom($from)
-                    ->setTo($to)
-            ]);
+                $transfers = app(CommonService::class)->multiBrings([
+                    (new Bring())
+                        ->setStatus(Transfer::STATUS_EXCHANGE)
+                        ->setDeposit($deposit)
+                        ->setWithdraw($withdraw)
+                        ->setFrom($from)
+                        ->setTo($to)
+                ]);
 
-            return current($transfers);
+                return current($transfers);
+            });
         });
     }
 

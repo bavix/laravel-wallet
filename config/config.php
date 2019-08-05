@@ -4,6 +4,7 @@ use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
@@ -16,6 +17,13 @@ return [
      */
     'package' => [
         'rateable' => Rate::class,
+    ],
+
+    /**
+     * Lock settings for highload projects
+     */
+    'lock' => [
+        'seconds' => 1,
     ],
 
     /**
@@ -39,6 +47,7 @@ return [
         'common' => CommonService::class,
         'proxy' => ProxyService::class,
         'wallet' => WalletService::class,
+        'lock' => LockService::class,
     ],
 
     /**

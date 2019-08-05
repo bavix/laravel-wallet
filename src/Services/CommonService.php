@@ -28,8 +28,10 @@ class CommonService
      */
     public function transfer(Wallet $from, Wallet $to, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
-        $this->verifyWithdraw($from, $amount);
-        return $this->forceTransfer($from, $to, $amount, $meta, $status);
+        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($from, $to, $amount, $meta, $status) {
+            $this->verifyWithdraw($from, $amount);
+            return $this->forceTransfer($from, $to, $amount, $meta, $status);
+        });
     }
 
     /**
@@ -42,23 +44,25 @@ class CommonService
      */
     public function forceTransfer(Wallet $from, Wallet $to, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
-        $fee = app(WalletService::class)->fee($to, $amount);
-        $withdraw = $this->forceWithdraw($from, $amount + $fee, $meta);
-        $deposit = $this->deposit($to, $amount, $meta);
+        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($from, $to, $amount, $meta, $status) {
+            $fee = app(WalletService::class)->fee($to, $amount);
+            $withdraw = $this->forceWithdraw($from, $amount + $fee, $meta);
+            $deposit = $this->deposit($to, $amount, $meta);
 
-        $from = app(WalletService::class)
-            ->getWallet($from);
+            $from = app(WalletService::class)
+                ->getWallet($from);
 
-        $transfers = $this->multiBrings([
-            (new Bring())
-                ->setStatus($status)
-                ->setDeposit($deposit)
-                ->setWithdraw($withdraw)
-                ->setFrom($from)
-                ->setTo($to)
-        ]);
+            $transfers = $this->multiBrings([
+                (new Bring())
+                    ->setStatus($status)
+                    ->setDeposit($deposit)
+                    ->setWithdraw($withdraw)
+                    ->setFrom($from)
+                    ->setTo($to)
+            ]);
 
-        return current($transfers);
+            return current($transfers);
+        });
     }
 
     /**
@@ -70,23 +74,25 @@ class CommonService
      */
     public function forceWithdraw(Wallet $wallet, int $amount, ?array $meta, bool $confirmed = true): Transaction
     {
-        $walletService = app(WalletService::class);
-        $walletService->checkAmount($amount);
+        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($wallet, $amount, $meta, $confirmed) {
+            $walletService = app(WalletService::class);
+            $walletService->checkAmount($amount);
 
-        /**
-         * @var WalletModel $wallet
-         */
-        $wallet = $walletService->getWallet($wallet);
+            /**
+             * @var WalletModel $wallet
+             */
+            $wallet = $walletService->getWallet($wallet);
 
-        $transactions = $this->multiOperation($wallet, [
-            (new Operation())
-                ->setType(Transaction::TYPE_WITHDRAW)
-                ->setConfirmed($confirmed)
-                ->setAmount(-$amount)
-                ->setMeta($meta)
-        ]);
+            $transactions = $this->multiOperation($wallet, [
+                (new Operation())
+                    ->setType(Transaction::TYPE_WITHDRAW)
+                    ->setConfirmed($confirmed)
+                    ->setAmount(-$amount)
+                    ->setMeta($meta)
+            ]);
 
-        return current($transactions);
+            return current($transactions);
+        });
     }
 
     /**
@@ -98,23 +104,25 @@ class CommonService
      */
     public function deposit(Wallet $wallet, int $amount, ?array $meta, bool $confirmed = true): Transaction
     {
-        $walletService = app(WalletService::class);
-        $walletService->checkAmount($amount);
+        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($wallet, $amount, $meta, $confirmed) {
+            $walletService = app(WalletService::class);
+            $walletService->checkAmount($amount);
 
-        /**
-         * @var WalletModel $wallet
-         */
-        $wallet = $walletService->getWallet($wallet);
+            /**
+             * @var WalletModel $wallet
+             */
+            $wallet = $walletService->getWallet($wallet);
 
-        $transactions = $this->multiOperation($wallet, [
-            (new Operation())
-                ->setType(Transaction::TYPE_DEPOSIT)
-                ->setConfirmed($confirmed)
-                ->setAmount($amount)
-                ->setMeta($meta)
-        ]);
+            $transactions = $this->multiOperation($wallet, [
+                (new Operation())
+                    ->setType(Transaction::TYPE_DEPOSIT)
+                    ->setConfirmed($confirmed)
+                    ->setAmount($amount)
+                    ->setMeta($meta)
+            ]);
 
-        return current($transactions);
+            return current($transactions);
+        });
     }
 
     /**
@@ -148,20 +156,22 @@ class CommonService
      */
     public function multiOperation(Wallet $self, array $operations): array
     {
-        $amount = 0;
-        $objects = [];
-        foreach ($operations as $operation) {
-            if ($operation->isConfirmed()) {
-                $amount += $operation->getAmount();
+        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($self, $operations) {
+            $amount = 0;
+            $objects = [];
+            foreach ($operations as $operation) {
+                if ($operation->isConfirmed()) {
+                    $amount += $operation->getAmount();
+                }
+
+                $objects[] = $operation
+                    ->setWallet($self)
+                    ->create();
             }
 
-            $objects[] = $operation
-                ->setWallet($self)
-                ->create();
-        }
-
-        $this->addBalance($self, $amount);
-        return $objects;
+            $this->addBalance($self, $amount);
+            return $objects;
+        });
     }
 
     /**
@@ -173,9 +183,11 @@ class CommonService
      */
     public function assemble(array $brings): array
     {
-        $self = $this;
-        return DB::transaction(static function() use ($self, $brings) {
-            return $self->multiBrings($brings);
+        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($brings) {
+            $self = $this;
+            return DB::transaction(static function () use ($self, $brings) {
+                return $self->multiBrings($brings);
+            });
         });
     }
 
@@ -187,12 +199,14 @@ class CommonService
      */
     public function multiBrings(array $brings): array
     {
-        $objects = [];
-        foreach ($brings as $bring) {
-            $objects[] = $bring->create();
-        }
+        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($brings) {
+            $objects = [];
+            foreach ($brings as $bring) {
+                $objects[] = $bring->create();
+            }
 
-        return $objects;
+            return $objects;
+        });
     }
 
     /**
@@ -203,20 +217,22 @@ class CommonService
      */
     public function addBalance(Wallet $wallet, int $amount): bool
     {
-        /**
-         * @var ProxyService $proxy
-         * @var WalletModel $wallet
-         */
-        $proxy = app(ProxyService::class);
-        $balance = $wallet->balance + $amount;
-        if ($proxy->has($wallet->getKey())) {
-            $balance = $proxy->get($wallet->getKey()) + $amount;
-        }
+        return app(LockService::class)->lock($this, __FUNCTION__, static function () use ($wallet, $amount) {
+            /**
+             * @var ProxyService $proxy
+             * @var WalletModel $wallet
+             */
+            $proxy = app(ProxyService::class);
+            $balance = $wallet->balance + $amount;
+            if ($proxy->has($wallet->getKey())) {
+                $balance = $proxy->get($wallet->getKey()) + $amount;
+            }
 
-        $result = $wallet->update(compact('balance'));
-        $proxy->set($wallet->getKey(), $balance);
+            $result = $wallet->update(compact('balance'));
+            $proxy->set($wallet->getKey(), $balance);
 
-        return $result;
+            return $result;
+        });
     }
 
 }

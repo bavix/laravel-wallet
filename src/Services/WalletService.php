@@ -113,14 +113,16 @@ class WalletService
      */
     public function refresh(WalletModel $wallet): bool
     {
-        $this->getBalance($wallet);
-        $balance = $wallet->getAvailableBalance();
-        $wallet->balance = $balance;
+        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($wallet) {
+            $this->getBalance($wallet);
+            $balance = $wallet->getAvailableBalance();
+            $wallet->balance = $balance;
 
-        $proxy = app(ProxyService::class);
-        $proxy->set($wallet->getKey(), $balance);
+            $proxy = app(ProxyService::class);
+            $proxy->set($wallet->getKey(), $balance);
 
-        return $wallet->save();
+            return $wallet->save();
+        });
     }
 
 }
