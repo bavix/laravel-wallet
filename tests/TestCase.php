@@ -62,19 +62,18 @@ class TestCase extends OrchestraTestCase
             'def-curr' => 'EUR',
         ]);
 
-        if (extension_loaded('memcached')) {
-            $app['config']->set('cache.default', 'memcached');
-            $app['config']->set('cache.stores.memcached', [
-                'driver' => 'memcached',
-                'servers' => [
-                    [
-                        'host' => '127.0.0.1',
-                        'port' => 11211,
-                        'weight' => 100,
-                    ],
+        $app['config']->set('wallet.lock.enabled', extension_loaded('memcached'));
+        $app['config']->set('cache.default', 'memcached');
+        $app['config']->set('cache.stores.memcached', [
+            'driver' => 'memcached',
+            'servers' => [
+                [
+                    'host' => '127.0.0.1',
+                    'port' => 11211,
+                    'weight' => 100,
                 ],
-            ]);
-        }
+            ],
+        ]);
 
         // database
         $app['config']->set('database.default', 'testbench');

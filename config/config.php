@@ -23,6 +23,7 @@ return [
      * Lock settings for highload projects
      */
     'lock' => [
+        'enabled' => false,
         'seconds' => 1,
     ],
 

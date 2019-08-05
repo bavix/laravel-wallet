@@ -47,8 +47,9 @@ class LockService
          * @var LockProvider $store
          */
         $store = Cache::getStore();
+        $enabled = config('wallet.lock.enabled', false);
 
-        if ($store instanceof LockProvider) {
+        if ($enabled && $store instanceof LockProvider) {
             return $store->lock($name, $seconds);
         }
 
