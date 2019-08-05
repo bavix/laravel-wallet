@@ -61,8 +61,10 @@ class LockService
                 return $store->lock("$name.$uniqId", $seconds);
             }
         } catch (\Throwable $throwable) {
-            return new EmptyLock();
+            // write error's
         }
+
+        return new EmptyLock();
     }
 
 }
