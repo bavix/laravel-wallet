@@ -57,7 +57,7 @@ class LockService
                 $uniqId .= $self->getKey();
             }
 
-            return $store->lock($name, $seconds, $uniqId);
+            return $store->lock("$name.$uniqId", $seconds);
         }
 
         return new EmptyLock();
