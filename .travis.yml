@@ -12,13 +12,12 @@ matrix:
     - php: 'nightly'
 
 before_script:
-  - "composer install"
+  - composer install
   - wget https://github.com/infection/infection/releases/download/0.13.0/infection.phar
   - wget https://github.com/infection/infection/releases/download/0.13.0/infection.phar.asc
   - gpg --keyserver hkps.pool.sks-keyservers.net --recv-keys 493B4AA0
   - gpg --with-fingerprint --verify infection.phar.asc infection.phar
   - chmod +x infection.phar
-  - ./infection.phar self-update
 
 script:
   - ./infection.phar --min-msi=48 --threads=4
