@@ -20,4 +20,4 @@ before_script:
   - chmod +x infection.phar
 
 script:
-  - ./infection.phar --min-msi=48 --threads=4
+  - ./infection.phar --min-msi=48 -j$(nproc)
