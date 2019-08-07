@@ -3,6 +3,9 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Services\ProxyService;
+use Bavix\Wallet\Test\Common\Models\Transaction;
+use Bavix\Wallet\Test\Common\Models\Transfer;
+use Bavix\Wallet\Test\Common\Models\Wallet;
 use Bavix\Wallet\Test\Common\Rate;
 use Bavix\Wallet\WalletServiceProvider;
 use Illuminate\Foundation\Application;
@@ -54,6 +57,16 @@ class TestCase extends OrchestraTestCase
      */
     protected function getEnvironmentSetUp($app): void
     {
+        // new table name's
+        $app['config']->set('wallet.transaction.table', 'transaction');
+        $app['config']->set('wallet.transfer.table', 'transfer');
+        $app['config']->set('wallet.wallet.table', 'wallet');
+
+        // override model's
+        $app['config']->set('wallet.transaction.model', Transaction::class);
+        $app['config']->set('wallet.transfer.model', Transfer::class);
+        $app['config']->set('wallet.wallet.model', Wallet::class);
+
         // wallet
         $app['config']->set('wallet.currencies', [
             'my-usd' => 'USD',

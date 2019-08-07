@@ -1,10 +1,10 @@
 language: php
 php:
-- '7.1'
-- '7.2'
-- '7.3'
-- '7.4snapshot'
-- 'nightly'
+  - '7.1'
+  - '7.2'
+  - '7.3'
+  - '7.4snapshot'
+  - 'nightly'
 
 services:
   - memcached
@@ -15,4 +15,12 @@ matrix:
     - php: 'nightly'
 
 before_script:
-- "composer install"
+  - composer install
+  - wget https://github.com/infection/infection/releases/download/0.13.0/infection.phar
+  - wget https://github.com/infection/infection/releases/download/0.13.0/infection.phar.asc
+  - gpg --keyserver hkps.pool.sks-keyservers.net --recv-keys 493B4AA0
+  - gpg --with-fingerprint --verify infection.phar.asc infection.phar
+  - chmod +x infection.phar
+
+script:
+  - ./infection.phar --min-msi=48 -j$(nproc)
