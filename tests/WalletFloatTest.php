@@ -4,6 +4,7 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Test\Models\UserFloat as User;
 
 class WalletFloatTest extends TestCase
@@ -188,6 +189,58 @@ class WalletFloatTest extends TestCase
         $this->assertEquals($user->balanceFloat, -1);
         $user->depositFloat(1);
         $this->assertEquals($user->balanceFloat, 0);
+    }
+
+    /**
+     * @return void
+     */
+    public function testMantissa(): void
+    {
+        /**
+         * @var User $user
+         */
+        $user = factory(User::class)->create();
+        $this->assertEquals($user->balance, 0);
+
+        $user->deposit(1000000);
+        $this->assertEquals($user->balance, 1000000);
+        $this->assertEquals($user->balanceFloat, 10000.00);
+
+        $transaction = $user->withdrawFloat(2556.72);
+        $this->assertEquals($transaction->amount, -255672);
+        $this->assertEquals($transaction->type, Transaction::TYPE_WITHDRAW);
+
+        $this->assertEquals($user->balance, 1000000 - 255672);
+        $this->assertEquals($user->balanceFloat, 10000.00 - 2556.72);
+
+    }
+
+    /**
+     * @return void
+     */
+    public function testMathRounding(): void
+    {
+        /**
+         * @var User $user
+         */
+        $user = factory(User::class)->create();
+        $this->assertEquals($user->balance, 0);
+
+        $user->deposit(1000000);
+        $this->assertEquals($user->balance, 1000000);
+        $this->assertEquals($user->balanceFloat, 10000.00);
+
+        $transaction = $user->withdrawFloat(0.2+0.1);
+        $this->assertEquals($transaction->amount, -30);
+        $this->assertEquals($transaction->type, Transaction::TYPE_WITHDRAW);
+
+        $transaction = $user->withdrawFloat(0.2+0.105);
+        $this->assertEquals($transaction->amount, -31);
+        $this->assertEquals($transaction->type, Transaction::TYPE_WITHDRAW);
+
+        $transaction = $user->withdrawFloat(0.2+0.104);
+        $this->assertEquals($transaction->amount, -30);
+        $this->assertEquals($transaction->type, Transaction::TYPE_WITHDRAW);
     }
 
 }
