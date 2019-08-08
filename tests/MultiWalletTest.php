@@ -4,8 +4,10 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Test\Models\Item;
+use Bavix\Wallet\Test\Models\UserCashier;
 use Bavix\Wallet\Test\Models\UserMulti;
 use Illuminate\Database\QueryException;
 use function compact;
@@ -404,6 +406,37 @@ class MultiWalletTest extends TestCase
         $this->assertTrue($b->refund($product));
         $this->assertEquals($product->balance, 0);
         $this->assertEquals($b->balance, $product->getAmountProduct());
+    }
+
+    /**
+     * @return void
+     */
+    public function testUserCashier(): void
+    {
+        /**
+         * @var UserCashier $user
+         */
+        $user = factory(UserCashier::class)->create();
+        $default = $user->wallet;
+
+        $this->assertEquals($default->balance, 0);
+
+        $transaction = $default->deposit(100);
+        $this->assertEquals($transaction->type, Transaction::TYPE_DEPOSIT);
+        $this->assertEquals($transaction->amount, 100);
+        $this->assertEquals($default->balance, 100);
+
+        $newWallet = $user->createWallet(['name' => 'New Wallet']);
+
+        $transfer = $default->transfer($newWallet, 100);
+        $this->assertEquals($default->balance, 0);
+        $this->assertEquals($newWallet->balance, 100);
+
+        $this->assertEquals($transfer->withdraw->type, Transaction::TYPE_WITHDRAW);
+        $this->assertEquals($transfer->withdraw->amount, -100);
+
+        $this->assertEquals($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
+        $this->assertEquals($transfer->deposit->amount, 100);
     }
 
 }
