@@ -137,7 +137,7 @@ class ConfirmTest extends TestCase
         $this->assertInstanceOf(UserConfirm::class, $transaction->payable);
         $this->assertFalse($transaction->confirmed);
 
-        $userConfirm->confirm($transaction);
+        $this->assertTrue($userConfirm->confirm($transaction));
         $this->assertTrue($transaction->confirmed);
     }
 
