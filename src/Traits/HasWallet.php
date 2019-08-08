@@ -21,12 +21,13 @@ use function config;
  *
  * @package Bavix\Wallet\Traits
  *
- * @property-read WalletModel $wallet
  * @property-read Collection|WalletModel[] $wallets
  * @property-read int $balance
  */
 trait HasWallet
 {
+
+    use MorphOneWallet;
 
     /**
      * The input means in the system
@@ -199,24 +200,6 @@ trait HasWallet
         return app(WalletService::class)
             ->getWallet($this, false)
             ->morphMany(config('wallet.transfer.model'), 'from');
-    }
-
-    /**
-     * Get default Wallet
-     * this method is used for Eager Loading
-     *
-     * @return MorphOne|WalletModel
-     */
-    public function wallet(): MorphOne
-    {
-        return ($this instanceof WalletModel ? $this->holder : $this)
-            ->morphOne(config('wallet.wallet.model'), 'holder')
-            ->where('slug', config('wallet.wallet.default.slug'))
-            ->withDefault([
-                'name' => config('wallet.wallet.default.name'),
-                'slug' => config('wallet.wallet.default.slug'),
-                'balance' => 0,
-            ]);
     }
 
 }

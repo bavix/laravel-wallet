@@ -91,8 +91,10 @@ trait HasWallets
 
         /**
          * Create a default wallet
+         * @var $walletModel WalletModel
          */
-        $this->getBalanceAttribute();
+        $walletModel = $this->wallet;
+        $walletModel->getBalanceAttribute();
 
         return $wallet;
     }
