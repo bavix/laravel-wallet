@@ -7,9 +7,23 @@ use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class LockService
 {
+
+    /**
+     * @var string
+     */
+    protected $uniqId;
+
+    /**
+     * LockService constructor.
+     */
+    public function __construct()
+    {
+        $this->uniqId = Str::random();
+    }
 
     /**
      * @param object $self
@@ -53,9 +67,10 @@ class LockService
             $enabled = config('wallet.lock.enabled', false);
 
             if ($enabled && $store instanceof LockProvider) {
-                $uniqId = \get_class($self);
+                $class = \get_class($self);
+                $uniqId = $class . $this->uniqId;
                 if ($self instanceof Model) {
-                    $uniqId .= $self->getKey();
+                    $uniqId = $class . $self->getKey();
                 }
 
                 return $store->lock("$name.$uniqId", $seconds);

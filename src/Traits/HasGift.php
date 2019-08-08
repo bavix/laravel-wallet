@@ -7,6 +7,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Services\CommonService;
+use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\WalletService;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -50,49 +51,51 @@ trait HasGift
      */
     public function gift(Wallet $to, Product $product, bool $force = null): Transfer
     {
-        /**
-         * Who's giving? Let's call him Santa Claus
-         * @var Wallet $santa
-         */
-        $santa = $this;
-
-        /**
-         * Unfortunately,
-         * I think it is wrong to make the "assemble" method public.
-         * That's why I address him like this!
-         */
-        return DB::transaction(static function() use ($santa, $to, $product, $force) {
-            $amount = $product->getAmountProduct();
-            $meta = $product->getMetaProduct();
-            $fee = app(WalletService::class)
-                ->fee($product, $amount);
-
-            $commonService = app(CommonService::class);
+        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($to, $product, $force) {
+            /**
+             * Who's giving? Let's call him Santa Claus
+             * @var Wallet $santa
+             */
+            $santa = $this;
 
             /**
-             * Santa pays taxes
+             * Unfortunately,
+             * I think it is wrong to make the "assemble" method public.
+             * That's why I address him like this!
              */
-            if (!$force) {
-                $commonService->verifyWithdraw($santa, $amount);
-            }
+            return DB::transaction(static function() use ($santa, $to, $product, $force) {
+                $amount = $product->getAmountProduct();
+                $meta = $product->getMetaProduct();
+                $fee = app(WalletService::class)
+                    ->fee($product, $amount);
 
-            $withdraw = $commonService->forceWithdraw($santa, $amount + $fee, $meta);
+                $commonService = app(CommonService::class);
 
-            $deposit = $commonService->deposit($product, $amount, $meta);
+                /**
+                 * Santa pays taxes
+                 */
+                if (!$force) {
+                    $commonService->verifyWithdraw($santa, $amount);
+                }
 
-            $from = app(WalletService::class)
-                ->getWallet($to);
+                $withdraw = $commonService->forceWithdraw($santa, $amount + $fee, $meta);
 
-            $transfers = $commonService->assemble([
-                (new Bring())
-                    ->setStatus(Transfer::STATUS_GIFT)
-                    ->setDeposit($deposit)
-                    ->setWithdraw($withdraw)
-                    ->setFrom($from)
-                    ->setTo($product)
-            ]);
+                $deposit = $commonService->deposit($product, $amount, $meta);
 
-            return current($transfers);
+                $from = app(WalletService::class)
+                    ->getWallet($to);
+
+                $transfers = $commonService->assemble([
+                    (new Bring())
+                        ->setStatus(Transfer::STATUS_GIFT)
+                        ->setDeposit($deposit)
+                        ->setWithdraw($withdraw)
+                        ->setFrom($from)
+                        ->setTo($product)
+                ]);
+
+                return current($transfers);
+            });
         });
     }
 

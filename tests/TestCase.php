@@ -75,7 +75,7 @@ class TestCase extends OrchestraTestCase
             'def-curr' => 'EUR',
         ]);
 
-        $app['config']->set('wallet.lock.enabled', extension_loaded('memcached'));
+        $app['config']->set('wallet.lock.enabled', false);
         $app['config']->set('cache.default', 'memcached');
         $app['config']->set('cache.stores.memcached', [
             'driver' => 'memcached',
