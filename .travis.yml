@@ -15,10 +15,9 @@ before_script:
   - composer install
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 
 script:
   - ./vendor/bin/infection --min-msi=60 -j$(nproc)
-  - ./cc-test-reporter format-coverage -t simplecov -o coverage/codeclimate.backend.json coverage/backend/.resultset.json
-  - ./cc-test-reporter format-coverage -t lcov -o coverage/codeclimate.frontend.json coverage/frontend/lcov.info
-  - ./cc-test-reporter sum-coverage coverage/codeclimate.*.json -p 2             
-  - if [[ "$TRAVIS_TEST_RESULT" == 0 ]]; then ./cc-test-reporter upload-coverage; fi
+  - cp ./build/logs/clover.xml clover.xml 
+  - ./cc-test-reporter after-build --coverage-input-type clover --exit-code $TRAVIS_TEST_RESULT
