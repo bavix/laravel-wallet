@@ -15,9 +15,9 @@ before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
+  - composer install
 
 script:
-  - composer install
   - ./vendor/bin/phpunit --coverage-xml=build/coverage-xml --log-junit=build/phpunit.junit.xml
   - ./vendor/bin/infection --coverage=build --min-msi=60 -j$(nproc)
 
