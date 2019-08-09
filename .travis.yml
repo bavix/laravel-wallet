@@ -19,4 +19,4 @@ before_script:
 
 script:
   - ./vendor/bin/infection --min-msi=60 -j$(nproc)
-  - ./cc-test-reporter after-build
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
