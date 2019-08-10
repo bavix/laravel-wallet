@@ -32,25 +32,24 @@ class WalletService
      */
     public function fee(Wallet $wallet, int $amount): int
     {
-        $result = 0;
-
+        $fee = 0;
         if ($wallet instanceof Taxable) {
-            $result = (int) ($amount * $wallet->getFeePercent() / 100);
+            $fee = (int) ($amount * $wallet->getFeePercent() / 100);
+        }
 
-            /**
-             * Added minimum commission condition
-             *
-             * @see https://github.com/bavix/laravel-wallet/issues/64#issuecomment-514483143
-             */
-            if ($wallet instanceof MinimalTaxable) {
-                $minimal = $wallet->getMinimalFee();
-                if ($result < $minimal) {
-                    $result = $wallet->getMinimalFee();
-                }
+        /**
+         * Added minimum commission condition
+         *
+         * @see https://github.com/bavix/laravel-wallet/issues/64#issuecomment-514483143
+         */
+        if ($wallet instanceof MinimalTaxable) {
+            $minimal = $wallet->getMinimalFee();
+            if ($fee < $minimal) {
+                $fee = $wallet->getMinimalFee();
             }
         }
 
-        return $result;
+        return $fee;
     }
 
     /**
