@@ -9,6 +9,11 @@ class EmptyLock implements Lock
 {
 
     /**
+     * @var string
+     */
+    protected $ownerId;
+
+    /**
      * Attempt to acquire the lock.
      *
      * @param  callable|null  $callback
@@ -39,6 +44,7 @@ class EmptyLock implements Lock
      * Release the lock.
      *
      * @return void
+     * @codeCoverageIgnore
      */
     public function release(): void
     {
@@ -52,13 +58,18 @@ class EmptyLock implements Lock
      */
     public function owner(): string
     {
-        return Str::random();
+        if (!$this->ownerId) {
+            $this->ownerId = Str::random();
+        }
+
+        return $this->ownerId;
     }
 
     /**
      * Releases this lock in disregard of ownership.
      *
      * @return void
+     * @codeCoverageIgnore
      */
     public function forceRelease(): void
     {
