@@ -64,19 +64,23 @@ class LockService
              * @var LockProvider $store
              */
             $store = Cache::getStore();
-            $enabled = config('wallet.lock.enabled', false);
-
-            if ($enabled && $store instanceof LockProvider) {
-                $class = \get_class($self);
-                $uniqId = $class . $this->uniqId;
-                if ($self instanceof Model) {
-                    $uniqId = $class . $self->getKey();
-                }
-
-                return $store->lock("$name.$uniqId", $seconds);
-            }
         } catch (\Throwable $throwable) {
-            // write error's
+            // todo: write error's
+        }
+
+        $enabled = false;
+        if (isset($store)) {
+            $enabled = config('wallet.lock.enabled', false);
+        }
+
+        if ($enabled && $store instanceof LockProvider) {
+            $class = \get_class($self);
+            $uniqId = $class . $this->uniqId;
+            if ($self instanceof Model) {
+                $uniqId = $class . $self->getKey();
+            }
+
+            return $store->lock("$name.$uniqId", $seconds);
         }
 
         return new EmptyLock();
