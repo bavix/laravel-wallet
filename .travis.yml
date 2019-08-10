@@ -15,7 +15,15 @@ matrix:
     - php: 'nightly'
 
 before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
   - composer install
 
 script:
-  - ./vendor/bin/infection --min-msi=60 -j$(nproc)
+  - ./vendor/bin/phpunit --coverage-xml=build/coverage-xml --log-junit=build/phpunit.junit.xml
+  - ./vendor/bin/infection --coverage=build --min-msi=60 -j$(nproc)
+
+after_script:
+  - cp ./build/logs/clover.xml clover.xml
+  - ./cc-test-reporter after-build --coverage-input-type clover --exit-code $TRAVIS_TEST_RESULT

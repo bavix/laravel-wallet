@@ -1,0 +1,6 @@
+exclude_patterns:
+- "config/"
+- "database/"
+- "docs/"
+- "resources/"
+- "tests/"
