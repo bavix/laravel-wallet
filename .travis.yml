@@ -17,7 +17,7 @@ matrix:
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
+  - if [ $(phpenv version-name) = "7.3" ]; then ./cc-test-reporter before-build; fi
   - composer install
 
 script:
@@ -26,4 +26,4 @@ script:
 
 after_script:
   - cp ./build/logs/clover.xml clover.xml
-  - ./cc-test-reporter after-build --coverage-input-type clover --exit-code $TRAVIS_TEST_RESULT
+  - if [ $(phpenv version-name) = "7.3" ]; then ./cc-test-reporter after-build --coverage-input-type clover --exit-code $TRAVIS_TEST_RESULT; fi
