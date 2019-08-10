@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Services;
 use Bavix\Wallet\Objects\EmptyLock;
 use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Contracts\Cache\LockProvider;
+use Illuminate\Contracts\Cache\Store;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -52,6 +53,18 @@ class LockService
     }
 
     /**
+     * @return Store|null
+     */
+    protected function cache(): ?Store
+    {
+        try {
+            return Cache::getStore();
+        } catch (\Throwable $throwable) {
+            return null;
+        }
+    }
+
+    /**
      * @param object $self
      * @param string $name
      * @param int $seconds
@@ -59,19 +72,8 @@ class LockService
      */
     protected function lockProvider($self, string $name, int $seconds): Lock
     {
-        try {
-            /**
-             * @var LockProvider $store
-             */
-            $store = Cache::getStore();
-        } catch (\Throwable $throwable) {
-            // todo: write error's
-        }
-
-        $enabled = false;
-        if (isset($store)) {
-            $enabled = config('wallet.lock.enabled', false);
-        }
+        $store = $this->cache();
+        $enabled = $store && config('wallet.lock.enabled', false);
 
         if ($enabled && $store instanceof LockProvider) {
             $class = \get_class($self);
