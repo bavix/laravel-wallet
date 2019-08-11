@@ -75,6 +75,8 @@ class LockService
         $store = $this->cache();
         $enabled = $store && config('wallet.lock.enabled', false);
 
+        // fixme: CodeClimate
+        // @codeCoverageIgnoreStart
         if ($enabled && $store instanceof LockProvider) {
             $class = \get_class($self);
             $uniqId = $class . $this->uniqId;
@@ -84,6 +86,7 @@ class LockService
 
             return $store->lock("$name.$uniqId", $seconds);
         }
+        // @codeCoverageIgnoreEnd
 
         return new EmptyLock();
     }
