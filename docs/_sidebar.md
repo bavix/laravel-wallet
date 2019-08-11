@@ -3,6 +3,7 @@
     - [Introduction](README)
     - [Requirements](requirements)
     - [Installation](installation)
+    - [Lumen installation](lumen)
     - [Basic Usage](basic-usage)
     - [Upgrade Guide](upgrade-guide)
 
