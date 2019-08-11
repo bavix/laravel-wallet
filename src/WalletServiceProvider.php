@@ -9,6 +9,7 @@ use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ExchangeService;
+use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Services\WalletService;
 use Illuminate\Support\ServiceProvider;
@@ -84,6 +85,7 @@ class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(CommonService::class, config('wallet.services.common'));
         $this->app->singleton(ProxyService::class, config('wallet.services.proxy'));
         $this->app->singleton(WalletService::class, config('wallet.services.wallet'));
+        $this->app->singleton(LockService::class, config('wallet.services.lock'));
     }
 
 }

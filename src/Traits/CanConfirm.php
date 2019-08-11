@@ -6,6 +6,7 @@ use Bavix\Wallet\Exceptions\ConfirmedInvalid;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Services\CommonService;
+use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\WalletService;
 use Illuminate\Support\Facades\DB;
 
@@ -19,23 +20,25 @@ trait CanConfirm
      */
     public function confirm(Transaction $transaction): bool
     {
-        $self = $this;
-        return DB::transaction(static function() use ($self, $transaction) {
-            $wallet = app(WalletService::class)
-                ->getWallet($self);
+        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
+            $self = $this;
+            return DB::transaction(static function() use ($self, $transaction) {
+                $wallet = app(WalletService::class)
+                    ->getWallet($self);
 
-            if (!$wallet->refreshBalance()) {
-                return false;
-            }
+                if (!$wallet->refreshBalance()) {
+                    return false;
+                }
 
-            if ($transaction->type === Transaction::TYPE_WITHDRAW) {
-                app(CommonService::class)->verifyWithdraw(
-                    $wallet,
-                    \abs($transaction->amount)
-                );
-            }
+                if ($transaction->type === Transaction::TYPE_WITHDRAW) {
+                    app(CommonService::class)->verifyWithdraw(
+                        $wallet,
+                        \abs($transaction->amount)
+                    );
+                }
 
-            return $self->forceConfirm($transaction);
+                return $self->forceConfirm($transaction);
+            });
         });
     }
 
@@ -60,26 +63,28 @@ trait CanConfirm
      */
     public function forceConfirm(Transaction $transaction): bool
     {
-        $self = $this;
-        return DB::transaction(static function() use ($self, $transaction) {
+        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
+            $self = $this;
+            return DB::transaction(static function () use ($self, $transaction) {
 
-            $wallet = app(WalletService::class)
-                ->getWallet($self);
+                $wallet = app(WalletService::class)
+                    ->getWallet($self);
 
-            if ($transaction->confirmed) {
-                throw new ConfirmedInvalid(trans('wallet::errors.confirmed_invalid'));
-            }
+                if ($transaction->confirmed) {
+                    throw new ConfirmedInvalid(trans('wallet::errors.confirmed_invalid'));
+                }
 
-            if ($wallet->id !== $transaction->wallet_id) {
-                throw new WalletOwnerInvalid(trans('wallet::errors.owner_invalid'));
-            }
+                if ($wallet->id !== $transaction->wallet_id) {
+                    throw new WalletOwnerInvalid(trans('wallet::errors.owner_invalid'));
+                }
 
-            return $transaction->update(['confirmed' => true]) &&
+                return $transaction->update(['confirmed' => true]) &&
 
-                // update balance
-                app(CommonService::class)
-                    ->addBalance($wallet, $transaction->amount);
+                    // update balance
+                    app(CommonService::class)
+                        ->addBalance($wallet, $transaction->amount);
 
+            });
         });
     }
 

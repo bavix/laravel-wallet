@@ -3,7 +3,10 @@ build:
   environment:
     php:
       version: 7.2
-
+      pecl_extensions:
+        - memcached
+    memcached: true
+  
   nodes:
     analysis:
       project_setup:
