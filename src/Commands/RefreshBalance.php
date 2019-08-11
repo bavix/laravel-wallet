@@ -38,7 +38,7 @@ class RefreshBalance extends Command
     public function handle(): void
     {
         app(ProxyService::class)->fresh();
-        DB::transaction(function() {
+        DB::transaction(function () {
             $wallet = config('wallet.wallet.table');
             DB::table($wallet)->update(['balance' => 0]);
 
@@ -76,7 +76,7 @@ class RefreshBalance extends Command
             ->where('confirmed', true)
             ->groupBy('wallet_id');
 
-        $joinClause = static function(JoinClause $join) use ($wallet) {
+        $joinClause = static function (JoinClause $join) use ($wallet) {
             $join->on("$wallet.id", '=', 'b.wallet_id');
         };
 
