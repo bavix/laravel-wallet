@@ -22,7 +22,7 @@ trait CanConfirm
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
             $self = $this;
-            return DB::transaction(static function() use ($self, $transaction) {
+            return DB::transaction(static function () use ($self, $transaction) {
                 $wallet = app(WalletService::class)
                     ->getWallet($self);
 
