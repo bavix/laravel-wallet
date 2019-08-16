@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.2.0] - 2019-08-16
+### Added
+- Race condition problem resolved #82 @kak2z7702 #22 @sidor555 
+- Add Code Climate service
+- Add support lumen (update docs)
+
+### Changed
+- Optimize code
+- More unit tests, test fixes
+
 ## [3.1.6] - 2019-08-08
 ### Added
 - Add support laravel cashier #87 @imhuso
@@ -384,7 +394,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/3.1.6...HEAD
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/3.2.0...HEAD
+[3.2.0]: https://github.com/bavix/laravel-wallet/compare/3.1.6...3.2.0
 [3.1.6]: https://github.com/bavix/laravel-wallet/compare/3.1.5...3.1.6
 [3.1.5]: https://github.com/bavix/laravel-wallet/compare/3.1.4...3.1.5
 [3.1.4]: https://github.com/bavix/laravel-wallet/compare/3.1.3...3.1.4
