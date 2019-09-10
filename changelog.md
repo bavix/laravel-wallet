@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.2.1] - 2019-09-10
+### Fixed
+- Fixed calculation of commission for exchange
+
 ## [3.2.0] - 2019-08-16
 ### Added
 - Race condition problem resolved #82 @kak2z7702 #22 @sidor555 

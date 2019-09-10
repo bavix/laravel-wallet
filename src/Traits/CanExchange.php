@@ -67,6 +67,7 @@ trait CanExchange
                         ->setDeposit($deposit)
                         ->setWithdraw($withdraw)
                         ->setFrom($from)
+                        ->setFee($fee)
                         ->setTo($to)
                 ]);
 

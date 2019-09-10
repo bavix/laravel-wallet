@@ -39,6 +39,7 @@ class ExchangeTest extends TestCase
         $this->assertEquals($rub->balance, 0);
         $this->assertEquals($usd->balance, 147);
         $this->assertEquals($usd->balanceFloat, 1.47); // $1.47
+        $this->assertEquals($transfer->fee, 0);
         $this->assertEquals($transfer->status, Transfer::STATUS_EXCHANGE);
 
         $transfer = $usd->exchange($rub, $usd->balance);
