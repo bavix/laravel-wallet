@@ -31,7 +31,7 @@ $user->balance; // int(-191)
 
 Add the `CanPay` trait and `Customer` interface to your `User` model.
 
-> The trait `CanPay`"` already inherits `HasWallet`, reuse will cause an error.
+> The trait `CanPay` already inherits `HasWallet`, reuse will cause an error.
 
 ```php
 use Bavix\Wallet\Traits\CanPay;
