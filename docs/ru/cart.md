@@ -2,6 +2,8 @@
 
 Добавим `CanPay` trait и `Customer` interface в модель User.
 
+> Трейт `CanPay` уже наследует `HasWallet`, повторное использование вызовет ошибку.
+
 ```php
 use Bavix\Wallet\Traits\CanPay;
 use Bavix\Wallet\Interfaces\Customer;

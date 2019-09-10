@@ -1,5 +1,4 @@
 build:
-
   environment:
     php:
       version: 7.2
@@ -19,6 +18,7 @@ build:
           coverage:
             file: 'some-file'
             format: 'clover'
+          idle_timeout: 900
 
 filter:
   excluded_paths: [tests/*, database/*, config/*]

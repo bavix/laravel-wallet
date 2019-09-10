@@ -42,6 +42,11 @@ class Bring
     protected $uuid;
 
     /**
+     * @var int
+     */
+    protected $fee;
+
+    /**
      * Bring constructor.
      * @throws
      */
@@ -149,6 +154,28 @@ class Bring
     }
 
     /**
+     * @return int
+     */
+    public function getFee(): int
+    {
+        if ($this->fee === null) {
+            return abs($this->getWithdraw()->amount) - abs($this->getDeposit()->amount);
+        }
+
+        return $this->fee;
+    }
+
+    /**
+     * @param int $fee
+     * @return Bring
+     */
+    public function setFee(int $fee): self
+    {
+        $this->fee = $fee;
+        return $this;
+    }
+
+    /**
      * @return Transfer
      * @throws
      */
@@ -172,7 +199,7 @@ class Bring
             'from_id' => $this->getFrom()->getKey(),
             'to_type' => $this->getTo()->getMorphClass(),
             'to_id' => $this->getTo()->getKey(),
-            'fee' => abs($this->getWithdraw()->amount) - abs($this->getDeposit()->amount),
+            'fee' => $this->getFee(),
             'uuid' => $this->getUuid(),
         ];
     }
