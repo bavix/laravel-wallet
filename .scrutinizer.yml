@@ -1,8 +1,4 @@
 build:
-  dependencies:
-    before:
-      - "find /home/scrutinizer/.phpenv/versions -name 'php.ini' -exec sed -i 's/^zend_extension_ts/;zend_extension_ts/' {} \\;"
-
   environment:
     php:
       version: 7.2
