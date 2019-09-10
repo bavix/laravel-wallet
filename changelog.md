@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.2.1] - 2019-09-10
 ### Fixed
-- Fixed calculation of commission for exchange
+- Fixed calculation of commission for exchange #101 @haojingliu 
+- Update docs #99 @abishekrsrikaanth 
 
 ## [3.2.0] - 2019-08-16
 ### Added
