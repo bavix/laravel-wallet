@@ -2,7 +2,7 @@ build:
 
   environment:
     php:
-      version: 7.3.9
+      version: 7.2
       pecl_extensions:
         - memcached
     memcached: true
@@ -19,6 +19,7 @@ build:
           coverage:
             file: 'some-file'
             format: 'clover'
+          idle_timeout: 900
 
 filter:
   excluded_paths: [tests/*, database/*, config/*]
