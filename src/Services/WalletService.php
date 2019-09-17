@@ -4,6 +4,7 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Interfaces\MinimalTaxable;
+use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Interfaces\Taxable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
@@ -94,16 +95,12 @@ class WalletService
     /**
      * @param Wallet $object
      * @return int
+     * @deprecated use Storable::getBalance
      */
     public function getBalance(Wallet $object): int
     {
-        $wallet = $this->getWallet($object);
-        $proxy = app(ProxyService::class);
-        if (!$proxy->has($wallet->getKey())) {
-            $proxy->set($wallet->getKey(), (int) $wallet->getOriginal('balance', 0));
-        }
-
-        return $proxy[$wallet->getKey()];
+        return app(Storable::class)
+            ->getBalance($object);
     }
 
     /**
@@ -113,14 +110,12 @@ class WalletService
     public function refresh(WalletModel $wallet): bool
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($wallet) {
-            $this->getBalance($wallet);
+            app(Storable::class)->getBalance($wallet);
             $balance = $wallet->getAvailableBalance();
             $wallet->balance = $balance;
 
-            $proxy = app(ProxyService::class);
-            $proxy->set($wallet->getKey(), $balance);
-
-            return $wallet->save();
+            return app(Storable::class)->setBalance($wallet, $balance) &&
+                $wallet->save();
         });
     }
 

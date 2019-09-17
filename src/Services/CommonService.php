@@ -4,6 +4,7 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
+use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
@@ -219,17 +220,17 @@ class CommonService
     {
         return app(LockService::class)->lock($this, __FUNCTION__, static function () use ($wallet, $amount) {
             /**
-             * @var ProxyService $proxy
              * @var WalletModel $wallet
              */
-            $proxy = app(ProxyService::class);
-            $balance = $wallet->balance + $amount;
-            if ($proxy->has($wallet->getKey())) {
-                $balance = $proxy->get($wallet->getKey()) + $amount;
-            }
+            $balance = app(Storable::class)
+                ->incBalance($wallet, $amount);
 
             $result = $wallet->update(compact('balance'));
-            $proxy->set($wallet->getKey(), $balance);
+
+            if (!$result) {
+                app(Storable::class)
+                    ->setBalance($wallet, $wallet->getAvailableBalance());
+            }
 
             return $result;
         });

@@ -9,6 +9,7 @@ use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Simple\Rate;
+use Bavix\Wallet\Simple\MemoryStore;
 
 return [
     /**
@@ -17,6 +18,7 @@ return [
      */
     'package' => [
         'rateable' => Rate::class,
+        'storable' => MemoryStore::class,
     ],
 
     /**

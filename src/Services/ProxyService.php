@@ -5,6 +5,11 @@ namespace Bavix\Wallet\Services;
 use ArrayAccess;
 use function array_key_exists;
 
+/**
+ * Class ProxyService
+ * @package Bavix\Wallet\Services
+ * @deprecated
+ */
 class ProxyService implements ArrayAccess
 {
 
