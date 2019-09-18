@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ProxyService;
@@ -103,6 +104,37 @@ class BalanceTest extends TestCase
 
         $wallet->deposit(1);
         $this->assertEquals($wallet->balance, 1001);
+    }
+
+    /**
+     * @return void
+     * @throws
+     */
+    public function testFailUpdate(): void
+    {
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = factory(Buyer::class)->create();
+        $this->assertFalse($buyer->relationLoaded('wallet'));
+        $wallet = $buyer->wallet;
+
+        $this->assertFalse($wallet->exists);
+        $this->assertEquals($wallet->balance, 0);
+        $this->assertTrue($wallet->exists);
+
+        /**
+         * @var Wallet $mockWallet
+         */
+        $mockWallet = $this->createMock(\get_class($wallet));
+        $mockWallet->method('update')->willReturn(false);
+        $mockWallet->method('getKey')->willReturn($wallet->getKey());
+
+        $result = app(CommonService::class)
+            ->addBalance($mockWallet, 100);
+
+        $this->assertFalse($result);
+        $this->assertEquals(0, app(Storable::class)->getBalance($wallet));
     }
 
     /**
