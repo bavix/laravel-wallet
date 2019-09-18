@@ -6,6 +6,7 @@ use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ProxyService;
+use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\UserMulti;
 use Illuminate\Support\Facades\DB;
@@ -104,6 +105,28 @@ class BalanceTest extends TestCase
 
         $wallet->deposit(1);
         $this->assertEquals($wallet->balance, 1001);
+    }
+
+    /**
+     * @return void
+     * @deprecated
+     * @throws
+     */
+    public function testGetBalance(): void
+    {
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = factory(Buyer::class)->create();
+        $this->assertFalse($buyer->relationLoaded('wallet'));
+        $wallet = $buyer->wallet;
+
+        $this->assertFalse($wallet->exists);
+        $this->assertEquals($wallet->balance, 0);
+        $this->assertTrue($wallet->exists);
+
+        $this->assertEquals(0, app(Storable::class)->getBalance($wallet));
+        $this->assertEquals(0, app(WalletService::class)->getBalance($wallet));
     }
 
     /**
