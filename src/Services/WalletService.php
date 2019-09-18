@@ -109,7 +109,7 @@ class WalletService
      */
     public function refresh(WalletModel $wallet): bool
     {
-        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($wallet) {
+        return app(LockService::class)->lock($this, __FUNCTION__, static function () use ($wallet) {
             app(Storable::class)->getBalance($wallet);
             $balance = $wallet->getAvailableBalance();
             $wallet->balance = $balance;
