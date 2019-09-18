@@ -46,7 +46,7 @@ class WalletService
         if ($wallet instanceof MinimalTaxable) {
             $minimal = $wallet->getMinimalFee();
             if ($fee < $minimal) {
-                $fee = $wallet->getMinimalFee();
+                $fee = $minimal;
             }
         }
 
