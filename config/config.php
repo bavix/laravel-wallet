@@ -2,6 +2,7 @@
 
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\CommonService;
+use Bavix\Wallet\Services\MakeService;
 use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Services\LockService;
@@ -49,6 +50,7 @@ return [
         'proxy' => ProxyService::class,
         'wallet' => WalletService::class,
         'lock' => LockService::class,
+        'make' => MakeService::class,
     ],
 
     /**

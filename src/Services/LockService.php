@@ -2,7 +2,6 @@
 
 namespace Bavix\Wallet\Services;
 
-use Bavix\Wallet\Objects\EmptyLock;
 use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Contracts\Cache\Store;
@@ -34,7 +33,7 @@ class LockService
      */
     public function lock($self, string $name, \Closure $closure)
     {
-        return $this->lockProvider($self, $name, (int) config('wallet.lock.seconds'))
+        return $this->lockProvider($self, $name, (int)config('wallet.lock.seconds'))
             ->get($this->bindTo($self, $closure));
     }
 
@@ -88,7 +87,8 @@ class LockService
         }
         // @codeCoverageIgnoreEnd
 
-        return new EmptyLock();
+        return app(MakeService::class)
+            ->makeEmptyLock();
     }
 
 }

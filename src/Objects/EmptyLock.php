@@ -16,7 +16,7 @@ class EmptyLock implements Lock
     /**
      * Attempt to acquire the lock.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return mixed
      */
     public function get($callback = null)
@@ -31,8 +31,8 @@ class EmptyLock implements Lock
     /**
      * Attempt to acquire the lock for the given number of seconds.
      *
-     * @param  int  $seconds
-     * @param  callable|null  $callback
+     * @param int $seconds
+     * @param callable|null $callback
      * @return bool
      */
     public function block($seconds, $callback = null): bool

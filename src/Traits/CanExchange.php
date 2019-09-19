@@ -4,10 +4,10 @@ namespace Bavix\Wallet\Traits;
 
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
+use Bavix\Wallet\Services\MakeService;
 use Bavix\Wallet\Services\WalletService;
 use Illuminate\Support\Facades\DB;
 
@@ -62,7 +62,8 @@ trait CanExchange
                     ->deposit($to, $amount * $rate, $meta);
 
                 $transfers = app(CommonService::class)->multiBrings([
-                    (new Bring())
+                    app(MakeService::class)
+                        ->makeBring()
                         ->setStatus(Transfer::STATUS_EXCHANGE)
                         ->setDeposit($deposit)
                         ->setWithdraw($withdraw)

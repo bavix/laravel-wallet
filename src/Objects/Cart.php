@@ -25,6 +25,7 @@ class Cart implements Countable
 
     /**
      * @return static
+     * @deprecated use app(MakeService::class)->makeCart()
      */
     public static function make(): self
     {

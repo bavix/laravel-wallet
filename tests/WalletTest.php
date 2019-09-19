@@ -46,7 +46,7 @@ class WalletTest extends TestCase
                 ->count(),
             1
         );
-        
+
         $this->assertEquals($user->transactions()->count(), 4);
     }
 

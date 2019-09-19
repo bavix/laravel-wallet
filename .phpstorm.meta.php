@@ -10,8 +10,10 @@ namespace PHPSTORM_META {
     use Bavix\Wallet\Services\ExchangeService;
     use Bavix\Wallet\Services\ProxyService;
     use Bavix\Wallet\Services\WalletService;
+    use Bavix\Wallet\Services\MakeService;
 
     override(\app(0), map([
+        MakeService::class => MakeService::class,
         ExchangeService::class => ExchangeService::class,
         CommonService::class => CommonService::class,
         ProxyService::class => ProxyService::class,
