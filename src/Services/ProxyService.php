@@ -9,6 +9,7 @@ use function array_key_exists;
 /**
  * Class ProxyService
  * @package Bavix\Wallet\Services
+ * @codeCoverageIgnore
  * @deprecated
  */
 class ProxyService implements ArrayAccess
