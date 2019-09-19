@@ -3,7 +3,7 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Services\ProxyService;
-use Bavix\Wallet\Simple\MemoryStore;
+use Bavix\Wallet\Simple\Store;
 use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Common\Models\Transfer;
 use Bavix\Wallet\Test\Common\Models\Wallet;
@@ -47,7 +47,7 @@ class TestCase extends OrchestraTestCase
     {
         // Bind eloquent models to IoC container
         $app['config']->set('wallet.package.rateable', Rate::class);
-        $app['config']->set('wallet.package.storable', MemoryStore::class);
+        $app['config']->set('wallet.package.storable', Store::class);
         return [WalletServiceProvider::class];
     }
 

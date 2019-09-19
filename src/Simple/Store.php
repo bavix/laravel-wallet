@@ -5,7 +5,7 @@ namespace Bavix\Wallet\Simple;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Services\WalletService;
 
-class MemoryStore implements Storable
+class Store implements Storable
 {
 
     /**
