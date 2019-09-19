@@ -25,6 +25,7 @@ class Cart implements Countable
 
     /**
      * @return static
+     * @deprecated
      */
     public static function make(): self
     {

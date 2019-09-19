@@ -3,11 +3,11 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Objects\Cart;
+use Bavix\Wallet\Services\MakeService;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\Item;
-use function count;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use function count;
 
 class CartTest extends TestCase
 {
@@ -26,7 +26,10 @@ class CartTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $cart = Cart::make()->addItems($products);
+        $cart = app(MakeService::class)
+            ->makeCart()
+            ->addItems($products);
+
         foreach ($cart->getItems() as $product) {
             $this->assertEquals($product->balance, 0);
         }
@@ -69,7 +72,9 @@ class CartTest extends TestCase
             'quantity' => 10,
         ]);
 
-        $cart = Cart::make();
+        $cart = app(MakeService::class)
+            ->makeCart();
+
         $amount = 0;
         for ($i = 0; $i < count($products) - 1; $i++) {
             $rnd = random_int(1, 5);
@@ -105,7 +110,9 @@ class CartTest extends TestCase
             'quantity' => 10,
         ]);
 
-        $cart = Cart::make();
+        $cart = app(MakeService::class)
+            ->makeCart();
+
         $total = 0;
         for ($i = 0; $i < count($products) - 1; $i++) {
             $rnd = random_int(1, 5);
@@ -119,7 +126,10 @@ class CartTest extends TestCase
         $transfers = $buyer->payCart($cart);
         $this->assertCount($total, $transfers);
 
-        $refundCart = Cart::make()->addItems($products); // all goods
+        $refundCart = app(MakeService::class)
+            ->makeCart()
+            ->addItems($products); // all goods
+
         $buyer->refundCart($refundCart);
     }
 

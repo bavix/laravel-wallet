@@ -4,7 +4,7 @@ namespace Bavix\Wallet\Traits;
 
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Objects\Cart;
+use Bavix\Wallet\Services\MakeService;
 use function current;
 
 trait CanPay
@@ -19,7 +19,7 @@ trait CanPay
      */
     public function payFree(Product $product): Transfer
     {
-        return current($this->payFreeCart(Cart::make()->addItem($product)));
+        return current($this->payFreeCart(app(MakeService::class)->makeCart()->addItem($product)));
     }
 
     /**
@@ -29,7 +29,7 @@ trait CanPay
      */
     public function safePay(Product $product, bool $force = null): ?Transfer
     {
-        return current($this->safePayCart(Cart::make()->addItem($product), $force)) ?: null;
+        return current($this->safePayCart(app(MakeService::class)->makeCart()->addItem($product), $force)) ?: null;
     }
 
     /**
@@ -40,7 +40,7 @@ trait CanPay
      */
     public function pay(Product $product, bool $force = null): Transfer
     {
-        return current($this->payCart(Cart::make()->addItem($product), $force));
+        return current($this->payCart(app(MakeService::class)->makeCart()->addItem($product), $force));
     }
 
     /**
@@ -50,7 +50,7 @@ trait CanPay
      */
     public function forcePay(Product $product): Transfer
     {
-        return current($this->forcePayCart(Cart::make()->addItem($product)));
+        return current($this->forcePayCart(app(MakeService::class)->makeCart()->addItem($product)));
     }
 
     /**
@@ -61,7 +61,7 @@ trait CanPay
      */
     public function safeRefund(Product $product, bool $force = null, bool $gifts = null): bool
     {
-        return $this->safeRefundCart(Cart::make()->addItem($product), $force, $gifts);
+        return $this->safeRefundCart(app(MakeService::class)->makeCart()->addItem($product), $force, $gifts);
     }
 
     /**
@@ -73,7 +73,7 @@ trait CanPay
      */
     public function refund(Product $product, bool $force = null, bool $gifts = null): bool
     {
-        return $this->refundCart(Cart::make()->addItem($product), $force, $gifts);
+        return $this->refundCart(app(MakeService::class)->makeCart()->addItem($product), $force, $gifts);
     }
 
     /**
@@ -84,7 +84,7 @@ trait CanPay
      */
     public function forceRefund(Product $product, bool $gifts = null): bool
     {
-        return $this->forceRefundCart(Cart::make()->addItem($product), $gifts);
+        return $this->forceRefundCart(app(MakeService::class)->makeCart()->addItem($product), $gifts);
     }
 
     /**
@@ -94,7 +94,7 @@ trait CanPay
      */
     public function safeRefundGift(Product $product, bool $force = null): bool
     {
-        return $this->safeRefundGiftCart(Cart::make()->addItem($product), $force);
+        return $this->safeRefundGiftCart(app(MakeService::class)->makeCart()->addItem($product), $force);
     }
 
     /**
@@ -105,7 +105,7 @@ trait CanPay
      */
     public function refundGift(Product $product, bool $force = null): bool
     {
-        return $this->refundGiftCart(Cart::make()->addItem($product), $force);
+        return $this->refundGiftCart(app(MakeService::class)->makeCart()->addItem($product), $force);
     }
 
     /**
@@ -115,7 +115,7 @@ trait CanPay
      */
     public function forceRefundGift(Product $product): bool
     {
-        return $this->forceRefundGiftCart(Cart::make()->addItem($product));
+        return $this->forceRefundGiftCart(app(MakeService::class)->makeCart()->addItem($product));
     }
 
 }

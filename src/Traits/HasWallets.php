@@ -107,7 +107,7 @@ trait HasWallets
      */
     public function hasWallet(string $slug): bool
     {
-        return (bool) $this->getWallet($slug);
+        return (bool)$this->getWallet($slug);
     }
 
 }
