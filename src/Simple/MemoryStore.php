@@ -20,7 +20,7 @@ class MemoryStore implements Storable
     {
         $wallet = app(WalletService::class)->getWallet($object);
         if (!\array_key_exists($wallet->getKey(), $this->balanceSheets)) {
-            $this->balanceSheets[$wallet->getKey()] = (int) $wallet->getOriginal('balance', 0);
+            $this->balanceSheets[$wallet->getKey()] = (int)$wallet->getOriginal('balance', 0);
         }
 
         return $this->balanceSheets[$wallet->getKey()];
