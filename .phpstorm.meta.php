@@ -6,14 +6,20 @@ namespace PHPSTORM_META {
     use Bavix\Wallet\Models\Transaction;
     use Bavix\Wallet\Models\Transfer;
     use Bavix\Wallet\Models\Wallet;
+    use Bavix\Wallet\Objects\Bring;
+    use Bavix\Wallet\Objects\Cart;
+    use Bavix\Wallet\Objects\EmptyLock;
+    use Bavix\Wallet\Objects\Operation;
     use Bavix\Wallet\Services\CommonService;
     use Bavix\Wallet\Services\ExchangeService;
     use Bavix\Wallet\Services\ProxyService;
     use Bavix\Wallet\Services\WalletService;
-    use Bavix\Wallet\Services\MakeService;
 
     override(\app(0), map([
-        MakeService::class => MakeService::class,
+        Cart::class => Cart::class,
+        Bring::class => Bring::class,
+        Operation::class => Operation::class,
+        EmptyLock::class => EmptyLock::class,
         ExchangeService::class => ExchangeService::class,
         CommonService::class => CommonService::class,
         ProxyService::class => ProxyService::class,

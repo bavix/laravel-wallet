@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Objects\EmptyLock;
 use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Contracts\Cache\Store;
@@ -87,8 +88,7 @@ class LockService
         }
         // @codeCoverageIgnoreEnd
 
-        return app(MakeService::class)
-            ->makeEmptyLock();
+        return app(EmptyLock::class);
     }
 
 }

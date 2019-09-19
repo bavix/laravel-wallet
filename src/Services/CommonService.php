@@ -9,6 +9,7 @@ use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Objects\Bring;
+use Bavix\Wallet\Objects\Operation;
 use Bavix\Wallet\Traits\HasWallet;
 use Illuminate\Support\Facades\DB;
 use function app;
@@ -52,8 +53,7 @@ class CommonService
                 ->getWallet($from);
 
             $transfers = $this->multiBrings([
-                app(MakeService::class)
-                    ->makeBring()
+                app(Bring::class)
                     ->setStatus($status)
                     ->setDeposit($deposit)
                     ->setWithdraw($withdraw)
@@ -84,8 +84,7 @@ class CommonService
             $wallet = $walletService->getWallet($wallet);
 
             $transactions = $this->multiOperation($wallet, [
-                app(MakeService::class)
-                    ->makeOperation()
+                app(Operation::class)
                     ->setType(Transaction::TYPE_WITHDRAW)
                     ->setConfirmed($confirmed)
                     ->setAmount(-$amount)
@@ -115,8 +114,7 @@ class CommonService
             $wallet = $walletService->getWallet($wallet);
 
             $transactions = $this->multiOperation($wallet, [
-                app(MakeService::class)
-                    ->makeOperation()
+                app(Operation::class)
                     ->setType(Transaction::TYPE_DEPOSIT)
                     ->setConfirmed($confirmed)
                     ->setAmount($amount)
