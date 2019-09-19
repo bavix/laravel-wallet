@@ -7,7 +7,6 @@ use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\MakeService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -230,7 +229,7 @@ trait CartPay
      */
     public function paid(Product $product, bool $gifts = null): ?Transfer
     {
-        return current(app(MakeService::class)->makeCart()->addItem($product)->alreadyBuy($this, $gifts)) ?: null;
+        return current(app(Cart::class)->addItem($product)->alreadyBuy($this, $gifts)) ?: null;
     }
 
 }

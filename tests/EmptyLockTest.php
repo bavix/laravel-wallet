@@ -2,7 +2,7 @@
 
 namespace Bavix\Wallet\Test;
 
-use Bavix\Wallet\Services\MakeService;
+use Bavix\Wallet\Objects\EmptyLock;
 
 class EmptyLockTest extends TestCase
 {
@@ -12,7 +12,7 @@ class EmptyLockTest extends TestCase
      */
     public function testSimple(): void
     {
-        $empty = app(MakeService::class)->makeEmptyLock();
+        $empty = app(EmptyLock::class);
         $this->assertTrue($empty->block(1));
         $this->assertTrue($empty->block(1, null));
         $this->assertNull($empty->get());
@@ -26,7 +26,7 @@ class EmptyLockTest extends TestCase
      */
     public function testOwner(): void
     {
-        $empty = app(MakeService::class)->makeEmptyLock();
+        $empty = app(EmptyLock::class);
         $str = $empty->owner();
         $this->assertIsString($str);
         $this->assertEquals($str, $empty->owner());
