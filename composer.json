@@ -14,7 +14,7 @@
     "payments"
   ],
   "minimum-stability": "stable",
-  "homepage": "https://github.com/bavix/laravel-wallet",
+  "homepage": "https://bavix.github.io/laravel-wallet/",
   "license": "MIT",
   "authors": [
     {
