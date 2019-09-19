@@ -54,6 +54,7 @@ class LockService
 
     /**
      * @return Store|null
+     * @codeCoverageIgnore
      */
     protected function cache(): ?Store
     {
