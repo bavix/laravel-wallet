@@ -3,11 +3,15 @@
 namespace Bavix\Wallet\Simple;
 
 use Bavix\Wallet\Interfaces\Storable;
-use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Services\WalletService;
 
 class MemoryStore implements Storable
 {
+
+    /**
+     * @var array
+     */
+    protected $balanceSheets = [];
 
     /**
      * @inheritDoc
@@ -15,12 +19,11 @@ class MemoryStore implements Storable
     public function getBalance($object): int
     {
         $wallet = app(WalletService::class)->getWallet($object);
-        $proxy = app(ProxyService::class);
-        if (!$proxy->has($wallet->getKey())) {
-            $proxy->set($wallet->getKey(), (int) $wallet->getOriginal('balance', 0));
+        if (!\array_key_exists($wallet->getKey(), $this->balanceSheets)) {
+            $this->balanceSheets[$wallet->getKey()] = (int) $wallet->getOriginal('balance', 0);
         }
 
-        return $proxy[$wallet->getKey()];
+        return $this->balanceSheets[$wallet->getKey()];
     }
 
     /**
@@ -28,14 +31,7 @@ class MemoryStore implements Storable
      */
     public function incBalance($object, int $amount): int
     {
-        $wallet = app(WalletService::class)->getWallet($object);
-        $proxy = app(ProxyService::class);
-        $balance = $wallet->balance + $amount;
-
-        if ($proxy->has($wallet->getKey())) {
-            $balance = $proxy->get($wallet->getKey()) + $amount;
-        }
-
+        $balance = $this->getBalance($object) + $amount;
         $this->setBalance($object, $balance);
         return $balance;
     }
@@ -46,8 +42,8 @@ class MemoryStore implements Storable
     public function setBalance($object, int $amount): bool
     {
         $wallet = app(WalletService::class)->getWallet($object);
-        $proxy = app(ProxyService::class);
-        return (bool)$proxy->set($wallet->getKey(), $amount);
+        $this->balanceSheets[$wallet->getKey()] = $amount;
+        return true;
     }
 
 }
