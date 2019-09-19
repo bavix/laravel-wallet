@@ -54,7 +54,7 @@ class CommonService
                 ->getWallet($from);
 
             $transfers = $this->multiBrings([
-                (new Bring())
+                app(Bring::class)
                     ->setStatus($status)
                     ->setDeposit($deposit)
                     ->setWithdraw($withdraw)
@@ -85,7 +85,7 @@ class CommonService
             $wallet = $walletService->getWallet($wallet);
 
             $transactions = $this->multiOperation($wallet, [
-                (new Operation())
+                app(Operation::class)
                     ->setType(Transaction::TYPE_WITHDRAW)
                     ->setConfirmed($confirmed)
                     ->setAmount(-$amount)
@@ -115,7 +115,7 @@ class CommonService
             $wallet = $walletService->getWallet($wallet);
 
             $transactions = $this->multiOperation($wallet, [
-                (new Operation())
+                app(Operation::class)
                     ->setType(Transaction::TYPE_DEPOSIT)
                     ->setConfirmed($confirmed)
                     ->setAmount($amount)

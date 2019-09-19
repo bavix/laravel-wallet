@@ -8,6 +8,10 @@ use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
+use Bavix\Wallet\Objects\Bring;
+use Bavix\Wallet\Objects\Cart;
+use Bavix\Wallet\Objects\EmptyLock;
+use Bavix\Wallet\Objects\Operation;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
@@ -80,14 +84,22 @@ class WalletServiceProvider extends ServiceProvider
         // Bind eloquent models to IoC container
         $this->app->singleton(Rateable::class, config('wallet.package.rateable'));
         $this->app->singleton(Storable::class, config('wallet.package.storable'));
-        $this->app->singleton(Transaction::class, config('wallet.transaction.model'));
-        $this->app->singleton(Transfer::class, config('wallet.transfer.model'));
-        $this->app->singleton(Wallet::class, config('wallet.wallet.model'));
         $this->app->singleton(ExchangeService::class, config('wallet.services.exchange'));
         $this->app->singleton(CommonService::class, config('wallet.services.common'));
         $this->app->singleton(ProxyService::class, config('wallet.services.proxy'));
         $this->app->singleton(WalletService::class, config('wallet.services.wallet'));
         $this->app->singleton(LockService::class, config('wallet.services.lock'));
+
+        // models
+        $this->app->bind(Transaction::class, config('wallet.transaction.model'));
+        $this->app->bind(Transfer::class, config('wallet.transfer.model'));
+        $this->app->bind(Wallet::class, config('wallet.wallet.model'));
+
+        // object's
+        $this->app->bind(Bring::class, config('wallet.objects.bring'));
+        $this->app->bind(Cart::class, config('wallet.objects.cart'));
+        $this->app->bind(EmptyLock::class, config('wallet.objects.emptyLock'));
+        $this->app->bind(Operation::class, config('wallet.objects.operation'));
     }
 
 }

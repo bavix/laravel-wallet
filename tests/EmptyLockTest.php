@@ -12,7 +12,7 @@ class EmptyLockTest extends TestCase
      */
     public function testSimple(): void
     {
-        $empty = new EmptyLock();
+        $empty = app(EmptyLock::class);
         $this->assertTrue($empty->block(1));
         $this->assertTrue($empty->block(1, null));
         $this->assertNull($empty->get());
@@ -26,7 +26,7 @@ class EmptyLockTest extends TestCase
      */
     public function testOwner(): void
     {
-        $empty = new EmptyLock();
+        $empty = app(EmptyLock::class);
         $str = $empty->owner();
         $this->assertIsString($str);
         $this->assertEquals($str, $empty->owner());

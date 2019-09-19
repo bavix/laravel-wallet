@@ -229,7 +229,7 @@ trait CartPay
      */
     public function paid(Product $product, bool $gifts = null): ?Transfer
     {
-        return current(Cart::make()->addItem($product)->alreadyBuy($this, $gifts)) ?: null;
+        return current(app(Cart::class)->addItem($product)->alreadyBuy($this, $gifts)) ?: null;
     }
 
 }

@@ -34,7 +34,7 @@ class LockService
      */
     public function lock($self, string $name, \Closure $closure)
     {
-        return $this->lockProvider($self, $name, (int) config('wallet.lock.seconds'))
+        return $this->lockProvider($self, $name, (int)config('wallet.lock.seconds'))
             ->get($this->bindTo($self, $closure));
     }
 
@@ -88,7 +88,7 @@ class LockService
         }
         // @codeCoverageIgnoreEnd
 
-        return new EmptyLock();
+        return app(EmptyLock::class);
     }
 
 }

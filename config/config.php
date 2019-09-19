@@ -1,5 +1,9 @@
 <?php
 
+use Bavix\Wallet\Objects\Bring;
+use Bavix\Wallet\Objects\Cart;
+use Bavix\Wallet\Objects\EmptyLock;
+use Bavix\Wallet\Objects\Operation;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ProxyService;
@@ -51,6 +55,13 @@ return [
         'proxy' => ProxyService::class,
         'wallet' => WalletService::class,
         'lock' => LockService::class,
+    ],
+
+    'objects' => [
+        'bring' => Bring::class,
+        'cart' => Cart::class,
+        'emptyLock' => EmptyLock::class,
+        'operation' => Operation::class,
     ],
 
     /**

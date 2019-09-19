@@ -35,7 +35,7 @@ class WalletService
     {
         $fee = 0;
         if ($wallet instanceof Taxable) {
-            $fee = (int) ($amount * $wallet->getFeePercent() / 100);
+            $fee = (int)($amount * $wallet->getFeePercent() / 100);
         }
 
         /**

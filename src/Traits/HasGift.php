@@ -86,7 +86,7 @@ trait HasGift
                     ->getWallet($to);
 
                 $transfers = $commonService->assemble([
-                    (new Bring())
+                    app(Bring::class)
                         ->setStatus(Transfer::STATUS_GIFT)
                         ->setDeposit($deposit)
                         ->setWithdraw($withdraw)
