@@ -225,7 +225,14 @@ class CommonService
             $balance = app(Storable::class)
                 ->incBalance($wallet, $amount);
 
-            $result = $wallet->update(compact('balance'));
+            try {
+                $result = $wallet->update(compact('balance'));
+            } catch (\Throwable $throwable) {
+                app(Storable::class)
+                    ->setBalance($wallet, $wallet->getAvailableBalance());
+
+                throw $throwable;
+            }
 
             if (!$result) {
                 app(Storable::class)

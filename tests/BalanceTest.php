@@ -4,13 +4,14 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Models\Wallet;
-use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\UserMulti;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\MockObject\MockObject;
+use PDOException;
 use function app;
 
 class BalanceTest extends TestCase
@@ -148,7 +149,7 @@ class BalanceTest extends TestCase
         $this->assertTrue($wallet->exists);
 
         /**
-         * @var Wallet $mockWallet
+         * @var Wallet|MockObject $mockWallet
          */
         $mockWallet = $this->createMock(\get_class($wallet));
         $mockWallet->method('update')->willReturn(false);
@@ -159,6 +160,36 @@ class BalanceTest extends TestCase
 
         $this->assertFalse($result);
         $this->assertEquals(0, app(Storable::class)->getBalance($wallet));
+    }
+
+    /**
+     * @return void
+     * @throws
+     */
+    public function testThrowUpdate(): void
+    {
+        $this->expectException(PDOException::class);
+
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = factory(Buyer::class)->create();
+        $this->assertFalse($buyer->relationLoaded('wallet'));
+        $wallet = $buyer->wallet;
+
+        $this->assertFalse($wallet->exists);
+        $this->assertEquals($wallet->balance, 0);
+        $this->assertTrue($wallet->exists);
+
+        /**
+         * @var Wallet|MockObject $mockWallet
+         */
+        $mockWallet = $this->createMock(\get_class($wallet));
+        $mockWallet->method('update')->willThrowException(new PDOException());
+        $mockWallet->method('getKey')->willReturn($wallet->getKey());
+
+        app(CommonService::class)
+            ->addBalance($mockWallet, 100);
     }
 
     /**
