@@ -2,13 +2,16 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Models\Wallet;
-use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ProxyService;
+use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\UserMulti;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\MockObject\MockObject;
+use PDOException;
 use function app;
 
 class BalanceTest extends TestCase
@@ -104,6 +107,89 @@ class BalanceTest extends TestCase
 
         $wallet->deposit(1);
         $this->assertEquals($wallet->balance, 1001);
+    }
+
+    /**
+     * @return void
+     * @deprecated
+     * @throws
+     */
+    public function testGetBalance(): void
+    {
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = factory(Buyer::class)->create();
+        $this->assertFalse($buyer->relationLoaded('wallet'));
+        $wallet = $buyer->wallet;
+
+        $this->assertFalse($wallet->exists);
+        $this->assertEquals($wallet->balance, 0);
+        $this->assertTrue($wallet->exists);
+
+        $this->assertEquals(0, app(Storable::class)->getBalance($wallet));
+        $this->assertEquals(0, app(WalletService::class)->getBalance($wallet));
+    }
+
+    /**
+     * @return void
+     * @throws
+     */
+    public function testFailUpdate(): void
+    {
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = factory(Buyer::class)->create();
+        $this->assertFalse($buyer->relationLoaded('wallet'));
+        $wallet = $buyer->wallet;
+
+        $this->assertFalse($wallet->exists);
+        $this->assertEquals($wallet->balance, 0);
+        $this->assertTrue($wallet->exists);
+
+        /**
+         * @var Wallet|MockObject $mockWallet
+         */
+        $mockWallet = $this->createMock(\get_class($wallet));
+        $mockWallet->method('update')->willReturn(false);
+        $mockWallet->method('getKey')->willReturn($wallet->getKey());
+
+        $result = app(CommonService::class)
+            ->addBalance($mockWallet, 100);
+
+        $this->assertFalse($result);
+        $this->assertEquals(0, app(Storable::class)->getBalance($wallet));
+    }
+
+    /**
+     * @return void
+     * @throws
+     */
+    public function testThrowUpdate(): void
+    {
+        $this->expectException(PDOException::class);
+
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = factory(Buyer::class)->create();
+        $this->assertFalse($buyer->relationLoaded('wallet'));
+        $wallet = $buyer->wallet;
+
+        $this->assertFalse($wallet->exists);
+        $this->assertEquals($wallet->balance, 0);
+        $this->assertTrue($wallet->exists);
+
+        /**
+         * @var Wallet|MockObject $mockWallet
+         */
+        $mockWallet = $this->createMock(\get_class($wallet));
+        $mockWallet->method('update')->willThrowException(new PDOException());
+        $mockWallet->method('getKey')->willReturn($wallet->getKey());
+
+        app(CommonService::class)
+            ->addBalance($mockWallet, 100);
     }
 
     /**

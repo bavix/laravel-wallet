@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
@@ -72,7 +73,7 @@ trait HasWallet
      */
     public function getBalanceAttribute(): int
     {
-        return app(WalletService::class)->getBalance($this);
+        return app(Storable::class)->getBalance($this);
     }
 
     /**
