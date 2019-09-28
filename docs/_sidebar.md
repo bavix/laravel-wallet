@@ -14,7 +14,7 @@
     - [Transfer](transfer)
     - [Refresh balance](refresh)
     - [Confirm](confirm)
-<!--    - [Exchange](exchange)-->
+    - [Exchange](exchange)
     - [Withdraw taxing](taxing)
 
 - Purchases
@@ -28,14 +28,15 @@
 - Additions
 
     - [Wallet Swap](laravel-wallet-swap)
+    - [Wallet Vacuum](laravel-wallet-vacuum)
 
 - Multi Wallets
 
     - [New Wallet](new-wallet)
     - [Transfer](wallet-transfer)
 
-<!--- Currencies-->
+- Currencies
 
-<!--    - [Rate Service](rate)-->
-<!--    - [Create Wallet](rate-wallet)-->
-<!--    - [Taxing](rate-taxing)-->
+    - [Rate Service](rate)
+    - [Create Wallet](rate-wallet)
+    - [Taxing](rate-taxing)
