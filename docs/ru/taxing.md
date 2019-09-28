@@ -1,8 +1,8 @@
 ## User Model
 
-Add the `CanPay` trait and `Customer` interface to your User model.
+Добавим `CanPay` trait и `Customer` interface в модель User.
 
-> The trait `CanPay` already inherits `HasWallet`, reuse will cause an error.
+> Трейт `CanPay` уже наследует `HasWallet`, повторное использование вызовет ошибку.
 
 ```php
 use Bavix\Wallet\Traits\CanPay;
@@ -16,7 +16,7 @@ class User extends Model implements Customer
 
 ## Item Model
 
-Add the `HasWallet` trait and `Product` interface to Item model.
+Добавим `HasWallet` trait и `Product` interface в модель Item.
 
 ```php
 use Bavix\Wallet\Traits\HasWallet;
@@ -63,32 +63,33 @@ class Item extends Model implements Product, Taxable
 }
 ```
 
-## Tax process
+## Оплата с налогом
 
-Find the user and check the balance.
+Находим пользователя и проверяем его баланс.
 
 ```php
 $user = User::first();
 $user->balance; // int(103)
 ```
 
-Find the goods and check the cost.
+Деньги есть, это хорошо. Проверим стоимость товара.
 
 ```php
 $item = Item::first();
 $item->getAmountProduct(); // int(100)
 ```
 
-The user can buy a product, buy...
+Товар стоит 100 бубликов. Значит налог составит 3 бублика.
+Пользователю хватает средств для покупки товара. 
 
 ```php
 $user->pay($item); // success, 100 (product) + 3 (fee) = 103
 $user->balance; // int(0)
 ```
 
-## Minimal Taxing
+## Минимальный налог
 
-Add trait `MinimalTaxable` in class `Item`.
+Добавим trait `MinimalTaxable` в модель `Item`.
 
 ```php
 use Bavix\Wallet\Traits\HasWallet;
@@ -140,50 +141,52 @@ class Item extends Model implements Product, MinimalTaxable
 }
 ```
 
-#### Successfully
+#### Успешная операция
 
-Find the user and check the balance.
+Находим пользователя и проверяем баланс.
 
 ```php
 $user = User::first();
 $user->balance; // int(105)
 ```
 
-Find the goods and check the cost.
+Денег хватает, проверяем стоимость товара.
 
 ```php
 $item = Item::first();
 $item->getAmountProduct(); // int(100)
 ```
 
-The user can buy a product, buy...
+Налог 3%, а минимальный налог составляет 5 бубликов. 
+Нашему пользователю хватает средств для покупки товара.
 
 ```php
-$user->pay($item); // success, 100 (product) + 5 (minimal fee) = 105
+$user->pay($item); // успешно, 100 (product) + 5 (minimal fee) = 105
 $user->balance; // int(0)
 ```
 
-#### Failed
+#### Ошибочная операция
 
-Find the user and check the balance.
+Находим пользователя и проверяем баланс.
 
 ```php
 $user = User::first();
 $user->balance; // int(103)
 ```
 
-Find the goods and check the cost.
+Находим товар.
 
 ```php
 $item = Item::first();
 $item->getAmountProduct(); // int(100)
 ```
 
-The user can buy a product, buy...
+Налог составит 5 бубликов, а у пользователя только 103 бублика.
+Возникнет ошибка при попытке оплаты, воспользуемся `safePay` чтобы это проверить.
 
 ```php
-$user->safePay($item); // failed, 100 (product) + 5 (minimal fee) = 105
+$user->safePay($item); // ошибка, 100 (product) + 5 (minimal fee) = 105
 $user->balance; // int(103)
 ```
 
-It worked! 
+Это работает!

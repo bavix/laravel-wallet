@@ -3,7 +3,7 @@
     - [Введение](README)
     - [Требования](requirements)
     - [Установка](installation)
-    - [Lumen installation](lumen)
+    - [Установка в Lumen](lumen)
     - [Как использовать](basic-usage)
     - [Обновление](upgrade-guide)
 
@@ -13,9 +13,9 @@
     - [Вывод](withdraw)
     - [Перевод](transfer)
     - [Пересчёт баланса](refresh)
-    - [Confirm](confirm)
+    - [Подтверждение](confirm)
     - [Exchange](exchange)
-    - [Withdraw taxing](taxing)
+    - [Налог на списание](taxing)
 
 - Покупки
 
