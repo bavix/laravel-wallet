@@ -25,7 +25,7 @@
     - [Подарок](gift)
     - [Корзина](cart)
     
-- Additions
+- Дополнения
 
     - [Wallet Swap](laravel-wallet-swap)
 
