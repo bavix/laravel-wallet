@@ -15,7 +15,7 @@ matrix:
 
 before_script:
   - pecl install pcov
-  - phpenv config-rm xdebug.ini
+  - phpenv config-rm xdebug.ini || echo "xdebug not available"
   - bash <(curl -s https://raw.githubusercontent.com/php-cache/cache/master/build/php/7.2/Memcached.sh)
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
