@@ -15,9 +15,8 @@ matrix:
 
 before_script:
   - pecl install pcov
-  - phpdismod -v ALL xdebug
-  - phpenmod -v ALL pcov
-  - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
+  - phpenv config-rm xdebug.ini
+  - echo "extension = pcov.so\n" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - bash <(curl -s https://raw.githubusercontent.com/php-cache/cache/master/build/php/7.2/Memcached.sh)
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
