@@ -28,15 +28,16 @@
 - Additions
 
     - [Wallet Swap](laravel-wallet-swap)
-    - [Wallet Vacuum](laravel-wallet-vacuum)
 
 - Multi Wallets
 
     - [New Wallet](new-wallet)
     - [Transfer](wallet-transfer)
 
+<!--
 - Currencies
 
     - [Rate Service](rate)
     - [Create Wallet](rate-wallet)
     - [Taxing](rate-taxing)
+-->
