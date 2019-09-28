@@ -4,10 +4,12 @@
   "keywords": [
     "laravel",
     "laravel5",
+    "laravel6",
     "credits",
     "bavix",
     "currency",
     "laravel5-package",
+    "laravel6-package",
     "laravel-wallet",
     "virtual",
     "wallet",
@@ -38,7 +40,8 @@
     "laravel/cashier": "^7.0|^8.0|^9.0|^10.0"
   },
   "suggest": {
-    "bavix/laravel-wallet-swap": "Addition to the laravel-wallet library for quick setting of exchange rates"
+    "bavix/laravel-wallet-swap": "Addition to the laravel-wallet library for quick setting of exchange rates",
+    "bavix/laravel-wallet-vacuum": "Addition to the laravel-wallet library for quick fix race condition"
   },
   "autoload": {
     "psr-4": {
