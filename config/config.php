@@ -27,9 +27,16 @@ return [
 
     /**
      * Lock settings for highload projects
+     *
+     * If you want to replace the default cache with another,
+     * then write the name of the driver cache in the key `wallet.lock.cache`.
+     * @see https://laravel.com/docs/6.x/cache#driver-prerequisites
+     *
+     * @example
+     *  'cache' => 'redis'
      */
     'lock' => [
-        'cache' => 'memcached',
+        'cache' => null,
         'enabled' => false,
         'seconds' => 1,
     ],
