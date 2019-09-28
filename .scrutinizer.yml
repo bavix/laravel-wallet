@@ -5,7 +5,7 @@ build:
       pecl_extensions:
         - memcached
     memcached: true
-  
+
   nodes:
     analysis:
       project_setup:
@@ -13,15 +13,15 @@ build:
       tests:
         override:
         - php-scrutinizer-run
+        - command: 'vendor/bin/phpunit --dump-xdebug-filter xdebug-filter.php'
         -
-          command: 'vendor/bin/phpunit --coverage-clover=some-file'
+          command: 'vendor/bin/phpunit --prepend xdebug-filter.php --coverage-clover=some-file'
           coverage:
             file: 'some-file'
             format: 'clover'
-          idle_timeout: 900
 
 filter:
-  excluded_paths: [tests/*, database/*, config/*]
+  excluded_paths: [docs/*, resources/*, tests/*, database/*, config/*]
 
 checks:
 
@@ -43,7 +43,10 @@ checks:
     fix_doc_comments: true
 
 coding_style:
-    php:
-        spaces:
-            before_parentheses:
-                closure_definition: true
+  php:
+    spaces:
+      before_parentheses:
+        closure_definition: true
+      other:
+        after_type_cast: false
+
