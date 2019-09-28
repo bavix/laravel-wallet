@@ -25,6 +25,6 @@ script:
   - ./vendor/bin/phpunit --coverage-xml=build/coverage-xml --log-junit=build/phpunit.junit.xml
   - ./vendor/bin/infection --coverage=build --min-msi=60 -j$(nproc)
 
-after_script:
-  - cp ./build/logs/clover.xml clover.xml
+after_success:
   - if [ $(phpenv version-name) = "7.3" ]; then ./cc-test-reporter after-build --coverage-input-type clover --exit-code $TRAVIS_TEST_RESULT; fi
+  - bash <(curl -s https://codecov.io/bash)
