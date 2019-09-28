@@ -47,3 +47,6 @@ coding_style:
     spaces:
       before_parentheses:
         closure_definition: true
+      other:
+        after_type_cast: false
+
