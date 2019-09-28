@@ -29,6 +29,7 @@ return [
      * Lock settings for highload projects
      */
     'lock' => [
+        'cache' => 'memcached',
         'enabled' => false,
         'seconds' => 1,
     ],

@@ -59,7 +59,8 @@ class LockService
     protected function cache(): ?Store
     {
         try {
-            return Cache::getStore();
+            return Cache::store(config('wallet.lock.cache'))
+                ->getStore();
         } catch (\Throwable $throwable) {
             return null;
         }

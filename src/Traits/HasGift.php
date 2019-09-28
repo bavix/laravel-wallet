@@ -75,11 +75,10 @@ trait HasGift
                  * Santa pays taxes
                  */
                 if (!$force) {
-                    $commonService->verifyWithdraw($santa, $amount);
+                    $commonService->verifyWithdraw($santa, $amount + $fee);
                 }
 
                 $withdraw = $commonService->forceWithdraw($santa, $amount + $fee, $meta);
-
                 $deposit = $commonService->deposit($product, $amount, $meta);
 
                 $from = app(WalletService::class)
