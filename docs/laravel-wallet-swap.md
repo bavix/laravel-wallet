@@ -25,7 +25,7 @@ class User extends Model implements Wallet
 ```
 
 ### Simple example
-Find wallets and translate from one to another.
+Find wallets and exchange from one to another.
 
 ```php
 $usd = $user->getWallet('usd');
@@ -34,7 +34,7 @@ $rub = $user->getWallet('rub');
 $usd->balance; // int(200)
 $rub->balance; // int(0)
 
-$usd->exchange(10, $rub);
+$usd->exchange($rub, 10);
 $usd->balance; // int(190)
 $rub->balance; // int(622)
 ```

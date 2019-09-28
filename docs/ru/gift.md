@@ -1,8 +1,8 @@
 ## User Model
 
-Add the `CanPay` trait and `Customer` interface to your User model.
+Добавим `CanPay` trait и `Customer` interface в модель User.
 
-> The trait `CanPay` already inherits `HasWallet`, reuse will cause an error.
+> Трейт `CanPay` уже наследует `HasWallet`, повторное использование вызовет ошибку.
 
 ```php
 use Bavix\Wallet\Traits\CanPay;
@@ -16,7 +16,7 @@ class User extends Model implements Customer
 
 ## Item Model
 
-Add the `HasWallet` trait and `Product` interface to Item model.
+Добавим `HasWallet` trait и `Product` interface в модель Item.
 
 ```php
 use Bavix\Wallet\Traits\HasWallet;
@@ -57,9 +57,9 @@ class Item extends Model implements Product
 }
 ```
 
-## Santa Claus, give gifts
+## Дед мороз дарит подарки
 
-Find the user's and check the balance.
+Находим дедушку мороза и счастливчика.
 
 ```php
 $first = User::first(); 
@@ -70,8 +70,8 @@ $first->balance; // int(115)
 $last->balance; // int(0)
 ```
 
-One user wants to give a gift to another.
-Find the product.
+У дедушки есть деньги на подарок.
+Находим сам подарок (товар).
 
 ```php
 $item = Item::first();
@@ -79,9 +79,9 @@ $item->getAmountProduct(); // int(100)
 $item->balance; // int(0)
 ```
 
-The first user buys the product and gives it.
+Дедушка мороз дарит подарок "ребёнку".
 
-> If the product uses the `Taxable` interface, then Santa will pay tax
+> Если товар использует `Taxable` интерфейс, то дедушка заплатит налог
 
 ```php
 $first->gift($last, $item);
@@ -91,4 +91,4 @@ $last->balance; // int(0)
 $item->balance; // int(100)
 ```
 
-It worked! 
+Это работает!
