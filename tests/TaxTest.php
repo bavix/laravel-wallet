@@ -53,4 +53,53 @@ class TaxTest extends TestCase
         $this->assertEquals($buyer->balance, 0);
     }
 
+    /**
+     * @return void
+     */
+    public function testGift(): void
+    {
+        /**
+         * @var Buyer $santa
+         * @var Buyer $child
+         * @var ItemTax $product
+         */
+        [$santa, $child] = factory(Buyer::class, 2)->create();
+        $product = factory(ItemTax::class)->create([
+            'quantity' => 1,
+        ]);
+
+        $fee = (int)($product->price * $product->getFeePercent() / 100);
+        $balance = $product->price + $fee;
+
+        $this->assertEquals($santa->balance, 0);
+        $this->assertEquals($child->balance, 0);
+        $santa->deposit($balance);
+
+        $this->assertNotEquals($santa->balance, 0);
+        $this->assertEquals($child->balance, 0);
+        $transfer = $santa->wallet->gift($child, $product);
+        $this->assertNotNull($transfer);
+
+        /**
+         * @var Transaction $withdraw
+         * @var Transaction $deposit
+         */
+        $withdraw = $transfer->withdraw;
+        $deposit = $transfer->deposit;
+
+        $this->assertEquals($withdraw->amount, -$balance);
+        $this->assertEquals($deposit->amount, $product->getAmountProduct());
+        $this->assertNotEquals($deposit->amount, $withdraw->amount);
+        $this->assertEquals($transfer->fee, $fee);
+
+        $this->assertFalse($santa->safeRefundGift($product));
+        $this->assertTrue($child->refundGift($product));
+        $this->assertEquals($santa->balance, $deposit->amount);
+        $this->assertEquals($child->balance, 0);
+        $this->assertEquals($product->balance, 0);
+
+        $santa->withdraw($santa->balance);
+        $this->assertEquals($santa->balance, 0);
+    }
+
 }
