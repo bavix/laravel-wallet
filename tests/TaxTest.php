@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\ItemTax;
@@ -99,6 +100,34 @@ class TaxTest extends TestCase
         $this->assertEquals($product->balance, 0);
 
         $santa->withdraw($santa->balance);
+        $this->assertEquals($santa->balance, 0);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGiftFail(): void
+    {
+        $this->expectException(InsufficientFunds::class);
+
+        /**
+         * @var Buyer $santa
+         * @var Buyer $child
+         * @var ItemTax $product
+         */
+        [$santa, $child] = factory(Buyer::class, 2)->create();
+        $product = factory(ItemTax::class)->create([
+            'quantity' => 1,
+        ]);
+
+        $this->assertEquals($santa->balance, 0);
+        $this->assertEquals($child->balance, 0);
+        $santa->deposit($product->getAmountProduct());
+
+        $this->assertNotEquals($santa->balance, 0);
+        $this->assertEquals($child->balance, 0);
+        $santa->wallet->gift($child, $product);
+
         $this->assertEquals($santa->balance, 0);
     }
 
