@@ -34,7 +34,7 @@ $rub = $user->getWallet('rub');
 $usd->balance; // int(200)
 $rub->balance; // int(0)
 
-$usd->exchange(10, $rub);
+$usd->exchange($rub, 10);
 $usd->balance; // int(190)
 $rub->balance; // int(622)
 ```

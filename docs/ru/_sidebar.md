@@ -14,7 +14,7 @@
     - [Перевод](transfer)
     - [Пересчёт баланса](refresh)
     - [Подтверждение](confirm)
-    - [Exchange](exchange)
+    - [Обмен](exchange)
     - [Налог на списание](taxing)
 
 - Покупки
@@ -22,7 +22,7 @@
     - [Платеж](payment)
     - [Купить бесплатно](pay-free)
     - [Возврат](refund)
-    - [Gift](gift)
+    - [Подарок](gift)
     - [Корзина](cart)
     
 - Additions
