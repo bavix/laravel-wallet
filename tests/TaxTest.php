@@ -117,6 +117,7 @@ class TaxTest extends TestCase
          */
         [$santa, $child] = factory(Buyer::class, 2)->create();
         $product = factory(ItemTax::class)->create([
+            'price' => 200,
             'quantity' => 1,
         ]);
 
