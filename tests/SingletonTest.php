@@ -8,6 +8,7 @@ use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Objects\EmptyLock;
 use Bavix\Wallet\Objects\Operation;
 use Bavix\Wallet\Services\CommonService;
+use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\ProxyService;
@@ -122,6 +123,14 @@ class SingletonTest extends TestCase
     public function testWalletService(): void
     {
         $this->assertEquals($this->getRefId(WalletService::class), $this->getRefId(WalletService::class));
+    }
+
+    /**
+     * @return void
+     */
+    public function testDbService(): void
+    {
+        $this->assertEquals($this->getRefId(DbService::class), $this->getRefId(DbService::class));
     }
 
     /**
