@@ -7,6 +7,11 @@ use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class DbService
+ * @package Bavix\Wallet\Services
+ * @codeCoverageIgnore
+ */
 class DbService
 {
 
