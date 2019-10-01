@@ -8,6 +8,7 @@ use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\CommonService;
+use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\WalletService;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
@@ -41,7 +42,7 @@ trait HasWallet
     public function deposit(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         $self = $this;
-        return DB::transaction(static function () use ($self, $amount, $meta, $confirmed) {
+        return app(DbService::class)->transaction(static function () use ($self, $amount, $meta, $confirmed) {
             return app(CommonService::class)
                 ->deposit($self, $amount, $meta, $confirmed);
         });
@@ -165,7 +166,7 @@ trait HasWallet
     public function forceWithdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         $self = $this;
-        return DB::transaction(static function () use ($self, $amount, $meta, $confirmed) {
+        return app(DbService::class)->transaction(static function () use ($self, $amount, $meta, $confirmed) {
             return app(CommonService::class)
                 ->forceWithdraw($self, $amount, $meta, $confirmed);
         });
@@ -183,7 +184,7 @@ trait HasWallet
     public function forceTransfer(Wallet $wallet, int $amount, ?array $meta = null): Transfer
     {
         $self = $this;
-        return DB::transaction(static function () use ($self, $amount, $wallet, $meta) {
+        return app(DbService::class)->transaction(static function () use ($self, $amount, $wallet, $meta) {
             return app(CommonService::class)
                 ->forceTransfer($self, $wallet, $amount, $meta);
         });

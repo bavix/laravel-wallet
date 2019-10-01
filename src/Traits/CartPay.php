@@ -7,6 +7,7 @@ use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\CommonService;
+use Bavix\Wallet\Services\DbService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -32,7 +33,7 @@ trait CartPay
             ->verifyWithdraw($this, 0, true);
 
         $self = $this;
-        return DB::transaction(static function () use ($self, $cart) {
+        return app(DbService::class)->transaction(static function () use ($self, $cart) {
             $results = [];
             foreach ($cart->getItems() as $product) {
                 $results[] = app(CommonService::class)->forceTransfer(
@@ -75,7 +76,7 @@ trait CartPay
         }
 
         $self = $this;
-        return DB::transaction(static function () use ($self, $cart, $force) {
+        return app(DbService::class)->transaction(static function () use ($self, $cart, $force) {
             $results = [];
             foreach ($cart->getItems() as $product) {
                 if ($force) {
@@ -138,7 +139,7 @@ trait CartPay
     public function refundCart(Cart $cart, bool $force = null, bool $gifts = null): bool
     {
         $self = $this;
-        return DB::transaction(static function () use ($self, $cart, $force, $gifts) {
+        return app(DbService::class)->transaction(static function () use ($self, $cart, $force, $gifts) {
             $results = [];
             $transfers = $cart->alreadyBuy($self, $gifts);
             if (count($transfers) !== count($cart)) {

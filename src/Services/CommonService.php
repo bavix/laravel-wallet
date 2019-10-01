@@ -186,7 +186,7 @@ class CommonService
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($brings) {
             $self = $this;
-            return DB::transaction(static function () use ($self, $brings) {
+            return app(DbService::class)->transaction(static function () use ($self, $brings) {
                 return $self->multiBrings($brings);
             });
         });
