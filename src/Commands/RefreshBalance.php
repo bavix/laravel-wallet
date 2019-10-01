@@ -8,7 +8,6 @@ use Bavix\Wallet\Services\ProxyService;
 use Illuminate\Console\Command;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Database\SQLiteConnection;
-use Illuminate\Support\Facades\DB;
 use function config;
 
 /**

@@ -9,7 +9,6 @@ use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\DB;
 use Throwable;
 use function array_unique;
 use function count;

@@ -12,7 +12,6 @@ use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\WalletService;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Throwable;
 use function app;
 use function config;
@@ -38,6 +37,7 @@ trait HasWallet
      * @param bool $confirmed
      *
      * @return Transaction
+     * @throws
      */
     public function deposit(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
@@ -162,6 +162,7 @@ trait HasWallet
      * @param bool $confirmed
      *
      * @return Transaction
+     * @throws
      */
     public function forceWithdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
@@ -180,6 +181,7 @@ trait HasWallet
      * @param int $amount
      * @param array|null $meta
      * @return Transfer
+     * @throws
      */
     public function forceTransfer(Wallet $wallet, int $amount, ?array $meta = null): Transfer
     {

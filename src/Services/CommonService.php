@@ -12,7 +12,6 @@ use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Operation;
 use Bavix\Wallet\Traits\HasWallet;
-use Illuminate\Support\Facades\DB;
 use function app;
 use function compact;
 

@@ -10,7 +10,6 @@ use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\WalletService;
-use Illuminate\Support\Facades\DB;
 
 trait CanExchange
 {
