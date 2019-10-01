@@ -7,9 +7,9 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Services\CommonService;
+use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\WalletService;
-use Illuminate\Support\Facades\DB;
 use Throwable;
 use function app;
 
@@ -63,7 +63,7 @@ trait HasGift
              * I think it is wrong to make the "assemble" method public.
              * That's why I address him like this!
              */
-            return DB::transaction(static function () use ($santa, $to, $product, $force) {
+            return app(DbService::class)->transaction(static function () use ($santa, $to, $product, $force) {
                 $amount = $product->getAmountProduct();
                 $meta = $product->getMetaProduct();
                 $fee = app(WalletService::class)

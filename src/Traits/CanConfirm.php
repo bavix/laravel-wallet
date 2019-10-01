@@ -6,9 +6,9 @@ use Bavix\Wallet\Exceptions\ConfirmedInvalid;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Services\CommonService;
+use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\WalletService;
-use Illuminate\Support\Facades\DB;
 
 trait CanConfirm
 {
@@ -22,7 +22,7 @@ trait CanConfirm
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
             $self = $this;
-            return DB::transaction(static function () use ($self, $transaction) {
+            return app(DbService::class)->transaction(static function () use ($self, $transaction) {
                 $wallet = app(WalletService::class)
                     ->getWallet($self);
 
@@ -65,7 +65,7 @@ trait CanConfirm
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
             $self = $this;
-            return DB::transaction(static function () use ($self, $transaction) {
+            return app(DbService::class)->transaction(static function () use ($self, $transaction) {
 
                 $wallet = app(WalletService::class)
                     ->getWallet($self);

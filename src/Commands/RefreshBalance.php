@@ -3,11 +3,11 @@
 namespace Bavix\Wallet\Commands;
 
 use Bavix\Wallet\Models\Wallet;
+use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\ProxyService;
 use Illuminate\Console\Command;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Database\SQLiteConnection;
-use Illuminate\Support\Facades\DB;
 use function config;
 
 /**
@@ -38,11 +38,14 @@ class RefreshBalance extends Command
     public function handle(): void
     {
         app(ProxyService::class)->fresh();
-        DB::transaction(function () {
+        app(DbService::class)->transaction(function () {
             $wallet = config('wallet.wallet.table');
-            DB::table($wallet)->update(['balance' => 0]);
+            app(DbService::class)
+                ->connection()
+                ->table($wallet)
+                ->update(['balance' => 0]);
 
-            if (DB::connection() instanceof SQLiteConnection) {
+            if (app(DbService::class)->connection() instanceof SQLiteConnection) {
                 $this->sqliteUpdate();
             } else {
                 $this->multiUpdate();
@@ -71,8 +74,10 @@ class RefreshBalance extends Command
     {
         $wallet = config('wallet.wallet.table');
         $trans = config('wallet.transaction.table');
-        $availableBalance = DB::table($trans)
-            ->select('wallet_id', DB::raw('sum(amount) balance'))
+        $availableBalance = app(DbService::class)
+            ->connection()
+            ->table($trans)
+            ->select('wallet_id', app(DbService::class)->raw('sum(amount) balance'))
             ->where('confirmed', true)
             ->groupBy('wallet_id');
 
@@ -80,9 +85,11 @@ class RefreshBalance extends Command
             $join->on("$wallet.id", '=', 'b.wallet_id');
         };
 
-        DB::table($wallet)
+        app(DbService::class)
+            ->connection()
+            ->table($wallet)
             ->joinSub($availableBalance, 'b', $joinClause, null, null, 'left')
-            ->update(['balance' => DB::raw('b.balance')]);
+            ->update(['balance' => app(DbService::class)->raw('b.balance')]);
     }
 
 }

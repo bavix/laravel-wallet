@@ -12,7 +12,6 @@ use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Operation;
 use Bavix\Wallet\Traits\HasWallet;
-use Illuminate\Support\Facades\DB;
 use function app;
 use function compact;
 
@@ -186,7 +185,7 @@ class CommonService
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($brings) {
             $self = $this;
-            return DB::transaction(static function () use ($self, $brings) {
+            return app(DbService::class)->transaction(static function () use ($self, $brings) {
                 return $self->multiBrings($brings);
             });
         });
