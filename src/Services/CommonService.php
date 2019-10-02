@@ -45,18 +45,20 @@ class CommonService
     public function forceTransfer(Wallet $from, Wallet $to, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($from, $to, $amount, $meta, $status) {
+            $from = app(WalletService::class)->getWallet($from);
+            $discount = app(WalletService::class)->discount($from, $to);
+            $amount -= $discount;
+
             $fee = app(WalletService::class)->fee($to, $amount);
             $withdraw = $this->forceWithdraw($from, $amount + $fee, $meta);
             $deposit = $this->deposit($to, $amount, $meta);
-
-            $from = app(WalletService::class)
-                ->getWallet($from);
 
             $transfers = $this->multiBrings([
                 app(Bring::class)
                     ->setStatus($status)
                     ->setDeposit($deposit)
                     ->setWithdraw($withdraw)
+                    ->setDiscount($discount)
                     ->setFrom($from)
                     ->setTo($to)
             ]);

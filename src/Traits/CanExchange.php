@@ -63,6 +63,7 @@ trait CanExchange
 
                 $transfers = app(CommonService::class)->multiBrings([
                     app(Bring::class)
+                        ->setDiscount(0)
                         ->setStatus(Transfer::STATUS_EXCHANGE)
                         ->setDeposit($deposit)
                         ->setWithdraw($withdraw)

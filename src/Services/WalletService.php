@@ -3,7 +3,10 @@
 namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
+use Bavix\Wallet\Interfaces\Customer;
+use Bavix\Wallet\Interfaces\Discount;
 use Bavix\Wallet\Interfaces\MinimalTaxable;
+use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Interfaces\Taxable;
 use Bavix\Wallet\Interfaces\Wallet;
@@ -13,6 +16,21 @@ use function app;
 
 class WalletService
 {
+
+    /**
+     * @param Wallet $customer
+     * @param Wallet $product
+     * @return int
+     */
+    public function discount(Wallet $customer, Wallet $product): int
+    {
+        if ($customer instanceof Customer && $product instanceof Discount) {
+            return $product->getDiscountProduct($customer);
+        }
+
+        // without discount
+        return 0;
+    }
 
     /**
      * @param Wallet $object
