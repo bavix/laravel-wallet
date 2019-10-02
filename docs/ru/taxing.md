@@ -37,7 +37,7 @@ class Item extends Model implements Product, Taxable
         return true; 
     }
 
-    public function getAmountProduct(): int
+    public function getAmountProduct(Customer $customer): int
     {
         return 100;
     }
@@ -46,8 +46,7 @@ class Item extends Model implements Product, Taxable
     {
         return [
             'title' => $this->title, 
-            'description' => 'Purchase of Product #' . $this->id, 
-            'price' => $this->getAmountProduct(),
+            'description' => 'Purchase of Product #' . $this->id,
         ];
     }
     
@@ -76,7 +75,7 @@ $user->balance; // int(103)
 
 ```php
 $item = Item::first();
-$item->getAmountProduct(); // int(100)
+$item->getAmountProduct($user); // int(100)
 ```
 
 Товар стоит 100 бубликов. Значит налог составит 3 бублика.
@@ -110,7 +109,7 @@ class Item extends Model implements Product, MinimalTaxable
         return true; 
     }
 
-    public function getAmountProduct(): int
+    public function getAmountProduct(Customer $customer): int
     {
         return 100;
     }
@@ -119,8 +118,7 @@ class Item extends Model implements Product, MinimalTaxable
     {
         return [
             'title' => $this->title, 
-            'description' => 'Purchase of Product #' . $this->id, 
-            'price' => $this->getAmountProduct(),
+            'description' => 'Purchase of Product #' . $this->id,
         ];
     }
     
@@ -154,7 +152,7 @@ $user->balance; // int(105)
 
 ```php
 $item = Item::first();
-$item->getAmountProduct(); // int(100)
+$item->getAmountProduct($user); // int(100)
 ```
 
 Налог 3%, а минимальный налог составляет 5 бубликов. 
@@ -178,7 +176,7 @@ $user->balance; // int(103)
 
 ```php
 $item = Item::first();
-$item->getAmountProduct(); // int(100)
+$item->getAmountProduct($user); // int(100)
 ```
 
 Налог составит 5 бубликов, а у пользователя только 103 бублика.
