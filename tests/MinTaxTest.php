@@ -23,12 +23,12 @@ class MinTaxTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $fee = (int)($product->price * $product->getFeePercent() / 100);
+        $fee = (int)($product->getAmountProduct($buyer) * $product->getFeePercent() / 100);
         if ($fee < $product->getMinimalFee()) {
             $fee = $product->getMinimalFee();
         }
 
-        $balance = $product->price + $fee;
+        $balance = $product->getAmountProduct($buyer) + $fee;
 
         $this->assertEquals($buyer->balance, 0);
         $buyer->deposit($balance);
@@ -45,7 +45,7 @@ class MinTaxTest extends TestCase
         $deposit = $transfer->deposit;
 
         $this->assertEquals($withdraw->amount, -$balance);
-        $this->assertEquals($deposit->amount, $product->getAmountProduct());
+        $this->assertEquals($deposit->amount, $product->getAmountProduct($buyer));
         $this->assertNotEquals($deposit->amount, $withdraw->amount);
         $this->assertEquals($transfer->fee, $fee);
 

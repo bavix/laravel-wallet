@@ -27,8 +27,8 @@ class GiftTest extends TestCase
         $this->assertEquals($first->balance, 0);
         $this->assertEquals($second->balance, 0);
 
-        $first->deposit($product->getAmountProduct());
-        $this->assertEquals($first->balance, $product->getAmountProduct());
+        $first->deposit($product->getAmountProduct($first));
+        $this->assertEquals($first->balance, $product->getAmountProduct($first));
 
         $transfer = $first->wallet->gift($second, $product);
         $this->assertEquals($first->balance, 0);
@@ -58,8 +58,8 @@ class GiftTest extends TestCase
         $this->assertEquals($first->balance, 0);
         $this->assertEquals($second->balance, 0);
 
-        $first->deposit($product->getAmountProduct());
-        $this->assertEquals($first->balance, $product->getAmountProduct());
+        $first->deposit($product->getAmountProduct($first));
+        $this->assertEquals($first->balance, $product->getAmountProduct($first));
 
         $transfer = $first->wallet->gift($second, $product);
         $this->assertEquals($first->balance, 0);
@@ -69,7 +69,7 @@ class GiftTest extends TestCase
         $this->assertFalse($second->wallet->safeRefund($product));
         $this->assertTrue($second->wallet->refundGift($product));
 
-        $this->assertEquals($first->balance, $product->getAmountProduct());
+        $this->assertEquals($first->balance, $product->getAmountProduct($first));
         $this->assertEquals($second->balance, 0);
 
         $this->assertNull($second->wallet->safeGift($first, $product));
@@ -78,12 +78,12 @@ class GiftTest extends TestCase
         $this->assertNotNull($transfer);
         $this->assertEquals($transfer->status, Transfer::STATUS_GIFT);
 
-        $this->assertEquals($second->balance, -$product->getAmountProduct());
+        $this->assertEquals($second->balance, -$product->getAmountProduct($second));
 
         $second->deposit(-$second->balance);
         $this->assertEquals($second->balance, 0);
 
-        $first->withdraw($product->getAmountProduct());
+        $first->withdraw($product->getAmountProduct($first));
         $this->assertEquals($first->balance, 0);
 
         $product->withdraw($product->balance);
@@ -91,9 +91,9 @@ class GiftTest extends TestCase
 
         $this->assertFalse($first->safeRefundGift($product));
         $this->assertTrue($first->forceRefundGift($product));
-        $this->assertEquals($product->balance, -$product->getAmountProduct());
+        $this->assertEquals($product->balance, -$product->getAmountProduct($second));
 
-        $this->assertEquals($second->balance, $product->getAmountProduct());
+        $this->assertEquals($second->balance, $product->getAmountProduct($second));
         $second->withdraw($second->balance);
         $this->assertEquals($second->balance, 0);
     }

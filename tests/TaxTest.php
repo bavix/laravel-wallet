@@ -24,8 +24,8 @@ class TaxTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $fee = (int)($product->price * $product->getFeePercent() / 100);
-        $balance = $product->price + $fee;
+        $fee = (int)($product->getAmountProduct($buyer) * $product->getFeePercent() / 100);
+        $balance = $product->getAmountProduct($buyer) + $fee;
 
         $this->assertEquals($buyer->balance, 0);
         $buyer->deposit($balance);
@@ -42,7 +42,7 @@ class TaxTest extends TestCase
         $deposit = $transfer->deposit;
 
         $this->assertEquals($withdraw->amount, -$balance);
-        $this->assertEquals($deposit->amount, $product->getAmountProduct());
+        $this->assertEquals($deposit->amount, $product->getAmountProduct($buyer));
         $this->assertNotEquals($deposit->amount, $withdraw->amount);
         $this->assertEquals($transfer->fee, $fee);
 
@@ -69,8 +69,8 @@ class TaxTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $fee = (int)($product->price * $product->getFeePercent() / 100);
-        $balance = $product->price + $fee;
+        $fee = (int)($product->getAmountProduct($santa) * $product->getFeePercent() / 100);
+        $balance = $product->getAmountProduct($santa) + $fee;
 
         $this->assertEquals($santa->balance, 0);
         $this->assertEquals($child->balance, 0);
@@ -89,7 +89,7 @@ class TaxTest extends TestCase
         $deposit = $transfer->deposit;
 
         $this->assertEquals($withdraw->amount, -$balance);
-        $this->assertEquals($deposit->amount, $product->getAmountProduct());
+        $this->assertEquals($deposit->amount, $product->getAmountProduct($santa));
         $this->assertNotEquals($deposit->amount, $withdraw->amount);
         $this->assertEquals($transfer->fee, $fee);
 
@@ -123,7 +123,7 @@ class TaxTest extends TestCase
 
         $this->assertEquals($santa->balance, 0);
         $this->assertEquals($child->balance, 0);
-        $santa->deposit($product->getAmountProduct());
+        $santa->deposit($product->getAmountProduct($santa));
 
         $this->assertNotEquals($santa->balance, 0);
         $this->assertEquals($child->balance, 0);

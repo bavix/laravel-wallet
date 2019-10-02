@@ -82,7 +82,7 @@ trait CartPay
                     $results[] = app(CommonService::class)->forceTransfer(
                         $self,
                         $product,
-                        $product->getAmountProduct(),
+                        $product->getAmountProduct($self),
                         $product->getMetaProduct(),
                         Transfer::STATUS_PAID
                     );
@@ -93,7 +93,7 @@ trait CartPay
                 $results[] = app(CommonService::class)->transfer(
                     $self,
                     $product,
-                    $product->getAmountProduct(),
+                    $product->getAmountProduct($self),
                     $product->getMetaProduct(),
                     Transfer::STATUS_PAID
                 );
