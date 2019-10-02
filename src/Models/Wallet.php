@@ -21,6 +21,8 @@ use function config;
 /**
  * Class Wallet
  * @package Bavix\Wallet\Models
+ * @property string $holder_type
+ * @property int $holder_id
  * @property string $slug
  * @property int $balance
  * @property int $decimal_places
