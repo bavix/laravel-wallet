@@ -149,8 +149,7 @@ class CommonService
         }
 
         if (!$wallet->canWithdraw($amount, $allowZero)) {
-//            throw new InsufficientFunds(trans('wallet::errors.insufficient_funds'));
-            throw new InsufficientFunds("{$wallet->balance}, $amount");
+            throw new InsufficientFunds(trans('wallet::errors.insufficient_funds'));
         }
     }
 
