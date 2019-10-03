@@ -7,8 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Added interface `Storeable` for creating your own wallet balance repositories. #103
-- Added support for pcov, now coated unit tests work in a few seconds, not minutes.
-- Allow developers to inherit classes: Operation, Bring, etc.. #106
+- Added support for [pcov](https://pecl.php.net/package/pcov), now coated unit tests work in a few seconds, not minutes.
+- Allow developers to inherit classes: `Operation`, `Bring`, etc.. #106
 - Added personal product discounts (see `Discount` interface).
 - Added a separate service for working with the connection. It’s not possible to configure flexibly at the moment, wait for new releases.
 
@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The minimum version of php 7.2.
 - Old versions of the `laravel/cashier` package have been removed, now support begins with the seventh version.
 - New argument `Customer $customer` added to `getAmountProduct` method. #117 @jlstandout
-- Now for LockService you can choose your own (separate) cache.
+- Now for `LockService` you can choose your own (separate) cache.
 - Personal discount information has been added to the `transfers` table. Data is not used in the library, but will be needed for the future.
 - New argument `Customer $customer` added to `getTotal` method. #117
 
@@ -29,7 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reworked and fixed unit tests, fixed bugs.
 
 ### Deprecated
-- ProxyService is deprecated and is no longer used.
+- `ProxyService` is deprecated and is no longer used.
+- `WalletService::getBalance` method is deprecated, use `Storeable::getBalance`.
 
 ## [3.3.0] - 2019-09-10
 ### Added
