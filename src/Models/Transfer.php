@@ -54,7 +54,7 @@ class Transfer extends Model
     public function getTable(): string
     {
         if (!$this->table) {
-            $this->table = config('wallet.transfer.table');
+            $this->table = config('wallet.transfer.table', 'transfers');
         }
 
         return parent::getTable();

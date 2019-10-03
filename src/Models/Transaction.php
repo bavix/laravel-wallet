@@ -58,7 +58,7 @@ class Transaction extends Model
     public function getTable(): string
     {
         if (!$this->table) {
-            $this->table = config('wallet.transaction.table');
+            $this->table = config('wallet.transaction.table', 'transactions');
         }
 
         return parent::getTable();
@@ -77,7 +77,7 @@ class Transaction extends Model
      */
     public function wallet(): BelongsTo
     {
-        return $this->belongsTo(config('wallet.wallet.model'));
+        return $this->belongsTo(config('wallet.wallet.model', WalletModel::class));
     }
 
 }

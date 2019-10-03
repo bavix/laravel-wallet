@@ -64,7 +64,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     public function getTable(): string
     {
         if (!$this->table) {
-            $this->table = config('wallet.wallet.table');
+            $this->table = config('wallet.wallet.table', 'wallets');
         }
 
         return parent::getTable();
