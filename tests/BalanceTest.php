@@ -10,8 +10,8 @@ use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\UserMulti;
 use Illuminate\Support\Facades\DB;
-use PHPUnit\Framework\MockObject\MockObject;
 use PDOException;
+use PHPUnit\Framework\MockObject\MockObject;
 use function app;
 
 class BalanceTest extends TestCase
@@ -111,8 +111,8 @@ class BalanceTest extends TestCase
 
     /**
      * @return void
-     * @deprecated
      * @throws
+     * @deprecated
      */
     public function testGetBalance(): void
     {

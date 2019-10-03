@@ -201,6 +201,7 @@ class DiscountTaxTest extends TestCase
     public function testOutOfStock(): void
     {
         $this->expectException(ProductEnded::class);
+        $this->expectExceptionMessageStrict(trans('wallet::errors.product_stock'));
 
         /**
          * @var Buyer $buyer
@@ -311,6 +312,7 @@ class DiscountTaxTest extends TestCase
     public function testPayFreeOutOfStock(): void
     {
         $this->expectException(ProductEnded::class);
+        $this->expectExceptionMessageStrict(trans('wallet::errors.product_stock'));
 
         /**
          * @var Buyer $buyer

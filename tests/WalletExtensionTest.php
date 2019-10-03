@@ -2,10 +2,10 @@
 
 namespace Bavix\Wallet\Test;
 
-use Bavix\Wallet\Test\Objects;
 use Bavix\Wallet\Objects\Operation;
 use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Models\Buyer;
+use Bavix\Wallet\Test\Objects;
 
 class WalletExtensionTest extends TestCase
 {

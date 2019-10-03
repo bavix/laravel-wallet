@@ -44,6 +44,7 @@ class WalletFloatTest extends TestCase
     public function testInvalidDeposit(): void
     {
         $this->expectException(AmountInvalid::class);
+        $this->expectExceptionMessageStrict(trans('wallet::errors.price_positive'));
         $user = factory(User::class)->create();
         $user->depositFloat(-1);
     }
@@ -54,6 +55,7 @@ class WalletFloatTest extends TestCase
     public function testWithdraw(): void
     {
         $this->expectException(BalanceIsEmpty::class);
+        $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
         $user = factory(User::class)->create();
         $this->assertEquals($user->balance, 0);
@@ -79,6 +81,7 @@ class WalletFloatTest extends TestCase
     public function testInvalidWithdraw(): void
     {
         $this->expectException(BalanceIsEmpty::class);
+        $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
         $user = factory(User::class)->create();
         $user->withdrawFloat(-1);
     }
@@ -156,6 +159,7 @@ class WalletFloatTest extends TestCase
     public function testBalanceIsEmpty(): void
     {
         $this->expectException(BalanceIsEmpty::class);
+        $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
         /**
          * @var User $user

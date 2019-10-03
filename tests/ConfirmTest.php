@@ -82,6 +82,7 @@ class ConfirmTest extends TestCase
     public function testConfirmedInvalid(): void
     {
         $this->expectException(ConfirmedInvalid::class);
+        $this->expectExceptionMessageStrict(trans('wallet::errors.confirmed_invalid'));
 
         /**
          * @var Buyer $buyer
@@ -104,6 +105,7 @@ class ConfirmTest extends TestCase
     public function testWalletOwnerInvalid(): void
     {
         $this->expectException(WalletOwnerInvalid::class);
+        $this->expectExceptionMessageStrict(trans('wallet::errors.owner_invalid'));
 
         /**
          * @var Buyer $first

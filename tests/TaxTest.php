@@ -109,6 +109,7 @@ class TaxTest extends TestCase
     public function testGiftFail(): void
     {
         $this->expectException(InsufficientFunds::class);
+        $this->expectExceptionMessageStrict(trans('wallet::errors.insufficient_funds'));
 
         /**
          * @var Buyer $santa

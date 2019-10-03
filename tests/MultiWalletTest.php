@@ -78,6 +78,7 @@ class MultiWalletTest extends TestCase
     public function testInvalidDeposit(): void
     {
         $this->expectException(AmountInvalid::class);
+        $this->expectExceptionMessageStrict(trans('wallet::errors.price_positive'));
 
         /**
          * @var UserMulti $user
@@ -96,6 +97,7 @@ class MultiWalletTest extends TestCase
     public function testWithdraw(): void
     {
         $this->expectException(BalanceIsEmpty::class);
+        $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
         /**
          * @var UserMulti $user
@@ -128,6 +130,7 @@ class MultiWalletTest extends TestCase
     public function testInvalidWithdraw(): void
     {
         $this->expectException(BalanceIsEmpty::class);
+        $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
         /**
          * @var UserMulti $user
@@ -235,6 +238,7 @@ class MultiWalletTest extends TestCase
     public function testBalanceIsEmpty(): void
     {
         $this->expectException(BalanceIsEmpty::class);
+        $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
         /**
          * @var UserMulti $user

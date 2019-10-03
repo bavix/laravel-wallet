@@ -104,4 +104,12 @@ class TestCase extends OrchestraTestCase
         ]);
     }
 
+    /**
+     * @param string $message
+     */
+    public function expectExceptionMessageStrict(string $message): void
+    {
+        $this->expectExceptionMessageRegExp("~^{$message}$~");
+    }
+
 }
