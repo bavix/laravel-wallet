@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - The minimum version of php 7.2.
 - Old versions of the `laravel/cashier` package have been removed, now support begins with the seventh version.
-- New argument `Customer $customer` added to `getAmountProduct` method. #117
+- New argument `Customer $customer` added to `getAmountProduct` method. #117 @jlstandout
 - Now for LockService you can choose your own (separate) cache.
 - Personal discount information has been added to the `transfers` table. Data is not used in the library, but will be needed for the future.
 - New argument `Customer $customer` added to `getTotal` method. #117
