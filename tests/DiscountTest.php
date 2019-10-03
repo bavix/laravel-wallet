@@ -38,6 +38,11 @@ class DiscountTest extends TestCase
             $product->getPersonalDiscount($buyer)
         );
 
+        $this->assertEquals(
+            $transfer->discount,
+            $product->getPersonalDiscount($buyer)
+        );
+
         /**
          * @var Transaction $withdraw
          * @var Transaction $deposit
@@ -86,6 +91,11 @@ class DiscountTest extends TestCase
         $this->assertNotNull($transfer);
         $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
 
+        $this->assertEquals(
+            $transfer->discount,
+            $product->getPersonalDiscount($buyer)
+        );
+
         $this->assertTrue($buyer->refund($product));
         $this->assertEquals($buyer->balance, $product->getAmountProduct($buyer));
         $this->assertEquals($product->balance, 0);
@@ -133,12 +143,17 @@ class DiscountTest extends TestCase
 
         $this->assertEquals($buyer->balance, $product->getAmountProduct($buyer));
 
-        $buyer->pay($product);
+        $transfer = $buyer->pay($product);
         $this->assertEquals($buyer->balance, $product->getPersonalDiscount($buyer));
 
         $this->assertEquals(
             $product->balance,
             $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
+        );
+
+        $this->assertEquals(
+            $transfer->discount,
+            $product->getPersonalDiscount($buyer)
         );
 
         $product->withdraw($product->balance);

@@ -40,6 +40,13 @@ class DiscountTaxTest extends TestCase
             $product->getPersonalDiscount($buyer)
         );
 
+        $this->assertEquals(
+            $transfer->discount,
+            $product->getPersonalDiscount($buyer)
+        );
+
+        $this->assertEquals($transfer->fee, $fee);
+
         /**
          * @var Transaction $withdraw
          * @var Transaction $deposit
@@ -87,6 +94,13 @@ class DiscountTaxTest extends TestCase
         $transfer = $buyer->pay($product);
         $this->assertNotNull($transfer);
         $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
+
+        $this->assertEquals(
+            $transfer->discount,
+            $product->getPersonalDiscount($buyer)
+        );
+
+        $this->assertEquals($transfer->fee, $fee);
 
         $this->assertTrue($buyer->refund($product));
         $this->assertEquals(
@@ -148,13 +162,20 @@ class DiscountTaxTest extends TestCase
 
         $this->assertEquals($buyer->balance, $product->getAmountProduct($buyer) + $fee);
 
-        $buyer->pay($product);
+        $transfer = $buyer->pay($product);
         $this->assertEquals($buyer->balance, $product->getPersonalDiscount($buyer));
 
         $this->assertEquals(
             $product->balance,
-            $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
+            -$transfer->withdraw->amount - $fee
         );
+
+        $this->assertEquals(
+            $transfer->discount,
+            $product->getPersonalDiscount($buyer)
+        );
+
+        $this->assertEquals($transfer->fee, $fee);
 
         $product->withdraw($product->balance);
         $this->assertEquals($product->balance, 0);
@@ -268,6 +289,13 @@ class DiscountTaxTest extends TestCase
         $transfer = $buyer->payFree($product);
         $this->assertEquals($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
         $this->assertEquals($transfer->withdraw->type, Transaction::TYPE_WITHDRAW);
+
+        $this->assertEquals(
+            $transfer->discount,
+            $product->getPersonalDiscount($buyer)
+        );
+
+        $this->assertEquals($transfer->fee, 0);
 
         $this->assertEquals($buyer->balance, -1000);
         $this->assertEquals($product->balance, 0);
