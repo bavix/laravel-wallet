@@ -20,6 +20,7 @@ use function config;
  * @property int $to_id
  * @property string $uuid
  * @property int $fee
+ * @property int $discount
  *
  * @property Transaction $deposit
  * @property Transaction $withdraw
@@ -38,6 +39,7 @@ class Transfer extends Model
      */
     protected $fillable = [
         'status',
+        'discount',
         'deposit_id',
         'withdraw_id',
         'from_type',
@@ -54,7 +56,7 @@ class Transfer extends Model
     public function getTable(): string
     {
         if (!$this->table) {
-            $this->table = config('wallet.transfer.table');
+            $this->table = config('wallet.transfer.table', 'transfers');
         }
 
         return parent::getTable();

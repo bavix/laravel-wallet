@@ -64,7 +64,8 @@ trait HasGift
              * That's why I address him like this!
              */
             return app(DbService::class)->transaction(static function () use ($santa, $to, $product, $force) {
-                $amount = $product->getAmountProduct();
+                $discount = app(WalletService::class)->discount($santa, $product);
+                $amount = $product->getAmountProduct($santa) - $discount;
                 $meta = $product->getMetaProduct();
                 $fee = app(WalletService::class)
                     ->fee($product, $amount);
@@ -87,6 +88,7 @@ trait HasGift
                 $transfers = $commonService->assemble([
                     app(Bring::class)
                         ->setStatus(Transfer::STATUS_GIFT)
+                        ->setDiscount($discount)
                         ->setDeposit($deposit)
                         ->setWithdraw($withdraw)
                         ->setFrom($from)

@@ -47,6 +47,11 @@ class Bring
     protected $fee;
 
     /**
+     * @var int
+     */
+    protected $discount;
+
+    /**
      * Bring constructor.
      * @throws
      */
@@ -70,6 +75,16 @@ class Bring
     public function setStatus(string $status): self
     {
         $this->status = $status;
+        return $this;
+    }
+
+    /**
+     * @param int $discount
+     * @return static
+     */
+    public function setDiscount(int $discount): self
+    {
+        $this->discount = $discount;
         return $this;
     }
 
@@ -154,6 +169,14 @@ class Bring
     }
 
     /**
+     * @return string
+     */
+    public function getDiscount(): int
+    {
+        return $this->discount;
+    }
+
+    /**
      * @return int
      */
     public function getFee(): int
@@ -199,6 +222,7 @@ class Bring
             'from_id' => $this->getFrom()->getKey(),
             'to_type' => $this->getTo()->getMorphClass(),
             'to_id' => $this->getTo()->getKey(),
+            'discount' => $this->getDiscount(),
             'fee' => $this->getFee(),
             'uuid' => $this->getUuid(),
         ];

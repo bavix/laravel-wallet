@@ -4,9 +4,9 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Test\Models\Buyer;
-use Bavix\Wallet\Test\Models\Item;
+use Bavix\Wallet\Test\Models\ItemDiscount;
 
-class GiftTest extends TestCase
+class GiftDiscountTest extends TestCase
 {
 
     /**
@@ -17,18 +17,21 @@ class GiftTest extends TestCase
         /**
          * @var Buyer $first
          * @var Buyer $second
-         * @var Item $product
+         * @var ItemDiscount $product
          */
         [$first, $second] = factory(Buyer::class, 2)->create();
-        $product = factory(Item::class)->create([
+        $product = factory(ItemDiscount::class)->create([
             'quantity' => 1,
         ]);
 
         $this->assertEquals($first->balance, 0);
         $this->assertEquals($second->balance, 0);
 
-        $first->deposit($product->getAmountProduct($first));
-        $this->assertEquals($first->balance, $product->getAmountProduct($first));
+        $first->deposit($product->getAmountProduct($first) - $product->getPersonalDiscount($first));
+        $this->assertEquals(
+            $first->balance,
+            $product->getAmountProduct($first) - $product->getPersonalDiscount($first)
+        );
 
         $transfer = $first->wallet->gift($second, $product);
         $this->assertEquals($first->balance, 0);
@@ -48,10 +51,10 @@ class GiftTest extends TestCase
         /**
          * @var Buyer $first
          * @var Buyer $second
-         * @var Item $product
+         * @var ItemDiscount $product
          */
         [$first, $second] = factory(Buyer::class, 2)->create();
-        $product = factory(Item::class)->create([
+        $product = factory(ItemDiscount::class)->create([
             'quantity' => 1,
         ]);
 
@@ -62,7 +65,8 @@ class GiftTest extends TestCase
         $this->assertEquals($first->balance, $product->getAmountProduct($first));
 
         $transfer = $first->wallet->gift($second, $product);
-        $this->assertEquals($first->balance, 0);
+        $this->assertGreaterThan(0, $first->balance);
+        $this->assertEquals($first->balance, $product->getPersonalDiscount($first));
         $this->assertEquals($second->balance, 0);
         $this->assertEquals($transfer->status, Transfer::STATUS_GIFT);
 
@@ -78,7 +82,10 @@ class GiftTest extends TestCase
         $this->assertNotNull($transfer);
         $this->assertEquals($transfer->status, Transfer::STATUS_GIFT);
 
-        $this->assertEquals($second->balance, -$product->getAmountProduct($second));
+        $this->assertEquals(
+            $second->balance,
+            -($product->getAmountProduct($second) - $product->getPersonalDiscount($second))
+        );
 
         $second->deposit(-$second->balance);
         $this->assertEquals($second->balance, 0);
@@ -91,9 +98,16 @@ class GiftTest extends TestCase
 
         $this->assertFalse($first->safeRefundGift($product));
         $this->assertTrue($first->forceRefundGift($product));
-        $this->assertEquals($product->balance, -$product->getAmountProduct($second));
+        $this->assertEquals(
+            $product->balance,
+            -($product->getAmountProduct($second) - $product->getPersonalDiscount($second))
+        );
 
-        $this->assertEquals($second->balance, $product->getAmountProduct($second));
+        $this->assertEquals(
+            $second->balance,
+            $product->getAmountProduct($second) - $product->getPersonalDiscount($second)
+        );
+
         $second->withdraw($second->balance);
         $this->assertEquals($second->balance, 0);
     }

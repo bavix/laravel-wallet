@@ -74,7 +74,7 @@ trait HasWallets
      */
     public function wallets(): MorphMany
     {
-        return $this->morphMany(config('wallet.wallet.model'), 'holder');
+        return $this->morphMany(config('wallet.wallet.model', WalletModel::class), 'holder');
     }
 
     /**

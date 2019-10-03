@@ -369,11 +369,11 @@ class MultiWalletTest extends TestCase
         $this->assertEquals($a->balance, 0);
         $this->assertEquals($b->balance, 0);
 
-        $a->deposit($product->getAmountProduct());
-        $this->assertEquals($a->balance, $product->getAmountProduct());
+        $a->deposit($product->getAmountProduct($a));
+        $this->assertEquals($a->balance, $product->getAmountProduct($a));
 
-        $b->deposit($product->getAmountProduct());
-        $this->assertEquals($b->balance, $product->getAmountProduct());
+        $b->deposit($product->getAmountProduct($b));
+        $this->assertEquals($b->balance, $product->getAmountProduct($b));
 
         $transfer = $a->pay($product);
         $paidTransfer = $a->paid($product);
@@ -385,7 +385,7 @@ class MultiWalletTest extends TestCase
         $this->assertEquals($transfer->to->id, $product->id);
         $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
         $this->assertEquals($a->balance, 0);
-        $this->assertEquals($product->balance, $product->getAmountProduct());
+        $this->assertEquals($product->balance, $product->getAmountProduct($a));
 
         $transfer = $b->pay($product);
         $paidTransfer = $b->paid($product);
@@ -397,15 +397,15 @@ class MultiWalletTest extends TestCase
         $this->assertEquals($transfer->to->id, $product->id);
         $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
         $this->assertEquals($b->balance, 0);
-        $this->assertEquals($product->balance, $product->getAmountProduct() * 2);
+        $this->assertEquals($product->balance, $product->getAmountProduct($b) * 2);
 
         $this->assertTrue($a->refund($product));
-        $this->assertEquals($product->balance, $product->getAmountProduct());
-        $this->assertEquals($a->balance, $product->getAmountProduct());
+        $this->assertEquals($product->balance, $product->getAmountProduct($a));
+        $this->assertEquals($a->balance, $product->getAmountProduct($a));
 
         $this->assertTrue($b->refund($product));
         $this->assertEquals($product->balance, 0);
-        $this->assertEquals($b->balance, $product->getAmountProduct());
+        $this->assertEquals($b->balance, $product->getAmountProduct($b));
     }
 
     /**

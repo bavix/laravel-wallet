@@ -85,7 +85,7 @@ trait HasWallet
     public function transactions(): MorphMany
     {
         return ($this instanceof WalletModel ? $this->holder : $this)
-            ->morphMany(config('wallet.transaction.model'), 'payable');
+            ->morphMany(config('wallet.transaction.model', Transaction::class), 'payable');
     }
 
     /**
@@ -202,7 +202,7 @@ trait HasWallet
     {
         return app(WalletService::class)
             ->getWallet($this, false)
-            ->morphMany(config('wallet.transfer.model'), 'from');
+            ->morphMany(config('wallet.transfer.model', Transfer::class), 'from');
     }
 
 }

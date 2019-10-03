@@ -129,13 +129,14 @@ class Cart implements Countable
     }
 
     /**
+     * @param Customer $customer
      * @return int
      */
-    public function getTotal(): int
+    public function getTotal(Customer $customer): int
     {
         $result = 0;
         foreach ($this->items as $item) {
-            $result += $item->getAmountProduct();
+            $result += $item->getAmountProduct($customer);
         }
         return $result;
     }

@@ -4,6 +4,8 @@ namespace Bavix\Wallet\Test\Models;
 
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Test\Common\Models\Wallet;
 use Bavix\Wallet\Traits\HasWallet;
 use Illuminate\Database\Eloquent\Model;
 
@@ -43,11 +45,16 @@ class Item extends Model implements Product
     }
 
     /**
+     * @param Customer $customer
      * @return int
      */
-    public function getAmountProduct(): int
+    public function getAmountProduct(Customer $customer): int
     {
-        return $this->price;
+        /**
+         * @var Wallet $wallet
+         */
+        $wallet = app(WalletService::class)->getWallet($customer);
+        return $this->price + $wallet->holder_id;
     }
 
     /**

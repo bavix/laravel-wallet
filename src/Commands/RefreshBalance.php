@@ -39,7 +39,7 @@ class RefreshBalance extends Command
     {
         app(ProxyService::class)->fresh();
         app(DbService::class)->transaction(function () {
-            $wallet = config('wallet.wallet.table');
+            $wallet = config('wallet.wallet.table', 'wallets');
             app(DbService::class)
                 ->connection()
                 ->table($wallet)
@@ -72,8 +72,8 @@ class RefreshBalance extends Command
      */
     protected function multiUpdate(): void
     {
-        $wallet = config('wallet.wallet.table');
-        $trans = config('wallet.transaction.table');
+        $wallet = config('wallet.wallet.table', 'wallets');
+        $trans = config('wallet.transaction.table', 'transactions');
         $availableBalance = app(DbService::class)
             ->connection()
             ->table($trans)

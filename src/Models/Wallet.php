@@ -21,6 +21,8 @@ use function config;
 /**
  * Class Wallet
  * @package Bavix\Wallet\Models
+ * @property string $holder_type
+ * @property int $holder_id
  * @property string $slug
  * @property int $balance
  * @property int $decimal_places
@@ -62,7 +64,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     public function getTable(): string
     {
         if (!$this->table) {
-            $this->table = config('wallet.wallet.table');
+            $this->table = config('wallet.wallet.table', 'wallets');
         }
 
         return parent::getTable();
