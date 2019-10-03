@@ -63,3 +63,31 @@ class Item extends Model implements Product
 ## 3.0.x → 3.1.x
 
 Replace `Taxing` to `Taxable`.
+
+## 3.1.x → 4.0.x
+
+> If you are using php 7.1, then version 4.0 is not available to you. 
+> You need to update php.
+
+Removed support for older versions of `laravel/cashier`. We support 7+.
+
+#### If you use payment for goods
+
+You must add the argument `Customer $customer` to the `getAmountProduct` 
+method of your model.
+
+Your code on 3.x:
+```php
+    public function getAmountProduct(): int
+    {
+        return $this->price;
+    }
+```
+
+Your code on 4.x:
+```php
+    public function getAmountProduct(Customer $customer): int
+    {
+        return $this->price;
+    }
+```

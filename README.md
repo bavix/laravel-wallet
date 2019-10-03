@@ -98,7 +98,7 @@ class Item extends Model implements Product
         return true; 
     }
     
-    public function getAmountProduct(): int
+    public function getAmountProduct(Customer $customer): int
     {
         return 100;
     }
@@ -107,8 +107,7 @@ class Item extends Model implements Product
     {
         return [
             'title' => $this->title, 
-            'description' => 'Purchase of Product #' . $this->id, 
-            'price' => $this->getAmountProduct(),
+            'description' => 'Purchase of Product #' . $this->id,
         ];
     }
     
