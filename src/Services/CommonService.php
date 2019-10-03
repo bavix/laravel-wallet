@@ -12,9 +12,9 @@ use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Operation;
 use Bavix\Wallet\Traits\HasWallet;
-use function max;
 use function app;
 use function compact;
+use function max;
 
 class CommonService
 {
