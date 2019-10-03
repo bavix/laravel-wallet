@@ -17,7 +17,7 @@ use Faker\Generator as Faker;
 $factory->define(ItemDiscountTax::class, function (Faker $faker) {
     return [
         'name' => $faker->domainName,
-        'price' => random_int(200, 700),
-        'quantity' => random_int(10, 100),
+        'price' => 250,
+        'quantity' => 90,
     ];
 });

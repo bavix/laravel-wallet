@@ -5,7 +5,6 @@ namespace Bavix\Wallet\Test\Models;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Discount;
 use Bavix\Wallet\Services\WalletService;
-use Bavix\Wallet\Test\Common\Models\Wallet;
 
 class ItemDiscount extends Item implements Discount
 {

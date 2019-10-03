@@ -30,7 +30,10 @@ class CommonService
     public function transfer(Wallet $from, Wallet $to, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($from, $to, $amount, $meta, $status) {
-            $this->verifyWithdraw($from, $amount);
+            $discount = app(WalletService::class)->discount($from, $to);
+            $newAmount = max(0, $amount - $discount);
+            $fee = app(WalletService::class)->fee($to, $newAmount);
+            $this->verifyWithdraw($from, $newAmount + $fee);
             return $this->forceTransfer($from, $to, $amount, $meta, $status);
         });
     }
@@ -146,7 +149,8 @@ class CommonService
         }
 
         if (!$wallet->canWithdraw($amount, $allowZero)) {
-            throw new InsufficientFunds(trans('wallet::errors.insufficient_funds'));
+//            throw new InsufficientFunds(trans('wallet::errors.insufficient_funds'));
+            throw new InsufficientFunds("{$wallet->balance}, $amount");
         }
     }
 
