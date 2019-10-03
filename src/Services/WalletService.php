@@ -25,7 +25,7 @@ class WalletService
     public function discount(Wallet $customer, Wallet $product): int
     {
         if ($customer instanceof Customer && $product instanceof Discount) {
-            return $product->getDiscountProduct($customer);
+            return $product->getPersonalDiscount($customer);
         }
 
         // without discount

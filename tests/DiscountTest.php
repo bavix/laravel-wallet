@@ -35,7 +35,7 @@ class DiscountTest extends TestCase
 
         $this->assertEquals(
             $buyer->balance,
-            $product->getDiscountProduct($buyer)
+            $product->getPersonalDiscount($buyer)
         );
 
         /**
@@ -71,10 +71,10 @@ class DiscountTest extends TestCase
     {
         /**
          * @var Buyer $buyer
-         * @var Item $product
+         * @var ItemDiscount $product
          */
         $buyer = factory(Buyer::class)->create();
-        $product = factory(Item::class)->create([
+        $product = factory(ItemDiscount::class)->create([
             'quantity' => 1,
         ]);
 
@@ -98,8 +98,12 @@ class DiscountTest extends TestCase
 
         $transfer = $buyer->pay($product);
         $this->assertNotNull($transfer);
-        $this->assertEquals($buyer->balance, 0);
-        $this->assertEquals($product->balance, $product->getAmountProduct($buyer));
+        $this->assertEquals($buyer->balance, $product->getPersonalDiscount($buyer));
+        $this->assertEquals(
+            $product->balance,
+            $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
+        );
+
         $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
 
         $this->assertTrue($buyer->refund($product));
@@ -117,10 +121,10 @@ class DiscountTest extends TestCase
     {
         /**
          * @var Buyer $buyer
-         * @var Item $product
+         * @var ItemDiscount $product
          */
         $buyer = factory(Buyer::class)->create();
-        $product = factory(Item::class)->create([
+        $product = factory(ItemDiscount::class)->create([
             'quantity' => 1,
         ]);
 
@@ -130,8 +134,12 @@ class DiscountTest extends TestCase
         $this->assertEquals($buyer->balance, $product->getAmountProduct($buyer));
 
         $buyer->pay($product);
-        $this->assertEquals($buyer->balance, 0);
-        $this->assertEquals($product->balance, $product->getAmountProduct($buyer));
+        $this->assertEquals($buyer->balance, $product->getPersonalDiscount($buyer));
+
+        $this->assertEquals(
+            $product->balance,
+            $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
+        );
 
         $product->withdraw($product->balance);
         $this->assertEquals($product->balance, 0);
@@ -139,7 +147,10 @@ class DiscountTest extends TestCase
         $this->assertFalse($buyer->safeRefund($product));
         $this->assertTrue($buyer->forceRefund($product));
 
-        $this->assertEquals($product->balance, -$product->getAmountProduct($buyer));
+        $this->assertEquals(
+            $product->balance, -($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer))
+        );
+
         $this->assertEquals($buyer->balance, $product->getAmountProduct($buyer));
         $product->deposit(-$product->balance);
         $buyer->withdraw($buyer->balance);
@@ -157,10 +168,10 @@ class DiscountTest extends TestCase
 
         /**
          * @var Buyer $buyer
-         * @var Item $product
+         * @var ItemDiscount $product
          */
         $buyer = factory(Buyer::class)->create();
-        $product = factory(Item::class)->create([
+        $product = factory(ItemDiscount::class)->create([
             'quantity' => 1,
         ]);
 
@@ -176,17 +187,19 @@ class DiscountTest extends TestCase
     {
         /**
          * @var Buyer $buyer
-         * @var Item $product
+         * @var ItemDiscount $product
          */
         $buyer = factory(Buyer::class)->create();
-        $product = factory(Item::class)->create([
+        $product = factory(ItemDiscount::class)->create([
             'quantity' => 1,
         ]);
 
         $this->assertEquals($buyer->balance, 0);
         $buyer->forcePay($product);
 
-        $this->assertEquals($buyer->balance, -$product->getAmountProduct($buyer));
+        $this->assertEquals(
+            $buyer->balance, -($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer))
+        );
 
         $buyer->deposit(-$buyer->balance);
         $this->assertEquals($buyer->balance, 0);
@@ -199,10 +212,10 @@ class DiscountTest extends TestCase
     {
         /**
          * @var Buyer $buyer
-         * @var Item $product
+         * @var ItemDiscount $product
          */
         $buyer = factory(Buyer::class)->create();
-        $product = factory(Item::class)->create([
+        $product = factory(ItemDiscount::class)->create([
             'quantity' => 1,
         ]);
 
@@ -224,10 +237,10 @@ class DiscountTest extends TestCase
     {
         /**
          * @var Buyer $buyer
-         * @var Item $product
+         * @var ItemDiscount $product
          */
         $buyer = factory(Buyer::class)->create();
-        $product = factory(Item::class)->create([
+        $product = factory(ItemDiscount::class)->create([
             'quantity' => 1,
         ]);
 
@@ -255,10 +268,10 @@ class DiscountTest extends TestCase
 
         /**
          * @var Buyer $buyer
-         * @var Item $product
+         * @var ItemDiscount $product
          */
         $buyer = factory(Buyer::class)->create();
-        $product = factory(Item::class)->create([
+        $product = factory(ItemDiscount::class)->create([
             'quantity' => 1,
         ]);
 

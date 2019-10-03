@@ -22,7 +22,7 @@ class ItemDiscount extends Item implements Discount
      * @param Customer $customer
      * @return int
      */
-    public function getDiscountProduct(Customer $customer): int
+    public function getPersonalDiscount(Customer $customer): int
     {
         $wallet = app(WalletService::class)
             ->getWallet($customer);

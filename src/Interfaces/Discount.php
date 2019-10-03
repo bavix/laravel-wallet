@@ -8,5 +8,5 @@ interface Discount extends Product
      * @param Customer $customer
      * @return int
      */
-    public function getDiscountProduct(Customer $customer): int;
+    public function getPersonalDiscount(Customer $customer): int;
 }
