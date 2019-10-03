@@ -34,9 +34,9 @@ class MultiWalletGiftTest extends TestCase
          * @var Item $item
          */
         $item = factory(Item::class)->create();
-        $transaction = $wallet->deposit($item->getAmountProduct());
+        $transaction = $wallet->deposit($item->getAmountProduct($wallet));
         $this->assertEquals($transaction->amount, $wallet->balance);
-        $this->assertEquals($item->getAmountProduct(), $wallet->balance);
+        $this->assertEquals($item->getAmountProduct($wallet), $wallet->balance);
         $this->assertNotNull($transaction);
 
         $transfer = $wallet->gift($second, $item);

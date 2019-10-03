@@ -32,7 +32,7 @@ class CartTest extends TestCase
         }
 
         $this->assertEquals($buyer->balance, $buyer->wallet->balance);
-        $this->assertNotNull($buyer->deposit($cart->getTotal()));
+        $this->assertNotNull($buyer->deposit($cart->getTotal($buyer)));
         $this->assertEquals($buyer->balance, $buyer->wallet->balance);
 
         $transfers = $buyer->payCart($cart);
@@ -45,7 +45,7 @@ class CartTest extends TestCase
         }
 
         foreach ($cart->getItems() as $product) {
-            $this->assertEquals($product->balance, $product->getAmountProduct());
+            $this->assertEquals($product->balance, $product->getAmountProduct($buyer));
         }
 
         $this->assertTrue($buyer->refundCart($cart));
@@ -74,7 +74,7 @@ class CartTest extends TestCase
         for ($i = 0; $i < count($products) - 1; $i++) {
             $rnd = random_int(1, 5);
             $cart->addItem($products[$i], $rnd);
-            $buyer->deposit($products[$i]->getAmountProduct() * $rnd);
+            $buyer->deposit($products[$i]->getAmountProduct($buyer) * $rnd);
             $amount += $rnd;
         }
 
@@ -110,7 +110,7 @@ class CartTest extends TestCase
         for ($i = 0; $i < count($products) - 1; $i++) {
             $rnd = random_int(1, 5);
             $cart->addItem($products[$i], $rnd);
-            $buyer->deposit($products[$i]->getAmountProduct() * $rnd);
+            $buyer->deposit($products[$i]->getAmountProduct($buyer) * $rnd);
             $total += $rnd;
         }
 

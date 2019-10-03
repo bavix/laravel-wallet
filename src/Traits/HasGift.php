@@ -65,7 +65,7 @@ trait HasGift
              */
             return app(DbService::class)->transaction(static function () use ($santa, $to, $product, $force) {
                 $discount = app(WalletService::class)->discount($santa, $product);
-                $amount = $product->getAmountProduct() - $discount;
+                $amount = $product->getAmountProduct($santa) - $discount;
                 $meta = $product->getMetaProduct();
                 $fee = app(WalletService::class)
                     ->fee($product, $amount);

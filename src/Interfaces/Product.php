@@ -15,9 +15,10 @@ interface Product extends Wallet
     public function canBuy(Customer $customer, int $quantity = 1, bool $force = null): bool;
 
     /**
+     * @param Customer $customer
      * @return int
      */
-    public function getAmountProduct(): int;
+    public function getAmountProduct(Customer $customer): int;
 
     /**
      * @return array
