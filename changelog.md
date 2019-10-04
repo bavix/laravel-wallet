@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [4.0.0] - 2019-10-04
 ### Added
 - Added interface `Storeable` for creating your own wallet balance repositories. #103
 - Added support for [pcov](https://pecl.php.net/package/pcov), now coated unit tests work in a few seconds, not minutes.
@@ -429,7 +431,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/3.3.0...HEAD
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/4.0.0...HEAD
+[4.0.0]: https://github.com/bavix/laravel-wallet/compare/3.3.0...4.0.0
 [3.3.0]: https://github.com/bavix/laravel-wallet/compare/3.2.1...3.3.0
 [3.2.1]: https://github.com/bavix/laravel-wallet/compare/3.2.0...3.2.1
 [3.2.0]: https://github.com/bavix/laravel-wallet/compare/3.1.6...3.2.0
