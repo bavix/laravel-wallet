@@ -34,9 +34,9 @@
   },
   "require-dev": {
     "infection/infection": "^0.14",
-    "orchestra/testbench": "^4.0",
+    "orchestra/testbench": "^4.2",
     "phpstan/phpstan": "^0.11",
-    "phpunit/phpunit": "^8.3",
+    "phpunit/phpunit": "^8.4",
     "laravel/cashier": "^7.0|^8.0|^9.0|^10.0"
   },
   "suggest": {
