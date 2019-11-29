@@ -33,7 +33,7 @@
     "ramsey/uuid": "^3.0"
   },
   "require-dev": {
-    "infection/infection": "^0.14",
+    "infection/infection": "^0.15",
     "orchestra/testbench": "^4.2",
     "phpstan/phpstan": "^0.11",
     "phpunit/phpunit": "^8.4",
