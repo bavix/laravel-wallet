@@ -47,6 +47,7 @@ class Transaction extends Model
      * @var array
      */
     protected $casts = [
+        'wallet_id' => 'int',
         'amount' => 'int',
         'confirmed' => 'bool',
         'meta' => 'json'

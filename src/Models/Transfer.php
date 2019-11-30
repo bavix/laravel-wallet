@@ -51,6 +51,15 @@ class Transfer extends Model
     ];
 
     /**
+     * @var array
+     */
+    protected $casts = [
+        'deposit_id' => 'int',
+        'withdraw_id' => 'int',
+        'fee' => 'int',
+    ];
+
+    /**
      * @return string
      */
     public function getTable(): string
