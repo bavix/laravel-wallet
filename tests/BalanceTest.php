@@ -213,6 +213,7 @@ class BalanceTest extends TestCase
                 $amount = \random_int(10, 10000);
                 $confirmed = (bool)\random_int(0, 1);
                 $deposit = $wallet->deposit($amount, null, $confirmed);
+                $this->assertIsInt($deposit->wallet_id);
 
                 if ($confirmed) {
                     $sums[$name] += $amount;

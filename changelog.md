@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.1] - 2019-11-30
+### Fixed
+- Encountered error: "You are not the owner of the wallet" #129 @arjayosma
+
 ## [4.0.0] - 2019-10-04
 ### Added
 - Added interface `Storeable` for creating your own wallet balance repositories. #103
@@ -431,7 +435,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/4.0.0...HEAD
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/4.0.1...HEAD
+[4.0.1]: https://github.com/bavix/laravel-wallet/compare/4.0.0...4.0.1
 [4.0.0]: https://github.com/bavix/laravel-wallet/compare/3.3.0...4.0.0
 [3.3.0]: https://github.com/bavix/laravel-wallet/compare/3.2.1...3.3.0
 [3.2.1]: https://github.com/bavix/laravel-wallet/compare/3.2.0...3.2.1

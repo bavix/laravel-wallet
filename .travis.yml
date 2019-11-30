@@ -23,7 +23,7 @@ before_script:
   - composer install
 
 script:
-  - ./vendor/bin/phpunit --coverage-xml=build/coverage-xml --log-junit=build/phpunit.junit.xml
+  - ./vendor/bin/phpunit --coverage-xml=build/coverage-xml --log-junit=build/junit.xml
   - ./vendor/bin/infection --coverage=build --min-msi=60 -j$(nproc)
 
 after_success:
