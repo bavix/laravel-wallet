@@ -78,6 +78,7 @@ return [
     'transaction' => [
         'table' => 'transactions',
         'model' => Transaction::class,
+        'casts' => [],
     ],
 
     /**
@@ -86,6 +87,7 @@ return [
     'transfer' => [
         'table' => 'transfers',
         'model' => Transfer::class,
+        'casts' => [],
     ],
 
     /**
@@ -94,6 +96,7 @@ return [
     'wallet' => [
         'table' => 'wallets',
         'model' => Wallet::class,
+        'casts' => [],
         'default' => [
             'name' => 'Default Wallet',
             'slug' => 'default',
