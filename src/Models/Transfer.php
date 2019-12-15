@@ -60,6 +60,19 @@ class Transfer extends Model
     ];
 
     /**
+     * @inheritDoc
+     */
+    public function getCasts(): array
+    {
+        $this->casts = array_merge(
+            $this->casts,
+            config('wallet.transfer.casts', [])
+        );
+
+        return parent::getCasts();
+    }
+
+    /**
      * @return string
      */
     public function getTable(): string
