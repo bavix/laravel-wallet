@@ -55,6 +55,26 @@ class ConfirmTest extends TestCase
     }
 
     /**
+     * @see https://github.com/bavix/laravel-wallet/issues/134
+     * @return void
+     */
+    public function testWithdraw(): void
+    {
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = factory(Buyer::class)->create();
+        $wallet = $buyer->wallet;
+        $wallet->deposit(100);
+
+        $this->assertEquals($wallet->balance, 100);
+
+        $transaction = $wallet->withdraw(50, ['desc' => 'unconfirmed'], false);
+        $this->assertEquals($wallet->balance, 100);
+        $this->assertFalse($transaction->confirmed);
+    }
+
+    /**
      * @return void
      */
     public function testForce(): void
