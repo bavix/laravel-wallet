@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.1] - 2019-01-16
+### Changed
+- upgrade composer packages
+- add unit cases
+
 ## [4.1.0] - 2019-12-15
 ### Added
 - Added ability to override type
@@ -439,7 +444,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/4.1.0...HEAD
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/4.1.1...HEAD
+[4.1.1]: https://github.com/bavix/laravel-wallet/compare/4.1.0...4.1.1
 [4.1.0]: https://github.com/bavix/laravel-wallet/compare/4.0.1...4.1.0
 [4.0.1]: https://github.com/bavix/laravel-wallet/compare/4.0.0...4.0.1
 [4.0.0]: https://github.com/bavix/laravel-wallet/compare/3.3.0...4.0.0
