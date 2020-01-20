@@ -212,11 +212,19 @@ class WalletFloatTest extends TestCase
 
         $transaction = $user->withdrawFloat(2556.72);
         $this->assertEquals($transaction->amount, -255672);
+        $this->assertEquals($transaction->amountFloat, -2556.72);
         $this->assertEquals($transaction->type, Transaction::TYPE_WITHDRAW);
 
         $this->assertEquals($user->balance, 1000000 - 255672);
         $this->assertEquals($user->balanceFloat, 10000.00 - 2556.72);
 
+        $transaction = $user->depositFloat(2556.72 * 2);
+        $this->assertEquals($transaction->amount, 255672 * 2);
+        $this->assertEquals($transaction->amountFloat, 2556.72 * 2);
+        $this->assertEquals($transaction->type, Transaction::TYPE_DEPOSIT);
+
+        $this->assertEquals($user->balance, 1000000 + 255672);
+        $this->assertEquals($user->balanceFloat, 10000.00 + 2556.72);
     }
 
     /**

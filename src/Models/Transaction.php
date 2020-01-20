@@ -4,6 +4,7 @@ namespace Bavix\Wallet\Models;
 
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
+use Bavix\Wallet\Services\WalletService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -18,6 +19,7 @@ use function config;
  * @property string $uuid
  * @property string $type
  * @property int $amount
+ * @property float $amountFloat
  * @property bool $confirmed
  * @property array $meta
  * @property Wallet $payable
@@ -92,6 +94,29 @@ class Transaction extends Model
     public function wallet(): BelongsTo
     {
         return $this->belongsTo(config('wallet.wallet.model', WalletModel::class));
+    }
+
+    /**
+     * @return float
+     */
+    public function getAmountFloatAttribute(): float
+    {
+        $decimalPlaces = app(WalletService::class)
+            ->decimalPlaces($this->wallet);
+
+        return $this->amount / $decimalPlaces;
+    }
+
+    /**
+     * @param float $amount
+     * @return float
+     */
+    public function setAmountFloatAttribute(float $amount): void
+    {
+        $decimalPlaces = app(WalletService::class)
+            ->decimalPlaces($this->wallet);
+
+        $this->amount = $amount * $decimalPlaces;
     }
 
 }
