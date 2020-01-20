@@ -6,11 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [4.1.2] - 2019-01-20
+## [4.1.2] - 2020-01-20
 ### Added
 - add `$amountFloat` to Transaction model
 
-## [4.1.1] - 2019-01-16
+## [4.1.1] - 2020-01-16
 ### Changed
 - upgrade composer packages
 - add unit cases
