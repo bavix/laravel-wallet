@@ -33,7 +33,6 @@
     "ramsey/uuid": "^3.0"
   },
   "require-dev": {
-    "ext-gmp": "*",
     "infection/infection": "^0.15",
     "orchestra/testbench": "^4.6",
     "phpstan/phpstan": "^0.12",
@@ -41,6 +40,7 @@
     "laravel/cashier": "^7.0|^8.0|^9.0|^10.0"
   },
   "suggest": {
+    "ext-gmp": "Used for accurate calculations of large numbers",
     "bavix/laravel-wallet-swap": "Addition to the laravel-wallet library for quick setting of exchange rates",
     "bavix/laravel-wallet-vacuum": "Addition to the laravel-wallet library for quick fix race condition"
   },
