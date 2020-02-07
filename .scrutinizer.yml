@@ -14,9 +14,9 @@ build:
         override:
         - php-scrutinizer-run
         - command: vendor/bin/phpunit --dump-xdebug-filter xdebug-filter.php
-        - command: vendor/bin/phpunit --prepend xdebug-filter.php --coverage-clover=my-coverage-file
+        - command: vendor/bin/phpunit --prepend xdebug-filter.php --coverage-clover=/tmp/my-coverage-file
           coverage:
-            file: my-coverage-file
+            file: /tmp/my-coverage-file
             format: php-clover
 
 filter:
