@@ -2,7 +2,7 @@ language: php
 php:
   - '7.2'
   - '7.3'
-  - '7.4snapshot'
+  - '7.4'
   - 'nightly'
 
 services:
@@ -10,7 +10,6 @@ services:
 
 matrix:
   allow_failures:
-    - php: '7.4snapshot'
     - php: 'nightly'
 
 before_script:
@@ -19,7 +18,7 @@ before_script:
   - bash <(curl -s https://raw.githubusercontent.com/php-cache/cache/master/build/php/7.2/Memcached.sh)
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
-  - if [ $(phpenv version-name) = "7.3" ]; then ./cc-test-reporter before-build; fi
+  - if [ $(phpenv version-name) = "7.4" ]; then ./cc-test-reporter before-build; fi
   - composer install
 
 script:
@@ -27,5 +26,5 @@ script:
   - ./vendor/bin/infection --coverage=build --min-msi=60 -j$(nproc)
 
 after_success:
-  - if [ $(phpenv version-name) = "7.3" ]; then ./cc-test-reporter after-build --coverage-input-type clover --exit-code $TRAVIS_TEST_RESULT; fi
+  - if [ $(phpenv version-name) = "7.4" ]; then ./cc-test-reporter after-build --coverage-input-type clover --exit-code $TRAVIS_TEST_RESULT; fi
   - bash <(curl -s https://codecov.io/bash)
