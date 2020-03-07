@@ -3,13 +3,13 @@
   "description": "Easy work with virtual wallet.",
   "keywords": [
     "laravel",
-    "laravel5",
     "laravel6",
+    "laravel7",
     "credits",
     "bavix",
     "currency",
-    "laravel5-package",
     "laravel6-package",
+    "laravel7-package",
     "laravel-wallet",
     "virtual",
     "wallet",
@@ -27,17 +27,17 @@
   "require": {
     "php": "^7.2|^8.0",
     "ext-pdo": "*",
-    "illuminate/database": "^5.5|^6.0|^7.0",
-    "nesbot/carbon": "^1.20|^2.0",
+    "illuminate/database": "^6.0|^7.0",
+    "nesbot/carbon": "^2.0",
     "doctrine/dbal": "^2.8",
     "ramsey/uuid": "^3.0"
   },
   "require-dev": {
     "infection/infection": "^0.15",
-    "orchestra/testbench": "^4.6",
+    "orchestra/testbench": "^4.0|^5.0",
     "phpstan/phpstan": "^0.12",
-    "phpunit/phpunit": "^8.5",
-    "laravel/cashier": "^7.0|^8.0|^9.0|^10.0"
+    "phpunit/phpunit": "^8.0|^9.0",
+    "laravel/cashier": "^10.0"
   },
   "suggest": {
     "ext-gmp": "Used for accurate calculations of large numbers",

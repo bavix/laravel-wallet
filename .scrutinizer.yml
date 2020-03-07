@@ -1,4 +1,8 @@
 build:
+  dependencies:
+    override:
+      - composer install
+
   environment:
     php:
       version: 7.2
@@ -14,9 +18,10 @@ build:
         override:
         - php-scrutinizer-run
         - command: vendor/bin/phpunit --dump-xdebug-filter xdebug-filter.php
-        - command: vendor/bin/phpunit --prepend xdebug-filter.php --coverage-clover=/tmp/my-coverage-file
+        -
+          command: vendor/bin/phpunit --prepend xdebug-filter.php --coverage-clover=clover.xml
           coverage:
-            file: /tmp/my-coverage-file
+            file: clover.xml
             format: php-clover
 
 filter:

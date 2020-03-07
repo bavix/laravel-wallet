@@ -109,7 +109,7 @@ class TestCase extends OrchestraTestCase
      */
     public function expectExceptionMessageStrict(string $message): void
     {
-        $this->expectExceptionMessageRegExp("~^{$message}$~");
+        $this->expectExceptionMessageMatches("~^{$message}$~");
     }
 
 }

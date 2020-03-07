@@ -116,7 +116,7 @@ class Transaction extends Model
         $decimalPlaces = app(WalletService::class)
             ->decimalPlaces($this->wallet);
 
-        $this->amount = $amount * $decimalPlaces;
+        $this->amount = (int)round($amount * $decimalPlaces);
     }
 
 }
