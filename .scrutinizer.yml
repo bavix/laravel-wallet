@@ -13,12 +13,12 @@ build:
       tests:
         override:
         - php-scrutinizer-run
-        - command: 'vendor/bin/phpunit --dump-xdebug-filter xdebug-filter.php'
+        - command: vendor/bin/phpunit --dump-xdebug-filter xdebug-filter.php
         -
-          command: 'vendor/bin/phpunit --prepend xdebug-filter.php --coverage-clover=some-file'
+          command: vendor/bin/phpunit --prepend xdebug-filter.php --coverage-clover=clover.xml
           coverage:
-            file: 'some-file'
-            format: 'clover'
+            file: clover.xml
+            format: php-clover
 
 filter:
   excluded_paths: [docs/*, resources/*, tests/*, database/*, config/*]

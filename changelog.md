@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add laravel 7 support
+
 ## [4.1.2] - 2020-01-20
 ### Added
 - add `$amountFloat` to Transaction model
