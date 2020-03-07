@@ -1,4 +1,8 @@
 build:
+  dependencies:
+    override:
+      - composer install
+
   environment:
     php:
       version: 7.2
