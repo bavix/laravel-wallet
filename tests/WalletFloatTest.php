@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Test;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Test\Models\UserFloat as User;
 
 class WalletFloatTest extends TestCase
@@ -221,6 +222,39 @@ class WalletFloatTest extends TestCase
         $transaction = $user->depositFloat(2556.72 * 2);
         $this->assertEquals($transaction->amount, 255672 * 2);
         $this->assertEquals($transaction->amountFloat, 2556.72 * 2);
+        $this->assertEquals($transaction->type, Transaction::TYPE_DEPOSIT);
+
+        $this->assertEquals($user->balance, 1000000 + 255672);
+        $this->assertEquals($user->balanceFloat, 10000.00 + 2556.72);
+    }
+
+    /**
+     * @return void
+     */
+    public function testUpdateTransaction(): void
+    {
+        /**
+         * @var User $user
+         */
+        $user = factory(User::class)->create();
+        $this->assertEquals($user->balance, 0);
+
+        $user->deposit(1000000);
+        $this->assertEquals($user->balance, 1000000);
+        $this->assertEquals($user->balanceFloat, 10000.00);
+
+        $transaction = $user->withdrawFloat(2556.72);
+        $this->assertEquals($transaction->amount, -255672);
+        $this->assertEquals($transaction->amountFloat, -2556.72);
+        $this->assertEquals($transaction->type, Transaction::TYPE_WITHDRAW);
+
+        $transaction->type = Transaction::TYPE_DEPOSIT;
+        $transaction->amountFloat = 2556.72;
+        $this->assertTrue($transaction->save());
+        $this->assertTrue($user->wallet->refreshBalance());
+
+        $this->assertEquals($transaction->amount, 255672);
+        $this->assertEquals($transaction->amountFloat, 2556.72);
         $this->assertEquals($transaction->type, Transaction::TYPE_DEPOSIT);
 
         $this->assertEquals($user->balance, 1000000 + 255672);
