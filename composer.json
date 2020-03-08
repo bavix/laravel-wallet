@@ -40,7 +40,7 @@
     "laravel/cashier": "^10.0"
   },
   "suggest": {
-    "ext-gmp": "Used for accurate calculations of large numbers",
+    "ext-bcmath": "Used for accurate calculations of large numbers",
     "bavix/laravel-wallet-swap": "Addition to the laravel-wallet library for quick setting of exchange rates",
     "bavix/laravel-wallet-vacuum": "Addition to the laravel-wallet library for quick fix race condition"
   },

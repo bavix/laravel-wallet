@@ -4,6 +4,7 @@ namespace Bavix\Wallet\Models;
 
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
+use Bavix\Wallet\Services\MathService;
 use Bavix\Wallet\Services\WalletService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -104,7 +105,8 @@ class Transaction extends Model
         $decimalPlaces = app(WalletService::class)
             ->decimalPlaces($this->wallet);
 
-        return $this->amount / $decimalPlaces;
+        return app(MathService::class)
+            ->div($this->amount, $decimalPlaces);
     }
 
     /**
@@ -113,10 +115,11 @@ class Transaction extends Model
      */
     public function setAmountFloatAttribute(float $amount): void
     {
+        $math = app(MathService::class);
         $decimalPlaces = app(WalletService::class)
             ->decimalPlaces($this->wallet);
 
-        $this->amount = (int)round($amount * $decimalPlaces);
+        $this->amount = (int)round($math->mul($amount, $decimalPlaces));
     }
 
 }

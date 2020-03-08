@@ -30,10 +30,11 @@ class CommonService
     public function transfer(Wallet $from, Wallet $to, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($from, $to, $amount, $meta, $status) {
+            $math = app(MathService::class);
             $discount = app(WalletService::class)->discount($from, $to);
-            $newAmount = max(0, $amount - $discount);
+            $newAmount = max(0, $math->sub($amount, $discount));
             $fee = app(WalletService::class)->fee($to, $newAmount);
-            $this->verifyWithdraw($from, $newAmount + $fee);
+            $this->verifyWithdraw($from, $math->add($newAmount, $fee));
             return $this->forceTransfer($from, $to, $amount, $meta, $status);
         });
     }
@@ -49,12 +50,13 @@ class CommonService
     public function forceTransfer(Wallet $from, Wallet $to, int $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($from, $to, $amount, $meta, $status) {
+            $math = app(MathService::class);
             $from = app(WalletService::class)->getWallet($from);
             $discount = app(WalletService::class)->discount($from, $to);
-            $amount = max(0, $amount - $discount);
+            $amount = max(0, $math->sub($amount, $discount));
 
             $fee = app(WalletService::class)->fee($to, $amount);
-            $withdraw = $this->forceWithdraw($from, $amount + $fee, $meta);
+            $withdraw = $this->forceWithdraw($from, $math->add($amount, $fee), $meta);
             $deposit = $this->deposit($to, $amount, $meta);
 
             $transfers = $this->multiBrings([
@@ -165,9 +167,10 @@ class CommonService
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($self, $operations) {
             $amount = 0;
             $objects = [];
+            $math = app(MathService::class);
             foreach ($operations as $operation) {
                 if ($operation->isConfirmed()) {
-                    $amount += $operation->getAmount();
+                    $amount = $math->add($amount, $operation->getAmount());
                 }
 
                 $objects[] = $operation

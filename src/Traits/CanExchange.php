@@ -9,6 +9,7 @@ use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
+use Bavix\Wallet\Services\MathService;
 use Bavix\Wallet\Services\WalletService;
 
 trait CanExchange
@@ -52,14 +53,15 @@ trait CanExchange
 
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($from, $to, $amount, $meta) {
             return app(DbService::class)->transaction(static function () use ($from, $to, $amount, $meta) {
+                $math = app(MathService::class);
                 $rate = app(ExchangeService::class)->rate($from, $to);
                 $fee = app(WalletService::class)->fee($to, $amount);
 
                 $withdraw = app(CommonService::class)
-                    ->forceWithdraw($from, $amount + $fee, $meta);
+                    ->forceWithdraw($from, $math->add($amount, $fee), $meta);
 
                 $deposit = app(CommonService::class)
-                    ->deposit($to, $amount * $rate, $meta);
+                    ->deposit($to, $math->mul($amount, $rate), $meta);
 
                 $transfers = app(CommonService::class)->multiBrings([
                     app(Bring::class)

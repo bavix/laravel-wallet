@@ -17,6 +17,15 @@ use Bavix\Wallet\Simple\Store;
 
 return [
     /**
+     * This parameter is necessary for more accurate calculations.
+     * PS, Arbitrary Precision Calculations
+     */
+    'bcmath' => [
+        'enabled' => extension_loaded('bcmath'),
+        'scale' => 16,
+    ],
+
+    /**
      * The parameter is used for fast packet overload.
      * You do not need to search for the desired class by code, the library will do it itself.
      */

@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Objects;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Services\MathService;
 use Countable;
 use function array_unique;
 use function count;
@@ -168,7 +169,8 @@ class Cart implements Countable
     {
         $class = get_class($product);
         $uniq = $product->getUniqueId();
-        $this->quantity[$class][$uniq] = $this->getQuantity($product) + $quantity;
+        $math = app(MathService::class);
+        $this->quantity[$class][$uniq] = $math->add($this->getQuantity($product), $quantity);
     }
 
 }

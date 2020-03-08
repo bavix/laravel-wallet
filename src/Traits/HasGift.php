@@ -9,6 +9,7 @@ use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\LockService;
+use Bavix\Wallet\Services\MathService;
 use Bavix\Wallet\Services\WalletService;
 use Throwable;
 use function app;
@@ -64,8 +65,9 @@ trait HasGift
              * That's why I address him like this!
              */
             return app(DbService::class)->transaction(static function () use ($santa, $to, $product, $force) {
+                $math = app(MathService::class);
                 $discount = app(WalletService::class)->discount($santa, $product);
-                $amount = $product->getAmountProduct($santa) - $discount;
+                $amount = $math->sub($product->getAmountProduct($santa), $discount);
                 $meta = $product->getMetaProduct();
                 $fee = app(WalletService::class)
                     ->fee($product, $amount);
@@ -76,10 +78,10 @@ trait HasGift
                  * Santa pays taxes
                  */
                 if (!$force) {
-                    $commonService->verifyWithdraw($santa, $amount + $fee);
+                    $commonService->verifyWithdraw($santa, $math->add($amount, $fee));
                 }
 
-                $withdraw = $commonService->forceWithdraw($santa, $amount + $fee, $meta);
+                $withdraw = $commonService->forceWithdraw($santa, $math->add($amount, $fee), $meta);
                 $deposit = $commonService->deposit($product, $amount, $meta);
 
                 $from = app(WalletService::class)

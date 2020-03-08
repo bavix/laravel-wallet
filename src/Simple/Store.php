@@ -3,6 +3,7 @@
 namespace Bavix\Wallet\Simple;
 
 use Bavix\Wallet\Interfaces\Storable;
+use Bavix\Wallet\Services\MathService;
 use Bavix\Wallet\Services\WalletService;
 
 class Store implements Storable
@@ -34,7 +35,8 @@ class Store implements Storable
      */
     public function incBalance($object, int $amount): int
     {
-        $balance = $this->getBalance($object) + $amount;
+        $math = app(MathService::class);
+        $balance = $math->add($this->getBalance($object), $amount);
         $this->setBalance($object, $balance);
         return $balance;
     }

@@ -38,7 +38,7 @@ class WalletService
     public function decimalPlaces(Wallet $object): int
     {
         $decimalPlaces = $this->getWallet($object)->decimal_places ?: 2;
-        return 10 ** $decimalPlaces;
+        return app(MathService::class)->pow(10, $decimalPlaces);
     }
 
     /**
@@ -51,8 +51,12 @@ class WalletService
     public function fee(Wallet $wallet, int $amount): int
     {
         $fee = 0;
+        $math = app(MathService::class);
         if ($wallet instanceof Taxable) {
-            $fee = (int)($amount * $wallet->getFeePercent() / 100);
+            $fee = (int)$math->div(
+                $math->mul($amount, $wallet->getFeePercent()),
+                100
+            );
         }
 
         /**

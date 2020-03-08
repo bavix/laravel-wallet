@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Traits;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Services\MathService;
 use Bavix\Wallet\Services\WalletService;
 
 /**
@@ -27,8 +28,10 @@ trait HasWalletFloat
      */
     public function forceWithdrawFloat(float $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
+        $math = app(MathService::class);
         $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
-        return $this->forceWithdraw((int)round($amount * $decimalPlaces), $meta, $confirmed);
+        $result = round($math->mul($amount, $decimalPlaces));
+        return $this->forceWithdraw((int)$result, $meta, $confirmed);
     }
 
     /**
@@ -40,8 +43,10 @@ trait HasWalletFloat
      */
     public function depositFloat(float $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
+        $math = app(MathService::class);
         $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
-        return $this->deposit((int)round($amount * $decimalPlaces), $meta, $confirmed);
+        $result = round($math->mul($amount, $decimalPlaces));
+        return $this->deposit((int)$result, $meta, $confirmed);
     }
 
     /**
@@ -53,8 +58,10 @@ trait HasWalletFloat
      */
     public function withdrawFloat(float $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
+        $math = app(MathService::class);
         $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
-        return $this->withdraw((int)round($amount * $decimalPlaces), $meta, $confirmed);
+        $result = round($math->mul($amount, $decimalPlaces));
+        return $this->withdraw((int)$result, $meta, $confirmed);
     }
 
     /**
@@ -63,8 +70,10 @@ trait HasWalletFloat
      */
     public function canWithdrawFloat(float $amount): bool
     {
+        $math = app(MathService::class);
         $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
-        return $this->canWithdraw((int)round($amount * $decimalPlaces));
+        $result = round($math->mul($amount, $decimalPlaces));
+        return $this->canWithdraw((int)$result);
     }
 
     /**
@@ -76,8 +85,10 @@ trait HasWalletFloat
      */
     public function transferFloat(Wallet $wallet, float $amount, ?array $meta = null): Transfer
     {
+        $math = app(MathService::class);
         $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
-        return $this->transfer($wallet, (int)round($amount * $decimalPlaces), $meta);
+        $result = round($math->mul($amount, $decimalPlaces));
+        return $this->transfer($wallet, (int)$result, $meta);
     }
 
     /**
@@ -88,8 +99,10 @@ trait HasWalletFloat
      */
     public function safeTransferFloat(Wallet $wallet, float $amount, ?array $meta = null): ?Transfer
     {
+        $math = app(MathService::class);
         $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
-        return $this->safeTransfer($wallet, (int)round($amount * $decimalPlaces), $meta);
+        $result = round($math->mul($amount, $decimalPlaces));
+        return $this->safeTransfer($wallet, (int)$result, $meta);
     }
 
     /**
@@ -100,8 +113,10 @@ trait HasWalletFloat
      */
     public function forceTransferFloat(Wallet $wallet, float $amount, ?array $meta = null): Transfer
     {
+        $math = app(MathService::class);
         $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
-        return $this->forceTransfer($wallet, (int)round($amount * $decimalPlaces), $meta);
+        $result = round($math->mul($amount, $decimalPlaces));
+        return $this->forceTransfer($wallet, (int)$result, $meta);
     }
 
     /**
@@ -109,8 +124,9 @@ trait HasWalletFloat
      */
     public function getBalanceFloatAttribute(): float
     {
+        $math = app(MathService::class);
         $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
-        return $this->balance / $decimalPlaces;
+        return $math->div($this->balance, $decimalPlaces);
     }
 
 }
