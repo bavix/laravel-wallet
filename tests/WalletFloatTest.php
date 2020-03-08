@@ -4,8 +4,8 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Models\Transaction;
-use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Test\Models\UserFloat as User;
 
 class WalletFloatTest extends TestCase
@@ -287,6 +287,65 @@ class WalletFloatTest extends TestCase
         $transaction = $user->withdrawFloat(0.2 + 0.104);
         $this->assertEquals($transaction->amount, -30);
         $this->assertEquals($transaction->type, Transaction::TYPE_WITHDRAW);
+    }
+
+    /**
+     * @return void
+     */
+    public function testEther(): void
+    {
+        $this->assertTrue(true);
+        if (config('wallet.math.enabled')) {
+            /**
+             * @var User $user
+             */
+            $user = factory(User::class)->create();
+            $this->assertEquals($user->balance, 0);
+
+            $user->wallet->decimal_places = 18;
+            $user->wallet->save();
+
+            $math = app(Mathable::class);
+
+            $user->depositFloat('545.8754855274419');
+            $this->assertEquals($user->balance, '545875485527441900000');
+            $this->assertEquals($math->compare($user->balanceFloat, '545.8754855274419'), 0);
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function testBitcoin(): void
+    {
+        $this->assertTrue(true);
+        if (config('wallet.math.enabled')) {
+            /**
+             * @var User $user
+             */
+            $user = factory(User::class)->create();
+            $this->assertEquals($user->balance, 0);
+
+            $user->wallet->decimal_places = 32; // bitcoin wallet
+            $user->wallet->save();
+
+            $math = app(Mathable::class);
+
+            for ($i = 0; $i < 256; $i++) {
+                $user->depositFloat('0.00000001'); // Satoshi
+            }
+
+            $this->assertEquals($user->balance, '256' . str_repeat('0', 32 - 8));
+            $this->assertEquals($math->compare($user->balanceFloat, '0.00000256'), 0);
+
+            $user->deposit(256 . str_repeat('0', 32));
+            $user->depositFloat('0.' . str_repeat('0', 31) . '1');
+
+            [$q, $r] = explode('.', $user->balanceFloat, 2);
+            $this->assertEquals(strlen($r), $user->wallet->decimal_places);
+            $this->assertEquals($user->balance, '25600000256000000000000000000000001');
+            $this->assertEquals($user->balanceFloat, '256.00000256000000000000000000000001');
+        }
     }
 
 }

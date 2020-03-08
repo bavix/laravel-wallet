@@ -13,7 +13,7 @@ interface WalletFloat
      * @param bool $confirmed
      * @return Transaction
      */
-    public function depositFloat(float $amount, ?array $meta = null, bool $confirmed = true): Transaction;
+    public function depositFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
      * @param float $amount
@@ -21,7 +21,7 @@ interface WalletFloat
      * @param bool $confirmed
      * @return Transaction
      */
-    public function withdrawFloat(float $amount, ?array $meta = null, bool $confirmed = true): Transaction;
+    public function withdrawFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
      * @param float $amount
@@ -29,7 +29,7 @@ interface WalletFloat
      * @param bool $confirmed
      * @return Transaction
      */
-    public function forceWithdrawFloat(float $amount, ?array $meta = null, bool $confirmed = true): Transaction;
+    public function forceWithdrawFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
      * @param Wallet $wallet
@@ -38,7 +38,7 @@ interface WalletFloat
      * @param string $status
      * @return Transfer
      */
-    public function transferFloat(Wallet $wallet, float $amount, ?array $meta = null): Transfer;
+    public function transferFloat(Wallet $wallet, $amount, ?array $meta = null): Transfer;
 
     /**
      * @param Wallet $wallet
@@ -47,7 +47,7 @@ interface WalletFloat
      * @param string $status
      * @return null|Transfer
      */
-    public function safeTransferFloat(Wallet $wallet, float $amount, ?array $meta = null): ?Transfer;
+    public function safeTransferFloat(Wallet $wallet, $amount, ?array $meta = null): ?Transfer;
 
     /**
      * @param Wallet $wallet
@@ -56,16 +56,16 @@ interface WalletFloat
      * @param string $status
      * @return Transfer
      */
-    public function forceTransferFloat(Wallet $wallet, float $amount, ?array $meta = null): Transfer;
+    public function forceTransferFloat(Wallet $wallet, $amount, ?array $meta = null): Transfer;
 
     /**
      * @param float $amount
      * @return bool
      */
-    public function canWithdrawFloat(float $amount): bool;
+    public function canWithdrawFloat($amount): bool;
 
     /**
-     * @return float
+     * @return int|float
      */
-    public function getBalanceFloatAttribute(): float;
+    public function getBalanceFloatAttribute();
 }

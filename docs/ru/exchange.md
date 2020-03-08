@@ -25,7 +25,7 @@
 
 ```php
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Simple\WalletService;
 use Illuminate\Support\Arr;
 
 class MyRateService extends \Bavix\Wallet\Simple\Rate

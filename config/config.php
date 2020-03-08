@@ -14,15 +14,16 @@ use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Simple\Rate;
 use Bavix\Wallet\Simple\Store;
+use Bavix\Wallet\Simple\Math;
 
 return [
     /**
      * This parameter is necessary for more accurate calculations.
      * PS, Arbitrary Precision Calculations
      */
-    'bcmath' => [
-        'enabled' => extension_loaded('bcmath'),
-        'scale' => 16,
+    'math' => [
+        'enabled' => false, // extension_loaded('bcmath'),
+        'scale' => 64,
     ],
 
     /**
@@ -32,6 +33,7 @@ return [
     'package' => [
         'rateable' => Rate::class,
         'storable' => Store::class,
+        'mathable' => Math::class,
     ],
 
     /**

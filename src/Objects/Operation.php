@@ -65,9 +65,9 @@ class Operation
     }
 
     /**
-     * @return int
+     * @return float|int
      */
-    public function getAmount(): int
+    public function getAmount()
     {
         return $this->amount;
     }
@@ -102,7 +102,7 @@ class Operation
      * @param int $amount
      * @return static
      */
-    public function setAmount(int $amount): self
+    public function setAmount($amount): self
     {
         $this->amount = $amount;
         return $this;

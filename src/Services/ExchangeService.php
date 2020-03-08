@@ -11,9 +11,9 @@ class ExchangeService
     /**
      * @param Wallet $from
      * @param Wallet $to
-     * @return float
+     * @return int|float
      */
-    public function rate(Wallet $from, Wallet $to): float
+    public function rate(Wallet $from, Wallet $to)
     {
         return app(Rateable::class)
             ->withAmount(1)

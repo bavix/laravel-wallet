@@ -56,7 +56,6 @@ class Transfer extends Model
     protected $casts = [
         'deposit_id' => 'int',
         'withdraw_id' => 'int',
-        'fee' => 'int',
     ];
 
     /**

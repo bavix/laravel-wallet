@@ -6,21 +6,21 @@ interface Storable
 {
     /**
      * @param Wallet $object
-     * @return int
+     * @return int|float
      */
-    public function getBalance($object): int;
+    public function getBalance($object);
 
     /**
      * @param Wallet $object
      * @param int $amount
-     * @return int
+     * @return int|float
      */
-    public function incBalance($object, int $amount): int;
+    public function incBalance($object, $amount);
 
     /**
      * @param Wallet $object
      * @param int $amount
      * @return bool
      */
-    public function setBalance($object, int $amount): bool;
+    public function setBalance($object, $amount): bool;
 }

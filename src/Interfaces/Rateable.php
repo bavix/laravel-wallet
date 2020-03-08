@@ -9,7 +9,7 @@ interface Rateable
      * @param int $amount
      * @return Rateable
      */
-    public function withAmount(int $amount): self;
+    public function withAmount($amount): self;
 
     /**
      * @param Wallet $wallet
@@ -19,8 +19,8 @@ interface Rateable
 
     /**
      * @param Wallet $wallet
-     * @return float
+     * @return int|float
      */
-    public function convertTo(Wallet $wallet): float;
+    public function convertTo(Wallet $wallet);
 
 }

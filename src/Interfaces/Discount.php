@@ -6,7 +6,7 @@ interface Discount extends Product
 {
     /**
      * @param Customer $customer
-     * @return int
+     * @return int|float
      */
-    public function getPersonalDiscount(Customer $customer): int;
+    public function getPersonalDiscount(Customer $customer);
 }

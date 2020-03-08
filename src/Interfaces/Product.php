@@ -16,9 +16,9 @@ interface Product extends Wallet
 
     /**
      * @param Customer $customer
-     * @return int
+     * @return float|int
      */
-    public function getAmountProduct(Customer $customer): int;
+    public function getAmountProduct(Customer $customer);
 
     /**
      * @return array

@@ -54,7 +54,6 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
      * @var array
      */
     protected $casts = [
-        'balance' => 'int',
         'decimal_places' => 'int',
     ];
 
@@ -109,9 +108,9 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     }
 
     /**
-     * @return int
+     * @return float|int
      */
-    public function getAvailableBalance(): int
+    public function getAvailableBalance()
     {
         return $this->transactions()
             ->where('wallet_id', $this->getKey())

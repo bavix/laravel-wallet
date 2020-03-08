@@ -128,7 +128,6 @@ class BalanceTest extends TestCase
         $this->assertTrue($wallet->exists);
 
         $this->assertEquals(0, app(Storable::class)->getBalance($wallet));
-        $this->assertEquals(0, app(WalletService::class)->getBalance($wallet));
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transfer;
@@ -9,7 +10,6 @@ use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\LockService;
-use Bavix\Wallet\Services\MathService;
 use Bavix\Wallet\Services\WalletService;
 use Throwable;
 use function app;
@@ -65,7 +65,7 @@ trait HasGift
              * That's why I address him like this!
              */
             return app(DbService::class)->transaction(static function () use ($santa, $to, $product, $force) {
-                $math = app(MathService::class);
+                $math = app(Mathable::class);
                 $discount = app(WalletService::class)->discount($santa, $product);
                 $amount = $math->sub($product->getAmountProduct($santa), $discount);
                 $meta = $product->getMetaProduct();
