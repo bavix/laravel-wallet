@@ -47,7 +47,7 @@ class Store implements Storable
     public function setBalance($object, $amount): bool
     {
         $wallet = app(WalletService::class)->getWallet($object);
-        $this->balanceSheets[$wallet->getKey()] = app(Mathable::class)->round($amount);
+        $this->balanceSheets[$wallet->getKey()] = app(Mathable::class)->round($amount ?: 0);
         return true;
     }
 

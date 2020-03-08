@@ -154,7 +154,7 @@ class Math implements Mathable
     {
         if (strpos($number, '.') !== false) {
             if (preg_match("~\.[0]+$~", $number)) {
-                return bcround($number, 0);
+                return $this->bcround($number, 0);
             }
             if ($number[0] !== '-') {
                 return bcadd($number, 1, 0);
@@ -172,7 +172,7 @@ class Math implements Mathable
     {
         if (strpos($number, '.') !== false) {
             if (preg_match("~\.[0]+$~", $number)) {
-                return bcround($number, 0);
+                return $this->bcround($number, 0);
             }
             if ($number[0] !== '-') {
                 return bcadd($number, 0, 0);
