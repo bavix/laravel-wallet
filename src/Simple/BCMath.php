@@ -9,7 +9,7 @@ use Bavix\Wallet\Interfaces\Mathable;
  * @package Bavix\Wallet\Services
  * @codeCoverageIgnore
  */
-class Math implements Mathable
+class BCMath implements Mathable
 {
 
     /**
@@ -25,7 +25,7 @@ class Math implements Mathable
      */
     public function add($first, $second, ?int $scale = null): string
     {
-        return $this->round($first + $second, $this->scale($scale));
+        return bcadd($first, $second, $this->scale($scale));
     }
 
     /**
@@ -36,7 +36,7 @@ class Math implements Mathable
      */
     public function sub($first, $second, ?int $scale = null): string
     {
-        return $this->round($first - $second, $this->scale($scale));
+        return bcsub($first, $second, $this->scale($scale));
     }
 
     /**
@@ -47,7 +47,7 @@ class Math implements Mathable
      */
     public function div($first, $second, ?int $scale = null): string
     {
-        return $this->round($first / $second, $this->scale($scale));
+        return bcdiv($first, $second, $this->scale($scale));
     }
 
     /**
@@ -58,7 +58,7 @@ class Math implements Mathable
      */
     public function mul($first, $second, ?int $scale = null): string
     {
-        return $this->round($first * $second, $this->scale($scale));
+        return bcmul($first, $second, $this->scale($scale));
     }
 
     /**
@@ -69,7 +69,7 @@ class Math implements Mathable
      */
     public function pow($first, $second, ?int $scale = null): string
     {
-        return $this->round($first ** $second, $this->scale($scale));
+        return bcpow($first, $second, $this->scale($scale));
     }
 
     /**
@@ -78,7 +78,16 @@ class Math implements Mathable
      */
     public function ceil($number): string
     {
-        return ceil($number);
+        if (strpos($number, '.') !== false) {
+            if (preg_match("~\.[0]+$~", $number)) {
+                return $this->bcround($number, 0);
+            }
+            if ($number[0] !== '-') {
+                return bcadd($number, 1, 0);
+            }
+            return bcsub($number, 0, 0);
+        }
+        return $number;
     }
 
     /**
@@ -87,7 +96,19 @@ class Math implements Mathable
      */
     public function floor($number): string
     {
-        return floor($number);
+        if (strpos($number, '.') === false) {
+            return $number;
+        }
+
+        if (preg_match("~\.[0]+$~", $number)) {
+            return $this->round($number, 0);
+        }
+
+        if ($number[0] !== '-') {
+            return bcadd($number, 0, 0);
+        }
+
+        return bcsub($number, 1, 0);
     }
 
     /**
@@ -97,7 +118,15 @@ class Math implements Mathable
      */
     public function round($number, int $precision = 0): string
     {
-        return round($number, $precision);
+        if (strpos($number, '.') === false) {
+            return $number;
+        }
+
+        if ($number[0] !== '-') {
+            return bcadd($number, '0.' . str_repeat('0', $precision) . '5', $precision);
+        }
+
+        return bcsub($number, '0.' . str_repeat('0', $precision) . '5', $precision);
     }
 
     /**
@@ -107,7 +136,7 @@ class Math implements Mathable
      */
     public function compare($first, $second): int
     {
-        return $first <=> $second;
+        return bccomp($first, $second, $this->scale());
     }
 
     /**

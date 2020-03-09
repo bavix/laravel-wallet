@@ -6,6 +6,7 @@ use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Simple\BCMath;
 use Bavix\Wallet\Test\Models\UserFloat as User;
 
 class WalletFloatTest extends TestCase
@@ -294,8 +295,7 @@ class WalletFloatTest extends TestCase
      */
     public function testEther(): void
     {
-        $this->assertTrue(true);
-        if (config('wallet.math.enabled')) {
+        if (app(Mathable::class) instanceof BCMath) {
             /**
              * @var User $user
              */
@@ -318,8 +318,7 @@ class WalletFloatTest extends TestCase
      */
     public function testBitcoin(): void
     {
-        $this->assertTrue(true);
-        if (config('wallet.math.enabled')) {
+        if (app(Mathable::class) instanceof BCMath) {
             /**
              * @var User $user
              */

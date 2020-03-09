@@ -14,7 +14,10 @@ use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Simple\Rate;
 use Bavix\Wallet\Simple\Store;
+use Bavix\Wallet\Simple\BCMath;
 use Bavix\Wallet\Simple\Math;
+
+$bcLoaded = extension_loaded('bcmath');
 
 return [
     /**
@@ -22,7 +25,6 @@ return [
      * PS, Arbitrary Precision Calculations
      */
     'math' => [
-        'enabled' => false, // extension_loaded('bcmath'),
         'scale' => 64,
     ],
 
@@ -33,7 +35,9 @@ return [
     'package' => [
         'rateable' => Rate::class,
         'storable' => Store::class,
-        'mathable' => Math::class,
+        'mathable' => $bcLoaded ?
+            BCMath::class :
+            Math::class,
     ],
 
     /**
@@ -89,7 +93,9 @@ return [
     'transaction' => [
         'table' => 'transactions',
         'model' => Transaction::class,
-        'casts' => [],
+        'casts' => [
+            'amount' => $bcLoaded ? 'string' : 'int',
+        ],
     ],
 
     /**
@@ -98,7 +104,9 @@ return [
     'transfer' => [
         'table' => 'transfers',
         'model' => Transfer::class,
-        'casts' => [],
+        'casts' => [
+            'fee' => $bcLoaded ? 'string' : 'int',
+        ],
     ],
 
     /**
@@ -107,7 +115,9 @@ return [
     'wallet' => [
         'table' => 'wallets',
         'model' => Wallet::class,
-        'casts' => [],
+        'casts' => [
+            'balance' => $bcLoaded ? 'string' : 'int',
+        ],
         'default' => [
             'name' => 'Default Wallet',
             'slug' => 'default',
