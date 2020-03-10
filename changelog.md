@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- add support "Arbitrary Precision Mathematics" (`ext-bcmath`) #139 #146
+- add `Mathable` service (helps switch quickly from bcmath to php computing)
+
+### Changed
+- add unit cases
+- upgrade composer packages
+- Now all casts are in the config, not in the model. If you use bcmath, then all values are reduced to a string.
+
+### Removed
+- Strong typing (models, interfaces, etc.)
+- all deprecated methods are removed
+
 ## [4.2.0] - 2020-03-08
 
 ### Added
@@ -142,7 +155,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 - class `Taxing`.
 
-### Remove
+### Removed
 - The ability to change the ratio  `coefficient`.
 - Removed private and protected methods, the traits turned out to be more clean.
 
@@ -453,7 +466,7 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/4.2.0...HEAD
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/4.2.0...develop
 [4.2.0]: https://github.com/bavix/laravel-wallet/compare/4.1.2...4.2.0
 [4.1.2]: https://github.com/bavix/laravel-wallet/compare/4.1.1...4.1.2
 [4.1.1]: https://github.com/bavix/laravel-wallet/compare/4.1.0...4.1.1
