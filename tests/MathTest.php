@@ -2,7 +2,7 @@
 
 namespace Bavix\Wallet\Test;
 
-use Bavix\Wallet\Simple\GMPMath;
+use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Simple\BCMath;
 use Bavix\Wallet\Simple\Math;
 
@@ -17,7 +17,7 @@ class MathTest extends TestCase
     public function testAbs(string $class): void
     {
         /**
-         * @var Math $provider
+         * @var Mathable $provider
          */
         $provider = app($class);
 
@@ -42,7 +42,7 @@ class MathTest extends TestCase
     public function testCompare(string $class): void
     {
         /**
-         * @var Math $provider
+         * @var Mathable $provider
          */
         $provider = app($class);
 
@@ -70,7 +70,7 @@ class MathTest extends TestCase
     public function testAdd(string $class): void
     {
         /**
-         * @var Math $provider
+         * @var Mathable $provider
          */
         $provider = app($class);
 
@@ -109,7 +109,7 @@ class MathTest extends TestCase
     public function testSub(string $class): void
     {
         /**
-         * @var Math $provider
+         * @var Mathable $provider
          */
         $provider = app($class);
 
@@ -148,7 +148,7 @@ class MathTest extends TestCase
     public function testDiv(string $class): void
     {
         /**
-         * @var Math $provider
+         * @var Mathable $provider
          */
         $provider = app($class);
 
@@ -187,7 +187,7 @@ class MathTest extends TestCase
     public function testMul(string $class): void
     {
         /**
-         * @var Math $provider
+         * @var Mathable $provider
          */
         $provider = app($class);
 
@@ -226,7 +226,7 @@ class MathTest extends TestCase
     public function testPow(string $class): void
     {
         /**
-         * @var Math $provider
+         * @var Mathable $provider
          */
         $provider = app($class);
 
@@ -265,7 +265,7 @@ class MathTest extends TestCase
     public function testCeil(string $class): void
     {
         /**
-         * @var Math $provider
+         * @var Mathable $provider
          */
         $provider = app($class);
 
@@ -341,7 +341,7 @@ class MathTest extends TestCase
     public function testFloor(string $class): void
     {
         /**
-         * @var Math $provider
+         * @var Mathable $provider
          */
         $provider = app($class);
 
@@ -417,7 +417,7 @@ class MathTest extends TestCase
     public function testRound(string $class): void
     {
         /**
-         * @var Math $provider
+         * @var Mathable $provider
          */
         $provider = app($class);
 
