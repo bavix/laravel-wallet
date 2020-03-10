@@ -11,7 +11,6 @@ use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
-use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Common\Models\Transfer;
@@ -107,14 +106,6 @@ class SingletonTest extends TestCase
     public function testCommonService(): void
     {
         $this->assertEquals($this->getRefId(CommonService::class), $this->getRefId(CommonService::class));
-    }
-
-    /**
-     * @return void
-     */
-    public function testProxyService(): void
-    {
-        $this->assertEquals($this->getRefId(ProxyService::class), $this->getRefId(ProxyService::class));
     }
 
     /**

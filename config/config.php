@@ -6,7 +6,6 @@ use Bavix\Wallet\Objects\EmptyLock;
 use Bavix\Wallet\Objects\Operation;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Models\Transaction;
@@ -75,7 +74,6 @@ return [
     'services' => [
         'exchange' => ExchangeService::class,
         'common' => CommonService::class,
-        'proxy' => ProxyService::class,
         'wallet' => WalletService::class,
         'lock' => LockService::class,
     ],

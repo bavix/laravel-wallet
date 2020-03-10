@@ -134,12 +134,14 @@ class WalletService
     public function refresh(WalletModel $wallet): bool
     {
         return app(LockService::class)->lock($this, __FUNCTION__, static function () use ($wallet) {
+            $math = app(Mathable::class);
             app(Storable::class)->getBalance($wallet);
+            $whatIs = $wallet->balance;
             $balance = $wallet->getAvailableBalance();
             $wallet->balance = $balance;
 
             return app(Storable::class)->setBalance($wallet, $balance) &&
-                $wallet->save();
+                (!$math->compare($whatIs, $balance) || $wallet->save());
         });
     }
 

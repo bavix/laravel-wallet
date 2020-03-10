@@ -2,7 +2,7 @@
 
 namespace Bavix\Wallet\Test;
 
-use Bavix\Wallet\Services\ProxyService;
+use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Simple\BCMath;
 use Bavix\Wallet\Simple\Math;
 use Bavix\Wallet\Simple\Store;
@@ -24,7 +24,6 @@ class TestCase extends OrchestraTestCase
      */
     public function setUp(): void
     {
-        app(ProxyService::class)->fresh();
         parent::setUp();
         $this->withFactories(__DIR__ . '/factories');
         $this->loadMigrationsFrom([

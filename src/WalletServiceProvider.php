@@ -18,7 +18,6 @@ use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Simple\Math;
-use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Simple\Rate;
 use Bavix\Wallet\Simple\Store;
@@ -93,7 +92,6 @@ class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(DbService::class, config('wallet.services.db', DbService::class));
         $this->app->singleton(ExchangeService::class, config('wallet.services.exchange', ExchangeService::class));
         $this->app->singleton(CommonService::class, config('wallet.services.common', CommonService::class));
-        $this->app->singleton(ProxyService::class, config('wallet.services.proxy', ProxyService::class));
         $this->app->singleton(WalletService::class, config('wallet.services.wallet', WalletService::class));
         $this->app->singleton(LockService::class, config('wallet.services.lock', LockService::class));
 
