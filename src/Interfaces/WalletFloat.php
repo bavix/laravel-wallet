@@ -35,7 +35,6 @@ interface WalletFloat
      * @param Wallet $wallet
      * @param float $amount
      * @param array|null $meta
-     * @param string $status
      * @return Transfer
      */
     public function transferFloat(Wallet $wallet, $amount, ?array $meta = null): Transfer;
@@ -44,7 +43,6 @@ interface WalletFloat
      * @param Wallet $wallet
      * @param float $amount
      * @param array|null $meta
-     * @param string $status
      * @return null|Transfer
      */
     public function safeTransferFloat(Wallet $wallet, $amount, ?array $meta = null): ?Transfer;
@@ -53,7 +51,6 @@ interface WalletFloat
      * @param Wallet $wallet
      * @param float $amount
      * @param array|null $meta
-     * @param string $status
      * @return Transfer
      */
     public function forceTransferFloat(Wallet $wallet, $amount, ?array $meta = null): Transfer;

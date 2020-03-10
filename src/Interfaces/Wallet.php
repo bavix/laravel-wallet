@@ -36,7 +36,6 @@ interface Wallet
      * @param self $wallet
      * @param int $amount
      * @param array|null $meta
-     * @param string $status
      * @return Transfer
      */
     public function transfer(self $wallet, $amount, ?array $meta = null): Transfer;
@@ -45,7 +44,6 @@ interface Wallet
      * @param self $wallet
      * @param int $amount
      * @param array|null $meta
-     * @param string $status
      * @return null|Transfer
      */
     public function safeTransfer(self $wallet, $amount, ?array $meta = null): ?Transfer;
@@ -54,7 +52,6 @@ interface Wallet
      * @param Wallet $wallet
      * @param int $amount
      * @param array|null $meta
-     * @param string $status
      * @return Transfer
      */
     public function forceTransfer(Wallet $wallet, $amount, ?array $meta = null): Transfer;
