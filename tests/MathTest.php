@@ -13,6 +13,31 @@ class MathTest extends TestCase
      * @param string $class
      * @return void
      */
+    public function testAbs(string $class): void
+    {
+        /**
+         * @var Math $provider
+         */
+        $provider = app($class);
+
+        // int
+        $this->assertEquals($provider->abs(123), 123);
+        $this->assertEquals($provider->abs(-123), 123);
+
+        // float
+        $this->assertEquals($provider->abs(123.11), 123.11);
+        $this->assertEquals($provider->abs(-123.11), 123.11);
+
+        // string
+        $this->assertEquals($provider->abs('123.11'), 123.11);
+        $this->assertEquals($provider->abs('-123.11'), 123.11);
+    }
+
+    /**
+     * @dataProvider dataProvider
+     * @param string $class
+     * @return void
+     */
     public function testCompare(string $class): void
     {
         /**

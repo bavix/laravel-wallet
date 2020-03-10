@@ -90,6 +90,15 @@ class Math implements Mathable
     }
 
     /**
+     * @param float|int|string $number
+     * @return string
+     */
+    public function abs($number): string
+    {
+        return abs($number);
+    }
+
+    /**
      * @param string|int|float $number
      * @param int $precision
      * @return string

@@ -62,7 +62,7 @@ class BCMath extends Math
             return $this->round($number, 0);
         }
 
-        if (strpos($number, '-') === 0) {
+        if ($this->isNegative($number)) {
             return bcsub($number, 0, 0);
         }
 
@@ -82,7 +82,7 @@ class BCMath extends Math
             return $this->round($number, 0);
         }
 
-        if (strpos($number, '-') === 0) {
+        if ($this->isNegative($number)) {
             return bcsub($number, 1, 0);
         }
 
@@ -98,11 +98,24 @@ class BCMath extends Math
             return $number;
         }
 
-        if (strpos($number, '-') === 0) {
+        if ($this->isNegative($number)) {
             return bcsub($number, '0.' . str_repeat('0', $precision) . '5', $precision);
         }
 
         return bcadd($number, '0.' . str_repeat('0', $precision) . '5', $precision);
+    }
+
+    /**
+     * @param float|int|string $number
+     * @return string
+     */
+    public function abs($number): string
+    {
+        if ($this->isNegative($number)) {
+            return substr($number, 1);
+        }
+
+        return $number;
     }
 
     /**
@@ -111,6 +124,15 @@ class BCMath extends Math
     public function compare($first, $second): int
     {
         return bccomp($first, $second, $this->scale());
+    }
+
+    /**
+     * @param $number
+     * @return bool
+     */
+    protected function isNegative($number): bool
+    {
+        return strpos($number, '-') === 0;
     }
 
 }

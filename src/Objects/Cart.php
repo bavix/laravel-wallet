@@ -25,16 +25,6 @@ class Cart implements Countable
     protected $quantity = [];
 
     /**
-     * @return static
-     * @deprecated use app(Cart::class)
-     * @codeCoverageIgnore
-     */
-    public static function make(): self
-    {
-        return new static();
-    }
-
-    /**
      * @param Product $product
      * @param int $quantity
      * @return static
@@ -133,11 +123,12 @@ class Cart implements Countable
      * @param Customer $customer
      * @return int
      */
-    public function getTotal(Customer $customer): int
+    public function getTotal(Customer $customer): string
     {
         $result = 0;
+        $math = app(Mathable::class);
         foreach ($this->items as $item) {
-            $result += $item->getAmountProduct($customer);
+            $result = $math->add($result, $item->getAmountProduct($customer));
         }
         return $result;
     }

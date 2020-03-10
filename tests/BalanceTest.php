@@ -112,7 +112,6 @@ class BalanceTest extends TestCase
     /**
      * @return void
      * @throws
-     * @deprecated
      */
     public function testGetBalance(): void
     {

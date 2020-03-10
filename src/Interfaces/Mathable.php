@@ -64,6 +64,12 @@ interface Mathable
     public function ceil($number): string;
 
     /**
+     * @param int|float|string $number
+     * @return string
+     */
+    public function abs($number): string;
+
+    /**
      * @param int|float|string $first
      * @param int|float|string $second
      * @return int
