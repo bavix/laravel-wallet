@@ -28,7 +28,6 @@
     "php": "^7.2|^8.0",
     "ext-pdo": "*",
     "illuminate/database": "^6.0|^7.0",
-    "nesbot/carbon": "^2.0",
     "doctrine/dbal": "^2.8",
     "ramsey/uuid": "^3.0"
   },

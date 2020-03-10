@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Strong typing (models, interfaces, etc.)
 - all deprecated methods are removed
+- `nesbot/carbon` is no longer needed for the library to work
 
 ## [4.2.0] - 2020-03-08
 
