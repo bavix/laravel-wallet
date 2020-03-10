@@ -97,9 +97,9 @@ class Transaction extends Model
     }
 
     /**
-     * @return float
+     * @return int|float
      */
-    public function getAmountFloatAttribute(): float
+    public function getAmountFloatAttribute()
     {
         $decimalPlaces = app(WalletService::class)
             ->decimalPlaces($this->wallet);
@@ -109,10 +109,10 @@ class Transaction extends Model
     }
 
     /**
-     * @param float $amount
-     * @return float
+     * @param int|float $amount
+     * @return void
      */
-    public function setAmountFloatAttribute(float $amount): void
+    public function setAmountFloatAttribute($amount): void
     {
         $math = app(Mathable::class);
         $decimalPlaces = app(WalletService::class)
