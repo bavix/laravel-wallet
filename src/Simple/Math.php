@@ -6,8 +6,7 @@ use Bavix\Wallet\Interfaces\Mathable;
 
 /**
  * Class MathService
- * @package Bavix\Wallet\Services
- * @codeCoverageIgnore
+ * @package Bavix\Wallet\Simple
  */
 class Math implements Mathable
 {

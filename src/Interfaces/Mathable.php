@@ -38,7 +38,7 @@ interface Mathable
 
     /**
      * @param int|float|string $first
-     * @param int|float|string $second
+     * @param int|string $second
      * @param int|null $scale
      * @return string
      */

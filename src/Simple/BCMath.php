@@ -2,26 +2,15 @@
 
 namespace Bavix\Wallet\Simple;
 
-use Bavix\Wallet\Interfaces\Mathable;
-
 /**
- * Class MathService
- * @package Bavix\Wallet\Services
- * @codeCoverageIgnore
+ * Class BCMathService
+ * @package Bavix\Wallet\Simple
  */
-class BCMath implements Mathable
+class BCMath extends Math
 {
 
     /**
-     * @var int
-     */
-    protected $scale;
-
-    /**
-     * @param string|int|float $first
-     * @param string|int|float $second
-     * @param null|int $scale
-     * @return string
+     * @inheritDoc
      */
     public function add($first, $second, ?int $scale = null): string
     {
@@ -29,10 +18,7 @@ class BCMath implements Mathable
     }
 
     /**
-     * @param string|int|float $first
-     * @param string|int|float $second
-     * @param null|int $scale
-     * @return string
+     * @inheritDoc
      */
     public function sub($first, $second, ?int $scale = null): string
     {
@@ -40,10 +26,7 @@ class BCMath implements Mathable
     }
 
     /**
-     * @param string|int|float $first
-     * @param string|int|float $second
-     * @param null|int $scale
-     * @return float|int|string|null
+     * @inheritDoc
      */
     public function div($first, $second, ?int $scale = null): string
     {
@@ -51,10 +34,7 @@ class BCMath implements Mathable
     }
 
     /**
-     * @param string|int|float $first
-     * @param string|int|float $second
-     * @param null|int $scale
-     * @return float|int|string
+     * @inheritDoc
      */
     public function mul($first, $second, ?int $scale = null): string
     {
@@ -62,10 +42,7 @@ class BCMath implements Mathable
     }
 
     /**
-     * @param string|int|float $first
-     * @param string|int|float $second
-     * @param null|int $scale
-     * @return string
+     * @inheritDoc
      */
     public function pow($first, $second, ?int $scale = null): string
     {
@@ -73,26 +50,27 @@ class BCMath implements Mathable
     }
 
     /**
-     * @param string|int|float $number
-     * @return string
+     * @inheritDoc
      */
     public function ceil($number): string
     {
-        if (strpos($number, '.') !== false) {
-            if (preg_match("~\.[0]+$~", $number)) {
-                return $this->bcround($number, 0);
-            }
-            if ($number[0] !== '-') {
-                return bcadd($number, 1, 0);
-            }
+        if (strpos($number, '.') === false) {
+            return $number;
+        }
+
+        if (preg_match("~\.[0]+$~", $number)) {
+            return $this->round($number, 0);
+        }
+
+        if (strpos($number, '-') === 0) {
             return bcsub($number, 0, 0);
         }
-        return $number;
+
+        return bcadd($number, 1, 0);
     }
 
     /**
-     * @param string|int|float $number
-     * @return string
+     * @inheritDoc
      */
     public function floor($number): string
     {
@@ -104,17 +82,15 @@ class BCMath implements Mathable
             return $this->round($number, 0);
         }
 
-        if ($number[0] !== '-') {
-            return bcadd($number, 0, 0);
+        if (strpos($number, '-') === 0) {
+            return bcsub($number, 1, 0);
         }
 
-        return bcsub($number, 1, 0);
+        return bcadd($number, 0, 0);
     }
 
     /**
-     * @param string|int|float $number
-     * @param int $precision
-     * @return string
+     * @inheritDoc
      */
     public function round($number, int $precision = 0): string
     {
@@ -122,38 +98,19 @@ class BCMath implements Mathable
             return $number;
         }
 
-        if ($number[0] !== '-') {
-            return bcadd($number, '0.' . str_repeat('0', $precision) . '5', $precision);
+        if (strpos($number, '-') === 0) {
+            return bcsub($number, '0.' . str_repeat('0', $precision) . '5', $precision);
         }
 
-        return bcsub($number, '0.' . str_repeat('0', $precision) . '5', $precision);
+        return bcadd($number, '0.' . str_repeat('0', $precision) . '5', $precision);
     }
 
     /**
-     * @param $first
-     * @param $second
-     * @return int
+     * @inheritDoc
      */
     public function compare($first, $second): int
     {
         return bccomp($first, $second, $this->scale());
-    }
-
-    /**
-     * @param int $scale
-     * @return int
-     */
-    protected function scale(?int $scale = null): int
-    {
-        if ($scale !== null) {
-            return $scale;
-        }
-
-        if ($this->scale === null) {
-            $this->scale = (int)config('wallet.math.scale', 64);
-        }
-
-        return $this->scale;
     }
 
 }
