@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Simple\GMPMath;
 use Bavix\Wallet\Simple\BCMath;
 use Bavix\Wallet\Simple\Math;
 
@@ -489,14 +490,13 @@ class MathTest extends TestCase
      */
     public function dataProvider(): array
     {
+        $providers = [[Math::class]];
+
         if (extension_loaded('bcmath')) {
-            return [
-                [Math::class],
-                [BCMath::class],
-            ];
+            $providers[] = [BCMath::class];
         }
 
-        return [[Math::class]];
+        return $providers;
     }
 
 }

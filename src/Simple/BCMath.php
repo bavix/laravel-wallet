@@ -3,7 +3,7 @@
 namespace Bavix\Wallet\Simple;
 
 /**
- * Class BCMathService
+ * Class BCMath
  * @package Bavix\Wallet\Simple
  */
 class BCMath extends Math
