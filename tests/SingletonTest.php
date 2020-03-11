@@ -2,7 +2,9 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Rateable;
+use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Objects\EmptyLock;
@@ -66,6 +68,22 @@ class SingletonTest extends TestCase
     public function testRateable(): void
     {
         $this->assertEquals($this->getRefId(Rateable::class), $this->getRefId(Rateable::class));
+    }
+
+    /**
+     * @return void
+     */
+    public function testStorable(): void
+    {
+        $this->assertEquals($this->getRefId(Storable::class), $this->getRefId(Storable::class));
+    }
+
+    /**
+     * @return void
+     */
+    public function testMathable(): void
+    {
+        $this->assertEquals($this->getRefId(Mathable::class), $this->getRefId(Mathable::class));
     }
 
     /**
