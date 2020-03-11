@@ -26,7 +26,7 @@ We will take the data from the array, and not from the database.
 
 ```php
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Simple\WalletService;
+use Bavix\Wallet\Services\WalletService;
 use Illuminate\Support\Arr;
 
 class MyRateService extends \Bavix\Wallet\Simple\Rate
