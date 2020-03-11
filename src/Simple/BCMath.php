@@ -111,11 +111,17 @@ class BCMath extends Math
      */
     public function abs($number): string
     {
-        if ($this->isNegative($number)) {
-            return substr($number, 1);
-        }
+        try {
+            $this->add($number, 0); // validator
+            if ($this->isNegative($number)) {
+                return substr($number, 1);
+            }
 
-        return $number;
+            return $number;
+        } catch (\Throwable $throwable) {
+            // this is not a number
+            return 0;
+        }
     }
 
     /**

@@ -21,6 +21,11 @@ class MathTest extends TestCase
          */
         $provider = app($class);
 
+        // not number
+        $this->assertEquals($provider->abs('hello'), 0);
+        $this->assertEquals($provider->abs('--121'), 0);
+        $this->assertEquals($provider->abs('---121'), 0);
+
         // int
         $this->assertEquals($provider->abs(123), 123);
         $this->assertEquals($provider->abs(-123), 123);
