@@ -22,6 +22,7 @@ class MathTest extends TestCase
         $provider = app($class);
 
         // not number
+        $this->assertEquals($provider->abs('.'), 0);
         $this->assertEquals($provider->abs('hello'), 0);
         $this->assertEquals($provider->abs('--121'), 0);
         $this->assertEquals($provider->abs('---121'), 0);
@@ -31,10 +32,14 @@ class MathTest extends TestCase
         $this->assertEquals($provider->abs(-123), 123);
 
         // float
+        $this->assertEquals($provider->abs(.0), 0);
+        $this->assertEquals($provider->abs(123.0), 123);
         $this->assertEquals($provider->abs(123.11), 123.11);
         $this->assertEquals($provider->abs(-123.11), 123.11);
 
         // string
+        $this->assertEquals($provider->abs('123.'), 123);
+        $this->assertEquals($provider->abs('.11'), .11);
         $this->assertEquals($provider->abs('123.11'), 123.11);
         $this->assertEquals($provider->abs('-123.11'), 123.11);
     }

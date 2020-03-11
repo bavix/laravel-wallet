@@ -111,7 +111,13 @@ class BCMath extends Math
      */
     public function abs($number): string
     {
-        if (!preg_match('~^-?\d+(\.\d+)?~', $number)) {
+        if (!preg_match('~^-?\d*(\.\d*)?$~', $number, $matches)) {
+            return 0;
+        }
+
+        $digits = $matches[0] ?? '0';
+        $division = $matches[1] ?? '.';
+        if ($digits === '.' && $division === '.') {
             return 0;
         }
 
