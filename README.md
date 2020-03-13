@@ -29,6 +29,9 @@ laravel-wallet - Easy work with virtual wallet.
 
 ### Upgrade Guide
 
+> Starting with version 5.x, support for Laravel 5 has been discontinued.
+> Update laravel or use version 4.x.
+
 To perform the migration, you will be [helped by the instruction](https://bavix.github.io/laravel-wallet/#/upgrade-guide).
 
 ### Extensions
