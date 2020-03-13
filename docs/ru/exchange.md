@@ -41,7 +41,7 @@ class MyRateService extends \Bavix\Wallet\Simple\Rate
         ],
     ];
 
-    protected function rate(Wallet $wallet): float
+    protected function rate(Wallet $wallet)
     {
         $from = app(WalletService::class)->getWallet($this->withCurrency);
         $to = app(WalletService::class)->getWallet($wallet);
@@ -53,7 +53,7 @@ class MyRateService extends \Bavix\Wallet\Simple\Rate
         );
     }
 
-    public function convertTo(Wallet $wallet): float
+    public function convertTo(Wallet $wallet)
     {
         return parent::convertTo($wallet) * $this->rate($wallet);
     }

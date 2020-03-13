@@ -37,7 +37,7 @@ class Item extends Model implements Product, Taxable
         return true; 
     }
 
-    public function getAmountProduct(Customer $customer): int
+    public function getAmountProduct(Customer $customer)
     {
         return 100;
     }
@@ -55,7 +55,7 @@ class Item extends Model implements Product, Taxable
         return (string)$this->getKey();
     }
     
-    public function getFeePercent() : float
+    public function getFeePercent()
     {
         return 0.03; // 3%    
     }
@@ -109,7 +109,7 @@ class Item extends Model implements Product, MinimalTaxable
         return true; 
     }
 
-    public function getAmountProduct(Customer $customer): int
+    public function getAmountProduct(Customer $customer)
     {
         return 100;
     }
@@ -127,12 +127,12 @@ class Item extends Model implements Product, MinimalTaxable
         return (string)$this->getKey();
     }
     
-    public function getFeePercent() : float
+    public function getFeePercent()
     {
         return 0.03; // 3%    
     }
     
-    public function getMinimalFee() : int
+    public function getMinimalFee()
     {
         return 5; // 3%, minimum int(5)    
     }
