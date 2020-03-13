@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.0] - 2020-03-13
+
 ### Added
 - add support "Arbitrary Precision Mathematics" (`ext-bcmath`) #139 #146
 - add `Mathable` service (helps switch quickly from bcmath to php computing)
@@ -467,7 +469,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/4.2.0...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/5.0.0...develop
+[5.0.0]: https://github.com/bavix/laravel-wallet/compare/4.2.0...5.0.0
 [4.2.0]: https://github.com/bavix/laravel-wallet/compare/4.1.2...4.2.0
 [4.1.2]: https://github.com/bavix/laravel-wallet/compare/4.1.1...4.1.2
 [4.1.1]: https://github.com/bavix/laravel-wallet/compare/4.1.0...4.1.1
