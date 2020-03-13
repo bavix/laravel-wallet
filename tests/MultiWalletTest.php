@@ -70,6 +70,60 @@ class MultiWalletTest extends TestCase
         $wallet->withdraw($wallet->balance);
         $this->assertEquals($user->balance, 0);
         $this->assertEquals($wallet->balance, 0);
+
+        $transaction = $wallet->depositFloat(10.10);
+        $this->assertEquals($user->balance, 0);
+        $this->assertEquals($wallet->balance, 1010);
+        $this->assertEquals($wallet->balanceFloat, 10.10);
+
+        $user->refresh();
+
+        // is equal
+        $this->assertTrue($transaction->wallet->is($user->getWallet('deposit')));
+        $this->assertTrue($user->getWallet('deposit')->is($wallet));
+        $this->assertTrue($wallet->is($user->getWallet('deposit')));
+
+        $wallet->withdrawFloat($wallet->balanceFloat);
+        $this->assertEquals($wallet->balanceFloat, 0);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDepositFloat(): void
+    {
+        /**
+         * @var UserMulti $userInit
+         * @var UserMulti $userFind
+         */
+        $userInit = factory(UserMulti::class)->create();
+        $wallet = $userInit->createWallet([
+            'name' => 'my-simple-wallet',
+            'slug' => $userInit->getKey()
+        ]);
+
+        // without find
+        $wallet->depositFloat(100.1);
+
+        $this->assertEquals($wallet->balanceFloat, 100.1);
+        $this->assertEquals($wallet->balance, 10010);
+
+        $wallet->withdrawFloat($wallet->balanceFloat);
+        $this->assertEquals($wallet->balanceFloat, 0);
+
+        // find
+        $userFind = UserMulti::query()->find($userInit->id); // refresh
+        $this->assertTrue($userInit->is($userFind));
+        $this->assertTrue($userFind->hasWallet($userInit->getKey()));
+
+        $wallet = $userFind->getWallet($userInit->getKey());
+        $wallet->depositFloat(100.1);
+
+        $this->assertEquals($wallet->balanceFloat, 100.1);
+        $this->assertEquals($wallet->balance, 10010);
+
+        $wallet->withdrawFloat($wallet->balanceFloat);
+        $this->assertEquals($wallet->balanceFloat, 0);
     }
 
     /**
