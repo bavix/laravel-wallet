@@ -91,3 +91,44 @@ class Item extends Model implements Product
         return $this->price;
     }
 ```
+
+## 4.0.x → 5.0.x
+
+> Обновляясь с версии 4.x до 5.x Вы теряете строгую типизацию. 
+> Данная крайность необходима для вычислений с произвольной точностью.
+
+В товарах:
+
+Ваш код в версии 4.x:
+```php
+    public function getAmountProduct(Customer $customer): int  { ... }
+
+    public function getFeePercent(): float  { ... }
+
+    public function getMinimalFee(): int { ... }
+```
+
+Ваш код в версии 5.x:
+```php
+    public function getAmountProduct(Customer $customer) { ... }
+
+    public function getFeePercent() { ... }
+
+    public function getMinimalFee() { ... }
+```
+
+В сервисе обработки курса валют:
+
+Ваш код в версии 4.x:
+```php
+    protected function rate(Wallet $wallet): float { ... }
+
+    public function convertTo(Wallet $wallet): float { ... }
+```
+
+Ваш код в версии 5.x:
+```php
+    protected function rate(Wallet $wallet) { ... }
+
+    public function convertTo(Wallet $wallet) { ... }
+```

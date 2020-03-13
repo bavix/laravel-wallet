@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Models;
 
+use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\WalletService;
@@ -50,7 +51,6 @@ class Transaction extends Model
      */
     protected $casts = [
         'wallet_id' => 'int',
-        'amount' => 'int',
         'confirmed' => 'bool',
         'meta' => 'json'
     ];
@@ -97,26 +97,28 @@ class Transaction extends Model
     }
 
     /**
-     * @return float
+     * @return int|float
      */
-    public function getAmountFloatAttribute(): float
+    public function getAmountFloatAttribute()
     {
         $decimalPlaces = app(WalletService::class)
             ->decimalPlaces($this->wallet);
 
-        return $this->amount / $decimalPlaces;
+        return app(Mathable::class)
+            ->div($this->amount, $decimalPlaces);
     }
 
     /**
-     * @param float $amount
-     * @return float
+     * @param int|float $amount
+     * @return void
      */
-    public function setAmountFloatAttribute(float $amount): void
+    public function setAmountFloatAttribute($amount): void
     {
+        $math = app(Mathable::class);
         $decimalPlaces = app(WalletService::class)
             ->decimalPlaces($this->wallet);
 
-        $this->amount = (int)round($amount * $decimalPlaces);
+        $this->amount = $math->round($math->mul($amount, $decimalPlaces));
     }
 
 }

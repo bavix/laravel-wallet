@@ -12,7 +12,7 @@ interface Exchangeable
      * @param array|null $meta
      * @return Transfer
      */
-    public function exchange(Wallet $to, int $amount, ?array $meta = null): Transfer;
+    public function exchange(Wallet $to, $amount, ?array $meta = null): Transfer;
 
     /**
      * @param Wallet $to
@@ -20,7 +20,7 @@ interface Exchangeable
      * @param array|null $meta
      * @return Transfer|null
      */
-    public function safeExchange(Wallet $to, int $amount, ?array $meta = null): ?Transfer;
+    public function safeExchange(Wallet $to, $amount, ?array $meta = null): ?Transfer;
 
     /**
      * @param Wallet $to
@@ -28,5 +28,5 @@ interface Exchangeable
      * @param array|null $meta
      * @return Transfer
      */
-    public function forceExchange(Wallet $to, int $amount, ?array $meta = null): Transfer;
+    public function forceExchange(Wallet $to, $amount, ?array $meta = null): Transfer;
 }

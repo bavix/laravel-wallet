@@ -6,7 +6,6 @@ use Bavix\Wallet\Objects\EmptyLock;
 use Bavix\Wallet\Objects\Operation;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Models\Transaction;
@@ -14,8 +13,20 @@ use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Simple\Rate;
 use Bavix\Wallet\Simple\Store;
+use Bavix\Wallet\Simple\BCMath;
+use Bavix\Wallet\Simple\Math;
+
+$bcLoaded = extension_loaded('bcmath');
 
 return [
+    /**
+     * This parameter is necessary for more accurate calculations.
+     * PS, Arbitrary Precision Calculations
+     */
+    'math' => [
+        'scale' => 64,
+    ],
+
     /**
      * The parameter is used for fast packet overload.
      * You do not need to search for the desired class by code, the library will do it itself.
@@ -23,6 +34,9 @@ return [
     'package' => [
         'rateable' => Rate::class,
         'storable' => Store::class,
+        'mathable' => $bcLoaded ?
+            BCMath::class :
+            Math::class,
     ],
 
     /**
@@ -60,7 +74,6 @@ return [
     'services' => [
         'exchange' => ExchangeService::class,
         'common' => CommonService::class,
-        'proxy' => ProxyService::class,
         'wallet' => WalletService::class,
         'lock' => LockService::class,
     ],
@@ -78,7 +91,9 @@ return [
     'transaction' => [
         'table' => 'transactions',
         'model' => Transaction::class,
-        'casts' => [],
+        'casts' => [
+            'amount' => $bcLoaded ? 'string' : 'int',
+        ],
     ],
 
     /**
@@ -87,7 +102,9 @@ return [
     'transfer' => [
         'table' => 'transfers',
         'model' => Transfer::class,
-        'casts' => [],
+        'casts' => [
+            'fee' => $bcLoaded ? 'string' : 'int',
+        ],
     ],
 
     /**
@@ -96,7 +113,9 @@ return [
     'wallet' => [
         'table' => 'wallets',
         'model' => Wallet::class,
-        'casts' => [],
+        'casts' => [
+            'balance' => $bcLoaded ? 'string' : 'int',
+        ],
         'default' => [
             'name' => 'Default Wallet',
             'slug' => 'default',

@@ -91,3 +91,44 @@ Your code on 4.x:
         return $this->price;
     }
 ```
+
+## 4.0.x → 5.0.x
+
+> By updating the library from 4.x to 5.x you lose strong typing. 
+> This solution was necessary to support APM (Arbitrary Precision Mathematics).
+
+In your goods:
+
+Your code on 4.x:
+```php
+    public function getAmountProduct(Customer $customer): int  { ... }
+
+    public function getFeePercent(): float  { ... }
+
+    public function getMinimalFee(): int { ... }
+```
+
+Your code on 5.x:
+```php
+    public function getAmountProduct(Customer $customer) { ... }
+
+    public function getFeePercent() { ... }
+
+    public function getMinimalFee() { ... }
+```
+
+In the exchange rate processing service:
+
+Your code on 4.x:
+```php
+    protected function rate(Wallet $wallet): float { ... }
+
+    public function convertTo(Wallet $wallet): float { ... }
+```
+
+Your code on 5.x:
+```php
+    protected function rate(Wallet $wallet) { ... }
+
+    public function convertTo(Wallet $wallet) { ... }
+```

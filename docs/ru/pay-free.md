@@ -43,7 +43,7 @@ class Item extends Model implements Product
         return true; 
     }
 
-    public function getAmountProduct(Customer $customer): int
+    public function getAmountProduct(Customer $customer)
     {
         return 100;
     }

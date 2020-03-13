@@ -15,11 +15,11 @@ class CreateTransfersTable extends Migration
     public function up(): void
     {
         Schema::create($this->table(), function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->morphs('from');
             $table->morphs('to');
-            $table->unsignedInteger('deposit_id');
-            $table->unsignedInteger('withdraw_id');
+            $table->unsignedBigInteger('deposit_id');
+            $table->unsignedBigInteger('withdraw_id');
             $table->uuid('uuid')->unique();
             $table->timestamps();
 

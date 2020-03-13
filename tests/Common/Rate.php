@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Test\Common;
 
+use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Services\WalletService;
 use Illuminate\Support\Arr;
@@ -26,7 +27,7 @@ class Rate extends \Bavix\Wallet\Simple\Rate
         foreach ($this->rates as $from => $rates) {
             foreach ($rates as $to => $rate) {
                 if (empty($this->rates[$to][$from])) {
-                    $this->rates[$to][$from] = 1 / $rate;
+                    $this->rates[$to][$from] = app(Mathable::class)->div(1, $rate);
                 }
             }
         }
@@ -34,9 +35,9 @@ class Rate extends \Bavix\Wallet\Simple\Rate
 
     /**
      * @param Wallet $wallet
-     * @return float
+     * @return int|float
      */
-    protected function rate(Wallet $wallet): float
+    protected function rate(Wallet $wallet)
     {
         $from = app(WalletService::class)->getWallet($this->withCurrency);
         $to = app(WalletService::class)->getWallet($wallet);
@@ -54,9 +55,12 @@ class Rate extends \Bavix\Wallet\Simple\Rate
     /**
      * @inheritDoc
      */
-    public function convertTo(Wallet $wallet): float
+    public function convertTo(Wallet $wallet)
     {
-        return parent::convertTo($wallet) * $this->rate($wallet);
+        return app(Mathable::class)->mul(
+            parent::convertTo($wallet),
+            $this->rate($wallet)
+        );
     }
 
 }

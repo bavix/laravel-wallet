@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
@@ -25,10 +26,13 @@ trait HasWalletFloat
      *
      * @return Transaction
      */
-    public function forceWithdrawFloat(float $amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function forceWithdrawFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
+        $math = app(Mathable::class);
+        $decimalPlacesValue = app(WalletService::class)->decimalPlacesValue($this);
         $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
-        return $this->forceWithdraw((int)round($amount * $decimalPlaces), $meta, $confirmed);
+        $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
+        return $this->forceWithdraw($result, $meta, $confirmed);
     }
 
     /**
@@ -38,10 +42,13 @@ trait HasWalletFloat
      *
      * @return Transaction
      */
-    public function depositFloat(float $amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function depositFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
+        $math = app(Mathable::class);
+        $decimalPlacesValue = app(WalletService::class)->decimalPlacesValue($this);
         $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
-        return $this->deposit((int)round($amount * $decimalPlaces), $meta, $confirmed);
+        $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
+        return $this->deposit($result, $meta, $confirmed);
     }
 
     /**
@@ -51,20 +58,26 @@ trait HasWalletFloat
      *
      * @return Transaction
      */
-    public function withdrawFloat(float $amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function withdrawFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
+        $math = app(Mathable::class);
+        $decimalPlacesValue = app(WalletService::class)->decimalPlacesValue($this);
         $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
-        return $this->withdraw((int)round($amount * $decimalPlaces), $meta, $confirmed);
+        $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
+        return $this->withdraw($result, $meta, $confirmed);
     }
 
     /**
      * @param float $amount
      * @return bool
      */
-    public function canWithdrawFloat(float $amount): bool
+    public function canWithdrawFloat($amount): bool
     {
+        $math = app(Mathable::class);
+        $decimalPlacesValue = app(WalletService::class)->decimalPlacesValue($this);
         $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
-        return $this->canWithdraw((int)round($amount * $decimalPlaces));
+        $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
+        return $this->canWithdraw($result);
     }
 
     /**
@@ -74,10 +87,13 @@ trait HasWalletFloat
      * @return Transfer
      * @throws
      */
-    public function transferFloat(Wallet $wallet, float $amount, ?array $meta = null): Transfer
+    public function transferFloat(Wallet $wallet, $amount, ?array $meta = null): Transfer
     {
+        $math = app(Mathable::class);
+        $decimalPlacesValue = app(WalletService::class)->decimalPlacesValue($this);
         $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
-        return $this->transfer($wallet, (int)round($amount * $decimalPlaces), $meta);
+        $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
+        return $this->transfer($wallet, $result, $meta);
     }
 
     /**
@@ -86,10 +102,13 @@ trait HasWalletFloat
      * @param array|null $meta
      * @return null|Transfer
      */
-    public function safeTransferFloat(Wallet $wallet, float $amount, ?array $meta = null): ?Transfer
+    public function safeTransferFloat(Wallet $wallet, $amount, ?array $meta = null): ?Transfer
     {
+        $math = app(Mathable::class);
+        $decimalPlacesValue = app(WalletService::class)->decimalPlacesValue($this);
         $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
-        return $this->safeTransfer($wallet, (int)round($amount * $decimalPlaces), $meta);
+        $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
+        return $this->safeTransfer($wallet, $result, $meta);
     }
 
     /**
@@ -98,19 +117,24 @@ trait HasWalletFloat
      * @param array|null $meta
      * @return Transfer
      */
-    public function forceTransferFloat(Wallet $wallet, float $amount, ?array $meta = null): Transfer
+    public function forceTransferFloat(Wallet $wallet, $amount, ?array $meta = null): Transfer
     {
+        $math = app(Mathable::class);
+        $decimalPlacesValue = app(WalletService::class)->decimalPlacesValue($this);
         $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
-        return $this->forceTransfer($wallet, (int)round($amount * $decimalPlaces), $meta);
+        $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
+        return $this->forceTransfer($wallet, $result, $meta);
     }
 
     /**
-     * @return float
+     * @return int|float
      */
-    public function getBalanceFloatAttribute(): float
+    public function getBalanceFloatAttribute()
     {
+        $math = app(Mathable::class);
+        $decimalPlacesValue = app(WalletService::class)->decimalPlacesValue($this);
         $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
-        return $this->balance / $decimalPlaces;
+        return $math->div($this->balance, $decimalPlaces, $decimalPlacesValue);
     }
 
 }

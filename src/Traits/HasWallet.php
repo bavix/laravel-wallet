@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
@@ -39,7 +40,7 @@ trait HasWallet
      * @return Transaction
      * @throws
      */
-    public function deposit(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function deposit($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         $self = $this;
         return app(DbService::class)->transaction(static function () use ($self, $amount, $meta, $confirmed) {
@@ -69,10 +70,10 @@ trait HasWallet
      *  $user2->deposit(100);
      *  var_dump($user2->balance); // 300
      *
-     * @return int
+     * @return int|float
      * @throws
      */
-    public function getBalanceAttribute(): int
+    public function getBalanceAttribute()
     {
         return app(Storable::class)->getBalance($this);
     }
@@ -96,7 +97,7 @@ trait HasWallet
      * @param array|null $meta
      * @return null|Transfer
      */
-    public function safeTransfer(Wallet $wallet, int $amount, ?array $meta = null): ?Transfer
+    public function safeTransfer(Wallet $wallet, $amount, ?array $meta = null): ?Transfer
     {
         try {
             return $this->transfer($wallet, $amount, $meta);
@@ -114,7 +115,7 @@ trait HasWallet
      * @return Transfer
      * @throws
      */
-    public function transfer(Wallet $wallet, int $amount, ?array $meta = null): Transfer
+    public function transfer(Wallet $wallet, $amount, ?array $meta = null): Transfer
     {
         app(CommonService::class)->verifyWithdraw($this, $amount);
         return $this->forceTransfer($wallet, $amount, $meta);
@@ -129,7 +130,7 @@ trait HasWallet
      *
      * @return Transaction
      */
-    public function withdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function withdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         app(CommonService::class)->verifyWithdraw($this, $amount);
         return $this->forceWithdraw($amount, $meta, $confirmed);
@@ -142,7 +143,7 @@ trait HasWallet
      * @param bool $allowZero
      * @return bool
      */
-    public function canWithdraw(int $amount, bool $allowZero = null): bool
+    public function canWithdraw($amount, bool $allowZero = null): bool
     {
         /**
          * Allow to buy for free with a negative balance
@@ -151,7 +152,7 @@ trait HasWallet
             return true;
         }
 
-        return $this->balance >= $amount;
+        return app(Mathable::class)->compare($this->balance, $amount) >= 0;
     }
 
     /**
@@ -164,7 +165,7 @@ trait HasWallet
      * @return Transaction
      * @throws
      */
-    public function forceWithdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function forceWithdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         $self = $this;
         return app(DbService::class)->transaction(static function () use ($self, $amount, $meta, $confirmed) {
@@ -183,7 +184,7 @@ trait HasWallet
      * @return Transfer
      * @throws
      */
-    public function forceTransfer(Wallet $wallet, int $amount, ?array $meta = null): Transfer
+    public function forceTransfer(Wallet $wallet, $amount, ?array $meta = null): Transfer
     {
         $self = $this;
         return app(DbService::class)->transaction(static function () use ($self, $amount, $wallet, $meta) {

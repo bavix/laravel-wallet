@@ -2,7 +2,9 @@
 
 namespace Bavix\Wallet\Test;
 
-use Bavix\Wallet\Services\ProxyService;
+use Bavix\Wallet\Interfaces\Storable;
+use Bavix\Wallet\Simple\BCMath;
+use Bavix\Wallet\Simple\Math;
 use Bavix\Wallet\Simple\Store;
 use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Common\Models\Transfer;
@@ -22,7 +24,6 @@ class TestCase extends OrchestraTestCase
      */
     public function setUp(): void
     {
-        app(ProxyService::class)->fresh();
         parent::setUp();
         $this->withFactories(__DIR__ . '/factories');
         $this->loadMigrationsFrom([
@@ -48,6 +49,7 @@ class TestCase extends OrchestraTestCase
         // Bind eloquent models to IoC container
         $app['config']->set('wallet.package.rateable', Rate::class);
         $app['config']->set('wallet.package.storable', Store::class);
+        $app['config']->set('wallet.package.mathable', extension_loaded('bcmath') ? BCMath::class : Math::class);
         return [WalletServiceProvider::class];
     }
 

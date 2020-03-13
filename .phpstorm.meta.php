@@ -2,6 +2,7 @@
 
 namespace PHPSTORM_META {
 
+    use Bavix\Wallet\Interfaces\Mathable;
     use Bavix\Wallet\Interfaces\Rateable;
     use Bavix\Wallet\Interfaces\Storable;
     use Bavix\Wallet\Models\Transaction;
@@ -13,7 +14,6 @@ namespace PHPSTORM_META {
     use Bavix\Wallet\Objects\Operation;
     use Bavix\Wallet\Services\CommonService;
     use Bavix\Wallet\Services\ExchangeService;
-    use Bavix\Wallet\Services\ProxyService;
     use Bavix\Wallet\Services\WalletService;
 
     override(\app(0), map([
@@ -23,11 +23,11 @@ namespace PHPSTORM_META {
         EmptyLock::class => EmptyLock::class,
         ExchangeService::class => ExchangeService::class,
         CommonService::class => CommonService::class,
-        ProxyService::class => ProxyService::class,
         WalletService::class => WalletService::class,
         Wallet::class => Wallet::class,
         Transfer::class => Transfer::class,
         Transaction::class => Transaction::class,
+        Mathable::class => Mathable::class,
         Rateable::class => Rateable::class,
         Storable::class => Storable::class,
     ]));

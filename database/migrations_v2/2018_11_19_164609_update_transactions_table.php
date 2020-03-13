@@ -33,7 +33,7 @@ class UpdateTransactionsTable extends Migration
     public function up(): void
     {
         Schema::table($this->table(), function (Blueprint $table) {
-            $table->unsignedInteger('wallet_id')
+            $table->unsignedBigInteger('wallet_id')
                 ->nullable()
                 ->after('payable_id');
 

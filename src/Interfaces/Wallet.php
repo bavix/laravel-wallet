@@ -14,7 +14,7 @@ interface Wallet
      * @param bool $confirmed
      * @return Transaction
      */
-    public function deposit(int $amount, ?array $meta = null, bool $confirmed = true): Transaction;
+    public function deposit($amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
      * @param int $amount
@@ -22,7 +22,7 @@ interface Wallet
      * @param bool $confirmed
      * @return Transaction
      */
-    public function withdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction;
+    public function withdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
      * @param int $amount
@@ -30,46 +30,43 @@ interface Wallet
      * @param bool $confirmed
      * @return Transaction
      */
-    public function forceWithdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction;
+    public function forceWithdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
      * @param self $wallet
      * @param int $amount
      * @param array|null $meta
-     * @param string $status
      * @return Transfer
      */
-    public function transfer(self $wallet, int $amount, ?array $meta = null): Transfer;
+    public function transfer(self $wallet, $amount, ?array $meta = null): Transfer;
 
     /**
      * @param self $wallet
      * @param int $amount
      * @param array|null $meta
-     * @param string $status
      * @return null|Transfer
      */
-    public function safeTransfer(self $wallet, int $amount, ?array $meta = null): ?Transfer;
+    public function safeTransfer(self $wallet, $amount, ?array $meta = null): ?Transfer;
 
     /**
      * @param Wallet $wallet
      * @param int $amount
      * @param array|null $meta
-     * @param string $status
      * @return Transfer
      */
-    public function forceTransfer(Wallet $wallet, int $amount, ?array $meta = null): Transfer;
+    public function forceTransfer(Wallet $wallet, $amount, ?array $meta = null): Transfer;
 
     /**
      * @param int $amount
      * @param bool $allowZero
      * @return bool
      */
-    public function canWithdraw(int $amount, bool $allowZero = null): bool;
+    public function canWithdraw($amount, bool $allowZero = null): bool;
 
     /**
-     * @return int
+     * @return int|float
      */
-    public function getBalanceAttribute(): int;
+    public function getBalanceAttribute();
 
     /**
      * @return MorphMany

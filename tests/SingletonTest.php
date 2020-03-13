@@ -2,7 +2,9 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Rateable;
+use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Objects\EmptyLock;
@@ -11,7 +13,6 @@ use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
-use Bavix\Wallet\Services\ProxyService;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Common\Models\Transfer;
@@ -72,6 +73,22 @@ class SingletonTest extends TestCase
     /**
      * @return void
      */
+    public function testStorable(): void
+    {
+        $this->assertEquals($this->getRefId(Storable::class), $this->getRefId(Storable::class));
+    }
+
+    /**
+     * @return void
+     */
+    public function testMathable(): void
+    {
+        $this->assertEquals($this->getRefId(Mathable::class), $this->getRefId(Mathable::class));
+    }
+
+    /**
+     * @return void
+     */
     public function testTransaction(): void
     {
         $this->assertNotEquals($this->getRefId(Transaction::class), $this->getRefId(Transaction::class));
@@ -107,14 +124,6 @@ class SingletonTest extends TestCase
     public function testCommonService(): void
     {
         $this->assertEquals($this->getRefId(CommonService::class), $this->getRefId(CommonService::class));
-    }
-
-    /**
-     * @return void
-     */
-    public function testProxyService(): void
-    {
-        $this->assertEquals($this->getRefId(ProxyService::class), $this->getRefId(ProxyService::class));
     }
 
     /**

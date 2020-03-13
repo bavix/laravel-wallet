@@ -5,8 +5,7 @@ namespace Bavix\Wallet\Test;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\ProxyService;
-use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Simple\Store;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\UserMulti;
 use Illuminate\Support\Facades\DB;
@@ -112,7 +111,6 @@ class BalanceTest extends TestCase
     /**
      * @return void
      * @throws
-     * @deprecated
      */
     public function testGetBalance(): void
     {
@@ -128,7 +126,6 @@ class BalanceTest extends TestCase
         $this->assertTrue($wallet->exists);
 
         $this->assertEquals(0, app(Storable::class)->getBalance($wallet));
-        $this->assertEquals(0, app(WalletService::class)->getBalance($wallet));
     }
 
     /**
@@ -226,7 +223,6 @@ class BalanceTest extends TestCase
         }
 
         // fresh balance
-        app(ProxyService::class)->fresh();
         DB::table(config('wallet.wallet.table'))
             ->update(['balance' => 0]);
 
@@ -256,13 +252,30 @@ class BalanceTest extends TestCase
         Wallet::whereKey($buyer->wallet->getKey())
             ->update(['balance' => 10]);
 
-        app(ProxyService::class)->fresh();
+        /**
+         * Create a state when the cache is empty.
+         * For example, something went wrong and your database has incorrect data.
+         * Unfortunately, the library will work with what is.
+         * But there is an opportunity to recount the balance.
+         *
+         * Here is an example:
+         */
+        app()->singleton(Storable::class, Store::class);
+        $this->assertEquals($wallet->getRawOriginal('balance'), 1000);
 
+        /**
+         * We load the model from the base and our balance is 10.
+         */
         $wallet->refresh();
         $this->assertEquals($wallet->balance, 10);
+        $this->assertEquals($wallet->getRawOriginal('balance'), 10);
 
+        /**
+         * Now we fill the cache with relevant data (PS, the data inside the model will be updated).
+         */
         $wallet->refreshBalance();
         $this->assertEquals($wallet->balance, 1000);
+        $this->assertEquals($wallet->getRawOriginal('balance'), 1000);
     }
 
 }

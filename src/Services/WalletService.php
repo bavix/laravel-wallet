@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Services;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Discount;
+use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\MinimalTaxable;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Interfaces\Taxable;
@@ -35,10 +36,19 @@ class WalletService
      * @param Wallet $object
      * @return int
      */
-    public function decimalPlaces(Wallet $object): int
+    public function decimalPlacesValue(Wallet $object): int
     {
-        $decimalPlaces = $this->getWallet($object)->decimal_places ?: 2;
-        return 10 ** $decimalPlaces;
+        return $this->getWallet($object)->decimal_places ?: 2;
+    }
+
+    /**
+     * @param Wallet $object
+     * @return string
+     */
+    public function decimalPlaces(Wallet $object): string
+    {
+        return app(Mathable::class)
+            ->pow(10, $this->decimalPlacesValue($object));
     }
 
     /**
@@ -46,13 +56,21 @@ class WalletService
      *
      * @param Wallet $wallet
      * @param int $amount
-     * @return int
+     * @return float|int
      */
-    public function fee(Wallet $wallet, int $amount): int
+    public function fee(Wallet $wallet, $amount)
     {
         $fee = 0;
+        $math = app(Mathable::class);
         if ($wallet instanceof Taxable) {
-            $fee = (int)($amount * $wallet->getFeePercent() / 100);
+            $placesValue = $this->decimalPlacesValue($wallet);
+            $fee = $math->floor(
+                $math->div(
+                    $math->mul($amount, $wallet->getFeePercent(), 0),
+                    100,
+                    $placesValue
+                )
+            );
         }
 
         /**
@@ -62,7 +80,7 @@ class WalletService
          */
         if ($wallet instanceof MinimalTaxable) {
             $minimal = $wallet->getMinimalFee();
-            if ($fee < $minimal) {
+            if (app(Mathable::class)->compare($fee, $minimal) === -1) {
                 $fee = $minimal;
             }
         }
@@ -76,9 +94,9 @@ class WalletService
      * @param int $amount
      * @throws
      */
-    public function checkAmount(int $amount): void
+    public function checkAmount($amount): void
     {
-        if ($amount < 0) {
+        if (app(Mathable::class)->compare($amount, 0) === -1) {
             throw new AmountInvalid(trans('wallet::errors.price_positive'));
         }
     }
@@ -110,29 +128,20 @@ class WalletService
     }
 
     /**
-     * @param Wallet $object
-     * @return int
-     * @deprecated use Storable::getBalance
-     */
-    public function getBalance(Wallet $object): int
-    {
-        return app(Storable::class)
-            ->getBalance($object);
-    }
-
-    /**
      * @param WalletModel $wallet
      * @return bool
      */
     public function refresh(WalletModel $wallet): bool
     {
         return app(LockService::class)->lock($this, __FUNCTION__, static function () use ($wallet) {
+            $math = app(Mathable::class);
             app(Storable::class)->getBalance($wallet);
+            $whatIs = $wallet->balance;
             $balance = $wallet->getAvailableBalance();
             $wallet->balance = $balance;
 
             return app(Storable::class)->setBalance($wallet, $balance) &&
-                $wallet->save();
+                (!$math->compare($whatIs, $balance) || $wallet->save());
         });
     }
 

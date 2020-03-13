@@ -28,7 +28,6 @@
     "php": "^7.2|^8.0",
     "ext-pdo": "*",
     "illuminate/database": "^6.0|^7.0",
-    "nesbot/carbon": "^2.0",
     "doctrine/dbal": "^2.8",
     "ramsey/uuid": "^3.0"
   },
@@ -40,6 +39,7 @@
     "laravel/cashier": "^10.0"
   },
   "suggest": {
+    "ext-bcmath": "Used for accurate calculations of large numbers",
     "bavix/laravel-wallet-swap": "Addition to the laravel-wallet library for quick setting of exchange rates",
     "bavix/laravel-wallet-vacuum": "Addition to the laravel-wallet library for quick fix race condition"
   },
@@ -54,6 +54,9 @@
     }
   },
   "extra": {
+    "branch-alias": {
+      "dev-develop": "5.0.x-dev"
+    },
     "laravel": {
       "providers": [
         "Bavix\\Wallet\\WalletServiceProvider"

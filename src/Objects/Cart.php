@@ -3,6 +3,7 @@
 namespace Bavix\Wallet\Objects;
 
 use Bavix\Wallet\Interfaces\Customer;
+use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Models\Transfer;
 use Countable;
@@ -22,16 +23,6 @@ class Cart implements Countable
      * @var int[]
      */
     protected $quantity = [];
-
-    /**
-     * @return static
-     * @deprecated use app(Cart::class)
-     * @codeCoverageIgnore
-     */
-    public static function make(): self
-    {
-        return new static();
-    }
 
     /**
      * @param Product $product
@@ -132,11 +123,12 @@ class Cart implements Countable
      * @param Customer $customer
      * @return int
      */
-    public function getTotal(Customer $customer): int
+    public function getTotal(Customer $customer): string
     {
         $result = 0;
+        $math = app(Mathable::class);
         foreach ($this->items as $item) {
-            $result += $item->getAmountProduct($customer);
+            $result = $math->add($result, $item->getAmountProduct($customer));
         }
         return $result;
     }
@@ -168,7 +160,8 @@ class Cart implements Countable
     {
         $class = get_class($product);
         $uniq = $product->getUniqueId();
-        $this->quantity[$class][$uniq] = $this->getQuantity($product) + $quantity;
+        $math = app(Mathable::class);
+        $this->quantity[$class][$uniq] = $math->add($this->getQuantity($product), $quantity);
     }
 
 }

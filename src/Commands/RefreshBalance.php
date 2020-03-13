@@ -4,7 +4,6 @@ namespace Bavix\Wallet\Commands;
 
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\DbService;
-use Bavix\Wallet\Services\ProxyService;
 use Illuminate\Console\Command;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Database\SQLiteConnection;
@@ -34,10 +33,10 @@ class RefreshBalance extends Command
 
     /**
      * @return void
+     * @throws
      */
     public function handle(): void
     {
-        app(ProxyService::class)->fresh();
         app(DbService::class)->transaction(function () {
             $wallet = config('wallet.wallet.table', 'wallets');
             app(DbService::class)

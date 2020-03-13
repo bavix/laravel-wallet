@@ -25,7 +25,7 @@ class Rate implements Rateable
     /**
      * @inheritDoc
      */
-    public function withAmount(int $amount): Rateable
+    public function withAmount($amount): Rateable
     {
         $this->amount = $amount;
         return $this;
@@ -43,7 +43,7 @@ class Rate implements Rateable
     /**
      * @inheritDoc
      */
-    public function convertTo(Wallet $wallet): float
+    public function convertTo(Wallet $wallet)
     {
         return $this->amount;
     }

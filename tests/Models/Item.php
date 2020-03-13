@@ -46,9 +46,9 @@ class Item extends Model implements Product
 
     /**
      * @param Customer $customer
-     * @return int
+     * @return float|int
      */
-    public function getAmountProduct(Customer $customer): int
+    public function getAmountProduct(Customer $customer)
     {
         /**
          * @var Wallet $wallet

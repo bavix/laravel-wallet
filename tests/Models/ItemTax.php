@@ -23,9 +23,9 @@ class ItemTax extends Item implements Taxable
      * Minimum 0; Maximum 100
      * Example: return 7.5; // 7.5%
      *
-     * @return float
+     * @return int|float
      */
-    public function getFeePercent(): float
+    public function getFeePercent()
     {
         return 7.5;
     }
