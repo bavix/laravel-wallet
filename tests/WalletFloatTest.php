@@ -364,6 +364,9 @@ class WalletFloatTest extends TestCase
             $user->wallet->save();
 
             $user->depositFloat(0.09699977);
+            
+            $user->wallet->refreshBalance();
+            $user->refresh();
 
             $this->assertEquals($user->balanceFloat, 0.09699977);
             $this->assertEquals($user->balance, 9699977);
