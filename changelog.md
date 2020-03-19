@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.2.1] - 2020-03-19
 ### Fixed 
-- Fixed wallet recalculate command
+- Fixed wallet recalculate command #150
 
 ## [4.2.0] - 2020-03-08
 
