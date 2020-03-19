@@ -39,13 +39,13 @@ class RefreshBalance extends Command
     {
         app(ProxyService::class)->fresh();
         app(DbService::class)->transaction(function () {
-            $wallet = config('wallet.wallet.table', 'wallets');
-            app(DbService::class)
-                ->connection()
-                ->table($wallet)
-                ->update(['balance' => 0]);
-
             if (app(DbService::class)->connection() instanceof SQLiteConnection) {
+                $wallet = config('wallet.wallet.table', 'wallets');
+                app(DbService::class)
+                    ->connection()
+                    ->table($wallet)
+                    ->update(['balance' => 0]);
+
                 $this->sqliteUpdate();
             } else {
                 $this->multiUpdate();
@@ -89,7 +89,7 @@ class RefreshBalance extends Command
             ->connection()
             ->table($wallet)
             ->joinSub($availableBalance, 'b', $joinClause, null, null, 'left')
-            ->update(['balance' => app(DbService::class)->raw('b.balance')]);
+            ->update(["$wallet.balance" => app(DbService::class)->raw('ifnull(b.balance, 0)')]);
     }
 
 }
