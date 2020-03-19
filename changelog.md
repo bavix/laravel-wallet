@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.1] - 2020-03-19
+### Added
+- Added a patch from version 4.2.1 #150
+
 ## [5.0.0] - 2020-03-13
 
 ### Added
@@ -21,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Strong typing (models, interfaces, etc.)
 - all deprecated methods are removed
 - `nesbot/carbon` is no longer needed for the library to work
+
+## [4.2.1] - 2020-03-19
+### Fixed 
+- Fixed wallet recalculate command #150
 
 ## [4.2.0] - 2020-03-08
 
@@ -469,8 +477,10 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/5.0.0...develop
-[5.0.0]: https://github.com/bavix/laravel-wallet/compare/4.2.0...5.0.0
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/5.0.1...develop
+[5.0.1]: https://github.com/bavix/laravel-wallet/compare/5.0.0...5.0.1
+[5.0.0]: https://github.com/bavix/laravel-wallet/compare/4.2.1...5.0.0
+[4.2.1]: https://github.com/bavix/laravel-wallet/compare/4.2.0...4.2.1
 [4.2.0]: https://github.com/bavix/laravel-wallet/compare/4.1.2...4.2.0
 [4.1.2]: https://github.com/bavix/laravel-wallet/compare/4.1.1...4.1.2
 [4.1.1]: https://github.com/bavix/laravel-wallet/compare/4.1.0...4.1.1

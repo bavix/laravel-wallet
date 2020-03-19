@@ -347,4 +347,30 @@ class WalletFloatTest extends TestCase
         }
     }
 
+    /**
+     * Case from @ucanbehack
+     * @see https://github.com/bavix/laravel-wallet/issues/149
+     */
+    public function testBitcoin2(): void
+    {
+        if (app(Mathable::class) instanceof BCMath) {
+            /**
+             * @var User $user
+             */
+            $user = factory(User::class)->create();
+            $this->assertEquals($user->balance, 0);
+
+            $user->wallet->decimal_places = 8;
+            $user->wallet->save();
+
+            $user->depositFloat(0.09699977);
+            
+            $user->wallet->refreshBalance();
+            $user->refresh();
+
+            $this->assertEquals($user->balanceFloat, 0.09699977);
+            $this->assertEquals($user->balance, 9699977);
+        }
+    }
+
 }
