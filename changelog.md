@@ -35,6 +35,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add laravel 7 support
 
+## [4.1.3] - 2020-03-20
+### Added
+Added a patch from version 4.2.1 #150
+
 ## [4.1.2] - 2020-01-20
 ### Added
 - add `$amountFloat` to Transaction model
@@ -481,7 +485,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 [5.0.1]: https://github.com/bavix/laravel-wallet/compare/5.0.0...5.0.1
 [5.0.0]: https://github.com/bavix/laravel-wallet/compare/4.2.1...5.0.0
 [4.2.1]: https://github.com/bavix/laravel-wallet/compare/4.2.0...4.2.1
-[4.2.0]: https://github.com/bavix/laravel-wallet/compare/4.1.2...4.2.0
+[4.2.0]: https://github.com/bavix/laravel-wallet/compare/4.1.3...4.2.0
+[4.1.3]: https://github.com/bavix/laravel-wallet/compare/4.1.2...4.1.3
 [4.1.2]: https://github.com/bavix/laravel-wallet/compare/4.1.1...4.1.2
 [4.1.1]: https://github.com/bavix/laravel-wallet/compare/4.1.0...4.1.1
 [4.1.0]: https://github.com/bavix/laravel-wallet/compare/4.0.1...4.1.0
