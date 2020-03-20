@@ -89,7 +89,7 @@ class RefreshBalance extends Command
             ->connection()
             ->table($wallet)
             ->joinSub($availableBalance, 'b', $joinClause, null, null, 'left')
-            ->update(['balance' => app(DbService::class)->raw('b.balance')]);
+            ->update(["$wallet.balance" => app(DbService::class)->raw('ifnull(b.balance, 0)')]);
     }
 
 }
