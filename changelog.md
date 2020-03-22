@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.2] - 2020-03-22
+### Fixed
+- fix `bindTo` method (v4.1)
+
 ## [4.2.1] - 2020-03-19
 ### Fixed 
 - Fixed wallet recalculate command #150
@@ -15,9 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add laravel 7 support
 
+## [4.1.4] - 2020-03-22
+### Fixed
+- fix `bindTo` method
+
 ## [4.1.3] - 2020-03-20
 ### Added
-Added a patch from version 4.2.1 #150
+- Added a patch from version 4.2.1 #150
 
 ## [4.1.2] - 2020-01-20
 ### Added
@@ -463,7 +471,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 
 [Unreleased]: https://github.com/bavix/laravel-wallet/compare/4.2.1...HEAD
 [4.2.1]: https://github.com/bavix/laravel-wallet/compare/4.2.0...4.2.1
-[4.2.0]: https://github.com/bavix/laravel-wallet/compare/4.1.3...4.2.0
+[4.2.0]: https://github.com/bavix/laravel-wallet/compare/4.1.4...4.2.0
+[4.1.4]: https://github.com/bavix/laravel-wallet/compare/4.1.3...4.1.4
 [4.1.3]: https://github.com/bavix/laravel-wallet/compare/4.1.2...4.1.3
 [4.1.2]: https://github.com/bavix/laravel-wallet/compare/4.1.1...4.1.2
 [4.1.1]: https://github.com/bavix/laravel-wallet/compare/4.1.0...4.1.1
