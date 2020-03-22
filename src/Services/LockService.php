@@ -42,14 +42,16 @@ class LockService
      * @param object $self
      * @param \Closure $closure
      * @return \Closure
+     * @throws
      */
     protected function bindTo($self, \Closure $closure): \Closure
     {
-        try {
+        $reflect = new \ReflectionFunction($closure);
+        if (strpos((string)$reflect, 'static') === false) {
             return $closure->bindTo($self);
-        } catch (\Throwable $throwable) {
-            return $closure;
         }
+
+        return $closure;
     }
 
     /**
