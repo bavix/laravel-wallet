@@ -29,7 +29,7 @@
     "ext-pdo": "*",
     "illuminate/database": "^6.0|^7.0",
     "doctrine/dbal": "^2.8",
-    "ramsey/uuid": "^3.0"
+    "ramsey/uuid": "^4.0"
   },
   "require-dev": {
     "infection/infection": "^0.15",
