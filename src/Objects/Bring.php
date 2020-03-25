@@ -7,7 +7,6 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Ramsey\Uuid\Uuid;
-use function abs;
 
 class Bring
 {
@@ -85,7 +84,7 @@ class Bring
      */
     public function setDiscount(int $discount): self
     {
-        $this->discount = $discount;
+        $this->discount = app(Mathable::class)->round($discount);
         return $this;
     }
 
@@ -183,10 +182,10 @@ class Bring
     public function getFee(): int
     {
         if ($this->fee === null) {
-            return app(Mathable::class)->sub(
+            $this->setFee(app(Mathable::class)->sub(
                 app(Mathable::class)->abs($this->getWithdraw()->amount),
                 app(Mathable::class)->abs($this->getDeposit()->amount)
-            );
+            ));
         }
 
         return $this->fee;
@@ -198,7 +197,7 @@ class Bring
      */
     public function setFee($fee): self
     {
-        $this->fee = $fee;
+        $this->fee = app(Mathable::class)->round($fee);
         return $this;
     }
 

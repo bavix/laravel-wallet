@@ -24,7 +24,7 @@ class Store implements Storable
             $balance = method_exists($wallet, 'getRawOriginal') ?
                 $wallet->getRawOriginal('balance', 0) : $wallet->getOriginal('balance', 0);
 
-            $this->balanceSheets[$wallet->getKey()] = app(Mathable::class)->round($balance);
+            $this->balanceSheets[$wallet->getKey()] = $this->toInt($balance);
         }
 
         return $this->balanceSheets[$wallet->getKey()];
@@ -37,6 +37,7 @@ class Store implements Storable
     {
         $math = app(Mathable::class);
         $balance = $math->add($this->getBalance($object), $amount);
+        $balance = $this->toInt($balance);
         $this->setBalance($object, $balance);
         return $balance;
     }
@@ -47,8 +48,17 @@ class Store implements Storable
     public function setBalance($object, $amount): bool
     {
         $wallet = app(WalletService::class)->getWallet($object);
-        $this->balanceSheets[$wallet->getKey()] = app(Mathable::class)->round($amount ?: 0);
+        $this->balanceSheets[$wallet->getKey()] = $this->toInt($amount);
         return true;
+    }
+
+    /**
+     * @param string $balance
+     * @return string
+     */
+    protected function toInt($balance): string
+    {
+        return app(Mathable::class)->round($balance ?: 0);
     }
 
 }

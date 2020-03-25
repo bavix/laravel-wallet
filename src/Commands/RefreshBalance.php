@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Commands;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\DbService;
 use Illuminate\Console\Command;
+use Illuminate\Database\PostgresConnection;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Database\SQLiteConnection;
 use function config;
@@ -38,14 +39,11 @@ class RefreshBalance extends Command
     public function handle(): void
     {
         app(DbService::class)->transaction(function () {
-            if (app(DbService::class)->connection() instanceof SQLiteConnection) {
+            $connection = app(DbService::class)->connection();
+            if ($connection instanceof SQLiteConnection || $connection instanceof PostgresConnection) {
                 $wallet = config('wallet.wallet.table', 'wallets');
-                app(DbService::class)
-                    ->connection()
-                    ->table($wallet)
-                    ->update(['balance' => 0]);
-
-                $this->sqliteUpdate();
+                $connection->table($wallet)->update(['balance' => 0]);
+                $this->singleUpdate();
             } else {
                 $this->multiUpdate();
             }
@@ -57,7 +55,7 @@ class RefreshBalance extends Command
      *
      * @return void
      */
-    protected function sqliteUpdate(): void
+    protected function singleUpdate(): void
     {
         Wallet::query()->each(static function (Wallet $wallet) {
             $wallet->refreshBalance();

@@ -6,9 +6,12 @@ use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Test\Models\Item;
 use Bavix\Wallet\Test\Models\UserCashier;
 use Bavix\Wallet\Test\Models\UserMulti;
+use Doctrine\DBAL\Driver\PDOException;
+use Illuminate\Database\PostgresConnection;
 use Illuminate\Database\QueryException;
 use function compact;
 use function range;
@@ -336,20 +339,22 @@ class MultiWalletTest extends TestCase
      */
     public function testWalletUnique(): void
     {
-        $this->expectException(QueryException::class);
+        if (!(app(DbService::class)->connection() instanceof PostgresConnection)) {
+            $this->expectException(QueryException::class);
 
-        /**
-         * @var UserMulti $user
-         */
-        $user = factory(UserMulti::class)->create();
+            /**
+             * @var UserMulti $user
+             */
+            $user = factory(UserMulti::class)->create();
 
-        $user->createWallet([
-            'name' => 'deposit'
-        ]);
+            $user->createWallet([
+                'name' => 'deposit'
+            ]);
 
-        $user->createWallet([
-            'name' => 'deposit'
-        ]);
+            $user->createWallet([
+                'name' => 'deposit'
+            ]);
+        }
     }
 
     /**

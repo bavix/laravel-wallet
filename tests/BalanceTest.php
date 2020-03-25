@@ -8,6 +8,7 @@ use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Simple\Store;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\UserMulti;
+use Illuminate\Database\SQLiteConnection;
 use Illuminate\Support\Facades\DB;
 use PDOException;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -96,16 +97,23 @@ class BalanceTest extends TestCase
 
         $this->assertEquals($wallet->balance, 1000);
 
+        $key = $wallet->getKey();
         $this->assertTrue($wallet->delete());
         $this->assertFalse($wallet->exists);
+        $this->assertEquals($wallet->getKey(), $key);
         $result = app(CommonService::class)->addBalance($wallet, 100);
         $this->assertTrue($result); // automatic create default wallet
 
         $wallet->refreshBalance();
-        $this->assertEquals($wallet->balance, 1000);
+        $balance = 0;
+        if ($wallet->getConnection() instanceof SQLiteConnection) {
+            $balance = 1000;
+        }
+
+        $this->assertEquals($wallet->balance, $balance);
 
         $wallet->deposit(1);
-        $this->assertEquals($wallet->balance, 1001);
+        $this->assertEquals($wallet->balance, $balance + 1);
     }
 
     /**
