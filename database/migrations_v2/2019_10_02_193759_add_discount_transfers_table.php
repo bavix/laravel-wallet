@@ -22,7 +22,7 @@ class AddDiscountTransfersTable extends Migration
     public function up(): void
     {
         Schema::table($this->table(), function (Blueprint $table) {
-            $table->bigInteger('discount')
+            $table->decimal('discount', 64, 0)
                 ->default(0)
                 ->after('withdraw_id');
         });

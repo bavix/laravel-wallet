@@ -161,7 +161,7 @@ class CommonService
      * Create Operation without DB::transaction
      *
      * @param Wallet $self
-     * @param array $operations
+     * @param Operation[] $operations
      * @return array
      */
     public function multiOperation(Wallet $self, array $operations): array
@@ -172,7 +172,11 @@ class CommonService
             $math = app(Mathable::class);
             foreach ($operations as $operation) {
                 if ($operation->isConfirmed()) {
-                    $amount = $math->add($amount, $operation->getAmount());
+                    try {
+                        $amount = $math->add($amount, $operation->getAmount());
+                    } catch (\ErrorException $errorException) {
+                        var_dump($amount, $operation->getAmount());die;
+                    }
                 }
 
                 $objects[] = $operation

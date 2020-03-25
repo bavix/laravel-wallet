@@ -30,7 +30,7 @@ class CreateWalletsTable extends Migration
             $table->string('name');
             $table->string('slug')->index();
             $table->string('description')->nullable();
-            $table->bigInteger('balance')->default(0);
+            $table->decimal('balance', 64, 0)->default(0);
             $table->timestamps();
 
             $table->unique(['holder_type', 'holder_id', 'slug']);
@@ -41,14 +41,15 @@ class CreateWalletsTable extends Migration
          */
         $default = config('wallet.wallet.default.name', 'Default Wallet');
         $slug = config('wallet.wallet.default.slug', 'default');
+        $now = time();
         $query = Transaction::query()->distinct()
             ->selectRaw('payable_type as holder_type')
             ->selectRaw('payable_id as holder_id')
             ->selectRaw('? as name', [$default])
             ->selectRaw('? as slug', [$slug])
             ->selectRaw('sum(amount) as balance')
-            ->selectRaw('? as created_at', [DB::raw('now()')])
-            ->selectRaw('? as updated_at', [DB::raw('now()')])
+            ->selectRaw('? as created_at', [$now])
+            ->selectRaw('? as updated_at', [$now])
             ->groupBy('holder_type', 'holder_id')
             ->orderBy('holder_type');
 
