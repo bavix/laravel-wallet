@@ -181,14 +181,17 @@ class Bring
      */
     public function getFee(): int
     {
-        if ($this->fee === null) {
-            $this->setFee(app(Mathable::class)->sub(
-                app(Mathable::class)->abs($this->getWithdraw()->amount),
-                app(Mathable::class)->abs($this->getDeposit()->amount)
-            ));
+        $fee = $this->fee;
+        if ($fee === null) {
+            $fee = app(Mathable::class)->round(
+                app(Mathable::class)->sub(
+                    app(Mathable::class)->abs($this->getWithdraw()->amount),
+                    app(Mathable::class)->abs($this->getDeposit()->amount)
+                )
+            );
         }
 
-        return $this->fee;
+        return $fee;
     }
 
     /**

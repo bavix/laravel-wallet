@@ -172,11 +172,7 @@ class CommonService
             $math = app(Mathable::class);
             foreach ($operations as $operation) {
                 if ($operation->isConfirmed()) {
-                    try {
-                        $amount = $math->add($amount, $operation->getAmount());
-                    } catch (\ErrorException $errorException) {
-                        var_dump($amount, $operation->getAmount());die;
-                    }
+                    $amount = $math->add($amount, $operation->getAmount());
                 }
 
                 $objects[] = $operation
