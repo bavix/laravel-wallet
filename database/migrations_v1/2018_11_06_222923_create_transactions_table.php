@@ -21,7 +21,7 @@ class CreateTransactionsTable extends Migration
             $table->bigIncrements('id');
             $table->morphs('payable');
             $table->enum('type', ['deposit', 'withdraw'])->index();
-            $table->bigInteger('amount');
+            $table->decimal('amount', 64, 0);
             $table->boolean('confirmed');
             $this->json($table, 'meta')->nullable();
             $table->uuid('uuid')->unique();

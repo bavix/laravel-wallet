@@ -161,7 +161,7 @@ class CommonService
      * Create Operation without DB::transaction
      *
      * @param Wallet $self
-     * @param array $operations
+     * @param Operation[] $operations
      * @return array
      */
     public function multiOperation(Wallet $self, array $operations): array

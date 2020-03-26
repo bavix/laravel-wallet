@@ -145,14 +145,16 @@ trait HasWallet
      */
     public function canWithdraw($amount, bool $allowZero = null): bool
     {
+        $math = app(Mathable::class);
+
         /**
          * Allow to buy for free with a negative balance
          */
-        if ($allowZero && $amount === 0) {
+        if ($allowZero && !$math->compare($amount, 0)) {
             return true;
         }
 
-        return app(Mathable::class)->compare($this->balance, $amount) >= 0;
+        return $math->compare($this->balance, $amount) >= 0;
     }
 
     /**

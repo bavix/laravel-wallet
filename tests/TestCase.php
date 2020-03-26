@@ -2,7 +2,6 @@
 
 namespace Bavix\Wallet\Test;
 
-use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Simple\BCMath;
 use Bavix\Wallet\Simple\Math;
 use Bavix\Wallet\Simple\Store;
@@ -12,12 +11,14 @@ use Bavix\Wallet\Test\Common\Models\Wallet;
 use Bavix\Wallet\Test\Common\Rate;
 use Bavix\Wallet\WalletServiceProvider;
 use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
-use function app;
 use function dirname;
 
 class TestCase extends OrchestraTestCase
 {
+
+    use RefreshDatabase;
 
     /**
      * @return void
@@ -27,15 +28,12 @@ class TestCase extends OrchestraTestCase
         parent::setUp();
         $this->withFactories(__DIR__ . '/factories');
         $this->loadMigrationsFrom([
-            '--database' => 'testbench',
             '--path' => dirname(__DIR__) . '/database/migrations_v1'
         ]);
         $this->loadMigrationsFrom([
-            '--database' => 'testbench',
             '--path' => dirname(__DIR__) . '/database/migrations_v2'
         ]);
         $this->loadMigrationsFrom([
-            '--database' => 'testbench',
             '--path' => __DIR__ . '/migrations'
         ]);
     }
@@ -98,11 +96,25 @@ class TestCase extends OrchestraTestCase
         ]);
 
         // database
-        $app['config']->set('database.default', 'testbench');
-        $app['config']->set('database.connections.testbench', [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-            'prefix' => '',
+        $app['config']->set('database.default', 'sqlite');
+        $app['config']->set('database.connections', [
+            'sqlite' => [
+                'driver' => 'sqlite',
+                'database' => ':memory:',
+                'prefix' => '',
+            ],
+            'pgsql' => [
+                'driver' => 'pgsql',
+                'host' => '172.17.0.2',
+                'port' => '5432',
+                'database' => 'wallet',
+                'username' => 'postgres',
+                'password' => 'postgres',
+                'charset' => 'utf8',
+                'prefix' => '',
+                'schema' => 'public',
+                'sslmode' => 'prefer',
+            ],
         ]);
     }
 

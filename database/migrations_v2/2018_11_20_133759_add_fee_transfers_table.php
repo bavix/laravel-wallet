@@ -22,7 +22,7 @@ class AddFeeTransfersTable extends Migration
     public function up(): void
     {
         Schema::table($this->table(), function (Blueprint $table) {
-            $table->bigInteger('fee')
+            $table->decimal('fee', 64, 0)
                 ->default(0)
                 ->after('withdraw_id');
         });
