@@ -72,6 +72,56 @@ class DiscountTest extends TestCase
     /**
      * @return void
      */
+    public function testItemTransactions(): void
+    {
+        /**
+         * @var Buyer $buyer
+         * @var ItemDiscount $product
+         */
+        $buyer = factory(Buyer::class)->create();
+        $product = factory(ItemDiscount::class)->create();
+
+        $this->assertEquals($buyer->balance, 0);
+        $buyer->deposit($product->getAmountProduct($buyer));
+
+        $this->assertEquals($buyer->balance, $product->getAmountProduct($buyer));
+        $transfer = $buyer->pay($product);
+        $this->assertNotNull($transfer);
+        $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
+
+        $this->assertEquals(
+            $buyer->balance,
+            $product->getPersonalDiscount($buyer)
+        );
+
+        $this->assertEquals(
+            $transfer->discount,
+            $product->getPersonalDiscount($buyer)
+        );
+
+        /**
+         * @var Transaction $withdraw
+         * @var Transaction $deposit
+         */
+        $withdraw = $transfer->withdraw;
+        $deposit = $transfer->deposit;
+
+        $this->assertInstanceOf(Transaction::class, $withdraw);
+        $this->assertInstanceOf(Transaction::class, $deposit);
+
+        $this->assertTrue($withdraw->is(
+            $buyer->transactions()
+                ->where('type', Transaction::TYPE_WITHDRAW)
+                ->latest()
+                ->first()
+        ));
+
+        $this->assertTrue($deposit->is($product->transactions()->latest()->first()));
+    }
+
+    /**
+     * @return void
+     */
     public function testRefund(): void
     {
         /**
