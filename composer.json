@@ -36,7 +36,7 @@
     "orchestra/testbench": "^4.0|^5.0",
     "phpstan/phpstan": "^0.12",
     "phpunit/phpunit": "^8.0|^9.0",
-    "laravel/cashier": "^12.0.0"
+    "laravel/cashier": "^10.0|^11.0|^12.0"
   },
   "suggest": {
     "ext-bcmath": "Used for accurate calculations of large numbers",
