@@ -1,9 +1,7 @@
 function collect() {
-  if (!window.cozyHouse) {
-    init($docsify.cozyHouse);
+  if (window.cozyHouse) {
+    window.cozyHouse.push('docs', 'page', location.hash);
   }
-
-  window.cozyHouse.push('docs', 'page', location.hash);
 }
 
 const install = function(hook) {
@@ -12,10 +10,11 @@ const install = function(hook) {
     return;
   }
 
-  window.cozyHouse.setApiUrl('https://cozy.babichev.net')
-  window.cozyHouse.setToken($docsify.cozyHouse)
-
-  hook.beforeEach(collect);
+  if (window.cozyHouse) {
+    window.cozyHouse.setApiUrl('https://cozy.babichev.net')
+    window.cozyHouse.setToken($docsify.cozyHouse)
+    hook.beforeEach(collect);
+  }
 };
 
 $docsify.plugins = [].concat(install, $docsify.plugins);
