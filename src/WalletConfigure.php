@@ -2,6 +2,11 @@
 
 namespace Bavix\Wallet;
 
+/**
+ * Class WalletConfigure
+ * @package Bavix\Wallet
+ * @codeCoverageIgnore 
+ */
 class WalletConfigure
 {
     /**
