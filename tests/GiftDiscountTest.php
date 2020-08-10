@@ -24,23 +24,23 @@ class GiftDiscountTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $this->assertEquals($first->balance, 0);
-        $this->assertEquals($second->balance, 0);
+        self::assertEquals($first->balance, 0);
+        self::assertEquals($second->balance, 0);
 
         $first->deposit($product->getAmountProduct($first) - $product->getPersonalDiscount($first));
-        $this->assertEquals(
+        self::assertEquals(
             $first->balance,
             $product->getAmountProduct($first) - $product->getPersonalDiscount($first)
         );
 
         $transfer = $first->wallet->gift($second, $product);
-        $this->assertEquals($first->balance, 0);
-        $this->assertEquals($second->balance, 0);
-        $this->assertNull($first->paid($product, true));
-        $this->assertNotNull($second->paid($product, true));
-        $this->assertNull($second->wallet->paid($product));
-        $this->assertNotNull($second->wallet->paid($product, true));
-        $this->assertEquals($transfer->status, Transfer::STATUS_GIFT);
+        self::assertEquals($first->balance, 0);
+        self::assertEquals($second->balance, 0);
+        self::assertNull($first->paid($product, true));
+        self::assertNotNull($second->paid($product, true));
+        self::assertNull($second->wallet->paid($product));
+        self::assertNotNull($second->wallet->paid($product, true));
+        self::assertEquals($transfer->status, Transfer::STATUS_GIFT);
     }
 
     /**
@@ -58,58 +58,58 @@ class GiftDiscountTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $this->assertEquals($first->balance, 0);
-        $this->assertEquals($second->balance, 0);
+        self::assertEquals($first->balance, 0);
+        self::assertEquals($second->balance, 0);
 
         $first->deposit($product->getAmountProduct($first));
-        $this->assertEquals($first->balance, $product->getAmountProduct($first));
+        self::assertEquals($first->balance, $product->getAmountProduct($first));
 
         $transfer = $first->wallet->gift($second, $product);
-        $this->assertGreaterThan(0, $first->balance);
-        $this->assertEquals($first->balance, $product->getPersonalDiscount($first));
-        $this->assertEquals($second->balance, 0);
-        $this->assertEquals($transfer->status, Transfer::STATUS_GIFT);
+        self::assertGreaterThan(0, $first->balance);
+        self::assertEquals($first->balance, $product->getPersonalDiscount($first));
+        self::assertEquals($second->balance, 0);
+        self::assertEquals($transfer->status, Transfer::STATUS_GIFT);
 
-        $this->assertFalse($second->wallet->safeRefund($product));
-        $this->assertTrue($second->wallet->refundGift($product));
+        self::assertFalse($second->wallet->safeRefund($product));
+        self::assertTrue($second->wallet->refundGift($product));
 
-        $this->assertEquals($first->balance, $product->getAmountProduct($first));
-        $this->assertEquals($second->balance, 0);
+        self::assertEquals($first->balance, $product->getAmountProduct($first));
+        self::assertEquals($second->balance, 0);
 
-        $this->assertNull($second->wallet->safeGift($first, $product));
+        self::assertNull($second->wallet->safeGift($first, $product));
 
         $transfer = $second->wallet->forceGift($first, $product);
-        $this->assertNotNull($transfer);
-        $this->assertEquals($transfer->status, Transfer::STATUS_GIFT);
+        self::assertNotNull($transfer);
+        self::assertEquals($transfer->status, Transfer::STATUS_GIFT);
 
-        $this->assertEquals(
+        self::assertEquals(
             $second->balance,
             -($product->getAmountProduct($second) - $product->getPersonalDiscount($second))
         );
 
         $second->deposit(-$second->balance);
-        $this->assertEquals($second->balance, 0);
+        self::assertEquals($second->balance, 0);
 
         $first->withdraw($product->getAmountProduct($first));
-        $this->assertEquals($first->balance, 0);
+        self::assertEquals($first->balance, 0);
 
         $product->withdraw($product->balance);
-        $this->assertEquals($product->balance, 0);
+        self::assertEquals($product->balance, 0);
 
-        $this->assertFalse($first->safeRefundGift($product));
-        $this->assertTrue($first->forceRefundGift($product));
-        $this->assertEquals(
+        self::assertFalse($first->safeRefundGift($product));
+        self::assertTrue($first->forceRefundGift($product));
+        self::assertEquals(
             $product->balance,
             -($product->getAmountProduct($second) - $product->getPersonalDiscount($second))
         );
 
-        $this->assertEquals(
+        self::assertEquals(
             $second->balance,
             $product->getAmountProduct($second) - $product->getPersonalDiscount($second)
         );
 
         $second->withdraw($second->balance);
-        $this->assertEquals($second->balance, 0);
+        self::assertEquals($second->balance, 0);
     }
 
 }

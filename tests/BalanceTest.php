@@ -26,11 +26,11 @@ class BalanceTest extends TestCase
          * @var Buyer $buyer
          */
         $buyer = factory(Buyer::class)->create();
-        $this->assertFalse($buyer->relationLoaded('wallet'));
+        self::assertFalse($buyer->relationLoaded('wallet'));
         $buyer->deposit(1);
 
-        $this->assertTrue($buyer->relationLoaded('wallet'));
-        $this->assertTrue($buyer->wallet->exists);
+        self::assertTrue($buyer->relationLoaded('wallet'));
+        self::assertTrue($buyer->wallet->exists);
     }
 
     /**
@@ -42,11 +42,11 @@ class BalanceTest extends TestCase
          * @var Buyer $buyer
          */
         $buyer = factory(Buyer::class)->create();
-        $this->assertTrue($buyer->canWithdraw(0));
+        self::assertTrue($buyer->canWithdraw(0));
 
         $buyer->forceWithdraw(1);
-        $this->assertFalse($buyer->canWithdraw(0));
-        $this->assertTrue($buyer->canWithdraw(0, true));
+        self::assertFalse($buyer->canWithdraw(0));
+        self::assertTrue($buyer->canWithdraw(0, true));
     }
 
     /**
@@ -58,14 +58,14 @@ class BalanceTest extends TestCase
          * @var Buyer $buyer
          */
         $buyer = factory(Buyer::class)->create();
-        $this->assertFalse($buyer->relationLoaded('wallet'));
-        $this->assertEquals($buyer->balance, 0);
+        self::assertFalse($buyer->relationLoaded('wallet'));
+        self::assertEquals($buyer->balance, 0);
         $buyer->forceWithdraw(1);
 
-        $this->assertEquals($buyer->balance, -1);
-        $this->assertTrue($buyer->relationLoaded('wallet'));
-        $this->assertTrue($buyer->wallet->exists);
-        $this->assertLessThan(0, $buyer->balance);
+        self::assertEquals($buyer->balance, -1);
+        self::assertTrue($buyer->relationLoaded('wallet'));
+        self::assertTrue($buyer->wallet->exists);
+        self::assertLessThan(0, $buyer->balance);
     }
 
     /**
@@ -79,30 +79,30 @@ class BalanceTest extends TestCase
          */
         $buyer = factory(Buyer::class)->create();
 
-        $this->assertFalse($buyer->relationLoaded('wallet'));
+        self::assertFalse($buyer->relationLoaded('wallet'));
         $wallet = $buyer->wallet;
 
-        $this->assertFalse($wallet->exists);
-        $this->assertEquals($wallet->balance, 0);
-        $this->assertTrue($wallet->exists);
+        self::assertFalse($wallet->exists);
+        self::assertEquals($wallet->balance, 0);
+        self::assertTrue($wallet->exists);
 
         $wallet->deposit(1000);
-        $this->assertEquals($wallet->balance, 1000);
+        self::assertEquals($wallet->balance, 1000);
 
         $result = app(CommonService::class)->addBalance($wallet, 100);
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
-        $this->assertEquals($wallet->balance, 1100);
-        $this->assertTrue($wallet->refreshBalance());
+        self::assertEquals($wallet->balance, 1100);
+        self::assertTrue($wallet->refreshBalance());
 
-        $this->assertEquals($wallet->balance, 1000);
+        self::assertEquals($wallet->balance, 1000);
 
         $key = $wallet->getKey();
-        $this->assertTrue($wallet->delete());
-        $this->assertFalse($wallet->exists);
-        $this->assertEquals($wallet->getKey(), $key);
+        self::assertTrue($wallet->delete());
+        self::assertFalse($wallet->exists);
+        self::assertEquals($wallet->getKey(), $key);
         $result = app(CommonService::class)->addBalance($wallet, 100);
-        $this->assertTrue($result); // automatic create default wallet
+        self::assertTrue($result); // automatic create default wallet
 
         $wallet->refreshBalance();
         $balance = 0;
@@ -110,10 +110,10 @@ class BalanceTest extends TestCase
             $balance = 1000;
         }
 
-        $this->assertEquals($wallet->balance, $balance);
+        self::assertEquals($wallet->balance, $balance);
 
         $wallet->deposit(1);
-        $this->assertEquals($wallet->balance, $balance + 1);
+        self::assertEquals($wallet->balance, $balance + 1);
     }
 
     /**
@@ -126,14 +126,14 @@ class BalanceTest extends TestCase
          * @var Buyer $buyer
          */
         $buyer = factory(Buyer::class)->create();
-        $this->assertFalse($buyer->relationLoaded('wallet'));
+        self::assertFalse($buyer->relationLoaded('wallet'));
         $wallet = $buyer->wallet;
 
-        $this->assertFalse($wallet->exists);
-        $this->assertEquals($wallet->balance, 0);
-        $this->assertTrue($wallet->exists);
+        self::assertFalse($wallet->exists);
+        self::assertEquals($wallet->balance, 0);
+        self::assertTrue($wallet->exists);
 
-        $this->assertEquals(0, app(Storable::class)->getBalance($wallet));
+        self::assertEquals(0, app(Storable::class)->getBalance($wallet));
     }
 
     /**
@@ -146,12 +146,12 @@ class BalanceTest extends TestCase
          * @var Buyer $buyer
          */
         $buyer = factory(Buyer::class)->create();
-        $this->assertFalse($buyer->relationLoaded('wallet'));
+        self::assertFalse($buyer->relationLoaded('wallet'));
         $wallet = $buyer->wallet;
 
-        $this->assertFalse($wallet->exists);
-        $this->assertEquals($wallet->balance, 0);
-        $this->assertTrue($wallet->exists);
+        self::assertFalse($wallet->exists);
+        self::assertEquals($wallet->balance, 0);
+        self::assertTrue($wallet->exists);
 
         /**
          * @var Wallet|MockObject $mockWallet
@@ -163,8 +163,8 @@ class BalanceTest extends TestCase
         $result = app(CommonService::class)
             ->addBalance($mockWallet, 100);
 
-        $this->assertFalse($result);
-        $this->assertEquals(0, app(Storable::class)->getBalance($wallet));
+        self::assertFalse($result);
+        self::assertEquals(0, app(Storable::class)->getBalance($wallet));
     }
 
     /**
@@ -179,12 +179,12 @@ class BalanceTest extends TestCase
          * @var Buyer $buyer
          */
         $buyer = factory(Buyer::class)->create();
-        $this->assertFalse($buyer->relationLoaded('wallet'));
+        self::assertFalse($buyer->relationLoaded('wallet'));
         $wallet = $buyer->wallet;
 
-        $this->assertFalse($wallet->exists);
-        $this->assertEquals($wallet->balance, 0);
-        $this->assertTrue($wallet->exists);
+        self::assertFalse($wallet->exists);
+        self::assertEquals($wallet->balance, 0);
+        self::assertTrue($wallet->exists);
 
         /**
          * @var Wallet|MockObject $mockWallet
@@ -218,15 +218,15 @@ class BalanceTest extends TestCase
                 $amount = \random_int(10, 10000);
                 $confirmed = (bool)\random_int(0, 1);
                 $deposit = $wallet->deposit($amount, null, $confirmed);
-                $this->assertIsInt($deposit->wallet_id);
+                self::assertIsInt($deposit->wallet_id);
 
                 if ($confirmed) {
                     $sums[$name] += $amount;
                 }
 
-                $this->assertEquals($amount, $deposit->amount);
-                $this->assertEquals($confirmed, $deposit->confirmed);
-                $this->assertEquals($sums[$name], $wallet->balance);
+                self::assertEquals($amount, $deposit->amount);
+                self::assertEquals($confirmed, $deposit->confirmed);
+                self::assertEquals($sums[$name], $wallet->balance);
             }
         }
 
@@ -236,7 +236,7 @@ class BalanceTest extends TestCase
 
         $this->artisan('wallet:refresh');
         Wallet::query()->whereKey($ids)->each(function (Wallet $wallet) use ($sums) {
-            $this->assertEquals($sums[$wallet->name], $wallet->balance);
+            self::assertEquals($sums[$wallet->name], $wallet->balance);
         });
     }
 
@@ -252,10 +252,10 @@ class BalanceTest extends TestCase
         $buyer = factory(Buyer::class)->create();
         $wallet = $buyer->wallet;
 
-        $this->assertEquals($wallet->balance, 0);
+        self::assertEquals($wallet->balance, 0);
 
         $wallet->deposit(1000);
-        $this->assertEquals($wallet->balance, 1000);
+        self::assertEquals($wallet->balance, 1000);
 
         Wallet::whereKey($buyer->wallet->getKey())
             ->update(['balance' => 10]);
@@ -269,21 +269,21 @@ class BalanceTest extends TestCase
          * Here is an example:
          */
         app()->singleton(Storable::class, Store::class);
-        $this->assertEquals($wallet->getRawOriginal('balance'), 1000);
+        self::assertEquals($wallet->getRawOriginal('balance'), 1000);
 
         /**
          * We load the model from the base and our balance is 10.
          */
         $wallet->refresh();
-        $this->assertEquals($wallet->balance, 10);
-        $this->assertEquals($wallet->getRawOriginal('balance'), 10);
+        self::assertEquals($wallet->balance, 10);
+        self::assertEquals($wallet->getRawOriginal('balance'), 10);
 
         /**
          * Now we fill the cache with relevant data (PS, the data inside the model will be updated).
          */
         $wallet->refreshBalance();
-        $this->assertEquals($wallet->balance, 1000);
-        $this->assertEquals($wallet->getRawOriginal('balance'), 1000);
+        self::assertEquals($wallet->balance, 1000);
+        self::assertEquals($wallet->getRawOriginal('balance'), 1000);
     }
 
 }

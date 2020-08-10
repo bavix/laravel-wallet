@@ -27,12 +27,12 @@ class TaxTest extends TestCase
         $fee = (int)($product->getAmountProduct($buyer) * $product->getFeePercent() / 100);
         $balance = $product->getAmountProduct($buyer) + $fee;
 
-        $this->assertEquals($buyer->balance, 0);
+        self::assertEquals($buyer->balance, 0);
         $buyer->deposit($balance);
 
-        $this->assertNotEquals($buyer->balance, 0);
+        self::assertNotEquals($buyer->balance, 0);
         $transfer = $buyer->pay($product);
-        $this->assertNotNull($transfer);
+        self::assertNotNull($transfer);
 
         /**
          * @var Transaction $withdraw
@@ -41,17 +41,17 @@ class TaxTest extends TestCase
         $withdraw = $transfer->withdraw;
         $deposit = $transfer->deposit;
 
-        $this->assertEquals($withdraw->amount, -$balance);
-        $this->assertEquals($deposit->amount, $product->getAmountProduct($buyer));
-        $this->assertNotEquals($deposit->amount, $withdraw->amount);
-        $this->assertEquals($transfer->fee, $fee);
+        self::assertEquals($withdraw->amount, -$balance);
+        self::assertEquals($deposit->amount, $product->getAmountProduct($buyer));
+        self::assertNotEquals($deposit->amount, $withdraw->amount);
+        self::assertEquals($transfer->fee, $fee);
 
         $buyer->refund($product);
-        $this->assertEquals($buyer->balance, $deposit->amount);
-        $this->assertEquals($product->balance, 0);
+        self::assertEquals($buyer->balance, $deposit->amount);
+        self::assertEquals($product->balance, 0);
 
         $buyer->withdraw($buyer->balance);
-        $this->assertEquals($buyer->balance, 0);
+        self::assertEquals($buyer->balance, 0);
     }
 
     /**
@@ -72,14 +72,14 @@ class TaxTest extends TestCase
         $fee = (int)($product->getAmountProduct($santa) * $product->getFeePercent() / 100);
         $balance = $product->getAmountProduct($santa) + $fee;
 
-        $this->assertEquals($santa->balance, 0);
-        $this->assertEquals($child->balance, 0);
+        self::assertEquals($santa->balance, 0);
+        self::assertEquals($child->balance, 0);
         $santa->deposit($balance);
 
-        $this->assertNotEquals($santa->balance, 0);
-        $this->assertEquals($child->balance, 0);
+        self::assertNotEquals($santa->balance, 0);
+        self::assertEquals($child->balance, 0);
         $transfer = $santa->wallet->gift($child, $product);
-        $this->assertNotNull($transfer);
+        self::assertNotNull($transfer);
 
         /**
          * @var Transaction $withdraw
@@ -88,19 +88,19 @@ class TaxTest extends TestCase
         $withdraw = $transfer->withdraw;
         $deposit = $transfer->deposit;
 
-        $this->assertEquals($withdraw->amount, -$balance);
-        $this->assertEquals($deposit->amount, $product->getAmountProduct($santa));
-        $this->assertNotEquals($deposit->amount, $withdraw->amount);
-        $this->assertEquals($transfer->fee, $fee);
+        self::assertEquals($withdraw->amount, -$balance);
+        self::assertEquals($deposit->amount, $product->getAmountProduct($santa));
+        self::assertNotEquals($deposit->amount, $withdraw->amount);
+        self::assertEquals($transfer->fee, $fee);
 
-        $this->assertFalse($santa->safeRefundGift($product));
-        $this->assertTrue($child->refundGift($product));
-        $this->assertEquals($santa->balance, $deposit->amount);
-        $this->assertEquals($child->balance, 0);
-        $this->assertEquals($product->balance, 0);
+        self::assertFalse($santa->safeRefundGift($product));
+        self::assertTrue($child->refundGift($product));
+        self::assertEquals($santa->balance, $deposit->amount);
+        self::assertEquals($child->balance, 0);
+        self::assertEquals($product->balance, 0);
 
         $santa->withdraw($santa->balance);
-        $this->assertEquals($santa->balance, 0);
+        self::assertEquals($santa->balance, 0);
     }
 
     /**
@@ -122,15 +122,15 @@ class TaxTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $this->assertEquals($santa->balance, 0);
-        $this->assertEquals($child->balance, 0);
+        self::assertEquals($santa->balance, 0);
+        self::assertEquals($child->balance, 0);
         $santa->deposit($product->getAmountProduct($santa));
 
-        $this->assertNotEquals($santa->balance, 0);
-        $this->assertEquals($child->balance, 0);
+        self::assertNotEquals($santa->balance, 0);
+        self::assertEquals($child->balance, 0);
         $santa->wallet->gift($child, $product);
 
-        $this->assertEquals($santa->balance, 0);
+        self::assertEquals($santa->balance, 0);
     }
 
 }

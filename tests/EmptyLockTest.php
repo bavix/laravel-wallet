@@ -13,10 +13,10 @@ class EmptyLockTest extends TestCase
     public function testSimple(): void
     {
         $empty = app(EmptyLock::class);
-        $this->assertTrue($empty->block(1));
-        $this->assertTrue($empty->block(1, null));
-        $this->assertNull($empty->get());
-        $this->assertTrue($empty->get(static function () {
+        self::assertTrue($empty->block(1));
+        self::assertTrue($empty->block(1, null));
+        self::assertNull($empty->get());
+        self::assertTrue($empty->get(static function () {
             return true;
         }));
     }
@@ -28,8 +28,8 @@ class EmptyLockTest extends TestCase
     {
         $empty = app(EmptyLock::class);
         $str = $empty->owner();
-        $this->assertIsString($str);
-        $this->assertEquals($str, $empty->owner());
+        self::assertIsString($str);
+        self::assertEquals($str, $empty->owner());
     }
 
 }

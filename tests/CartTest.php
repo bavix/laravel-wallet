@@ -28,30 +28,30 @@ class CartTest extends TestCase
 
         $cart = app(Cart::class)->addItems($products);
         foreach ($cart->getItems() as $product) {
-            $this->assertEquals($product->balance, 0);
+            self::assertEquals($product->balance, 0);
         }
 
-        $this->assertEquals($buyer->balance, $buyer->wallet->balance);
-        $this->assertNotNull($buyer->deposit($cart->getTotal($buyer)));
-        $this->assertEquals($buyer->balance, $buyer->wallet->balance);
+        self::assertEquals($buyer->balance, $buyer->wallet->balance);
+        self::assertNotNull($buyer->deposit($cart->getTotal($buyer)));
+        self::assertEquals($buyer->balance, $buyer->wallet->balance);
 
         $transfers = $buyer->payCart($cart);
-        $this->assertCount(count($cart), $transfers);
-        $this->assertTrue((bool)$cart->alreadyBuy($buyer));
-        $this->assertEquals($buyer->balance, 0);
+        self::assertCount(count($cart), $transfers);
+        self::assertTrue((bool)$cart->alreadyBuy($buyer));
+        self::assertEquals($buyer->balance, 0);
 
         foreach ($transfers as $transfer) {
-            $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
+            self::assertEquals($transfer->status, Transfer::STATUS_PAID);
         }
 
         foreach ($cart->getItems() as $product) {
-            $this->assertEquals($product->balance, $product->getAmountProduct($buyer));
+            self::assertEquals($product->balance, $product->getAmountProduct($buyer));
         }
 
-        $this->assertTrue($buyer->refundCart($cart));
+        self::assertTrue($buyer->refundCart($cart));
         foreach ($transfers as $transfer) {
             $transfer->refresh();
-            $this->assertEquals($transfer->status, Transfer::STATUS_REFUND);
+            self::assertEquals($transfer->status, Transfer::STATUS_REFUND);
         }
     }
 
@@ -78,15 +78,15 @@ class CartTest extends TestCase
             $amount += $rnd;
         }
 
-        $this->assertCount($amount, $cart->getItems());
+        self::assertCount($amount, $cart->getItems());
 
         $transfers = $buyer->payCart($cart);
-        $this->assertCount($amount, $transfers);
+        self::assertCount($amount, $transfers);
 
-        $this->assertTrue($buyer->refundCart($cart));
+        self::assertTrue($buyer->refundCart($cart));
         foreach ($transfers as $transfer) {
             $transfer->refresh();
-            $this->assertEquals($transfer->status, Transfer::STATUS_REFUND);
+            self::assertEquals($transfer->status, Transfer::STATUS_REFUND);
         }
     }
 
@@ -114,10 +114,10 @@ class CartTest extends TestCase
             $total += $rnd;
         }
 
-        $this->assertCount($total, $cart->getItems());
+        self::assertCount($total, $cart->getItems());
 
         $transfers = $buyer->payCart($cart);
-        $this->assertCount($total, $transfers);
+        self::assertCount($total, $transfers);
 
         $refundCart = app(Cart::class)
             ->addItems($products); // all goods

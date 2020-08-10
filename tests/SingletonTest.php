@@ -35,7 +35,7 @@ class SingletonTest extends TestCase
      */
     public function testBring(): void
     {
-        $this->assertNotEquals($this->getRefId(Bring::class), $this->getRefId(Bring::class));
+        self::assertNotEquals($this->getRefId(Bring::class), $this->getRefId(Bring::class));
     }
 
     /**
@@ -43,7 +43,7 @@ class SingletonTest extends TestCase
      */
     public function testCart(): void
     {
-        $this->assertNotEquals($this->getRefId(Cart::class), $this->getRefId(Cart::class));
+        self::assertNotEquals($this->getRefId(Cart::class), $this->getRefId(Cart::class));
     }
 
     /**
@@ -51,7 +51,7 @@ class SingletonTest extends TestCase
      */
     public function testEmptyLock(): void
     {
-        $this->assertNotEquals($this->getRefId(EmptyLock::class), $this->getRefId(EmptyLock::class));
+        self::assertNotEquals($this->getRefId(EmptyLock::class), $this->getRefId(EmptyLock::class));
     }
 
     /**
@@ -59,7 +59,7 @@ class SingletonTest extends TestCase
      */
     public function testOperation(): void
     {
-        $this->assertNotEquals($this->getRefId(Operation::class), $this->getRefId(Operation::class));
+        self::assertNotEquals($this->getRefId(Operation::class), $this->getRefId(Operation::class));
     }
 
     /**
@@ -67,7 +67,7 @@ class SingletonTest extends TestCase
      */
     public function testRateable(): void
     {
-        $this->assertEquals($this->getRefId(Rateable::class), $this->getRefId(Rateable::class));
+        self::assertEquals($this->getRefId(Rateable::class), $this->getRefId(Rateable::class));
     }
 
     /**
@@ -75,7 +75,7 @@ class SingletonTest extends TestCase
      */
     public function testStorable(): void
     {
-        $this->assertEquals($this->getRefId(Storable::class), $this->getRefId(Storable::class));
+        self::assertEquals($this->getRefId(Storable::class), $this->getRefId(Storable::class));
     }
 
     /**
@@ -83,7 +83,7 @@ class SingletonTest extends TestCase
      */
     public function testMathable(): void
     {
-        $this->assertEquals($this->getRefId(Mathable::class), $this->getRefId(Mathable::class));
+        self::assertEquals($this->getRefId(Mathable::class), $this->getRefId(Mathable::class));
     }
 
     /**
@@ -91,7 +91,7 @@ class SingletonTest extends TestCase
      */
     public function testTransaction(): void
     {
-        $this->assertNotEquals($this->getRefId(Transaction::class), $this->getRefId(Transaction::class));
+        self::assertNotEquals($this->getRefId(Transaction::class), $this->getRefId(Transaction::class));
     }
 
     /**
@@ -99,7 +99,7 @@ class SingletonTest extends TestCase
      */
     public function testTransfer(): void
     {
-        $this->assertNotEquals($this->getRefId(Transfer::class), $this->getRefId(Transfer::class));
+        self::assertNotEquals($this->getRefId(Transfer::class), $this->getRefId(Transfer::class));
     }
 
     /**
@@ -107,7 +107,7 @@ class SingletonTest extends TestCase
      */
     public function testWallet(): void
     {
-        $this->assertNotEquals($this->getRefId(Wallet::class), $this->getRefId(Wallet::class));
+        self::assertNotEquals($this->getRefId(Wallet::class), $this->getRefId(Wallet::class));
     }
 
     /**
@@ -115,7 +115,7 @@ class SingletonTest extends TestCase
      */
     public function testExchangeService(): void
     {
-        $this->assertEquals($this->getRefId(ExchangeService::class), $this->getRefId(ExchangeService::class));
+        self::assertEquals($this->getRefId(ExchangeService::class), $this->getRefId(ExchangeService::class));
     }
 
     /**
@@ -123,7 +123,7 @@ class SingletonTest extends TestCase
      */
     public function testCommonService(): void
     {
-        $this->assertEquals($this->getRefId(CommonService::class), $this->getRefId(CommonService::class));
+        self::assertEquals($this->getRefId(CommonService::class), $this->getRefId(CommonService::class));
     }
 
     /**
@@ -131,7 +131,7 @@ class SingletonTest extends TestCase
      */
     public function testWalletService(): void
     {
-        $this->assertEquals($this->getRefId(WalletService::class), $this->getRefId(WalletService::class));
+        self::assertEquals($this->getRefId(WalletService::class), $this->getRefId(WalletService::class));
     }
 
     /**
@@ -139,7 +139,7 @@ class SingletonTest extends TestCase
      */
     public function testDbService(): void
     {
-        $this->assertEquals($this->getRefId(DbService::class), $this->getRefId(DbService::class));
+        self::assertEquals($this->getRefId(DbService::class), $this->getRefId(DbService::class));
     }
 
     /**
@@ -147,7 +147,7 @@ class SingletonTest extends TestCase
      */
     public function testLockService(): void
     {
-        $this->assertEquals($this->getRefId(LockService::class), $this->getRefId(LockService::class));
+        self::assertEquals($this->getRefId(LockService::class), $this->getRefId(LockService::class));
     }
 
 }

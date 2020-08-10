@@ -20,49 +20,49 @@ class MultiWalletGiftTest extends TestCase
          * @var UserMulti $second
          */
         [$first, $second] = factory(UserMulti::class, 2)->create();
-        $this->assertNull($first->getWallet('gifter'));
+        self::assertNull($first->getWallet('gifter'));
 
         $first->deposit(1);
         $second->deposit(2);
 
         $wallet = $first->createWallet(['name' => 'Gift', 'slug' => 'gifter']);
-        $this->assertNotNull($wallet);
-        $this->assertNotNull($first->wallet);
-        $this->assertNotNull($first->wallet->id, $wallet->id);
+        self::assertNotNull($wallet);
+        self::assertNotNull($first->wallet);
+        self::assertNotNull($first->wallet->id, $wallet->id);
 
         /**
          * @var Item $item
          */
         $item = factory(Item::class)->create();
         $transaction = $wallet->deposit($item->getAmountProduct($wallet));
-        $this->assertEquals($transaction->amount, $wallet->balance);
-        $this->assertEquals($item->getAmountProduct($wallet), $wallet->balance);
-        $this->assertNotNull($transaction);
+        self::assertEquals($transaction->amount, $wallet->balance);
+        self::assertEquals($item->getAmountProduct($wallet), $wallet->balance);
+        self::assertNotNull($transaction);
 
         $transfer = $wallet->gift($second, $item);
-        $this->assertNotNull($transfer);
+        self::assertNotNull($transfer);
 
-        $this->assertEquals($wallet->balance, 0);
-        $this->assertEquals($first->balance, 1);
-        $this->assertEquals($second->balance, 2);
-        $this->assertEquals($transfer->status, Transfer::STATUS_GIFT);
+        self::assertEquals($wallet->balance, 0);
+        self::assertEquals($first->balance, 1);
+        self::assertEquals($second->balance, 2);
+        self::assertEquals($transfer->status, Transfer::STATUS_GIFT);
 
-        $this->assertEquals($transfer->withdraw->wallet->holder->id, $first->id);
-        $this->assertInstanceOf(UserMulti::class, $transfer->withdraw->wallet->holder);
+        self::assertEquals($transfer->withdraw->wallet->holder->id, $first->id);
+        self::assertInstanceOf(UserMulti::class, $transfer->withdraw->wallet->holder);
 
-        $this->assertEquals($wallet->id, $transfer->withdraw->wallet->id);
-        $this->assertInstanceOf(Wallet::class, $transfer->withdraw->wallet);
+        self::assertEquals($wallet->id, $transfer->withdraw->wallet->id);
+        self::assertInstanceOf(Wallet::class, $transfer->withdraw->wallet);
 
-        $this->assertEquals($second->id, $transfer->from->holder_id);
-        $this->assertInstanceOf(UserMulti::class, $transfer->from->holder);
+        self::assertEquals($second->id, $transfer->from->holder_id);
+        self::assertInstanceOf(UserMulti::class, $transfer->from->holder);
 
-        $this->assertFalse((bool)$wallet->paid($item));
-        $this->assertFalse((bool)$first->wallet->paid($item));
-        $this->assertFalse((bool)$second->wallet->paid($item));
+        self::assertFalse((bool)$wallet->paid($item));
+        self::assertFalse((bool)$first->wallet->paid($item));
+        self::assertFalse((bool)$second->wallet->paid($item));
 
-        $this->assertFalse((bool)$wallet->paid($item, true));
-        $this->assertFalse((bool)$first->wallet->paid($item, true));
-        $this->assertTrue((bool)$second->wallet->paid($item, true));
+        self::assertFalse((bool)$wallet->paid($item, true));
+        self::assertFalse((bool)$first->wallet->paid($item, true));
+        self::assertTrue((bool)$second->wallet->paid($item, true));
     }
 
 }
