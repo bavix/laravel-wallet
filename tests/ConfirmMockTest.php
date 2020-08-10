@@ -41,4 +41,36 @@ class ConfirmMockTest extends TestCase
         $this->assertFalse($userConfirm->confirm($transaction));
     }
 
+    /**
+     * @return void
+     */
+    public function testFailResetConfirm(): void
+    {
+        /**
+         * @var UserConfirm $userConfirm
+         */
+        $userConfirm = factory(UserConfirm::class)->create();
+        $transaction = $userConfirm->deposit(100);
+        $this->assertEquals($userConfirm->wallet->id, $transaction->wallet->id);
+        $this->assertEquals($userConfirm->id, $transaction->payable_id);
+        $this->assertInstanceOf(UserConfirm::class, $transaction->payable);
+        $this->assertTrue($transaction->confirmed);
+
+        $wallet = app(WalletService::class)
+            ->getWallet($userConfirm);
+
+        $mockWallet = $this->createMock(\get_class($wallet));
+        $mockWallet->method('refreshBalance')
+            ->willReturn(false);
+
+        /**
+         * @var Wallet $mockWallet
+         */
+        $this->assertInstanceOf(Wallet::class, $wallet);
+        $this->assertFalse($mockWallet->refreshBalance());
+
+        $userConfirm->setRelation('wallet', $mockWallet);
+        $this->assertFalse($userConfirm->resetConfirm($transaction));
+    }
+
 }
