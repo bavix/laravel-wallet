@@ -189,6 +189,25 @@ class ConfirmTest extends TestCase
     /**
      * @return void
      */
+    public function testSafeUnconfirmed(): void
+    {
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = factory(Buyer::class)->create();
+        $wallet = $buyer->wallet;
+
+        $this->assertEquals(0, $wallet->balance);
+
+        $transaction = $wallet->deposit(1000, null, false);
+        $this->assertEquals(0, $wallet->balance);
+        $this->assertFalse($transaction->confirmed);
+        $this->assertFalse($wallet->safeResetConfirm($transaction));
+    }
+
+    /**
+     * @return void
+     */
     public function testWalletOwnerInvalid(): void
     {
         $this->expectException(WalletOwnerInvalid::class);

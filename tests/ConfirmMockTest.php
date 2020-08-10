@@ -39,6 +39,7 @@ class ConfirmMockTest extends TestCase
 
         $userConfirm->setRelation('wallet', $mockWallet);
         $this->assertFalse($userConfirm->confirm($transaction));
+        $this->assertFalse($userConfirm->safeConfirm($transaction));
     }
 
     /**
@@ -71,6 +72,7 @@ class ConfirmMockTest extends TestCase
 
         $userConfirm->setRelation('wallet', $mockWallet);
         $this->assertFalse($userConfirm->resetConfirm($transaction));
+        $this->assertFalse($userConfirm->safeResetConfirm($transaction));
     }
 
 }
