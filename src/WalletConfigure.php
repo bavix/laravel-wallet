@@ -2,7 +2,7 @@
 
 namespace Bavix\Wallet;
 
-class Wallet
+class WalletConfigure
 {
     /**
      * Indicates if Wallet migrations will be run.
@@ -16,7 +16,7 @@ class Wallet
      *
      * @return static
      */
-    public static function ignoreMigrations()
+    public static function ignoreMigrations(): self
     {
         static::$runsMigrations = false;
 

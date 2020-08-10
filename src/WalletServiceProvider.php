@@ -21,7 +21,6 @@ use Bavix\Wallet\Simple\Math;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Simple\Rate;
 use Bavix\Wallet\Simple\Store;
-use Bavix\Wallet\Wallet as WalletConfiguration;
 use Illuminate\Support\ServiceProvider;
 use function config;
 use function dirname;
@@ -115,8 +114,8 @@ class WalletServiceProvider extends ServiceProvider
      *
      * @return bool
      */
-    protected function shouldMigrate()
+    protected function shouldMigrate(): bool
     {
-        return WalletConfiguration::$runsMigrations;
+        return WalletConfigure::$runsMigrations;
     }
 }
