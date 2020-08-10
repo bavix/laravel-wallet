@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.3.0] - 2020-08-10
+### Added
+- Add `resetConfirm`, `safeResetConfirm` methods (unconfirmed).
+- Allow default migrations to be ignored. #189 @driangonzales 
+
 ## [5.2.1] - 2020-06-10
 ### Added
 - Added support `laravel/cashier ^12.0`
@@ -508,7 +513,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/5.2.1...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/5.3.0...develop
+[5.3.0]: https://github.com/bavix/laravel-wallet/compare/5.2.1...5.3.0
 [5.2.1]: https://github.com/bavix/laravel-wallet/compare/5.2.0...5.2.1
 [5.2.0]: https://github.com/bavix/laravel-wallet/compare/5.1.0...5.2.0
 [5.1.0]: https://github.com/bavix/laravel-wallet/compare/5.0.2...5.1.0
