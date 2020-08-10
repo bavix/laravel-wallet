@@ -21,15 +21,15 @@ class ConfirmTest extends TestCase
         $buyer = factory(Buyer::class)->create();
         $wallet = $buyer->wallet;
 
-        $this->assertEquals($wallet->balance, 0);
+        self::assertEquals(0, $wallet->balance);
 
         $transaction = $wallet->deposit(1000, ['desc' => 'unconfirmed'], false);
-        $this->assertEquals($wallet->balance, 0);
-        $this->assertFalse($transaction->confirmed);
+        self::assertEquals(0, $wallet->balance);
+        self::assertFalse($transaction->confirmed);
 
         $wallet->confirm($transaction);
-        $this->assertEquals($wallet->balance, $transaction->amount);
-        $this->assertTrue($transaction->confirmed);
+        self::assertEquals($transaction->amount, $wallet->balance);
+        self::assertTrue($transaction->confirmed);
     }
 
     /**
@@ -43,15 +43,37 @@ class ConfirmTest extends TestCase
         $buyer = factory(Buyer::class)->create();
         $wallet = $buyer->wallet;
 
-        $this->assertEquals($wallet->balance, 0);
+        self::assertEquals(0, $wallet->balance);
 
         $transaction = $wallet->forceWithdraw(1000, ['desc' => 'unconfirmed'], false);
-        $this->assertEquals($wallet->balance, 0);
-        $this->assertFalse($transaction->confirmed);
+        self::assertEquals(0, $wallet->balance);
+        self::assertFalse($transaction->confirmed);
 
         $wallet->safeConfirm($transaction);
-        $this->assertEquals($wallet->balance, 0);
-        $this->assertFalse($transaction->confirmed);
+        self::assertEquals(0, $wallet->balance);
+        self::assertFalse($transaction->confirmed);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSafeResetConfirm(): void
+    {
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = factory(Buyer::class)->create();
+        $wallet = $buyer->wallet;
+
+        self::assertEquals(0, $wallet->balance);
+
+        $transaction = $wallet->forceWithdraw(1000, ['desc' => 'confirmed']);
+        self::assertEquals(-1000, $wallet->balance);
+        self::assertTrue($transaction->confirmed);
+
+        $wallet->safeResetConfirm($transaction);
+        self::assertEquals(0, $wallet->balance);
+        self::assertFalse($transaction->confirmed);
     }
 
     /**
@@ -67,11 +89,11 @@ class ConfirmTest extends TestCase
         $wallet = $buyer->wallet;
         $wallet->deposit(100);
 
-        $this->assertEquals($wallet->balance, 100);
+        self::assertEquals(100, $wallet->balance);
 
         $transaction = $wallet->withdraw(50, ['desc' => 'unconfirmed'], false);
-        $this->assertEquals($wallet->balance, 100);
-        $this->assertFalse($transaction->confirmed);
+        self::assertEquals(100, $wallet->balance);
+        self::assertFalse($transaction->confirmed);
     }
 
     /**
@@ -85,15 +107,37 @@ class ConfirmTest extends TestCase
         $buyer = factory(Buyer::class)->create();
         $wallet = $buyer->wallet;
 
-        $this->assertEquals($wallet->balance, 0);
+        self::assertEquals(0, $wallet->balance);
 
         $transaction = $wallet->forceWithdraw(1000, ['desc' => 'unconfirmed'], false);
-        $this->assertEquals($wallet->balance, 0);
-        $this->assertFalse($transaction->confirmed);
+        self::assertEquals(0, $wallet->balance);
+        self::assertFalse($transaction->confirmed);
 
         $wallet->forceConfirm($transaction);
-        $this->assertEquals($wallet->balance, $transaction->amount);
-        $this->assertTrue($transaction->confirmed);
+        self::assertEquals($transaction->amount, $wallet->balance);
+        self::assertTrue($transaction->confirmed);
+    }
+
+    /**
+     * @return void
+     */
+    public function testUnconfirmed(): void
+    {
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = factory(Buyer::class)->create();
+        $wallet = $buyer->wallet;
+
+        self::assertEquals(0, $wallet->balance);
+
+        $transaction = $wallet->forceWithdraw(1000, ['desc' => 'confirmed']);
+        self::assertEquals(-1000, $wallet->balance);
+        self::assertTrue($transaction->confirmed);
+
+        $wallet->resetConfirm($transaction);
+        self::assertEquals(0, $wallet->balance);
+        self::assertFalse($transaction->confirmed);
     }
 
     /**
@@ -110,13 +154,55 @@ class ConfirmTest extends TestCase
         $buyer = factory(Buyer::class)->create();
         $wallet = $buyer->wallet;
 
-        $this->assertEquals($wallet->balance, 0);
+        self::assertEquals(0, $wallet->balance);
 
         $transaction = $wallet->deposit(1000);
-        $this->assertEquals($wallet->balance, 1000);
-        $this->assertTrue($transaction->confirmed);
+        self::assertEquals(1000, $wallet->balance);
+        self::assertTrue($transaction->confirmed);
 
         $wallet->confirm($transaction);
+    }
+
+    /**
+     * @return void
+     */
+    public function testUnconfirmedInvalid(): void
+    {
+        $this->expectException(ConfirmedInvalid::class);
+        $this->expectExceptionMessageStrict(trans('wallet::errors.unconfirmed_invalid'));
+
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = factory(Buyer::class)->create();
+        $wallet = $buyer->wallet;
+
+        self::assertEquals(0, $wallet->balance);
+
+        $transaction = $wallet->deposit(1000, null, false);
+        self::assertEquals(0, $wallet->balance);
+        self::assertFalse($transaction->confirmed);
+
+        $wallet->resetConfirm($transaction);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSafeUnconfirmed(): void
+    {
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = factory(Buyer::class)->create();
+        $wallet = $buyer->wallet;
+
+        self::assertEquals(0, $wallet->balance);
+
+        $transaction = $wallet->deposit(1000, null, false);
+        self::assertEquals(0, $wallet->balance);
+        self::assertFalse($transaction->confirmed);
+        self::assertFalse($wallet->safeResetConfirm($transaction));
     }
 
     /**
@@ -135,11 +221,11 @@ class ConfirmTest extends TestCase
         $firstWallet = $first->wallet;
         $secondWallet = $second->wallet;
 
-        $this->assertEquals($firstWallet->balance, 0);
+        self::assertEquals(0, $firstWallet->balance);
 
         $transaction = $firstWallet->deposit(1000, ['desc' => 'unconfirmed'], false);
-        $this->assertEquals($firstWallet->balance, 0);
-        $this->assertFalse($transaction->confirmed);
+        self::assertEquals(0, $firstWallet->balance);
+        self::assertFalse($transaction->confirmed);
 
         $secondWallet->confirm($transaction);
     }
@@ -154,13 +240,13 @@ class ConfirmTest extends TestCase
          */
         $userConfirm = factory(UserConfirm::class)->create();
         $transaction = $userConfirm->deposit(100, null, false);
-        $this->assertEquals($userConfirm->wallet->id, $transaction->wallet->id);
-        $this->assertEquals($userConfirm->id, $transaction->payable_id);
-        $this->assertInstanceOf(UserConfirm::class, $transaction->payable);
-        $this->assertFalse($transaction->confirmed);
+        self::assertEquals($transaction->wallet->id, $userConfirm->wallet->id);
+        self::assertEquals($transaction->payable_id, $userConfirm->id);
+        self::assertInstanceOf(UserConfirm::class, $transaction->payable);
+        self::assertFalse($transaction->confirmed);
 
-        $this->assertTrue($userConfirm->confirm($transaction));
-        $this->assertTrue($transaction->confirmed);
+        self::assertTrue($userConfirm->confirm($transaction));
+        self::assertTrue($transaction->confirmed);
     }
 
 }

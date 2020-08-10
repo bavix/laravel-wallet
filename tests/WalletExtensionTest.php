@@ -28,12 +28,12 @@ class WalletExtensionTest extends TestCase
          * @var Buyer $buyer
          */
         $buyer = factory(Buyer::class)->create();
-        $this->assertFalse($buyer->relationLoaded('wallet'));
+        self::assertFalse($buyer->relationLoaded('wallet'));
         $transaction = $buyer->deposit(1000, ['bank_method' => 'VietComBank']);
 
-        $this->assertEquals($transaction->amount, $buyer->balance);
-        $this->assertInstanceOf(Transaction::class, $transaction);
-        $this->assertEquals('VietComBank', $transaction->bank_method);
+        self::assertEquals($transaction->amount, $buyer->balance);
+        self::assertInstanceOf(Transaction::class, $transaction);
+        self::assertEquals('VietComBank', $transaction->bank_method);
     }
 
     public function testNoCustomAttribute(): void
@@ -42,12 +42,12 @@ class WalletExtensionTest extends TestCase
          * @var Buyer $buyer
          */
         $buyer = factory(Buyer::class)->create();
-        $this->assertFalse($buyer->relationLoaded('wallet'));
+        self::assertFalse($buyer->relationLoaded('wallet'));
         $transaction = $buyer->deposit(1000);
 
-        $this->assertEquals($transaction->amount, $buyer->balance);
-        $this->assertInstanceOf(Transaction::class, $transaction);
-        $this->assertNull($transaction->bank_method);
+        self::assertEquals($transaction->amount, $buyer->balance);
+        self::assertInstanceOf(Transaction::class, $transaction);
+        self::assertNull($transaction->bank_method);
     }
 
 }

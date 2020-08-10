@@ -30,12 +30,12 @@ class MultiWalletTest extends TestCase
          * @var UserMulti $user
          */
         $user = factory(UserMulti::class)->create();
-        $this->assertNull($user->getWallet($slug));
+        self::assertNull($user->getWallet($slug));
 
         $wallet = $user->createWallet(['name' => 'Simple', 'slug' => $slug]);
-        $this->assertNotNull($wallet);
-        $this->assertNotNull($user->wallet);
-        $this->assertEquals($user->wallet->id, $wallet->id);
+        self::assertNotNull($wallet);
+        self::assertNotNull($user->wallet);
+        self::assertEquals($user->wallet->id, $wallet->id);
     }
 
     /**
@@ -47,47 +47,47 @@ class MultiWalletTest extends TestCase
          * @var UserMulti $user
          */
         $user = factory(UserMulti::class)->create();
-        $this->assertFalse($user->hasWallet('deposit'));
+        self::assertFalse($user->hasWallet('deposit'));
         $wallet = $user->createWallet([
             'name' => 'Deposit'
         ]);
 
-        $this->assertTrue($user->hasWallet('deposit'));
-        $this->assertEquals($user->balance, 0);
-        $this->assertEquals($wallet->balance, 0);
+        self::assertTrue($user->hasWallet('deposit'));
+        self::assertEquals($user->balance, 0);
+        self::assertEquals($wallet->balance, 0);
 
         $wallet->deposit(10);
-        $this->assertEquals($user->balance, 0);
-        $this->assertEquals($wallet->balance, 10);
+        self::assertEquals($user->balance, 0);
+        self::assertEquals($wallet->balance, 10);
 
         $wallet->deposit(125);
-        $this->assertEquals($user->balance, 0);
-        $this->assertEquals($wallet->balance, 135);
+        self::assertEquals($user->balance, 0);
+        self::assertEquals($wallet->balance, 135);
 
         $wallet->deposit(865);
-        $this->assertEquals($user->balance, 0);
-        $this->assertEquals($wallet->balance, 1000);
+        self::assertEquals($user->balance, 0);
+        self::assertEquals($wallet->balance, 1000);
 
-        $this->assertEquals($user->transactions()->count(), 3);
+        self::assertEquals($user->transactions()->count(), 3);
 
         $wallet->withdraw($wallet->balance);
-        $this->assertEquals($user->balance, 0);
-        $this->assertEquals($wallet->balance, 0);
+        self::assertEquals($user->balance, 0);
+        self::assertEquals($wallet->balance, 0);
 
         $transaction = $wallet->depositFloat(10.10);
-        $this->assertEquals($user->balance, 0);
-        $this->assertEquals($wallet->balance, 1010);
-        $this->assertEquals($wallet->balanceFloat, 10.10);
+        self::assertEquals($user->balance, 0);
+        self::assertEquals($wallet->balance, 1010);
+        self::assertEquals($wallet->balanceFloat, 10.10);
 
         $user->refresh();
 
         // is equal
-        $this->assertTrue($transaction->wallet->is($user->getWallet('deposit')));
-        $this->assertTrue($user->getWallet('deposit')->is($wallet));
-        $this->assertTrue($wallet->is($user->getWallet('deposit')));
+        self::assertTrue($transaction->wallet->is($user->getWallet('deposit')));
+        self::assertTrue($user->getWallet('deposit')->is($wallet));
+        self::assertTrue($wallet->is($user->getWallet('deposit')));
 
         $wallet->withdrawFloat($wallet->balanceFloat);
-        $this->assertEquals($wallet->balanceFloat, 0);
+        self::assertEquals($wallet->balanceFloat, 0);
     }
 
     /**
@@ -108,25 +108,25 @@ class MultiWalletTest extends TestCase
         // without find
         $wallet->depositFloat(100.1);
 
-        $this->assertEquals($wallet->balanceFloat, 100.1);
-        $this->assertEquals($wallet->balance, 10010);
+        self::assertEquals($wallet->balanceFloat, 100.1);
+        self::assertEquals($wallet->balance, 10010);
 
         $wallet->withdrawFloat($wallet->balanceFloat);
-        $this->assertEquals($wallet->balanceFloat, 0);
+        self::assertEquals($wallet->balanceFloat, 0);
 
         // find
         $userFind = UserMulti::query()->find($userInit->id); // refresh
-        $this->assertTrue($userInit->is($userFind));
-        $this->assertTrue($userFind->hasWallet($userInit->getKey()));
+        self::assertTrue($userInit->is($userFind));
+        self::assertTrue($userFind->hasWallet($userInit->getKey()));
 
         $wallet = $userFind->getWallet($userInit->getKey());
         $wallet->depositFloat(100.1);
 
-        $this->assertEquals($wallet->balanceFloat, 100.1);
-        $this->assertEquals($wallet->balance, 10010);
+        self::assertEquals($wallet->balanceFloat, 100.1);
+        self::assertEquals($wallet->balance, 10010);
 
         $wallet->withdrawFloat($wallet->balanceFloat);
-        $this->assertEquals($wallet->balanceFloat, 0);
+        self::assertEquals($wallet->balanceFloat, 0);
     }
 
     /**
@@ -164,19 +164,19 @@ class MultiWalletTest extends TestCase
             'name' => 'deposit'
         ]);
 
-        $this->assertEquals($wallet->balance, 0);
+        self::assertEquals($wallet->balance, 0);
 
         $wallet->deposit(100);
-        $this->assertEquals($wallet->balance, 100);
+        self::assertEquals($wallet->balance, 100);
 
         $wallet->withdraw(10);
-        $this->assertEquals($wallet->balance, 90);
+        self::assertEquals($wallet->balance, 90);
 
         $wallet->withdraw(81);
-        $this->assertEquals($wallet->balance, 9);
+        self::assertEquals($wallet->balance, 9);
 
         $wallet->withdraw(9);
-        $this->assertEquals($wallet->balance, 0);
+        self::assertEquals($wallet->balance, 0);
 
         $wallet->withdraw(1);
     }
@@ -218,52 +218,52 @@ class MultiWalletTest extends TestCase
             'name' => 'deposit'
         ]);
 
-        $this->assertNotEquals($first->id, $second->id);
-        $this->assertNotEquals($firstWallet->id, $secondWallet->id);
-        $this->assertEquals($firstWallet->balance, 0);
-        $this->assertEquals($secondWallet->balance, 0);
+        self::assertNotEquals($first->id, $second->id);
+        self::assertNotEquals($firstWallet->id, $secondWallet->id);
+        self::assertEquals($firstWallet->balance, 0);
+        self::assertEquals($secondWallet->balance, 0);
 
         $firstWallet->deposit(100);
-        $this->assertEquals($firstWallet->balance, 100);
+        self::assertEquals($firstWallet->balance, 100);
 
         $secondWallet->deposit(100);
-        $this->assertEquals($secondWallet->balance, 100);
+        self::assertEquals($secondWallet->balance, 100);
 
         $transfer = $firstWallet->transfer($secondWallet, 100);
-        $this->assertEquals($first->balance, 0);
-        $this->assertEquals($firstWallet->balance, 0);
-        $this->assertEquals($second->balance, 0);
-        $this->assertEquals($secondWallet->balance, 200);
-        $this->assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
+        self::assertEquals($first->balance, 0);
+        self::assertEquals($firstWallet->balance, 0);
+        self::assertEquals($second->balance, 0);
+        self::assertEquals($secondWallet->balance, 200);
+        self::assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
 
         $transfer = $secondWallet->transfer($firstWallet, 100);
-        $this->assertEquals($secondWallet->balance, 100);
-        $this->assertEquals($firstWallet->balance, 100);
-        $this->assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
+        self::assertEquals($secondWallet->balance, 100);
+        self::assertEquals($firstWallet->balance, 100);
+        self::assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
 
         $transfer = $secondWallet->transfer($firstWallet, 100);
-        $this->assertEquals($secondWallet->balance, 0);
-        $this->assertEquals($firstWallet->balance, 200);
-        $this->assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
+        self::assertEquals($secondWallet->balance, 0);
+        self::assertEquals($firstWallet->balance, 200);
+        self::assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
 
         $firstWallet->withdraw($firstWallet->balance);
-        $this->assertEquals($firstWallet->balance, 0);
+        self::assertEquals($firstWallet->balance, 0);
 
-        $this->assertNull($firstWallet->safeTransfer($secondWallet, 100));
-        $this->assertEquals($firstWallet->balance, 0);
-        $this->assertEquals($secondWallet->balance, 0);
+        self::assertNull($firstWallet->safeTransfer($secondWallet, 100));
+        self::assertEquals($firstWallet->balance, 0);
+        self::assertEquals($secondWallet->balance, 0);
 
         $transfer = $firstWallet->forceTransfer($secondWallet, 100);
-        $this->assertNotNull($transfer);
-        $this->assertEquals($firstWallet->balance, -100);
-        $this->assertEquals($secondWallet->balance, 100);
-        $this->assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
+        self::assertNotNull($transfer);
+        self::assertEquals($firstWallet->balance, -100);
+        self::assertEquals($secondWallet->balance, 100);
+        self::assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
 
         $transfer = $secondWallet->forceTransfer($firstWallet, 100);
-        $this->assertNotNull($transfer);
-        $this->assertEquals($firstWallet->balance, 0);
-        $this->assertEquals($secondWallet->balance, 0);
-        $this->assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
+        self::assertNotNull($transfer);
+        self::assertEquals($firstWallet->balance, 0);
+        self::assertEquals($secondWallet->balance, 0);
+        self::assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
     }
 
     /**
@@ -279,14 +279,14 @@ class MultiWalletTest extends TestCase
             'name' => 'deposit'
         ]);
 
-        $this->assertEquals($wallet->balance, 0);
+        self::assertEquals($wallet->balance, 0);
 
         $wallet->deposit(100);
         $wallet->transfer($wallet, 100);
-        $this->assertEquals($wallet->balance, 100);
+        self::assertEquals($wallet->balance, 100);
 
         $wallet->withdraw($wallet->balance);
-        $this->assertEquals($wallet->balance, 0);
+        self::assertEquals($wallet->balance, 0);
     }
 
     /**
@@ -305,7 +305,7 @@ class MultiWalletTest extends TestCase
             'name' => 'deposit'
         ]);
 
-        $this->assertEquals($wallet->balance, 0);
+        self::assertEquals($wallet->balance, 0);
         $wallet->withdraw(1);
     }
 
@@ -322,16 +322,16 @@ class MultiWalletTest extends TestCase
             'name' => 'deposit'
         ]);
 
-        $this->assertEquals($wallet->balance, 0);
+        self::assertEquals($wallet->balance, 0);
 
         $wallet->deposit(1);
-        $this->assertEquals($wallet->balance, 1);
+        self::assertEquals($wallet->balance, 1);
 
         $wallet->withdraw(1, null, false);
-        $this->assertEquals($wallet->balance, 1);
+        self::assertEquals($wallet->balance, 1);
 
         $wallet->withdraw(1);
-        $this->assertEquals($wallet->balance, 0);
+        self::assertEquals($wallet->balance, 0);
     }
 
     /**
@@ -373,19 +373,19 @@ class MultiWalletTest extends TestCase
         ]);
 
         $secondWallet = $user->getWallet('test');
-        $this->assertEquals($secondWallet->getKey(), $firstWallet->getKey());
+        self::assertEquals($secondWallet->getKey(), $firstWallet->getKey());
 
         $test2 = $user->wallets()->create([
             'name' => 'Test2'
         ]);
 
-        $this->assertEquals(
+        self::assertEquals(
             $test2->getKey(),
             $user->getWallet('test2')->getKey()
         );
 
         // check default wallet
-        $this->assertEquals(
+        self::assertEquals(
             $user->balance,
             $user->wallet->balance
         );
@@ -408,7 +408,7 @@ class MultiWalletTest extends TestCase
         $user->load('wallets'); // optimize
 
         foreach ($names as $name) {
-            $this->assertEquals($name, $user->getWallet($name)->name);
+            self::assertEquals($name, $user->getWallet($name)->name);
         }
     }
 
@@ -429,46 +429,46 @@ class MultiWalletTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $this->assertEquals($a->balance, 0);
-        $this->assertEquals($b->balance, 0);
+        self::assertEquals($a->balance, 0);
+        self::assertEquals($b->balance, 0);
 
         $a->deposit($product->getAmountProduct($a));
-        $this->assertEquals($a->balance, $product->getAmountProduct($a));
+        self::assertEquals($a->balance, $product->getAmountProduct($a));
 
         $b->deposit($product->getAmountProduct($b));
-        $this->assertEquals($b->balance, $product->getAmountProduct($b));
+        self::assertEquals($b->balance, $product->getAmountProduct($b));
 
         $transfer = $a->pay($product);
         $paidTransfer = $a->paid($product);
-        $this->assertTrue((bool)$paidTransfer);
-        $this->assertEquals($transfer->getKey(), $paidTransfer->getKey());
-        $this->assertInstanceOf(UserMulti::class, $paidTransfer->withdraw->payable);
-        $this->assertEquals($user->getKey(), $paidTransfer->withdraw->payable->getKey());
-        $this->assertEquals($transfer->from->id, $a->id);
-        $this->assertEquals($transfer->to->id, $product->id);
-        $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
-        $this->assertEquals($a->balance, 0);
-        $this->assertEquals($product->balance, $product->getAmountProduct($a));
+        self::assertTrue((bool)$paidTransfer);
+        self::assertEquals($transfer->getKey(), $paidTransfer->getKey());
+        self::assertInstanceOf(UserMulti::class, $paidTransfer->withdraw->payable);
+        self::assertEquals($user->getKey(), $paidTransfer->withdraw->payable->getKey());
+        self::assertEquals($transfer->from->id, $a->id);
+        self::assertEquals($transfer->to->id, $product->id);
+        self::assertEquals($transfer->status, Transfer::STATUS_PAID);
+        self::assertEquals($a->balance, 0);
+        self::assertEquals($product->balance, $product->getAmountProduct($a));
 
         $transfer = $b->pay($product);
         $paidTransfer = $b->paid($product);
-        $this->assertTrue((bool)$paidTransfer);
-        $this->assertEquals($transfer->getKey(), $paidTransfer->getKey());
-        $this->assertInstanceOf(UserMulti::class, $paidTransfer->withdraw->payable);
-        $this->assertEquals($user->getKey(), $paidTransfer->withdraw->payable->getKey());
-        $this->assertEquals($transfer->from->id, $b->id);
-        $this->assertEquals($transfer->to->id, $product->id);
-        $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
-        $this->assertEquals($b->balance, 0);
-        $this->assertEquals($product->balance, $product->getAmountProduct($b) * 2);
+        self::assertTrue((bool)$paidTransfer);
+        self::assertEquals($transfer->getKey(), $paidTransfer->getKey());
+        self::assertInstanceOf(UserMulti::class, $paidTransfer->withdraw->payable);
+        self::assertEquals($user->getKey(), $paidTransfer->withdraw->payable->getKey());
+        self::assertEquals($transfer->from->id, $b->id);
+        self::assertEquals($transfer->to->id, $product->id);
+        self::assertEquals($transfer->status, Transfer::STATUS_PAID);
+        self::assertEquals($b->balance, 0);
+        self::assertEquals($product->balance, $product->getAmountProduct($b) * 2);
 
-        $this->assertTrue($a->refund($product));
-        $this->assertEquals($product->balance, $product->getAmountProduct($a));
-        $this->assertEquals($a->balance, $product->getAmountProduct($a));
+        self::assertTrue($a->refund($product));
+        self::assertEquals($product->balance, $product->getAmountProduct($a));
+        self::assertEquals($a->balance, $product->getAmountProduct($a));
 
-        $this->assertTrue($b->refund($product));
-        $this->assertEquals($product->balance, 0);
-        $this->assertEquals($b->balance, $product->getAmountProduct($b));
+        self::assertTrue($b->refund($product));
+        self::assertEquals($product->balance, 0);
+        self::assertEquals($b->balance, $product->getAmountProduct($b));
     }
 
     /**
@@ -482,24 +482,24 @@ class MultiWalletTest extends TestCase
         $user = factory(UserCashier::class)->create();
         $default = $user->wallet;
 
-        $this->assertEquals($default->balance, 0);
+        self::assertEquals($default->balance, 0);
 
         $transaction = $default->deposit(100);
-        $this->assertEquals($transaction->type, Transaction::TYPE_DEPOSIT);
-        $this->assertEquals($transaction->amount, 100);
-        $this->assertEquals($default->balance, 100);
+        self::assertEquals($transaction->type, Transaction::TYPE_DEPOSIT);
+        self::assertEquals($transaction->amount, 100);
+        self::assertEquals($default->balance, 100);
 
         $newWallet = $user->createWallet(['name' => 'New Wallet']);
 
         $transfer = $default->transfer($newWallet, 100);
-        $this->assertEquals($default->balance, 0);
-        $this->assertEquals($newWallet->balance, 100);
+        self::assertEquals($default->balance, 0);
+        self::assertEquals($newWallet->balance, 100);
 
-        $this->assertEquals($transfer->withdraw->type, Transaction::TYPE_WITHDRAW);
-        $this->assertEquals($transfer->withdraw->amount, -100);
+        self::assertEquals($transfer->withdraw->type, Transaction::TYPE_WITHDRAW);
+        self::assertEquals($transfer->withdraw->amount, -100);
 
-        $this->assertEquals($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
-        $this->assertEquals($transfer->deposit->amount, 100);
+        self::assertEquals($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
+        self::assertEquals($transfer->deposit->amount, 100);
     }
 
 }

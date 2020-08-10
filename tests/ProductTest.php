@@ -26,13 +26,13 @@ class ProductTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $this->assertEquals($buyer->balance, 0);
+        self::assertEquals($buyer->balance, 0);
         $buyer->deposit($product->getAmountProduct($buyer));
 
-        $this->assertEquals($buyer->balance, $product->getAmountProduct($buyer));
+        self::assertEquals($buyer->balance, $product->getAmountProduct($buyer));
         $transfer = $buyer->pay($product);
-        $this->assertNotNull($transfer);
-        $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
+        self::assertNotNull($transfer);
+        self::assertEquals($transfer->status, Transfer::STATUS_PAID);
 
         /**
          * @var Transaction $withdraw
@@ -41,26 +41,26 @@ class ProductTest extends TestCase
         $withdraw = $transfer->withdraw;
         $deposit = $transfer->deposit;
 
-        $this->assertInstanceOf(Transaction::class, $withdraw);
-        $this->assertInstanceOf(Transaction::class, $deposit);
+        self::assertInstanceOf(Transaction::class, $withdraw);
+        self::assertInstanceOf(Transaction::class, $deposit);
 
-        $this->assertInstanceOf(Buyer::class, $withdraw->payable);
-        $this->assertInstanceOf(Item::class, $deposit->payable);
+        self::assertInstanceOf(Buyer::class, $withdraw->payable);
+        self::assertInstanceOf(Item::class, $deposit->payable);
 
-        $this->assertEquals($buyer->getKey(), $withdraw->payable->getKey());
-        $this->assertEquals($product->getKey(), $deposit->payable->getKey());
+        self::assertEquals($buyer->getKey(), $withdraw->payable->getKey());
+        self::assertEquals($product->getKey(), $deposit->payable->getKey());
 
-        $this->assertInstanceOf(Buyer::class, $transfer->from->holder);
-        $this->assertInstanceOf(Wallet::class, $transfer->from);
-        $this->assertInstanceOf(Item::class, $transfer->to);
-        $this->assertInstanceOf(Wallet::class, $transfer->to->wallet);
+        self::assertInstanceOf(Buyer::class, $transfer->from->holder);
+        self::assertInstanceOf(Wallet::class, $transfer->from);
+        self::assertInstanceOf(Item::class, $transfer->to);
+        self::assertInstanceOf(Wallet::class, $transfer->to->wallet);
 
-        $this->assertEquals($buyer->wallet->getKey(), $transfer->from->getKey());
-        $this->assertEquals($buyer->getKey(), $transfer->from->holder->getKey());
-        $this->assertEquals($product->getKey(), $transfer->to->getKey());
+        self::assertEquals($buyer->wallet->getKey(), $transfer->from->getKey());
+        self::assertEquals($buyer->getKey(), $transfer->from->holder->getKey());
+        self::assertEquals($product->getKey(), $transfer->to->getKey());
 
-        $this->assertEquals($buyer->balance, 0);
-        $this->assertNull($buyer->safePay($product));
+        self::assertEquals($buyer->balance, 0);
+        self::assertNull($buyer->safePay($product));
     }
 
     /**
@@ -77,36 +77,36 @@ class ProductTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $this->assertEquals($buyer->balance, 0);
+        self::assertEquals($buyer->balance, 0);
         $buyer->deposit($product->getAmountProduct($buyer));
 
-        $this->assertEquals($buyer->balance, $product->getAmountProduct($buyer));
+        self::assertEquals($buyer->balance, $product->getAmountProduct($buyer));
         $transfer = $buyer->pay($product);
-        $this->assertNotNull($transfer);
-        $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
+        self::assertNotNull($transfer);
+        self::assertEquals($transfer->status, Transfer::STATUS_PAID);
 
-        $this->assertTrue($buyer->refund($product));
-        $this->assertEquals($buyer->balance, $product->getAmountProduct($buyer));
-        $this->assertEquals($product->balance, 0);
+        self::assertTrue($buyer->refund($product));
+        self::assertEquals($buyer->balance, $product->getAmountProduct($buyer));
+        self::assertEquals($product->balance, 0);
 
         $transfer->refresh();
-        $this->assertEquals($transfer->status, Transfer::STATUS_REFUND);
+        self::assertEquals($transfer->status, Transfer::STATUS_REFUND);
 
-        $this->assertFalse($buyer->safeRefund($product));
-        $this->assertEquals($buyer->balance, $product->getAmountProduct($buyer));
+        self::assertFalse($buyer->safeRefund($product));
+        self::assertEquals($buyer->balance, $product->getAmountProduct($buyer));
 
         $transfer = $buyer->pay($product);
-        $this->assertNotNull($transfer);
-        $this->assertEquals($buyer->balance, 0);
-        $this->assertEquals($product->balance, $product->getAmountProduct($buyer));
-        $this->assertEquals($transfer->status, Transfer::STATUS_PAID);
+        self::assertNotNull($transfer);
+        self::assertEquals($buyer->balance, 0);
+        self::assertEquals($product->balance, $product->getAmountProduct($buyer));
+        self::assertEquals($transfer->status, Transfer::STATUS_PAID);
 
-        $this->assertTrue($buyer->refund($product));
-        $this->assertEquals($buyer->balance, $product->getAmountProduct($buyer));
-        $this->assertEquals($product->balance, 0);
+        self::assertTrue($buyer->refund($product));
+        self::assertEquals($buyer->balance, $product->getAmountProduct($buyer));
+        self::assertEquals($product->balance, 0);
 
         $transfer->refresh();
-        $this->assertEquals($transfer->status, Transfer::STATUS_REFUND);
+        self::assertEquals($transfer->status, Transfer::STATUS_REFUND);
     }
 
     /**
@@ -123,28 +123,28 @@ class ProductTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $this->assertEquals($buyer->balance, 0);
+        self::assertEquals($buyer->balance, 0);
         $buyer->deposit($product->getAmountProduct($buyer));
 
-        $this->assertEquals($buyer->balance, $product->getAmountProduct($buyer));
+        self::assertEquals($buyer->balance, $product->getAmountProduct($buyer));
 
         $buyer->pay($product);
-        $this->assertEquals($buyer->balance, 0);
-        $this->assertEquals($product->balance, $product->getAmountProduct($buyer));
+        self::assertEquals($buyer->balance, 0);
+        self::assertEquals($product->balance, $product->getAmountProduct($buyer));
 
         $product->withdraw($product->balance);
-        $this->assertEquals($product->balance, 0);
+        self::assertEquals($product->balance, 0);
 
-        $this->assertFalse($buyer->safeRefund($product));
-        $this->assertTrue($buyer->forceRefund($product));
+        self::assertFalse($buyer->safeRefund($product));
+        self::assertTrue($buyer->forceRefund($product));
 
-        $this->assertEquals($product->balance, -$product->getAmountProduct($buyer));
-        $this->assertEquals($buyer->balance, $product->getAmountProduct($buyer));
+        self::assertEquals($product->balance, -$product->getAmountProduct($buyer));
+        self::assertEquals($buyer->balance, $product->getAmountProduct($buyer));
         $product->deposit(-$product->balance);
         $buyer->withdraw($buyer->balance);
 
-        $this->assertEquals($product->balance, 0);
-        $this->assertEquals($buyer->balance, 0);
+        self::assertEquals($product->balance, 0);
+        self::assertEquals($buyer->balance, 0);
     }
 
     /**
@@ -183,13 +183,13 @@ class ProductTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $this->assertEquals($buyer->balance, 0);
+        self::assertEquals($buyer->balance, 0);
         $buyer->forcePay($product);
 
-        $this->assertEquals($buyer->balance, -$product->getAmountProduct($buyer));
+        self::assertEquals($buyer->balance, -$product->getAmountProduct($buyer));
 
         $buyer->deposit(-$buyer->balance);
-        $this->assertEquals($buyer->balance, 0);
+        self::assertEquals($buyer->balance, 0);
     }
 
     /**
@@ -206,18 +206,18 @@ class ProductTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $this->assertEquals($buyer->balance, 0);
+        self::assertEquals($buyer->balance, 0);
 
         $transfer = $buyer->payFree($product);
-        $this->assertEquals($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
-        $this->assertEquals($transfer->withdraw->type, Transaction::TYPE_WITHDRAW);
+        self::assertEquals($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
+        self::assertEquals($transfer->withdraw->type, Transaction::TYPE_WITHDRAW);
 
-        $this->assertEquals($buyer->balance, 0);
-        $this->assertEquals($product->balance, 0);
+        self::assertEquals($buyer->balance, 0);
+        self::assertEquals($product->balance, 0);
 
         $buyer->refund($product);
-        $this->assertEquals($buyer->balance, 0);
-        $this->assertEquals($product->balance, 0);
+        self::assertEquals($buyer->balance, 0);
+        self::assertEquals($product->balance, 0);
     }
 
     public function testFreePay(): void
@@ -232,18 +232,18 @@ class ProductTest extends TestCase
         ]);
 
         $buyer->forceWithdraw(1000);
-        $this->assertEquals($buyer->balance, -1000);
+        self::assertEquals($buyer->balance, -1000);
 
         $transfer = $buyer->payFree($product);
-        $this->assertEquals($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
-        $this->assertEquals($transfer->withdraw->type, Transaction::TYPE_WITHDRAW);
+        self::assertEquals($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
+        self::assertEquals($transfer->withdraw->type, Transaction::TYPE_WITHDRAW);
 
-        $this->assertEquals($buyer->balance, -1000);
-        $this->assertEquals($product->balance, 0);
+        self::assertEquals($buyer->balance, -1000);
+        self::assertEquals($product->balance, 0);
 
         $buyer->refund($product);
-        $this->assertEquals($buyer->balance, -1000);
-        $this->assertEquals($product->balance, 0);
+        self::assertEquals($buyer->balance, -1000);
+        self::assertEquals($product->balance, 0);
     }
 
     /**
@@ -263,7 +263,7 @@ class ProductTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $this->assertNotNull($buyer->payFree($product));
+        self::assertNotNull($buyer->payFree($product));
         $buyer->payFree($product);
     }
 

@@ -16,38 +16,41 @@ class WalletTest extends TestCase
      */
     public function testDeposit(): void
     {
+        /**
+         * @var User $user
+         */
         $user = factory(User::class)->create();
-        $this->assertEquals($user->balance, 0);
+        self::assertEquals(0, $user->balance);
 
         $user->deposit(10);
-        $this->assertEquals($user->balance, 10);
+        self::assertEquals(10, $user->balance);
 
         $user->deposit(10);
-        $this->assertEquals($user->balance, 20);
+        self::assertEquals(20, $user->balance);
 
         $user->deposit(980);
-        $this->assertEquals($user->balance, 1000);
+        self::assertEquals(1000, $user->balance);
 
-        $this->assertEquals($user->transactions()->count(), 3);
+        self::assertEquals(3, $user->transactions()->count());
 
         $user->withdraw($user->balance);
-        $this->assertEquals($user->balance, 0);
+        self::assertEquals(0, $user->balance);
 
-        $this->assertEquals(
+        self::assertEquals(
+            3,
             $user->transactions()
                 ->where(['type' => Transaction::TYPE_DEPOSIT])
-                ->count(),
-            3
+                ->count()
         );
 
-        $this->assertEquals(
+        self::assertEquals(
+            1,
             $user->transactions()
                 ->where(['type' => Transaction::TYPE_WITHDRAW])
-                ->count(),
-            1
+                ->count()
         );
 
-        $this->assertEquals($user->transactions()->count(), 4);
+        self::assertEquals(4, $user->transactions()->count());
     }
 
     /**
@@ -73,20 +76,23 @@ class WalletTest extends TestCase
         $this->expectException(BalanceIsEmpty::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
+        /**
+         * @var User $user
+         */
         $user = factory(User::class)->create();
-        $this->assertEquals($user->balance, 0);
+        self::assertEquals(0, $user->balance);
 
         $user->deposit(100);
-        $this->assertEquals($user->balance, 100);
+        self::assertEquals(100, $user->balance);
 
         $user->withdraw(10);
-        $this->assertEquals($user->balance, 90);
+        self::assertEquals(90, $user->balance);
 
         $user->withdraw(81);
-        $this->assertEquals($user->balance, 9);
+        self::assertEquals(9, $user->balance);
 
         $user->withdraw(9);
-        $this->assertEquals($user->balance, 0);
+        self::assertEquals(0, $user->balance);
 
         $user->withdraw(1);
     }
@@ -98,6 +104,10 @@ class WalletTest extends TestCase
     {
         $this->expectException(BalanceIsEmpty::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
+
+        /**
+         * @var User $user
+         */
         $user = factory(User::class)->create();
         $user->withdraw(-1);
     }
@@ -109,6 +119,10 @@ class WalletTest extends TestCase
     {
         $this->expectException(InsufficientFunds::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.insufficient_funds'));
+
+        /**
+         * @var User $user
+         */
         $user = factory(User::class)->create();
         $user->deposit(1);
         $user->withdraw(2);
@@ -124,42 +138,42 @@ class WalletTest extends TestCase
          * @var User $second
          */
         list($first, $second) = factory(User::class, 2)->create();
-        $this->assertNotEquals($first->id, $second->id);
-        $this->assertEquals($first->balance, 0);
-        $this->assertEquals($second->balance, 0);
+        self::assertNotEquals($first->id, $second->id);
+        self::assertEquals(0, $first->balance);
+        self::assertEquals(0, $second->balance);
 
         $first->deposit(100);
-        $this->assertEquals($first->balance, 100);
+        self::assertEquals(100, $first->balance);
 
         $second->deposit(100);
-        $this->assertEquals($second->balance, 100);
+        self::assertEquals(100, $second->balance);
 
         $first->transfer($second, 100);
-        $this->assertEquals($first->balance, 0);
-        $this->assertEquals($second->balance, 200);
+        self::assertEquals(0, $first->balance);
+        self::assertEquals(200, $second->balance);
 
         $second->transfer($first, 100);
-        $this->assertEquals($second->balance, 100);
-        $this->assertEquals($first->balance, 100);
+        self::assertEquals(100, $second->balance);
+        self::assertEquals(100, $first->balance);
 
         $second->transfer($first, 100);
-        $this->assertEquals($second->balance, 0);
-        $this->assertEquals($first->balance, 200);
+        self::assertEquals(0, $second->balance);
+        self::assertEquals(200, $first->balance);
 
         $first->withdraw($first->balance);
-        $this->assertEquals($first->balance, 0);
+        self::assertEquals(0, $first->balance);
 
-        $this->assertNull($first->safeTransfer($second, 100));
-        $this->assertEquals($first->balance, 0);
-        $this->assertEquals($second->balance, 0);
+        self::assertNull($first->safeTransfer($second, 100));
+        self::assertEquals(0, $first->balance);
+        self::assertEquals(0, $second->balance);
 
-        $this->assertNotNull($first->forceTransfer($second, 100));
-        $this->assertEquals($first->balance, -100);
-        $this->assertEquals($second->balance, 100);
+        self::assertNotNull($first->forceTransfer($second, 100));
+        self::assertEquals(-100, $first->balance);
+        self::assertEquals(100, $second->balance);
 
-        $this->assertNotNull($second->forceTransfer($first, 100));
-        $this->assertEquals($first->balance, 0);
-        $this->assertEquals($second->balance, 0);
+        self::assertNotNull($second->forceTransfer($first, 100));
+        self::assertEquals(0, $first->balance);
+        self::assertEquals(0, $second->balance);
     }
 
     /**
@@ -171,14 +185,14 @@ class WalletTest extends TestCase
          * @var User $user
          */
         $user = factory(User::class)->create();
-        $this->assertEquals($user->balance, 0);
+        self::assertEquals(0, $user->balance);
 
         $user->deposit(100);
         $user->transfer($user, 100);
-        $this->assertEquals($user->balance, 100);
+        self::assertEquals(100, $user->balance);
 
         $user->withdraw($user->balance);
-        $this->assertEquals($user->balance, 0);
+        self::assertEquals(0, $user->balance);
     }
 
     /**
@@ -193,7 +207,7 @@ class WalletTest extends TestCase
          * @var User $user
          */
         $user = factory(User::class)->create();
-        $this->assertEquals($user->balance, 0);
+        self::assertEquals(0, $user->balance);
         $user->withdraw(1);
     }
 
@@ -206,16 +220,16 @@ class WalletTest extends TestCase
          * @var User $user
          */
         $user = factory(User::class)->create();
-        $this->assertEquals($user->balance, 0);
+        self::assertEquals(0, $user->balance);
 
         $user->deposit(1);
-        $this->assertEquals($user->balance, 1);
+        self::assertEquals(1, $user->balance);
 
         $user->withdraw(1, null, false);
-        $this->assertEquals($user->balance, 1);
+        self::assertEquals(1, $user->balance);
 
         $user->withdraw(1);
-        $this->assertEquals($user->balance, 0);
+        self::assertEquals(0, $user->balance);
     }
 
     /**
@@ -227,19 +241,19 @@ class WalletTest extends TestCase
          * @var User $user
          */
         $user = factory(User::class)->create();
-        $this->assertEquals($user->balance, 0);
+        self::assertEquals(0, $user->balance);
 
         $user->deposit(100, null, false);
-        $this->assertEquals($user->balance, 0);
+        self::assertEquals(0, $user->balance);
 
         $user->transactions()->update(['confirmed' => true]);
-        $this->assertEquals($user->balance, 0);
+        self::assertEquals(0, $user->balance);
 
         $user->wallet->refreshBalance();
-        $this->assertEquals($user->balance, 100);
+        self::assertEquals(100, $user->balance);
 
         $user->withdraw($user->balance);
-        $this->assertEquals($user->balance, 0);
+        self::assertEquals(0, $user->balance);
     }
 
 }

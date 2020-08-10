@@ -4,6 +4,7 @@ namespace Bavix\Wallet\Traits;
 
 use Bavix\Wallet\Exceptions\ConfirmedInvalid;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
+use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
@@ -23,9 +24,7 @@ trait CanConfirm
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
             $self = $this;
             return app(DbService::class)->transaction(static function () use ($self, $transaction) {
-                $wallet = app(WalletService::class)
-                    ->getWallet($self);
-
+                $wallet = app(WalletService::class)->getWallet($self);
                 if (!$wallet->refreshBalance()) {
                     return false;
                 }
@@ -33,7 +32,7 @@ trait CanConfirm
                 if ($transaction->type === Transaction::TYPE_WITHDRAW) {
                     app(CommonService::class)->verifyWithdraw(
                         $wallet,
-                        \abs($transaction->amount)
+                        app(Mathable::class)->abs($transaction->amount)
                     );
                 }
 
@@ -50,6 +49,48 @@ trait CanConfirm
     {
         try {
             return $this->confirm($transaction);
+        } catch (\Throwable $throwable) {
+            return false;
+        }
+    }
+
+    /**
+     * Removal of confirmation (forced), use at your own peril and risk.
+     *
+     * @param Transaction $transaction
+     * @return bool
+     */
+    public function resetConfirm(Transaction $transaction): bool
+    {
+        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
+            $self = $this;
+            return app(DbService::class)->transaction(static function () use ($self, $transaction) {
+                $wallet = app(WalletService::class)->getWallet($self);
+                if (!$wallet->refreshBalance()) {
+                    return false;
+                }
+
+                if (!$transaction->confirmed) {
+                    throw new ConfirmedInvalid(trans('wallet::errors.unconfirmed_invalid'));
+                }
+
+                return $transaction->update(['confirmed' => false]) &&
+
+                    // update balance
+                    app(CommonService::class)
+                        ->addBalance($wallet, -$transaction->amount);
+            });
+        });
+    }
+
+    /**
+     * @param Transaction $transaction
+     * @return bool
+     */
+    public function safeResetConfirm(Transaction $transaction): bool
+    {
+        try {
+            return $this->resetConfirm($transaction);
         } catch (\Throwable $throwable) {
             return false;
         }
@@ -74,7 +115,7 @@ trait CanConfirm
                     throw new ConfirmedInvalid(trans('wallet::errors.confirmed_invalid'));
                 }
 
-                if ($wallet->id !== $transaction->wallet_id) {
+                if ($wallet->getKey() !== $transaction->wallet_id) {
                     throw new WalletOwnerInvalid(trans('wallet::errors.owner_invalid'));
                 }
 

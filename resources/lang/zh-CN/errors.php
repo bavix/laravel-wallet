@@ -6,5 +6,6 @@ return [
     'wallet_empty' => '钱包为空',
     'insufficient_funds' => '余额不足',
     'confirmed_invalid' => '翻译已经确认',
+    'unconfirmed_invalid' => '確認已被重置',
     'owner_invalid' => '你不是钱包的主人',
 ];

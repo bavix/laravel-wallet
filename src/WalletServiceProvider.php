@@ -48,10 +48,12 @@ class WalletServiceProvider extends ServiceProvider
 
         $this->commands([RefreshBalance::class]);
 
-        $this->loadMigrationsFrom([
-            __DIR__ . '/../database/migrations_v1',
-            __DIR__ . '/../database/migrations_v2',
-        ]);
+        if ($this->shouldMigrate()) {
+            $this->loadMigrationsFrom([
+                __DIR__ . '/../database/migrations_v1',
+                __DIR__ . '/../database/migrations_v2',
+            ]);
+        }
 
         if (function_exists('config_path')) {
             $this->publishes([
@@ -107,4 +109,13 @@ class WalletServiceProvider extends ServiceProvider
         $this->app->bind(Operation::class, config('wallet.objects.operation', Operation::class));
     }
 
+    /**
+     * Determine if we should register the migrations.
+     *
+     * @return bool
+     */
+    protected function shouldMigrate(): bool
+    {
+        return WalletConfigure::$runsMigrations;
+    }
 }
