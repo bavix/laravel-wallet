@@ -74,10 +74,6 @@ trait CanConfirm
                     throw new ConfirmedInvalid(trans('wallet::errors.unconfirmed_invalid'));
                 }
 
-                if ($wallet->getKey() !== $transaction->wallet_id) {
-                    throw new WalletOwnerInvalid(trans('wallet::errors.owner_invalid'));
-                }
-
                 return $transaction->update(['confirmed' => false]) &&
 
                     // update balance
