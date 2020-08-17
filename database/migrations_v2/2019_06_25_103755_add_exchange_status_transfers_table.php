@@ -31,7 +31,7 @@ class AddExchangeStatusTransfersTable extends Migration
         ];
 
         if (DB::connection() instanceof MySqlConnection) {
-            $table = $this->table();
+            $table = DB::getTablePrefix() . $this->table();
             $enumString = implode('\', \'', $enums);
             $default = Transfer::STATUS_TRANSFER;
             DB::statement("ALTER TABLE $table CHANGE COLUMN status status ENUM('$enumString') NOT NULL DEFAULT '$default'");
@@ -40,8 +40,8 @@ class AddExchangeStatusTransfersTable extends Migration
         }
 
         if (DB::connection() instanceof PostgresConnection) {
-            $this->alterEnum($this->table(), 'status', $enums);
-            $this->alterEnum($this->table(), 'status_last', $enums);
+            $this->alterEnum(DB::getTablePrefix() . $this->table(), 'status', $enums);
+            $this->alterEnum(DB::getTablePrefix() . $this->table(), 'status_last', $enums);
             return;
         }
     }
@@ -59,7 +59,7 @@ class AddExchangeStatusTransfersTable extends Migration
         ];
 
         if (DB::connection() instanceof MySqlConnection) {
-            $table = $this->table();
+            $table = DB::getTablePrefix() . $this->table();
             $enumString = implode('\', \'', $enums);
             $default = Transfer::STATUS_TRANSFER;
             DB::statement("ALTER TABLE $table CHANGE COLUMN status status ENUM('$enumString') NOT NULL DEFAULT '$default'");
@@ -68,8 +68,8 @@ class AddExchangeStatusTransfersTable extends Migration
         }
 
         if (DB::connection() instanceof PostgresConnection) {
-            $this->alterEnum($this->table(), 'status', $enums);
-            $this->alterEnum($this->table(), 'status_last', $enums);
+            $this->alterEnum(DB::getTablePrefix() . $this->table(), 'status', $enums);
+            $this->alterEnum(DB::getTablePrefix() . $this->table(), 'status_last', $enums);
             return;
         }
     }
