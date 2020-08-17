@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [5.3.1] - 2020-08-10
+## [5.3.1] - 2020-08-18
 ### Fixed
 - Fixed migration issue with db table prefix #195 @reedknight @cispl-shaswatad
 
