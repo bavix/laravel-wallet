@@ -101,7 +101,7 @@ class TestCase extends OrchestraTestCase
             'sqlite' => [
                 'driver' => 'sqlite',
                 'database' => ':memory:',
-                'prefix' => '',
+                'prefix' => 'tests',
             ],
             'pgsql' => [
                 'driver' => 'pgsql',
@@ -111,7 +111,7 @@ class TestCase extends OrchestraTestCase
                 'username' => 'postgres',
                 'password' => 'postgres',
                 'charset' => 'utf8',
-                'prefix' => '',
+                'prefix' => 'tests',
                 'schema' => 'public',
                 'sslmode' => 'prefer',
             ],
