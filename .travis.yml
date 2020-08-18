@@ -23,7 +23,7 @@ before_script:
 
 script:
   - ./vendor/bin/phpunit --coverage-xml=build/coverage-xml --log-junit=build/junit.xml
-  - ./vendor/bin/infection --coverage=build --min-msi=60 -j$(nproc)
+  - if [ $(phpenv version-name) = "7.4" ]; then ./vendor/bin/infection --coverage=build --min-msi=60 -j$(nproc); fi
 
 after_success:
   - if [ $(phpenv version-name) = "7.4" ]; then ./cc-test-reporter after-build --coverage-input-type clover --exit-code $TRAVIS_TEST_RESULT; fi
