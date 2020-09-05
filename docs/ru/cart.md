@@ -79,7 +79,7 @@ $products = Item::query()
     ->whereIn('slug', ['potato', 'carrot'])
     ->get();
 
-$cart = Cart::make();
+$cart = app(Cart::class);
 foreach ($products as $product) {
     // add product's
     $cart->addItem($product, $list[$product->slug]);
