@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.3.2] - 2020-08-31
+### Added
+- Add support laravel ~8.0
+- Dependency Allowed `illuminate/database` ^8.0 
+- Dependency Allowed `doctrine/dbal` ^3.0
+- Dependency Allowed `infection/infection` 0.17.*
+- Added new unit tests
+
 ## [5.3.1] - 2020-08-18
 ### Fixed
 - Fixed migration issue with db table prefix #195 @reedknight @cispl-shaswatad
@@ -517,7 +525,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/5.3.1...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/5.3.2...develop
+[5.3.2]: https://github.com/bavix/laravel-wallet/compare/5.3.1...5.3.2
 [5.3.1]: https://github.com/bavix/laravel-wallet/compare/5.3.0...5.3.1
 [5.3.0]: https://github.com/bavix/laravel-wallet/compare/5.2.1...5.3.0
 [5.2.1]: https://github.com/bavix/laravel-wallet/compare/5.2.0...5.2.1
