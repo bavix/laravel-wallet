@@ -84,38 +84,8 @@ class TestCase extends OrchestraTestCase
             $app['config']->set('wallet.lock.cache', 'memcached');
         }
 
-        $app['config']->set('cache.stores.memcached', [
-            'driver' => 'memcached',
-            'servers' => [
-                [
-                    'host' => '127.0.0.1',
-                    'port' => 11211,
-                    'weight' => 100,
-                ],
-            ],
-        ]);
-
-        // database
-        $app['config']->set('database.default', 'sqlite');
-        $app['config']->set('database.connections', [
-            'sqlite' => [
-                'driver' => 'sqlite',
-                'database' => ':memory:',
-                'prefix' => 'tests',
-            ],
-            'pgsql' => [
-                'driver' => 'pgsql',
-                'host' => '172.17.0.2',
-                'port' => '5432',
-                'database' => 'wallet',
-                'username' => 'postgres',
-                'password' => 'postgres',
-                'charset' => 'utf8',
-                'prefix' => 'tests',
-                'schema' => 'public',
-                'sslmode' => 'prefer',
-            ],
-        ]);
+        $app['config']->set('database.connections.testing.prefix', 'tests');
+        $app['config']->set('database.connections.mysql.prefix', 'tests');
     }
 
     /**
