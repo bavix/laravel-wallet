@@ -9,7 +9,6 @@ use Bavix\Wallet\Test\Models\UserMulti;
 
 class MultiWalletGiftTest extends TestCase
 {
-
     /**
      * @return void
      */
@@ -56,13 +55,12 @@ class MultiWalletGiftTest extends TestCase
         self::assertEquals($second->id, $transfer->from->holder_id);
         self::assertInstanceOf(UserMulti::class, $transfer->from->holder);
 
-        self::assertFalse((bool)$wallet->paid($item));
-        self::assertFalse((bool)$first->wallet->paid($item));
-        self::assertFalse((bool)$second->wallet->paid($item));
+        self::assertFalse((bool) $wallet->paid($item));
+        self::assertFalse((bool) $first->wallet->paid($item));
+        self::assertFalse((bool) $second->wallet->paid($item));
 
-        self::assertFalse((bool)$wallet->paid($item, true));
-        self::assertFalse((bool)$first->wallet->paid($item, true));
-        self::assertTrue((bool)$second->wallet->paid($item, true));
+        self::assertFalse((bool) $wallet->paid($item, true));
+        self::assertFalse((bool) $first->wallet->paid($item, true));
+        self::assertTrue((bool) $second->wallet->paid($item, true));
     }
-
 }

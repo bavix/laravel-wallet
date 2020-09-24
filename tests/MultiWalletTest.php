@@ -10,15 +10,13 @@ use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Test\Models\Item;
 use Bavix\Wallet\Test\Models\UserCashier;
 use Bavix\Wallet\Test\Models\UserMulti;
-use Doctrine\DBAL\Driver\PDOException;
+use function compact;
 use Illuminate\Database\PostgresConnection;
 use Illuminate\Database\QueryException;
-use function compact;
 use function range;
 
 class MultiWalletTest extends TestCase
 {
-
     /**
      * @return void
      */
@@ -49,7 +47,7 @@ class MultiWalletTest extends TestCase
         $user = factory(UserMulti::class)->create();
         self::assertFalse($user->hasWallet('deposit'));
         $wallet = $user->createWallet([
-            'name' => 'Deposit'
+            'name' => 'Deposit',
         ]);
 
         self::assertTrue($user->hasWallet('deposit'));
@@ -102,7 +100,7 @@ class MultiWalletTest extends TestCase
         $userInit = factory(UserMulti::class)->create();
         $wallet = $userInit->createWallet([
             'name' => 'my-simple-wallet',
-            'slug' => $userInit->getKey()
+            'slug' => $userInit->getKey(),
         ]);
 
         // without find
@@ -142,7 +140,7 @@ class MultiWalletTest extends TestCase
          */
         $user = factory(UserMulti::class)->create();
         $wallet = $user->createWallet([
-            'name' => 'deposit'
+            'name' => 'deposit',
         ]);
 
         $wallet->deposit(-1);
@@ -161,7 +159,7 @@ class MultiWalletTest extends TestCase
          */
         $user = factory(UserMulti::class)->create();
         $wallet = $user->createWallet([
-            'name' => 'deposit'
+            'name' => 'deposit',
         ]);
 
         self::assertEquals($wallet->balance, 0);
@@ -194,7 +192,7 @@ class MultiWalletTest extends TestCase
          */
         $user = factory(UserMulti::class)->create();
         $wallet = $user->createWallet([
-            'name' => 'deposit'
+            'name' => 'deposit',
         ]);
 
         $wallet->withdraw(-1);
@@ -209,13 +207,13 @@ class MultiWalletTest extends TestCase
          * @var UserMulti $first
          * @var UserMulti $second
          */
-        list($first, $second) = factory(UserMulti::class, 2)->create();
+        [$first, $second] = factory(UserMulti::class, 2)->create();
         $firstWallet = $first->createWallet([
-            'name' => 'deposit'
+            'name' => 'deposit',
         ]);
 
         $secondWallet = $second->createWallet([
-            'name' => 'deposit'
+            'name' => 'deposit',
         ]);
 
         self::assertNotEquals($first->id, $second->id);
@@ -276,7 +274,7 @@ class MultiWalletTest extends TestCase
          */
         $user = factory(UserMulti::class)->create();
         $wallet = $user->createWallet([
-            'name' => 'deposit'
+            'name' => 'deposit',
         ]);
 
         self::assertEquals($wallet->balance, 0);
@@ -302,7 +300,7 @@ class MultiWalletTest extends TestCase
          */
         $user = factory(UserMulti::class)->create();
         $wallet = $user->createWallet([
-            'name' => 'deposit'
+            'name' => 'deposit',
         ]);
 
         self::assertEquals($wallet->balance, 0);
@@ -319,7 +317,7 @@ class MultiWalletTest extends TestCase
          */
         $user = factory(UserMulti::class)->create();
         $wallet = $user->createWallet([
-            'name' => 'deposit'
+            'name' => 'deposit',
         ]);
 
         self::assertEquals($wallet->balance, 0);
@@ -339,7 +337,7 @@ class MultiWalletTest extends TestCase
      */
     public function testWalletUnique(): void
     {
-        if (!(app(DbService::class)->connection() instanceof PostgresConnection)) {
+        if (! (app(DbService::class)->connection() instanceof PostgresConnection)) {
             $this->expectException(QueryException::class);
 
             /**
@@ -348,11 +346,11 @@ class MultiWalletTest extends TestCase
             $user = factory(UserMulti::class)->create();
 
             $user->createWallet([
-                'name' => 'deposit'
+                'name' => 'deposit',
             ]);
 
             $user->createWallet([
-                'name' => 'deposit'
+                'name' => 'deposit',
             ]);
         }
     }
@@ -376,7 +374,7 @@ class MultiWalletTest extends TestCase
         self::assertEquals($secondWallet->getKey(), $firstWallet->getKey());
 
         $test2 = $user->wallets()->create([
-            'name' => 'Test2'
+            'name' => 'Test2',
         ]);
 
         self::assertEquals(
@@ -440,7 +438,7 @@ class MultiWalletTest extends TestCase
 
         $transfer = $a->pay($product);
         $paidTransfer = $a->paid($product);
-        self::assertTrue((bool)$paidTransfer);
+        self::assertTrue((bool) $paidTransfer);
         self::assertEquals($transfer->getKey(), $paidTransfer->getKey());
         self::assertInstanceOf(UserMulti::class, $paidTransfer->withdraw->payable);
         self::assertEquals($user->getKey(), $paidTransfer->withdraw->payable->getKey());
@@ -452,7 +450,7 @@ class MultiWalletTest extends TestCase
 
         $transfer = $b->pay($product);
         $paidTransfer = $b->paid($product);
-        self::assertTrue((bool)$paidTransfer);
+        self::assertTrue((bool) $paidTransfer);
         self::assertEquals($transfer->getKey(), $paidTransfer->getKey());
         self::assertInstanceOf(UserMulti::class, $paidTransfer->withdraw->payable);
         self::assertEquals($user->getKey(), $paidTransfer->withdraw->payable->getKey());
@@ -501,5 +499,4 @@ class MultiWalletTest extends TestCase
         self::assertEquals($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
         self::assertEquals($transfer->deposit->amount, 100);
     }
-
 }

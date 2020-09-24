@@ -2,23 +2,21 @@
 
 namespace Bavix\Wallet\Traits;
 
+use function array_key_exists;
 use Bavix\Wallet\Models\Wallet as WalletModel;
+use function config;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
-use function array_key_exists;
-use function config;
 
 /**
  * Trait HasWallets
  * To use a trait, you must add HasWallet trait.
  *
- * @package Bavix\Wallet\Traits
  *
  * @property-read Collection|WalletModel[] $wallets
  */
 trait HasWallets
 {
-
     /**
      * The variable is used for the cache, so as not to request wallets many times.
      * WalletProxy keeps the money wallets in the memory to avoid errors when you
@@ -34,7 +32,7 @@ trait HasWallets
     private $_loadedWallets;
 
     /**
-     * Get wallet by slug
+     * Get wallet by slug.
      *
      *  $user->wallet->balance // 200
      *  or short recording $user->balance; // 200
@@ -50,7 +48,7 @@ trait HasWallets
      */
     public function getWallet(string $slug): ?WalletModel
     {
-        if (!$this->_loadedWallets && $this->relationLoaded('wallets')) {
+        if (! $this->_loadedWallets && $this->relationLoaded('wallets')) {
             $this->_loadedWallets = true;
             $wallets = $this->getRelation('wallets');
             foreach ($wallets as $wallet) {
@@ -58,7 +56,7 @@ trait HasWallets
             }
         }
 
-        if (!array_key_exists($slug, $this->_wallets)) {
+        if (! array_key_exists($slug, $this->_wallets)) {
             $this->_wallets[$slug] = $this->wallets()
                 ->where('slug', $slug)
                 ->first();
@@ -68,7 +66,7 @@ trait HasWallets
     }
 
     /**
-     * method of obtaining all wallets
+     * method of obtaining all wallets.
      *
      * @return MorphMany
      */
@@ -90,7 +88,7 @@ trait HasWallets
         $this->_wallets[$wallet->slug] = $wallet;
 
         /**
-         * Create a default wallet
+         * Create a default wallet.
          * @var $walletModel WalletModel
          */
         $walletModel = $this->wallet;
@@ -100,14 +98,13 @@ trait HasWallets
     }
 
     /**
-     * The method checks the existence of the wallet
+     * The method checks the existence of the wallet.
      *
      * @param string $slug
      * @return bool
      */
     public function hasWallet(string $slug): bool
     {
-        return (bool)$this->getWallet($slug);
+        return (bool) $this->getWallet($slug);
     }
-
 }

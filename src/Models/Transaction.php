@@ -6,14 +6,13 @@ use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\WalletService;
+use function config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use function config;
 
 /**
- * Class Transaction
- * @package Bavix\Wallet\Models
+ * Class Transaction.
  *
  * @property string $payable_type
  * @property int $payable_id
@@ -28,7 +27,6 @@ use function config;
  */
 class Transaction extends Model
 {
-
     public const TYPE_DEPOSIT = 'deposit';
     public const TYPE_WITHDRAW = 'withdraw';
 
@@ -52,11 +50,11 @@ class Transaction extends Model
     protected $casts = [
         'wallet_id' => 'int',
         'confirmed' => 'bool',
-        'meta' => 'json'
+        'meta' => 'json',
     ];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getCasts(): array
     {
@@ -73,7 +71,7 @@ class Transaction extends Model
      */
     public function getTable(): string
     {
-        if (!$this->table) {
+        if (! $this->table) {
             $this->table = config('wallet.transaction.table', 'transactions');
         }
 
@@ -120,5 +118,4 @@ class Transaction extends Model
 
         $this->amount = $math->round($math->mul($amount, $decimalPlaces));
     }
-
 }

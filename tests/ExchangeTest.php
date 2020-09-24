@@ -7,7 +7,6 @@ use Bavix\Wallet\Test\Models\UserMulti;
 
 class ExchangeTest extends TestCase
 {
-
     /**
      * @return void
      */
@@ -73,5 +72,4 @@ class ExchangeTest extends TestCase
         $transfer = $rub->safeExchange($usd, 10000);
         self::assertNull($transfer);
     }
-
 }

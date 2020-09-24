@@ -10,7 +10,6 @@ use Ramsey\Uuid\Uuid;
 
 class Bring
 {
-
     /**
      * @var string
      */
@@ -75,6 +74,7 @@ class Bring
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
         return $this;
     }
 
@@ -85,6 +85,7 @@ class Bring
     public function setDiscount(int $discount): self
     {
         $this->discount = app(Mathable::class)->round($discount);
+
         return $this;
     }
 
@@ -103,6 +104,7 @@ class Bring
     public function setFrom(Wallet $from): self
     {
         $this->from = $from;
+
         return $this;
     }
 
@@ -121,6 +123,7 @@ class Bring
     public function setTo(Wallet $to): self
     {
         $this->to = $to;
+
         return $this;
     }
 
@@ -139,6 +142,7 @@ class Bring
     public function setDeposit(Transaction $deposit): self
     {
         $this->deposit = $deposit;
+
         return $this;
     }
 
@@ -157,6 +161,7 @@ class Bring
     public function setWithdraw(Transaction $withdraw): self
     {
         $this->withdraw = $withdraw;
+
         return $this;
     }
 
@@ -201,6 +206,7 @@ class Bring
     public function setFee($fee): self
     {
         $this->fee = app(Mathable::class)->round($fee);
+
         return $this;
     }
 
@@ -233,5 +239,4 @@ class Bring
             'uuid' => $this->getUuid(),
         ];
     }
-
 }

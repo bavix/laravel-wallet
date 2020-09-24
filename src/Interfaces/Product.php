@@ -4,7 +4,6 @@ namespace Bavix\Wallet\Interfaces;
 
 interface Product extends Wallet
 {
-
     /**
      * @param Customer $customer
      * @param int $quantity

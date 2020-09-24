@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Schema;
 
 class AddStatusTransfersTable extends Migration
 {
-
     /**
      * @return string
      */
@@ -53,11 +52,10 @@ class AddStatusTransfersTable extends Migration
     {
         DB::table($this->table())
             ->where('status', Transfer::STATUS_REFUND)
-            ->update(['refund' => true,]);
+            ->update(['refund' => true]);
 
         Schema::table($this->table(), function (Blueprint $table) {
             $table->dropColumn(['status', 'status_last']);
         });
     }
-
 }

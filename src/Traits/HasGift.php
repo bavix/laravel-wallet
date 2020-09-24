@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Traits;
 
+use function app;
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Interfaces\Wallet;
@@ -12,17 +13,12 @@ use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\WalletService;
 use Throwable;
-use function app;
 
 /**
- * Trait HasGift
- * @package Bavix\Wallet\Traits
- *
- * This trait should be used with the trait HasWallet.
+ * Trait HasGift.
  */
 trait HasGift
 {
-
     /**
      * Give the goods safely.
      *
@@ -54,7 +50,7 @@ trait HasGift
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($to, $product, $force) {
             /**
-             * Who's giving? Let's call him Santa Claus
+             * Who's giving? Let's call him Santa Claus.
              * @var Wallet $santa
              */
             $santa = $this;
@@ -75,9 +71,9 @@ trait HasGift
                 $commonService = app(CommonService::class);
 
                 /**
-                 * Santa pays taxes
+                 * Santa pays taxes.
                  */
-                if (!$force) {
+                if (! $force) {
                     $commonService->verifyWithdraw($santa, $math->add($amount, $fee));
                 }
 
@@ -94,7 +90,7 @@ trait HasGift
                         ->setDeposit($deposit)
                         ->setWithdraw($withdraw)
                         ->setFrom($from)
-                        ->setTo($product)
+                        ->setTo($product),
                 ]);
 
                 return current($transfers);
@@ -103,7 +99,7 @@ trait HasGift
     }
 
     /**
-     * to give force)
+     * to give force).
      *
      * @param Wallet $to
      * @param Product $product
@@ -113,5 +109,4 @@ trait HasGift
     {
         return $this->gift($to, $product, true);
     }
-
 }

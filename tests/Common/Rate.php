@@ -9,7 +9,6 @@ use Illuminate\Support\Arr;
 
 class Rate extends \Bavix\Wallet\Simple\Rate
 {
-
     /**
      * @var array
      */
@@ -53,7 +52,7 @@ class Rate extends \Bavix\Wallet\Simple\Rate
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function convertTo(Wallet $wallet)
     {
@@ -62,5 +61,4 @@ class Rate extends \Bavix\Wallet\Simple\Rate
             $this->rate($wallet)
         );
     }
-
 }

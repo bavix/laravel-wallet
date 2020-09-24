@@ -6,12 +6,10 @@ use Bavix\Wallet\Interfaces\Rateable;
 use Bavix\Wallet\Interfaces\Wallet;
 
 /**
- * Class Rate
- * @package Bavix\Wallet\Simple
+ * Class Rate.
  */
 class Rate implements Rateable
 {
-
     /**
      * @var int
      */
@@ -23,29 +21,30 @@ class Rate implements Rateable
     protected $withCurrency;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function withAmount($amount): Rateable
     {
         $this->amount = $amount;
+
         return $this;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function withCurrency(Wallet $wallet): Rateable
     {
         $this->withCurrency = $wallet;
+
         return $this;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function convertTo(Wallet $wallet)
     {
         return $this->amount;
     }
-
 }

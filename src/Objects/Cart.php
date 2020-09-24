@@ -2,18 +2,17 @@
 
 namespace Bavix\Wallet\Objects;
 
+use function array_unique;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Models\Transfer;
-use Countable;
-use function array_unique;
 use function count;
+use Countable;
 use function get_class;
 
 class Cart implements Countable
 {
-
     /**
      * @var Product[]
      */
@@ -35,6 +34,7 @@ class Cart implements Countable
         for ($i = 0; $i < $quantity; $i++) {
             $this->items[] = $product;
         }
+
         return $this;
     }
 
@@ -68,7 +68,7 @@ class Cart implements Countable
     }
 
     /**
-     * The method returns the transfers already paid for the goods
+     * The method returns the transfers already paid for the goods.
      *
      * @param Customer $customer
      * @param bool|null $gifts
@@ -111,7 +111,7 @@ class Cart implements Countable
     public function canBuy(Customer $customer, bool $force = null): bool
     {
         foreach ($this->items as $item) {
-            if (!$item->canBuy($customer, $this->getQuantity($item), $force)) {
+            if (! $item->canBuy($customer, $this->getQuantity($item), $force)) {
                 return false;
             }
         }
@@ -130,6 +130,7 @@ class Cart implements Countable
         foreach ($this->items as $item) {
             $result = $math->add($result, $item->getAmountProduct($customer));
         }
+
         return $result;
     }
 
@@ -149,6 +150,7 @@ class Cart implements Countable
     {
         $class = get_class($product);
         $uniq = $product->getUniqueId();
+
         return $this->quantity[$class][$uniq] ?? 0;
     }
 
@@ -163,5 +165,4 @@ class Cart implements Countable
         $math = app(Mathable::class);
         $this->quantity[$class][$uniq] = $math->add($this->getQuantity($product), $quantity);
     }
-
 }

@@ -1,27 +1,27 @@
 <?php
 
+use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Objects\EmptyLock;
 use Bavix\Wallet\Objects\Operation;
-use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
-use Bavix\Wallet\Models\Transaction;
-use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Models\Wallet;
-use Bavix\Wallet\Simple\Rate;
-use Bavix\Wallet\Simple\Store;
+use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Simple\BCMath;
 use Bavix\Wallet\Simple\Math;
+use Bavix\Wallet\Simple\Rate;
+use Bavix\Wallet\Simple\Store;
 
 $bcLoaded = extension_loaded('bcmath');
 
 return [
     /**
      * This parameter is necessary for more accurate calculations.
-     * PS, Arbitrary Precision Calculations
+     * PS, Arbitrary Precision Calculations.
      */
     'math' => [
         'scale' => 64,
@@ -40,7 +40,7 @@ return [
     ],
 
     /**
-     * Lock settings for highload projects
+     * Lock settings for highload projects.
      *
      * If you want to replace the default cache with another,
      * then write the name of the driver cache in the key `wallet.lock.cache`.
@@ -57,7 +57,7 @@ return [
 
     /**
      * Sometimes a slug may not match the currency and you need the ability to add an exception.
-     * The main thing is that there are not many exceptions)
+     * The main thing is that there are not many exceptions).
      *
      * Syntax:
      *  'slug' => 'currency'

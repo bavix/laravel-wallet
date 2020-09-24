@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Services;
 
+use function app;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Mathable;
@@ -13,13 +14,11 @@ use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Operation;
 use Bavix\Wallet\Traits\HasWallet;
-use function app;
 use function compact;
 use function max;
 
 class CommonService
 {
-
     /**
      * @param Wallet $from
      * @param Wallet $to
@@ -36,6 +35,7 @@ class CommonService
             $newAmount = max(0, $math->sub($amount, $discount));
             $fee = app(WalletService::class)->fee($to, $newAmount);
             $this->verifyWithdraw($from, $math->add($newAmount, $fee));
+
             return $this->forceTransfer($from, $to, $amount, $meta, $status);
         });
     }
@@ -68,7 +68,7 @@ class CommonService
                     ->setWithdraw($withdraw)
                     ->setDiscount($discount)
                     ->setFrom($from)
-                    ->setTo($to)
+                    ->setTo($to),
             ]);
 
             return current($transfers);
@@ -98,7 +98,7 @@ class CommonService
                     ->setType(Transaction::TYPE_WITHDRAW)
                     ->setConfirmed($confirmed)
                     ->setAmount(-$amount)
-                    ->setMeta($meta)
+                    ->setMeta($meta),
             ]);
 
             return current($transactions);
@@ -128,7 +128,7 @@ class CommonService
                     ->setType(Transaction::TYPE_DEPOSIT)
                     ->setConfirmed($confirmed)
                     ->setAmount($amount)
-                    ->setMeta($meta)
+                    ->setMeta($meta),
             ]);
 
             return current($transactions);
@@ -148,17 +148,17 @@ class CommonService
         /**
          * @var HasWallet $wallet
          */
-        if ($amount && !$wallet->balance) {
+        if ($amount && ! $wallet->balance) {
             throw new BalanceIsEmpty(trans('wallet::errors.wallet_empty'));
         }
 
-        if (!$wallet->canWithdraw($amount, $allowZero)) {
+        if (! $wallet->canWithdraw($amount, $allowZero)) {
             throw new InsufficientFunds(trans('wallet::errors.insufficient_funds'));
         }
     }
 
     /**
-     * Create Operation without DB::transaction
+     * Create Operation without DB::transaction.
      *
      * @param Wallet $self
      * @param Operation[] $operations
@@ -181,12 +181,13 @@ class CommonService
             }
 
             $this->addBalance($self, $amount);
+
             return $objects;
         });
     }
 
     /**
-     * Create Bring with DB::transaction
+     * Create Bring with DB::transaction.
      *
      * @param Bring[] $brings
      * @return array
@@ -196,6 +197,7 @@ class CommonService
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($brings) {
             $self = $this;
+
             return app(DbService::class)->transaction(static function () use ($self, $brings) {
                 return $self->multiBrings($brings);
             });
@@ -203,7 +205,7 @@ class CommonService
     }
 
     /**
-     * Create Bring without DB::transaction
+     * Create Bring without DB::transaction.
      *
      * @param array $brings
      * @return array
@@ -244,7 +246,7 @@ class CommonService
                 throw $throwable;
             }
 
-            if (!$result) {
+            if (! $result) {
                 app(Storable::class)
                     ->setBalance($wallet, $wallet->getAvailableBalance());
             }
@@ -252,5 +254,4 @@ class CommonService
             return $result;
         });
     }
-
 }
