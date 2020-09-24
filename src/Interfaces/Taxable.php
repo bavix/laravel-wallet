@@ -4,7 +4,6 @@ namespace Bavix\Wallet\Interfaces;
 
 interface Taxable
 {
-
     /**
      * Specify the percentage of the amount.
      * For example, the product costs $100, the equivalent of 15%.

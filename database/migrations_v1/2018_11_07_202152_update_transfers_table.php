@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Schema;
 
 class UpdateTransfersTable extends Migration
 {
-
     /**
      * @return void
      */
@@ -40,7 +39,7 @@ class UpdateTransfersTable extends Migration
     public function down(): void
     {
         Schema::table($this->table(), function (Blueprint $table) {
-            if (!(DB::connection() instanceof SQLiteConnection)) {
+            if (! (DB::connection() instanceof SQLiteConnection)) {
                 $table->dropIndex('from_to_refund_ind');
                 $table->dropIndex('from_refund_ind');
                 $table->dropIndex('to_refund_ind');
@@ -49,5 +48,4 @@ class UpdateTransfersTable extends Migration
             $table->dropColumn('refund');
         });
     }
-
 }

@@ -13,7 +13,6 @@ use Bavix\Wallet\Test\Models\ItemDiscountTax;
 
 class DiscountTaxTest extends TestCase
 {
-
     /**
      * @return void
      */
@@ -326,5 +325,4 @@ class DiscountTaxTest extends TestCase
         self::assertNotNull($buyer->payFree($product));
         $buyer->payFree($product);
     }
-
 }

@@ -8,7 +8,6 @@ use Bavix\Wallet\Simple\Math;
 
 class MathTest extends TestCase
 {
-
     /**
      * @dataProvider dataProvider
      * @param string $class
@@ -508,5 +507,4 @@ class MathTest extends TestCase
 
         return $providers;
     }
-
 }

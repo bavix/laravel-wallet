@@ -6,7 +6,6 @@ use Bavix\Wallet\Test\Models\Buyer;
 
 class FilterTest extends TestCase
 {
-
     /**
      * @return void
      */
@@ -27,6 +26,7 @@ class FilterTest extends TestCase
 
         if (version_compare(PHP_VERSION, '7.3.0') < 0) {
             self::markTestSkipped('You are using old php. Test not available.');
+
             return;
         }
 
@@ -44,7 +44,5 @@ class FilterTest extends TestCase
             ->count();
 
         self::assertEquals(3, $countByPeriods);
-
     }
-
 }

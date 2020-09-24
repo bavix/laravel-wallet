@@ -6,7 +6,6 @@ use Bavix\Wallet\Models\Transaction;
 
 interface Confirmable
 {
-
     /**
      * @param Transaction $transaction
      * @return bool
@@ -24,5 +23,4 @@ interface Confirmable
      * @return bool
      */
     public function forceConfirm(Transaction $transaction): bool;
-
 }

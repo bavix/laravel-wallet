@@ -6,9 +6,8 @@ use Bavix\Wallet\Interfaces\MinimalTaxable;
 
 class ItemMinTax extends Item implements MinimalTaxable
 {
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTable(): string
     {
@@ -16,7 +15,7 @@ class ItemMinTax extends Item implements MinimalTaxable
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getFeePercent(): float
     {
@@ -30,5 +29,4 @@ class ItemMinTax extends Item implements MinimalTaxable
     {
         return 90;
     }
-
 }

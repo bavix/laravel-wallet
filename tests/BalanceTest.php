@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Test;
 
+use function app;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CommonService;
@@ -12,11 +13,9 @@ use Illuminate\Database\SQLiteConnection;
 use Illuminate\Support\Facades\DB;
 use PDOException;
 use PHPUnit\Framework\MockObject\MockObject;
-use function app;
 
 class BalanceTest extends TestCase
 {
-
     /**
      * @return void
      */
@@ -216,7 +215,7 @@ class BalanceTest extends TestCase
             $operations = \random_int(1, 10);
             for ($i = 0; $i < $operations; $i++) {
                 $amount = \random_int(10, 10000);
-                $confirmed = (bool)\random_int(0, 1);
+                $confirmed = (bool) \random_int(0, 1);
                 $deposit = $wallet->deposit($amount, null, $confirmed);
                 self::assertIsInt($deposit->wallet_id);
 
@@ -285,5 +284,4 @@ class BalanceTest extends TestCase
         self::assertEquals($wallet->balance, 1000);
         self::assertEquals($wallet->getRawOriginal('balance'), 1000);
     }
-
 }

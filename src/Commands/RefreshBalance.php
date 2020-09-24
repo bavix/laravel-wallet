@@ -4,20 +4,18 @@ namespace Bavix\Wallet\Commands;
 
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\DbService;
+use function config;
 use Illuminate\Console\Command;
 use Illuminate\Database\PostgresConnection;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Database\SQLiteConnection;
-use function config;
 
 /**
- * Class RefreshBalance
- * @package Bavix\Wallet\Commands
+ * Class RefreshBalance.
  * @codeCoverageIgnore
  */
 class RefreshBalance extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -51,7 +49,7 @@ class RefreshBalance extends Command
     }
 
     /**
-     * SQLite
+     * SQLite.
      *
      * @return void
      */
@@ -63,7 +61,7 @@ class RefreshBalance extends Command
     }
 
     /**
-     * MySQL/PgSQL
+     * MySQL/PgSQL.
      *
      * @return void
      */
@@ -88,5 +86,4 @@ class RefreshBalance extends Command
             ->joinSub($availableBalance, 'b', $joinClause, null, null, 'left')
             ->update(["$wallet.balance" => app(DbService::class)->raw('ifnull(b.balance, 0)')]);
     }
-
 }

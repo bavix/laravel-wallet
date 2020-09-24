@@ -12,7 +12,6 @@ use Illuminate\Support\Str;
 
 class LockService
 {
-
     /**
      * @var string
      */
@@ -34,7 +33,7 @@ class LockService
      */
     public function lock($self, string $name, \Closure $closure)
     {
-        return $this->lockProvider($self, $name, (int)config('wallet.lock.seconds', 1))
+        return $this->lockProvider($self, $name, (int) config('wallet.lock.seconds', 1))
             ->get($this->bindTo($self, $closure));
     }
 
@@ -47,7 +46,7 @@ class LockService
     protected function bindTo($self, \Closure $closure): \Closure
     {
         $reflect = new \ReflectionFunction($closure);
-        if (strpos((string)$reflect, 'static') === false) {
+        if (strpos((string) $reflect, 'static') === false) {
             return $closure->bindTo($self);
         }
 
@@ -83,9 +82,9 @@ class LockService
         // @codeCoverageIgnoreStart
         if ($enabled && $store instanceof LockProvider) {
             $class = \get_class($self);
-            $uniqId = $class . $this->uniqId;
+            $uniqId = $class.$this->uniqId;
             if ($self instanceof Model) {
-                $uniqId = $class . $self->getKey();
+                $uniqId = $class.$self->getKey();
             }
 
             return $store->lock("$name.$uniqId", $seconds);
@@ -94,5 +93,4 @@ class LockService
 
         return app(EmptyLock::class);
     }
-
 }

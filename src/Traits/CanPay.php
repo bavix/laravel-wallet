@@ -9,7 +9,6 @@ use function current;
 
 trait CanPay
 {
-
     use CartPay;
 
     /**
@@ -117,5 +116,4 @@ trait CanPay
     {
         return $this->forceRefundGiftCart(app(Cart::class)->addItem($product));
     }
-
 }

@@ -10,9 +10,8 @@ use Bavix\Wallet\Traits\HasWallet;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Item
+ * Class Item.
  *
- * @package Bavix\Wallet\Test\Models
  * @property string $name
  * @property int $quantity
  * @property int $price
@@ -41,7 +40,7 @@ class Item extends Model implements Product
             return $result;
         }
 
-        return $result && !$customer->paid($this);
+        return $result && ! $customer->paid($this);
     }
 
     /**
@@ -54,6 +53,7 @@ class Item extends Model implements Product
          * @var Wallet $wallet
          */
         $wallet = app(WalletService::class)->getWallet($customer);
+
         return $this->price + $wallet->holder_id;
     }
 

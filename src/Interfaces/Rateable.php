@@ -4,7 +4,6 @@ namespace Bavix\Wallet\Interfaces;
 
 interface Rateable
 {
-
     /**
      * @param int $amount
      * @return Rateable
@@ -22,5 +21,4 @@ interface Rateable
      * @return int|float
      */
     public function convertTo(Wallet $wallet);
-
 }

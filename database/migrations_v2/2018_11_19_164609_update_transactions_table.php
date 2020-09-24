@@ -4,13 +4,12 @@ use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Wallet;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\SQLiteConnection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\SQLiteConnection;
 
 class UpdateTransactionsTable extends Migration
 {
-
     /**
      * @return string
      */
@@ -60,11 +59,10 @@ class UpdateTransactionsTable extends Migration
     public function down(): void
     {
         Schema::table($this->table(), function (Blueprint $table) {
-            if (!(DB::connection() instanceof SQLiteConnection)) {
+            if (! (DB::connection() instanceof SQLiteConnection)) {
                 $table->dropForeign(['wallet_id']);
             }
             $table->dropColumn('wallet_id');
         });
     }
-
 }
