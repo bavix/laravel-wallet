@@ -13,8 +13,6 @@ use Bavix\Wallet\Services\WalletService;
 
 trait CanConfirm
 {
-
-
     /**
      * @param Transaction $transaction
      * @return bool
@@ -23,9 +21,10 @@ trait CanConfirm
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
             $self = $this;
+
             return app(DbService::class)->transaction(static function () use ($self, $transaction) {
                 $wallet = app(WalletService::class)->getWallet($self);
-                if (!$wallet->refreshBalance()) {
+                if (! $wallet->refreshBalance()) {
                     return false;
                 }
 
@@ -64,13 +63,14 @@ trait CanConfirm
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
             $self = $this;
+
             return app(DbService::class)->transaction(static function () use ($self, $transaction) {
                 $wallet = app(WalletService::class)->getWallet($self);
-                if (!$wallet->refreshBalance()) {
+                if (! $wallet->refreshBalance()) {
                     return false;
                 }
 
-                if (!$transaction->confirmed) {
+                if (! $transaction->confirmed) {
                     throw new ConfirmedInvalid(trans('wallet::errors.unconfirmed_invalid'));
                 }
 
@@ -106,8 +106,8 @@ trait CanConfirm
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
             $self = $this;
-            return app(DbService::class)->transaction(static function () use ($self, $transaction) {
 
+            return app(DbService::class)->transaction(static function () use ($self, $transaction) {
                 $wallet = app(WalletService::class)
                     ->getWallet($self);
 
@@ -124,9 +124,7 @@ trait CanConfirm
                     // update balance
                     app(CommonService::class)
                         ->addBalance($wallet, $transaction->amount);
-
             });
         });
     }
-
 }

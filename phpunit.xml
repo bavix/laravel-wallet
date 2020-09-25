@@ -23,4 +23,9 @@
         <log type="coverage-html" target="./build/html/"/>
         <log type="coverage-clover" target="./build/logs/clover.xml"/>
     </logging>
+    <php>
+        <env name="DB_CONNECTION" value="testing" />
+        <env name="DB_DATABASE" value="wallet" />
+        <env name="DB_USERNAME" value="root" />
+    </php>
 </phpunit>

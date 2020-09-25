@@ -10,14 +10,13 @@ use Bavix\Wallet\Test\Common\Models\Transfer;
 use Bavix\Wallet\Test\Common\Models\Wallet;
 use Bavix\Wallet\Test\Common\Rate;
 use Bavix\Wallet\WalletServiceProvider;
+use function dirname;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
-use function dirname;
 
 class TestCase extends OrchestraTestCase
 {
-
     use RefreshDatabase;
 
     /**
@@ -26,15 +25,15 @@ class TestCase extends OrchestraTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->withFactories(__DIR__ . '/factories');
+        $this->withFactories(__DIR__.'/factories');
         $this->loadMigrationsFrom([
-            '--path' => dirname(__DIR__) . '/database/migrations_v1'
+            '--path' => dirname(__DIR__).'/database/migrations_v1',
         ]);
         $this->loadMigrationsFrom([
-            '--path' => dirname(__DIR__) . '/database/migrations_v2'
+            '--path' => dirname(__DIR__).'/database/migrations_v2',
         ]);
         $this->loadMigrationsFrom([
-            '--path' => __DIR__ . '/migrations'
+            '--path' => __DIR__.'/migrations',
         ]);
     }
 
@@ -48,6 +47,7 @@ class TestCase extends OrchestraTestCase
         $app['config']->set('wallet.package.rateable', Rate::class);
         $app['config']->set('wallet.package.storable', Store::class);
         $app['config']->set('wallet.package.mathable', extension_loaded('bcmath') ? BCMath::class : Math::class);
+
         return [WalletServiceProvider::class];
     }
 
@@ -84,38 +84,8 @@ class TestCase extends OrchestraTestCase
             $app['config']->set('wallet.lock.cache', 'memcached');
         }
 
-        $app['config']->set('cache.stores.memcached', [
-            'driver' => 'memcached',
-            'servers' => [
-                [
-                    'host' => '127.0.0.1',
-                    'port' => 11211,
-                    'weight' => 100,
-                ],
-            ],
-        ]);
-
-        // database
-        $app['config']->set('database.default', 'sqlite');
-        $app['config']->set('database.connections', [
-            'sqlite' => [
-                'driver' => 'sqlite',
-                'database' => ':memory:',
-                'prefix' => 'tests',
-            ],
-            'pgsql' => [
-                'driver' => 'pgsql',
-                'host' => '172.17.0.2',
-                'port' => '5432',
-                'database' => 'wallet',
-                'username' => 'postgres',
-                'password' => 'postgres',
-                'charset' => 'utf8',
-                'prefix' => 'tests',
-                'schema' => 'public',
-                'sslmode' => 'prefer',
-            ],
-        ]);
+        $app['config']->set('database.connections.testing.prefix', 'tests');
+        $app['config']->set('database.connections.mysql.prefix', 'tests');
     }
 
     /**
@@ -125,5 +95,4 @@ class TestCase extends OrchestraTestCase
     {
         $this->expectExceptionMessageMatches("~^{$message}$~");
     }
-
 }

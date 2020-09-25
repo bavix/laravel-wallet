@@ -5,7 +5,7 @@ build:
 
   environment:
     php:
-      version: 7.2
+      version: 7.3
       pecl_extensions:
         - memcached
     memcached: true
@@ -17,9 +17,8 @@ build:
       tests:
         override:
         - php-scrutinizer-run
-        - command: vendor/bin/phpunit --dump-xdebug-filter xdebug-filter.php
         -
-          command: vendor/bin/phpunit --prepend xdebug-filter.php --coverage-clover=clover.xml
+          command: vendor/bin/phpunit --coverage-clover=clover.xml
           coverage:
             file: clover.xml
             format: php-clover

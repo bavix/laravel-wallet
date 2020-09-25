@@ -9,7 +9,6 @@ use Ramsey\Uuid\Uuid;
 
 class Operation
 {
-
     /**
      * @var string
      */
@@ -96,6 +95,7 @@ class Operation
     public function setType(string $type): self
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -106,6 +106,7 @@ class Operation
     public function setAmount($amount): self
     {
         $this->amount = app(Mathable::class)->round($amount);
+
         return $this;
     }
 
@@ -116,6 +117,7 @@ class Operation
     public function setMeta(?array $meta): self
     {
         $this->meta = $meta;
+
         return $this;
     }
 
@@ -126,6 +128,7 @@ class Operation
     public function setConfirmed(bool $confirmed): self
     {
         $this->confirmed = $confirmed;
+
         return $this;
     }
 
@@ -144,6 +147,7 @@ class Operation
     public function setWallet(Wallet $wallet): self
     {
         $this->wallet = $wallet;
+
         return $this;
     }
 
@@ -177,5 +181,4 @@ class Operation
             'meta' => $this->getMeta(),
         ];
     }
-
 }

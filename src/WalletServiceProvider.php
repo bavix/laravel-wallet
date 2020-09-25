@@ -17,18 +17,17 @@ use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
-use Bavix\Wallet\Simple\Math;
 use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Simple\Math;
 use Bavix\Wallet\Simple\Rate;
 use Bavix\Wallet\Simple\Store;
-use Illuminate\Support\ServiceProvider;
 use function config;
 use function dirname;
 use function function_exists;
+use Illuminate\Support\ServiceProvider;
 
 class WalletServiceProvider extends ServiceProvider
 {
-
     /**
      * Bootstrap services.
      *
@@ -38,11 +37,11 @@ class WalletServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadTranslationsFrom(
-            dirname(__DIR__) . '/resources/lang',
+            dirname(__DIR__).'/resources/lang',
             'wallet'
         );
 
-        if (!$this->app->runningInConsole()) {
+        if (! $this->app->runningInConsole()) {
             return;
         }
 
@@ -50,28 +49,28 @@ class WalletServiceProvider extends ServiceProvider
 
         if ($this->shouldMigrate()) {
             $this->loadMigrationsFrom([
-                __DIR__ . '/../database/migrations_v1',
-                __DIR__ . '/../database/migrations_v2',
+                __DIR__.'/../database/migrations_v1',
+                __DIR__.'/../database/migrations_v2',
             ]);
         }
 
         if (function_exists('config_path')) {
             $this->publishes([
-                dirname(__DIR__) . '/config/config.php' => config_path('wallet.php'),
+                dirname(__DIR__).'/config/config.php' => config_path('wallet.php'),
             ], 'laravel-wallet-config');
         }
 
         $this->publishes([
-            dirname(__DIR__) . '/database/migrations_v1/' => database_path('migrations'),
-            dirname(__DIR__) . '/database/migrations_v2/' => database_path('migrations'),
+            dirname(__DIR__).'/database/migrations_v1/' => database_path('migrations'),
+            dirname(__DIR__).'/database/migrations_v2/' => database_path('migrations'),
         ], 'laravel-wallet-migrations');
 
         $this->publishes([
-            dirname(__DIR__) . '/database/migrations_v1/' => database_path('migrations'),
+            dirname(__DIR__).'/database/migrations_v1/' => database_path('migrations'),
         ], 'laravel-wallet-migrations-v1');
 
         $this->publishes([
-            dirname(__DIR__) . '/database/migrations_v2/' => database_path('migrations'),
+            dirname(__DIR__).'/database/migrations_v2/' => database_path('migrations'),
         ], 'laravel-wallet-migrations-v2');
     }
 
@@ -83,7 +82,7 @@ class WalletServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            dirname(__DIR__) . '/config/config.php',
+            dirname(__DIR__).'/config/config.php',
             'wallet'
         );
 

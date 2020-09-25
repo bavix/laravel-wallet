@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Services;
 
+use function app;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Discount;
@@ -12,11 +13,9 @@ use Bavix\Wallet\Interfaces\Taxable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Traits\HasWallet;
-use function app;
 
 class WalletService
 {
-
     /**
      * @param Wallet $customer
      * @param Wallet $product
@@ -74,7 +73,7 @@ class WalletService
         }
 
         /**
-         * Added minimum commission condition
+         * Added minimum commission condition.
          *
          * @see https://github.com/bavix/laravel-wallet/issues/64#issuecomment-514483143
          */
@@ -89,7 +88,7 @@ class WalletService
     }
 
     /**
-     * The amount of checks for errors
+     * The amount of checks for errors.
      *
      * @param int $amount
      * @throws
@@ -113,7 +112,7 @@ class WalletService
          */
         $wallet = $object;
 
-        if (!($object instanceof WalletModel)) {
+        if (! ($object instanceof WalletModel)) {
             /**
              * @var HasWallet $object
              */
@@ -141,8 +140,7 @@ class WalletService
             $wallet->balance = $balance;
 
             return app(Storable::class)->setBalance($wallet, $balance) &&
-                (!$math->compare($whatIs, $balance) || $wallet->save());
+                (! $math->compare($whatIs, $balance) || $wallet->save());
         });
     }
-
 }

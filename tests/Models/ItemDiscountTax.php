@@ -6,7 +6,6 @@ use Bavix\Wallet\Interfaces\Taxable;
 
 class ItemDiscountTax extends ItemDiscount implements Taxable
 {
-
     /**
      * Specify the percentage of the amount.
      * For example, the product costs $100, the equivalent of 15%.

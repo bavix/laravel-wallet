@@ -6,16 +6,14 @@ use Bavix\Wallet\Models\Wallet as WalletModel;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
- * Trait MorphOneWallet
- * @package Bavix\Wallet\Traits
+ * Trait MorphOneWallet.
  * @property-read WalletModel $wallet
  */
 trait MorphOneWallet
 {
-
     /**
      * Get default Wallet
-     * this method is used for Eager Loading
+     * this method is used for Eager Loading.
      *
      * @return MorphOne|WalletModel
      */
@@ -30,5 +28,4 @@ trait MorphOneWallet
                 'balance' => 0,
             ]);
     }
-
 }

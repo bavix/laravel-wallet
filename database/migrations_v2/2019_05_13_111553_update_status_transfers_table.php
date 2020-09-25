@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Schema;
 
 class UpdateStatusTransfersTable extends Migration
 {
-
     /**
      * @return string
      */
@@ -32,21 +31,23 @@ class UpdateStatusTransfersTable extends Migration
         ];
 
         if (DB::connection() instanceof MySqlConnection) {
-            $table = DB::getTablePrefix() . $this->table();
+            $table = DB::getTablePrefix().$this->table();
             $enumString = implode('\', \'', $enums);
             $default = Transfer::STATUS_TRANSFER;
             DB::statement("ALTER TABLE $table CHANGE COLUMN status status ENUM('$enumString') NOT NULL DEFAULT '$default'");
             DB::statement("ALTER TABLE $table CHANGE COLUMN status_last status_last ENUM('$enumString') NULL");
+
             return;
         }
 
         if (DB::connection() instanceof PostgresConnection) {
-            $this->alterEnum(DB::getTablePrefix() . $this->table(), 'status', $enums);
-            $this->alterEnum(DB::getTablePrefix() . $this->table(), 'status_last', $enums);
+            $this->alterEnum(DB::getTablePrefix().$this->table(), 'status', $enums);
+            $this->alterEnum(DB::getTablePrefix().$this->table(), 'status_last', $enums);
+
             return;
         }
 
-        Schema::table($this->table(), function (Blueprint $table) use ($enums) {
+        Schema::table($this->table(), function (Blueprint $table) {
             $table->string('status')
                 ->default(Transfer::STATUS_TRANSFER)
                 ->change();
@@ -77,21 +78,23 @@ class UpdateStatusTransfersTable extends Migration
         ];
 
         if (DB::connection() instanceof MySqlConnection) {
-            $table = DB::getTablePrefix() . $this->table();
+            $table = DB::getTablePrefix().$this->table();
             $enumString = implode('\', \'', $enums);
             $default = Transfer::STATUS_PAID;
             DB::statement("ALTER TABLE $table CHANGE COLUMN status status ENUM('$enumString') NOT NULL DEFAULT '$default'");
             DB::statement("ALTER TABLE $table CHANGE COLUMN status_last status_last ENUM('$enumString') NULL");
+
             return;
         }
 
         if (DB::connection() instanceof PostgresConnection) {
-            $this->alterEnum(DB::getTablePrefix() . $this->table(), 'status', $enums);
-            $this->alterEnum(DB::getTablePrefix() . $this->table(), 'status_last', $enums);
+            $this->alterEnum(DB::getTablePrefix().$this->table(), 'status', $enums);
+            $this->alterEnum(DB::getTablePrefix().$this->table(), 'status_last', $enums);
+
             return;
         }
 
-        Schema::table($this->table(), function (Blueprint $table) use ($enums) {
+        Schema::table($this->table(), function (Blueprint $table) {
             $table->string('status')
                 ->default(Transfer::STATUS_PAID)
                 ->change();
@@ -103,7 +106,7 @@ class UpdateStatusTransfersTable extends Migration
     }
 
     /**
-     * Alter an enum field constraints
+     * Alter an enum field constraints.
      * @param $table
      * @param $field
      * @param array $options
@@ -120,10 +123,9 @@ class UpdateStatusTransfersTable extends Migration
 
         $enumString = implode(', ', $enumList);
 
-        DB::transaction(function () use ($table, $field, $check, $options, $enumString) {
+        DB::transaction(function () use ($table, $field, $check , $enumString) {
             DB::statement(sprintf('ALTER TABLE %s DROP CONSTRAINT %s;', $table, $check));
             DB::statement(sprintf('ALTER TABLE %s ADD CONSTRAINT %s CHECK (%s::TEXT = ANY (ARRAY[%s]::TEXT[]))', $table, $check, $field, $enumString));
         });
     }
-
 }

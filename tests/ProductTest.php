@@ -11,7 +11,6 @@ use Bavix\Wallet\Test\Models\Item;
 
 class ProductTest extends TestCase
 {
-
     /**
      * @return void
      */
@@ -266,5 +265,4 @@ class ProductTest extends TestCase
         self::assertNotNull($buyer->payFree($product));
         $buyer->payFree($product);
     }
-
 }

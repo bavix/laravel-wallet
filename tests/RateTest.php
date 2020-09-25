@@ -9,7 +9,6 @@ use Illuminate\Support\Str;
 
 class RateTest extends TestCase
 {
-
     /**
      * @return void
      */
@@ -76,5 +75,4 @@ class RateTest extends TestCase
 
         self::assertEquals($rate, 1 / 67.61);
     }
-
 }

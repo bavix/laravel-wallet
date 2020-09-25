@@ -7,7 +7,6 @@ use Illuminate\Support\Str;
 
 class EmptyLock implements Lock
 {
-
     /**
      * @var string
      */
@@ -58,7 +57,7 @@ class EmptyLock implements Lock
      */
     public function owner(): string
     {
-        if (!$this->ownerId) {
+        if (! $this->ownerId) {
             $this->ownerId = Str::random();
         }
 
@@ -75,5 +74,4 @@ class EmptyLock implements Lock
     {
         // force lock release
     }
-
 }
