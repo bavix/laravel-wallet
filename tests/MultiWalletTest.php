@@ -334,25 +334,31 @@ class MultiWalletTest extends TestCase
 
     /**
      * @return void
+     * @throws
      */
     public function testWalletUnique(): void
     {
-        if (! (app(DbService::class)->connection() instanceof PostgresConnection)) {
-            $this->expectException(QueryException::class);
+        $this->expectException(QueryException::class);
 
-            /**
-             * @var UserMulti $user
-             */
-            $user = factory(UserMulti::class)->create();
+        /**
+         * @var UserMulti $user
+         */
+        $user = factory(UserMulti::class)->create();
 
-            $user->createWallet([
-                'name' => 'deposit',
-            ]);
+        $user->createWallet([
+            'name' => 'deposit',
+        ]);
 
-            $user->createWallet([
-                'name' => 'deposit',
-            ]);
+        if (app(DbService::class)->connection() instanceof PostgresConnection) {
+            // enable autocommit for pgsql
+            app(DbService::class)
+                ->connection()
+                ->commit();
         }
+
+        $user->createWallet([
+            'name' => 'deposit',
+        ]);
     }
 
     /**

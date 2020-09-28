@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Simple\BCMath;
 use Bavix\Wallet\Simple\Math;
 use Bavix\Wallet\Simple\Store;
@@ -10,6 +11,7 @@ use Bavix\Wallet\Test\Common\Models\Transfer;
 use Bavix\Wallet\Test\Common\Models\Wallet;
 use Bavix\Wallet\Test\Common\Rate;
 use Bavix\Wallet\WalletServiceProvider;
+use Illuminate\Foundation\Testing\RefreshDatabaseState;
 use function dirname;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -35,6 +37,8 @@ class TestCase extends OrchestraTestCase
         $this->loadMigrationsFrom([
             '--path' => __DIR__.'/migrations',
         ]);
+
+        app(Storable::class)->fresh();
     }
 
     /**

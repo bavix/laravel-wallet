@@ -32,6 +32,10 @@ class DbService
      */
     public function transaction(Closure $callback, $attempts = 1)
     {
+        if ($this->connection()->transactionLevel()) {
+            return $callback($this);
+        }
+
         return $this->connection()->transaction($callback, $attempts);
     }
 
