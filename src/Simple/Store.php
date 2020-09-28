@@ -54,6 +54,15 @@ class Store implements Storable
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function fresh(): bool
+    {
+        $this->balanceSheets = [];
+        return true;
+    }
+
+    /**
      * @param string $balance
      * @return string
      */

@@ -59,6 +59,15 @@ class AddExchangeStatusTransfersTable extends Migration
             Transfer::STATUS_GIFT,
         ];
 
+        // fix unit-test for mysql&pgsql
+        DB::table($this->table())
+            ->where('status', Transfer::STATUS_EXCHANGE)
+            ->update(['status' => Transfer::STATUS_TRANSFER,]);
+
+        DB::table($this->table())
+            ->where('status_last', Transfer::STATUS_EXCHANGE)
+            ->update(['status_last' => Transfer::STATUS_TRANSFER,]);
+
         if (DB::connection() instanceof MySqlConnection) {
             $table = DB::getTablePrefix().$this->table();
             $enumString = implode('\', \'', $enums);
