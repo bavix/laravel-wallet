@@ -229,6 +229,14 @@ class BalanceTest extends TestCase
             }
         }
 
+        /**
+         * Check for the number of created wallets.
+         * Make sure you didn't accidentally create the default wallet.
+         *
+         * @see https://github.com/bavix/laravel-wallet/issues/218
+         */
+        self::assertCount(count($wallets),  $user->wallets);
+
         // fresh balance
         DB::table(config('wallet.wallet.table'))
             ->update(['balance' => 0]);
