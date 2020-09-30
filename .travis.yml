@@ -19,7 +19,7 @@ before_script:
   - bash <(curl -s https://raw.githubusercontent.com/php-cache/cache/master/build/php/7.2/Memcached.sh)
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
-  - if [ $(phpenv version-name) = "7.4" ]; then ./cc-test-reporter before-build; fi
+  - if [ $COVERAGE = "yes" ]; then ./cc-test-reporter before-build; fi
   - composer install
 
 jobs:
@@ -40,15 +40,15 @@ jobs:
       php: 7.4
       before_install:
         - docker run -p 5432:5432 -e POSTGRES_USER=wallet -e POSTGRES_PASSWORD=wallet -e POSTGRES_DB=wallet -d postgres:13
-      env: DB_CONNECTION=pgsql
+      env: DB_CONNECTION=pgsql COVERAGE=yes
 
   allow_failures:
     - php: 'nightly'
 
 script:
   - ./vendor/bin/phpunit --coverage-xml=build/coverage-xml --log-junit=build/junit.xml
-  - if [ $(phpenv version-name) = "7.4" ]; then ./vendor/bin/infection --coverage=build --min-msi=60 -j$(nproc); fi
+  - if [ $COVERAGE = "yes" ]; then ./vendor/bin/infection --coverage=build --min-msi=60 -j$(nproc); fi
 
 after_success:
-  - if [ $(phpenv version-name) = "7.4" ]; then ./cc-test-reporter after-build --coverage-input-type clover --exit-code $TRAVIS_TEST_RESULT; fi
+  - if [ $COVERAGE = "yes" ]; then ./cc-test-reporter after-build --coverage-input-type clover --exit-code $TRAVIS_TEST_RESULT; fi
   - bash <(curl -s https://codecov.io/bash)
