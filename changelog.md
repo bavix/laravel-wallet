@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [5.4.0] - 2020-09-30
 ### Added
 - Temporarily added package (to develop) laravel/legacy-factories.
 
@@ -14,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The mysql/postgres balance refresh command no longer performs a single request update.
 - If you use standard laravel transactions and open it, the library will not open a new transaction. 
 This removes a lot of errors that were sent to my email.
+- Removed automatic creation of the default wallet when calling `createWallet`. #218
 
 ### Fixed
 - Fixed migrations for unit tests (your app should not be affected).
@@ -539,7 +542,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/5.3.2...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/5.4.0...develop
+[5.4.0]: https://github.com/bavix/laravel-wallet/compare/5.3.2...5.4.0
 [5.3.2]: https://github.com/bavix/laravel-wallet/compare/5.3.1...5.3.2
 [5.3.1]: https://github.com/bavix/laravel-wallet/compare/5.3.0...5.3.1
 [5.3.0]: https://github.com/bavix/laravel-wallet/compare/5.2.1...5.3.0
