@@ -23,7 +23,7 @@ before_script:
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
-  - if [ $COVERAGE = "yes" ]; then ./cc-test-reporter before-build; fi
+  - if [[ $COVERAGE == "yes" ]]; then ./cc-test-reporter before-build; fi
   - composer install
 
 jobs:
@@ -59,8 +59,8 @@ jobs:
 
 script:
   - ./vendor/bin/phpunit --coverage-xml=build/coverage-xml --log-junit=build/junit.xml
-  - if [ $COVERAGE = "yes" ]; then ./vendor/bin/infection --coverage=build --min-msi=60 -j$(nproc); fi
+  - if [[ $COVERAGE == "yes" ]]; then ./vendor/bin/infection --coverage=build --min-msi=60 -j$(nproc); fi
 
 after_success:
-  - if [ $COVERAGE = "yes" ]; then ./cc-test-reporter after-build --coverage-input-type clover --exit-code $TRAVIS_TEST_RESULT; fi
+  - if [[ $COVERAGE == "yes" ]]; then ./cc-test-reporter after-build --coverage-input-type clover --exit-code $TRAVIS_TEST_RESULT; fi
   - bash <(curl -s https://codecov.io/bash)
