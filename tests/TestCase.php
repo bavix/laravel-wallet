@@ -83,7 +83,7 @@ class TestCase extends OrchestraTestCase
 
         $app['config']->set('wallet.lock.enabled', false);
 
-        if (extension_loaded('memcached')) {
+        if (env('MEMCACHED_ENABLE', false)) {
             $app['config']->set('cache.default', 'memcached');
             $app['config']->set('wallet.lock.cache', 'memcached');
         }

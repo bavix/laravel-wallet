@@ -5,9 +5,10 @@ php:
   - 'nightly'
 
 stages:
-  - mysql8
-  - pgsql12
-  - pgsql13
+  - SQLite (with memcached)
+  - MySQL 8
+  - PostgreSQL 12
+  - PostgreSQL 13
 
 services:
   - docker
@@ -24,19 +25,23 @@ before_script:
 
 jobs:
   include:
-    - stage: mysql8
+    - stage: SQLite (with memcached)
+      php: 7.4
+      env: MEMCACHED_ENABLE=true
+
+    - stage: MySQL 8
       php: 7.4
       before_install:
         - docker run -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true -e MYSQL_USER=wallet -e MYSQL_PASSWORD=wallet -e MYSQL_DATABASE=wallet -d mysql:8
       env: DB_CONNECTION=mysql
 
-    - stage: pgsql12
+    - stage: PostgreSQL 12
       php: 7.4
       before_install:
         - docker run -p 5432:5432 -e POSTGRES_USER=wallet -e POSTGRES_PASSWORD=wallet -e POSTGRES_DB=wallet -d postgres:12
       env: DB_CONNECTION=pgsql
 
-    - stage: pgsql13
+    - stage: PostgreSQL 13
       php: 7.4
       before_install:
         - docker run -p 5432:5432 -e POSTGRES_USER=wallet -e POSTGRES_PASSWORD=wallet -e POSTGRES_DB=wallet -d postgres:13
