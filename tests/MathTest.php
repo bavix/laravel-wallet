@@ -485,5 +485,4 @@ class MathTest extends TestCase
             ['---121'],
         ];
     }
-
 }

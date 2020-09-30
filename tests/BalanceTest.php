@@ -2,13 +2,13 @@
 
 namespace Bavix\Wallet\Test;
 
-use Bavix\Wallet\Test\Factories\BuyerFactory;
-use Bavix\Wallet\Test\Factories\UserMultiFactory;
 use function app;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Simple\Store;
+use Bavix\Wallet\Test\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\UserMulti;
 use Illuminate\Database\SQLiteConnection;
