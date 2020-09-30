@@ -15,7 +15,7 @@ class BrickMath extends BCMath
      */
     public function add($first, $second, ?int $scale = null): string
     {
-        return (string)BigDecimal::of($first)
+        return (string) BigDecimal::of($first)
             ->plus(BigDecimal::of($second))
             ->toScale($this->scale($scale), RoundingMode::DOWN);
     }
@@ -25,7 +25,7 @@ class BrickMath extends BCMath
      */
     public function sub($first, $second, ?int $scale = null): string
     {
-        return (string)BigDecimal::of($first)
+        return (string) BigDecimal::of($first)
             ->minus(BigDecimal::of($second))
             ->toScale($this->scale($scale), RoundingMode::DOWN);
     }
@@ -35,7 +35,7 @@ class BrickMath extends BCMath
      */
     public function div($first, $second, ?int $scale = null): string
     {
-        return (string)BigDecimal::of($first)
+        return (string) BigDecimal::of($first)
             ->dividedBy(BigDecimal::of($second), $this->scale($scale), RoundingMode::DOWN);
     }
 
@@ -44,7 +44,7 @@ class BrickMath extends BCMath
      */
     public function mul($first, $second, ?int $scale = null): string
     {
-        return (string)BigDecimal::of($first)
+        return (string) BigDecimal::of($first)
             ->multipliedBy(BigDecimal::of($second))
             ->toScale($this->scale($scale), RoundingMode::DOWN);
     }
@@ -54,7 +54,7 @@ class BrickMath extends BCMath
      */
     public function pow($first, $second, ?int $scale = null): string
     {
-        return (string)BigDecimal::of($first)
+        return (string) BigDecimal::of($first)
             ->power($second)
             ->toScale($this->scale($scale), RoundingMode::DOWN);
     }
@@ -93,9 +93,9 @@ class BrickMath extends BCMath
     public function abs($number): string
     {
         try {
-            return (string)BigDecimal::of($number)->abs();
+            return (string) BigDecimal::of($number)->abs();
         } catch (\Throwable $throwable) {
-            return "0"; // fixme: 6.x
+            return '0'; // fixme: 6.x
         }
     }
 

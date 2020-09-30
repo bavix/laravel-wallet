@@ -3,8 +3,8 @@
 namespace Bavix\Wallet\Models;
 
 use function app;
-use function array_merge;
 use function array_key_exists;
+use function array_merge;
 use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Exchangeable;
