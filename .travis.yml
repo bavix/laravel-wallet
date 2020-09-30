@@ -2,7 +2,7 @@ language: php
 php:
   - '7.3'
   - '7.4'
-  - 'nightly'
+#  - 'nightly'
 
 stages:
   - mysql8
@@ -11,9 +11,9 @@ services:
   - docker
   - memcached
 
-matrix:
-  allow_failures:
-    - php: 'nightly'
+#matrix:
+#  allow_failures:
+#    - php: 'nightly'
 
 before_script:
   - pecl install pcov
