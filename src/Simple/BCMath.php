@@ -4,6 +4,7 @@ namespace Bavix\Wallet\Simple;
 
 /**
  * Class BCMath.
+ * @deprecated Will be removed in 6.x.
  */
 class BCMath extends Math
 {

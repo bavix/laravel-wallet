@@ -6,6 +6,7 @@ use Bavix\Wallet\Interfaces\Mathable;
 
 /**
  * Class MathService.
+ * @deprecated Will be removed in 6.x.
  */
 class Math implements Mathable
 {
@@ -117,7 +118,7 @@ class Math implements Mathable
     }
 
     /**
-     * @param int $scale
+     * @param int|null $scale
      * @return int
      */
     protected function scale(?int $scale = null): int
