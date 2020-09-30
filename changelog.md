@@ -5,6 +5,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Temporarily added package (to develop) laravel/legacy-factories.
+
+### Changed
+- PHP 7.3+ support, 7.2 is no longer supported.
+- Formatted code using StyleCI.
+- The mysql/postgres balance refresh command no longer performs a single request update.
+- If you use standard laravel transactions and open it, the library will not open a new transaction. 
+This removes a lot of errors that were sent to my email.
+
+### Fixed
+- Fixed migrations for unit tests (your app should not be affected).
+- Fixed nested transactions in databases. This is now one transaction.
+- Fixed risk in unit tests for the postgres database.
 
 ## [5.3.2] - 2020-08-31
 ### Added
