@@ -87,13 +87,6 @@ trait HasWallets
         $wallet = $this->wallets()->create($data);
         $this->_wallets[$wallet->slug] = $wallet;
 
-        /**
-         * Create a default wallet.
-         * @var $walletModel WalletModel
-         */
-        $walletModel = $this->wallet;
-        $walletModel->getBalanceAttribute();
-
         return $wallet;
     }
 
