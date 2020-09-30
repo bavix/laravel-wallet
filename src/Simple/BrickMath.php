@@ -106,13 +106,4 @@ class BrickMath extends BCMath
     {
         return BigDecimal::of($first)->compareTo(BigDecimal::of($second));
     }
-
-    /**
-     * @param $number
-     * @return bool
-     */
-    protected function isNegative($number): bool
-    {
-        return BigDecimal::of($number)->isNegative();
-    }
 }
