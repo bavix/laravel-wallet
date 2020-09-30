@@ -7,6 +7,8 @@ php:
 stages:
   - SQLite (with redis)
   - SQLite (with memcached)
+  - Percona 8
+  - MariaDB 10
   - MySQL 8
   - PostgreSQL 12
   - PostgreSQL 13
@@ -35,6 +37,18 @@ jobs:
     - stage: SQLite (with memcached)
       php: 7.4
       env: MEMCACHED_ENABLE=true
+
+    - stage: Percona 8
+      php: 7.4
+      before_install:
+        - docker run -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true -e MYSQL_USER=wallet -e MYSQL_PASSWORD=wallet -e MYSQL_DATABASE=wallet -d percona:8
+      env: DB_CONNECTION=mysql
+
+    - stage: MariaDB 10
+      php: 7.4
+      before_install:
+        - docker run -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true -e MYSQL_USER=wallet -e MYSQL_PASSWORD=wallet -e MYSQL_DATABASE=wallet -d mariadb:10
+      env: DB_CONNECTION=mysql
 
     - stage: MySQL 8
       php: 7.4
