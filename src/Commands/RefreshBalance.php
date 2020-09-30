@@ -37,5 +37,4 @@ class RefreshBalance extends Command
             });
         });
     }
-
 }

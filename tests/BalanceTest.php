@@ -237,7 +237,7 @@ class BalanceTest extends TestCase
          *
          * @see https://github.com/bavix/laravel-wallet/issues/218
          */
-        self::assertCount(count($wallets),  $user->wallets);
+        self::assertCount(count($wallets), $user->wallets);
 
         // fresh balance
         DB::table(config('wallet.wallet.table'))
