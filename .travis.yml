@@ -5,6 +5,7 @@ php:
   - 'nightly'
 
 stages:
+  - SQLite (with redis)
   - SQLite (with memcached)
   - MySQL 8
   - PostgreSQL 12
@@ -13,11 +14,13 @@ stages:
 services:
   - docker
   - memcached
+  - redis
 
 before_script:
   - pecl install pcov
   - phpenv config-rm xdebug.ini || echo "xdebug not available"
-  - bash <(curl -s https://raw.githubusercontent.com/php-cache/cache/master/build/php/7.2/Memcached.sh)
+  - echo "extension = memcached.so\n" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "extension = redis.so\n" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - if [ $COVERAGE = "yes" ]; then ./cc-test-reporter before-build; fi
@@ -25,6 +28,10 @@ before_script:
 
 jobs:
   include:
+    - stage: SQLite (with redis)
+      php: 7.4
+      env: REDIS_ENABLE=true
+
     - stage: SQLite (with memcached)
       php: 7.4
       env: MEMCACHED_ENABLE=true
