@@ -6,6 +6,8 @@ use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
+use Bavix\Wallet\Test\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Factories\ItemDiscountFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\Item;
 use Bavix\Wallet\Test\Models\ItemDiscount;
@@ -21,8 +23,8 @@ class DiscountTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscount $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscount::class)->create();
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountFactory::new()->create();
 
         self::assertEquals($buyer->balance, 0);
         $buyer->deposit($product->getAmountProduct($buyer));
@@ -77,8 +79,8 @@ class DiscountTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscount $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscount::class)->create();
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountFactory::new()->create();
 
         self::assertEquals($buyer->balance, 0);
         $buyer->deposit($product->getAmountProduct($buyer));
@@ -127,8 +129,8 @@ class DiscountTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscount $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscount::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -182,8 +184,8 @@ class DiscountTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscount $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscount::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -235,8 +237,8 @@ class DiscountTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscount $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscount::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -254,8 +256,8 @@ class DiscountTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscount $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscount::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -279,8 +281,8 @@ class DiscountTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscount $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscount::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -304,8 +306,8 @@ class DiscountTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscount $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscount::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -336,8 +338,8 @@ class DiscountTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscount $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscount::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
 

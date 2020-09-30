@@ -6,6 +6,8 @@ use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
+use Bavix\Wallet\Test\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Factories\ItemFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\Item;
 
@@ -20,8 +22,8 @@ class ProductTest extends TestCase
          * @var Buyer $buyer
          * @var Item $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(Item::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -71,8 +73,8 @@ class ProductTest extends TestCase
          * @var Buyer $buyer
          * @var Item $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(Item::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -117,8 +119,8 @@ class ProductTest extends TestCase
          * @var Buyer $buyer
          * @var Item $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(Item::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -158,8 +160,8 @@ class ProductTest extends TestCase
          * @var Buyer $buyer
          * @var Item $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(Item::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -177,8 +179,8 @@ class ProductTest extends TestCase
          * @var Buyer $buyer
          * @var Item $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(Item::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -200,8 +202,8 @@ class ProductTest extends TestCase
          * @var Buyer $buyer
          * @var Item $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(Item::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -225,8 +227,8 @@ class ProductTest extends TestCase
          * @var Buyer $buyer
          * @var Item $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(Item::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -257,8 +259,8 @@ class ProductTest extends TestCase
          * @var Buyer $buyer
          * @var Item $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(Item::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
 

@@ -3,15 +3,13 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Interfaces\Storable;
-use Bavix\Wallet\Simple\BCMath;
-use Bavix\Wallet\Simple\Math;
+use Bavix\Wallet\Simple\BrickMath;
 use Bavix\Wallet\Simple\Store;
 use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Common\Models\Transfer;
 use Bavix\Wallet\Test\Common\Models\Wallet;
 use Bavix\Wallet\Test\Common\Rate;
 use Bavix\Wallet\WalletServiceProvider;
-use Illuminate\Foundation\Testing\RefreshDatabaseState;
 use function dirname;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -27,7 +25,6 @@ class TestCase extends OrchestraTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->withFactories(__DIR__.'/factories');
         $this->loadMigrationsFrom([
             '--path' => dirname(__DIR__).'/database/migrations_v1',
         ]);
@@ -50,7 +47,7 @@ class TestCase extends OrchestraTestCase
         // Bind eloquent models to IoC container
         $app['config']->set('wallet.package.rateable', Rate::class);
         $app['config']->set('wallet.package.storable', Store::class);
-        $app['config']->set('wallet.package.mathable', extension_loaded('bcmath') ? BCMath::class : Math::class);
+        $app['config']->set('wallet.package.mathable', BrickMath::class);
 
         return [WalletServiceProvider::class];
     }

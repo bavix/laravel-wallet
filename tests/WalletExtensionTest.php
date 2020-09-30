@@ -4,6 +4,7 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Objects\Operation;
 use Bavix\Wallet\Test\Common\Models\Transaction;
+use Bavix\Wallet\Test\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 
 class WalletExtensionTest extends TestCase
@@ -25,7 +26,7 @@ class WalletExtensionTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
         $transaction = $buyer->deposit(1000, ['bank_method' => 'VietComBank']);
 
@@ -39,7 +40,7 @@ class WalletExtensionTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
         $transaction = $buyer->deposit(1000);
 

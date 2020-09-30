@@ -6,6 +6,7 @@ use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Test\Factories\UserFactory;
 use Bavix\Wallet\Test\Models\User;
 
 class WalletTest extends TestCase
@@ -18,7 +19,7 @@ class WalletTest extends TestCase
         /**
          * @var User $user
          */
-        $user = factory(User::class)->create();
+        $user = UserFactory::new()->create();
         self::assertEquals(0, $user->balance);
 
         $user->deposit(10);
@@ -63,7 +64,7 @@ class WalletTest extends TestCase
         /**
          * @var User $user
          */
-        $user = factory(User::class)->create();
+        $user = UserFactory::new()->create();
         $user->deposit(-1);
     }
 
@@ -78,7 +79,7 @@ class WalletTest extends TestCase
         /**
          * @var User $user
          */
-        $user = factory(User::class)->create();
+        $user = UserFactory::new()->create();
         self::assertEquals(0, $user->balance);
 
         $user->deposit(100);
@@ -107,7 +108,7 @@ class WalletTest extends TestCase
         /**
          * @var User $user
          */
-        $user = factory(User::class)->create();
+        $user = UserFactory::new()->create();
         $user->withdraw(-1);
     }
 
@@ -122,7 +123,7 @@ class WalletTest extends TestCase
         /**
          * @var User $user
          */
-        $user = factory(User::class)->create();
+        $user = UserFactory::new()->create();
         $user->deposit(1);
         $user->withdraw(2);
     }
@@ -136,7 +137,7 @@ class WalletTest extends TestCase
          * @var User $first
          * @var User $second
          */
-        [$first, $second] = factory(User::class, 2)->create();
+        [$first, $second] = UserFactory::times(2)->create();
         self::assertNotEquals($first->id, $second->id);
         self::assertEquals(0, $first->balance);
         self::assertEquals(0, $second->balance);
@@ -183,7 +184,7 @@ class WalletTest extends TestCase
         /**
          * @var User $user
          */
-        $user = factory(User::class)->create();
+        $user = UserFactory::new()->create();
         self::assertEquals(0, $user->balance);
 
         $user->deposit(100);
@@ -205,7 +206,7 @@ class WalletTest extends TestCase
         /**
          * @var User $user
          */
-        $user = factory(User::class)->create();
+        $user = UserFactory::new()->create();
         self::assertEquals(0, $user->balance);
         $user->withdraw(1);
     }
@@ -218,7 +219,7 @@ class WalletTest extends TestCase
         /**
          * @var User $user
          */
-        $user = factory(User::class)->create();
+        $user = UserFactory::new()->create();
         self::assertEquals(0, $user->balance);
 
         $user->deposit(1);
@@ -239,7 +240,7 @@ class WalletTest extends TestCase
         /**
          * @var User $user
          */
-        $user = factory(User::class)->create();
+        $user = UserFactory::new()->create();
         self::assertEquals(0, $user->balance);
 
         $user->deposit(100, null, false);

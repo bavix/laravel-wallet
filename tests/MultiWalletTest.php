@@ -7,6 +7,9 @@ use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\DbService;
+use Bavix\Wallet\Test\Factories\ItemFactory;
+use Bavix\Wallet\Test\Factories\UserCashierFactory;
+use Bavix\Wallet\Test\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Models\Item;
 use Bavix\Wallet\Test\Models\UserCashier;
 use Bavix\Wallet\Test\Models\UserMulti;
@@ -27,7 +30,7 @@ class MultiWalletTest extends TestCase
         /**
          * @var UserMulti $user
          */
-        $user = factory(UserMulti::class)->create();
+        $user = UserMultiFactory::new()->create();
         self::assertNull($user->getWallet($slug));
 
         $wallet = $user->createWallet(['name' => 'Simple', 'slug' => $slug]);
@@ -44,7 +47,7 @@ class MultiWalletTest extends TestCase
         /**
          * @var UserMulti $user
          */
-        $user = factory(UserMulti::class)->create();
+        $user = UserMultiFactory::new()->create();
         self::assertFalse($user->hasWallet('deposit'));
         $wallet = $user->createWallet([
             'name' => 'Deposit',
@@ -97,7 +100,7 @@ class MultiWalletTest extends TestCase
          * @var UserMulti $userInit
          * @var UserMulti $userFind
          */
-        $userInit = factory(UserMulti::class)->create();
+        $userInit = UserMultiFactory::new()->create();
         $wallet = $userInit->createWallet([
             'name' => 'my-simple-wallet',
             'slug' => $userInit->getKey(),
@@ -138,7 +141,7 @@ class MultiWalletTest extends TestCase
         /**
          * @var UserMulti $user
          */
-        $user = factory(UserMulti::class)->create();
+        $user = UserMultiFactory::new()->create();
         $wallet = $user->createWallet([
             'name' => 'deposit',
         ]);
@@ -157,7 +160,7 @@ class MultiWalletTest extends TestCase
         /**
          * @var UserMulti $user
          */
-        $user = factory(UserMulti::class)->create();
+        $user = UserMultiFactory::new()->create();
         $wallet = $user->createWallet([
             'name' => 'deposit',
         ]);
@@ -190,7 +193,7 @@ class MultiWalletTest extends TestCase
         /**
          * @var UserMulti $user
          */
-        $user = factory(UserMulti::class)->create();
+        $user = UserMultiFactory::new()->create();
         $wallet = $user->createWallet([
             'name' => 'deposit',
         ]);
@@ -207,7 +210,7 @@ class MultiWalletTest extends TestCase
          * @var UserMulti $first
          * @var UserMulti $second
          */
-        [$first, $second] = factory(UserMulti::class, 2)->create();
+        [$first, $second] = UserMultiFactory::times(2)->create();
         $firstWallet = $first->createWallet([
             'name' => 'deposit',
         ]);
@@ -272,7 +275,7 @@ class MultiWalletTest extends TestCase
         /**
          * @var UserMulti $user
          */
-        $user = factory(UserMulti::class)->create();
+        $user = UserMultiFactory::new()->create();
         $wallet = $user->createWallet([
             'name' => 'deposit',
         ]);
@@ -298,7 +301,7 @@ class MultiWalletTest extends TestCase
         /**
          * @var UserMulti $user
          */
-        $user = factory(UserMulti::class)->create();
+        $user = UserMultiFactory::new()->create();
         $wallet = $user->createWallet([
             'name' => 'deposit',
         ]);
@@ -315,7 +318,7 @@ class MultiWalletTest extends TestCase
         /**
          * @var UserMulti $user
          */
-        $user = factory(UserMulti::class)->create();
+        $user = UserMultiFactory::new()->create();
         $wallet = $user->createWallet([
             'name' => 'deposit',
         ]);
@@ -343,7 +346,7 @@ class MultiWalletTest extends TestCase
         /**
          * @var UserMulti $user
          */
-        $user = factory(UserMulti::class)->create();
+        $user = UserMultiFactory::new()->create();
 
         $user->createWallet([
             'name' => 'deposit',
@@ -369,7 +372,7 @@ class MultiWalletTest extends TestCase
         /**
          * @var UserMulti $user
          */
-        $user = factory(UserMulti::class)->create();
+        $user = UserMultiFactory::new()->create();
 
         $firstWallet = $user->createWallet([
             'name' => 'My Test',
@@ -403,7 +406,7 @@ class MultiWalletTest extends TestCase
         /**
          * @var UserMulti $user
          */
-        $user = factory(UserMulti::class)->create();
+        $user = UserMultiFactory::new()->create();
         $names = range('a', 'z');
         foreach ($names as $name) {
             $user->createWallet(compact('name'));
@@ -425,11 +428,11 @@ class MultiWalletTest extends TestCase
          * @var UserMulti $user
          * @var Item $product
          */
-        $user = factory(UserMulti::class)->create();
+        $user = UserMultiFactory::new()->create();
         $a = $user->createWallet(['name' => 'a']);
         $b = $user->createWallet(['name' => 'b']);
 
-        $product = factory(Item::class)->create([
+        $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -483,7 +486,7 @@ class MultiWalletTest extends TestCase
         /**
          * @var UserCashier $user
          */
-        $user = factory(UserCashier::class)->create();
+        $user = UserCashierFactory::new()->create();
         $default = $user->wallet;
 
         self::assertEquals($default->balance, 0);

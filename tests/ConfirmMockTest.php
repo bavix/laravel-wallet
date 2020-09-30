@@ -4,6 +4,7 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Test\Common\Models\Wallet;
+use Bavix\Wallet\Test\Factories\UserConfirmFactory;
 use Bavix\Wallet\Test\Models\UserConfirm;
 
 class ConfirmMockTest extends TestCase
@@ -16,7 +17,7 @@ class ConfirmMockTest extends TestCase
         /**
          * @var UserConfirm $userConfirm
          */
-        $userConfirm = factory(UserConfirm::class)->create();
+        $userConfirm = UserConfirmFactory::new()->create();
         $transaction = $userConfirm->deposit(100, null, false);
         self::assertEquals($userConfirm->wallet->id, $transaction->wallet->id);
         self::assertEquals($userConfirm->id, $transaction->payable_id);
@@ -49,7 +50,7 @@ class ConfirmMockTest extends TestCase
         /**
          * @var UserConfirm $userConfirm
          */
-        $userConfirm = factory(UserConfirm::class)->create();
+        $userConfirm = UserConfirmFactory::new()->create();
         $transaction = $userConfirm->deposit(100);
         self::assertEquals($userConfirm->wallet->id, $transaction->wallet->id);
         self::assertEquals($userConfirm->id, $transaction->payable_id);

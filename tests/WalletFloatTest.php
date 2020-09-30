@@ -6,7 +6,7 @@ use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Models\Transaction;
-use Bavix\Wallet\Simple\BCMath;
+use Bavix\Wallet\Test\Factories\UserFloatFactory;
 use Bavix\Wallet\Test\Models\UserFloat as User;
 
 class WalletFloatTest extends TestCase
@@ -16,27 +16,30 @@ class WalletFloatTest extends TestCase
      */
     public function testDeposit(): void
     {
-        $user = factory(User::class)->create();
-        self::assertEquals($user->balance, 0);
-        self::assertEquals($user->balanceFloat, 0);
+        /**
+         * @var User $user
+         */
+        $user = UserFloatFactory::new()->create();
+        self::assertEquals(0, $user->balance);
+        self::assertEquals(0, $user->balanceFloat);
 
         $user->depositFloat(.1);
-        self::assertEquals($user->balance, 10);
-        self::assertEquals($user->balanceFloat, .1);
+        self::assertEquals(10, $user->balance);
+        self::assertEquals(.1, $user->balanceFloat);
 
         $user->depositFloat(1.25);
-        self::assertEquals($user->balance, 135);
-        self::assertEquals($user->balanceFloat, 1.35);
+        self::assertEquals(135, $user->balance);
+        self::assertEquals(1.35, $user->balanceFloat);
 
         $user->deposit(865);
-        self::assertEquals($user->balance, 1000);
-        self::assertEquals($user->balanceFloat, 10);
+        self::assertEquals(1000, $user->balance);
+        self::assertEquals(10, $user->balanceFloat);
 
-        self::assertEquals($user->transactions()->count(), 3);
+        self::assertEquals(3, $user->transactions()->count());
 
         $user->withdraw($user->balance);
-        self::assertEquals($user->balance, 0);
-        self::assertEquals($user->balanceFloat, 0);
+        self::assertEquals(0, $user->balance);
+        self::assertEquals(0, $user->balanceFloat);
     }
 
     /**
@@ -46,7 +49,7 @@ class WalletFloatTest extends TestCase
     {
         $this->expectException(AmountInvalid::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.price_positive'));
-        $user = factory(User::class)->create();
+        $user = UserFloatFactory::new()->create();
         $user->depositFloat(-1);
     }
 
@@ -58,20 +61,23 @@ class WalletFloatTest extends TestCase
         $this->expectException(BalanceIsEmpty::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
-        $user = factory(User::class)->create();
-        self::assertEquals($user->balance, 0);
+        /**
+         * @var User $user
+         */
+        $user = UserFloatFactory::new()->create();
+        self::assertEquals(0, $user->balance);
 
         $user->depositFloat(1);
-        self::assertEquals($user->balanceFloat, 1);
+        self::assertEquals(1, $user->balanceFloat);
 
         $user->withdrawFloat(.1);
-        self::assertEquals($user->balanceFloat, 0.9);
+        self::assertEquals(0.9, $user->balanceFloat);
 
         $user->withdrawFloat(.81);
-        self::assertEquals($user->balanceFloat, .09);
+        self::assertEquals(.09, $user->balanceFloat);
 
         $user->withdraw(9);
-        self::assertEquals($user->balance, 0);
+        self::assertEquals(0, $user->balance);
 
         $user->withdraw(1);
     }
@@ -83,7 +89,7 @@ class WalletFloatTest extends TestCase
     {
         $this->expectException(BalanceIsEmpty::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
-        $user = factory(User::class)->create();
+        $user = UserFloatFactory::new()->create();
         $user->withdrawFloat(-1);
     }
 
@@ -96,7 +102,7 @@ class WalletFloatTest extends TestCase
          * @var User $first
          * @var User $second
          */
-        [$first, $second] = factory(User::class, 2)->create();
+        [$first, $second] = UserFloatFactory::times(2)->create();
         self::assertNotEquals($first->id, $second->id);
         self::assertEquals($first->balanceFloat, 0);
         self::assertEquals($second->balanceFloat, 0);
@@ -143,15 +149,15 @@ class WalletFloatTest extends TestCase
         /**
          * @var User $user
          */
-        $user = factory(User::class)->create();
-        self::assertEquals($user->balanceFloat, 0);
+        $user = UserFloatFactory::new()->create();
+        self::assertEquals(0, $user->balanceFloat);
 
         $user->depositFloat(1);
         $user->transferFloat($user, 1);
-        self::assertEquals($user->balance, 100);
+        self::assertEquals(100, $user->balance);
 
         $user->withdrawFloat($user->balanceFloat);
-        self::assertEquals($user->balance, 0);
+        self::assertEquals(0, $user->balance);
     }
 
     /**
@@ -165,8 +171,8 @@ class WalletFloatTest extends TestCase
         /**
          * @var User $user
          */
-        $user = factory(User::class)->create();
-        self::assertEquals($user->balance, 0);
+        $user = UserFloatFactory::new()->create();
+        self::assertEquals(0, $user->balance);
         $user->withdrawFloat(1);
     }
 
@@ -178,7 +184,7 @@ class WalletFloatTest extends TestCase
         /**
          * @var User $user
          */
-        $user = factory(User::class)->create();
+        $user = UserFloatFactory::new()->create();
         self::assertEquals($user->balance, 0);
 
         $user->depositFloat(1);
@@ -204,7 +210,7 @@ class WalletFloatTest extends TestCase
         /**
          * @var User $user
          */
-        $user = factory(User::class)->create();
+        $user = UserFloatFactory::new()->create();
         self::assertEquals($user->balance, 0);
 
         $user->deposit(1000000);
@@ -236,7 +242,7 @@ class WalletFloatTest extends TestCase
         /**
          * @var User $user
          */
-        $user = factory(User::class)->create();
+        $user = UserFloatFactory::new()->create();
         self::assertEquals($user->balance, 0);
 
         $user->deposit(1000000);
@@ -269,7 +275,7 @@ class WalletFloatTest extends TestCase
         /**
          * @var User $user
          */
-        $user = factory(User::class)->create();
+        $user = UserFloatFactory::new()->create();
         self::assertEquals($user->balance, 0);
 
         $user->deposit(1000000);
@@ -294,22 +300,20 @@ class WalletFloatTest extends TestCase
      */
     public function testEther(): void
     {
-        if (app(Mathable::class) instanceof BCMath) {
-            /**
-             * @var User $user
-             */
-            $user = factory(User::class)->create();
-            self::assertEquals($user->balance, 0);
+        /**
+         * @var User $user
+         */
+        $user = UserFloatFactory::new()->create();
+        self::assertEquals(0, $user->balance);
 
-            $user->wallet->decimal_places = 18;
-            $user->wallet->save();
+        $user->wallet->decimal_places = 18;
+        $user->wallet->save();
 
-            $math = app(Mathable::class);
+        $math = app(Mathable::class);
 
-            $user->depositFloat('545.8754855274419');
-            self::assertEquals($user->balance, '545875485527441900000');
-            self::assertEquals($math->compare($user->balanceFloat, '545.8754855274419'), 0);
-        }
+        $user->depositFloat('545.8754855274419');
+        self::assertEquals('545875485527441900000', $user->balance);
+        self::assertEquals(0, $math->compare($user->balanceFloat, '545.8754855274419'));
     }
 
     /**
@@ -317,33 +321,31 @@ class WalletFloatTest extends TestCase
      */
     public function testBitcoin(): void
     {
-        if (app(Mathable::class) instanceof BCMath) {
-            /**
-             * @var User $user
-             */
-            $user = factory(User::class)->create();
-            self::assertEquals($user->balance, 0);
+        /**
+         * @var User $user
+         */
+        $user = UserFloatFactory::new()->create();
+        self::assertEquals(0, $user->balance);
 
-            $user->wallet->decimal_places = 32; // bitcoin wallet
-            $user->wallet->save();
+        $user->wallet->decimal_places = 32; // bitcoin wallet
+        $user->wallet->save();
 
-            $math = app(Mathable::class);
+        $math = app(Mathable::class);
 
-            for ($i = 0; $i < 256; $i++) {
-                $user->depositFloat('0.00000001'); // Satoshi
-            }
-
-            self::assertEquals($user->balance, '256'.str_repeat('0', 32 - 8));
-            self::assertEquals($math->compare($user->balanceFloat, '0.00000256'), 0);
-
-            $user->deposit(256 .str_repeat('0', 32));
-            $user->depositFloat('0.'.str_repeat('0', 31).'1');
-
-            [$q, $r] = explode('.', $user->balanceFloat, 2);
-            self::assertEquals(strlen($r), $user->wallet->decimal_places);
-            self::assertEquals($user->balance, '25600000256000000000000000000000001');
-            self::assertEquals($user->balanceFloat, '256.00000256000000000000000000000001');
+        for ($i = 0; $i < 256; $i++) {
+            $user->depositFloat('0.00000001'); // Satoshi
         }
+
+        self::assertEquals($user->balance, '256'.str_repeat('0', 32 - 8));
+        self::assertEquals(0, $math->compare($user->balanceFloat, '0.00000256'));
+
+        $user->deposit(256 .str_repeat('0', 32));
+        $user->depositFloat('0.'.str_repeat('0', 31).'1');
+
+        [$q, $r] = explode('.', $user->balanceFloat, 2);
+        self::assertEquals(strlen($r), $user->wallet->decimal_places);
+        self::assertEquals('25600000256000000000000000000000001', $user->balance);
+        self::assertEquals('256.00000256000000000000000000000001', $user->balanceFloat);
     }
 
     /**
@@ -352,23 +354,21 @@ class WalletFloatTest extends TestCase
      */
     public function testBitcoin2(): void
     {
-        if (app(Mathable::class) instanceof BCMath) {
-            /**
-             * @var User $user
-             */
-            $user = factory(User::class)->create();
-            self::assertEquals($user->balance, 0);
+        /**
+         * @var User $user
+         */
+        $user = UserFloatFactory::new()->create();
+        self::assertEquals(0, $user->balance);
 
-            $user->wallet->decimal_places = 8;
-            $user->wallet->save();
+        $user->wallet->decimal_places = 8;
+        $user->wallet->save();
 
-            $user->depositFloat(0.09699977);
+        $user->depositFloat(0.09699977);
 
-            $user->wallet->refreshBalance();
-            $user->refresh();
+        $user->wallet->refreshBalance();
+        $user->refresh();
 
-            self::assertEquals($user->balanceFloat, 0.09699977);
-            self::assertEquals($user->balance, 9699977);
-        }
+        self::assertEquals(0.09699977, $user->balanceFloat);
+        self::assertEquals(9699977, $user->balance);
     }
 }
