@@ -25,19 +25,28 @@ before_script:
 jobs:
   include:
     - stage: mysql8
-      php: 7.4
+      php:
+        - 7.3
+        - 7.4
+        - 'nightly'
       before_install:
         - docker run -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true -e MYSQL_USER=wallet -e MYSQL_PASSWORD=wallet -e MYSQL_DATABASE=wallet -d mysql:8
       env: DB_CONNECTION=mysql
 
     - stage: pgsql12
-      php: 7.4
+      php:
+        - 7.3
+        - 7.4
+        - 'nightly'
       before_install:
         - docker run -p 5432:5432 -e POSTGRES_USER=wallet -e POSTGRES_PASSWORD=wallet -e POSTGRES_DB=wallet -d postgres:12
       env: DB_CONNECTION=pgsql
 
     - stage: pgsql13
-      php: 7.4
+      php:
+        - 7.3
+        - 7.4
+        - 'nightly'
       before_install:
         - docker run -p 5432:5432 -e POSTGRES_USER=wallet -e POSTGRES_PASSWORD=wallet -e POSTGRES_DB=wallet -d postgres:13
       env: DB_CONNECTION=pgsql
