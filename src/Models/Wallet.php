@@ -4,6 +4,7 @@ namespace Bavix\Wallet\Models;
 
 use function app;
 use function array_key_exists;
+use function array_merge;
 use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Exchangeable;
@@ -22,7 +23,9 @@ use Illuminate\Support\Str;
  * Class Wallet.
  * @property string $holder_type
  * @property int $holder_id
+ * @property string $name
  * @property string $slug
+ * @property string $description
  * @property int $balance
  * @property int $decimal_places
  * @property \Bavix\Wallet\Interfaces\Wallet $holder
@@ -60,12 +63,10 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
      */
     public function getCasts(): array
     {
-        $this->casts = array_merge(
-            $this->casts,
+        return array_merge(
+            parent::getCasts(),
             config('wallet.wallet.casts', [])
         );
-
-        return parent::getCasts();
     }
 
     /**

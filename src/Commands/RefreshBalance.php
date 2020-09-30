@@ -4,15 +4,10 @@ namespace Bavix\Wallet\Commands;
 
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\DbService;
-use function config;
 use Illuminate\Console\Command;
-use Illuminate\Database\PostgresConnection;
-use Illuminate\Database\Query\JoinClause;
-use Illuminate\Database\SQLiteConnection;
 
 /**
  * Class RefreshBalance.
- * @codeCoverageIgnore
  */
 class RefreshBalance extends Command
 {
@@ -36,11 +31,10 @@ class RefreshBalance extends Command
      */
     public function handle(): void
     {
-        app(DbService::class)->transaction(function () {
+        app(DbService::class)->transaction(static function () {
             Wallet::query()->each(static function (Wallet $wallet) {
                 $wallet->refreshBalance();
             });
         });
     }
-
 }

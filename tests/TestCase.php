@@ -11,7 +11,6 @@ use Bavix\Wallet\Test\Common\Models\Transfer;
 use Bavix\Wallet\Test\Common\Models\Wallet;
 use Bavix\Wallet\Test\Common\Rate;
 use Bavix\Wallet\WalletServiceProvider;
-use Illuminate\Foundation\Testing\RefreshDatabaseState;
 use function dirname;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -83,9 +82,14 @@ class TestCase extends OrchestraTestCase
 
         $app['config']->set('wallet.lock.enabled', false);
 
-        if (extension_loaded('memcached')) {
+        if (env('MEMCACHED_ENABLE')) {
             $app['config']->set('cache.default', 'memcached');
             $app['config']->set('wallet.lock.cache', 'memcached');
+        }
+
+        if (env('REDIS_ENABLE')) {
+            $app['config']->set('cache.default', 'redis');
+            $app['config']->set('wallet.lock.cache', 'redis');
         }
 
         $app['config']->set('database.connections.testing.prefix', 'tests');

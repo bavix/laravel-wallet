@@ -12,11 +12,22 @@ use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Simple\BCMath;
+use Bavix\Wallet\Simple\BrickMath;
 use Bavix\Wallet\Simple\Math;
 use Bavix\Wallet\Simple\Rate;
 use Bavix\Wallet\Simple\Store;
+use Brick\Math\BigDecimal;
 
 $bcLoaded = extension_loaded('bcmath');
+$mathClass = Math::class;
+switch (true) {
+    case class_exists(BigDecimal::class):
+        $mathClass = BrickMath::class;
+        break;
+    case $bcLoaded:
+        $mathClass = BCMath::class;
+        break;
+}
 
 return [
     /**
@@ -34,9 +45,7 @@ return [
     'package' => [
         'rateable' => Rate::class,
         'storable' => Store::class,
-        'mathable' => $bcLoaded ?
-            BCMath::class :
-            Math::class,
+        'mathable' => $mathClass,
     ],
 
     /**

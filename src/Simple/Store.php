@@ -59,6 +59,7 @@ class Store implements Storable
     public function fresh(): bool
     {
         $this->balanceSheets = [];
+
         return true;
     }
 

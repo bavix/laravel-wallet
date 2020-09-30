@@ -32,6 +32,7 @@
     "ramsey/uuid": "^3.0|^4.0"
   },
   "require-dev": {
+    "brick/math": "^0.9.1",
     "infection/infection": "0.17.*",
     "laravel/cashier": "^10.0|^11.0|^12.0",
     "laravel/legacy-factories": "^1.0",
@@ -41,6 +42,7 @@
   },
   "suggest": {
     "ext-bcmath": "Used for accurate calculations of large numbers",
+    "brick/math": "Used for work with arbitrary precision numbers",
     "bavix/laravel-wallet-swap": "Addition to the laravel-wallet library for quick setting of exchange rates",
     "bavix/laravel-wallet-vacuum": "Addition to the laravel-wallet library for quick fix race condition"
   },
