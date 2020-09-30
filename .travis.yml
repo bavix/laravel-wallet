@@ -4,26 +4,63 @@ php:
   - '7.4'
   - 'nightly'
 
-services:
-  - memcached
+stages:
+  - SQLite (with redis)
+  - SQLite (with memcached)
+  - MySQL 8
+  - PostgreSQL 12
+  - PostgreSQL 13
 
-matrix:
-  allow_failures:
-    - php: 'nightly'
+services:
+  - docker
+  - memcached
+  - redis
 
 before_script:
   - pecl install pcov
   - phpenv config-rm xdebug.ini || echo "xdebug not available"
-  - bash <(curl -s https://raw.githubusercontent.com/php-cache/cache/master/build/php/7.2/Memcached.sh)
+  - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
-  - if [ $(phpenv version-name) = "7.4" ]; then ./cc-test-reporter before-build; fi
+  - if [ $COVERAGE = "yes" ]; then ./cc-test-reporter before-build; fi
   - composer install
+
+jobs:
+  include:
+    - stage: SQLite (with redis)
+      php: 7.4
+      env: REDIS_ENABLE=true
+
+    - stage: SQLite (with memcached)
+      php: 7.4
+      env: MEMCACHED_ENABLE=true
+
+    - stage: MySQL 8
+      php: 7.4
+      before_install:
+        - docker run -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true -e MYSQL_USER=wallet -e MYSQL_PASSWORD=wallet -e MYSQL_DATABASE=wallet -d mysql:8
+      env: DB_CONNECTION=mysql
+
+    - stage: PostgreSQL 12
+      php: 7.4
+      before_install:
+        - docker run -p 5432:5432 -e POSTGRES_USER=wallet -e POSTGRES_PASSWORD=wallet -e POSTGRES_DB=wallet -d postgres:12
+      env: DB_CONNECTION=pgsql
+
+    - stage: PostgreSQL 13
+      php: 7.4
+      before_install:
+        - docker run -p 5432:5432 -e POSTGRES_USER=wallet -e POSTGRES_PASSWORD=wallet -e POSTGRES_DB=wallet -d postgres:13
+      env: DB_CONNECTION=pgsql COVERAGE=yes
+
+  allow_failures:
+    - php: 'nightly'
 
 script:
   - ./vendor/bin/phpunit --coverage-xml=build/coverage-xml --log-junit=build/junit.xml
-  - if [ $(phpenv version-name) = "7.4" ]; then ./vendor/bin/infection --coverage=build --min-msi=60 -j$(nproc); fi
+  - if [ $COVERAGE = "yes" ]; then ./vendor/bin/infection --coverage=build --min-msi=60 -j$(nproc); fi
 
 after_success:
-  - if [ $(phpenv version-name) = "7.4" ]; then ./cc-test-reporter after-build --coverage-input-type clover --exit-code $TRAVIS_TEST_RESULT; fi
+  - if [ $COVERAGE = "yes" ]; then ./cc-test-reporter after-build --coverage-input-type clover --exit-code $TRAVIS_TEST_RESULT; fi
   - bash <(curl -s https://codecov.io/bash)
