@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Models;
 
+use function array_merge;
 use function config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * Class Transfer.
  *
  * @property string $status
+ * @property int $discount
  * @property int $deposit_id
  * @property int $withdraw_id
  * @property string $from_type
@@ -19,7 +21,6 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int $to_id
  * @property string $uuid
  * @property int $fee
- * @property int $discount
  *
  * @property Transaction $deposit
  * @property Transaction $withdraw
@@ -61,12 +62,10 @@ class Transfer extends Model
      */
     public function getCasts(): array
     {
-        $this->casts = array_merge(
-            $this->casts,
+        return array_merge(
+            parent::getCasts(),
             config('wallet.transfer.casts', [])
         );
-
-        return parent::getCasts();
     }
 
     /**

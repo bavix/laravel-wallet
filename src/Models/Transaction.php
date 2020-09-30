@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Models;
 
+use function array_merge;
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  *
  * @property string $payable_type
  * @property int $payable_id
+ * @property int $wallet_id
  * @property string $uuid
  * @property string $type
  * @property int $amount
@@ -58,12 +60,10 @@ class Transaction extends Model
      */
     public function getCasts(): array
     {
-        $this->casts = array_merge(
-            $this->casts,
+        return array_merge(
+            parent::getCasts(),
             config('wallet.transaction.casts', [])
         );
-
-        return parent::getCasts();
     }
 
     /**
