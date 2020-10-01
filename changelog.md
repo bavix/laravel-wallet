@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.5.0] - 2020-10-01
+
+### Added
+- Added brick/math dependency (Optional in version 5.x. If you already have a package installed, the library will switch to it automatically)
+- Added more php annotations, now it's easier to work with the library.
+- Updated travis. Now we check not only SQLite, but also mysql & postgres.
+
+### Fixed
+- Fixed memory leak in models.
+
+### Deprecated
+- class `BCMath`.
+- class `Math`.
+
 ## [5.4.0] - 2020-09-30
 ### Added
 - Temporarily added package (to develop) laravel/legacy-factories.
@@ -217,7 +231,11 @@ This removes a lot of errors that were sent to my email.
 - Add `Taxable`.
 - New exception's.
 - Add decimal places (replacement ratio).
-
+​
+317
+### Deprecated
+318
+- method `calculateBalance`.
 ### Changed
 - Updated dependencies (composer.json).
 - New status `exchange`.
@@ -542,7 +560,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/5.4.0...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/5.5.0...develop
+[5.5.0]: https://github.com/bavix/laravel-wallet/compare/5.4.0...5.5.0
 [5.4.0]: https://github.com/bavix/laravel-wallet/compare/5.3.2...5.4.0
 [5.3.2]: https://github.com/bavix/laravel-wallet/compare/5.3.1...5.3.2
 [5.3.1]: https://github.com/bavix/laravel-wallet/compare/5.3.0...5.3.1
