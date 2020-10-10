@@ -300,5 +300,4 @@ class ProductTest extends TestCase
         self::assertEquals(0, $buyer->balance);
         self::assertEquals($product->getAmountProduct($buyer), $product->getWallet('testing')->balance);
     }
-
 }
