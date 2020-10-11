@@ -17,7 +17,7 @@ class TransactionMoney extends \Bavix\Wallet\Models\Transaction
 
     public function getCurrencyAttribute(): Money
     {
-        if (!$this->currency) {
+        if (! $this->currency) {
             $this->currency = \money($this->amount, $this->meta['currency'] ?? 'USD');
         }
 
