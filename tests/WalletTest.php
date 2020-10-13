@@ -8,6 +8,7 @@ use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Test\Factories\UserFactory;
 use Bavix\Wallet\Test\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 
 class WalletTest extends TestCase
 {
@@ -66,6 +67,34 @@ class WalletTest extends TestCase
          */
         $user = UserFactory::new()->create();
         $user->deposit(-1);
+    }
+
+    /**
+     * @return void
+     */
+    public function testFindUserByExistsWallet(): void
+    {
+        /**
+         * @var User[]|Collection $users
+         */
+        $users = UserFactory::times(10)->create();
+        self::assertCount(10, $users);
+
+        /**
+         * @var User $user
+         */
+        $user = $users->first();
+        self::assertEquals(0, $user->balance); // create default wallet
+        self::assertTrue($user->wallet->exists);
+
+        foreach ($users as $other) {
+            if ($user !== $other) {
+                self::assertFalse($other->wallet->exists);
+            }
+        }
+
+        self::assertCount(1, User::query()->has('wallet')->get());
+        self::assertCount(9, User::query()->has('wallet', '<')->get());
     }
 
     /**
