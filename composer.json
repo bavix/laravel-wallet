@@ -33,7 +33,7 @@
   },
   "require-dev": {
     "brick/math": "^0.9.1",
-    "infection/infection": "0.18",
+    "infection/infection": "^0.17",
     "laravel/cashier": "^10.0|^11.0|^12.0",
     "laravel/legacy-factories": "^1.0",
     "orchestra/testbench": "^4.0|^5.0|^6.0",
