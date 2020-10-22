@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Bigger and safer. There are never many tests. As always, new test cases have been added.
+- Package `brick/math` is now required.
+- Added examples of integrations with the `cknow/laravel-money` package in unit tests.
+- The `Storable` interface has an additional method `fresh` to clean up all data.
+
+### Changed
+- Now the package works exclusively with strings, there are fewer problems when working with large numbers.
+- Now, to work with cryptocurrencies, it is not necessary to install `bcmath`.
+
+### Removed
+- Removed php 7.2 support.
+- Drop package `laravel/legacy-factories`.
+- Remove `BCMath` and `Math` classes.
+
 ## [5.5.0] - 2020-10-01
 
 ### Added
