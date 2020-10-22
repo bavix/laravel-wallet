@@ -3,6 +3,8 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Test\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Factories\ItemMinTaxFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\ItemMinTax;
 
@@ -17,8 +19,8 @@ class MinTaxTest extends TestCase
          * @var Buyer $buyer
          * @var ItemMinTax $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemMinTax::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemMinTaxFactory::new()->create([
             'quantity' => 1,
         ]);
 

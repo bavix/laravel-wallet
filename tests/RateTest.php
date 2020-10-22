@@ -4,6 +4,7 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Interfaces\Rateable;
 use Bavix\Wallet\Services\ExchangeService;
+use Bavix\Wallet\Test\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Models\UserMulti;
 use Illuminate\Support\Str;
 
@@ -17,7 +18,7 @@ class RateTest extends TestCase
         /**
          * @var UserMulti $user
          */
-        $user = factory(UserMulti::class)->create();
+        $user = UserMultiFactory::new()->create();
         $usd = $user->createWallet(['name' => 'Dollar USA', 'slug' => 'my-usd']);
         self::assertEquals($usd->slug, 'my-usd');
         self::assertEquals($usd->currency, 'USD');
@@ -52,7 +53,7 @@ class RateTest extends TestCase
         /**
          * @var UserMulti $user
          */
-        $user = factory(UserMulti::class)->create();
+        $user = UserMultiFactory::new()->create();
         $usd = $user->createWallet(['name' => 'USD']);
         self::assertEquals($usd->slug, 'usd');
         self::assertEquals($usd->currency, 'USD');

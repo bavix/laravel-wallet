@@ -174,7 +174,7 @@ class Bring
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getDiscount(): int
     {

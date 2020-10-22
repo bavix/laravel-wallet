@@ -32,9 +32,8 @@ interface Storable
 
     /**
      * We clean the storage, a need for consumers.
-     * Expected in 6.x version.
      *
      * @return bool
      */
-    // public function fresh(): bool;
+    public function fresh(): bool;
 }

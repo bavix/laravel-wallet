@@ -7,6 +7,8 @@ use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Simple\Store;
+use Bavix\Wallet\Test\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\UserMulti;
 use Illuminate\Database\SQLiteConnection;
@@ -24,7 +26,7 @@ class BalanceTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
         $buyer->deposit(1);
 
@@ -40,7 +42,7 @@ class BalanceTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         self::assertTrue($buyer->canWithdraw(0));
 
         $buyer->forceWithdraw(1);
@@ -56,7 +58,7 @@ class BalanceTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
         self::assertEquals($buyer->balance, 0);
         $buyer->forceWithdraw(1);
@@ -76,7 +78,7 @@ class BalanceTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
 
         self::assertFalse($buyer->relationLoaded('wallet'));
         $wallet = $buyer->wallet;
@@ -124,7 +126,7 @@ class BalanceTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
         $wallet = $buyer->wallet;
 
@@ -144,7 +146,7 @@ class BalanceTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
         $wallet = $buyer->wallet;
 
@@ -177,7 +179,7 @@ class BalanceTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
         $wallet = $buyer->wallet;
 
@@ -204,7 +206,7 @@ class BalanceTest extends TestCase
         /**
          * @var UserMulti $user
          */
-        $user = factory(UserMulti::class)->create();
+        $user = UserMultiFactory::new()->create();
         $wallets = \range('a', 'z');
         $sums = [];
         $ids = [];
@@ -256,7 +258,7 @@ class BalanceTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
 
         self::assertEquals($wallet->balance, 0);

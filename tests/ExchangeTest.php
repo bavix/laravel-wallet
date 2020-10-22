@@ -3,6 +3,7 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Test\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Models\UserMulti;
 
 class ExchangeTest extends TestCase
@@ -15,7 +16,7 @@ class ExchangeTest extends TestCase
         /**
          * @var UserMulti $user
          */
-        $user = factory(UserMulti::class)->create();
+        $user = UserMultiFactory::new()->create();
         $usd = $user->createWallet([
             'name' => 'My USD',
             'slug' => 'usd',
@@ -55,7 +56,7 @@ class ExchangeTest extends TestCase
         /**
          * @var UserMulti $user
          */
-        $user = factory(UserMulti::class)->create();
+        $user = UserMultiFactory::new()->create();
         $usd = $user->createWallet([
             'name' => 'My USD',
             'slug' => 'usd',

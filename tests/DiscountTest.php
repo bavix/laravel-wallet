@@ -6,6 +6,8 @@ use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
+use Bavix\Wallet\Test\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Factories\ItemDiscountFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\Item;
 use Bavix\Wallet\Test\Models\ItemDiscount;
@@ -21,16 +23,16 @@ class DiscountTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscount $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscount::class)->create();
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountFactory::new()->create();
 
-        self::assertEquals($buyer->balance, 0);
+        self::assertEquals(0, $buyer->balance);
         $buyer->deposit($product->getAmountProduct($buyer));
 
         self::assertEquals($buyer->balance, $product->getAmountProduct($buyer));
         $transfer = $buyer->pay($product);
         self::assertNotNull($transfer);
-        self::assertEquals($transfer->status, Transfer::STATUS_PAID);
+        self::assertEquals(Transfer::STATUS_PAID, $transfer->status);
 
         self::assertEquals(
             $buyer->balance,
@@ -77,16 +79,16 @@ class DiscountTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscount $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscount::class)->create();
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountFactory::new()->create();
 
-        self::assertEquals($buyer->balance, 0);
+        self::assertEquals(0, $buyer->balance);
         $buyer->deposit($product->getAmountProduct($buyer));
 
         self::assertEquals($buyer->balance, $product->getAmountProduct($buyer));
         $transfer = $buyer->pay($product);
         self::assertNotNull($transfer);
-        self::assertEquals($transfer->status, Transfer::STATUS_PAID);
+        self::assertEquals(Transfer::STATUS_PAID, $transfer->status);
 
         self::assertEquals(
             $buyer->balance,
@@ -127,18 +129,18 @@ class DiscountTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscount $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscount::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
 
-        self::assertEquals($buyer->balance, 0);
+        self::assertEquals(0, $buyer->balance);
         $buyer->deposit($product->getAmountProduct($buyer));
 
         self::assertEquals($buyer->balance, $product->getAmountProduct($buyer));
         $transfer = $buyer->pay($product);
         self::assertNotNull($transfer);
-        self::assertEquals($transfer->status, Transfer::STATUS_PAID);
+        self::assertEquals(Transfer::STATUS_PAID, $transfer->status);
 
         self::assertEquals(
             $transfer->discount,
@@ -147,10 +149,10 @@ class DiscountTest extends TestCase
 
         self::assertTrue($buyer->refund($product));
         self::assertEquals($buyer->balance, $product->getAmountProduct($buyer));
-        self::assertEquals($product->balance, 0);
+        self::assertEquals(0, $product->balance);
 
         $transfer->refresh();
-        self::assertEquals($transfer->status, Transfer::STATUS_REFUND);
+        self::assertEquals(Transfer::STATUS_REFUND, $transfer->status);
 
         self::assertFalse($buyer->safeRefund($product));
         self::assertEquals($buyer->balance, $product->getAmountProduct($buyer));
@@ -163,14 +165,14 @@ class DiscountTest extends TestCase
             $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
         );
 
-        self::assertEquals($transfer->status, Transfer::STATUS_PAID);
+        self::assertEquals(Transfer::STATUS_PAID, $transfer->status);
 
         self::assertTrue($buyer->refund($product));
         self::assertEquals($buyer->balance, $product->getAmountProduct($buyer));
-        self::assertEquals($product->balance, 0);
+        self::assertEquals(0, $product->balance);
 
         $transfer->refresh();
-        self::assertEquals($transfer->status, Transfer::STATUS_REFUND);
+        self::assertEquals(Transfer::STATUS_REFUND, $transfer->status);
     }
 
     /**
@@ -182,12 +184,12 @@ class DiscountTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscount $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscount::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
 
-        self::assertEquals($buyer->balance, 0);
+        self::assertEquals(0, $buyer->balance);
         $buyer->deposit($product->getAmountProduct($buyer));
 
         self::assertEquals($buyer->balance, $product->getAmountProduct($buyer));
@@ -206,7 +208,7 @@ class DiscountTest extends TestCase
         );
 
         $product->withdraw($product->balance);
-        self::assertEquals($product->balance, 0);
+        self::assertEquals(0, $product->balance);
 
         self::assertFalse($buyer->safeRefund($product));
         self::assertTrue($buyer->forceRefund($product));
@@ -219,8 +221,8 @@ class DiscountTest extends TestCase
         $product->deposit(-$product->balance);
         $buyer->withdraw($buyer->balance);
 
-        self::assertEquals($product->balance, 0);
-        self::assertEquals($buyer->balance, 0);
+        self::assertEquals(0, $product->balance);
+        self::assertEquals(0, $buyer->balance);
     }
 
     /**
@@ -235,8 +237,8 @@ class DiscountTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscount $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscount::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -254,12 +256,12 @@ class DiscountTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscount $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscount::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
 
-        self::assertEquals($buyer->balance, 0);
+        self::assertEquals(0, $buyer->balance);
         $buyer->forcePay($product);
 
         self::assertEquals(
@@ -267,7 +269,7 @@ class DiscountTest extends TestCase
         );
 
         $buyer->deposit(-$buyer->balance);
-        self::assertEquals($buyer->balance, 0);
+        self::assertEquals(0, $buyer->balance);
     }
 
     /**
@@ -279,23 +281,23 @@ class DiscountTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscount $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscount::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
 
-        self::assertEquals($buyer->balance, 0);
+        self::assertEquals(0, $buyer->balance);
 
         $transfer = $buyer->payFree($product);
-        self::assertEquals($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
-        self::assertEquals($transfer->withdraw->type, Transaction::TYPE_WITHDRAW);
+        self::assertEquals(Transaction::TYPE_DEPOSIT, $transfer->deposit->type);
+        self::assertEquals(Transaction::TYPE_WITHDRAW, $transfer->withdraw->type);
 
-        self::assertEquals($buyer->balance, 0);
-        self::assertEquals($product->balance, 0);
+        self::assertEquals(0, $buyer->balance);
+        self::assertEquals(0, $product->balance);
 
         $buyer->refund($product);
-        self::assertEquals($buyer->balance, 0);
-        self::assertEquals($product->balance, 0);
+        self::assertEquals(0, $buyer->balance);
+        self::assertEquals(0, $product->balance);
     }
 
     public function testFreePay(): void
@@ -304,24 +306,24 @@ class DiscountTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscount $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscount::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
 
         $buyer->forceWithdraw(1000);
-        self::assertEquals($buyer->balance, -1000);
+        self::assertEquals(-1000, $buyer->balance);
 
         $transfer = $buyer->payFree($product);
-        self::assertEquals($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
-        self::assertEquals($transfer->withdraw->type, Transaction::TYPE_WITHDRAW);
+        self::assertEquals(Transaction::TYPE_DEPOSIT, $transfer->deposit->type);
+        self::assertEquals(Transaction::TYPE_WITHDRAW, $transfer->withdraw->type);
 
-        self::assertEquals($buyer->balance, -1000);
-        self::assertEquals($product->balance, 0);
+        self::assertEquals(-1000, $buyer->balance);
+        self::assertEquals(0, $product->balance);
 
         $buyer->refund($product);
-        self::assertEquals($buyer->balance, -1000);
-        self::assertEquals($product->balance, 0);
+        self::assertEquals(-1000, $buyer->balance);
+        self::assertEquals(0, $product->balance);
     }
 
     /**
@@ -336,8 +338,8 @@ class DiscountTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscount $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscount::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
 

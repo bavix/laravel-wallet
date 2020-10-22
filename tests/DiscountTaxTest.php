@@ -7,6 +7,8 @@ use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Test\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Factories\ItemDiscountTaxFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\Item;
 use Bavix\Wallet\Test\Models\ItemDiscountTax;
@@ -22,8 +24,8 @@ class DiscountTaxTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscountTax $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscountTax::class)->create();
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountTaxFactory::new()->create();
 
         self::assertEquals($buyer->balance, 0);
         $fee = app(WalletService::class)->fee($product, $product->getAmountProduct($buyer));
@@ -81,8 +83,8 @@ class DiscountTaxTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscountTax $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscountTax::class)->create();
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountTaxFactory::new()->create();
 
         self::assertEquals($buyer->balance, 0);
         $discount = app(WalletService::class)->discount($buyer, $product);
@@ -151,8 +153,8 @@ class DiscountTaxTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscountTax $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscountTax::class)->create();
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountTaxFactory::new()->create();
 
         self::assertEquals($buyer->balance, 0);
         $discount = app(WalletService::class)->discount($buyer, $product);
@@ -206,8 +208,8 @@ class DiscountTaxTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscountTax $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscountTax::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountTaxFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -226,8 +228,8 @@ class DiscountTaxTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscountTax $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscountTax::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountTaxFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -253,8 +255,8 @@ class DiscountTaxTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscountTax $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscountTax::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountTaxFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -278,8 +280,8 @@ class DiscountTaxTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscountTax $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscountTax::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountTaxFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -317,8 +319,8 @@ class DiscountTaxTest extends TestCase
          * @var Buyer $buyer
          * @var ItemDiscountTax $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemDiscountTax::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemDiscountTaxFactory::new()->create([
             'quantity' => 1,
         ]);
 

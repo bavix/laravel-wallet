@@ -3,6 +3,8 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Test\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Factories\ItemFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\Item;
 
@@ -18,8 +20,8 @@ class GiftTest extends TestCase
          * @var Buyer $second
          * @var Item $product
          */
-        [$first, $second] = factory(Buyer::class, 2)->create();
-        $product = factory(Item::class)->create([
+        [$first, $second] = BuyerFactory::times(2)->create();
+        $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -49,8 +51,8 @@ class GiftTest extends TestCase
          * @var Buyer $second
          * @var Item $product
          */
-        [$first, $second] = factory(Buyer::class, 2)->create();
-        $product = factory(Item::class)->create([
+        [$first, $second] = BuyerFactory::times(2)->create();
+        $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
 

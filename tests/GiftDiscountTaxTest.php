@@ -4,6 +4,8 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Test\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Factories\ItemDiscountTaxFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\ItemDiscountTax;
 
@@ -19,8 +21,8 @@ class GiftDiscountTaxTest extends TestCase
          * @var Buyer $second
          * @var ItemDiscountTax $product
          */
-        [$first, $second] = factory(Buyer::class, 2)->create();
-        $product = factory(ItemDiscountTax::class)->create([
+        [$first, $second] = BuyerFactory::times(2)->create();
+        $product = ItemDiscountTaxFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -58,8 +60,8 @@ class GiftDiscountTaxTest extends TestCase
          * @var Buyer $second
          * @var ItemDiscountTax $product
          */
-        [$first, $second] = factory(Buyer::class, 2)->create();
-        $product = factory(ItemDiscountTax::class)->create([
+        [$first, $second] = BuyerFactory::times(2)->create();
+        $product = ItemDiscountTaxFactory::new()->create([
             'quantity' => 1,
         ]);
 

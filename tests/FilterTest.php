@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Test\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 
 class FilterTest extends TestCase
@@ -14,7 +15,7 @@ class FilterTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
         $buyer->deposit(1000); // without meta
 
