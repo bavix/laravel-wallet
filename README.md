@@ -12,6 +12,8 @@
 [![License](https://poser.pugx.org/bavix/laravel-wallet/license)](https://packagist.org/packages/bavix/laravel-wallet)
 [![composer.lock](https://poser.pugx.org/bavix/laravel-wallet/composerlock)](https://packagist.org/packages/bavix/laravel-wallet)
 
+[![Sparkline](https://stars.medv.io/bavix/laravel-wallet.svg)](https://stars.medv.io/bavix/laravel-wallet)
+
 laravel-wallet - Easy work with virtual wallet.
 
 [[Documentation](https://bavix.github.io/laravel-wallet/)] 
