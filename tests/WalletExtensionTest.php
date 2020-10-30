@@ -42,8 +42,9 @@ class WalletExtensionTest extends TestCase
      */
     public function testTransactionMoneyAttribute(): void
     {
-        if (!class_exists(Money::class)) {
+        if (! class_exists(Money::class)) {
             self::markTestSkipped('For the test to work, you must run command: composer req cknow/laravel-money --dev');
+
             return;
         }
 
