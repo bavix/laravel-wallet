@@ -22,10 +22,11 @@ trait MorphOneWallet
         return ($this instanceof WalletModel ? $this->holder : $this)
             ->morphOne(config('wallet.wallet.model', WalletModel::class), 'holder')
             ->where('slug', config('wallet.wallet.default.slug', 'default'))
-            ->withDefault([
+            ->withDefault(array_merge(config('wallet.wallet.creating', []), [
                 'name' => config('wallet.wallet.default.name', 'Default Wallet'),
                 'slug' => config('wallet.wallet.default.slug', 'default'),
+                'meta' => config('wallet.wallet.default.meta', []),
                 'balance' => 0,
-            ]);
+            ]));
     }
 }

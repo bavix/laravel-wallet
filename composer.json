@@ -56,6 +56,7 @@
     }
   },
   "scripts": {
+    "docs": "@php -S localhost:3000 -t ./docs",
     "metrics": "@php vendor/bin/phpmetrics --config=phpmetrics.json --junit=build/phpunit.junit.xml"
   },
   "extra": {
@@ -66,6 +67,7 @@
     }
   },
   "config": {
+    "process-timeout":0,
     "sort-packages": true
   }
 }

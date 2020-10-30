@@ -4,10 +4,12 @@ namespace Bavix\Wallet\Test\Models;
 
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\WalletService;
-use Bavix\Wallet\Test\Common\Models\Wallet;
 use Bavix\Wallet\Traits\HasWallet;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * Class Item.
@@ -71,5 +73,18 @@ class Item extends Model implements Product
     public function getUniqueId(): string
     {
         return $this->getKey();
+    }
+
+    /**
+     * @param int[] $walletIds
+     * @return MorphMany
+     */
+    public function boughtGoods(array $walletIds): MorphMany
+    {
+        return $this
+            ->morphMany(config('wallet.transfer.model', Transfer::class), 'to')
+            ->where('status', Transfer::STATUS_PAID)
+            ->where('from_type', config('wallet.wallet.model', Wallet::class))
+            ->whereIn('from_id', $walletIds);
     }
 }

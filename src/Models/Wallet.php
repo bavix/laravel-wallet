@@ -26,6 +26,7 @@ use Illuminate\Support\Str;
  * @property string $name
  * @property string $slug
  * @property string $description
+ * @property array $meta
  * @property int $balance
  * @property int $decimal_places
  * @property \Bavix\Wallet\Interfaces\Wallet $holder
@@ -47,6 +48,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         'name',
         'slug',
         'description',
+        'meta',
         'balance',
         'decimal_places',
     ];
@@ -56,6 +58,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
      */
     protected $casts = [
         'decimal_places' => 'int',
+        'meta' => 'json',
     ];
 
     /**
@@ -132,6 +135,8 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     {
         $currencies = config('wallet.currencies', []);
 
-        return $currencies[$this->slug] ?? Str::upper($this->slug);
+        return $currencies[$this->slug] ??
+            $this->meta['currency'] ??
+            Str::upper($this->slug);
     }
 }

@@ -111,9 +111,11 @@ return [
         'casts' => [
             'balance' => 'string',
         ],
+        'creating' => [],
         'default' => [
             'name' => 'Default Wallet',
             'slug' => 'default',
+            'meta' => [],
         ],
     ],
 ];

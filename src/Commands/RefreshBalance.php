@@ -3,7 +3,7 @@
 namespace Bavix\Wallet\Commands;
 
 use Bavix\Wallet\Models\Wallet;
-use Bavix\Wallet\Services\DbService;
+use Bavix\Wallet\Services\WalletService;
 use Illuminate\Console\Command;
 
 /**
@@ -31,10 +31,6 @@ class RefreshBalance extends Command
      */
     public function handle(): void
     {
-        app(DbService::class)->transaction(static function () {
-            Wallet::query()->each(static function (Wallet $wallet) {
-                $wallet->refreshBalance();
-            });
-        });
+        Wallet::query()->each([app(WalletService::class), 'refresh']);
     }
 }
