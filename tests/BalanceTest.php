@@ -251,6 +251,27 @@ class BalanceTest extends TestCase
 
     /**
      * @return void
+     */
+    public function testEqualWallet(): void
+    {
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = BuyerFactory::new()->create();
+        $wallet = $buyer->wallet;
+
+        self::assertEquals(0, $wallet->balance);
+
+        $wallet->deposit(1000);
+        self::assertEquals(1000, $wallet->balance);
+        self::assertEquals(1000, $wallet->wallet->balance);
+        self::assertEquals($wallet->getKey(), $wallet->wallet->getKey());
+        self::assertEquals($wallet->getKey(), $wallet->wallet->wallet->getKey());
+        self::assertEquals($wallet->getKey(), $wallet->wallet->wallet->wallet->getKey());
+    }
+
+    /**
+     * @return void
      * @see https://github.com/bavix/laravel-wallet/issues/49
      */
     public function testForceUpdate(): void
