@@ -2,6 +2,8 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Test\Common\Services\WalletAdjustmentFailedService;
 use function app;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Models\Wallet;
@@ -370,6 +372,34 @@ class BalanceTest extends TestCase
         $wallet->refreshBalance();
         self::assertEquals($adjust, $wallet->balance);
         self::assertEquals($adjust, $wallet->getRawOriginal('balance'));
+    }
+
+
+    /**
+     * @param int $account
+     * @param int $adjust
+     * @return void
+     *
+     * @dataProvider providerAdjustment
+     */
+    public function testAdjustmentFailed(int $account, int $adjust): void
+    {
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = BuyerFactory::new()->create();
+        $wallet = $buyer->wallet;
+
+        self::assertEquals(0, $wallet->balance);
+
+        $wallet->deposit($account);
+        self::assertEquals($account, $wallet->balance);
+
+        Wallet::whereKey($buyer->wallet->getKey())
+            ->update(['balance' => $adjust]);
+
+        app()->singleton(WalletService::class, WalletAdjustmentFailedService::class);
+        self::assertFalse($wallet->adjustmentBalance());
     }
 
     /**
