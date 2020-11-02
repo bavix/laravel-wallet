@@ -315,4 +315,72 @@ class BalanceTest extends TestCase
         self::assertEquals($wallet->balance, 1000);
         self::assertEquals($wallet->getRawOriginal('balance'), 1000);
     }
+
+    /**
+     * @param int $account
+     * @param int $adjust
+     * @return void
+     *
+     * @dataProvider providerAdjustment
+     */
+    public function testAdjustment(int $account, int $adjust): void
+    {
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = BuyerFactory::new()->create();
+        $wallet = $buyer->wallet;
+
+        self::assertEquals(0, $wallet->balance);
+
+        $wallet->deposit($account);
+        self::assertEquals($account, $wallet->balance);
+
+        Wallet::whereKey($buyer->wallet->getKey())
+            ->update(['balance' => $adjust]);
+
+        /**
+         * Create a state when the cache is empty.
+         * For example, something went wrong and your database has incorrect data.
+         * Unfortunately, the library will work with what is.
+         * But there is an opportunity to recount the balance.
+         *
+         * Here is an example:
+         */
+        app()->singleton(Storable::class, Store::class);
+        self::assertEquals($account, $wallet->getRawOriginal('balance'));
+
+        /**
+         * We load the model from the base and our balance is 10.
+         */
+        $wallet->refresh();
+        self::assertEquals($adjust, $wallet->balance);
+        self::assertEquals($adjust, $wallet->getRawOriginal('balance'));
+
+        /**
+         * Now we fill the cache with relevant data (PS, the data inside the model will be updated).
+         */
+        $wallet->adjustmentBalance();
+        self::assertEquals($adjust, $wallet->balance);
+        self::assertEquals($adjust, $wallet->getRawOriginal('balance'));
+
+        /**
+         * Reapply, just in case...
+         */
+        $wallet->refreshBalance();
+        self::assertEquals($adjust, $wallet->balance);
+        self::assertEquals($adjust, $wallet->getRawOriginal('balance'));
+    }
+
+    /**
+     * @return int[][]
+     */
+    public function providerAdjustment(): array
+    {
+        return [
+            [2000, 1000],
+            [1000, 2000],
+            [2000, 2000],
+        ];
+    }
 }

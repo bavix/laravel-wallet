@@ -102,11 +102,30 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     }
 
     /**
+     * Under ideal conditions, you will never need a method.
+     * Needed to deal with out-of-sync.
+     *
      * @return bool
      */
     public function refreshBalance(): bool
     {
         return app(WalletService::class)->refresh($this);
+    }
+
+    /**
+     * The method adjusts the balance by adding an additional transaction.
+     * Used wisely, it can lead to serious problems.
+     *
+     * @return bool
+     */
+    public function adjustmentBalance(): bool
+    {
+        try {
+            app(WalletService::class)->adjustment($this);
+            return true;
+        } catch (\Throwable $throwable) {
+            return false;
+        }
     }
 
     /**

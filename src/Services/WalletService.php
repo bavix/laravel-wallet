@@ -143,4 +143,30 @@ class WalletService
                 (! $math->compare($whatIs, $balance) || $wallet->save());
         });
     }
+
+    /**
+     * @param WalletModel $wallet
+     * @param array|null $meta
+     * @return void
+     * @throws
+     */
+    public function adjustment(WalletModel $wallet, ?array $meta = null): void
+    {
+        app(DbService::class)->transaction(function () use ($wallet, $meta) {
+            $math = app(Mathable::class);
+            app(Storable::class)->getBalance($wallet);
+            $adjustmentBalance = $wallet->balance;
+            $wallet->refreshBalance();
+            $difference = $math->sub($wallet->balance, $adjustmentBalance);
+
+            switch ($math->compare($difference, 0)) {
+                case -1:
+                    $wallet->deposit($math->abs($difference), $meta);
+                    break;
+                case 1:
+                    $wallet->forceWithdraw($math->abs($difference), $meta);
+                    break;
+            }
+        });
+    }
 }
