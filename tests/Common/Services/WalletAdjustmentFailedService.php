@@ -8,7 +8,6 @@ use Doctrine\DBAL\Exception\InvalidArgumentException;
 
 class WalletAdjustmentFailedService extends WalletService
 {
-
     /**
      * @param WalletModel $wallet
      * @param array|null $meta
@@ -18,5 +17,4 @@ class WalletAdjustmentFailedService extends WalletService
     {
         throw new InvalidArgumentException(__METHOD__);
     }
-
 }
