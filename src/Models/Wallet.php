@@ -122,6 +122,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     {
         try {
             app(WalletService::class)->adjustment($this);
+
             return true;
         } catch (\Throwable $throwable) {
             return false;
