@@ -2,13 +2,13 @@
 
 namespace Bavix\Wallet\Test;
 
-use Bavix\Wallet\Services\WalletService;
-use Bavix\Wallet\Test\Common\Services\WalletAdjustmentFailedService;
 use function app;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CommonService;
+use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Simple\Store;
+use Bavix\Wallet\Test\Common\Services\WalletAdjustmentFailedService;
 use Bavix\Wallet\Test\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Models\Buyer;
@@ -373,7 +373,6 @@ class BalanceTest extends TestCase
         self::assertEquals($adjust, $wallet->balance);
         self::assertEquals($adjust, $wallet->getRawOriginal('balance'));
     }
-
 
     /**
      * @param int $account
