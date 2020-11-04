@@ -1,7 +1,6 @@
 - Начнем
 
     - [Введение](README)
-    - [Требования](requirements)
     - [Установка](installation)
     - [Установка в Lumen](lumen)
     - [Как использовать](basic-usage)
