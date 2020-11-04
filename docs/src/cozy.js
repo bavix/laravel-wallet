@@ -1,6 +1,8 @@
+import cozyHouse from '@bavix/cozy-house-kit'
+
 function collect() {
-  if (window.cozyHouse) {
-    window.cozyHouse.push('docs', 'page', location.hash);
+  if (cozyHouse) {
+    cozyHouse.push('docs', 'page', location.hash);
   }
 }
 
@@ -10,9 +12,9 @@ const install = function(hook) {
     return;
   }
 
-  if (window.cozyHouse) {
-    window.cozyHouse.setApiUrl('https://cozy.babichev.net')
-    window.cozyHouse.setToken($docsify.cozyHouse)
+  if (cozyHouse) {
+    cozyHouse.setApiUrl('https://cozy.babichev.net')
+    cozyHouse.setToken($docsify.cozyHouse)
     hook.beforeEach(collect);
   }
 };
