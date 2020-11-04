@@ -10,13 +10,15 @@ How long does it take to add virtual cards to the project? Hah, we'll see.
 [![Code Coverage](https://scrutinizer-ci.com/g/bavix/laravel-wallet/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/bavix/laravel-wallet/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/bavix/laravel-wallet/badges/build.png?b=master)](https://scrutinizer-ci.com/g/bavix/laravel-wallet/build-status/master)
 [![Code Intelligence Status](https://scrutinizer-ci.com/g/bavix/laravel-wallet/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
-[![Mutation testing badge](https://badge.stryker-mutator.io/github.com/bavix/laravel-wallet/master)](https://packagist.org/packages/bavix/laravel-wallet)
+[![Financial Contributors on Open Collective](https://opencollective.com/laravel-wallet/all/badge.svg?label=financial+contributors)](https://opencollective.com/laravel-wallet) [![Mutation testing badge](https://badge.stryker-mutator.io/github.com/bavix/laravel-wallet/master)](https://packagist.org/packages/bavix/laravel-wallet)
 
 [![Package Rank](https://phppackages.org/p/bavix/laravel-wallet/badge/rank.svg)](https://packagist.org/packages/bavix/laravel-wallet)
 [![Latest Stable Version](https://poser.pugx.org/bavix/laravel-wallet/v/stable)](https://packagist.org/packages/bavix/laravel-wallet)
 [![Latest Unstable Version](https://poser.pugx.org/bavix/laravel-wallet/v/unstable)](https://packagist.org/packages/bavix/laravel-wallet)
 [![License](https://poser.pugx.org/bavix/laravel-wallet/license)](https://packagist.org/packages/bavix/laravel-wallet)
 [![composer.lock](https://poser.pugx.org/bavix/laravel-wallet/composerlock)](https://packagist.org/packages/bavix/laravel-wallet)
+
+[![Sparkline](https://stars.medv.io/bavix/laravel-wallet.svg)](https://stars.medv.io/bavix/laravel-wallet)
 
 `laravel-wallet` - Easy work with virtual wallet.
 
