@@ -59,6 +59,8 @@ return [
      *
      * @example
      *  'my-usd' => 'USD'
+     *
+     * @deprecated use wallets.meta.currency
      */
     'currencies' => [],
 

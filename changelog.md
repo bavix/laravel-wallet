@@ -11,15 +11,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Package `brick/math` is now required.
 - Added examples of integrations with the `cknow/laravel-money` package in unit tests.
 - The `Storable` interface has an additional method `fresh` to clean up all data.
+- Added psalm, but not used yet.
+- Added phpmetrics, thanks to which it was possible to remove a lot of loops in the code.
+- Added meta column in wallet, now the package is more extensible. I moved currency from the config to the meta.
+- Added an icon to the documentation.
+- Added full support for php 8. We are waiting for the release.
+- Added `adjustment` method, it deals with balance adjustment. In automatic mode, it calculates the difference between the current amount on the balance sheet and for transactions, and if the balance does not converge, then finishes with a transaction.
+- Added the ability to initialize the default wallet with the required meta parameters (needed to work with currencies).
 
 ### Changed
 - Now the package works exclusively with strings, there are fewer problems when working with large numbers.
 - Now, to work with cryptocurrencies, it is not necessary to install `bcmath`.
+- JS documentation is no longer dependent on CDN, everything is collected in one bundle.
+- Updated the command to refresh the balance, now without a transaction for all wallets. Use carefully.
+- Currencies are now in "wallets.meta.currency", please do not use the config for these cases.
+- English documentation has been slightly improved.
+- Updated phpunit to support php 8.
 
 ### Removed
 - Removed php 7.2 support.
 - Drop package `laravel/legacy-factories`.
 - Remove `BCMath` and `Math` classes.
+
+### Deprecated
+- The key in the currencies config will be removed in 7.x. Use "wallet.meta.currency".
 
 ## [5.5.0] - 2020-10-01
 
