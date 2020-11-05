@@ -30,6 +30,7 @@
     "brick/math": "^0.9"
   },
   "require-dev": {
+    "cknow/laravel-money": "^6.1",
     "infection/infection": "~0.17",
     "laravel/cashier": "^12.4|12.x-dev",
     "orchestra/testbench": "^6.3",
