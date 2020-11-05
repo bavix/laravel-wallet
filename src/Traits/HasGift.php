@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Interfaces\Customer;
 use function app;
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Product;
@@ -48,10 +49,10 @@ trait HasGift
      */
     public function gift(Wallet $to, Product $product, bool $force = null): Transfer
     {
-        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($to, $product, $force) {
+        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($to, $product, $force): Transfer {
             /**
              * Who's giving? Let's call him Santa Claus.
-             * @var Wallet $santa
+             * @var Customer $santa
              */
             $santa = $this;
 
@@ -60,7 +61,7 @@ trait HasGift
              * I think it is wrong to make the "assemble" method public.
              * That's why I address him like this!
              */
-            return app(DbService::class)->transaction(static function () use ($santa, $to, $product, $force) {
+            return app(DbService::class)->transaction(static function () use ($santa, $to, $product, $force): Transfer {
                 $math = app(Mathable::class);
                 $discount = app(WalletService::class)->discount($santa, $product);
                 $amount = $math->sub($product->getAmountProduct($santa), $discount);

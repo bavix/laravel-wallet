@@ -9,7 +9,7 @@ use Bavix\Wallet\Services\WalletService;
 class Store implements Storable
 {
     /**
-     * @var array
+     * @var string[]
      */
     protected $balanceSheets = [];
 
@@ -23,7 +23,7 @@ class Store implements Storable
             $balance = method_exists($wallet, 'getRawOriginal') ?
                 $wallet->getRawOriginal('balance', 0) : $wallet->getOriginal('balance', 0);
 
-            $this->balanceSheets[$wallet->getKey()] = $this->toInt($balance);
+            $this->balanceSheets[$wallet->getKey()] = $this->round($balance);
         }
 
         return $this->balanceSheets[$wallet->getKey()];
@@ -32,11 +32,11 @@ class Store implements Storable
     /**
      * {@inheritdoc}
      */
-    public function incBalance($object, $amount)
+    public function incBalance($object, $amount): string
     {
         $math = app(Mathable::class);
         $balance = $math->add($this->getBalance($object), $amount);
-        $balance = $this->toInt($balance);
+        $balance = $this->round($balance);
         $this->setBalance($object, $balance);
 
         return $balance;
@@ -48,7 +48,7 @@ class Store implements Storable
     public function setBalance($object, $amount): bool
     {
         $wallet = app(WalletService::class)->getWallet($object);
-        $this->balanceSheets[$wallet->getKey()] = $this->toInt($amount);
+        $this->balanceSheets[$wallet->getKey()] = $this->round($amount);
 
         return true;
     }
@@ -64,10 +64,10 @@ class Store implements Storable
     }
 
     /**
-     * @param string $balance
+     * @param int|string $balance
      * @return string
      */
-    protected function toInt($balance): string
+    protected function round($balance): string
     {
         return app(Mathable::class)->round($balance ?: 0);
     }

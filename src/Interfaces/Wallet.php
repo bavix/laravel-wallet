@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 interface Wallet
 {
     /**
-     * @param int $amount
+     * @param int|string $amount
      * @param array|null $meta
      * @param bool $confirmed
      * @return Transaction
@@ -17,7 +17,7 @@ interface Wallet
     public function deposit($amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
-     * @param int $amount
+     * @param int|string $amount
      * @param array|null $meta
      * @param bool $confirmed
      * @return Transaction
@@ -25,7 +25,7 @@ interface Wallet
     public function withdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
-     * @param int $amount
+     * @param int|string $amount
      * @param array|null $meta
      * @param bool $confirmed
      * @return Transaction
@@ -34,7 +34,7 @@ interface Wallet
 
     /**
      * @param self $wallet
-     * @param int $amount
+     * @param int|string $amount
      * @param array|null $meta
      * @return Transfer
      */
@@ -42,7 +42,7 @@ interface Wallet
 
     /**
      * @param self $wallet
-     * @param int $amount
+     * @param int|string $amount
      * @param array|null $meta
      * @return null|Transfer
      */
@@ -50,14 +50,14 @@ interface Wallet
 
     /**
      * @param Wallet $wallet
-     * @param int $amount
+     * @param int|string $amount
      * @param array|null $meta
      * @return Transfer
      */
     public function forceTransfer(Wallet $wallet, $amount, ?array $meta = null): Transfer;
 
     /**
-     * @param int $amount
+     * @param int|string $amount
      * @param bool $allowZero
      * @return bool
      */

@@ -56,7 +56,10 @@
   },
   "scripts": {
     "docs": "@php -S localhost:3000 -t ./docs",
-    "metrics": "@php vendor/bin/phpmetrics --config=phpmetrics.json --junit=build/phpunit.junit.xml"
+    "metrics": "@php vendor/bin/phpmetrics --config=phpmetrics.json --junit=build/phpunit.junit.xml",
+    "stan": "@php vendor/bin/phpstan analyse -vvv --debug --memory-limit 2G -l 7 src/",
+    "psalm": "@php vendor/bin/psalm src/",
+    "psalm-dry-run": "@php vendor/bin/psalm --alter --issues=InvalidReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType --dry-run src/"
   },
   "extra": {
     "laravel": {

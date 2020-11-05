@@ -15,7 +15,7 @@ trait MorphOneWallet
      * Get default Wallet
      * this method is used for Eager Loading.
      *
-     * @return MorphOne|WalletModel
+     * @return MorphOne
      */
     public function wallet(): MorphOne
     {
