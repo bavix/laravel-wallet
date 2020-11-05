@@ -2,8 +2,8 @@
 
 namespace Bavix\Wallet\Traits;
 
-use Bavix\Wallet\Interfaces\Customer;
 use function app;
+use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Interfaces\Wallet;
