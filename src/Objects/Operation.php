@@ -100,7 +100,7 @@ class Operation
     }
 
     /**
-     * @param int $amount
+     * @param int|string $amount
      * @return static
      */
     public function setAmount($amount): self

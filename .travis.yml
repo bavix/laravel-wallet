@@ -26,6 +26,7 @@ before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - if [[ $COVERAGE == "yes" ]]; then ./cc-test-reporter before-build; fi
+  - composer self-update
   - composer install
 
 jobs:

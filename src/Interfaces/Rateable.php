@@ -5,7 +5,7 @@ namespace Bavix\Wallet\Interfaces;
 interface Rateable
 {
     /**
-     * @param int $amount
+     * @param int|string $amount
      * @return Rateable
      */
     public function withAmount($amount): self;

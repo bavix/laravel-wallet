@@ -121,7 +121,8 @@ class Cart implements Countable
 
     /**
      * @param Customer $customer
-     * @return int
+     *
+     * @return string
      */
     public function getTotal(Customer $customer): string
     {

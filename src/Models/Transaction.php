@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int $wallet_id
  * @property string $uuid
  * @property string $type
- * @property int $amount
+ * @property int|string $amount
  * @property float $amountFloat
  * @property bool $confirmed
  * @property array $meta

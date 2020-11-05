@@ -24,7 +24,7 @@ class WalletService
     public function discount(Wallet $customer, Wallet $product): int
     {
         if ($customer instanceof Customer && $product instanceof Discount) {
-            return $product->getPersonalDiscount($customer);
+            return (int) $product->getPersonalDiscount($customer);
         }
 
         // without discount
@@ -54,7 +54,7 @@ class WalletService
      * Consider the fee that the system will receive.
      *
      * @param Wallet $wallet
-     * @param int $amount
+     * @param int|string $amount
      * @return float|int
      */
     public function fee(Wallet $wallet, $amount)
@@ -90,7 +90,7 @@ class WalletService
     /**
      * The amount of checks for errors.
      *
-     * @param int $amount
+     * @param int|string $amount
      * @throws
      */
     public function checkAmount($amount): void

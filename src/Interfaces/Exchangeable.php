@@ -8,7 +8,7 @@ interface Exchangeable
 {
     /**
      * @param Wallet $to
-     * @param int $amount
+     * @param int|string $amount
      * @param array|null $meta
      * @return Transfer
      */
@@ -16,7 +16,7 @@ interface Exchangeable
 
     /**
      * @param Wallet $to
-     * @param int $amount
+     * @param int|string $amount
      * @param array|null $meta
      * @return Transfer|null
      */
@@ -24,7 +24,7 @@ interface Exchangeable
 
     /**
      * @param Wallet $to
-     * @param int $amount
+     * @param int|string $amount
      * @param array|null $meta
      * @return Transfer
      */
