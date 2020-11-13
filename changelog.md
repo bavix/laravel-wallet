@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.0.0] - 2020-11-##
+
 ### Added
 - Bigger and safer. There are never many tests. As always, new test cases have been added.
 - Package `brick/math` is now required.
@@ -18,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added full support for php 8. We are waiting for the release.
 - Added `adjustment` method, it deals with balance adjustment. In automatic mode, it calculates the difference between the current amount on the balance sheet and for transactions, and if the balance does not converge, then finishes with a transaction.
 - Added the ability to initialize the default wallet with the required meta parameters (needed to work with currencies).
+- Added method `negative` to `Mathable` interface.
 
 ### Changed
 - Now the package works exclusively with strings, there are fewer problems when working with large numbers.
@@ -32,6 +35,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed php 7.2 support.
 - Drop package `laravel/legacy-factories`.
 - Remove `BCMath` and `Math` classes.
+
+### Fixed
+- Fixed a bug when withdrawing large funds from the wallet. Sometimes the number went beyond int64 and the exception fell on "negative number".
 
 ### Deprecated
 - The key in the currencies config will be removed in 7.x. Use "wallet.meta.currency".
@@ -590,7 +596,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/5.5.0...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/6.0.0...develop
+[6.0.0]: https://github.com/bavix/laravel-wallet/compare/5.5.0...6.0.0
 [5.5.0]: https://github.com/bavix/laravel-wallet/compare/5.4.0...5.5.0
 [5.4.0]: https://github.com/bavix/laravel-wallet/compare/5.3.2...5.4.0
 [5.3.2]: https://github.com/bavix/laravel-wallet/compare/5.3.1...5.3.2
