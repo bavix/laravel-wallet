@@ -7,7 +7,6 @@ use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Common\Models\TransactionMoney;
 use Bavix\Wallet\Test\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Models\Buyer;
-use Cknow\Money\Money;
 
 class WalletExtensionTest extends TestCase
 {
