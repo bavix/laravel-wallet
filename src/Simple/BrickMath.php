@@ -93,12 +93,19 @@ class BrickMath implements Mathable
     }
 
     /**
-     * @param float|int|string $number
-     * @return string
+     * {@inheritdoc}
      */
     public function abs($number): string
     {
         return (string) BigDecimal::of($number)->abs();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function negative($number): string
+    {
+        return (string) BigDecimal::of($number)->negated();
     }
 
     /**

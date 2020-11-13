@@ -93,11 +93,12 @@ class CommonService
              */
             $wallet = $walletService->getWallet($wallet);
 
+            $mathService = app(Mathable::class);
             $transactions = $this->multiOperation($wallet, [
                 app(Operation::class)
                     ->setType(Transaction::TYPE_WITHDRAW)
                     ->setConfirmed($confirmed)
-                    ->setAmount(-$amount)
+                    ->setAmount($mathService->negative($amount))
                     ->setMeta($meta),
             ]);
 

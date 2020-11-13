@@ -27,13 +27,13 @@
     "illuminate/database": "^6.0|^7.0|^8.0",
     "doctrine/dbal": "^2.8|^3.0",
     "ramsey/uuid": "^3.0|^4.0",
-    "brick/math": "^0.9"
+    "brick/math": "~0.8"
   },
   "require-dev": {
     "cknow/laravel-money": "^6.1",
     "infection/infection": "~0.17",
-    "laravel/cashier": "^12.4|12.x-dev",
-    "orchestra/testbench": "^6.3",
+    "laravel/cashier": "^12.5",
+    "orchestra/testbench": "^6.4",
     "phpmetrics/phpmetrics": "^v2.7",
     "phpstan/phpstan": "^0.12",
     "phpunit/phpunit": "^9.4",
@@ -41,7 +41,6 @@
     "vimeo/psalm": "^4.1"
   },
   "suggest": {
-    "ext-bcmath": "Used for accurate calculations of large numbers",
     "bavix/laravel-wallet-swap": "Addition to the laravel-wallet library for quick setting of exchange rates",
     "bavix/laravel-wallet-vacuum": "Addition to the laravel-wallet library for quick fix race condition"
   },
@@ -57,10 +56,12 @@
   },
   "scripts": {
     "docs": "@php -S localhost:3000 -t ./docs",
-    "metrics": "@php vendor/bin/phpmetrics --config=phpmetrics.json --junit=build/phpunit.junit.xml",
+    "unit":"@php vendor/bin/phpunit --coverage-xml=build/coverage-xml --log-junit=build/junit.xml",
+    "infect": "@php vendor/bin/infection --coverage=build --min-msi=60 -j$(nproc)",
+    "metrics": "@php vendor/bin/phpmetrics --config=phpmetrics.json",
     "stan": "@php vendor/bin/phpstan analyse -vvv --debug --memory-limit 2G -l 7 src/",
     "psalm": "@php vendor/bin/psalm src/",
-    "psalm-dry-run": "@php vendor/bin/psalm --alter --issues=InvalidReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType --dry-run src/"
+    "psalm-dry": "@php vendor/bin/psalm --alter --issues=InvalidReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType --dry-run src/"
   },
   "extra": {
     "laravel": {

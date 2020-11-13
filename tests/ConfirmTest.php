@@ -249,4 +249,27 @@ class ConfirmTest extends TestCase
         self::assertTrue($userConfirm->confirm($transaction));
         self::assertTrue($transaction->confirmed);
     }
+
+    /**
+     * @return void
+     */
+    public function testUserConfirmByWallet(): void
+    {
+        /**
+         * @var UserConfirm $userConfirm
+         */
+        $userConfirm = UserConfirmFactory::new()->create();
+        $transaction = $userConfirm->wallet->deposit(100, null, false);
+        self::assertEquals($transaction->wallet->id, $userConfirm->wallet->id);
+        self::assertEquals($transaction->payable_id, $userConfirm->id);
+        self::assertInstanceOf(UserConfirm::class, $transaction->payable);
+        self::assertFalse($transaction->confirmed);
+
+        self::assertTrue($userConfirm->confirm($transaction));
+        self::assertTrue($transaction->confirmed);
+        self::assertTrue($userConfirm->resetConfirm($transaction));
+        self::assertFalse($transaction->confirmed);
+        self::assertTrue($userConfirm->wallet->confirm($transaction));
+        self::assertTrue($transaction->confirmed);
+    }
 }

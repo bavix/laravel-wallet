@@ -132,3 +132,35 @@ Your code on 5.x:
 
     public function convertTo(Wallet $wallet) { ... }
 ```
+
+## 5.x.x → 6.0.x
+
+Go to `config/wallet.php` file (if you have it) and edit it.
+
+*Removing unnecessary code.*
+```php
+$bcLoaded = extension_loaded('bcmath');	
+$mathClass = Math::class;	
+switch (true) {	
+    case class_exists(BigDecimal::class):	
+        $mathClass = BrickMath::class;	
+        break;	
+    case $bcLoaded:	
+        $mathClass = BCMath::class;	
+        break;	
+}	
+```
+
+*Replace your math class ($mathClass) with `brick/math`.*
+
+Your code on 5.x:
+```php
+    'mathable' => $mathClass,
+```
+
+Your code on 6.x:
+```php
+    'mathable' => BrickMath::class,
+```
+
+

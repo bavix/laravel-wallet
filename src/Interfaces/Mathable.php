@@ -70,6 +70,12 @@ interface Mathable
     public function abs($number): string;
 
     /**
+     * @param int|float|string $number
+     * @return string
+     */
+    public function negative($number): string;
+
+    /**
      * @param int|float|string $first
      * @param int|float|string $second
      * @return int

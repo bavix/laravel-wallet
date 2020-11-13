@@ -4,6 +4,7 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Simple\BrickMath;
+use Brick\Math\BigInteger;
 use Brick\Math\Exception\NumberFormatException;
 
 class MathTest extends TestCase
@@ -44,8 +45,12 @@ class MathTest extends TestCase
         self::assertEquals(123.11, $provider->abs(-123.11));
 
         // string
-        self::assertEquals(123, $provider->abs('123.'));
-        self::assertEquals(.11, $provider->abs('.11'));
+        if (! method_exists(BigInteger::class, 'parse')) {
+            // brick/math 0.9+
+            self::assertEquals(123, $provider->abs('123.'));
+            self::assertEquals(.11, $provider->abs('.11'));
+        }
+
         self::assertEquals(123.11, $provider->abs('123.11'));
         self::assertEquals(123.11, $provider->abs('-123.11'));
     }

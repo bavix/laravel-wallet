@@ -6,17 +6,17 @@
     "tests"
   ],
   "report": {
-    "html": "./build/report/",
-    "csv": "./build/report.csv",
-    "json": "./build/report.json",
-    "violations": "./build/violations.xml"
+    "html": "build/report/",
+    "csv": "build/report.csv",
+    "json": "build/report.json",
+    "violations": "build/violations.xml"
   },
   "plugins": {
     "git": {
       "binary": "git"
     },
     "junit": {
-      "file": "./build/phpunit.junit.xml"
+      "file": "build/phpunit.junit.xml"
     }
   }
 }

@@ -73,8 +73,8 @@ jobs:
     - php: 'nightly'
 
 script:
-  - ./vendor/bin/phpunit --coverage-xml=build/coverage-xml --log-junit=build/junit.xml
-  - if [[ $COVERAGE == "yes" ]]; then ./vendor/bin/infection --coverage=build --min-msi=60 -j$(nproc); fi
+  - composer unit
+  - if [[ $COVERAGE == "yes" ]]; then composer infect; fi
 
 after_success:
   - if [[ $COVERAGE == "yes" ]]; then ./cc-test-reporter after-build --coverage-input-type clover --exit-code $TRAVIS_TEST_RESULT; fi
