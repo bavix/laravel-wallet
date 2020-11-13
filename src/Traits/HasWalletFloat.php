@@ -19,7 +19,7 @@ trait HasWalletFloat
     use HasWallet;
 
     /**
-     * @param float $amount
+     * @param float|string $amount
      * @param array|null $meta
      * @param bool $confirmed
      *
@@ -36,7 +36,7 @@ trait HasWalletFloat
     }
 
     /**
-     * @param float $amount
+     * @param float|string $amount
      * @param array|null $meta
      * @param bool $confirmed
      *
@@ -53,7 +53,7 @@ trait HasWalletFloat
     }
 
     /**
-     * @param float $amount
+     * @param float|string $amount
      * @param array|null $meta
      * @param bool $confirmed
      *
@@ -70,7 +70,7 @@ trait HasWalletFloat
     }
 
     /**
-     * @param float $amount
+     * @param float|string $amount
      * @return bool
      */
     public function canWithdrawFloat($amount): bool
@@ -118,7 +118,7 @@ trait HasWalletFloat
 
     /**
      * @param Wallet $wallet
-     * @param float $amount
+     * @param float|string $amount
      * @param array|null $meta
      * @return Transfer
      */
@@ -133,7 +133,7 @@ trait HasWalletFloat
     }
 
     /**
-     * @return int|float
+     * @return int|float|string
      */
     public function getBalanceFloatAttribute()
     {

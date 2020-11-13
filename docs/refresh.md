@@ -9,17 +9,7 @@ You must be forced to refresh the balance.
 
 ## User Model
 
-Prepare the model, add the `HasWallet` trait and `Wallet` interface.
-
-```php
-use Bavix\Wallet\Traits\HasWallet;
-use Bavix\Wallet\Interfaces\Wallet;
-
-class User extends Model implements Wallet
-{
-    use HasWallet;
-}
-```
+[User Simple](_include/models/user_simple.md ':include')
 
 ## Get the current balance for your wallet
 

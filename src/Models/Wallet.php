@@ -26,6 +26,7 @@ use Illuminate\Support\Str;
  * @property string $name
  * @property string $slug
  * @property string $description
+ * @property array $meta
  * @property int $balance
  * @property int $decimal_places
  * @property \Bavix\Wallet\Interfaces\Wallet $holder
@@ -47,6 +48,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         'name',
         'slug',
         'description',
+        'meta',
         'balance',
         'decimal_places',
     ];
@@ -56,6 +58,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
      */
     protected $casts = [
         'decimal_places' => 'int',
+        'meta' => 'json',
     ];
 
     /**
@@ -99,11 +102,31 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     }
 
     /**
+     * Under ideal conditions, you will never need a method.
+     * Needed to deal with out-of-sync.
+     *
      * @return bool
      */
     public function refreshBalance(): bool
     {
         return app(WalletService::class)->refresh($this);
+    }
+
+    /**
+     * The method adjusts the balance by adding an additional transaction.
+     * Used wisely, it can lead to serious problems.
+     *
+     * @return bool
+     */
+    public function adjustmentBalance(): bool
+    {
+        try {
+            app(WalletService::class)->adjustment($this);
+
+            return true;
+        } catch (\Throwable $throwable) {
+            return false;
+        }
     }
 
     /**
@@ -132,6 +155,8 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     {
         $currencies = config('wallet.currencies', []);
 
-        return $currencies[$this->slug] ?? Str::upper($this->slug);
+        return $currencies[$this->slug] ??
+            $this->meta['currency'] ??
+            Str::upper($this->slug);
     }
 }

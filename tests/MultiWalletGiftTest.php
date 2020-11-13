@@ -4,6 +4,8 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
+use Bavix\Wallet\Test\Factories\ItemFactory;
+use Bavix\Wallet\Test\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Models\Item;
 use Bavix\Wallet\Test\Models\UserMulti;
 
@@ -18,7 +20,7 @@ class MultiWalletGiftTest extends TestCase
          * @var UserMulti $first
          * @var UserMulti $second
          */
-        [$first, $second] = factory(UserMulti::class, 2)->create();
+        [$first, $second] = UserMultiFactory::times(2)->create();
         self::assertNull($first->getWallet('gifter'));
 
         $first->deposit(1);
@@ -32,7 +34,7 @@ class MultiWalletGiftTest extends TestCase
         /**
          * @var Item $item
          */
-        $item = factory(Item::class)->create();
+        $item = ItemFactory::new()->create();
         $transaction = $wallet->deposit($item->getAmountProduct($wallet));
         self::assertEquals($transaction->amount, $wallet->balance);
         self::assertEquals($item->getAmountProduct($wallet), $wallet->balance);

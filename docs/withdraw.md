@@ -10,17 +10,7 @@ For example, priority in search results.
 
 ## User Model
 
-Prepare the model, add the `HasWallet` trait and `Wallet` interface.
-
-```php
-use Bavix\Wallet\Traits\HasWallet;
-use Bavix\Wallet\Interfaces\Wallet;
-
-class User extends Model implements Wallet
-{
-    use HasWallet;
-}
-```
+[User Simple](_include/models/user_simple.md ':include')
 
 ## Make a Withdraw
 

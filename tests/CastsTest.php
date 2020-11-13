@@ -2,6 +2,8 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Test\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Factories\UserFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\User;
 
@@ -15,7 +17,7 @@ class CastsTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         self::assertEquals($buyer->balance, 0);
 
         self::assertIsInt($buyer->wallet->getKey());
@@ -35,8 +37,8 @@ class CastsTest extends TestCase
          * @var Buyer $buyer
          * @var User $user
          */
-        $buyer = factory(Buyer::class)->create();
-        $user = factory(User::class)->create();
+        $buyer = BuyerFactory::new()->create();
+        $user = UserFactory::new()->create();
         self::assertEquals($buyer->balance, 0);
         self::assertEquals($user->balance, 0);
 
@@ -61,7 +63,7 @@ class CastsTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         self::assertEquals($buyer->balance, 0);
         $deposit = $buyer->deposit(1);
 

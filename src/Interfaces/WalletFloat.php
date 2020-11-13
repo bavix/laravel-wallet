@@ -8,7 +8,7 @@ use Bavix\Wallet\Models\Transfer;
 interface WalletFloat
 {
     /**
-     * @param float $amount
+     * @param float|string $amount
      * @param array|null $meta
      * @param bool $confirmed
      * @return Transaction
@@ -16,7 +16,7 @@ interface WalletFloat
     public function depositFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
-     * @param float $amount
+     * @param float|string $amount
      * @param array|null $meta
      * @param bool $confirmed
      * @return Transaction
@@ -24,7 +24,7 @@ interface WalletFloat
     public function withdrawFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
-     * @param float $amount
+     * @param float|string $amount
      * @param array|null $meta
      * @param bool $confirmed
      * @return Transaction
@@ -33,7 +33,7 @@ interface WalletFloat
 
     /**
      * @param Wallet $wallet
-     * @param float $amount
+     * @param float|string $amount
      * @param array|null $meta
      * @return Transfer
      */
@@ -41,7 +41,7 @@ interface WalletFloat
 
     /**
      * @param Wallet $wallet
-     * @param float $amount
+     * @param float|string $amount
      * @param array|null $meta
      * @return null|Transfer
      */
@@ -49,20 +49,20 @@ interface WalletFloat
 
     /**
      * @param Wallet $wallet
-     * @param float $amount
+     * @param float|string $amount
      * @param array|null $meta
      * @return Transfer
      */
     public function forceTransferFloat(Wallet $wallet, $amount, ?array $meta = null): Transfer;
 
     /**
-     * @param float $amount
+     * @param float|string $amount
      * @return bool
      */
     public function canWithdrawFloat($amount): bool;
 
     /**
-     * @return int|float
+     * @return int|float|string
      */
     public function getBalanceFloatAttribute();
 }

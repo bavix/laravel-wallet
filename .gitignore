@@ -5,3 +5,4 @@ composer.lock
 build/
 .phpunit.result.cache
 .php_cs_cache
+node_modules/

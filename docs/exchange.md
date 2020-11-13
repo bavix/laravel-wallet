@@ -3,6 +3,19 @@
 Everyone’s tasks are different and with the help of this functionality
 you can add exchange rates to your wallets.
 
+The wallet currency is set via meta. Example:
+
+```php
+$user->createWallet([
+    'name' => 'My USD Wallet',
+    'meta' => ['currency' => 'USD'],
+]);
+```
+
+> Management via config file is deprecated. 
+> Create wallets with parameter in meta.currency.
+> In the 7.x release, the ability to specify the currency through wallet.php will be removed.
+
 Currencies are configured in the general configuration file `config/wallet.php`.
 
 ```php

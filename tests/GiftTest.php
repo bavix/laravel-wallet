@@ -3,6 +3,8 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Test\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Factories\ItemFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\Item;
 
@@ -18,25 +20,25 @@ class GiftTest extends TestCase
          * @var Buyer $second
          * @var Item $product
          */
-        [$first, $second] = factory(Buyer::class, 2)->create();
-        $product = factory(Item::class)->create([
+        [$first, $second] = BuyerFactory::times(2)->create();
+        $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
 
-        self::assertEquals($first->balance, 0);
-        self::assertEquals($second->balance, 0);
+        self::assertEquals(0, $first->balance);
+        self::assertEquals(0, $second->balance);
 
         $first->deposit($product->getAmountProduct($first));
         self::assertEquals($first->balance, $product->getAmountProduct($first));
 
         $transfer = $first->wallet->gift($second, $product);
-        self::assertEquals($first->balance, 0);
-        self::assertEquals($second->balance, 0);
+        self::assertEquals(0, $first->balance);
+        self::assertEquals(0, $second->balance);
         self::assertNull($first->paid($product, true));
         self::assertNotNull($second->paid($product, true));
         self::assertNull($second->wallet->paid($product));
         self::assertNotNull($second->wallet->paid($product, true));
-        self::assertEquals($transfer->status, Transfer::STATUS_GIFT);
+        self::assertEquals(Transfer::STATUS_GIFT, $transfer->status);
     }
 
     /**
@@ -49,8 +51,8 @@ class GiftTest extends TestCase
          * @var Buyer $second
          * @var Item $product
          */
-        [$first, $second] = factory(Buyer::class, 2)->create();
-        $product = factory(Item::class)->create([
+        [$first, $second] = BuyerFactory::times(2)->create();
+        $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
 

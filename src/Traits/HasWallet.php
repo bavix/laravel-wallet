@@ -31,7 +31,7 @@ trait HasWallet
     /**
      * The input means in the system.
      *
-     * @param int $amount
+     * @param int|string $amount
      * @param array|null $meta
      * @param bool $confirmed
      *
@@ -69,7 +69,7 @@ trait HasWallet
      *  $user2->deposit(100);
      *  var_dump($user2->balance); // 300
      *
-     * @return int|float
+     * @return int|float|string
      * @throws
      */
     public function getBalanceAttribute()
@@ -92,7 +92,7 @@ trait HasWallet
      * This method ignores errors that occur when transferring funds.
      *
      * @param Wallet $wallet
-     * @param int $amount
+     * @param int|string $amount
      * @param array|null $meta
      * @return null|Transfer
      */
@@ -109,7 +109,7 @@ trait HasWallet
      * A method that transfers funds from host to host.
      *
      * @param Wallet $wallet
-     * @param int $amount
+     * @param int|string $amount
      * @param array|null $meta
      * @return Transfer
      * @throws
@@ -124,7 +124,7 @@ trait HasWallet
     /**
      * Withdrawals from the system.
      *
-     * @param int $amount
+     * @param int|string $amount
      * @param array|null $meta
      * @param bool $confirmed
      *
@@ -140,7 +140,7 @@ trait HasWallet
     /**
      * Checks if you can withdraw funds.
      *
-     * @param int $amount
+     * @param int|string $amount
      * @param bool $allowZero
      * @return bool
      */
@@ -161,7 +161,7 @@ trait HasWallet
     /**
      * Forced to withdraw funds from system.
      *
-     * @param int $amount
+     * @param int|string $amount
      * @param array|null $meta
      * @param bool $confirmed
      *
@@ -183,7 +183,7 @@ trait HasWallet
      * Sometimes you do. Depends on business logic.
      *
      * @param Wallet $wallet
-     * @param int $amount
+     * @param int|string $amount
      * @param array|null $meta
      * @return Transfer
      * @throws

@@ -9,17 +9,7 @@ In this case, the Deposit is the replenishment of the wallet.
 
 ## User Model
 
-Add the `HasWallet` trait and `Wallet` interface to model.
-
-```php
-use Bavix\Wallet\Traits\HasWallet;
-use Bavix\Wallet\Interfaces\Wallet;
-
-class User extends Model implements Wallet
-{
-    use HasWallet;
-}
-```
+[User Simple](_include/models/user_simple.md ':include')
 
 ## Make a Deposit
 

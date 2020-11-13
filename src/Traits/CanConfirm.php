@@ -74,11 +74,14 @@ trait CanConfirm
                     throw new ConfirmedInvalid(trans('wallet::errors.unconfirmed_invalid'));
                 }
 
+                $mathService = app(Mathable::class);
+                $negativeAmount = $mathService->negative($transaction->amount);
+
                 return $transaction->update(['confirmed' => false]) &&
 
                     // update balance
                     app(CommonService::class)
-                        ->addBalance($wallet, -$transaction->amount);
+                        ->addBalance($wallet, $negativeAmount);
             });
         });
     }

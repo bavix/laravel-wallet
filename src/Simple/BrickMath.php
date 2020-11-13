@@ -2,14 +2,20 @@
 
 namespace Bavix\Wallet\Simple;
 
+use Bavix\Wallet\Interfaces\Mathable;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
 
 /**
  * Class BrickMath.
  */
-class BrickMath extends BCMath
+class BrickMath implements Mathable
 {
+    /**
+     * @var int
+     */
+    protected $scale;
+
     /**
      * {@inheritdoc}
      */
@@ -64,7 +70,7 @@ class BrickMath extends BCMath
      */
     public function ceil($number): string
     {
-        return BigDecimal::of($number)
+        return (string) BigDecimal::of($number)
             ->dividedBy(BigDecimal::one(), 0, RoundingMode::CEILING);
     }
 
@@ -73,7 +79,7 @@ class BrickMath extends BCMath
      */
     public function floor($number): string
     {
-        return BigDecimal::of($number)
+        return (string) BigDecimal::of($number)
             ->dividedBy(BigDecimal::one(), 0, RoundingMode::FLOOR);
     }
 
@@ -82,21 +88,24 @@ class BrickMath extends BCMath
      */
     public function round($number, int $precision = 0): string
     {
-        return BigDecimal::of($number)
+        return (string) BigDecimal::of($number)
             ->dividedBy(BigDecimal::one(), $precision, RoundingMode::HALF_UP);
     }
 
     /**
-     * @param float|int|string $number
-     * @return string
+     * {@inheritdoc}
      */
     public function abs($number): string
     {
-        try {
-            return (string) BigDecimal::of($number)->abs();
-        } catch (\Throwable $throwable) {
-            return '0'; // fixme: 6.x
-        }
+        return (string) BigDecimal::of($number)->abs();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function negative($number): string
+    {
+        return (string) BigDecimal::of($number)->negated();
     }
 
     /**
@@ -105,5 +114,18 @@ class BrickMath extends BCMath
     public function compare($first, $second): int
     {
         return BigDecimal::of($first)->compareTo(BigDecimal::of($second));
+    }
+
+    /**
+     * @param int|null $scale
+     * @return int
+     */
+    protected function scale(?int $scale = null): int
+    {
+        if ($this->scale === null) {
+            $this->scale = (int) config('wallet.math.scale', 64);
+        }
+
+        return $scale ?? $this->scale;
     }
 }

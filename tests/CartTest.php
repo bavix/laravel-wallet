@@ -4,6 +4,8 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
+use Bavix\Wallet\Test\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Factories\ItemFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\Item;
 use function count;
@@ -20,8 +22,8 @@ class CartTest extends TestCase
          * @var Buyer $buyer
          * @var Item[] $products
          */
-        $buyer = factory(Buyer::class)->create();
-        $products = factory(Item::class, 10)->create([
+        $buyer = BuyerFactory::new()->create();
+        $products = ItemFactory::times(10)->create([
             'quantity' => 1,
         ]);
 
@@ -63,8 +65,8 @@ class CartTest extends TestCase
          * @var Buyer $buyer
          * @var Item[] $products
          */
-        $buyer = factory(Buyer::class)->create();
-        $products = factory(Item::class, 10)->create([
+        $buyer = BuyerFactory::new()->create();
+        $products = ItemFactory::times(10)->create([
             'quantity' => 10,
         ]);
 
@@ -99,8 +101,8 @@ class CartTest extends TestCase
          * @var Item[] $products
          */
         $this->expectException(ModelNotFoundException::class);
-        $buyer = factory(Buyer::class)->create();
-        $products = factory(Item::class, 10)->create([
+        $buyer = BuyerFactory::new()->create();
+        $products = ItemFactory::times(10)->create([
             'quantity' => 10,
         ]);
 
@@ -122,5 +124,40 @@ class CartTest extends TestCase
             ->addItems($products); // all goods
 
         $buyer->refundCart($refundCart);
+    }
+
+    /**
+     * @throws
+     */
+    public function testBoughtGoods(): void
+    {
+        /**
+         * @var Buyer $buyer
+         * @var Item[] $products
+         */
+        $buyer = BuyerFactory::new()->create();
+        $products = ItemFactory::times(10)->create([
+            'quantity' => 10,
+        ]);
+
+        $cart = app(Cart::class);
+        $total = [];
+        foreach ($products as $product) {
+            $quantity = random_int(1, 5);
+            $cart->addItem($product, $quantity);
+            $buyer->deposit($product->getAmountProduct($buyer) * $quantity);
+            $total[$product->getKey()] = $quantity;
+        }
+
+        $transfers = $buyer->payCart($cart);
+        self::assertCount(array_sum($total), $transfers);
+
+        foreach ($products as $product) {
+            $count = $product
+                ->boughtGoods([$buyer->wallet->getKey()])
+                ->count();
+
+            self::assertEquals($total[$product->getKey()], $count);
+        }
     }
 }

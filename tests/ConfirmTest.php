@@ -4,6 +4,8 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Exceptions\ConfirmedInvalid;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
+use Bavix\Wallet\Test\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Factories\UserConfirmFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\UserConfirm;
 
@@ -17,7 +19,7 @@ class ConfirmTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
 
         self::assertEquals(0, $wallet->balance);
@@ -39,7 +41,7 @@ class ConfirmTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
 
         self::assertEquals(0, $wallet->balance);
@@ -61,7 +63,7 @@ class ConfirmTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
 
         self::assertEquals(0, $wallet->balance);
@@ -84,7 +86,7 @@ class ConfirmTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
         $wallet->deposit(100);
 
@@ -103,7 +105,7 @@ class ConfirmTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
 
         self::assertEquals(0, $wallet->balance);
@@ -125,7 +127,7 @@ class ConfirmTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
 
         self::assertEquals(0, $wallet->balance);
@@ -150,7 +152,7 @@ class ConfirmTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
 
         self::assertEquals(0, $wallet->balance);
@@ -173,7 +175,7 @@ class ConfirmTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
 
         self::assertEquals(0, $wallet->balance);
@@ -193,7 +195,7 @@ class ConfirmTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
 
         self::assertEquals(0, $wallet->balance);
@@ -216,7 +218,7 @@ class ConfirmTest extends TestCase
          * @var Buyer $first
          * @var Buyer $second
          */
-        [$first, $second] = factory(Buyer::class, 2)->create();
+        [$first, $second] = BuyerFactory::times(2)->create();
         $firstWallet = $first->wallet;
         $secondWallet = $second->wallet;
 
@@ -237,7 +239,7 @@ class ConfirmTest extends TestCase
         /**
          * @var UserConfirm $userConfirm
          */
-        $userConfirm = factory(UserConfirm::class)->create();
+        $userConfirm = UserConfirmFactory::new()->create();
         $transaction = $userConfirm->deposit(100, null, false);
         self::assertEquals($transaction->wallet->id, $userConfirm->wallet->id);
         self::assertEquals($transaction->payable_id, $userConfirm->id);
@@ -245,6 +247,29 @@ class ConfirmTest extends TestCase
         self::assertFalse($transaction->confirmed);
 
         self::assertTrue($userConfirm->confirm($transaction));
+        self::assertTrue($transaction->confirmed);
+    }
+
+    /**
+     * @return void
+     */
+    public function testUserConfirmByWallet(): void
+    {
+        /**
+         * @var UserConfirm $userConfirm
+         */
+        $userConfirm = UserConfirmFactory::new()->create();
+        $transaction = $userConfirm->wallet->deposit(100, null, false);
+        self::assertEquals($transaction->wallet->id, $userConfirm->wallet->id);
+        self::assertEquals($transaction->payable_id, $userConfirm->id);
+        self::assertInstanceOf(UserConfirm::class, $transaction->payable);
+        self::assertFalse($transaction->confirmed);
+
+        self::assertTrue($userConfirm->confirm($transaction));
+        self::assertTrue($transaction->confirmed);
+        self::assertTrue($userConfirm->resetConfirm($transaction));
+        self::assertFalse($transaction->confirmed);
+        self::assertTrue($userConfirm->wallet->confirm($transaction));
         self::assertTrue($transaction->confirmed);
     }
 }

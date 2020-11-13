@@ -1,32 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php"
-         backupGlobals="false"
-         backupStaticAttributes="false"
-         colors="true"
-         verbose="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="vendor/autoload.php" backupGlobals="false"
+         backupStaticAttributes="false" colors="true" verbose="true" convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true" convertWarningsToExceptions="true" processIsolation="false"
+         stopOnFailure="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./src/</directory>
+        </include>
+        <report>
+            <clover outputFile="./build/logs/clover.xml"/>
+            <html outputDirectory="./build/html/"/>
+        </report>
+    </coverage>
     <testsuites>
         <testsuite name="Wallet Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src/</directory>
-        </whitelist>
-    </filter>
-    <logging>
-        <log type="coverage-html" target="./build/html/"/>
-        <log type="coverage-clover" target="./build/logs/clover.xml"/>
-    </logging>
+    <logging/>
     <php>
-        <env name="DB_CONNECTION" value="testing" />
-        <env name="DB_DATABASE" value="wallet" />
-        <env name="DB_USERNAME" value="wallet" />
-        <env name="DB_PASSWORD" value="wallet" />
+        <env name="DB_CONNECTION" value="testing"/>
+        <env name="DB_DATABASE" value="wallet"/>
+        <env name="DB_USERNAME" value="wallet"/>
+        <env name="DB_PASSWORD" value="wallet"/>
     </php>
 </phpunit>

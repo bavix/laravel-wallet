@@ -4,6 +4,8 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Test\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Factories\ItemTaxFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\ItemTax;
 
@@ -18,8 +20,8 @@ class TaxTest extends TestCase
          * @var Buyer $buyer
          * @var ItemTax $product
          */
-        $buyer = factory(Buyer::class)->create();
-        $product = factory(ItemTax::class)->create([
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemTaxFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -63,8 +65,8 @@ class TaxTest extends TestCase
          * @var Buyer $child
          * @var ItemTax $product
          */
-        [$santa, $child] = factory(Buyer::class, 2)->create();
-        $product = factory(ItemTax::class)->create([
+        [$santa, $child] = BuyerFactory::times(2)->create();
+        $product = ItemTaxFactory::new()->create([
             'quantity' => 1,
         ]);
 
@@ -115,8 +117,8 @@ class TaxTest extends TestCase
          * @var Buyer $child
          * @var ItemTax $product
          */
-        [$santa, $child] = factory(Buyer::class, 2)->create();
-        $product = factory(ItemTax::class)->create([
+        [$santa, $child] = BuyerFactory::times(2)->create();
+        $product = ItemTaxFactory::new()->create([
             'price' => 200,
             'quantity' => 1,
         ]);

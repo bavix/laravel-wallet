@@ -24,7 +24,7 @@ class WalletService
     public function discount(Wallet $customer, Wallet $product): int
     {
         if ($customer instanceof Customer && $product instanceof Discount) {
-            return $product->getPersonalDiscount($customer);
+            return (int) $product->getPersonalDiscount($customer);
         }
 
         // without discount
@@ -54,7 +54,7 @@ class WalletService
      * Consider the fee that the system will receive.
      *
      * @param Wallet $wallet
-     * @param int $amount
+     * @param int|string $amount
      * @return float|int
      */
     public function fee(Wallet $wallet, $amount)
@@ -90,7 +90,7 @@ class WalletService
     /**
      * The amount of checks for errors.
      *
-     * @param int $amount
+     * @param int|string $amount
      * @throws
      */
     public function checkAmount($amount): void
@@ -141,6 +141,32 @@ class WalletService
 
             return app(Storable::class)->setBalance($wallet, $balance) &&
                 (! $math->compare($whatIs, $balance) || $wallet->save());
+        });
+    }
+
+    /**
+     * @param WalletModel $wallet
+     * @param array|null $meta
+     * @return void
+     * @throws
+     */
+    public function adjustment(WalletModel $wallet, ?array $meta = null): void
+    {
+        app(DbService::class)->transaction(function () use ($wallet, $meta) {
+            $math = app(Mathable::class);
+            app(Storable::class)->getBalance($wallet);
+            $adjustmentBalance = $wallet->balance;
+            $wallet->refreshBalance();
+            $difference = $math->sub($wallet->balance, $adjustmentBalance);
+
+            switch ($math->compare($difference, 0)) {
+                case -1:
+                    $wallet->deposit($math->abs($difference), $meta);
+                    break;
+                case 1:
+                    $wallet->forceWithdraw($math->abs($difference), $meta);
+                    break;
+            }
         });
     }
 }

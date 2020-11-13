@@ -6,7 +6,11 @@ use function app;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CommonService;
+use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Simple\Store;
+use Bavix\Wallet\Test\Common\Services\WalletAdjustmentFailedService;
+use Bavix\Wallet\Test\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\UserMulti;
 use Illuminate\Database\SQLiteConnection;
@@ -24,7 +28,7 @@ class BalanceTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
         $buyer->deposit(1);
 
@@ -40,7 +44,7 @@ class BalanceTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         self::assertTrue($buyer->canWithdraw(0));
 
         $buyer->forceWithdraw(1);
@@ -56,7 +60,7 @@ class BalanceTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
         self::assertEquals($buyer->balance, 0);
         $buyer->forceWithdraw(1);
@@ -76,7 +80,7 @@ class BalanceTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
 
         self::assertFalse($buyer->relationLoaded('wallet'));
         $wallet = $buyer->wallet;
@@ -124,7 +128,7 @@ class BalanceTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
         $wallet = $buyer->wallet;
 
@@ -144,7 +148,7 @@ class BalanceTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
         $wallet = $buyer->wallet;
 
@@ -177,7 +181,7 @@ class BalanceTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
         $wallet = $buyer->wallet;
 
@@ -204,7 +208,7 @@ class BalanceTest extends TestCase
         /**
          * @var UserMulti $user
          */
-        $user = factory(UserMulti::class)->create();
+        $user = UserMultiFactory::new()->create();
         $wallets = \range('a', 'z');
         $sums = [];
         $ids = [];
@@ -249,6 +253,27 @@ class BalanceTest extends TestCase
 
     /**
      * @return void
+     */
+    public function testEqualWallet(): void
+    {
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = BuyerFactory::new()->create();
+        $wallet = $buyer->wallet;
+
+        self::assertEquals(0, $wallet->balance);
+
+        $wallet->deposit(1000);
+        self::assertEquals(1000, $wallet->balance);
+        self::assertEquals(1000, $wallet->wallet->balance);
+        self::assertEquals($wallet->getKey(), $wallet->wallet->getKey());
+        self::assertEquals($wallet->getKey(), $wallet->wallet->wallet->getKey());
+        self::assertEquals($wallet->getKey(), $wallet->wallet->wallet->wallet->getKey());
+    }
+
+    /**
+     * @return void
      * @see https://github.com/bavix/laravel-wallet/issues/49
      */
     public function testForceUpdate(): void
@@ -256,7 +281,7 @@ class BalanceTest extends TestCase
         /**
          * @var Buyer $buyer
          */
-        $buyer = factory(Buyer::class)->create();
+        $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
 
         self::assertEquals($wallet->balance, 0);
@@ -291,5 +316,100 @@ class BalanceTest extends TestCase
         $wallet->refreshBalance();
         self::assertEquals($wallet->balance, 1000);
         self::assertEquals($wallet->getRawOriginal('balance'), 1000);
+    }
+
+    /**
+     * @param int $account
+     * @param int $adjust
+     * @return void
+     *
+     * @dataProvider providerAdjustment
+     */
+    public function testAdjustment(int $account, int $adjust): void
+    {
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = BuyerFactory::new()->create();
+        $wallet = $buyer->wallet;
+
+        self::assertEquals(0, $wallet->balance);
+
+        $wallet->deposit($account);
+        self::assertEquals($account, $wallet->balance);
+
+        Wallet::whereKey($buyer->wallet->getKey())
+            ->update(['balance' => $adjust]);
+
+        /**
+         * Create a state when the cache is empty.
+         * For example, something went wrong and your database has incorrect data.
+         * Unfortunately, the library will work with what is.
+         * But there is an opportunity to recount the balance.
+         *
+         * Here is an example:
+         */
+        app()->singleton(Storable::class, Store::class);
+        self::assertEquals($account, $wallet->getRawOriginal('balance'));
+
+        /**
+         * We load the model from the base and our balance is 10.
+         */
+        $wallet->refresh();
+        self::assertEquals($adjust, $wallet->balance);
+        self::assertEquals($adjust, $wallet->getRawOriginal('balance'));
+
+        /**
+         * Now we fill the cache with relevant data (PS, the data inside the model will be updated).
+         */
+        $wallet->adjustmentBalance();
+        self::assertEquals($adjust, $wallet->balance);
+        self::assertEquals($adjust, $wallet->getRawOriginal('balance'));
+
+        /**
+         * Reapply, just in case...
+         */
+        $wallet->refreshBalance();
+        self::assertEquals($adjust, $wallet->balance);
+        self::assertEquals($adjust, $wallet->getRawOriginal('balance'));
+    }
+
+    /**
+     * @param int $account
+     * @param int $adjust
+     * @return void
+     *
+     * @dataProvider providerAdjustment
+     */
+    public function testAdjustmentFailed(int $account, int $adjust): void
+    {
+        /**
+         * @var Buyer $buyer
+         */
+        $buyer = BuyerFactory::new()->create();
+        $wallet = $buyer->wallet;
+
+        self::assertEquals(0, $wallet->balance);
+
+        $wallet->deposit($account);
+        self::assertEquals($account, $wallet->balance);
+
+        Wallet::whereKey($buyer->wallet->getKey())
+            ->update(['balance' => $adjust]);
+
+        app()->singleton(WalletService::class, WalletAdjustmentFailedService::class);
+        self::assertFalse($wallet->adjustmentBalance());
+    }
+
+    /**
+     * @return int[][]
+     */
+    public function providerAdjustment(): array
+    {
+        return [
+            [2000, 1000],
+            [1000, 2000],
+            [2000, 2000],
+        ];
     }
 }

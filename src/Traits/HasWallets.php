@@ -84,7 +84,11 @@ trait HasWallets
         /**
          * @var WalletModel $wallet
          */
-        $wallet = $this->wallets()->create($data);
+        $wallet = $this->wallets()->create(array_merge(
+            config('wallet.wallet.creating', []),
+            $data
+        ));
+
         $this->_wallets[$wallet->slug] = $wallet;
 
         return $wallet;

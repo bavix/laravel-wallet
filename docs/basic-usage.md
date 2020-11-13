@@ -1,17 +1,14 @@
 ## Simple Wallet
 
-Add the `HasWallet` trait and `Wallet` interface to model.
-```php
-use Bavix\Wallet\Traits\HasWallet;
-use Bavix\Wallet\Interfaces\Wallet;
+[User Simple](_include/models/user_simple.md ':include')
 
-class User extends Model implements Wallet
-{
-    use HasWallet;
-}
-```
+## Simple wallet transactions
 
-Now we make transactions.
+The package is built on simple transactions:
+  - deposit - replenishment of the wallet;
+  - withdraw - withdrawal from the wallet;
+  
+Consider an example:
 
 ```php
 $user = User::first();
@@ -53,7 +50,7 @@ class Item extends Model implements Product
 {
     use HasWallet;
 
-    public function canBuy(Customer $customer, bool $force = false): bool
+    public function canBuy(Customer $customer, int $quantity = 1, bool $force = null): bool
     {
         /**
          * If the service can be purchased once, then
@@ -102,11 +99,7 @@ var_dump($user->refund($item)); // bool(true)
 var_dump((bool)$user->paid($item)); // bool(false)
 ```
 
-## Eager Loading
-
-```php
-User::with('wallet');
-```
+[Eager Loading](_include/eager_loading.md ':include')
 
 ## How to work with fractional numbers?
 Add the `HasWalletFloat` trait and `WalletFloat` interface to model.

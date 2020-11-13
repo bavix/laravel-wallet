@@ -16,6 +16,13 @@ class WalletConfigure
     public static $runsMigrations = true;
 
     /**
+     * WalletConfigure constructor.
+     */
+    final public function __construct()
+    {
+    }
+
+    /**
      * Configure Wallet to not register its migrations.
      *
      * @return static
@@ -24,6 +31,6 @@ class WalletConfigure
     {
         static::$runsMigrations = false;
 
-        return new static;
+        return new static();
     }
 }

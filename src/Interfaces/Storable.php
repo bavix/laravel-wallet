@@ -16,8 +16,8 @@ interface Storable
      * We increase the balance by the amount.
      *
      * @param Wallet $object
-     * @param int $amount
-     * @return int|float
+     * @param int|string $amount
+     * @return string
      */
     public function incBalance($object, $amount);
 
@@ -25,16 +25,15 @@ interface Storable
      * We set the exact amount.
      *
      * @param Wallet $object
-     * @param int $amount
+     * @param int|string $amount
      * @return bool
      */
     public function setBalance($object, $amount): bool;
 
     /**
      * We clean the storage, a need for consumers.
-     * Expected in 6.x version.
      *
      * @return bool
      */
-    // public function fresh(): bool;
+    public function fresh(): bool;
 }

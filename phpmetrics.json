@@ -1,0 +1,22 @@
+{
+  "includes": [
+    "src"
+  ],
+  "exclude": [
+    "tests"
+  ],
+  "report": {
+    "html": "build/report/",
+    "csv": "build/report.csv",
+    "json": "build/report.json",
+    "violations": "build/violations.xml"
+  },
+  "plugins": {
+    "git": {
+      "binary": "git"
+    },
+    "junit": {
+      "file": "build/phpunit.junit.xml"
+    }
+  }
+}

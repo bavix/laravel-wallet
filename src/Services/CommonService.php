@@ -22,7 +22,7 @@ class CommonService
     /**
      * @param Wallet $from
      * @param Wallet $to
-     * @param int $amount
+     * @param int|string $amount
      * @param array|null $meta
      * @param string $status
      * @return Transfer
@@ -43,7 +43,7 @@ class CommonService
     /**
      * @param Wallet $from
      * @param Wallet $to
-     * @param int $amount
+     * @param int|string $amount
      * @param array|null $meta
      * @param string $status
      * @return Transfer
@@ -77,9 +77,9 @@ class CommonService
 
     /**
      * @param Wallet $wallet
-     * @param int $amount
+     * @param int|string $amount
      * @param array|null $meta
-     * @param bool|null $confirmed
+     * @param bool $confirmed
      * @return Transaction
      */
     public function forceWithdraw(Wallet $wallet, $amount, ?array $meta, bool $confirmed = true): Transaction
@@ -93,11 +93,12 @@ class CommonService
              */
             $wallet = $walletService->getWallet($wallet);
 
+            $mathService = app(Mathable::class);
             $transactions = $this->multiOperation($wallet, [
                 app(Operation::class)
                     ->setType(Transaction::TYPE_WITHDRAW)
                     ->setConfirmed($confirmed)
-                    ->setAmount(-$amount)
+                    ->setAmount($mathService->negative($amount))
                     ->setMeta($meta),
             ]);
 
@@ -107,7 +108,7 @@ class CommonService
 
     /**
      * @param Wallet $wallet
-     * @param int $amount
+     * @param int|string $amount
      * @param array|null $meta
      * @param bool $confirmed
      * @return Transaction
@@ -137,7 +138,7 @@ class CommonService
 
     /**
      * @param Wallet $wallet
-     * @param int $amount
+     * @param int|string $amount
      * @param bool $allowZero
      * @return void
      * @throws BalanceIsEmpty
@@ -224,7 +225,7 @@ class CommonService
 
     /**
      * @param Wallet $wallet
-     * @param int $amount
+     * @param int|string $amount
      * @return bool
      * @throws
      */

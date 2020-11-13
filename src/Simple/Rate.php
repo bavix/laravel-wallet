@@ -11,7 +11,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 class Rate implements Rateable
 {
     /**
-     * @var int
+     * @var string
      */
     protected $amount;
 
