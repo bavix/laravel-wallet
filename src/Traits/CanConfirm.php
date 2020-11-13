@@ -76,6 +76,7 @@ trait CanConfirm
 
                 $mathService = app(Mathable::class);
                 $negativeAmount = $mathService->negative($transaction->amount);
+
                 return $transaction->update(['confirmed' => false]) &&
 
                     // update balance
