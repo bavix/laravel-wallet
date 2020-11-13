@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [6.0.0] - 2020-11-##
+## [6.0.0] - 2020-11-13
 
 ### Added
 - Bigger and safer. There are never many tests. As always, new test cases have been added.
