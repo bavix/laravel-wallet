@@ -46,6 +46,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 - The key in the currencies config will be removed in 7.x. Use "wallet.meta.currency".
 
+## [5.5.1] - 2020-10-18
+### Fixed
+- Fixed a bug when updating the balance, refund and full write-off. #279 @vaibhavpandeyvpz
+- Fixed bugs in unit tests.
+
 ## [5.5.0] - 2020-10-01
 ### Added
 - Added brick/math dependency (Optional in version 5.x. If you already have a package installed, the library will switch to it automatically)
@@ -601,7 +606,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 
 [Unreleased]: https://github.com/bavix/laravel-wallet/compare/6.0.1...develop
 [6.0.1]: https://github.com/bavix/laravel-wallet/compare/6.0.0...6.0.1
-[6.0.0]: https://github.com/bavix/laravel-wallet/compare/5.5.0...6.0.0
+[6.0.0]: https://github.com/bavix/laravel-wallet/compare/5.5.1...6.0.0
+[5.5.1]: https://github.com/bavix/laravel-wallet/compare/5.5.0...5.5.1
 [5.5.0]: https://github.com/bavix/laravel-wallet/compare/5.4.0...5.5.0
 [5.4.0]: https://github.com/bavix/laravel-wallet/compare/5.3.2...5.4.0
 [5.3.2]: https://github.com/bavix/laravel-wallet/compare/5.3.1...5.3.2
