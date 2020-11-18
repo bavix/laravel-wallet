@@ -2,8 +2,10 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
+use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Test\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Factories\ItemFactory;
 use Bavix\Wallet\Test\Models\Buyer;
@@ -29,7 +31,7 @@ class CartTest extends TestCase
 
         $cart = app(Cart::class)->addItems($products);
         foreach ($cart->getItems() as $product) {
-            self::assertEquals($product->balance, 0);
+            self::assertEquals(0, $product->balance);
         }
 
         self::assertEquals($buyer->balance, $buyer->wallet->balance);
@@ -39,10 +41,10 @@ class CartTest extends TestCase
         $transfers = $buyer->payCart($cart);
         self::assertCount(count($cart), $transfers);
         self::assertTrue((bool) $cart->alreadyBuy($buyer));
-        self::assertEquals($buyer->balance, 0);
+        self::assertEquals(0, $buyer->balance);
 
         foreach ($transfers as $transfer) {
-            self::assertEquals($transfer->status, Transfer::STATUS_PAID);
+            self::assertEquals(Transfer::STATUS_PAID, $transfer->status);
         }
 
         foreach ($cart->getItems() as $product) {
@@ -52,7 +54,7 @@ class CartTest extends TestCase
         self::assertTrue($buyer->refundCart($cart));
         foreach ($transfers as $transfer) {
             $transfer->refresh();
-            self::assertEquals($transfer->status, Transfer::STATUS_REFUND);
+            self::assertEquals(Transfer::STATUS_REFUND, $transfer->status);
         }
     }
 
@@ -87,7 +89,7 @@ class CartTest extends TestCase
         self::assertTrue($buyer->refundCart($cart));
         foreach ($transfers as $transfer) {
             $transfer->refresh();
-            self::assertEquals($transfer->status, Transfer::STATUS_REFUND);
+            self::assertEquals(Transfer::STATUS_REFUND, $transfer->status);
         }
     }
 
@@ -159,5 +161,72 @@ class CartTest extends TestCase
 
             self::assertEquals($total[$product->getKey()], $count);
         }
+    }
+
+    /**
+     * @see https://github.com/bavix/laravel-wallet/issues/279
+     *
+     * @return void
+     */
+    public function testWithdrawal(): void
+    {
+        $transactionLevel = app(DbService::class)
+            ->connection()
+            ->transactionLevel();
+
+        /**
+         * @var Buyer $buyer
+         * @var Item $product
+         */
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemFactory::new()->create(['quantity' => 1]);
+
+        $cart = app(Cart::class);
+        $cart->addItem($product, 1);
+
+        foreach ($cart->getItems() as $item) {
+            self::assertEquals(0, $item->balance);
+        }
+
+        $math = app(Mathable::class);
+
+        self::assertEquals($buyer->balance, $buyer->wallet->balance);
+        self::assertNotNull($buyer->deposit($cart->getTotal($buyer)));
+        self::assertEquals(0, $math->compare($cart->getTotal($buyer), $buyer->balance));
+        self::assertEquals($buyer->balance, $buyer->wallet->balance);
+
+        $transfers = $buyer->payCart($cart);
+        self::assertCount(count($cart), $transfers);
+        self::assertTrue((bool) $cart->alreadyBuy($buyer));
+        self::assertEquals(0, $buyer->balance);
+
+        foreach ($transfers as $transfer) {
+            self::assertEquals(Transfer::STATUS_PAID, $transfer->status);
+        }
+
+        foreach ($cart->getItems() as $product) {
+            self::assertEquals($product->balance, $product->getAmountProduct($buyer));
+        }
+
+        self::assertTrue($buyer->refundCart($cart));
+        self::assertEquals(0, $math->compare($cart->getTotal($buyer), $buyer->balance));
+        self::assertEquals($transactionLevel, app(DbService::class)->connection()->transactionLevel()); // check case #1
+
+        foreach ($transfers as $transfer) {
+            $transfer->refresh();
+            self::assertEquals(Transfer::STATUS_REFUND, $transfer->status);
+        }
+
+        $withdraw = $buyer->withdraw($buyer->balance); // problem place... withdrawal
+        self::assertNotNull($withdraw);
+        self::assertEquals(0, $buyer->balance);
+
+        // check in the database
+        $balance = $buyer->wallet::query()
+            ->whereKey($buyer->wallet->getKey())
+            ->getQuery()
+            ->value('balance');
+
+        self::assertEquals(0, $balance);
     }
 }
