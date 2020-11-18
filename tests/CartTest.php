@@ -206,7 +206,6 @@ class CartTest extends TestCase
 
         self::assertTrue($buyer->refundCart($cart));
         self::assertEquals(0, $math->compare($cart->getTotal($buyer), $buyer->balance));
-        self::assertEquals(0, DB::transactionLevel()); // check case #1
 
         foreach ($transfers as $transfer) {
             $transfer->refresh();
