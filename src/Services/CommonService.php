@@ -238,7 +238,9 @@ class CommonService
                 ->incBalance($wallet, $amount);
 
             try {
-                $result = $wallet->update(compact('balance'));
+                $result = $wallet->newQuery()
+                    ->whereKey($wallet->getKey())
+                    ->update(compact('balance'));
             } catch (\Throwable $throwable) {
                 app(Storable::class)
                     ->setBalance($wallet, $wallet->getAvailableBalance());
@@ -246,7 +248,10 @@ class CommonService
                 throw $throwable;
             }
 
-            if (! $result) {
+            if ($result) {
+                $wallet->fill(compact('balance'))
+                    ->syncOriginalAttributes('balance');
+            } else {
                 app(Storable::class)
                     ->setBalance($wallet, $wallet->getAvailableBalance());
             }
