@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Test\Models;
 
 use Bavix\Wallet\Interfaces\Customer;
@@ -72,7 +74,7 @@ class Item extends Model implements Product
      */
     public function getUniqueId(): string
     {
-        return $this->getKey();
+        return (string) $this->getKey();
     }
 
     /**

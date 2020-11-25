@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet;
 
 use Bavix\Wallet\Commands\RefreshBalance;

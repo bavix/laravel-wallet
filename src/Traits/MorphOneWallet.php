@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Traits;
 
 use Bavix\Wallet\Models\Wallet as WalletModel;

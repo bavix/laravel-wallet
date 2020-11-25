@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Services;
 
 use function app;
@@ -231,7 +233,7 @@ class CommonService
      */
     public function addBalance(Wallet $wallet, $amount): bool
     {
-        return app(LockService::class)->lock($this, __FUNCTION__, static function () use ($wallet, $amount) {
+        return app(LockService::class)->lock($this, __FUNCTION__, static function () use ($wallet, $amount): bool {
             /**
              * @var WalletModel $wallet
              */
@@ -257,7 +259,7 @@ class CommonService
                     ->setBalance($wallet, $wallet->getAvailableBalance());
             }
 
-            return $result;
+            return (bool) $result;
         });
     }
 }

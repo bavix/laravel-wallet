@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Objects;
 
 use Bavix\Wallet\Interfaces\Mathable;
@@ -178,7 +180,7 @@ class Bring
      */
     public function getDiscount(): int
     {
-        return $this->discount;
+        return (int) $this->discount;
     }
 
     /**
@@ -196,7 +198,7 @@ class Bring
             );
         }
 
-        return $fee;
+        return (int) $fee;
     }
 
     /**

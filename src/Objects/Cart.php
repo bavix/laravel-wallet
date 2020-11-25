@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Objects;
 
 use function array_unique;
@@ -152,7 +154,7 @@ class Cart implements Countable
         $class = get_class($product);
         $uniq = $product->getUniqueId();
 
-        return $this->quantity[$class][$uniq] ?? 0;
+        return (int) ($this->quantity[$class][$uniq] ?? 0);
     }
 
     /**
