@@ -13,6 +13,7 @@ use Bavix\Wallet\Test\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Models\Item;
 use Bavix\Wallet\Test\Models\UserCashier;
 use Bavix\Wallet\Test\Models\UserMulti;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use function compact;
 use Illuminate\Database\PostgresConnection;
 use Illuminate\Database\QueryException;
@@ -109,11 +110,11 @@ class MultiWalletTest extends TestCase
         // without find
         $wallet->depositFloat(100.1);
 
-        self::assertEquals($wallet->balanceFloat, 100.1);
-        self::assertEquals($wallet->balance, 10010);
+        self::assertEquals(100.1, $wallet->balanceFloat);
+        self::assertEquals(10010, $wallet->balance);
 
         $wallet->withdrawFloat($wallet->balanceFloat);
-        self::assertEquals($wallet->balanceFloat, 0);
+        self::assertEquals(0, $wallet->balanceFloat);
 
         // find
         $userFind = UserMulti::query()->find($userInit->id); // refresh
@@ -123,11 +124,42 @@ class MultiWalletTest extends TestCase
         $wallet = $userFind->getWallet($userInit->getKey());
         $wallet->depositFloat(100.1);
 
-        self::assertEquals($wallet->balanceFloat, 100.1);
-        self::assertEquals($wallet->balance, 10010);
+        self::assertEquals(100.1, $wallet->balanceFloat);
+        self::assertEquals(10010, $wallet->balance);
 
         $wallet->withdrawFloat($wallet->balanceFloat);
-        self::assertEquals($wallet->balanceFloat, 0);
+        self::assertEquals(0, $wallet->balanceFloat);
+    }
+
+    /**
+     * @see https://github.com/bavix/laravel-wallet/issues/286#issue-750353538
+     * @return void
+     */
+    public function testGetWalletOrFail(): void
+    {
+        /**
+         * @var UserMulti $userMulti
+         */
+        $userMulti = UserMultiFactory::new()->create();
+        self::assertEquals(0, $userMulti->balance); // createWallet
+        $userMulti
+            ->getWalletOrFail(config('wallet.wallet.default.slug', 'default'));
+    }
+
+    /**
+     * @see https://github.com/bavix/laravel-wallet/issues/286#issue-750353538
+     * @return void
+     */
+    public function testTransferWalletNotExists(): void
+    {
+        $this->expectException(ModelNotFoundException::class);
+
+        /**
+         * @var UserMulti $userMulti
+         */
+        $userMulti = UserMultiFactory::new()->create();
+        $userMulti
+            ->getWalletOrFail(config('wallet.wallet.default.slug', 'default'));
     }
 
     /**
@@ -165,19 +197,19 @@ class MultiWalletTest extends TestCase
             'name' => 'deposit',
         ]);
 
-        self::assertEquals($wallet->balance, 0);
+        self::assertEquals(0, $wallet->balance);
 
         $wallet->deposit(100);
-        self::assertEquals($wallet->balance, 100);
+        self::assertEquals(100, $wallet->balance);
 
         $wallet->withdraw(10);
-        self::assertEquals($wallet->balance, 90);
+        self::assertEquals(90, $wallet->balance);
 
         $wallet->withdraw(81);
-        self::assertEquals($wallet->balance, 9);
+        self::assertEquals(9, $wallet->balance);
 
         $wallet->withdraw(9);
-        self::assertEquals($wallet->balance, 0);
+        self::assertEquals(0, $wallet->balance);
 
         $wallet->withdraw(1);
     }
@@ -221,50 +253,50 @@ class MultiWalletTest extends TestCase
 
         self::assertNotEquals($first->id, $second->id);
         self::assertNotEquals($firstWallet->id, $secondWallet->id);
-        self::assertEquals($firstWallet->balance, 0);
-        self::assertEquals($secondWallet->balance, 0);
+        self::assertEquals(0, $firstWallet->balance);
+        self::assertEquals(0, $secondWallet->balance);
 
         $firstWallet->deposit(100);
-        self::assertEquals($firstWallet->balance, 100);
+        self::assertEquals(100, $firstWallet->balance);
 
         $secondWallet->deposit(100);
-        self::assertEquals($secondWallet->balance, 100);
+        self::assertEquals(100, $secondWallet->balance);
 
         $transfer = $firstWallet->transfer($secondWallet, 100);
-        self::assertEquals($first->balance, 0);
-        self::assertEquals($firstWallet->balance, 0);
-        self::assertEquals($second->balance, 0);
-        self::assertEquals($secondWallet->balance, 200);
-        self::assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
+        self::assertEquals(0, $first->balance);
+        self::assertEquals(0, $firstWallet->balance);
+        self::assertEquals(0, $second->balance);
+        self::assertEquals(200, $secondWallet->balance);
+        self::assertEquals(Transfer::STATUS_TRANSFER, $transfer->status);
 
         $transfer = $secondWallet->transfer($firstWallet, 100);
-        self::assertEquals($secondWallet->balance, 100);
-        self::assertEquals($firstWallet->balance, 100);
-        self::assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
+        self::assertEquals(100, $secondWallet->balance);
+        self::assertEquals(100, $firstWallet->balance);
+        self::assertEquals(Transfer::STATUS_TRANSFER, $transfer->status);
 
         $transfer = $secondWallet->transfer($firstWallet, 100);
-        self::assertEquals($secondWallet->balance, 0);
-        self::assertEquals($firstWallet->balance, 200);
-        self::assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
+        self::assertEquals(0, $secondWallet->balance);
+        self::assertEquals(200, $firstWallet->balance);
+        self::assertEquals(Transfer::STATUS_TRANSFER, $transfer->status);
 
         $firstWallet->withdraw($firstWallet->balance);
-        self::assertEquals($firstWallet->balance, 0);
+        self::assertEquals(0, $firstWallet->balance);
 
         self::assertNull($firstWallet->safeTransfer($secondWallet, 100));
-        self::assertEquals($firstWallet->balance, 0);
-        self::assertEquals($secondWallet->balance, 0);
+        self::assertEquals(0, $firstWallet->balance);
+        self::assertEquals(0, $secondWallet->balance);
 
         $transfer = $firstWallet->forceTransfer($secondWallet, 100);
         self::assertNotNull($transfer);
-        self::assertEquals($firstWallet->balance, -100);
-        self::assertEquals($secondWallet->balance, 100);
-        self::assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
+        self::assertEquals(-100, $firstWallet->balance);
+        self::assertEquals(100, $secondWallet->balance);
+        self::assertEquals(Transfer::STATUS_TRANSFER, $transfer->status);
 
         $transfer = $secondWallet->forceTransfer($firstWallet, 100);
         self::assertNotNull($transfer);
-        self::assertEquals($firstWallet->balance, 0);
-        self::assertEquals($secondWallet->balance, 0);
-        self::assertEquals($transfer->status, Transfer::STATUS_TRANSFER);
+        self::assertEquals(0, $firstWallet->balance);
+        self::assertEquals(0, $secondWallet->balance);
+        self::assertEquals(Transfer::STATUS_TRANSFER, $transfer->status);
     }
 
     /**

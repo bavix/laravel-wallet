@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Traits;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use function array_key_exists;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use function config;
@@ -48,6 +49,30 @@ trait HasWallets
      */
     public function getWallet(string $slug): ?WalletModel
     {
+        try {
+            return $this->getWalletOrFail($slug);
+        } catch (ModelNotFoundException $modelNotFoundException) {
+            return null;
+        }
+    }
+
+    /**
+     * Get wallet by slug.
+     *
+     *  $user->wallet->balance // 200
+     *  or short recording $user->balance; // 200
+     *
+     *  $defaultSlug = config('wallet.wallet.default.slug');
+     *  $user->getWallet($defaultSlug)->balance; // 200
+     *
+     *  $user->getWallet('usd')->balance; // 50
+     *  $user->getWallet('rub')->balance; // 100
+     *
+     * @param string $slug
+     * @return WalletModel
+     */
+    public function getWalletOrFail(string $slug): WalletModel
+    {
         if (! $this->_loadedWallets && $this->relationLoaded('wallets')) {
             $this->_loadedWallets = true;
             $wallets = $this->getRelation('wallets');
@@ -59,7 +84,7 @@ trait HasWallets
         if (! array_key_exists($slug, $this->_wallets)) {
             $this->_wallets[$slug] = $this->wallets()
                 ->where('slug', $slug)
-                ->first();
+                ->firstOrFail();
         }
 
         return $this->_wallets[$slug];
