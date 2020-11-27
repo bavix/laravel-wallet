@@ -29,7 +29,7 @@ class MultiWalletGiftTest extends TestCase
         $wallet = $first->createWallet(['name' => 'Gift', 'slug' => 'gifter']);
         self::assertNotNull($wallet);
         self::assertNotNull($first->wallet);
-        self::assertNotNull($first->wallet->id, $wallet->id);
+        self::assertNotEquals($first->wallet->id, $wallet->id);
 
         /**
          * @var Item $item
