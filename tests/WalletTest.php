@@ -206,6 +206,27 @@ class WalletTest extends TestCase
     }
 
     /**
+     * @see https://github.com/bavix/laravel-wallet/issues/286#issue-750353538
+     * @return void
+     */
+    public function testTransferWalletNotExists(): void
+    {
+        /**
+         * @var User $first
+         * @var User $second
+         */
+        [$first, $second] = UserFactory::times(2)->create();
+        self::assertNotEquals($first->getKey(), $second->getKey());
+
+        self::assertNotNull($first->deposit(1000));
+        self::assertEquals(1000, $first->balance);
+
+        self::assertNotNull($first->transfer($second, 500));
+        self::assertEquals(500, $first->balance);
+        self::assertEquals(500, $second->balance);
+    }
+
+    /**
      * @return void
      */
     public function testTransferYourself(): void
