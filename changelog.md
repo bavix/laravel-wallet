@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.0.3] - 2021-01-31
+### Added
+- Add arabic locale; #302 @akhedrane
+
 ## [6.0.2] - 2020-11-28
 ### Added
 - Added `getWalletOrFail` method.
@@ -608,7 +612,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/6.0.2...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/6.0.3...develop
+[6.0.3]: https://github.com/bavix/laravel-wallet/compare/6.0.2...6.0.3
 [6.0.2]: https://github.com/bavix/laravel-wallet/compare/6.0.1...6.0.2
 [6.0.1]: https://github.com/bavix/laravel-wallet/compare/6.0.0...6.0.1
 [6.0.0]: https://github.com/bavix/laravel-wallet/compare/5.5.1...6.0.0
