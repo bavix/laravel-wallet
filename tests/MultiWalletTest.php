@@ -43,6 +43,43 @@ class MultiWalletTest extends TestCase
     /**
      * @return void
      */
+    public function testOnlyCreatedWallets(): void
+    {
+        /**
+         * @var UserMulti $user
+         */
+        $user = UserMultiFactory::new()->create();
+        $slugs = ['dollar', 'euro', 'ruble'];
+
+        foreach ($slugs as $slug) {
+            self::assertNull($user->getWallet($slug));
+            $wallet = $user->createWallet([
+                'name' => ucfirst($slug),
+                'slug' => $slug,
+            ]);
+
+            self::assertNotNull($wallet);
+            self::assertEquals($slug, $wallet->slug);
+
+            self::assertTrue((bool) $wallet->deposit(1000));
+        }
+
+        self::assertEqualsCanonicalizing(
+            $slugs,
+            $user->wallets->pluck('slug')->toArray()
+        );
+
+        self::assertCount(count($slugs), $user->wallets()->get());
+
+        foreach ($user->wallets()->get() as $wallet) {
+            self::assertEquals(1000, $wallet->balance);
+            self::assertContains($wallet->slug, $slugs);
+        }
+    }
+
+    /**
+     * @return void
+     */
     public function testDeposit(): void
     {
         /**
