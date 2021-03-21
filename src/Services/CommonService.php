@@ -2,9 +2,8 @@
 
 namespace Bavix\Wallet\Services;
 
-use Bavix\Wallet\Exceptions\AmountInvalid;
-use Throwable;
 use function app;
+use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Mathable;
@@ -18,6 +17,7 @@ use Bavix\Wallet\Objects\Operation;
 use Bavix\Wallet\Traits\HasWallet;
 use function compact;
 use function max;
+use Throwable;
 
 class CommonService
 {

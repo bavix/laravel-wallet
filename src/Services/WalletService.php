@@ -2,7 +2,6 @@
 
 namespace Bavix\Wallet\Services;
 
-use Throwable;
 use function app;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Interfaces\Customer;
@@ -14,6 +13,7 @@ use Bavix\Wallet\Interfaces\Taxable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Traits\HasWallet;
+use Throwable;
 
 class WalletService
 {

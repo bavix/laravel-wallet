@@ -2,11 +2,11 @@
 
 namespace Bavix\Wallet\Interfaces;
 
+use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\ConfirmedInvalid;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
 use Bavix\Wallet\Models\Transaction;
-use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 
 interface Confirmable
 {

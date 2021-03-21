@@ -2,10 +2,10 @@
 
 namespace Bavix\Wallet\Traits;
 
+use function app;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
-use function app;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Product;
