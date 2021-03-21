@@ -6,9 +6,11 @@ use Closure;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 /**
  * Class DbService.
+ *
  * @codeCoverageIgnore
  */
 class DbService
@@ -26,9 +28,10 @@ class DbService
      *
      * @param Closure $callback
      * @param int $attempts
+     *
      * @return mixed
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function transaction(Closure $callback, $attempts = 1)
     {
@@ -43,6 +46,7 @@ class DbService
      * Get a new raw query expression.
      *
      * @param mixed $value
+     *
      * @return Expression
      */
     public function raw($value): Expression

@@ -253,6 +253,25 @@ class ConfirmTest extends TestCase
     /**
      * @return void
      */
+    public function testConfirmWithoutWallet(): void
+    {
+        /**
+         * @var UserConfirm $userConfirm
+         */
+        $userConfirm = UserConfirmFactory::new()->create();
+        $userConfirm->deposit(10000);
+
+        $transaction = $userConfirm->withdraw(1000, null, false);
+        self::assertFalse($transaction->confirmed);
+        self::assertEquals(10000, $userConfirm->balance);
+
+        self::assertTrue($transaction->wallet->confirm($transaction));
+        self::assertEquals(9000, $userConfirm->balance);
+    }
+
+    /**
+     * @return void
+     */
     public function testUserConfirmByWallet(): void
     {
         /**

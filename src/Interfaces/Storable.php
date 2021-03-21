@@ -8,6 +8,7 @@ interface Storable
      * Get balance from storage.
      *
      * @param Wallet $object
+     *
      * @return int|float
      */
     public function getBalance($object);
@@ -17,6 +18,7 @@ interface Storable
      *
      * @param Wallet $object
      * @param int|string $amount
+     *
      * @return string
      */
     public function incBalance($object, $amount);
@@ -26,6 +28,7 @@ interface Storable
      *
      * @param Wallet $object
      * @param int|string $amount
+     *
      * @return bool
      */
     public function setBalance($object, $amount): bool;

@@ -108,6 +108,7 @@ class Transaction extends Model
 
     /**
      * @param int|float $amount
+     *
      * @return void
      */
     public function setAmountFloatAttribute($amount): void

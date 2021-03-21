@@ -40,6 +40,7 @@ class Cart implements Countable
 
     /**
      * @param iterable $products
+     *
      * @return static
      */
     public function addItems(iterable $products): self
@@ -72,6 +73,7 @@ class Cart implements Countable
      *
      * @param Customer $customer
      * @param bool|null $gifts
+     *
      * @return Transfer[]
      */
     public function alreadyBuy(Customer $customer, bool $gifts = null): array
@@ -106,6 +108,7 @@ class Cart implements Countable
     /**
      * @param Customer $customer
      * @param bool|null $force
+     *
      * @return bool
      */
     public function canBuy(Customer $customer, bool $force = null): bool
@@ -145,6 +148,7 @@ class Cart implements Countable
 
     /**
      * @param Product $product
+     *
      * @return int
      */
     public function getQuantity(Product $product): int
