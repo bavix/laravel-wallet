@@ -41,6 +41,7 @@ class Operation
 
     /**
      * Transaction constructor.
+     *
      * @throws
      */
     public function __construct()
@@ -90,6 +91,7 @@ class Operation
 
     /**
      * @param string $type
+     *
      * @return static
      */
     public function setType(string $type): self
@@ -101,6 +103,7 @@ class Operation
 
     /**
      * @param int|string $amount
+     *
      * @return static
      */
     public function setAmount($amount): self
@@ -112,6 +115,7 @@ class Operation
 
     /**
      * @param array|null $meta
+     *
      * @return static
      */
     public function setMeta(?array $meta): self
@@ -123,6 +127,7 @@ class Operation
 
     /**
      * @param bool $confirmed
+     *
      * @return static
      */
     public function setConfirmed(bool $confirmed): self
@@ -142,6 +147,7 @@ class Operation
 
     /**
      * @param Wallet $wallet
+     *
      * @return static
      */
     public function setWallet(Wallet $wallet): self
@@ -168,6 +174,7 @@ class Operation
 
     /**
      * @return array
+     *
      * @throws
      */
     public function toArray(): array

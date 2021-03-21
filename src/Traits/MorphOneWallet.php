@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
  * Trait MorphOneWallet.
+ *
  * @property-read WalletModel $wallet
  */
 trait MorphOneWallet

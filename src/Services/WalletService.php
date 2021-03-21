@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Services;
 
+use Throwable;
 use function app;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Interfaces\Customer;
@@ -19,6 +20,7 @@ class WalletService
     /**
      * @param Wallet $customer
      * @param Wallet $product
+     *
      * @return int
      */
     public function discount(Wallet $customer, Wallet $product): int
@@ -33,6 +35,7 @@ class WalletService
 
     /**
      * @param Wallet $object
+     *
      * @return int
      */
     public function decimalPlacesValue(Wallet $object): int
@@ -42,6 +45,7 @@ class WalletService
 
     /**
      * @param Wallet $object
+     *
      * @return string
      */
     public function decimalPlaces(Wallet $object): string
@@ -55,6 +59,7 @@ class WalletService
      *
      * @param Wallet $wallet
      * @param int|string $amount
+     *
      * @return float|int
      */
     public function fee(Wallet $wallet, $amount)
@@ -91,7 +96,8 @@ class WalletService
      * The amount of checks for errors.
      *
      * @param int|string $amount
-     * @throws
+     *
+     * @throws AmountInvalid
      */
     public function checkAmount($amount): void
     {
@@ -103,6 +109,7 @@ class WalletService
     /**
      * @param Wallet $object
      * @param bool $autoSave
+     *
      * @return WalletModel
      */
     public function getWallet(Wallet $object, bool $autoSave = true): WalletModel
@@ -128,6 +135,7 @@ class WalletService
 
     /**
      * @param WalletModel $wallet
+     *
      * @return bool
      */
     public function refresh(WalletModel $wallet): bool
@@ -147,8 +155,10 @@ class WalletService
     /**
      * @param WalletModel $wallet
      * @param array|null $meta
+     *
      * @return void
-     * @throws
+     *
+     * @throws Throwable
      */
     public function adjustment(WalletModel $wallet, ?array $meta = null): void
     {

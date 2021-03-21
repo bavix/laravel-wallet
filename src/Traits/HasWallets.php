@@ -45,6 +45,7 @@ trait HasWallets
      *  $user->getWallet('rub')->balance; // 100
      *
      * @param string $slug
+     *
      * @return WalletModel|null
      */
     public function getWallet(string $slug): ?WalletModel
@@ -69,7 +70,10 @@ trait HasWallets
      *  $user->getWallet('rub')->balance; // 100
      *
      * @param string $slug
+     *
      * @return WalletModel
+     *
+     * @throws ModelNotFoundException
      */
     public function getWalletOrFail(string $slug): WalletModel
     {
@@ -102,6 +106,7 @@ trait HasWallets
 
     /**
      * @param array $data
+     *
      * @return WalletModel
      */
     public function createWallet(array $data): WalletModel
@@ -123,6 +128,7 @@ trait HasWallets
      * The method checks the existence of the wallet.
      *
      * @param string $slug
+     *
      * @return bool
      */
     public function hasWallet(string $slug): bool

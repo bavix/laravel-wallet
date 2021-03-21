@@ -2,6 +2,9 @@
 
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Exceptions\AmountInvalid;
+use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Exceptions\InsufficientFunds;
 use function app;
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Storable;
@@ -36,10 +39,13 @@ trait HasWallet
      * @param bool $confirmed
      *
      * @return Transaction
-     * @throws
+     *
+     * @throws AmountInvalid
+     * @throws Throwable
      */
     public function deposit($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
+        /** @var Wallet $self */
         $self = $this;
 
         return app(DbService::class)->transaction(static function () use ($self, $amount, $meta, $confirmed) {
@@ -70,10 +76,12 @@ trait HasWallet
      *  var_dump($user2->balance); // 300
      *
      * @return int|float|string
-     * @throws
+     *
+     * @throws Throwable
      */
     public function getBalanceAttribute()
     {
+        /** @var Wallet $this */
         return app(Storable::class)->getBalance($this);
     }
 
@@ -94,7 +102,8 @@ trait HasWallet
      * @param Wallet $wallet
      * @param int|string $amount
      * @param array|null $meta
-     * @return null|Transfer
+     *
+     * @return Transfer|null
      */
     public function safeTransfer(Wallet $wallet, $amount, ?array $meta = null): ?Transfer
     {
@@ -111,11 +120,17 @@ trait HasWallet
      * @param Wallet $wallet
      * @param int|string $amount
      * @param array|null $meta
+     *
      * @return Transfer
-     * @throws
+     *
+     * @throws AmountInvalid
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws Throwable
      */
     public function transfer(Wallet $wallet, $amount, ?array $meta = null): Transfer
     {
+        /** @var $this Wallet */
         app(CommonService::class)->verifyWithdraw($this, $amount);
 
         return $this->forceTransfer($wallet, $amount, $meta);
@@ -129,9 +144,15 @@ trait HasWallet
      * @param bool $confirmed
      *
      * @return Transaction
+     *
+     * @throws AmountInvalid
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws Throwable
      */
     public function withdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
+        /** @var Wallet $this */
         app(CommonService::class)->verifyWithdraw($this, $amount);
 
         return $this->forceWithdraw($amount, $meta, $confirmed);
@@ -142,6 +163,7 @@ trait HasWallet
      *
      * @param int|string $amount
      * @param bool $allowZero
+     *
      * @return bool
      */
     public function canWithdraw($amount, bool $allowZero = null): bool
@@ -166,10 +188,13 @@ trait HasWallet
      * @param bool $confirmed
      *
      * @return Transaction
-     * @throws
+     *
+     * @throws AmountInvalid
+     * @throws Throwable
      */
     public function forceWithdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
+        /** @var Wallet $self */
         $self = $this;
 
         return app(DbService::class)->transaction(static function () use ($self, $amount, $meta, $confirmed) {
@@ -185,11 +210,15 @@ trait HasWallet
      * @param Wallet $wallet
      * @param int|string $amount
      * @param array|null $meta
+     *
      * @return Transfer
-     * @throws
+     *
+     * @throws AmountInvalid
+     * @throws Throwable
      */
     public function forceTransfer(Wallet $wallet, $amount, ?array $meta = null): Transfer
     {
+        /** @var Wallet $self */
         $self = $this;
 
         return app(DbService::class)->transaction(static function () use ($self, $amount, $wallet, $meta) {
@@ -206,6 +235,7 @@ trait HasWallet
      */
     public function transfers(): MorphMany
     {
+        /** @var Wallet $this */
         return app(WalletService::class)
             ->getWallet($this, false)
             ->morphMany(config('wallet.transfer.model', Transfer::class), 'from');

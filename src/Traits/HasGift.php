@@ -2,6 +2,9 @@
 
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Exceptions\AmountInvalid;
+use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Exceptions\InsufficientFunds;
 use function app;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Mathable;
@@ -26,6 +29,7 @@ trait HasGift
      * @param Wallet $to
      * @param Product $product
      * @param bool $force
+     *
      * @return Transfer|null
      */
     public function safeGift(Wallet $to, Product $product, bool $force = null): ?Transfer
@@ -45,7 +49,13 @@ trait HasGift
      * @param Wallet $to
      * @param Product $product
      * @param bool $force
+     *
      * @return Transfer
+     *
+     * @throws AmountInvalid
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws Throwable
      */
     public function gift(Wallet $to, Product $product, bool $force = null): Transfer
     {
@@ -104,7 +114,11 @@ trait HasGift
      *
      * @param Wallet $to
      * @param Product $product
+     *
      * @return Transfer
+     *
+     * @throws AmountInvalid
+     * @throws Throwable
      */
     public function forceGift(Wallet $to, Product $product): Transfer
     {

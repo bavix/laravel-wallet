@@ -2,6 +2,8 @@
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Exceptions\AmountInvalid;
+use Throwable;
 use function app;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
@@ -25,7 +27,13 @@ class CommonService
      * @param int|string $amount
      * @param array|null $meta
      * @param string $status
+     *
      * @return Transfer
+     *
+     * @throws AmountInvalid
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws Throwable
      */
     public function transfer(Wallet $from, Wallet $to, $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
@@ -46,7 +54,11 @@ class CommonService
      * @param int|string $amount
      * @param array|null $meta
      * @param string $status
+     *
      * @return Transfer
+     *
+     * @throws AmountInvalid
+     * @throws Throwable
      */
     public function forceTransfer(Wallet $from, Wallet $to, $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
@@ -80,7 +92,10 @@ class CommonService
      * @param int|string $amount
      * @param array|null $meta
      * @param bool $confirmed
+     *
      * @return Transaction
+     *
+     * @throws AmountInvalid
      */
     public function forceWithdraw(Wallet $wallet, $amount, ?array $meta, bool $confirmed = true): Transaction
     {
@@ -111,7 +126,10 @@ class CommonService
      * @param int|string $amount
      * @param array|null $meta
      * @param bool $confirmed
+     *
      * @return Transaction
+     *
+     * @throws AmountInvalid
      */
     public function deposit(Wallet $wallet, $amount, ?array $meta, bool $confirmed = true): Transaction
     {
@@ -140,7 +158,9 @@ class CommonService
      * @param Wallet $wallet
      * @param int|string $amount
      * @param bool $allowZero
+     *
      * @return void
+     *
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      */
@@ -163,6 +183,7 @@ class CommonService
      *
      * @param Wallet $self
      * @param Operation[] $operations
+     *
      * @return array
      */
     public function multiOperation(Wallet $self, array $operations): array
@@ -191,7 +212,9 @@ class CommonService
      * Create Bring with DB::transaction.
      *
      * @param Bring[] $brings
+     *
      * @return array
+     *
      * @throws
      */
     public function assemble(array $brings): array
@@ -209,6 +232,7 @@ class CommonService
      * Create Bring without DB::transaction.
      *
      * @param array $brings
+     *
      * @return array
      */
     public function multiBrings(array $brings): array
@@ -226,7 +250,9 @@ class CommonService
     /**
      * @param Wallet $wallet
      * @param int|string $amount
+     *
      * @return bool
+     *
      * @throws
      */
     public function addBalance(Wallet $wallet, $amount): bool
@@ -242,7 +268,7 @@ class CommonService
                 $result = $wallet->newQuery()
                     ->whereKey($wallet->getKey())
                     ->update(compact('balance'));
-            } catch (\Throwable $throwable) {
+            } catch (Throwable $throwable) {
                 app(Storable::class)
                     ->setBalance($wallet, $wallet->getAvailableBalance());
 

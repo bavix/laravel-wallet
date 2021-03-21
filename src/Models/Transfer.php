@@ -21,7 +21,6 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int $to_id
  * @property string $uuid
  * @property int $fee
- *
  * @property Transaction $deposit
  * @property Transaction $withdraw
  */
