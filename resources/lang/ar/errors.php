@@ -5,7 +5,7 @@ return [
     'product_stock' => 'المنتج غير متوفر',
     'wallet_empty' => 'المحفظة فارغة',
     'insufficient_funds' => 'الأموال غير الكافية',
-    'confirmed_invalid' => 'تم تأكيد الترجمة بالفعل',
+    'confirmed_invalid' => 'تم التأكيد بالفعل',
     'unconfirmed_invalid' => 'التأكيد تمت إعادة تعيينه بالفعل',
     'owner_invalid' => 'أنت لست مالك المحفظة',
 ];
