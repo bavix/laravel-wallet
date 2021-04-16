@@ -87,14 +87,29 @@ class WalletTest extends TestCase
         self::assertEquals(0, $user->balance); // create default wallet
         self::assertTrue($user->wallet->exists);
 
+        $ids = [];
         foreach ($users as $other) {
+            $ids[] = $other->id;
             if ($user !== $other) {
                 self::assertFalse($other->wallet->exists);
             }
         }
 
-        self::assertCount(1, User::query()->has('wallet')->get());
-        self::assertCount(9, User::query()->has('wallet', '<')->get());
+        self::assertCount(
+            1,
+            User::query()
+                ->has('wallet')
+                ->whereIn('id', $ids)
+                ->get()
+        );
+
+        self::assertCount(
+            9,
+            User::query()
+                ->has('wallet', '<')
+                ->whereIn('id', $ids)
+                ->get()
+        );
     }
 
     /**

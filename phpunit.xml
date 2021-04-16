@@ -21,7 +21,8 @@
     <php>
         <env name="DB_CONNECTION" value="testing"/>
         <env name="DB_DATABASE" value="wallet"/>
-        <env name="DB_USERNAME" value="wallet"/>
+        <env name="DB_USERNAME" value="root"/>
         <env name="DB_PASSWORD" value="wallet"/>
+        <env name="CACHE_DRIVER" value="array"/>
     </php>
 </phpunit>

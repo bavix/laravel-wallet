@@ -1,0 +1,141 @@
+name: phpunits
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  MEMCACHED_HOST: localhost
+  REDIS_HOST: localhost
+  REDIS_PORT: 6379
+  MEMCACHED_PORT: 11211
+
+jobs:
+  units:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: [7.3, 7.4, 8.0]
+        databases: [testing, pgsql, mysql, mariadb]
+        caches: [array, redis, memcached]
+
+    services:
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+      memcached:
+        image: memcached
+        options: >-
+          --health-cmd "timeout 5 bash -c 'cat < /dev/null > /dev/udp/127.0.0.1/11211'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 11211:11211
+
+      pgsql:
+        image: postgres
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: wallet
+          POSTGRES_DB: wallet
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+        ports:
+          - 5432:5432
+
+      mysql:
+        image: bitnami/mysql:8.0
+        env:
+          MYSQL_AUTHENTICATION_PLUGIN: mysql_native_password
+          MYSQL_ROOT_PASSWORD: wallet
+          MYSQL_DATABASE: wallet
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+        ports:
+          - 3306:3306
+
+      mariadb:
+        image: mariadb:10.5
+        env:
+          MYSQL_ROOT_PASSWORD: wallet
+          MYSQL_DATABASE: wallet
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+        ports:
+          - 3307:3306
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, pgsql, mysql, sqlite, redis, memcached
+          coverage: pcov
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Prepare run test suite
+        run: |
+          mkdir build
+
+      - name: Prepare codeclimate
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+          ./cc-test-reporter before-build
+
+      - name: Run test suite
+        run: composer unit
+        env:
+          CACHE_DRIVER: ${{ matrix.caches }}
+          DB_CONNECTION: ${{ matrix.databases }}
+
+      - name: Run mutation test suite
+        run: composer infect
+        env:
+          CACHE_DRIVER: ${{ matrix.caches }}
+          DB_CONNECTION: ${{ matrix.databases }}
+          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+
+      - name: Send coverage
+        run: |
+          ./cc-test-reporter after-build --coverage-input-type clover --exit-code 0
+          bash <(curl -s https://codecov.io/bash)
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
