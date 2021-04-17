@@ -54,9 +54,9 @@ class CommonService
             $math = app(Mathable::class);
             $from = app(WalletService::class)->getWallet($from);
             $discount = app(WalletService::class)->discount($from, $to);
-            $amount = max(0, $math->sub($amount, $discount));
-
             $fee = app(WalletService::class)->fee($to, $amount);
+
+            $amount = max(0, $math->sub($amount, $discount));
             $placesValue = app(WalletService::class)->decimalPlacesValue($from);
             $withdraw = $this->forceWithdraw($from, $math->add($amount, $fee, $placesValue), $meta);
             $deposit = $this->deposit($to, $amount, $meta);

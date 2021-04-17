@@ -27,14 +27,14 @@ class DiscountTaxTest extends TestCase
         $buyer = BuyerFactory::new()->create();
         $product = ItemDiscountTaxFactory::new()->create();
 
-        self::assertEquals($buyer->balance, 0);
+        self::assertEquals(0, $buyer->balance);
         $fee = app(WalletService::class)->fee($product, $product->getAmountProduct($buyer));
         $buyer->deposit($product->getAmountProduct($buyer) + $fee);
 
         self::assertEquals($buyer->balance, $product->getAmountProduct($buyer) + $fee);
         $transfer = $buyer->pay($product);
         self::assertNotNull($transfer);
-        self::assertEquals($transfer->status, Transfer::STATUS_PAID);
+        self::assertEquals(Transfer::STATUS_PAID, $transfer->status);
 
         self::assertEquals(
             $buyer->balance,
@@ -88,10 +88,10 @@ class DiscountTaxTest extends TestCase
 
         self::assertEquals($buyer->balance, 0);
         $discount = app(WalletService::class)->discount($buyer, $product);
-        $fee = app(WalletService::class)->fee($product, ($product->getAmountProduct($buyer) - $discount));
-        $buyer->deposit(($product->getAmountProduct($buyer) - $discount) + $fee);
+        $fee = app(WalletService::class)->fee($product, $product->getAmountProduct($buyer));
+        $buyer->deposit($product->getAmountProduct($buyer) + $fee - $discount);
 
-        self::assertEquals($buyer->balance, ($product->getAmountProduct($buyer) - $discount) + $fee);
+        self::assertEquals($buyer->balance, $product->getAmountProduct($buyer) + $fee - $discount);
         $transfer = $buyer->pay($product);
         self::assertNotNull($transfer);
         self::assertEquals($transfer->status, Transfer::STATUS_PAID);
@@ -156,15 +156,16 @@ class DiscountTaxTest extends TestCase
         $buyer = BuyerFactory::new()->create();
         $product = ItemDiscountTaxFactory::new()->create();
 
-        self::assertEquals($buyer->balance, 0);
+        self::assertEquals(0, $buyer->balance);
         $discount = app(WalletService::class)->discount($buyer, $product);
-        $fee = app(WalletService::class)->fee($product, ($product->getAmountProduct($buyer) - $discount));
-        $buyer->deposit($product->getAmountProduct($buyer) + $fee);
+        $fee = app(WalletService::class)->fee($product, $product->getAmountProduct($buyer));
+        $buyer->deposit($product->getAmountProduct($buyer) + $fee - $discount);
 
-        self::assertEquals($buyer->balance, $product->getAmountProduct($buyer) + $fee);
+        $paidPrice = $buyer->balance;
+        self::assertEquals($buyer->balance, $product->getAmountProduct($buyer) + $fee - $discount);
 
         $transfer = $buyer->pay($product);
-        self::assertEquals($buyer->balance, $product->getPersonalDiscount($buyer));
+        self::assertEquals(0, $buyer->balance);
 
         self::assertEquals(
             $product->balance,
@@ -184,11 +185,12 @@ class DiscountTaxTest extends TestCase
         self::assertFalse($buyer->safeRefund($product));
         self::assertTrue($buyer->forceRefund($product));
 
+        self::assertEquals($paidPrice - $fee, -$product->balance);
         self::assertEquals(
             $product->balance, -($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer))
         );
 
-        self::assertEquals($buyer->balance, $product->getAmountProduct($buyer));
+        self::assertEquals($paidPrice - $fee, $buyer->balance);
         $product->deposit(-$product->balance);
         $buyer->withdraw($buyer->balance);
 

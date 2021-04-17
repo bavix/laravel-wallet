@@ -33,11 +33,11 @@ jobs:
   include:
     - stage: SQLite (with redis)
       php: 7.4
-      env: REDIS_ENABLE=true
+      env: CACHE_DRIVER=redis
 
     - stage: SQLite (with memcached)
       php: 7.4
-      env: MEMCACHED_ENABLE=true
+      env: CACHE_DRIVER=memcached
 
     - stage: Percona 8
       php: 7.4
