@@ -1,27 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Interfaces;
 
 interface Rateable
 {
-    /**
-     * @param int|string $amount
-     *
-     * @return Rateable
-     */
-    public function withAmount($amount): self;
+    public function withAmount(string $amount): self;
 
-    /**
-     * @param Wallet $wallet
-     *
-     * @return self
-     */
     public function withCurrency(Wallet $wallet): self;
 
-    /**
-     * @param Wallet $wallet
-     *
-     * @return int|float
-     */
-    public function convertTo(Wallet $wallet);
+    public function convertTo(Wallet $wallet): string;
 }

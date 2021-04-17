@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Objects;
 
 use function array_unique;
@@ -25,16 +27,16 @@ class Cart implements Countable
 
     protected $meta = [];
 
-    public function getMeta(): array
-    {
-        return $this->meta;
-    }
-
     public function setMeta(array $meta): self
     {
         $this->meta = $meta;
 
         return $this;
+    }
+
+    public function getMeta(): array
+    {
+        return $this->meta;
     }
 
     /**
@@ -66,17 +68,13 @@ class Cart implements Countable
         return $this;
     }
 
-    /**
-     * @return Product[]
-     */
+    /** @return Product[] */
     public function getItems(): array
     {
         return $this->items;
     }
 
-    /**
-     * @return Product[]
-     */
+    /** @return Product[] */
     public function getUniqueItems(): array
     {
         return array_unique($this->items);
@@ -90,7 +88,7 @@ class Cart implements Countable
      *
      * @return Transfer[]
      */
-    public function alreadyBuy(Customer $customer, bool $gifts = null): array
+    public function alreadyBuy(Customer $customer, bool $gifts = false): array
     {
         $status = [Transfer::STATUS_PAID];
         if ($gifts) {
@@ -170,7 +168,7 @@ class Cart implements Countable
         $class = get_class($product);
         $uniq = $product->getUniqueId();
 
-        return $this->quantity[$class][$uniq] ?? 0;
+        return (int) ($this->quantity[$class][$uniq] ?? 0);
     }
 
     /**
@@ -182,6 +180,6 @@ class Cart implements Countable
         $class = get_class($product);
         $uniq = $product->getUniqueId();
         $math = app(Mathable::class);
-        $this->quantity[$class][$uniq] = $math->add($this->getQuantity($product), $quantity);
+        $this->quantity[$class][$uniq] = (int) $math->add($this->getQuantity($product), $quantity);
     }
 }
