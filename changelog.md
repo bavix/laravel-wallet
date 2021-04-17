@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.1.0] - 2021-04-18
+### Added
+- Added Github Actions
+- Add farsi locale; #317 #320 @hsharghi
+- Added the ability to add meta data from the cart #318
+- Added exceptions to phpdoc
+
+### Changed
+- Reworked unit tests
+- Unit tests work faster
+
+### Fixed
+- Fixed a bug in the calculation of the commission
+
 ## [6.0.4] - 2021-04-07
 ### Fixed
 - Updated key "confirmed_invalid" in Arabic; #316 @omarhen 
@@ -616,7 +630,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/6.0.4...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/6.1.0...develop
+[6.1.0]: https://github.com/bavix/laravel-wallet/compare/6.0.4...6.1.0
 [6.0.4]: https://github.com/bavix/laravel-wallet/compare/6.0.3...6.0.4
 [6.0.3]: https://github.com/bavix/laravel-wallet/compare/6.0.2...6.0.3
 [6.0.2]: https://github.com/bavix/laravel-wallet/compare/6.0.1...6.0.2
