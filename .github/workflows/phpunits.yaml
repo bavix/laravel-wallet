@@ -120,7 +120,12 @@ jobs:
           ./cc-test-reporter before-build
 
       - name: Run test suite
-        run: composer unit
+        run: |
+          if [[ $DB_CONNECTION == "testing" ]]; then
+            composer paraunit
+          else
+            composer unit
+          fi
         env:
           CACHE_DRIVER: ${{ matrix.caches }}
           DB_CONNECTION: ${{ matrix.databases }}
