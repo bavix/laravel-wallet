@@ -2,9 +2,13 @@
 
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\ConfirmedInvalid;
+use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
+use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
@@ -15,11 +19,18 @@ trait CanConfirm
 {
     /**
      * @param Transaction $transaction
+     *
      * @return bool
+     *
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws ConfirmedInvalid
+     * @throws WalletOwnerInvalid
      */
     public function confirm(Transaction $transaction): bool
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
+            /** @var Wallet|Confirmable $self */
             $self = $this;
 
             return app(DbService::class)->transaction(static function () use ($self, $transaction) {
@@ -42,6 +53,7 @@ trait CanConfirm
 
     /**
      * @param Transaction $transaction
+     *
      * @return bool
      */
     public function safeConfirm(Transaction $transaction): bool
@@ -57,11 +69,15 @@ trait CanConfirm
      * Removal of confirmation (forced), use at your own peril and risk.
      *
      * @param Transaction $transaction
+     *
      * @return bool
+     *
+     * @throws ConfirmedInvalid
      */
     public function resetConfirm(Transaction $transaction): bool
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
+            /** @var Wallet $self */
             $self = $this;
 
             return app(DbService::class)->transaction(static function () use ($self, $transaction) {
@@ -88,6 +104,7 @@ trait CanConfirm
 
     /**
      * @param Transaction $transaction
+     *
      * @return bool
      */
     public function safeResetConfirm(Transaction $transaction): bool
@@ -101,13 +118,16 @@ trait CanConfirm
 
     /**
      * @param Transaction $transaction
+     *
      * @return bool
+     *
      * @throws ConfirmedInvalid
      * @throws WalletOwnerInvalid
      */
     public function forceConfirm(Transaction $transaction): bool
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
+            /** @var Wallet $self */
             $self = $this;
 
             return app(DbService::class)->transaction(static function () use ($self, $transaction) {

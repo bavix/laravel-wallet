@@ -86,6 +86,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
 
     /**
      * @param string $name
+     *
      * @return void
      */
     public function setNameAttribute(string $name): void

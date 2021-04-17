@@ -29,6 +29,7 @@ class LockService
      * @param object $self
      * @param string $name
      * @param \Closure $closure
+     *
      * @return mixed
      */
     public function lock($self, string $name, \Closure $closure)
@@ -41,6 +42,7 @@ class LockService
      * @param object $self
      * @param \Closure $closure
      * @return \Closure
+     *
      * @throws
      */
     protected function bindTo($self, \Closure $closure): \Closure
@@ -55,6 +57,7 @@ class LockService
 
     /**
      * @return Store|null
+     *
      * @codeCoverageIgnore
      */
     protected function cache(): ?Store
@@ -71,6 +74,7 @@ class LockService
      * @param object $self
      * @param string $name
      * @param int $seconds
+     *
      * @return Lock
      */
     protected function lockProvider($self, string $name, int $seconds): Lock

@@ -52,6 +52,7 @@ class Bring
 
     /**
      * Bring constructor.
+     *
      * @throws
      */
     public function __construct()
@@ -69,6 +70,7 @@ class Bring
 
     /**
      * @param string $status
+     *
      * @return static
      */
     public function setStatus(string $status): self
@@ -80,6 +82,7 @@ class Bring
 
     /**
      * @param int $discount
+     *
      * @return static
      */
     public function setDiscount(int $discount): self
@@ -99,6 +102,7 @@ class Bring
 
     /**
      * @param Wallet $from
+     *
      * @return static
      */
     public function setFrom(Wallet $from): self
@@ -118,6 +122,7 @@ class Bring
 
     /**
      * @param Wallet $to
+     *
      * @return static
      */
     public function setTo(Wallet $to): self
@@ -137,6 +142,7 @@ class Bring
 
     /**
      * @param Transaction $deposit
+     *
      * @return static
      */
     public function setDeposit(Transaction $deposit): self
@@ -156,6 +162,7 @@ class Bring
 
     /**
      * @param Transaction $withdraw
+     *
      * @return static
      */
     public function setWithdraw(Transaction $withdraw): self
@@ -201,6 +208,7 @@ class Bring
 
     /**
      * @param int $fee
+     *
      * @return Bring
      */
     public function setFee($fee): self
@@ -212,6 +220,7 @@ class Bring
 
     /**
      * @return Transfer
+     *
      * @throws
      */
     public function create(): Transfer
@@ -222,6 +231,7 @@ class Bring
 
     /**
      * @return array
+     *
      * @throws
      */
     public function toArray(): array

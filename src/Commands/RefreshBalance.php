@@ -27,6 +27,7 @@ class RefreshBalance extends Command
 
     /**
      * @return void
+     *
      * @throws
      */
     public function handle(): void
