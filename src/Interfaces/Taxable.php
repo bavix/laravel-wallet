@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Interfaces;
 
 interface Taxable
@@ -11,8 +13,6 @@ interface Taxable
      *
      * Minimum 0; Maximum 100
      * Example: return 7.5; // 7.5%
-     *
-     * @return int|float
      */
-    public function getFeePercent();
+    public function getFeePercent(): string;
 }

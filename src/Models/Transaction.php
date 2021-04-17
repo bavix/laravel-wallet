@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Models;
 
+use Bavix\Wallet\Services\FloatService;
 use function array_merge;
-use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\WalletService;
@@ -20,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int $wallet_id
  * @property string $uuid
  * @property string $type
- * @property int|string $amount
+ * @property string $amount
  * @property float $amountFloat
  * @property bool $confirmed
  * @property array $meta
@@ -94,29 +96,24 @@ class Transaction extends Model
         return $this->belongsTo(config('wallet.wallet.model', WalletModel::class));
     }
 
-    /**
-     * @return int|float
-     */
-    public function getAmountFloatAttribute()
+    public function getAmountFloatAttribute(): string
     {
         $decimalPlaces = app(WalletService::class)
             ->decimalPlaces($this->wallet);
 
-        return app(Mathable::class)
-            ->div($this->amount, $decimalPlaces);
+        return app(FloatService::class)
+            ->balanceIntToFloat($this->amount, $decimalPlaces);
     }
 
     /**
-     * @param int|float $amount
-     *
-     * @return void
+     * @param int|float|string $amount
      */
     public function setAmountFloatAttribute($amount): void
     {
-        $math = app(Mathable::class);
         $decimalPlaces = app(WalletService::class)
             ->decimalPlaces($this->wallet);
 
-        $this->amount = $math->round($math->mul($amount, $decimalPlaces));
+        $this->amount = app(FloatService::class)
+            ->balanceFloatToInt($amount, $decimalPlaces);
     }
 }
