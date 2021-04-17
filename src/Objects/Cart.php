@@ -23,6 +23,20 @@ class Cart implements Countable
      */
     protected $quantity = [];
 
+    protected $meta = [];
+
+    public function getMeta(): array
+    {
+        return $this->meta;
+    }
+
+    public function setMeta(array $meta): self
+    {
+        $this->meta = $meta;
+
+        return $this;
+    }
+
     /**
      * @param Product $product
      * @param int $quantity

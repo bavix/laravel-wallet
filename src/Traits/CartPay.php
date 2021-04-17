@@ -9,6 +9,7 @@ use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
+use Bavix\Wallet\Services\MetaService;
 use function count;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
@@ -40,7 +41,7 @@ trait CartPay
                     $self,
                     $product,
                     0,
-                    $product->getMetaProduct(),
+                    app(MetaService::class)->getMeta($cart, $product),
                     Transfer::STATUS_PAID
                 );
             }
@@ -85,7 +86,7 @@ trait CartPay
                         $self,
                         $product,
                         $product->getAmountProduct($self),
-                        $product->getMetaProduct(),
+                        app(MetaService::class)->getMeta($cart, $product),
                         Transfer::STATUS_PAID
                     );
 
@@ -96,7 +97,7 @@ trait CartPay
                     $self,
                     $product,
                     $product->getAmountProduct($self),
-                    $product->getMetaProduct(),
+                    app(MetaService::class)->getMeta($cart, $product),
                     Transfer::STATUS_PAID
                 );
             }
@@ -164,7 +165,7 @@ trait CartPay
                     $product,
                     $transfer->withdraw->wallet,
                     $transfer->deposit->amount,
-                    $product->getMetaProduct()
+                    app(MetaService::class)->getMeta($cart, $product)
                 );
 
                 $results[] = $transfer->update([

@@ -6,15 +6,85 @@ use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\DbService;
+use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Factories\ItemFactory;
+use Bavix\Wallet\Test\Factories\ItemMetaFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\Item;
+use Bavix\Wallet\Test\Models\ItemMeta;
 use function count;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CartTest extends TestCase
 {
+    public function testCartMeta(): void
+    {
+        /**
+         * @var Buyer $buyer
+         * @var ItemMeta $product
+         */
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemMetaFactory::new()->create([
+            'quantity' => 1,
+        ]);
+
+        $expected = 'pay';
+
+        $cart = app(Cart::class)
+            ->addItems([$product])
+            ->setMeta(['type' => $expected]);
+
+        self::assertEquals(0, $buyer->balance);
+        self::assertNotNull($buyer->deposit($cart->getTotal($buyer)));
+
+        $transfers = $buyer->payCart($cart);
+        self::assertCount(1, $transfers);
+
+        $transfer = current($transfers);
+
+        /** @var Transaction[] $transactions */
+        $transactions = [$transfer->deposit, $transfer->withdraw];
+        foreach ($transactions as $transaction) {
+            self::assertEquals($product->price, $transaction->meta['price']);
+            self::assertEquals($product->name, $transaction->meta['name']);
+            self::assertEquals($expected, $transaction->meta['type']);
+        }
+    }
+
+    public function testCartMetaItemNoMeta(): void
+    {
+        /**
+         * @var Buyer $buyer
+         * @var Item $product
+         */
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemFactory::new()->create([
+            'quantity' => 1,
+        ]);
+
+        $expected = 'pay';
+
+        $cart = app(Cart::class)
+            ->addItems([$product])
+            ->setMeta(['type' => $expected]);
+
+        self::assertEquals(0, $buyer->balance);
+        self::assertNotNull($buyer->deposit($cart->getTotal($buyer)));
+
+        $transfers = $buyer->payCart($cart);
+        self::assertCount(1, $transfers);
+
+        $transfer = current($transfers);
+
+        /** @var Transaction[] $transactions */
+        $transactions = [$transfer->deposit, $transfer->withdraw];
+        foreach ($transactions as $transaction) {
+            self::assertCount(1, $transaction->meta);
+            self::assertEquals($expected, $transaction->meta['type']);
+        }
+    }
+
     /**
      * @return void
      */
