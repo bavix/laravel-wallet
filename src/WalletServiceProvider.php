@@ -19,7 +19,6 @@ use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
-use Bavix\Wallet\Services\MetaService;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Simple\BrickMath;
 use Bavix\Wallet\Simple\Rate;
@@ -93,7 +92,6 @@ class WalletServiceProvider extends ServiceProvider
 
         // needle?
         $this->app->singleton(CommonService::class, config('wallet.services.common', CommonService::class));
-
 
         // Bind eloquent models to IoC container
         $this->app->singleton(Rateable::class, config('wallet.package.rateable', Rate::class));
