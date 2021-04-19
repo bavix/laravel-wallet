@@ -8,71 +8,38 @@ use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Ramsey\Uuid\Uuid;
 
+/** @deprecated  */
 class Bring
 {
-    /**
-     * @var string
-     */
-    protected $status;
+    private Mathable $math;
 
-    /**
-     * @var Wallet
-     */
-    protected $from;
+    protected string $status;
 
-    /**
-     * @var Wallet
-     */
-    protected $to;
+    protected Wallet $from;
 
-    /**
-     * @var Transaction
-     */
-    protected $deposit;
+    protected Wallet $to;
 
-    /**
-     * @var Transaction
-     */
-    protected $withdraw;
+    protected Transaction $deposit;
 
-    /**
-     * @var string
-     */
-    protected $uuid;
+    protected Transaction $withdraw;
 
-    /**
-     * @var int
-     */
-    protected $fee;
+    protected string $uuid;
 
-    /**
-     * @var int
-     */
-    protected $discount;
+    protected ?int $fee = null;
 
-    /**
-     * Bring constructor.
-     *
-     * @throws
-     */
-    public function __construct()
+    protected int $discount= 0;
+
+    public function __construct(Mathable $math)
     {
+        $this->math = $math;
         $this->uuid = Uuid::uuid4()->toString();
     }
 
-    /**
-     * @return string
-     */
     public function getStatus(): string
     {
         return $this->status;
     }
 
-    /**
-     * @param string $status
-     *
-     * @return static
-     */
     public function setStatus(string $status): self
     {
         $this->status = $status;
@@ -80,21 +47,13 @@ class Bring
         return $this;
     }
 
-    /**
-     * @param int $discount
-     *
-     * @return static
-     */
     public function setDiscount(int $discount): self
     {
-        $this->discount = app(Mathable::class)->round($discount);
+        $this->discount = $this->math->round($discount);
 
         return $this;
     }
 
-    /**
-     * @return Wallet
-     */
     public function getFrom(): Wallet
     {
         return $this->from;

@@ -34,16 +34,10 @@ trait HasWallet
     /**
      * The input means in the system.
      *
-     * @param int|string $amount
-     * @param array|null $meta
-     * @param bool $confirmed
-     *
-     * @return Transaction
-     *
      * @throws AmountInvalid
      * @throws Throwable
      */
-    public function deposit($amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function deposit(string $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         /** @var Wallet $self */
         $self = $this;
@@ -75,11 +69,9 @@ trait HasWallet
      *  $user2->deposit(100);
      *  var_dump($user2->balance); // 300
      *
-     * @return int|float|string
-     *
      * @throws Throwable
      */
-    public function getBalanceAttribute()
+    public function getBalanceAttribute(): string
     {
         /** @var Wallet $this */
         return app(Storable::class)->getBalance($this);
@@ -87,8 +79,6 @@ trait HasWallet
 
     /**
      * all user actions on wallets will be in this method.
-     *
-     * @return MorphMany
      */
     public function transactions(): MorphMany
     {
@@ -98,14 +88,8 @@ trait HasWallet
 
     /**
      * This method ignores errors that occur when transferring funds.
-     *
-     * @param Wallet $wallet
-     * @param int|string $amount
-     * @param array|null $meta
-     *
-     * @return Transfer|null
      */
-    public function safeTransfer(Wallet $wallet, $amount, ?array $meta = null): ?Transfer
+    public function safeTransfer(Wallet $wallet, string $amount, ?array $meta = null): ?Transfer
     {
         try {
             return $this->transfer($wallet, $amount, $meta);
@@ -117,18 +101,12 @@ trait HasWallet
     /**
      * A method that transfers funds from host to host.
      *
-     * @param Wallet $wallet
-     * @param int|string $amount
-     * @param array|null $meta
-     *
-     * @return Transfer
-     *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      * @throws Throwable
      */
-    public function transfer(Wallet $wallet, $amount, ?array $meta = null): Transfer
+    public function transfer(Wallet $wallet, string $amount, ?array $meta = null): Transfer
     {
         /** @var $this Wallet */
         app(CommonService::class)->verifyWithdraw($this, $amount);
@@ -139,18 +117,12 @@ trait HasWallet
     /**
      * Withdrawals from the system.
      *
-     * @param int|string $amount
-     * @param array|null $meta
-     * @param bool $confirmed
-     *
-     * @return Transaction
-     *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      * @throws Throwable
      */
-    public function withdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function withdraw(string $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         /** @var Wallet $this */
         app(CommonService::class)->verifyWithdraw($this, $amount);
@@ -160,13 +132,8 @@ trait HasWallet
 
     /**
      * Checks if you can withdraw funds.
-     *
-     * @param int|string $amount
-     * @param bool $allowZero
-     *
-     * @return bool
      */
-    public function canWithdraw($amount, bool $allowZero = null): bool
+    public function canWithdraw(string $amount, bool $allowZero = false): bool
     {
         $math = app(Mathable::class);
 
@@ -183,16 +150,10 @@ trait HasWallet
     /**
      * Forced to withdraw funds from system.
      *
-     * @param int|string $amount
-     * @param array|null $meta
-     * @param bool $confirmed
-     *
-     * @return Transaction
-     *
      * @throws AmountInvalid
      * @throws Throwable
      */
-    public function forceWithdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function forceWithdraw(string $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         /** @var Wallet $self */
         $self = $this;
@@ -207,16 +168,10 @@ trait HasWallet
      * the forced transfer is needed when the user does not have the money and we drive it.
      * Sometimes you do. Depends on business logic.
      *
-     * @param Wallet $wallet
-     * @param int|string $amount
-     * @param array|null $meta
-     *
-     * @return Transfer
-     *
      * @throws AmountInvalid
      * @throws Throwable
      */
-    public function forceTransfer(Wallet $wallet, $amount, ?array $meta = null): Transfer
+    public function forceTransfer(Wallet $wallet, string $amount, ?array $meta = null): Transfer
     {
         /** @var Wallet $self */
         $self = $this;
@@ -230,8 +185,6 @@ trait HasWallet
     /**
      * the transfer table is used to confirm the payment
      * this method receives all transfers.
-     *
-     * @return MorphMany
      */
     public function transfers(): MorphMany
     {

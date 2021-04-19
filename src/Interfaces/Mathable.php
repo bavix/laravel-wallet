@@ -14,7 +14,7 @@ interface Mathable
 
     public function mul(string $first, string $second, ?int $scale = null): string;
 
-    public function pow(string $first, string $second, ?int $scale = null): string;
+    public function pow(string $number, int $exponent, ?int $scale = null): string;
 
     public function round(string $number, int $precision = 0): string;
 

@@ -8,15 +8,10 @@ use Bavix\Wallet\Services\WalletService;
 
 class Store implements Storable
 {
-    /**
-     * @var string[]
-     */
-    protected $balanceSheets = [];
+    /** @var string[] */
+    protected array $balanceSheets = [];
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBalance($object)
+    public function getBalance($object): string
     {
         $wallet = app(WalletService::class)->getWallet($object);
         if (! \array_key_exists($wallet->getKey(), $this->balanceSheets)) {

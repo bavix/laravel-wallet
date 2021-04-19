@@ -45,7 +45,7 @@ interface Wallet
      */
     public function forceTransfer(Wallet $wallet, string $amount, ?array $meta = null): Transfer;
 
-    public function canWithdraw($amount, bool $allowZero = false): bool;
+    public function canWithdraw(string $amount, bool $allowZero = false): bool;
 
     public function getBalanceAttribute(): string;
 

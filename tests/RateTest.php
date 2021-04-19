@@ -19,15 +19,20 @@ class RateTest extends TestCase
          * @var UserMulti $user
          */
         $user = UserMultiFactory::new()->create();
-        $usd = $user->createWallet(['name' => 'Dollar USA', 'slug' => 'my-usd']);
-        self::assertEquals($usd->slug, 'my-usd');
-        self::assertEquals($usd->currency, 'USD');
+        $usd = $user->createWallet([
+            'name' => 'Dollar USA',
+            'slug' => 'my-usd',
+            'meta' => ['currency' => 'USD'],
+        ]);
+
+        self::assertEquals('my-usd', $usd->slug);
+        self::assertEquals('USD', $usd->currency);
         self::assertEquals($usd->holder_id, $user->id);
         self::assertInstanceOf($usd->holder_type, $user);
 
         $rub = $user->createWallet(['name' => 'RUB']);
-        self::assertEquals($rub->slug, 'rub');
-        self::assertEquals($rub->currency, 'RUB');
+        self::assertEquals('rub', $rub->slug);
+        self::assertEquals('RUB', $rub->currency);
         self::assertEquals($rub->holder_id, $user->id);
         self::assertInstanceOf($rub->holder_type, $user);
 
@@ -42,7 +47,7 @@ class RateTest extends TestCase
             ->withCurrency($usd)
             ->convertTo($rub);
 
-        self::assertEquals($rate, 67610.);
+        self::assertEquals(67610., $rate);
     }
 
     /**
@@ -54,22 +59,31 @@ class RateTest extends TestCase
          * @var UserMulti $user
          */
         $user = UserMultiFactory::new()->create();
-        $usd = $user->createWallet(['name' => 'USD']);
-        self::assertEquals($usd->slug, 'usd');
-        self::assertEquals($usd->currency, 'USD');
+        $usd = $user->createWallet([
+            'name' => 'USD',
+            'meta' => ['currency' => 'USD'],
+        ]);
+
+        self::assertEquals('usd', $usd->slug);
+        self::assertEquals('USD', $usd->currency);
         self::assertEquals($usd->holder_id, $user->id);
         self::assertInstanceOf($usd->holder_type, $user);
 
-        $rub = $user->createWallet(['name' => 'RUR', 'slug' => 'my-rub']);
-        self::assertEquals($rub->slug, 'my-rub');
-        self::assertEquals($rub->currency, 'RUB');
+        $rub = $user->createWallet([
+            'name' => 'RUR',
+            'slug' => 'my-rub',
+            'meta' => ['currency' => 'RUB'],
+        ]);
+
+        self::assertEquals('my-rub', $rub->slug);
+        self::assertEquals('RUB', $rub->currency);
         self::assertEquals($rub->holder_id, $user->id);
         self::assertInstanceOf($rub->holder_type, $user);
 
         $rate = app(ExchangeService::class)
             ->rate($usd, $rub);
 
-        self::assertEquals($rate, 67.61);
+        self::assertEquals(67.61, $rate);
 
         $rate = app(ExchangeService::class)
             ->rate($rub, $usd);

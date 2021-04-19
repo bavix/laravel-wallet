@@ -1,38 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Simple;
 
 use Bavix\Wallet\Interfaces\Rateable;
 use Bavix\Wallet\Interfaces\Wallet;
 
-/**
- * Class Rate.
- */
 class Rate implements Rateable
 {
-    /**
-     * @var string
-     */
-    protected $amount;
+    protected string $amount;
 
-    /**
-     * @var Wallet|\Bavix\Wallet\Models\Wallet
-     */
-    protected $withCurrency;
+    protected Wallet $withCurrency;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function withAmount($amount): Rateable
+    public function withAmount(string $amount): Rateable
     {
         $this->amount = $amount;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function withCurrency(Wallet $wallet): Rateable
     {
         $this->withCurrency = $wallet;
@@ -40,10 +27,7 @@ class Rate implements Rateable
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function convertTo(Wallet $wallet)
+    public function convertTo(Wallet $wallet): string
     {
         return $this->amount;
     }

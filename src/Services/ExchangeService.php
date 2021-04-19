@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Services;
 use Bavix\Wallet\Interfaces\Rateable;
 use Bavix\Wallet\Interfaces\Wallet;
 
+/** @deprecated  */
 class ExchangeService
 {
     /**

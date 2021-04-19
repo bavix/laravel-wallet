@@ -19,6 +19,7 @@ use function compact;
 use function max;
 use Throwable;
 
+/** @deprecated  */
 class CommonService
 {
     /**
@@ -164,7 +165,7 @@ class CommonService
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      */
-    public function verifyWithdraw(Wallet $wallet, $amount, bool $allowZero = null): void
+    public function verifyWithdraw(Wallet $wallet, $amount, bool $allowZero = false): void
     {
         /**
          * @var HasWallet $wallet

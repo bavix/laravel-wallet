@@ -18,10 +18,6 @@ use Bavix\Wallet\Services\WalletService;
 trait CanConfirm
 {
     /**
-     * @param Transaction $transaction
-     *
-     * @return bool
-     *
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      * @throws ConfirmedInvalid
@@ -51,11 +47,6 @@ trait CanConfirm
         });
     }
 
-    /**
-     * @param Transaction $transaction
-     *
-     * @return bool
-     */
     public function safeConfirm(Transaction $transaction): bool
     {
         try {
@@ -67,10 +58,6 @@ trait CanConfirm
 
     /**
      * Removal of confirmation (forced), use at your own peril and risk.
-     *
-     * @param Transaction $transaction
-     *
-     * @return bool
      *
      * @throws ConfirmedInvalid
      */
@@ -102,11 +89,6 @@ trait CanConfirm
         });
     }
 
-    /**
-     * @param Transaction $transaction
-     *
-     * @return bool
-     */
     public function safeResetConfirm(Transaction $transaction): bool
     {
         try {
@@ -117,10 +99,6 @@ trait CanConfirm
     }
 
     /**
-     * @param Transaction $transaction
-     *
-     * @return bool
-     *
      * @throws ConfirmedInvalid
      * @throws WalletOwnerInvalid
      */

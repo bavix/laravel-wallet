@@ -15,24 +15,17 @@ use Throwable;
 /**
  * Trait HasWalletFloat.
  *
- *
- * @property-read float $balanceFloat
+ * @property-read string $balanceFloat
  */
 trait HasWalletFloat
 {
     use HasWallet;
 
     /**
-     * @param float|string $amount
-     * @param array|null $meta
-     * @param bool $confirmed
-     *
-     * @return Transaction
-     *
      * @throws AmountInvalid
      * @throws Throwable
      */
-    public function forceWithdrawFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function forceWithdrawFloat(string $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
@@ -44,16 +37,10 @@ trait HasWalletFloat
     }
 
     /**
-     * @param float|string $amount
-     * @param array|null $meta
-     * @param bool $confirmed
-     *
-     * @return Transaction
-     *
      * @throws AmountInvalid
      * @throws Throwable
      */
-    public function depositFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function depositFloat(string $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
@@ -65,18 +52,12 @@ trait HasWalletFloat
     }
 
     /**
-     * @param float|string $amount
-     * @param array|null $meta
-     * @param bool $confirmed
-     *
-     * @return Transaction
-     *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      * @throws Throwable
      */
-    public function withdrawFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function withdrawFloat(string $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
@@ -87,12 +68,7 @@ trait HasWalletFloat
         return $this->withdraw($result, $meta, $confirmed);
     }
 
-    /**
-     * @param float|string $amount
-     *
-     * @return bool
-     */
-    public function canWithdrawFloat($amount): bool
+    public function canWithdrawFloat(string $amount): bool
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
@@ -104,18 +80,12 @@ trait HasWalletFloat
     }
 
     /**
-     * @param Wallet $wallet
-     * @param float $amount
-     * @param array|null $meta
-     *
-     * @return Transfer
-     *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      * @throws Throwable
      */
-    public function transferFloat(Wallet $wallet, $amount, ?array $meta = null): Transfer
+    public function transferFloat(Wallet $wallet, string $amount, ?array $meta = null): Transfer
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
@@ -126,14 +96,7 @@ trait HasWalletFloat
         return $this->transfer($wallet, $result, $meta);
     }
 
-    /**
-     * @param Wallet $wallet
-     * @param float $amount
-     * @param array|null $meta
-     *
-     * @return Transfer|null
-     */
-    public function safeTransferFloat(Wallet $wallet, $amount, ?array $meta = null): ?Transfer
+    public function safeTransferFloat(Wallet $wallet, string $amount, ?array $meta = null): ?Transfer
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
@@ -145,16 +108,10 @@ trait HasWalletFloat
     }
 
     /**
-     * @param Wallet $wallet
-     * @param float|string $amount
-     * @param array|null $meta
-     *
-     * @return Transfer
-     *
      * @throws AmountInvalid
      * @throws Throwable
      */
-    public function forceTransferFloat(Wallet $wallet, $amount, ?array $meta = null): Transfer
+    public function forceTransferFloat(Wallet $wallet, string $amount, ?array $meta = null): Transfer
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
@@ -165,10 +122,7 @@ trait HasWalletFloat
         return $this->forceTransfer($wallet, $result, $meta);
     }
 
-    /**
-     * @return int|float|string
-     */
-    public function getBalanceFloatAttribute()
+    public function getBalanceFloatAttribute(): string
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);

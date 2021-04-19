@@ -8,11 +8,6 @@ use Doctrine\DBAL\Exception\InvalidArgumentException;
 
 class WalletAdjustmentFailedService extends WalletService
 {
-    /**
-     * @param WalletModel $wallet
-     * @param array|null $meta
-     * @throws InvalidArgumentException
-     */
     public function adjustment(WalletModel $wallet, ?array $meta = null): void
     {
         throw new InvalidArgumentException(__METHOD__);

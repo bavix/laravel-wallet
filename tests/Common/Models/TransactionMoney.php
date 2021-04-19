@@ -11,13 +11,13 @@ use Cknow\Money\Money;
 class TransactionMoney extends \Bavix\Wallet\Models\Transaction
 {
     /**
-     * @var Money
+     * @var Money|null
      */
-    protected $currency;
+    private ?Money $currency = null;
 
     public function getCurrencyAttribute(): Money
     {
-        if (! $this->currency) {
+        if ($this->currency === null) {
             $this->currency = \money($this->amount, $this->meta['currency'] ?? 'USD');
         }
 

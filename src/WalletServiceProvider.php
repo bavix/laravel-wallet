@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet;
 
 use Bavix\Wallet\Commands\RefreshBalance;
@@ -49,10 +51,7 @@ class WalletServiceProvider extends ServiceProvider
         $this->commands([RefreshBalance::class]);
 
         if ($this->shouldMigrate()) {
-            $this->loadMigrationsFrom([
-                __DIR__.'/../database/migrations_v1',
-                __DIR__.'/../database/migrations_v2',
-            ]);
+            $this->loadMigrationsFrom([__DIR__.'/../database']);
         }
 
         if (function_exists('config_path')) {
@@ -61,18 +60,11 @@ class WalletServiceProvider extends ServiceProvider
             ], 'laravel-wallet-config');
         }
 
-        $this->publishes([
-            dirname(__DIR__).'/database/migrations_v1/' => database_path('migrations'),
-            dirname(__DIR__).'/database/migrations_v2/' => database_path('migrations'),
-        ], 'laravel-wallet-migrations');
-
-        $this->publishes([
-            dirname(__DIR__).'/database/migrations_v1/' => database_path('migrations'),
-        ], 'laravel-wallet-migrations-v1');
-
-        $this->publishes([
-            dirname(__DIR__).'/database/migrations_v2/' => database_path('migrations'),
-        ], 'laravel-wallet-migrations-v2');
+        if (function_exists('database_path')) {
+            $this->publishes([
+                dirname(__DIR__).'/database/' => database_path('migrations'),
+            ], 'laravel-wallet-migrations');
+        }
     }
 
     /**
@@ -87,16 +79,25 @@ class WalletServiceProvider extends ServiceProvider
             'wallet'
         );
 
+        // drop it
+        $this->app->singleton(LockService::class, config('wallet.services.lock', LockService::class));
+        $this->app->bind(EmptyLock::class, config('wallet.objects.emptyLock', EmptyLock::class));
+
+        // internal
+        $this->app->singleton(DbService::class, config('wallet.services.db', DbService::class));
+        $this->app->singleton(Mathable::class, config('wallet.package.mathable', BrickMath::class));
+
+        // external
+        $this->app->singleton(ExchangeService::class, config('wallet.services.exchange', ExchangeService::class));
+        $this->app->singleton(WalletService::class, config('wallet.services.wallet', WalletService::class));
+
+        // needle?
+        $this->app->singleton(CommonService::class, config('wallet.services.common', CommonService::class));
+
+
         // Bind eloquent models to IoC container
         $this->app->singleton(Rateable::class, config('wallet.package.rateable', Rate::class));
         $this->app->singleton(Storable::class, config('wallet.package.storable', Store::class));
-        $this->app->singleton(Mathable::class, config('wallet.package.mathable', BrickMath::class));
-        $this->app->singleton(DbService::class, config('wallet.services.db', DbService::class));
-        $this->app->singleton(ExchangeService::class, config('wallet.services.exchange', ExchangeService::class));
-        $this->app->singleton(CommonService::class, config('wallet.services.common', CommonService::class));
-        $this->app->singleton(WalletService::class, config('wallet.services.wallet', WalletService::class));
-        $this->app->singleton(LockService::class, config('wallet.services.lock', LockService::class));
-        $this->app->singleton(MetaService::class);
 
         // models
         $this->app->bind(Transaction::class, config('wallet.transaction.model', Transaction::class));
@@ -106,7 +107,6 @@ class WalletServiceProvider extends ServiceProvider
         // object's
         $this->app->bind(Bring::class, config('wallet.objects.bring', Bring::class));
         $this->app->bind(Cart::class, config('wallet.objects.cart', Cart::class));
-        $this->app->bind(EmptyLock::class, config('wallet.objects.emptyLock', EmptyLock::class));
         $this->app->bind(Operation::class, config('wallet.objects.operation', Operation::class));
     }
 
