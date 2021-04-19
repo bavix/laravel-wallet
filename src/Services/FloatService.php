@@ -18,13 +18,13 @@ class FloatService
 
     public function balanceIntToFloat(string $balance, int $decimalPlaces): string
     {
-        return $this->math->div($balance, (string)$decimalPlaces);
+        return $this->math->div($balance, (string) $decimalPlaces);
     }
 
     public function balanceFloatToInt(string $balance, int $decimalPlaces): string
     {
         return $this->math->round(
-            $this->math->mul($balance, (string)$decimalPlaces)
+            $this->math->mul($balance, (string) $decimalPlaces)
         );
     }
 }

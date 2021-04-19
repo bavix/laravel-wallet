@@ -27,7 +27,7 @@ class Bring
 
     protected ?int $fee = null;
 
-    protected int $discount= 0;
+    protected int $discount = 0;
 
     public function __construct(Mathable $math)
     {
