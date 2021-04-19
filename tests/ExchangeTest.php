@@ -27,6 +27,9 @@ class ExchangeTest extends TestCase
             'slug' => 'rub',
         ]);
 
+        self::assertEquals('USD', $usd->currency);
+        self::assertEquals('RUB', $rub->currency);
+
         self::assertEquals(0, $rub->balance);
         self::assertEquals(0, $usd->balance);
 

@@ -12,7 +12,7 @@ class Rate extends \Bavix\Wallet\Simple\Rate
     /**
      * @var array
      */
-    protected $rates = [
+    protected array $rates = [
         'USD' => [
             'RUB' => 67.61,
         ],
@@ -32,11 +32,7 @@ class Rate extends \Bavix\Wallet\Simple\Rate
         }
     }
 
-    /**
-     * @param Wallet $wallet
-     * @return int|float
-     */
-    protected function rate(Wallet $wallet)
+    protected function rate(Wallet $wallet): string
     {
         $from = app(WalletService::class)->getWallet($this->withCurrency);
         $to = app(WalletService::class)->getWallet($wallet);
@@ -44,17 +40,14 @@ class Rate extends \Bavix\Wallet\Simple\Rate
         /**
          * @var \Bavix\Wallet\Models\Wallet $wallet
          */
-        return Arr::get(
+        return (string) Arr::get(
             Arr::get($this->rates, $from->currency, []),
             $to->currency,
             1
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function convertTo(Wallet $wallet)
+    public function convertTo(Wallet $wallet): string
     {
         return app(Mathable::class)->mul(
             parent::convertTo($wallet),

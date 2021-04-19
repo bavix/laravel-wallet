@@ -13,11 +13,9 @@ class ItemDiscountTax extends ItemDiscount implements Taxable
      *
      * Minimum 0; Maximum 100
      * Example: return 7.5; // 7.5%
-     *
-     * @return float
      */
-    public function getFeePercent(): float
+    public function getFeePercent(): string
     {
-        return 7.5;
+        return (string) 7.5;
     }
 }

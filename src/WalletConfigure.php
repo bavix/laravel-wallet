@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet;
 
 /**
@@ -13,7 +15,7 @@ class WalletConfigure
      *
      * @var bool
      */
-    public static $runsMigrations = true;
+    public static bool $runsMigrations = true;
 
     /**
      * WalletConfigure constructor.

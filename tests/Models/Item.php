@@ -27,14 +27,7 @@ class Item extends Model implements Product
      */
     protected $fillable = ['name', 'quantity', 'price'];
 
-    /**
-     * @param Customer $customer
-     * @param int $quantity
-     * @param bool $force
-     *
-     * @return bool
-     */
-    public function canBuy(Customer $customer, int $quantity = 1, bool $force = null): bool
+    public function canBuy(Customer $customer, int $quantity = 1, bool $force = false): bool
     {
         $result = $this->quantity >= $quantity;
 
@@ -45,11 +38,7 @@ class Item extends Model implements Product
         return $result && ! $customer->paid($this);
     }
 
-    /**
-     * @param Customer $customer
-     * @return float|int
-     */
-    public function getAmountProduct(Customer $customer)
+    public function getAmountProduct(Customer $customer): string
     {
         /**
          * @var Wallet $wallet
@@ -59,26 +48,16 @@ class Item extends Model implements Product
         return $this->price + $wallet->holder_id;
     }
 
-    /**
-     * @return array|null
-     */
     public function getMetaProduct(): ?array
     {
         return null;
     }
 
-    /**
-     * @return string
-     */
     public function getUniqueId(): string
     {
         return $this->getKey();
     }
 
-    /**
-     * @param int[] $walletIds
-     * @return MorphMany
-     */
     public function boughtGoods(array $walletIds): MorphMany
     {
         return $this

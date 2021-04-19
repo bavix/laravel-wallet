@@ -28,10 +28,10 @@ class TaxTest extends TestCase
         $fee = (int) ($product->getAmountProduct($buyer) * $product->getFeePercent() / 100);
         $balance = $product->getAmountProduct($buyer) + $fee;
 
-        self::assertEquals($buyer->balance, 0);
+        self::assertEquals(0, $buyer->balance);
         $buyer->deposit($balance);
 
-        self::assertNotEquals($buyer->balance, 0);
+        self::assertNotEquals(0, $buyer->balance);
         $transfer = $buyer->pay($product);
         self::assertNotNull($transfer);
 
@@ -49,10 +49,10 @@ class TaxTest extends TestCase
 
         $buyer->refund($product);
         self::assertEquals($buyer->balance, $deposit->amount);
-        self::assertEquals($product->balance, 0);
+        self::assertEquals(0, $product->balance);
 
         $buyer->withdraw($buyer->balance);
-        self::assertEquals($buyer->balance, 0);
+        self::assertEquals(0, $buyer->balance);
     }
 
     /**
@@ -73,12 +73,12 @@ class TaxTest extends TestCase
         $fee = (int) ($product->getAmountProduct($santa) * $product->getFeePercent() / 100);
         $balance = $product->getAmountProduct($santa) + $fee;
 
-        self::assertEquals($santa->balance, 0);
-        self::assertEquals($child->balance, 0);
+        self::assertEquals(0, $santa->balance);
+        self::assertEquals(0, $child->balance);
         $santa->deposit($balance);
 
-        self::assertNotEquals($santa->balance, 0);
-        self::assertEquals($child->balance, 0);
+        self::assertNotEquals(0, $santa->balance);
+        self::assertEquals(0, $child->balance);
         $transfer = $santa->wallet->gift($child, $product);
         self::assertNotNull($transfer);
 
@@ -97,11 +97,11 @@ class TaxTest extends TestCase
         self::assertFalse($santa->safeRefundGift($product));
         self::assertTrue($child->refundGift($product));
         self::assertEquals($santa->balance, $deposit->amount);
-        self::assertEquals($child->balance, 0);
-        self::assertEquals($product->balance, 0);
+        self::assertEquals(0, $child->balance);
+        self::assertEquals(0, $product->balance);
 
         $santa->withdraw($santa->balance);
-        self::assertEquals($santa->balance, 0);
+        self::assertEquals(0, $santa->balance);
     }
 
     /**
@@ -123,14 +123,14 @@ class TaxTest extends TestCase
             'quantity' => 1,
         ]);
 
-        self::assertEquals($santa->balance, 0);
-        self::assertEquals($child->balance, 0);
+        self::assertEquals(0, $santa->balance);
+        self::assertEquals(0, $child->balance);
         $santa->deposit($product->getAmountProduct($santa));
 
-        self::assertNotEquals($santa->balance, 0);
-        self::assertEquals($child->balance, 0);
+        self::assertNotEquals(0, $santa->balance);
+        self::assertEquals(0, $child->balance);
         $santa->wallet->gift($child, $product);
 
-        self::assertEquals($santa->balance, 0);
+        self::assertEquals(0, $santa->balance);
     }
 }

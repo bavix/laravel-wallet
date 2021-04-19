@@ -112,7 +112,8 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
      */
     public function refreshBalance(): bool
     {
-        return app(WalletService::class)->refresh($this);
+        return app(WalletService::class)
+            ->refresh($this);
     }
 
     /**
@@ -132,34 +133,21 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         }
     }
 
-    /**
-     * @return float|int
-     */
-    public function getAvailableBalance()
+    public function getAvailableBalance(): string
     {
-        return $this->transactions()
+        return (string) $this->transactions()
             ->where('wallet_id', $this->getKey())
             ->where('confirmed', true)
             ->sum('amount');
     }
 
-    /**
-     * @return MorphTo
-     */
     public function holder(): MorphTo
     {
         return $this->morphTo();
     }
 
-    /**
-     * @return string
-     */
-    public function getCurrencyAttribute(): string
+    public function getCurrencyAttribute(): ?string
     {
-        $currencies = config('wallet.currencies', []);
-
-        return $currencies[$this->slug] ??
-            $this->meta['currency'] ??
-            Str::upper($this->slug);
+        return $this->meta['currency'] ?? Str::upper($this->slug);
     }
 }

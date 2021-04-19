@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int $wallet_id
  * @property string $uuid
  * @property string $type
- * @property string $amount
+ * @property int|float|string $amount
  * @property float $amountFloat
  * @property bool $confirmed
  * @property array $meta
@@ -102,7 +102,7 @@ class Transaction extends Model
             ->decimalPlaces($this->wallet);
 
         return app(FloatService::class)
-            ->balanceIntToFloat($this->amount, $decimalPlaces);
+            ->balanceIntToFloat((string) $this->amount, (int)$decimalPlaces);
     }
 
     /**
@@ -114,6 +114,6 @@ class Transaction extends Model
             ->decimalPlaces($this->wallet);
 
         $this->amount = app(FloatService::class)
-            ->balanceFloatToInt($amount, $decimalPlaces);
+            ->balanceFloatToInt((string) $amount, (int)$decimalPlaces);
     }
 }

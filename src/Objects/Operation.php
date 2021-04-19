@@ -7,6 +7,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Ramsey\Uuid\Uuid;
 
+/** @deprecated  */
 class Operation
 {
     /**

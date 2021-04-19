@@ -13,19 +13,24 @@ use function count;
 use Countable;
 use function get_class;
 
+/** @deprecated  */
 class Cart implements Countable
 {
-    /**
-     * @var Product[]
-     */
-    protected $items = [];
+    protected Mathable $math;
 
-    /**
-     * @var int[]
-     */
-    protected $quantity = [];
+    /** @var Product[] */
+    protected array $items = [];
 
-    protected $meta = [];
+    /** @var int[] */
+    protected array $quantity = [];
+
+    protected array $meta = [];
+
+    public function __construct(
+        Mathable $math
+    ) {
+        $this->math = $math;
+    }
 
     public function setMeta(array $meta): self
     {
@@ -39,14 +44,9 @@ class Cart implements Countable
         return $this->meta;
     }
 
-    /**
-     * @param Product $product
-     * @param int $quantity
-     * @return static
-     */
     public function addItem(Product $product, int $quantity = 1): self
     {
-        $this->addQuantity($product, $quantity);
+        $this->addQuantity($product, $quantity); // fixme: needle?
         for ($i = 0; $i < $quantity; $i++) {
             $this->items[] = $product;
         }
@@ -54,11 +54,7 @@ class Cart implements Countable
         return $this;
     }
 
-    /**
-     * @param iterable $products
-     *
-     * @return static
-     */
+    /** @param Product[] $products */
     public function addItems(iterable $products): self
     {
         foreach ($products as $product) {
@@ -83,9 +79,6 @@ class Cart implements Countable
     /**
      * The method returns the transfers already paid for the goods.
      *
-     * @param Customer $customer
-     * @param bool|null $gifts
-     *
      * @return Transfer[]
      */
     public function alreadyBuy(Customer $customer, bool $gifts = false): array
@@ -95,11 +88,10 @@ class Cart implements Countable
             $status[] = Transfer::STATUS_GIFT;
         }
 
-        /**
-         * @var Transfer $query
-         */
-        $result = [];
+        /** @var Transfer $query */
         $query = $customer->transfers();
+
+        $result = [];
         foreach ($this->getUniqueItems() as $product) {
             $collect = (clone $query)
                 ->where('to_type', $product->getMorphClass())
@@ -117,13 +109,7 @@ class Cart implements Countable
         return $result;
     }
 
-    /**
-     * @param Customer $customer
-     * @param bool|null $force
-     *
-     * @return bool
-     */
-    public function canBuy(Customer $customer, bool $force = null): bool
+    public function canBuy(Customer $customer, bool $force = false): bool
     {
         foreach ($this->items as $item) {
             if (! $item->canBuy($customer, $this->getQuantity($item), $force)) {
@@ -134,35 +120,24 @@ class Cart implements Countable
         return true;
     }
 
-    /**
-     * @param Customer $customer
-     *
-     * @return string
-     */
     public function getTotal(Customer $customer): string
     {
-        $result = 0;
-        $math = app(Mathable::class);
+        $result = '0'; // fasted
         foreach ($this->items as $item) {
-            $result = $math->add($result, $item->getAmountProduct($customer));
+            $result = $this->math->add(
+                $result,
+                $item->getAmountProduct($customer)
+            );
         }
 
         return $result;
     }
 
-    /**
-     * @return int
-     */
     public function count(): int
     {
         return count($this->items);
     }
 
-    /**
-     * @param Product $product
-     *
-     * @return int
-     */
     public function getQuantity(Product $product): int
     {
         $class = get_class($product);
@@ -171,15 +146,14 @@ class Cart implements Countable
         return (int) ($this->quantity[$class][$uniq] ?? 0);
     }
 
-    /**
-     * @param Product $product
-     * @param int $quantity
-     */
     protected function addQuantity(Product $product, int $quantity): void
     {
         $class = get_class($product);
         $uniq = $product->getUniqueId();
-        $math = app(Mathable::class);
-        $this->quantity[$class][$uniq] = (int) $math->add($this->getQuantity($product), $quantity);
+
+        $this->quantity[$class][$uniq] = (int) $this->math->add(
+            (string) $this->getQuantity($product),
+            (string) $quantity,
+        );
     }
 }

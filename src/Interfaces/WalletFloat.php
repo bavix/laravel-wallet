@@ -19,7 +19,7 @@ interface WalletFloat
 
     public function safeTransferFloat(Wallet $wallet, string $amount, ?array $meta = null): ?Transfer;
 
-    public function forceTransferFloat(Wallet $wallet, $amount, ?array $meta = null): Transfer;
+    public function forceTransferFloat(Wallet $wallet, string $amount, ?array $meta = null): Transfer;
 
     public function canWithdrawFloat(string $amount): bool;
 
