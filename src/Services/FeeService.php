@@ -6,5 +6,4 @@ namespace Bavix\Wallet\Services;
 
 class FeeService
 {
-
 }

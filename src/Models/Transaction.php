@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Models;
 
-use Bavix\Wallet\Services\FloatService;
 use function array_merge;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
+use Bavix\Wallet\Services\FloatService;
 use Bavix\Wallet\Services\WalletService;
 use function config;
 use Illuminate\Database\Eloquent\Model;
@@ -102,7 +102,7 @@ class Transaction extends Model
             ->decimalPlaces($this->wallet);
 
         return app(FloatService::class)
-            ->balanceIntToFloat((string) $this->amount, (int)$decimalPlaces);
+            ->balanceIntToFloat((string) $this->amount, (int) $decimalPlaces);
     }
 
     /**
@@ -114,6 +114,6 @@ class Transaction extends Model
             ->decimalPlaces($this->wallet);
 
         $this->amount = app(FloatService::class)
-            ->balanceFloatToInt((string) $amount, (int)$decimalPlaces);
+            ->balanceFloatToInt((string) $amount, (int) $decimalPlaces);
     }
 }
