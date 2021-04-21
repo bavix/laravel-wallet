@@ -6,13 +6,11 @@ use Cknow\Money\Money;
 
 /**
  * Class Transaction.
- * @property-read Money $currency
+ *
+ * @property Money $currency
  */
 class TransactionMoney extends \Bavix\Wallet\Models\Transaction
 {
-    /**
-     * @var Money|null
-     */
     private ?Money $currency = null;
 
     public function getCurrencyAttribute(): Money

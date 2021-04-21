@@ -16,9 +16,6 @@ class Buyer extends Model implements Customer
 {
     use CanPay;
 
-    /**
-     * @return string
-     */
     public function getTable(): string
     {
         return 'users';

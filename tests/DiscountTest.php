@@ -12,15 +12,16 @@ use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\Item;
 use Bavix\Wallet\Test\Models\ItemDiscount;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class DiscountTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testPay(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer        $buyer
          * @var ItemDiscount $product
          */
         $buyer = BuyerFactory::new()->create();
@@ -70,13 +71,10 @@ class DiscountTest extends TestCase
         self::assertEquals($product->getKey(), $transfer->to->getKey());
     }
 
-    /**
-     * @return void
-     */
     public function testItemTransactions(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer        $buyer
          * @var ItemDiscount $product
          */
         $buyer = BuyerFactory::new()->create();
@@ -120,13 +118,10 @@ class DiscountTest extends TestCase
         self::assertTrue($deposit->is($product->transactions()->latest()->first()));
     }
 
-    /**
-     * @return void
-     */
     public function testRefund(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer        $buyer
          * @var ItemDiscount $product
          */
         $buyer = BuyerFactory::new()->create();
@@ -175,13 +170,10 @@ class DiscountTest extends TestCase
         self::assertEquals(Transfer::STATUS_REFUND, $transfer->status);
     }
 
-    /**
-     * @return void
-     */
     public function testForceRefund(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer        $buyer
          * @var ItemDiscount $product
          */
         $buyer = BuyerFactory::new()->create();
@@ -214,7 +206,8 @@ class DiscountTest extends TestCase
         self::assertTrue($buyer->forceRefund($product));
 
         self::assertEquals(
-            $product->balance, -($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer))
+            $product->balance,
+            -($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer))
         );
 
         self::assertEquals($buyer->balance, $product->getAmountProduct($buyer));
@@ -225,16 +218,13 @@ class DiscountTest extends TestCase
         self::assertEquals(0, $buyer->balance);
     }
 
-    /**
-     * @return void
-     */
     public function testOutOfStock(): void
     {
         $this->expectException(ProductEnded::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.product_stock'));
 
         /**
-         * @var Buyer $buyer
+         * @var Buyer        $buyer
          * @var ItemDiscount $product
          */
         $buyer = BuyerFactory::new()->create();
@@ -247,13 +237,10 @@ class DiscountTest extends TestCase
         $buyer->pay($product);
     }
 
-    /**
-     * @return void
-     */
     public function testForcePay(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer        $buyer
          * @var ItemDiscount $product
          */
         $buyer = BuyerFactory::new()->create();
@@ -265,20 +252,18 @@ class DiscountTest extends TestCase
         $buyer->forcePay($product);
 
         self::assertEquals(
-            $buyer->balance, -($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer))
+            $buyer->balance,
+            -($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer))
         );
 
         $buyer->deposit(-$buyer->balance);
         self::assertEquals(0, $buyer->balance);
     }
 
-    /**
-     * @return void
-     */
     public function testPayFree(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer        $buyer
          * @var ItemDiscount $product
          */
         $buyer = BuyerFactory::new()->create();
@@ -303,7 +288,7 @@ class DiscountTest extends TestCase
     public function testFreePay(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer        $buyer
          * @var ItemDiscount $product
          */
         $buyer = BuyerFactory::new()->create();
@@ -326,16 +311,13 @@ class DiscountTest extends TestCase
         self::assertEquals(0, $product->balance);
     }
 
-    /**
-     * @return void
-     */
     public function testPayFreeOutOfStock(): void
     {
         $this->expectException(ProductEnded::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.product_stock'));
 
         /**
-         * @var Buyer $buyer
+         * @var Buyer        $buyer
          * @var ItemDiscount $product
          */
         $buyer = BuyerFactory::new()->create();

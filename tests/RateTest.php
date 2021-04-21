@@ -8,16 +8,15 @@ use Bavix\Wallet\Test\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Models\UserMulti;
 use Illuminate\Support\Str;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class RateTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testRate(): void
     {
-        /**
-         * @var UserMulti $user
-         */
+        /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
         $usd = $user->createWallet([
             'name' => 'Dollar USA',
@@ -45,19 +44,15 @@ class RateTest extends TestCase
         $rate = app(Rateable::class)
             ->withAmount(1000)
             ->withCurrency($usd)
-            ->convertTo($rub);
+            ->convertTo($rub)
+        ;
 
         self::assertEquals(67610., $rate);
     }
 
-    /**
-     * @return void
-     */
     public function testExchange(): void
     {
-        /**
-         * @var UserMulti $user
-         */
+        /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
         $usd = $user->createWallet([
             'name' => 'USD',
@@ -81,12 +76,14 @@ class RateTest extends TestCase
         self::assertInstanceOf($rub->holder_type, $user);
 
         $rate = app(ExchangeService::class)
-            ->rate($usd, $rub);
+            ->rate($usd, $rub)
+        ;
 
         self::assertEquals(67.61, $rate);
 
         $rate = app(ExchangeService::class)
-            ->rate($rub, $usd);
+            ->rate($rub, $usd)
+        ;
 
         self::assertEquals($rate, 1 / 67.61);
     }

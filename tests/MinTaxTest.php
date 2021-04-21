@@ -8,15 +8,16 @@ use Bavix\Wallet\Test\Factories\ItemMinTaxFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\ItemMinTax;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class MinTaxTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testPay(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer      $buyer
          * @var ItemMinTax $product
          */
         $buyer = BuyerFactory::new()->create();

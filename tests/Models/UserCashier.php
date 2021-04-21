@@ -15,11 +15,10 @@ use Laravel\Cashier\Billable;
  */
 class UserCashier extends Model
 {
-    use Billable, HasWallets, MorphOneWallet;
+    use Billable;
+    use HasWallets;
+    use MorphOneWallet;
 
-    /**
-     * @return string
-     */
     public function getTable(): string
     {
         return 'users';

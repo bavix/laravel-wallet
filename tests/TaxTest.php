@@ -9,15 +9,16 @@ use Bavix\Wallet\Test\Factories\ItemTaxFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\ItemTax;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class TaxTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testPay(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer   $buyer
          * @var ItemTax $product
          */
         $buyer = BuyerFactory::new()->create();
@@ -55,14 +56,11 @@ class TaxTest extends TestCase
         self::assertEquals(0, $buyer->balance);
     }
 
-    /**
-     * @return void
-     */
     public function testGift(): void
     {
         /**
-         * @var Buyer $santa
-         * @var Buyer $child
+         * @var Buyer   $santa
+         * @var Buyer   $child
          * @var ItemTax $product
          */
         [$santa, $child] = BuyerFactory::times(2)->create();
@@ -104,17 +102,14 @@ class TaxTest extends TestCase
         self::assertEquals(0, $santa->balance);
     }
 
-    /**
-     * @return void
-     */
     public function testGiftFail(): void
     {
         $this->expectException(InsufficientFunds::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.insufficient_funds'));
 
         /**
-         * @var Buyer $santa
-         * @var Buyer $child
+         * @var Buyer   $santa
+         * @var Buyer   $child
          * @var ItemTax $product
          */
         [$santa, $child] = BuyerFactory::times(2)->create();
