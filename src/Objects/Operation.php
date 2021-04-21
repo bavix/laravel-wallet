@@ -50,17 +50,11 @@ class Operation
         $this->uuid = Uuid::uuid4()->toString();
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @return string
-     */
     public function getUuid(): string
     {
         return $this->uuid;
@@ -74,25 +68,17 @@ class Operation
         return $this->amount;
     }
 
-    /**
-     * @return array|null
-     */
     public function getMeta(): ?array
     {
         return $this->meta;
     }
 
-    /**
-     * @return bool
-     */
     public function isConfirmed(): bool
     {
         return $this->confirmed;
     }
 
     /**
-     * @param string $type
-     *
      * @return static
      */
     public function setType(string $type): self
@@ -115,8 +101,6 @@ class Operation
     }
 
     /**
-     * @param array|null $meta
-     *
      * @return static
      */
     public function setMeta(?array $meta): self
@@ -127,8 +111,6 @@ class Operation
     }
 
     /**
-     * @param bool $confirmed
-     *
      * @return static
      */
     public function setConfirmed(bool $confirmed): self
@@ -138,17 +120,12 @@ class Operation
         return $this;
     }
 
-    /**
-     * @return Wallet
-     */
     public function getWallet(): Wallet
     {
         return $this->wallet;
     }
 
     /**
-     * @param Wallet $wallet
-     *
      * @return static
      */
     public function setWallet(Wallet $wallet): self
@@ -158,24 +135,16 @@ class Operation
         return $this;
     }
 
-    /**
-     * @return Transaction
-     */
     public function create(): Transaction
     {
-        /**
-         * @var Transaction $model
-         */
-        $model = $this->getWallet()
+        // @var Transaction $model
+        return $this->getWallet()
             ->transactions()
-            ->create($this->toArray());
-
-        return $model;
+            ->create($this->toArray())
+        ;
     }
 
     /**
-     * @return array
-     *
      * @throws
      */
     public function toArray(): array

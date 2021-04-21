@@ -26,12 +26,12 @@ trait CanConfirm
     public function confirm(Transaction $transaction): bool
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
-            /** @var Wallet|Confirmable $self */
+            /** @var Confirmable|Wallet $self */
             $self = $this;
 
             return app(DbService::class)->transaction(static function () use ($self, $transaction) {
                 $wallet = app(WalletService::class)->getWallet($self);
-                if (! $wallet->refreshBalance()) {
+                if (!$wallet->refreshBalance()) {
                     return false;
                 }
 
@@ -69,11 +69,11 @@ trait CanConfirm
 
             return app(DbService::class)->transaction(static function () use ($self, $transaction) {
                 $wallet = app(WalletService::class)->getWallet($self);
-                if (! $wallet->refreshBalance()) {
+                if (!$wallet->refreshBalance()) {
                     return false;
                 }
 
-                if (! $transaction->confirmed) {
+                if (!$transaction->confirmed) {
                     throw new ConfirmedInvalid(trans('wallet::errors.unconfirmed_invalid'));
                 }
 
@@ -81,10 +81,10 @@ trait CanConfirm
                 $negativeAmount = $mathService->negative($transaction->amount);
 
                 return $transaction->update(['confirmed' => false]) &&
-
                     // update balance
                     app(CommonService::class)
-                        ->addBalance($wallet, $negativeAmount);
+                        ->addBalance($wallet, $negativeAmount)
+                    ;
             });
         });
     }
@@ -110,7 +110,8 @@ trait CanConfirm
 
             return app(DbService::class)->transaction(static function () use ($self, $transaction) {
                 $wallet = app(WalletService::class)
-                    ->getWallet($self);
+                    ->getWallet($self)
+                ;
 
                 if ($transaction->confirmed) {
                     throw new ConfirmedInvalid(trans('wallet::errors.confirmed_invalid'));
@@ -121,10 +122,10 @@ trait CanConfirm
                 }
 
                 return $transaction->update(['confirmed' => true]) &&
-
                     // update balance
                     app(CommonService::class)
-                        ->addBalance($wallet, $transaction->amount);
+                        ->addBalance($wallet, $transaction->amount)
+                    ;
             });
         });
     }

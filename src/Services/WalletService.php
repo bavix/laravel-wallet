@@ -17,12 +17,6 @@ use Throwable;
 
 class WalletService
 {
-    /**
-     * @param Wallet $customer
-     * @param Wallet $product
-     *
-     * @return int
-     */
     public function discount(Wallet $customer, Wallet $product): int
     {
         if ($customer instanceof Customer && $product instanceof Discount) {
@@ -33,31 +27,21 @@ class WalletService
         return 0;
     }
 
-    /**
-     * @param Wallet $object
-     *
-     * @return int
-     */
     public function decimalPlacesValue(Wallet $object): int
     {
         return $this->getWallet($object)->decimal_places ?: 2;
     }
 
-    /**
-     * @param Wallet $object
-     *
-     * @return string
-     */
     public function decimalPlaces(Wallet $object): string
     {
         return app(Mathable::class)
-            ->pow(10, $this->decimalPlacesValue($object));
+            ->pow(10, $this->decimalPlacesValue($object))
+        ;
     }
 
     /**
      * Consider the fee that the system will receive.
      *
-     * @param Wallet $wallet
      * @param int|string $amount
      *
      * @return float|int
@@ -77,7 +61,7 @@ class WalletService
             );
         }
 
-        /**
+        /*
          * Added minimum commission condition.
          *
          * @see https://github.com/bavix/laravel-wallet/issues/64#issuecomment-514483143
@@ -106,23 +90,13 @@ class WalletService
         }
     }
 
-    /**
-     * @param Wallet $object
-     * @param bool $autoSave
-     *
-     * @return WalletModel
-     */
     public function getWallet(Wallet $object, bool $autoSave = true): WalletModel
     {
-        /**
-         * @var WalletModel $wallet
-         */
+        /** @var WalletModel $wallet */
         $wallet = $object;
 
-        if (! ($object instanceof WalletModel)) {
-            /**
-             * @var HasWallet $object
-             */
+        if (!($object instanceof WalletModel)) {
+            /** @var HasWallet $object */
             $wallet = $object->wallet;
         }
 
@@ -133,11 +107,6 @@ class WalletService
         return $wallet;
     }
 
-    /**
-     * @param WalletModel $wallet
-     *
-     * @return bool
-     */
     public function refresh(WalletModel $wallet): bool
     {
         return app(LockService::class)->lock($this, __FUNCTION__, static function () use ($wallet) {
@@ -148,16 +117,11 @@ class WalletService
             $wallet->balance = $balance;
 
             return app(Storable::class)->setBalance($wallet, $balance) &&
-                (! $math->compare($whatIs, $balance) || $wallet->save());
+                (!$math->compare($whatIs, $balance) || $wallet->save());
         });
     }
 
     /**
-     * @param WalletModel $wallet
-     * @param array|null $meta
-     *
-     * @return void
-     *
      * @throws Throwable
      */
     public function adjustment(WalletModel $wallet, ?array $meta = null): void
@@ -172,9 +136,11 @@ class WalletService
             switch ($math->compare($difference, 0)) {
                 case -1:
                     $wallet->deposit($math->abs($difference), $meta);
+
                     break;
                 case 1:
                     $wallet->forceWithdraw($math->abs($difference), $meta);
+
                     break;
             }
         });

@@ -62,10 +62,10 @@ class BalanceTest extends TestCase
          */
         $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
-        self::assertEquals($buyer->balance, 0);
+        self::assertEquals(0, $buyer->balance);
         $buyer->forceWithdraw(1);
 
-        self::assertEquals($buyer->balance, -1);
+        self::assertEquals(-1, $buyer->balance);
         self::assertTrue($buyer->relationLoaded('wallet'));
         self::assertTrue($buyer->wallet->exists);
         self::assertLessThan(0, $buyer->balance);
@@ -86,19 +86,19 @@ class BalanceTest extends TestCase
         $wallet = $buyer->wallet;
 
         self::assertFalse($wallet->exists);
-        self::assertEquals($wallet->balance, 0);
+        self::assertEquals(0, $wallet->balance);
         self::assertTrue($wallet->exists);
 
         $wallet->deposit(1000);
-        self::assertEquals($wallet->balance, 1000);
+        self::assertEquals(1000, $wallet->balance);
 
         $result = app(CommonService::class)->addBalance($wallet, 100);
         self::assertTrue($result);
 
-        self::assertEquals($wallet->balance, 1100);
+        self::assertEquals(1100, $wallet->balance);
         self::assertTrue($wallet->refreshBalance());
 
-        self::assertEquals($wallet->balance, 1000);
+        self::assertEquals(1000, $wallet->balance);
 
         $key = $wallet->getKey();
         self::assertTrue($wallet->delete());
@@ -133,7 +133,7 @@ class BalanceTest extends TestCase
         $wallet = $buyer->wallet;
 
         self::assertFalse($wallet->exists);
-        self::assertEquals($wallet->balance, 0);
+        self::assertEquals(0, $wallet->balance);
         self::assertTrue($wallet->exists);
 
         self::assertEquals(0, app(Storable::class)->getBalance($wallet));

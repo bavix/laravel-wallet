@@ -28,21 +28,18 @@ class LockService
 
     /**
      * @param object $self
-     * @param string $name
-     * @param \Closure $closure
      *
      * @return mixed
      */
     public function lock($self, string $name, \Closure $closure)
     {
         return $this->lockProvider($self, $name, (int) config('wallet.lock.seconds', 1))
-            ->get($this->bindTo($self, $closure));
+            ->get($this->bindTo($self, $closure))
+        ;
     }
 
     /**
      * @param object $self
-     * @param \Closure $closure
-     * @return \Closure
      *
      * @throws
      */
@@ -57,15 +54,14 @@ class LockService
     }
 
     /**
-     * @return Store|null
-     *
      * @codeCoverageIgnore
      */
     protected function cache(): ?Store
     {
         try {
             return Cache::store(config('wallet.lock.cache'))
-                ->getStore();
+                ->getStore()
+            ;
         } catch (\Throwable $throwable) {
             return null;
         }
@@ -73,10 +69,6 @@ class LockService
 
     /**
      * @param object $self
-     * @param string $name
-     * @param int $seconds
-     *
-     * @return Lock
      */
     protected function lockProvider($self, string $name, int $seconds): Lock
     {
@@ -92,7 +84,7 @@ class LockService
                 $uniqId = $class.$self->getKey();
             }
 
-            return $store->lock("$name.$uniqId", $seconds);
+            return $store->lock("{$name}.{$uniqId}", $seconds);
         }
         // @codeCoverageIgnoreEnd
 

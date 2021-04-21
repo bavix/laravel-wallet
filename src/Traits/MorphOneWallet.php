@@ -8,15 +8,13 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 /**
  * Trait MorphOneWallet.
  *
- * @property-read WalletModel $wallet
+ * @property WalletModel $wallet
  */
 trait MorphOneWallet
 {
     /**
      * Get default Wallet
      * this method is used for Eager Loading.
-     *
-     * @return MorphOne
      */
     public function wallet(): MorphOne
     {
@@ -28,6 +26,7 @@ trait MorphOneWallet
                 'slug' => config('wallet.wallet.default.slug', 'default'),
                 'meta' => config('wallet.wallet.default.meta', []),
                 'balance' => 0,
-            ]));
+            ]))
+        ;
     }
 }

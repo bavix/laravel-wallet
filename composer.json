@@ -40,6 +40,7 @@
     "phpstan/phpstan": "^0.12",
     "phpunit/phpunit": "^9.5",
     "psalm/plugin-laravel": "^1.4",
+    "symplify/easy-coding-standard": "^9.2",
     "vimeo/psalm": "^4.7"
   },
   "suggest": {
