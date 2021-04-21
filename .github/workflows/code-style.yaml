@@ -1,4 +1,4 @@
-name: ecs
+name: code-style
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  units:
+  ecs:
     runs-on: ubuntu-latest
 
     steps:
