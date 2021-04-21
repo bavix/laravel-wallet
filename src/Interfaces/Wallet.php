@@ -43,7 +43,7 @@ interface Wallet
     /**
      * @throws AmountInvalid
      */
-    public function forceTransfer(Wallet $wallet, string $amount, ?array $meta = null): Transfer;
+    public function forceTransfer(self $wallet, string $amount, ?array $meta = null): Transfer;
 
     public function canWithdraw(string $amount, bool $allowZero = false): bool;
 
