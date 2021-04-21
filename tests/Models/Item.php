@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Test\Models;
 
 use Bavix\Wallet\Interfaces\Customer;
@@ -38,7 +40,7 @@ class Item extends Model implements Product
         return $result && !$customer->paid($this);
     }
 
-    public function getAmountProduct(Customer $customer): string
+    public function getAmountProduct(Customer $customer)
     {
         /** @var Wallet $wallet */
         $wallet = app(WalletService::class)->getWallet($customer);
@@ -53,7 +55,7 @@ class Item extends Model implements Product
 
     public function getUniqueId(): string
     {
-        return $this->getKey();
+        return (string) $this->getKey();
     }
 
     public function boughtGoods(array $walletIds): MorphMany

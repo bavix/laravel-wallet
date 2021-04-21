@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Test\Models;
 
 use Bavix\Wallet\Interfaces\Customer;
@@ -13,9 +15,9 @@ class ItemDiscount extends Item implements Discount
         return 'items';
     }
 
-    public function getPersonalDiscount(Customer $customer): string
+    public function getPersonalDiscount(Customer $customer)
     {
-        return (string) app(WalletService::class)
+        return app(WalletService::class)
             ->getWallet($customer)
             ->holder_id;
     }

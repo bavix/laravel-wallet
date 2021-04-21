@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Traits;
 
 use Bavix\Wallet\Interfaces\Mathable;
@@ -14,9 +16,6 @@ use Bavix\Wallet\Services\WalletService;
 
 trait CanExchange
 {
-    /**
-     * {@inheritdoc}
-     */
     public function exchange(Wallet $to, $amount, ?array $meta = null): Transfer
     {
         $wallet = app(WalletService::class)
@@ -30,9 +29,6 @@ trait CanExchange
         return $this->forceExchange($to, $amount, $meta);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function safeExchange(Wallet $to, $amount, ?array $meta = null): ?Transfer
     {
         try {
@@ -42,9 +38,6 @@ trait CanExchange
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function forceExchange(Wallet $to, $amount, ?array $meta = null): Transfer
     {
         /** @var Wallet $from */

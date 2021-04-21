@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Simple;
 
 use Bavix\Wallet\Interfaces\Mathable;
@@ -8,10 +10,10 @@ use Bavix\Wallet\Services\WalletService;
 
 class Store implements Storable
 {
-    /** @var string[] */
+    /** @var float[]|int[]|string[] */
     protected array $balanceSheets = [];
 
-    public function getBalance($object): string
+    public function getBalance($object)
     {
         $wallet = app(WalletService::class)->getWallet($object);
         if (!\array_key_exists($wallet->getKey(), $this->balanceSheets)) {
@@ -24,9 +26,6 @@ class Store implements Storable
         return $this->balanceSheets[$wallet->getKey()];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function incBalance($object, $amount): string
     {
         $math = app(Mathable::class);
@@ -37,9 +36,6 @@ class Store implements Storable
         return $balance;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setBalance($object, $amount): bool
     {
         $wallet = app(WalletService::class)->getWallet($object);
@@ -48,9 +44,6 @@ class Store implements Storable
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fresh(): bool
     {
         $this->balanceSheets = [];
@@ -58,11 +51,8 @@ class Store implements Storable
         return true;
     }
 
-    /**
-     * @param int|string $balance
-     */
     protected function round($balance): string
     {
-        return app(Mathable::class)->round($balance ?: 0);
+        return app(Mathable::class)->round((string) ($balance ?: 0));
     }
 }

@@ -23,9 +23,6 @@ class RefreshBalance extends Command
      */
     protected $description = 'Recalculates all wallets';
 
-    /**
-     * @throws
-     */
     public function handle(): void
     {
         Wallet::query()->each(static fn (Wallet $wallet) => $wallet->refreshBalance());

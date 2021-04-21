@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Traits;
 
 use function array_unique;
@@ -19,8 +21,6 @@ trait CartPay
     use HasWallet;
 
     /**
-     * @throws
-     *
      * @return Transfer[]
      */
     public function payFreeCart(Cart $cart): array
@@ -64,8 +64,6 @@ trait CartPay
     }
 
     /**
-     * @throws
-     *
      * @return Transfer[]
      */
     public function payCart(Cart $cart, bool $force = false): array
@@ -105,8 +103,6 @@ trait CartPay
     }
 
     /**
-     * @throws
-     *
      * @return Transfer[]
      */
     public function forcePayCart(Cart $cart): array
@@ -123,9 +119,6 @@ trait CartPay
         }
     }
 
-    /**
-     * @throws
-     */
     public function refundCart(Cart $cart, bool $force = false, bool $gifts = false): bool
     {
         $self = $this;
@@ -167,9 +160,6 @@ trait CartPay
         });
     }
 
-    /**
-     * @throws
-     */
     public function forceRefundCart(Cart $cart, bool $gifts = false): bool
     {
         return $this->refundCart($cart, true, $gifts);
@@ -184,17 +174,11 @@ trait CartPay
         }
     }
 
-    /**
-     * @throws
-     */
     public function refundGiftCart(Cart $cart, bool $force = false): bool
     {
         return $this->refundCart($cart, $force, true);
     }
 
-    /**
-     * @throws
-     */
     public function forceRefundGiftCart(Cart $cart): bool
     {
         return $this->refundGiftCart($cart, true);

@@ -13,6 +13,8 @@ interface Taxable
      *
      * Minimum 0; Maximum 100
      * Example: return 7.5; // 7.5%
+     *
+     * @retrun int|float|string
      */
-    public function getFeePercent(): string;
+    public function getFeePercent();
 }

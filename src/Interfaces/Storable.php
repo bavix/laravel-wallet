@@ -6,11 +6,14 @@ namespace Bavix\Wallet\Interfaces;
 
 interface Storable
 {
-    public function getBalance(Wallet $object): string;
+    /** @retrun int|float|string */
+    public function getBalance(Wallet $object);
 
-    public function incBalance(Wallet $object, string $amount);
+    /** @param float|int|string $amount */
+    public function incBalance(Wallet $object, $amount);
 
-    public function setBalance(Wallet $object, string $amount): bool;
+    /** @param float|int|string $amount */
+    public function setBalance(Wallet $object, $amount): bool;
 
     public function fresh(): bool;
 }

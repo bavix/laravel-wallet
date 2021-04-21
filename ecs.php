@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PhpCsFixer\Fixer\ArrayNotation\ArraySyntaxFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitTestClassRequiresCoversFixer;
+use PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\EasyCodingStandard\ValueObject\Option;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
@@ -14,6 +15,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             'syntax' => 'short',
         ]]);
+
+    $services->set(DeclareStrictTypesFixer::class);
 
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::PATHS, [
@@ -31,5 +34,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::PHP_CS_FIXER,
         SetList::CONTROL_STRUCTURES,
         SetList::NAMESPACES,
+        SetList::STRICT,
     ]);
 };

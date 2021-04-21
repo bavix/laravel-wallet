@@ -34,9 +34,6 @@ class Transaction extends Model
     public const TYPE_DEPOSIT = 'deposit';
     public const TYPE_WITHDRAW = 'withdraw';
 
-    /**
-     * @var array
-     */
     protected $fillable = [
         'payable_type',
         'payable_id',
@@ -48,18 +45,12 @@ class Transaction extends Model
         'meta',
     ];
 
-    /**
-     * @var array
-     */
     protected $casts = [
         'wallet_id' => 'int',
         'confirmed' => 'bool',
         'meta' => 'json',
     ];
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCasts(): array
     {
         return array_merge(
@@ -87,7 +78,8 @@ class Transaction extends Model
         return $this->belongsTo(config('wallet.wallet.model', WalletModel::class));
     }
 
-    public function getAmountFloatAttribute(): string
+    /** @return float|int|string */
+    public function getAmountFloatAttribute()
     {
         $decimalPlaces = app(WalletService::class)
             ->decimalPlaces($this->wallet)

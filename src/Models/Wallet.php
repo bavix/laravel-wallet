@@ -42,9 +42,6 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     use CanPayFloat;
     use HasGift;
 
-    /**
-     * @var array
-     */
     protected $fillable = [
         'holder_type',
         'holder_id',
@@ -56,17 +53,11 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         'decimal_places',
     ];
 
-    /**
-     * @var array
-     */
     protected $casts = [
         'decimal_places' => 'int',
         'meta' => 'json',
     ];
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCasts(): array
     {
         return array_merge(
@@ -123,9 +114,10 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         }
     }
 
-    public function getAvailableBalance(): string
+    /** @return float|int|string */
+    public function getAvailableBalance()
     {
-        return (string) $this->transactions()
+        return $this->transactions()
             ->where('wallet_id', $this->getKey())
             ->where('confirmed', true)
             ->sum('amount')

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Test\Models;
 
 use Bavix\Wallet\Interfaces\MinimalTaxable;
@@ -11,13 +13,13 @@ class ItemMinTax extends Item implements MinimalTaxable
         return 'items';
     }
 
-    public function getFeePercent(): string
+    public function getFeePercent()
     {
-        return (string) 3;
+        return 3;
     }
 
-    public function getMinimalFee(): string
+    public function getMinimalFee()
     {
-        return (string) 90;
+        return 90;
     }
 }
