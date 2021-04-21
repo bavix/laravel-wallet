@@ -13,15 +13,16 @@ use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\Item;
 use Bavix\Wallet\Test\Models\ItemDiscountTax;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class DiscountTaxTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testPay(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer           $buyer
          * @var ItemDiscountTax $product
          */
         $buyer = BuyerFactory::new()->create();
@@ -74,13 +75,10 @@ class DiscountTaxTest extends TestCase
         self::assertEquals($product->getKey(), $transfer->to->getKey());
     }
 
-    /**
-     * @return void
-     */
     public function testRefund(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer           $buyer
          * @var ItemDiscountTax $product
          */
         $buyer = BuyerFactory::new()->create();
@@ -144,13 +142,10 @@ class DiscountTaxTest extends TestCase
         self::assertEquals($transfer->status, Transfer::STATUS_REFUND);
     }
 
-    /**
-     * @return void
-     */
     public function testForceRefund(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer           $buyer
          * @var ItemDiscountTax $product
          */
         $buyer = BuyerFactory::new()->create();
@@ -187,7 +182,8 @@ class DiscountTaxTest extends TestCase
 
         self::assertEquals($paidPrice - $fee, -$product->balance);
         self::assertEquals(
-            $product->balance, -($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer))
+            $product->balance,
+            -($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer))
         );
 
         self::assertEquals($paidPrice - $fee, $buyer->balance);
@@ -198,16 +194,13 @@ class DiscountTaxTest extends TestCase
         self::assertEquals($buyer->balance, 0);
     }
 
-    /**
-     * @return void
-     */
     public function testOutOfStock(): void
     {
         $this->expectException(ProductEnded::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.product_stock'));
 
         /**
-         * @var Buyer $buyer
+         * @var Buyer           $buyer
          * @var ItemDiscountTax $product
          */
         $buyer = BuyerFactory::new()->create();
@@ -221,13 +214,10 @@ class DiscountTaxTest extends TestCase
         $buyer->pay($product);
     }
 
-    /**
-     * @return void
-     */
     public function testForcePay(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer           $buyer
          * @var ItemDiscountTax $product
          */
         $buyer = BuyerFactory::new()->create();
@@ -248,13 +238,10 @@ class DiscountTaxTest extends TestCase
         self::assertEquals($buyer->balance, 0);
     }
 
-    /**
-     * @return void
-     */
     public function testPayFree(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer           $buyer
          * @var ItemDiscountTax $product
          */
         $buyer = BuyerFactory::new()->create();
@@ -279,7 +266,7 @@ class DiscountTaxTest extends TestCase
     public function testFreePay(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer           $buyer
          * @var ItemDiscountTax $product
          */
         $buyer = BuyerFactory::new()->create();
@@ -309,16 +296,13 @@ class DiscountTaxTest extends TestCase
         self::assertEquals($product->balance, 0);
     }
 
-    /**
-     * @return void
-     */
     public function testPayFreeOutOfStock(): void
     {
         $this->expectException(ProductEnded::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.product_stock'));
 
         /**
-         * @var Buyer $buyer
+         * @var Buyer           $buyer
          * @var ItemDiscountTax $product
          */
         $buyer = BuyerFactory::new()->create();

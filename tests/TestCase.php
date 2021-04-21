@@ -15,22 +15,27 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class TestCase extends OrchestraTestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @return void
-     */
     public function setUp(): void
     {
         parent::setUp();
         app(Storable::class)->fresh();
     }
 
+    public function expectExceptionMessageStrict(string $message): void
+    {
+        $this->expectExceptionMessageMatches("~^{$message}$~");
+    }
+
     /**
      * @param Application $app
-     * @return array
      */
     protected function getPackageProviders($app): array
     {
@@ -41,7 +46,7 @@ class TestCase extends OrchestraTestCase
 
     protected function updateConfig(Application $app): void
     {
-        /** @var $config Repository */
+        /** @var Repository $config */
         $config = $app['config'];
 
         // Bind eloquent models to IoC container
@@ -80,13 +85,5 @@ class TestCase extends OrchestraTestCase
         ]);
 
         $config->set('wallet.lock.enabled', false);
-    }
-
-    /**
-     * @param string $message
-     */
-    public function expectExceptionMessageStrict(string $message): void
-    {
-        $this->expectExceptionMessageMatches("~^{$message}$~");
     }
 }

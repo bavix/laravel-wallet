@@ -16,12 +16,16 @@ use Bavix\Wallet\Test\Models\ItemMeta;
 use function count;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class CartTest extends TestCase
 {
     public function testCartMeta(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer    $buyer
          * @var ItemMeta $product
          */
         $buyer = BuyerFactory::new()->create();
@@ -33,7 +37,8 @@ class CartTest extends TestCase
 
         $cart = app(Cart::class)
             ->addItems([$product])
-            ->setMeta(['type' => $expected]);
+            ->setMeta(['type' => $expected])
+        ;
 
         self::assertEquals(0, $buyer->balance);
         self::assertNotNull($buyer->deposit($cart->getTotal($buyer)));
@@ -56,7 +61,7 @@ class CartTest extends TestCase
     {
         /**
          * @var Buyer $buyer
-         * @var Item $product
+         * @var Item  $product
          */
         $buyer = BuyerFactory::new()->create();
         $product = ItemFactory::new()->create([
@@ -67,7 +72,8 @@ class CartTest extends TestCase
 
         $cart = app(Cart::class)
             ->addItems([$product])
-            ->setMeta(['type' => $expected]);
+            ->setMeta(['type' => $expected])
+        ;
 
         self::assertEquals(0, $buyer->balance);
         self::assertNotNull($buyer->deposit($cart->getTotal($buyer)));
@@ -85,13 +91,10 @@ class CartTest extends TestCase
         }
     }
 
-    /**
-     * @return void
-     */
     public function testPay(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer  $buyer
          * @var Item[] $products
          */
         $buyer = BuyerFactory::new()->create();
@@ -134,7 +137,7 @@ class CartTest extends TestCase
     public function testCartQuantity(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer  $buyer
          * @var Item[] $products
          */
         $buyer = BuyerFactory::new()->create();
@@ -144,7 +147,7 @@ class CartTest extends TestCase
 
         $cart = app(Cart::class);
         $amount = 0;
-        for ($i = 0; $i < count($products) - 1; $i++) {
+        for ($i = 0; $i < count($products) - 1; ++$i) {
             $rnd = random_int(1, 5);
             $cart->addItem($products[$i], $rnd);
             $buyer->deposit($products[$i]->getAmountProduct($buyer) * $rnd);
@@ -168,7 +171,7 @@ class CartTest extends TestCase
      */
     public function testModelNotFoundException(): void
     {
-        /**
+        /*
          * @var Buyer $buyer
          * @var Item[] $products
          */
@@ -180,7 +183,7 @@ class CartTest extends TestCase
 
         $cart = app(Cart::class);
         $total = 0;
-        for ($i = 0; $i < count($products) - 1; $i++) {
+        for ($i = 0; $i < count($products) - 1; ++$i) {
             $rnd = random_int(1, 5);
             $cart->addItem($products[$i], $rnd);
             $buyer->deposit($products[$i]->getAmountProduct($buyer) * $rnd);
@@ -193,7 +196,8 @@ class CartTest extends TestCase
         self::assertCount($total, $transfers);
 
         $refundCart = app(Cart::class)
-            ->addItems($products); // all goods
+            ->addItems($products) // all goods
+        ;
 
         $buyer->refundCart($refundCart);
     }
@@ -204,7 +208,7 @@ class CartTest extends TestCase
     public function testBoughtGoods(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer  $buyer
          * @var Item[] $products
          */
         $buyer = BuyerFactory::new()->create();
@@ -227,7 +231,8 @@ class CartTest extends TestCase
         foreach ($products as $product) {
             $count = $product
                 ->boughtGoods([$buyer->wallet->getKey()])
-                ->count();
+                ->count()
+            ;
 
             self::assertEquals($total[$product->getKey()], $count);
         }
@@ -235,18 +240,17 @@ class CartTest extends TestCase
 
     /**
      * @see https://github.com/bavix/laravel-wallet/issues/279
-     *
-     * @return void
      */
     public function testWithdrawal(): void
     {
         $transactionLevel = app(DbService::class)
             ->connection()
-            ->transactionLevel();
+            ->transactionLevel()
+        ;
 
         /**
          * @var Buyer $buyer
-         * @var Item $product
+         * @var Item  $product
          */
         $buyer = BuyerFactory::new()->create();
         $product = ItemFactory::new()->create(['quantity' => 1]);
@@ -295,7 +299,8 @@ class CartTest extends TestCase
         $balance = $buyer->wallet::query()
             ->whereKey($buyer->wallet->getKey())
             ->getQuery()
-            ->value('balance');
+            ->value('balance')
+        ;
 
         self::assertEquals(0, $balance);
     }

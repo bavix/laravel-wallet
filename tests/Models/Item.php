@@ -15,8 +15,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * Class Item.
  *
  * @property string $name
- * @property int $quantity
- * @property int $price
+ * @property int    $quantity
+ * @property int    $price
  */
 class Item extends Model implements Product
 {
@@ -35,14 +35,12 @@ class Item extends Model implements Product
             return $result;
         }
 
-        return $result && ! $customer->paid($this);
+        return $result && !$customer->paid($this);
     }
 
     public function getAmountProduct(Customer $customer): string
     {
-        /**
-         * @var Wallet $wallet
-         */
+        /** @var Wallet $wallet */
         $wallet = app(WalletService::class)->getWallet($customer);
 
         return $this->price + $wallet->holder_id;
@@ -64,6 +62,7 @@ class Item extends Model implements Product
             ->morphMany(config('wallet.transfer.model', Transfer::class), 'to')
             ->where('status', Transfer::STATUS_PAID)
             ->where('from_type', config('wallet.wallet.model', Wallet::class))
-            ->whereIn('from_id', $walletIds);
+            ->whereIn('from_id', $walletIds)
+        ;
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 
 /**
  * Trait RaceCondition.
+ *
  * @property Application $app
  */
 trait RaceCondition
@@ -14,11 +15,10 @@ trait RaceCondition
      * The method involves working with the race.
      *
      * @before
-     * @return bool
      */
     public function enableRaceCondition(): bool
     {
-        if (! $this->app) {
+        if (!$this->app) {
             $this->refreshApplication();
         }
 

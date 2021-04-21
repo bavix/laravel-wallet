@@ -16,11 +16,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class UserMulti extends Model implements Wallet, WalletFloat
 {
-    use HasWalletFloat, HasWallets;
+    use HasWalletFloat;
+    use HasWallets;
 
-    /**
-     * @return string
-     */
     public function getTable(): string
     {
         return 'users';

@@ -9,9 +9,6 @@ use Illuminate\Support\Arr;
 
 class Rate extends \Bavix\Wallet\Simple\Rate
 {
-    /**
-     * @var array
-     */
     protected array $rates = [
         'USD' => [
             'RUB' => 67.61,
@@ -32,26 +29,24 @@ class Rate extends \Bavix\Wallet\Simple\Rate
         }
     }
 
-    protected function rate(Wallet $wallet): string
-    {
-        $from = app(WalletService::class)->getWallet($this->withCurrency);
-        $to = app(WalletService::class)->getWallet($wallet);
-
-        /**
-         * @var \Bavix\Wallet\Models\Wallet $wallet
-         */
-        return (string) Arr::get(
-            Arr::get($this->rates, $from->currency, []),
-            $to->currency,
-            1
-        );
-    }
-
     public function convertTo(Wallet $wallet): string
     {
         return app(Mathable::class)->mul(
             parent::convertTo($wallet),
             $this->rate($wallet)
+        );
+    }
+
+    protected function rate(Wallet $wallet): string
+    {
+        $from = app(WalletService::class)->getWallet($this->withCurrency);
+        $to = app(WalletService::class)->getWallet($wallet);
+
+        // @var \Bavix\Wallet\Models\Wallet $wallet
+        return (string) Arr::get(
+            Arr::get($this->rates, $from->currency, []),
+            $to->currency,
+            1
         );
     }
 }
