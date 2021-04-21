@@ -6,5 +6,6 @@ namespace Bavix\Wallet\Interfaces;
 
 interface MinimalTaxable extends Taxable
 {
-    public function getMinimalFee(): string;
+    /** @return float|int|string */
+    public function getMinimalFee();
 }

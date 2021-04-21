@@ -1,11 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Traits;
 
 use function app;
 use Bavix\Wallet\Exceptions\AmountInvalid;
-use Bavix\Wallet\Exceptions\BalanceIsEmpty;
-use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Product;
@@ -43,11 +43,6 @@ trait HasGift
      * This functionality can be organized for gifts.
      *
      * @param bool $force
-     *
-     * @throws AmountInvalid
-     * @throws BalanceIsEmpty
-     * @throws InsufficientFunds
-     * @throws Throwable
      */
     public function gift(Wallet $to, Product $product, bool $force = null): Transfer
     {

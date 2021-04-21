@@ -8,7 +8,8 @@ interface Product extends Wallet
 {
     public function canBuy(Customer $customer, int $quantity = 1, bool $force = false): bool;
 
-    public function getAmountProduct(Customer $customer): string;
+    /** @return float|int|string */
+    public function getAmountProduct(Customer $customer);
 
     public function getMetaProduct(): ?array;
 

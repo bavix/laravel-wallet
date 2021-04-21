@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Traits;
 
 use function array_key_exists;
@@ -21,15 +23,10 @@ trait HasWallets
      * The variable is used for the cache, so as not to request wallets many times.
      * WalletProxy keeps the money wallets in the memory to avoid errors when you
      * purchase/transfer, etc.
-     *
-     * @var array
      */
-    private $_wallets = [];
+    private array $_wallets = [];
 
-    /**
-     * @var bool
-     */
-    private $_loadedWallets;
+    private bool $_loadedWallets = false;
 
     /**
      * Get wallet by slug.

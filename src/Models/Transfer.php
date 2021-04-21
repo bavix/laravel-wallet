@@ -34,9 +34,6 @@ class Transfer extends Model
     public const STATUS_REFUND = 'refund';
     public const STATUS_GIFT = 'gift';
 
-    /**
-     * @var array
-     */
     protected $fillable = [
         'status',
         'discount',
@@ -50,17 +47,11 @@ class Transfer extends Model
         'fee',
     ];
 
-    /**
-     * @var array
-     */
     protected $casts = [
         'deposit_id' => 'int',
         'withdraw_id' => 'int',
     ];
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCasts(): array
     {
         return array_merge(

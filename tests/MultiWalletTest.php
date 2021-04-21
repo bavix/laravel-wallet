@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
@@ -141,9 +143,9 @@ class MultiWalletTest extends TestCase
         // find
         $userFind = UserMulti::query()->find($userInit->id); // refresh
         self::assertTrue($userInit->is($userFind));
-        self::assertTrue($userFind->hasWallet($userInit->getKey()));
+        self::assertTrue($userFind->hasWallet((string) $userInit->getKey()));
 
-        $wallet = $userFind->getWallet($userInit->getKey());
+        $wallet = $userFind->getWallet((string) $userInit->getKey());
         $wallet->depositFloat(100.1);
 
         self::assertEquals(100.1, $wallet->balanceFloat);

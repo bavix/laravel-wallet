@@ -20,7 +20,7 @@ class BrickMath implements Mathable
         ;
     }
 
-    public function add(string $first, string $second, ?int $scale = null): string
+    public function add($first, $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($first)
             ->plus(BigDecimal::of($second))
@@ -28,7 +28,7 @@ class BrickMath implements Mathable
         ;
     }
 
-    public function sub(string $first, string $second, ?int $scale = null): string
+    public function sub($first, $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($first)
             ->minus(BigDecimal::of($second))
@@ -36,14 +36,14 @@ class BrickMath implements Mathable
         ;
     }
 
-    public function div(string $first, string $second, ?int $scale = null): string
+    public function div($first, $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($first)
             ->dividedBy(BigDecimal::of($second), $this->scale($scale), RoundingMode::DOWN)
         ;
     }
 
-    public function mul(string $first, string $second, ?int $scale = null): string
+    public function mul($first, $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($first)
             ->multipliedBy(BigDecimal::of($second))
@@ -51,7 +51,7 @@ class BrickMath implements Mathable
         ;
     }
 
-    public function pow(string $number, int $exponent, ?int $scale = null): string
+    public function pow($number, int $exponent, ?int $scale = null): string
     {
         return (string) BigDecimal::of($number)
             ->power($exponent)
@@ -59,38 +59,38 @@ class BrickMath implements Mathable
         ;
     }
 
-    public function ceil(string $number): string
+    public function ceil($number): string
     {
         return (string) BigDecimal::of($number)
             ->dividedBy(BigDecimal::one(), 0, RoundingMode::CEILING)
         ;
     }
 
-    public function floor(string $number): string
+    public function floor($number): string
     {
         return (string) BigDecimal::of($number)
             ->dividedBy(BigDecimal::one(), 0, RoundingMode::FLOOR)
         ;
     }
 
-    public function round(string $number, int $precision = 0): string
+    public function round($number, int $precision = 0): string
     {
         return (string) BigDecimal::of($number)
             ->dividedBy(BigDecimal::one(), $precision, RoundingMode::HALF_UP)
         ;
     }
 
-    public function abs(string $number): string
+    public function abs($number): string
     {
         return (string) BigDecimal::of($number)->abs();
     }
 
-    public function negative(string $number): string
+    public function negative($number): string
     {
         return (string) BigDecimal::of($number)->negated();
     }
 
-    public function compare(string $first, string $second): int
+    public function compare($first, $second): int
     {
         return BigDecimal::of($first)->compareTo(BigDecimal::of($second));
     }

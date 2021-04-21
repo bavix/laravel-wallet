@@ -13,9 +13,9 @@ class Rate implements Rateable
 
     protected Wallet $withCurrency;
 
-    public function withAmount(string $amount): Rateable
+    public function withAmount($amount): Rateable
     {
-        $this->amount = $amount;
+        $this->amount = (string) $amount;
 
         return $this;
     }

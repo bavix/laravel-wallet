@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Objects;
 
 use Bavix\Wallet\Interfaces\Mathable;
@@ -48,7 +50,7 @@ class Bring
 
     public function setDiscount(int $discount): self
     {
-        $this->discount = $this->math->round($discount);
+        $this->discount = (int) $this->math->round($discount);
 
         return $this;
     }
@@ -127,7 +129,7 @@ class Bring
     {
         $fee = $this->fee;
         if ($fee === null) {
-            $fee = app(Mathable::class)->round(
+            $fee = (int) app(Mathable::class)->round(
                 app(Mathable::class)->sub(
                     app(Mathable::class)->abs($this->getWithdraw()->amount),
                     app(Mathable::class)->abs($this->getDeposit()->amount)
@@ -145,7 +147,7 @@ class Bring
      */
     public function setFee($fee): self
     {
-        $this->fee = app(Mathable::class)->round($fee);
+        $this->fee = (int) app(Mathable::class)->round($fee);
 
         return $this;
     }

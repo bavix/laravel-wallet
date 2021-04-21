@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Traits;
 
 use function app;
@@ -24,7 +26,7 @@ use Throwable;
  * Trait HasWallet.
  *
  * @property Collection|WalletModel[] $wallets
- * @property int                      $balance
+ * @property float|int|string         $balance
  */
 trait HasWallet
 {
@@ -33,10 +35,12 @@ trait HasWallet
     /**
      * The input means in the system.
      *
+     * @param float|int|string $amount
+     *
      * @throws AmountInvalid
      * @throws Throwable
      */
-    public function deposit(string $amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function deposit($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         /** @var Wallet $self */
         $self = $this;
@@ -70,8 +74,10 @@ trait HasWallet
      *  var_dump($user2->balance); // 300
      *
      * @throws Throwable
+     *
+     * @return float|int|string
      */
-    public function getBalanceAttribute(): string
+    public function getBalanceAttribute()
     {
         // @var Wallet $this
         return app(Storable::class)->getBalance($this);
@@ -89,8 +95,10 @@ trait HasWallet
 
     /**
      * This method ignores errors that occur when transferring funds.
+     *
+     * @param float|int|string $amount
      */
-    public function safeTransfer(Wallet $wallet, string $amount, ?array $meta = null): ?Transfer
+    public function safeTransfer(Wallet $wallet, $amount, ?array $meta = null): ?Transfer
     {
         try {
             return $this->transfer($wallet, $amount, $meta);
@@ -102,12 +110,14 @@ trait HasWallet
     /**
      * A method that transfers funds from host to host.
      *
+     * @param float|int|string $amount
+     *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      * @throws Throwable
      */
-    public function transfer(Wallet $wallet, string $amount, ?array $meta = null): Transfer
+    public function transfer(Wallet $wallet, $amount, ?array $meta = null): Transfer
     {
         // @var Wallet $this
         app(CommonService::class)->verifyWithdraw($this, $amount);
@@ -118,12 +128,14 @@ trait HasWallet
     /**
      * Withdrawals from the system.
      *
+     * @param float|int|string $amount
+     *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      * @throws Throwable
      */
-    public function withdraw(string $amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function withdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         // @var Wallet $this
         app(CommonService::class)->verifyWithdraw($this, $amount);
@@ -133,8 +145,10 @@ trait HasWallet
 
     /**
      * Checks if you can withdraw funds.
+     *
+     * @param float|int|string $amount
      */
-    public function canWithdraw(string $amount, bool $allowZero = false): bool
+    public function canWithdraw($amount, bool $allowZero = false): bool
     {
         $math = app(Mathable::class);
 
@@ -149,10 +163,12 @@ trait HasWallet
     /**
      * Forced to withdraw funds from system.
      *
+     * @param float|int|string $amount
+     *
      * @throws AmountInvalid
      * @throws Throwable
      */
-    public function forceWithdraw(string $amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function forceWithdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         /** @var Wallet $self */
         $self = $this;
@@ -168,10 +184,12 @@ trait HasWallet
      * the forced transfer is needed when the user does not have the money and we drive it.
      * Sometimes you do. Depends on business logic.
      *
+     * @param float|int|string $amount
+     *
      * @throws AmountInvalid
      * @throws Throwable
      */
-    public function forceTransfer(Wallet $wallet, string $amount, ?array $meta = null): Transfer
+    public function forceTransfer(Wallet $wallet, $amount, ?array $meta = null): Transfer
     {
         /** @var Wallet $self */
         $self = $this;
