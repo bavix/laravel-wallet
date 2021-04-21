@@ -17,17 +17,17 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 /**
  * Class Transaction.
  *
- * @property string $payable_type
- * @property int $payable_id
- * @property int $wallet_id
- * @property string $uuid
- * @property string $type
- * @property int|float|string $amount
- * @property float $amountFloat
- * @property bool $confirmed
- * @property array $meta
- * @property Wallet $payable
- * @property WalletModel $wallet
+ * @property string           $payable_type
+ * @property int              $payable_id
+ * @property int              $wallet_id
+ * @property string           $uuid
+ * @property string           $type
+ * @property float|int|string $amount
+ * @property float            $amountFloat
+ * @property bool             $confirmed
+ * @property array            $meta
+ * @property Wallet           $payable
+ * @property WalletModel      $wallet
  */
 class Transaction extends Model
 {
@@ -68,29 +68,20 @@ class Transaction extends Model
         );
     }
 
-    /**
-     * @return string
-     */
     public function getTable(): string
     {
-        if (! $this->table) {
+        if (!$this->table) {
             $this->table = config('wallet.transaction.table', 'transactions');
         }
 
         return parent::getTable();
     }
 
-    /**
-     * @return MorphTo
-     */
     public function payable(): MorphTo
     {
         return $this->morphTo();
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function wallet(): BelongsTo
     {
         return $this->belongsTo(config('wallet.wallet.model', WalletModel::class));
@@ -99,21 +90,25 @@ class Transaction extends Model
     public function getAmountFloatAttribute(): string
     {
         $decimalPlaces = app(WalletService::class)
-            ->decimalPlaces($this->wallet);
+            ->decimalPlaces($this->wallet)
+        ;
 
         return app(FloatService::class)
-            ->balanceIntToFloat((string) $this->amount, (int) $decimalPlaces);
+            ->balanceIntToFloat((string) $this->amount, (int) $decimalPlaces)
+        ;
     }
 
     /**
-     * @param int|float|string $amount
+     * @param float|int|string $amount
      */
     public function setAmountFloatAttribute($amount): void
     {
         $decimalPlaces = app(WalletService::class)
-            ->decimalPlaces($this->wallet);
+            ->decimalPlaces($this->wallet)
+        ;
 
         $this->amount = app(FloatService::class)
-            ->balanceFloatToInt((string) $amount, (int) $decimalPlaces);
+            ->balanceFloatToInt((string) $amount, (int) $decimalPlaces)
+        ;
     }
 }

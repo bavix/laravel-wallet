@@ -11,8 +11,6 @@ use Ramsey\Uuid\Uuid;
 /** @deprecated  */
 class Bring
 {
-    private Mathable $math;
-
     protected string $status;
 
     protected Wallet $from;
@@ -28,6 +26,7 @@ class Bring
     protected ?int $fee = null;
 
     protected int $discount = 0;
+    private Mathable $math;
 
     public function __construct(Mathable $math)
     {
@@ -60,8 +59,6 @@ class Bring
     }
 
     /**
-     * @param Wallet $from
-     *
      * @return static
      */
     public function setFrom(Wallet $from): self
@@ -71,17 +68,12 @@ class Bring
         return $this;
     }
 
-    /**
-     * @return Wallet
-     */
     public function getTo(): Wallet
     {
         return $this->to;
     }
 
     /**
-     * @param Wallet $to
-     *
      * @return static
      */
     public function setTo(Wallet $to): self
@@ -91,17 +83,12 @@ class Bring
         return $this;
     }
 
-    /**
-     * @return Transaction
-     */
     public function getDeposit(): Transaction
     {
         return $this->deposit;
     }
 
     /**
-     * @param Transaction $deposit
-     *
      * @return static
      */
     public function setDeposit(Transaction $deposit): self
@@ -111,17 +98,12 @@ class Bring
         return $this;
     }
 
-    /**
-     * @return Transaction
-     */
     public function getWithdraw(): Transaction
     {
         return $this->withdraw;
     }
 
     /**
-     * @param Transaction $withdraw
-     *
      * @return static
      */
     public function setWithdraw(Transaction $withdraw): self
@@ -131,25 +113,16 @@ class Bring
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getUuid(): string
     {
         return $this->uuid;
     }
 
-    /**
-     * @return int
-     */
     public function getDiscount(): int
     {
         return $this->discount;
     }
 
-    /**
-     * @return int
-     */
     public function getFee(): int
     {
         $fee = $this->fee;
@@ -178,19 +151,16 @@ class Bring
     }
 
     /**
-     * @return Transfer
-     *
      * @throws
      */
     public function create(): Transfer
     {
         return app(Transfer::class)
-            ->create($this->toArray());
+            ->create($this->toArray())
+        ;
     }
 
     /**
-     * @return array
-     *
      * @throws
      */
     public function toArray(): array

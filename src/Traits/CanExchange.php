@@ -20,10 +20,12 @@ trait CanExchange
     public function exchange(Wallet $to, $amount, ?array $meta = null): Transfer
     {
         $wallet = app(WalletService::class)
-            ->getWallet($this);
+            ->getWallet($this)
+        ;
 
         app(CommonService::class)
-            ->verifyWithdraw($wallet, $amount);
+            ->verifyWithdraw($wallet, $amount)
+        ;
 
         return $this->forceExchange($to, $amount, $meta);
     }
@@ -45,9 +47,7 @@ trait CanExchange
      */
     public function forceExchange(Wallet $to, $amount, ?array $meta = null): Transfer
     {
-        /**
-         * @var Wallet $from
-         */
+        /** @var Wallet $from */
         $from = app(WalletService::class)->getWallet($this);
 
         return app(LockService::class)->lock($this, __FUNCTION__, static function () use ($from, $to, $amount, $meta) {
@@ -57,10 +57,12 @@ trait CanExchange
                 $fee = app(WalletService::class)->fee($to, $amount);
 
                 $withdraw = app(CommonService::class)
-                    ->forceWithdraw($from, $math->add($amount, $fee), $meta);
+                    ->forceWithdraw($from, $math->add($amount, $fee), $meta)
+                ;
 
                 $deposit = app(CommonService::class)
-                    ->deposit($to, $math->floor($math->mul($amount, $rate, 1)), $meta);
+                    ->deposit($to, $math->floor($math->mul($amount, $rate, 1)), $meta)
+                ;
 
                 $transfers = app(CommonService::class)->multiBrings([
                     app(Bring::class)

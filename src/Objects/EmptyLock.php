@@ -16,7 +16,8 @@ class EmptyLock implements Lock
     /**
      * Attempt to acquire the lock.
      *
-     * @param callable|null $callback
+     * @param null|callable $callback
+     *
      * @return mixed
      */
     public function get($callback = null)
@@ -31,9 +32,8 @@ class EmptyLock implements Lock
     /**
      * Attempt to acquire the lock for the given number of seconds.
      *
-     * @param int $seconds
-     * @param callable|null $callback
-     * @return bool
+     * @param int           $seconds
+     * @param null|callable $callback
      */
     public function block($seconds, $callback = null): bool
     {
@@ -43,7 +43,6 @@ class EmptyLock implements Lock
     /**
      * Release the lock.
      *
-     * @return void
      * @codeCoverageIgnore
      */
     public function release(): void
@@ -53,12 +52,10 @@ class EmptyLock implements Lock
 
     /**
      * Returns the current owner of the lock.
-     *
-     * @return string
      */
     public function owner(): string
     {
-        if (! $this->ownerId) {
+        if (!$this->ownerId) {
             $this->ownerId = Str::random();
         }
 
@@ -68,7 +65,6 @@ class EmptyLock implements Lock
     /**
      * Releases this lock in disregard of ownership.
      *
-     * @return void
      * @codeCoverageIgnore
      */
     public function forceRelease(): void

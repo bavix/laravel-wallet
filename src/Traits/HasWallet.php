@@ -23,9 +23,8 @@ use Throwable;
 /**
  * Trait HasWallet.
  *
- *
- * @property-read Collection|WalletModel[] $wallets
- * @property-read int $balance
+ * @property Collection|WalletModel[] $wallets
+ * @property int                      $balance
  */
 trait HasWallet
 {
@@ -44,7 +43,8 @@ trait HasWallet
 
         return app(DbService::class)->transaction(static function () use ($self, $amount, $meta, $confirmed) {
             return app(CommonService::class)
-                ->deposit($self, $amount, $meta, $confirmed);
+                ->deposit($self, $amount, $meta, $confirmed)
+            ;
         });
     }
 
@@ -73,7 +73,7 @@ trait HasWallet
      */
     public function getBalanceAttribute(): string
     {
-        /** @var Wallet $this */
+        // @var Wallet $this
         return app(Storable::class)->getBalance($this);
     }
 
@@ -83,7 +83,8 @@ trait HasWallet
     public function transactions(): MorphMany
     {
         return ($this instanceof WalletModel ? $this->holder : $this)
-            ->morphMany(config('wallet.transaction.model', Transaction::class), 'payable');
+            ->morphMany(config('wallet.transaction.model', Transaction::class), 'payable')
+        ;
     }
 
     /**
@@ -108,7 +109,7 @@ trait HasWallet
      */
     public function transfer(Wallet $wallet, string $amount, ?array $meta = null): Transfer
     {
-        /** @var $this Wallet */
+        // @var Wallet $this
         app(CommonService::class)->verifyWithdraw($this, $amount);
 
         return $this->forceTransfer($wallet, $amount, $meta);
@@ -124,7 +125,7 @@ trait HasWallet
      */
     public function withdraw(string $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        /** @var Wallet $this */
+        // @var Wallet $this
         app(CommonService::class)->verifyWithdraw($this, $amount);
 
         return $this->forceWithdraw($amount, $meta, $confirmed);
@@ -137,10 +138,8 @@ trait HasWallet
     {
         $math = app(Mathable::class);
 
-        /**
-         * Allow to buy for free with a negative balance.
-         */
-        if ($allowZero && ! $math->compare($amount, 0)) {
+        // Allow to buy for free with a negative balance.
+        if ($allowZero && !$math->compare($amount, 0)) {
             return true;
         }
 
@@ -160,7 +159,8 @@ trait HasWallet
 
         return app(DbService::class)->transaction(static function () use ($self, $amount, $meta, $confirmed) {
             return app(CommonService::class)
-                ->forceWithdraw($self, $amount, $meta, $confirmed);
+                ->forceWithdraw($self, $amount, $meta, $confirmed)
+            ;
         });
     }
 
@@ -178,7 +178,8 @@ trait HasWallet
 
         return app(DbService::class)->transaction(static function () use ($self, $amount, $wallet, $meta) {
             return app(CommonService::class)
-                ->forceTransfer($self, $wallet, $amount, $meta);
+                ->forceTransfer($self, $wallet, $amount, $meta)
+            ;
         });
     }
 
@@ -188,9 +189,10 @@ trait HasWallet
      */
     public function transfers(): MorphMany
     {
-        /** @var Wallet $this */
+        // @var Wallet $this
         return app(WalletService::class)
             ->getWallet($this, false)
-            ->morphMany(config('wallet.transfer.model', Transfer::class), 'from');
+            ->morphMany(config('wallet.transfer.model', Transfer::class), 'from')
+        ;
     }
 }

@@ -23,16 +23,17 @@ use Illuminate\Support\Str;
 
 /**
  * Class Wallet.
- * @property string $holder_type
- * @property int $holder_id
- * @property string $name
- * @property string $slug
- * @property string $description
- * @property array $meta
- * @property int $balance
- * @property int $decimal_places
+ *
+ * @property string                          $holder_type
+ * @property int                             $holder_id
+ * @property string                          $name
+ * @property string                          $slug
+ * @property string                          $description
+ * @property array                           $meta
+ * @property int                             $balance
+ * @property int                             $decimal_places
  * @property \Bavix\Wallet\Interfaces\Wallet $holder
- * @property-read string $currency
+ * @property string                          $currency
  */
 class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchangeable
 {
@@ -74,32 +75,24 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         );
     }
 
-    /**
-     * @return string
-     */
     public function getTable(): string
     {
-        if (! $this->table) {
+        if (!$this->table) {
             $this->table = config('wallet.wallet.table', 'wallets');
         }
 
         return parent::getTable();
     }
 
-    /**
-     * @param string $name
-     *
-     * @return void
-     */
     public function setNameAttribute(string $name): void
     {
         $this->attributes['name'] = $name;
 
-        /**
+        /*
          * Must be updated only if the model does not exist
          *  or the slug is empty.
          */
-        if (! $this->exists && ! array_key_exists('slug', $this->attributes)) {
+        if (!$this->exists && !array_key_exists('slug', $this->attributes)) {
             $this->attributes['slug'] = Str::slug($name);
         }
     }
@@ -107,20 +100,17 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     /**
      * Under ideal conditions, you will never need a method.
      * Needed to deal with out-of-sync.
-     *
-     * @return bool
      */
     public function refreshBalance(): bool
     {
         return app(WalletService::class)
-            ->refresh($this);
+            ->refresh($this)
+        ;
     }
 
     /**
      * The method adjusts the balance by adding an additional transaction.
      * Used wisely, it can lead to serious problems.
-     *
-     * @return bool
      */
     public function adjustmentBalance(): bool
     {
@@ -138,7 +128,8 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         return (string) $this->transactions()
             ->where('wallet_id', $this->getKey())
             ->where('confirmed', true)
-            ->sum('amount');
+            ->sum('amount')
+        ;
     }
 
     public function holder(): MorphTo

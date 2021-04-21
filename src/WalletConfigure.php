@@ -6,14 +6,13 @@ namespace Bavix\Wallet;
 
 /**
  * Class WalletConfigure.
+ *
  * @codeCoverageIgnore
  */
 class WalletConfigure
 {
     /**
      * Indicates if Wallet migrations will be run.
-     *
-     * @var bool
      */
     public static bool $runsMigrations = true;
 

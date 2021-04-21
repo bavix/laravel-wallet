@@ -47,7 +47,7 @@ class Cart implements Countable
     public function addItem(Product $product, int $quantity = 1): self
     {
         $this->addQuantity($product, $quantity); // fixme: needle?
-        for ($i = 0; $i < $quantity; $i++) {
+        for ($i = 0; $i < $quantity; ++$i) {
             $this->items[] = $product;
         }
 
@@ -99,7 +99,8 @@ class Cart implements Countable
                 ->whereIn('status', $status)
                 ->orderBy('id', 'desc')
                 ->limit($this->getQuantity($product))
-                ->get();
+                ->get()
+            ;
 
             foreach ($collect as $datum) {
                 $result[] = $datum;
@@ -112,7 +113,7 @@ class Cart implements Countable
     public function canBuy(Customer $customer, bool $force = false): bool
     {
         foreach ($this->items as $item) {
-            if (! $item->canBuy($customer, $this->getQuantity($item), $force)) {
+            if (!$item->canBuy($customer, $this->getQuantity($item), $force)) {
                 return false;
             }
         }
