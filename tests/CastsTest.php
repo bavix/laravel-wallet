@@ -9,7 +9,6 @@ use Bavix\Wallet\Test\Models\User;
 
 /**
  * @internal
- * @coversNothing
  */
 class CastsTest extends TestCase
 {

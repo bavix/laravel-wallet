@@ -6,7 +6,6 @@ use Bavix\Wallet\Objects\EmptyLock;
 
 /**
  * @internal
- * @coversNothing
  */
 class EmptyLockTest extends TestCase
 {

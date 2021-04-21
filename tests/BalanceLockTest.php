@@ -4,7 +4,6 @@ namespace Bavix\Wallet\Test;
 
 /**
  * @internal
- * @coversNothing
  */
 class BalanceLockTest extends BalanceTest
 {

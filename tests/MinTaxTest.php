@@ -10,7 +10,6 @@ use Bavix\Wallet\Test\Models\ItemMinTax;
 
 /**
  * @internal
- * @coversNothing
  */
 class MinTaxTest extends TestCase
 {
