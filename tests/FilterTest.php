@@ -7,7 +7,6 @@ use Bavix\Wallet\Test\Models\Buyer;
 
 /**
  * @internal
- * @coversNothing
  */
 class FilterTest extends TestCase
 {

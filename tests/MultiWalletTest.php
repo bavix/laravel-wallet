@@ -21,7 +21,6 @@ use function range;
 
 /**
  * @internal
- * @coversNothing
  */
 class MultiWalletTest extends TestCase
 {

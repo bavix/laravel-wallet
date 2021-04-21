@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 /**
  * @internal
- * @coversNothing
  */
 class WalletTest extends TestCase
 {

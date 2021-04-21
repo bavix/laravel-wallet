@@ -9,7 +9,6 @@ use Brick\Math\Exception\NumberFormatException;
 
 /**
  * @internal
- * @coversNothing
  */
 class MathTest extends TestCase
 {

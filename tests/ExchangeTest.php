@@ -8,7 +8,6 @@ use Bavix\Wallet\Test\Models\UserMulti;
 
 /**
  * @internal
- * @coversNothing
  */
 class ExchangeTest extends TestCase
 {

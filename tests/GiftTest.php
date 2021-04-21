@@ -10,7 +10,6 @@ use Bavix\Wallet\Test\Models\Item;
 
 /**
  * @internal
- * @coversNothing
  */
 class GiftTest extends TestCase
 {

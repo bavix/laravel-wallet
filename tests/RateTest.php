@@ -10,7 +10,6 @@ use Illuminate\Support\Str;
 
 /**
  * @internal
- * @coversNothing
  */
 class RateTest extends TestCase
 {

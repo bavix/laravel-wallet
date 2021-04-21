@@ -14,7 +14,6 @@ use Bavix\Wallet\Test\Models\ItemDiscount;
 
 /**
  * @internal
- * @coversNothing
  */
 class DiscountTest extends TestCase
 {

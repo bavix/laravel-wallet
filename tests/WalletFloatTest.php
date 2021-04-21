@@ -11,7 +11,6 @@ use Bavix\Wallet\Test\Models\UserFloat as User;
 
 /**
  * @internal
- * @coversNothing
  */
 class WalletFloatTest extends TestCase
 {

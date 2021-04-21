@@ -65,6 +65,9 @@
     "infect": "@php vendor/bin/infection --coverage=build --min-msi=60 -j$(nproc)",
     "metrics": "@php vendor/bin/phpmetrics --config=phpmetrics.json",
     "stan": "@php vendor/bin/phpstan analyse -vvv --debug --memory-limit 2G -l 7 src/",
+    "ecs": "@php vendor/bin/ecs check",
+    "ecs-fix": "@php vendor/bin/ecs check --fix",
+    "ecs-cc": "@php vendor/bin/ecs --clear-cache",
     "psalm": "@php vendor/bin/psalm src/",
     "psalm-dry": "@php vendor/bin/psalm --alter --issues=InvalidReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType --dry-run src/"
   },

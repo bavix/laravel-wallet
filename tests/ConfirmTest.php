@@ -11,7 +11,6 @@ use Bavix\Wallet\Test\Models\UserConfirm;
 
 /**
  * @internal
- * @coversNothing
  */
 class ConfirmTest extends TestCase
 {
