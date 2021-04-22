@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Interfaces;
 
+/** @deprecated */
 interface Storable
 {
     /** @retrun int|float|string */
