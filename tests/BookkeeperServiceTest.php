@@ -29,7 +29,7 @@ class BookkeeperServiceTest extends TestCase
     /**
      * @throws InvalidArgumentException
      */
-    public function testSync(): void
+    public function testChange(): void
     {
         /** @var BookkeeperService $bookkeeperService */
         $bookkeeperService = $this->app->get(BookkeeperService::class);
@@ -39,7 +39,7 @@ class BookkeeperServiceTest extends TestCase
 
         $purseId = $uuidFactoryService->uuid4();
 
-        self::assertTrue($bookkeeperService->sync($purseId, 100));
+        self::assertTrue($bookkeeperService->change($purseId, 100));
 
         self::assertSame('100', $bookkeeperService->balance($purseId));
     }
@@ -53,6 +53,8 @@ class BookkeeperServiceTest extends TestCase
         $uuidFactoryService = $this->app->get(UuidFactoryService::class);
 
         $purseId = $uuidFactoryService->uuid4();
+
+        $bookkeeperService->change($purseId, 0); // init
 
         self::assertSame('100', $bookkeeperService->increase($purseId, 100));
         self::assertSame('100', $bookkeeperService->balance($purseId));

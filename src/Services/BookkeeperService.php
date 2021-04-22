@@ -23,6 +23,11 @@ class BookkeeperService implements BookkeeperInterface
         $this->mathService = $mathService;
     }
 
+    public function missing(string $purseId): bool
+    {
+        return $this->cacheRepository->missing($purseId);
+    }
+
     /** {@inheritdoc} */
     public function balance(string $purseId): string
     {
@@ -36,7 +41,7 @@ class BookkeeperService implements BookkeeperInterface
      *
      * @throws InvalidArgumentException
      */
-    public function sync(string $purseId, $amount): bool
+    public function change(string $purseId, $amount): bool
     {
         return $this->cacheRepository->set($purseId, $amount);
     }
