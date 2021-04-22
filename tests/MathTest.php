@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Interfaces\Mathable;
-use Bavix\Wallet\Simple\BrickMath;
+use Bavix\Wallet\Services\MathService;
 use Brick\Math\BigInteger;
 use Brick\Math\Exception\NumberFormatException;
 
@@ -22,14 +22,14 @@ class MathTest extends TestCase
         $this->expectException(NumberFormatException::class);
 
         /** @var Mathable $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathService::class);
         $provider->abs($value);
     }
 
     public function testAbs(): void
     {
         /** @var Mathable $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathService::class);
 
         // int
         self::assertEquals(123, $provider->abs(123));
@@ -55,7 +55,7 @@ class MathTest extends TestCase
     public function testCompare(): void
     {
         /** @var Mathable $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathService::class);
 
         // int
         self::assertEquals(0, $provider->compare(1, 1));
@@ -76,7 +76,7 @@ class MathTest extends TestCase
     public function testAdd(): void
     {
         /** @var Mathable $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathService::class);
 
         // int
         self::assertEquals(0, $provider->compare($provider->add(1, 5), 6));
@@ -106,7 +106,7 @@ class MathTest extends TestCase
     public function testSub(): void
     {
         /** @var Mathable $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathService::class);
 
         // int
         self::assertEquals(-4, $provider->sub(1, 5));
@@ -136,7 +136,7 @@ class MathTest extends TestCase
     public function testDiv(): void
     {
         /** @var Mathable $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathService::class);
 
         // int
         self::assertEquals(0.2, $provider->div(1, 5));
@@ -166,7 +166,7 @@ class MathTest extends TestCase
     public function testMul(): void
     {
         /** @var Mathable $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathService::class);
 
         // int
         self::assertEquals(5, $provider->mul(1, 5));
@@ -196,7 +196,7 @@ class MathTest extends TestCase
     public function testPow(): void
     {
         /** @var Mathable $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathService::class);
 
         // int
         self::assertEquals(1, $provider->pow(1, 5));
@@ -226,7 +226,7 @@ class MathTest extends TestCase
     public function testCeil(): void
     {
         /** @var Mathable $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathService::class);
 
         // positive
         // int
@@ -295,7 +295,7 @@ class MathTest extends TestCase
     public function testFloor(): void
     {
         /** @var Mathable $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathService::class);
 
         // positive
         // int
@@ -364,7 +364,7 @@ class MathTest extends TestCase
     public function testRound(): void
     {
         /** @var Mathable $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathService::class);
 
         // positive
         // int

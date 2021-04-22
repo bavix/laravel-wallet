@@ -11,7 +11,7 @@ use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\WalletService;
-use Bavix\Wallet\Simple\BrickMath;
+use Bavix\Wallet\Services\MathService;
 use Bavix\Wallet\Simple\Rate;
 use Bavix\Wallet\Simple\Store;
 
@@ -31,7 +31,7 @@ return [
     'package' => [
         'rateable' => Rate::class,
         'storable' => Store::class,
-        'mathable' => BrickMath::class,
+        'mathable' => MathService::class,
     ],
 
     /**

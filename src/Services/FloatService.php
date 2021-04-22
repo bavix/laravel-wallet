@@ -8,23 +8,23 @@ use Bavix\Wallet\Interfaces\Mathable;
 
 class FloatService
 {
-    protected Mathable $math;
+    protected Mathable $mathService;
 
     public function __construct(
         Mathable $math
     ) {
-        $this->math = $math;
+        $this->mathService = $math;
     }
 
     public function balanceIntToFloat(string $balance, int $decimalPlaces): string
     {
-        return $this->math->div($balance, (string) $decimalPlaces);
+        return $this->mathService->div($balance, (string) $decimalPlaces);
     }
 
     public function balanceFloatToInt(string $balance, int $decimalPlaces): string
     {
-        return $this->math->round(
-            $this->math->mul($balance, (string) $decimalPlaces)
+        return $this->mathService->round(
+            $this->mathService->mul($balance, (string) $decimalPlaces)
         );
     }
 }

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Bavix\Wallet\Simple;
+namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Interfaces\Mathable;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
 use Illuminate\Config\Repository;
 
-class BrickMath implements Mathable
+class MathService implements Mathable
 {
     protected int $scale;
 
