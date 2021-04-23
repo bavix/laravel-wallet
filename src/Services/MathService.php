@@ -4,20 +4,19 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Contracts\MathInterface;
 use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Settings\MathSetting;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
-use Illuminate\Config\Repository;
 
-class MathService implements Mathable
+class MathService implements MathInterface, Mathable
 {
-    protected int $scale;
+    protected MathSetting $mathSetting;
 
-    public function __construct(Repository $configRepository)
+    public function __construct(MathSetting $mathSetting)
     {
-        $this->scale = (int) $configRepository
-            ->get('wallet.math.scale', 64)
-        ;
+        $this->mathSetting = $mathSetting;
     }
 
     public function add($first, $second, ?int $scale = null): string
@@ -97,6 +96,6 @@ class MathService implements Mathable
 
     protected function scale(?int $scale = null): int
     {
-        return $scale ?? $this->scale;
+        return $scale ?? $this->mathSetting->getScale();
     }
 }

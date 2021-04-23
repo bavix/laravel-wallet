@@ -139,7 +139,6 @@ class Operation
 
     public function create(): Transaction
     {
-        // @var Transaction $model
         return $this->getWallet()
             ->transactions()
             ->create($this->toArray())

@@ -25,6 +25,27 @@ return [
     ],
 
     /**
+     * Cache settings for highload projects.
+     */
+    'cache' => [
+        'driver' => 'array',
+        'tags' => ['bavix-wallet-cache'],
+    ],
+
+    /**
+     * Lock settings for highload projects.
+     *
+     * If you want to replace the default cache with another,
+     * then write the name of the driver cache in the key `wallet.lock.cache`.
+     * @see https://laravel.com/docs/8.x/cache#driver-prerequisites
+     */
+    'lock' => [
+        'driver' => 'array',
+        'tags' => ['bavix-wallet-lock'],
+        'seconds' => 1,
+    ],
+
+    /**
      * The parameter is used for fast packet overload.
      * You do not need to search for the desired class by code, the library will do it itself.
      */

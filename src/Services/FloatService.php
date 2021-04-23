@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
-use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Contracts\MathInterface;
 
 class FloatService
 {
-    protected Mathable $mathService;
+    protected MathInterface $mathService;
 
     public function __construct(
-        Mathable $math
+        MathInterface $math
     ) {
         $this->mathService = $math;
     }

@@ -129,7 +129,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         return $this->morphTo();
     }
 
-    public function getCurrencyAttribute(): ?string
+    public function getCurrencyAttribute(): string
     {
         return $this->meta['currency'] ?? Str::upper($this->slug);
     }

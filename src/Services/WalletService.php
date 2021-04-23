@@ -14,7 +14,6 @@ use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Interfaces\Taxable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
-use Bavix\Wallet\Traits\HasWallet;
 use Throwable;
 
 class WalletService
@@ -94,13 +93,7 @@ class WalletService
 
     public function getWallet(Wallet $object, bool $autoSave = true): WalletModel
     {
-        /** @var WalletModel $wallet */
-        $wallet = $object;
-
-        if (!($object instanceof WalletModel)) {
-            /** @var HasWallet $object */
-            $wallet = $object->wallet;
-        }
+        $wallet = app(CastService::class)->getWalletModel($object);
 
         if ($autoSave) {
             $wallet->exists or $wallet->save();

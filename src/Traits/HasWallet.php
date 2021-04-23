@@ -79,7 +79,6 @@ trait HasWallet
      */
     public function getBalanceAttribute()
     {
-        // @var Wallet $this
         return app(Storable::class)->getBalance($this);
     }
 
@@ -119,7 +118,6 @@ trait HasWallet
      */
     public function transfer(Wallet $wallet, $amount, ?array $meta = null): Transfer
     {
-        // @var Wallet $this
         app(CommonService::class)->verifyWithdraw($this, $amount);
 
         return $this->forceTransfer($wallet, $amount, $meta);
@@ -137,7 +135,6 @@ trait HasWallet
      */
     public function withdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        // @var Wallet $this
         app(CommonService::class)->verifyWithdraw($this, $amount);
 
         return $this->forceWithdraw($amount, $meta, $confirmed);
@@ -207,7 +204,6 @@ trait HasWallet
      */
     public function transfers(): MorphMany
     {
-        // @var Wallet $this
         return app(WalletService::class)
             ->getWallet($this, false)
             ->morphMany(config('wallet.transfer.model', Transfer::class), 'from')
