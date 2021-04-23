@@ -15,6 +15,7 @@ class BasketDto
 
     private ?array $meta;
 
+    /** @param Product[] $items */
     public function __construct(string $idempotencyKey, array $items, ?array $meta)
     {
         $this->idempotencyKey = $idempotencyKey;

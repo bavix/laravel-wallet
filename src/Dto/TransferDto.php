@@ -6,6 +6,8 @@ namespace Bavix\Wallet\Dto;
 
 class TransferDto
 {
+    private string $idempotencyKey;
+
     private TransactionDto $from;
 
     private TransactionDto $to;
@@ -13,13 +15,20 @@ class TransferDto
     private ?array $meta;
 
     public function __construct(
+        string $idempotencyKey,
         TransactionDto $from,
         TransactionDto $to,
         ?array $meta
     ) {
+        $this->idempotencyKey = $idempotencyKey;
         $this->from = $from;
         $this->to = $to;
         $this->meta = $meta;
+    }
+
+    public function getIdempotencyKey(): string
+    {
+        return $this->idempotencyKey;
     }
 
     public function getFrom(): TransactionDto

@@ -33,7 +33,7 @@ class ConfirmMockTest extends TestCase
             ->willReturn(false)
         ;
 
-        // @var Wallet $mockWallet
+        /** @var Wallet $mockWallet */
         self::assertInstanceOf(Wallet::class, $wallet);
         self::assertFalse($mockWallet->refreshBalance());
 
@@ -61,7 +61,7 @@ class ConfirmMockTest extends TestCase
             ->willReturn(false)
         ;
 
-        // @var Wallet $mockWallet
+        /** @var Wallet $mockWallet */
         self::assertInstanceOf(Wallet::class, $wallet);
         self::assertFalse($mockWallet->refreshBalance());
 

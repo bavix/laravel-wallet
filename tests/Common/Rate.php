@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Test\Common;
 
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Services\RateService;
 use Bavix\Wallet\Services\WalletService;
 use Illuminate\Support\Arr;
 
@@ -20,8 +21,12 @@ class Rate extends \Bavix\Wallet\Simple\Rate
     /**
      * Rate constructor.
      */
-    public function __construct()
-    {
+    public function __construct(
+        RateService $rateService,
+        WalletService $walletService
+    ) {
+        parent::__construct($rateService, $walletService);
+
         foreach ($this->rates as $from => $rates) {
             foreach ($rates as $to => $rate) {
                 if (empty($this->rates[$to][$from])) {
@@ -41,12 +46,10 @@ class Rate extends \Bavix\Wallet\Simple\Rate
 
     protected function rate(Wallet $wallet): string
     {
-        $from = app(WalletService::class)->getWallet($this->withCurrency);
         $to = app(WalletService::class)->getWallet($wallet);
 
-        // @var \Bavix\Wallet\Models\Wallet $wallet
         return (string) Arr::get(
-            Arr::get($this->rates, $from->currency, []),
+            Arr::get($this->rates, $this->currency, []),
             $to->currency,
             1
         );

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Assemblers;
 
-use Bavix\Wallet\Dto\BasketDto;
-use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Dto\TransactionDto;
+use Bavix\Wallet\Dto\TransferDto;
 use Bavix\Wallet\Services\UuidFactoryService;
 
-class BasketDtoAssembler
+class TransferDtoAssembler
 {
     private UuidFactoryService $uuidFactoryService;
 
@@ -17,12 +17,15 @@ class BasketDtoAssembler
         $this->uuidFactoryService = $uuidFactoryService;
     }
 
-    /** @param Product[] $items */
-    public function create(array $items, ?array $meta): BasketDto
-    {
-        return new BasketDto(
+    public function create(
+        TransactionDto $fromDto,
+        TransactionDto $toDto,
+        ?array $meta
+    ): TransferDto {
+        return new TransferDto(
             $this->uuidFactoryService->uuid4(),
-            $items,
+            $fromDto,
+            $toDto,
             $meta
         );
     }

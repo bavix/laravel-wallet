@@ -6,4 +6,5 @@ namespace Bavix\Wallet\Repositories;
 
 class WalletRepository
 {
+    // wallets.getId(int id)
 }

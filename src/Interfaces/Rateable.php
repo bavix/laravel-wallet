@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Interfaces;
 
+/**
+ * @deprecated
+ * @use RateInterface
+ */
 interface Rateable
 {
     /** @param float|int|string $amount */
