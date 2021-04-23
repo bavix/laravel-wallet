@@ -33,8 +33,8 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
-        $decimalPlacesValue = app(FloatService::class)->decimalPlacesExponent($this);
-        $decimalPlaces = app(FloatService::class)->decimalPlaces($this);
+        $decimalPlacesValue = app(FloatService::class)->exponent($this);
+        $decimalPlaces = app(FloatService::class)->signs($this);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
         return $this->forceWithdraw($result, $meta, $confirmed);
@@ -50,8 +50,8 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
-        $decimalPlacesValue = app(FloatService::class)->decimalPlacesExponent($this);
-        $decimalPlaces = app(FloatService::class)->decimalPlaces($this);
+        $decimalPlacesValue = app(FloatService::class)->exponent($this);
+        $decimalPlaces = app(FloatService::class)->signs($this);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
         return $this->deposit($result, $meta, $confirmed);
@@ -69,8 +69,8 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
-        $decimalPlacesValue = app(FloatService::class)->decimalPlacesExponent($this);
-        $decimalPlaces = app(FloatService::class)->decimalPlaces($this);
+        $decimalPlacesValue = app(FloatService::class)->exponent($this);
+        $decimalPlaces = app(FloatService::class)->signs($this);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
         return $this->withdraw($result, $meta, $confirmed);
@@ -83,8 +83,8 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
-        $decimalPlacesValue = app(FloatService::class)->decimalPlacesExponent($this);
-        $decimalPlaces = app(FloatService::class)->decimalPlaces($this);
+        $decimalPlacesValue = app(FloatService::class)->exponent($this);
+        $decimalPlaces = app(FloatService::class)->signs($this);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
         return $this->canWithdraw($result);
@@ -102,8 +102,8 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
-        $decimalPlacesValue = app(FloatService::class)->decimalPlacesExponent($this);
-        $decimalPlaces = app(FloatService::class)->decimalPlaces($this);
+        $decimalPlacesValue = app(FloatService::class)->exponent($this);
+        $decimalPlaces = app(FloatService::class)->signs($this);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
         return $this->transfer($wallet, $result, $meta);
@@ -116,8 +116,8 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
-        $decimalPlacesValue = app(FloatService::class)->decimalPlacesExponent($this);
-        $decimalPlaces = app(FloatService::class)->decimalPlaces($this);
+        $decimalPlacesValue = app(FloatService::class)->exponent($this);
+        $decimalPlaces = app(FloatService::class)->signs($this);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
         return $this->safeTransfer($wallet, $result, $meta);
@@ -133,8 +133,8 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
-        $decimalPlacesValue = app(FloatService::class)->decimalPlacesExponent($this);
-        $decimalPlaces = app(FloatService::class)->decimalPlaces($this);
+        $decimalPlacesValue = app(FloatService::class)->exponent($this);
+        $decimalPlaces = app(FloatService::class)->signs($this);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
         return $this->forceTransfer($wallet, $result, $meta);
@@ -145,8 +145,8 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
-        $decimalPlacesValue = app(FloatService::class)->decimalPlacesExponent($this);
-        $decimalPlaces = app(FloatService::class)->decimalPlaces($this);
+        $decimalPlacesValue = app(FloatService::class)->exponent($this);
+        $decimalPlaces = app(FloatService::class)->signs($this);
 
         return $math->div($this->balance, $decimalPlaces, $decimalPlacesValue);
     }
