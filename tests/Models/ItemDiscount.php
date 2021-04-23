@@ -15,7 +15,7 @@ class ItemDiscount extends Item implements Discount
         return 'items';
     }
 
-    public function getPersonalDiscount(Customer $customer)
+    public function getPersonalDiscount(Customer $customer): int
     {
         return app(WalletService::class)
             ->getWallet($customer)

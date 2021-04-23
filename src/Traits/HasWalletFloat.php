@@ -11,6 +11,7 @@ use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Services\FloatService;
 use Bavix\Wallet\Services\WalletService;
 use Throwable;
 
@@ -33,8 +34,8 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
-        $decimalPlacesValue = app(WalletService::class)->decimalPlacesValue($this);
-        $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
+        $decimalPlacesValue = app(FloatService::class)->decimalPlacesExponent($this);
+        $decimalPlaces = app(FloatService::class)->decimalPlaces($this);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
         return $this->forceWithdraw($result, $meta, $confirmed);
@@ -50,8 +51,8 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
-        $decimalPlacesValue = app(WalletService::class)->decimalPlacesValue($this);
-        $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
+        $decimalPlacesValue = app(FloatService::class)->decimalPlacesExponent($this);
+        $decimalPlaces = app(FloatService::class)->decimalPlaces($this);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
         return $this->deposit($result, $meta, $confirmed);
@@ -69,8 +70,8 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
-        $decimalPlacesValue = app(WalletService::class)->decimalPlacesValue($this);
-        $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
+        $decimalPlacesValue = app(FloatService::class)->decimalPlacesExponent($this);
+        $decimalPlaces = app(FloatService::class)->decimalPlaces($this);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
         return $this->withdraw($result, $meta, $confirmed);
@@ -83,8 +84,8 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
-        $decimalPlacesValue = app(WalletService::class)->decimalPlacesValue($this);
-        $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
+        $decimalPlacesValue = app(FloatService::class)->decimalPlacesExponent($this);
+        $decimalPlaces = app(FloatService::class)->decimalPlaces($this);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
         return $this->canWithdraw($result);
@@ -102,8 +103,8 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
-        $decimalPlacesValue = app(WalletService::class)->decimalPlacesValue($this);
-        $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
+        $decimalPlacesValue = app(FloatService::class)->decimalPlacesExponent($this);
+        $decimalPlaces = app(FloatService::class)->decimalPlaces($this);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
         return $this->transfer($wallet, $result, $meta);
@@ -116,8 +117,8 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
-        $decimalPlacesValue = app(WalletService::class)->decimalPlacesValue($this);
-        $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
+        $decimalPlacesValue = app(FloatService::class)->decimalPlacesExponent($this);
+        $decimalPlaces = app(FloatService::class)->decimalPlaces($this);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
         return $this->safeTransfer($wallet, $result, $meta);
@@ -133,8 +134,8 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
-        $decimalPlacesValue = app(WalletService::class)->decimalPlacesValue($this);
-        $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
+        $decimalPlacesValue = app(FloatService::class)->decimalPlacesExponent($this);
+        $decimalPlaces = app(FloatService::class)->decimalPlaces($this);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
         return $this->forceTransfer($wallet, $result, $meta);
@@ -145,8 +146,8 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(Mathable::class);
-        $decimalPlacesValue = app(WalletService::class)->decimalPlacesValue($this);
-        $decimalPlaces = app(WalletService::class)->decimalPlaces($this);
+        $decimalPlacesValue = app(FloatService::class)->decimalPlacesExponent($this);
+        $decimalPlaces = app(FloatService::class)->decimalPlaces($this);
 
         return $math->div($this->balance, $decimalPlaces, $decimalPlacesValue);
     }

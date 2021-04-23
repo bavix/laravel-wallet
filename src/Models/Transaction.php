@@ -81,13 +81,7 @@ class Transaction extends Model
     /** @return float|int|string */
     public function getAmountFloatAttribute()
     {
-        $decimalPlaces = app(WalletService::class)
-            ->decimalPlaces($this->wallet)
-        ;
-
-        return app(FloatService::class)
-            ->balanceIntToFloat((string) $this->amount, (int) $decimalPlaces)
-        ;
+        return app(FloatService::class)->balanceIntToFloat($this->wallet, $this->amount);
     }
 
     /**
@@ -95,12 +89,6 @@ class Transaction extends Model
      */
     public function setAmountFloatAttribute($amount): void
     {
-        $decimalPlaces = app(WalletService::class)
-            ->decimalPlaces($this->wallet)
-        ;
-
-        $this->amount = app(FloatService::class)
-            ->balanceFloatToInt((string) $amount, (int) $decimalPlaces)
-        ;
+        $this->amount = app(FloatService::class)->balanceFloatToInt($this->wallet, $amount);
     }
 }

@@ -4,27 +4,45 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Contracts\CastInterface;
 use Bavix\Wallet\Contracts\MathInterface;
+use Bavix\Wallet\Interfaces\Wallet;
 
 class FloatService
 {
-    protected MathInterface $mathService;
+    private CastInterface $castService;
+
+    private MathInterface $mathService;
 
     public function __construct(
-        MathInterface $math
+        CastInterface $castService,
+        MathInterface $mathService
     ) {
-        $this->mathService = $math;
+        $this->castService = $castService;
+        $this->mathService = $mathService;
     }
 
-    public function balanceIntToFloat(string $balance, int $decimalPlaces): string
+    public function decimalPlacesExponent(Wallet $object): int
     {
-        return $this->mathService->div($balance, (string) $decimalPlaces);
+        return $this->castService->getWalletModel($object)->decimal_places ?? 2;
     }
 
-    public function balanceFloatToInt(string $balance, int $decimalPlaces): string
+    public function decimalPlaces(Wallet $object): string
+    {
+        return $this->mathService->pow(10, $this->decimalPlacesExponent($object));
+    }
+
+    /** @param float|string|int $amount */
+    public function balanceIntToFloat(Wallet $object, $amount): string
+    {
+        return $this->mathService->div($amount, $this->decimalPlaces($object));
+    }
+
+    /** @param float|string|int $amount */
+    public function balanceFloatToInt(Wallet $object, $amount): string
     {
         return $this->mathService->round(
-            $this->mathService->mul($balance, (string) $decimalPlaces)
+            $this->mathService->mul($amount, $this->decimalPlaces($object))
         );
     }
 }
