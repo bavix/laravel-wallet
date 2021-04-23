@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Services;
 
 use function app;
+use Bavix\Wallet\Contracts\MathInterface;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Discount;
-use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\MinimalTaxable;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Interfaces\Taxable;
@@ -18,6 +18,13 @@ use Throwable;
 
 class WalletService
 {
+    private MathInterface $mathService;
+
+    public function __construct(MathInterface $mathService)
+    {
+        $this->mathService = $mathService;
+    }
+
     public function discount(Wallet $customer, Wallet $product): int
     {
         if ($customer instanceof Customer && $product instanceof Discount) {
@@ -35,9 +42,7 @@ class WalletService
 
     public function decimalPlaces(Wallet $object): string
     {
-        return app(Mathable::class)
-            ->pow(10, $this->decimalPlacesValue($object))
-        ;
+        return $this->mathService->pow(10, $this->decimalPlacesValue($object));
     }
 
     /**
@@ -45,17 +50,16 @@ class WalletService
      *
      * @param int|string $amount
      *
-     * @return float|int
+     * @return float|int|string
      */
     public function fee(Wallet $wallet, $amount)
     {
         $fee = 0;
-        $math = app(Mathable::class);
         if ($wallet instanceof Taxable) {
             $placesValue = $this->decimalPlacesValue($wallet);
-            $fee = $math->floor(
-                $math->div(
-                    $math->mul($amount, $wallet->getFeePercent(), 0),
+            $fee = $this->mathService->floor(
+                $this->mathService->div(
+                    $this->mathService->mul($amount, $wallet->getFeePercent(), 0),
                     100,
                     $placesValue
                 )
@@ -69,7 +73,7 @@ class WalletService
          */
         if ($wallet instanceof MinimalTaxable) {
             $minimal = $wallet->getMinimalFee();
-            if (app(Mathable::class)->compare($fee, $minimal) === -1) {
+            if ($this->mathService->compare($fee, $minimal) === -1) {
                 $fee = $minimal;
             }
         }
@@ -86,7 +90,7 @@ class WalletService
      */
     public function checkAmount($amount): void
     {
-        if (app(Mathable::class)->compare($amount, 0) === -1) {
+        if ($this->mathService->compare($amount, 0) === -1) {
             throw new AmountInvalid(trans('wallet::errors.price_positive'));
         }
     }
@@ -104,15 +108,14 @@ class WalletService
 
     public function refresh(WalletModel $wallet): bool
     {
-        return app(LockService::class)->lock($this, __FUNCTION__, static function () use ($wallet) {
-            $math = app(Mathable::class);
+        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($wallet) {
             app(Storable::class)->getBalance($wallet);
             $whatIs = $wallet->balance;
             $balance = $wallet->getAvailableBalance();
             $wallet->balance = $balance;
 
             return app(Storable::class)->setBalance($wallet, $balance) &&
-                (!$math->compare($whatIs, $balance) || $wallet->save());
+                (!$this->mathService->compare($whatIs, $balance) || $wallet->save());
         });
     }
 
@@ -122,19 +125,18 @@ class WalletService
     public function adjustment(WalletModel $wallet, ?array $meta = null): void
     {
         app(DbService::class)->transaction(function () use ($wallet, $meta) {
-            $math = app(Mathable::class);
             app(Storable::class)->getBalance($wallet);
             $adjustmentBalance = $wallet->balance;
             $wallet->refreshBalance();
-            $difference = $math->sub($wallet->balance, $adjustmentBalance);
+            $difference = $this->mathService->sub($wallet->balance, $adjustmentBalance);
 
-            switch ($math->compare($difference, 0)) {
+            switch ($this->mathService->compare($difference, 0)) {
                 case -1:
-                    $wallet->deposit($math->abs($difference), $meta);
+                    $wallet->deposit($this->mathService->abs($difference), $meta);
 
                     break;
                 case 1:
-                    $wallet->forceWithdraw($math->abs($difference), $meta);
+                    $wallet->forceWithdraw($this->mathService->abs($difference), $meta);
 
                     break;
             }
