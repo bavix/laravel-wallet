@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Objects;
 
+use Bavix\Wallet\Contracts\MathInterface;
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
-use Ramsey\Uuid\Uuid;
+use Bavix\Wallet\Models\Wallet as WalletModel;
+use Bavix\Wallet\Services\UuidFactoryService;
 
 /** @deprecated  */
 class Bring
@@ -28,12 +30,15 @@ class Bring
     protected ?int $fee = null;
 
     protected int $discount = 0;
-    private Mathable $math;
 
-    public function __construct(Mathable $math)
-    {
-        $this->math = $math;
-        $this->uuid = Uuid::uuid4()->toString();
+    private MathInterface $mathService;
+
+    public function __construct(
+        MathInterface $mathService,
+        UuidFactoryService $uuidFactoryService
+    ) {
+        $this->mathService = $mathService;
+        $this->uuid = $uuidFactoryService->uuid4();
     }
 
     public function getStatus(): string
@@ -50,7 +55,7 @@ class Bring
 
     public function setDiscount(int $discount): self
     {
-        $this->discount = (int) $this->math->round($discount);
+        $this->discount = (int) $this->mathService->round($discount);
 
         return $this;
     }
@@ -161,14 +166,19 @@ class Bring
 
     public function toArray(): array
     {
+        /** @var WalletModel $from */
+        $from = $this->getFrom();
+        /** @var WalletModel $to */
+        $to = $this->getTo();
+
         return [
             'status' => $this->getStatus(),
             'deposit_id' => $this->getDeposit()->getKey(),
             'withdraw_id' => $this->getWithdraw()->getKey(),
-            'from_type' => $this->getFrom()->getMorphClass(),
-            'from_id' => $this->getFrom()->getKey(),
-            'to_type' => $this->getTo()->getMorphClass(),
-            'to_id' => $this->getTo()->getKey(),
+            'from_type' => $from->getMorphClass(),
+            'from_id' => $from->getKey(),
+            'to_type' => $to->getMorphClass(),
+            'to_id' => $to->getKey(),
             'discount' => $this->getDiscount(),
             'fee' => $this->getFee(),
             'uuid' => $this->getUuid(),

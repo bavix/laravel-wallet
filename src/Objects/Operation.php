@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Objects;
 
-use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Contracts\MathInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
-use Ramsey\Uuid\Uuid;
+use Bavix\Wallet\Services\UuidFactoryService;
 
 /** @deprecated  */
 class Operation
@@ -41,15 +41,14 @@ class Operation
      * @var Wallet
      */
     protected $wallet;
+    private MathInterface $mathService;
 
-    /**
-     * Transaction constructor.
-     *
-     * @throws
-     */
-    public function __construct()
-    {
-        $this->uuid = Uuid::uuid4()->toString();
+    public function __construct(
+        MathInterface $mathService,
+        UuidFactoryService $uuidFactoryService
+    ) {
+        $this->mathService = $mathService;
+        $this->uuid = $uuidFactoryService->uuid4();
     }
 
     public function getType(): string
@@ -97,7 +96,7 @@ class Operation
      */
     public function setAmount($amount): self
     {
-        $this->amount = app(Mathable::class)->round($amount);
+        $this->amount = $this->mathService->round($amount);
 
         return $this;
     }
@@ -145,9 +144,6 @@ class Operation
         ;
     }
 
-    /**
-     * @throws
-     */
     public function toArray(): array
     {
         return [

@@ -10,11 +10,15 @@ use Illuminate\Database\Eloquent\Model;
 
 interface CastInterface
 {
-    public function getHolderModel(Wallet $wallet): Model;
+    /** @param Model|Wallet $model */
+    public function getHolderModel($model): Model;
 
-    public function findHolderModel(Wallet $wallet): ?Model;
+    /** @param Model|Wallet $model */
+    public function findHolderModel($model): ?Model;
 
-    public function getWalletModel(Wallet $wallet): WalletModel;
+    /** @param Model|Wallet $model */
+    public function getWalletModel($model): WalletModel;
 
-    public function findWalletModel(Wallet $wallet): ?WalletModel;
+    /** @param Model|Wallet $model */
+    public function findWalletModel($model): ?WalletModel;
 }

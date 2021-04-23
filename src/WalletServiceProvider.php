@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet;
 
 use Bavix\Wallet\Commands\RefreshBalance;
+use Bavix\Wallet\Contracts\CastInterface;
 use Bavix\Wallet\Contracts\MathInterface;
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Rateable;
@@ -16,6 +17,7 @@ use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Objects\EmptyLock;
 use Bavix\Wallet\Objects\Operation;
+use Bavix\Wallet\Services\CastService;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\ExchangeService;
@@ -75,6 +77,8 @@ class WalletServiceProvider extends ServiceProvider
             dirname(__DIR__).'/config/config.php',
             'wallet'
         );
+
+        $this->app->singleton(CastInterface::class, CastService::class);
 
         // drop it
         $this->app->singleton(LockService::class, config('wallet.services.lock', LockService::class));

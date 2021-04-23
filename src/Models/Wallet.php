@@ -24,16 +24,16 @@ use Illuminate\Support\Str;
 /**
  * Class Wallet.
  *
- * @property string                          $holder_type
- * @property int                             $holder_id
- * @property string                          $name
- * @property string                          $slug
- * @property string                          $description
- * @property array                           $meta
- * @property int                             $balance
- * @property int                             $decimal_places
- * @property \Bavix\Wallet\Interfaces\Wallet $holder
- * @property string                          $currency
+ * @property string $holder_type
+ * @property int    $holder_id
+ * @property string $name
+ * @property string $slug
+ * @property string $description
+ * @property array  $meta
+ * @property int    $balance
+ * @property int    $decimal_places
+ * @property Model  $holder
+ * @property string $currency
  */
 class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchangeable
 {
