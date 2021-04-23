@@ -13,38 +13,42 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CastService implements CastInterface
 {
-    public function getHolderModel(Wallet $wallet): Model
+    /** @param Model|Wallet $model */
+    public function getHolderModel($model): Model
     {
-        return $this->findOrFail([$this, 'findHolderModel'], $wallet);
+        return $this->findOrFail([$this, 'findHolderModel'], $model);
     }
 
-    public function findHolderModel(Wallet $wallet): ?Model
+    /** @param Model|Wallet $model */
+    public function findHolderModel($model): ?Model
     {
-        if ($wallet instanceof WalletModel) {
-            return $wallet->holder;
+        if ($model instanceof WalletModel) {
+            return $model->holder;
         }
 
-        if ($wallet instanceof Model) {
-            return $wallet;
+        if ($model instanceof Model) {
+            return $model;
         }
 
         return null;
     }
 
-    public function getWalletModel(Wallet $wallet): WalletModel
+    /** @param Model|Wallet $model */
+    public function getWalletModel($model): WalletModel
     {
-        return $this->findOrFail([$this, 'findWalletModel'], $wallet);
+        return $this->findOrFail([$this, 'findWalletModel'], $model);
     }
 
-    public function findWalletModel(Wallet $wallet): ?WalletModel
+    /** @param Model|Wallet $model */
+    public function findWalletModel($model): ?WalletModel
     {
-        if ($wallet instanceof WalletModel) {
-            return $wallet;
+        if ($model instanceof WalletModel) {
+            return $model;
         }
 
-        if (method_exists($wallet, 'wallet')) {
-            /** @var HasWallet $wallet */
-            return $wallet->wallet;
+        if (method_exists($model, 'wallet')) {
+            /** @var HasWallet $model */
+            return $model->wallet;
         }
 
         return null;
