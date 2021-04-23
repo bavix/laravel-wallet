@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Objects;
 
 use function array_unique;
+use Bavix\Wallet\Contracts\MathInterface;
 use Bavix\Wallet\Interfaces\Customer;
-use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Models\Transfer;
 use function count;
@@ -16,7 +16,7 @@ use function get_class;
 /** @deprecated  */
 class Cart implements Countable
 {
-    protected Mathable $math;
+    protected MathInterface $mathService;
 
     /** @var Product[] */
     protected array $items = [];
@@ -27,9 +27,9 @@ class Cart implements Countable
     protected array $meta = [];
 
     public function __construct(
-        Mathable $math
+        MathInterface $mathService
     ) {
-        $this->math = $math;
+        $this->mathService = $mathService;
     }
 
     public function setMeta(array $meta): self
@@ -125,7 +125,7 @@ class Cart implements Countable
     {
         $result = '0'; // fasted
         foreach ($this->items as $item) {
-            $result = $this->math->add(
+            $result = $this->mathService->add(
                 $result,
                 $item->getAmountProduct($customer)
             );
@@ -152,7 +152,7 @@ class Cart implements Countable
         $class = get_class($product);
         $uniq = $product->getUniqueId();
 
-        $this->quantity[$class][$uniq] = (int) $this->math->add(
+        $this->quantity[$class][$uniq] = (int) $this->mathService->add(
             (string) $this->getQuantity($product),
             (string) $quantity,
         );

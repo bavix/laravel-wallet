@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Simple;
 
-use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Contracts\MathInterface;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Services\WalletService;
 
@@ -12,6 +12,13 @@ class Store implements Storable
 {
     /** @var float[]|int[]|string[] */
     protected array $balanceSheets = [];
+
+    private MathInterface $mathService;
+
+    public function __construct(MathInterface $mathService)
+    {
+        $this->mathService = $mathService;
+    }
 
     public function getBalance($object)
     {
@@ -28,8 +35,7 @@ class Store implements Storable
 
     public function incBalance($object, $amount): string
     {
-        $math = app(Mathable::class);
-        $balance = $math->add($this->getBalance($object), $amount);
+        $balance = $this->mathService->add($this->getBalance($object), $amount);
         $balance = $this->round($balance);
         $this->setBalance($object, $balance);
 
@@ -53,6 +59,6 @@ class Store implements Storable
 
     protected function round($balance): string
     {
-        return app(Mathable::class)->round((string) ($balance ?: 0));
+        return $this->mathService->round((string) ($balance ?: 0));
     }
 }
