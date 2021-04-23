@@ -7,9 +7,7 @@ namespace Bavix\Wallet\Services;
 use function app;
 use Bavix\Wallet\Contracts\MathInterface;
 use Bavix\Wallet\Exceptions\AmountInvalid;
-use Bavix\Wallet\Interfaces\MinimalTaxable;
 use Bavix\Wallet\Interfaces\Storable;
-use Bavix\Wallet\Interfaces\Taxable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Throwable;
@@ -37,31 +35,7 @@ class WalletService
      */
     public function fee(Wallet $wallet, $amount)
     {
-        $fee = 0;
-        if ($wallet instanceof Taxable) {
-            $placesValue = app(FloatService::class)->exponent($wallet);
-            $fee = $this->mathService->floor(
-                $this->mathService->div(
-                    $this->mathService->mul($amount, $wallet->getFeePercent(), 0),
-                    100,
-                    $placesValue
-                )
-            );
-        }
-
-        /*
-         * Added minimum commission condition.
-         *
-         * @see https://github.com/bavix/laravel-wallet/issues/64#issuecomment-514483143
-         */
-        if ($wallet instanceof MinimalTaxable) {
-            $minimal = $wallet->getMinimalFee();
-            if ($this->mathService->compare($fee, $minimal) === -1) {
-                $fee = $minimal;
-            }
-        }
-
-        return $fee;
+        return app(FeeService::class)->fee($wallet, $amount);
     }
 
     /**
