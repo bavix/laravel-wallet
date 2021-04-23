@@ -141,7 +141,7 @@ class Bring
     }
 
     /**
-     * @param int $fee
+     * @param float|int|string $fee
      *
      * @return Bring
      */
@@ -152,9 +152,6 @@ class Bring
         return $this;
     }
 
-    /**
-     * @throws
-     */
     public function create(): Transfer
     {
         return app(Transfer::class)
@@ -162,9 +159,6 @@ class Bring
         ;
     }
 
-    /**
-     * @throws
-     */
     public function toArray(): array
     {
         return [
