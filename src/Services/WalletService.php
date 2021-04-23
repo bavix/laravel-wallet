@@ -39,7 +39,7 @@ class WalletService
     {
         $fee = 0;
         if ($wallet instanceof Taxable) {
-            $placesValue = app(FloatService::class)->decimalPlacesExponent($wallet);
+            $placesValue = app(FloatService::class)->exponent($wallet);
             $fee = $this->mathService->floor(
                 $this->mathService->div(
                     $this->mathService->mul($amount, $wallet->getFeePercent(), 0),

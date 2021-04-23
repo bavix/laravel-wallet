@@ -60,7 +60,7 @@ class CommonService
             $fee = app(WalletService::class)->fee($to, $amount);
 
             $amount = max(0, $math->sub($amount, $discount));
-            $placesValue = app(FloatService::class)->decimalPlacesExponent($from);
+            $placesValue = app(FloatService::class)->exponent($from);
             $withdraw = $this->forceWithdraw($from, $math->add($amount, $fee, $placesValue), $meta);
             $deposit = $this->deposit($to, $amount, $meta);
 

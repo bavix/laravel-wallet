@@ -22,27 +22,27 @@ class FloatService
         $this->mathService = $mathService;
     }
 
-    public function decimalPlacesExponent(Wallet $object): int
+    public function exponent(Wallet $object): int
     {
         return $this->castService->getWalletModel($object)->decimal_places ?? 2;
     }
 
-    public function decimalPlaces(Wallet $object): string
+    public function signs(Wallet $object): string
     {
-        return $this->mathService->pow(10, $this->decimalPlacesExponent($object));
+        return $this->mathService->pow(10, $this->exponent($object));
     }
 
     /** @param float|int|string $amount */
-    public function balanceIntToFloat(Wallet $object, $amount): string
+    public function intToFloat(Wallet $object, $amount): string
     {
-        return $this->mathService->div($amount, $this->decimalPlaces($object));
+        return $this->mathService->div($amount, $this->signs($object));
     }
 
     /** @param float|int|string $amount */
-    public function balanceFloatToInt(Wallet $object, $amount): string
+    public function floatToInt(Wallet $object, $amount): string
     {
         return $this->mathService->round(
-            $this->mathService->mul($amount, $this->decimalPlaces($object))
+            $this->mathService->mul($amount, $this->signs($object))
         );
     }
 }
