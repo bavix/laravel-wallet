@@ -32,13 +32,13 @@ class FloatService
         return $this->mathService->pow(10, $this->decimalPlacesExponent($object));
     }
 
-    /** @param float|string|int $amount */
+    /** @param float|int|string $amount */
     public function balanceIntToFloat(Wallet $object, $amount): string
     {
         return $this->mathService->div($amount, $this->decimalPlaces($object));
     }
 
-    /** @param float|string|int $amount */
+    /** @param float|int|string $amount */
     public function balanceFloatToInt(Wallet $object, $amount): string
     {
         return $this->mathService->round(

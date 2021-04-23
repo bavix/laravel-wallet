@@ -8,7 +8,6 @@ use function array_merge;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\FloatService;
-use Bavix\Wallet\Services\WalletService;
 use function config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

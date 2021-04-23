@@ -12,7 +12,6 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\FloatService;
-use Bavix\Wallet\Services\WalletService;
 use Throwable;
 
 /**
