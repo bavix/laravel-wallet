@@ -7,8 +7,6 @@ namespace Bavix\Wallet\Services;
 use function app;
 use Bavix\Wallet\Contracts\MathInterface;
 use Bavix\Wallet\Exceptions\AmountInvalid;
-use Bavix\Wallet\Interfaces\Customer;
-use Bavix\Wallet\Interfaces\Discount;
 use Bavix\Wallet\Interfaces\MinimalTaxable;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Interfaces\Taxable;
@@ -27,22 +25,7 @@ class WalletService
 
     public function discount(Wallet $customer, Wallet $product): int
     {
-        if ($customer instanceof Customer && $product instanceof Discount) {
-            return (int) $product->getPersonalDiscount($customer);
-        }
-
-        // without discount
-        return 0;
-    }
-
-    public function decimalPlacesValue(Wallet $object): int
-    {
-        return $this->getWallet($object)->decimal_places ?: 2;
-    }
-
-    public function decimalPlaces(Wallet $object): string
-    {
-        return $this->mathService->pow(10, $this->decimalPlacesValue($object));
+        return app(DiscountService::class)->discount($customer, $product);
     }
 
     /**
@@ -56,7 +39,7 @@ class WalletService
     {
         $fee = 0;
         if ($wallet instanceof Taxable) {
-            $placesValue = $this->decimalPlacesValue($wallet);
+            $placesValue = app(FloatService::class)->decimalPlacesExponent($wallet);
             $fee = $this->mathService->floor(
                 $this->mathService->div(
                     $this->mathService->mul($amount, $wallet->getFeePercent(), 0),
