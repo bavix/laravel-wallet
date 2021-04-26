@@ -10,15 +10,16 @@ class LockSetting
 {
     private ?string $driver;
 
+    /** @var string[] */
     private array $tags = ['bavix-wallet-lock'];
 
-    private int $seconds;
+    private int $ttl;
 
     public function __construct(Repository $repository)
     {
-        $this->seconds = (int) $repository->get('wallet.lock.seconds', 1);
         $this->driver = $repository->get('wallet.lock.driver');
         $this->tags = $repository->get('wallet.cache.tags', $this->tags);
+        $this->ttl = (int) $repository->get('wallet.lock.seconds', 1);
     }
 
     public function getDriver(): ?string
@@ -34,8 +35,8 @@ class LockSetting
         return $this->tags;
     }
 
-    public function getSeconds(): int
+    public function getTtl(): int
     {
-        return $this->seconds;
+        return $this->ttl;
     }
 }

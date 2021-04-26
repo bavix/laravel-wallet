@@ -15,7 +15,7 @@ class AtomicLockService implements LockInterface
 
     private string $owner;
 
-    private int $seconds;
+    private int $ttl;
 
     public function __construct(
         UuidFactoryService $uuidFactoryService,
@@ -27,7 +27,7 @@ class AtomicLockService implements LockInterface
             $lockSetting->getTags(),
         );
 
-        $this->seconds = $lockSetting->getSeconds();
+        $this->ttl = $lockSetting->getTtl();
         $this->owner = $uuidFactoryService->uuid4();
     }
 
@@ -43,6 +43,6 @@ class AtomicLockService implements LockInterface
 
     private function lock(string $name): Lock
     {
-        return $this->lockProvider->lock($name, $this->seconds, $this->owner);
+        return $this->lockProvider->lock($name, $this->ttl, $this->owner);
     }
 }

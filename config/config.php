@@ -30,6 +30,7 @@ return [
     'cache' => [
         'driver' => 'array',
         'tags' => ['bavix-wallet-cache'],
+        'ttl' => 60 * 60 * 24,
     ],
 
     /**
@@ -42,7 +43,7 @@ return [
     'lock' => [
         'driver' => 'array',
         'tags' => ['bavix-wallet-lock'],
-        'seconds' => 1,
+        'ttl' => 1,
     ],
 
     /**
