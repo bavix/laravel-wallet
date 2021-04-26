@@ -13,10 +13,13 @@ class CacheService implements CacheInterface
 {
     private CacheRepository $cacheService;
 
+    private int $ttl;
+
     public function __construct(
         CacheManagerService $cacheManagerService,
         CacheSetting $cacheSetting
     ) {
+        $this->ttl = $cacheSetting->getTtl();
         $this->cacheService = $cacheManagerService->getRepository(
             $cacheSetting->getDriver(),
             $cacheSetting->getTags(),
@@ -40,7 +43,7 @@ class CacheService implements CacheInterface
      */
     public function set(string $key, $value): bool
     {
-        return $this->cacheService->set($key, (string) $value);
+        return $this->cacheService->set($key, (string) $value, $this->ttl);
     }
 
     /**

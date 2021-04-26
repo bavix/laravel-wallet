@@ -6,6 +6,7 @@ namespace Bavix\Wallet;
 
 use Bavix\Wallet\Commands\RefreshBalance;
 use Bavix\Wallet\Contracts\CastInterface;
+use Bavix\Wallet\Contracts\LockInterface;
 use Bavix\Wallet\Contracts\MathInterface;
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Rateable;
@@ -17,6 +18,7 @@ use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Objects\EmptyLock;
 use Bavix\Wallet\Objects\Operation;
+use Bavix\Wallet\Services\AtomicLockService;
 use Bavix\Wallet\Services\CastService;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
@@ -78,6 +80,7 @@ class WalletServiceProvider extends ServiceProvider
             'wallet'
         );
 
+        $this->app->singleton(LockInterface::class, AtomicLockService::class);
         $this->app->singleton(CastInterface::class, CastService::class);
 
         // drop it
