@@ -30,12 +30,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         PhpdocToCommentFixer::class,
     ]);
 
-    $parameters->set(Option::SETS, [
-        SetList::CLEAN_CODE,
-        SetList::PSR_12,
-        SetList::PHP_CS_FIXER,
-        SetList::CONTROL_STRUCTURES,
-        SetList::NAMESPACES,
-        SetList::STRICT,
-    ]);
+    $containerConfigurator->import(SetList::CLEAN_CODE);
+    $containerConfigurator->import(SetList::PSR_12);
+    $containerConfigurator->import(SetList::PHP_CS_FIXER);
+    $containerConfigurator->import(SetList::CONTROL_STRUCTURES);
+    $containerConfigurator->import(SetList::NAMESPACES);
+    $containerConfigurator->import(SetList::STRICT);
 };
