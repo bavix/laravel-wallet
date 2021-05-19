@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Interfaces\Storable;
-use Bavix\Wallet\Simple\BrickMath;
+use Bavix\Wallet\Services\MathService;
 use Bavix\Wallet\Simple\Store;
 use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Common\Models\Transfer;
@@ -15,22 +17,26 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
+/**
+ * @internal
+ */
 class TestCase extends OrchestraTestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @return void
-     */
     public function setUp(): void
     {
         parent::setUp();
         app(Storable::class)->fresh();
     }
 
+    public function expectExceptionMessageStrict(string $message): void
+    {
+        $this->expectExceptionMessageMatches("~^{$message}$~");
+    }
+
     /**
      * @param Application $app
-     * @return array
      */
     protected function getPackageProviders($app): array
     {
@@ -41,13 +47,13 @@ class TestCase extends OrchestraTestCase
 
     protected function updateConfig(Application $app): void
     {
-        /** @var $config Repository */
+        /** @var Repository $config */
         $config = $app['config'];
 
         // Bind eloquent models to IoC container
         $app['config']->set('wallet.package.rateable', Rate::class);
         $app['config']->set('wallet.package.storable', Store::class);
-        $app['config']->set('wallet.package.mathable', BrickMath::class);
+        $app['config']->set('wallet.package.mathable', MathService::class);
 
         // database
         $config->set('database.connections.testing.prefix', 'tests');
@@ -80,13 +86,5 @@ class TestCase extends OrchestraTestCase
         ]);
 
         $config->set('wallet.lock.enabled', false);
-    }
-
-    /**
-     * @param string $message
-     */
-    public function expectExceptionMessageStrict(string $message): void
-    {
-        $this->expectExceptionMessageMatches("~^{$message}$~");
     }
 }

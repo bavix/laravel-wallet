@@ -1,20 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Test\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 
+/**
+ * @internal
+ */
 class FilterTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testMetaAccount(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
         $buyer->deposit(1000); // without meta
@@ -42,7 +42,8 @@ class FilterTest extends TestCase
         $countByPeriods = $buyer->transactions()
             ->whereIn('meta->account', ['customers', 'expenses', 'vendors'])
             ->whereBetween('created_at', [now()->subDays(7), now()])
-            ->count();
+            ->count()
+        ;
 
         self::assertEquals(3, $countByPeriods);
     }

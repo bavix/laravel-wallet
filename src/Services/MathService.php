@@ -1,131 +1,101 @@
 <?php
 
-namespace Bavix\Wallet\Simple;
+declare(strict_types=1);
 
+namespace Bavix\Wallet\Services;
+
+use Bavix\Wallet\Contracts\MathInterface;
 use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Settings\MathSetting;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
 
-/**
- * Class BrickMath.
- */
-class BrickMath implements Mathable
+class MathService implements MathInterface, Mathable
 {
-    /**
-     * @var int
-     */
-    protected $scale;
+    protected MathSetting $mathSetting;
 
-    /**
-     * {@inheritdoc}
-     */
+    public function __construct(MathSetting $mathSetting)
+    {
+        $this->mathSetting = $mathSetting;
+    }
+
     public function add($first, $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($first)
             ->plus(BigDecimal::of($second))
-            ->toScale($this->scale($scale), RoundingMode::DOWN);
+            ->toScale($this->scale($scale), RoundingMode::DOWN)
+        ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function sub($first, $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($first)
             ->minus(BigDecimal::of($second))
-            ->toScale($this->scale($scale), RoundingMode::DOWN);
+            ->toScale($this->scale($scale), RoundingMode::DOWN)
+        ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function div($first, $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($first)
-            ->dividedBy(BigDecimal::of($second), $this->scale($scale), RoundingMode::DOWN);
+            ->dividedBy(BigDecimal::of($second), $this->scale($scale), RoundingMode::DOWN)
+        ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function mul($first, $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($first)
             ->multipliedBy(BigDecimal::of($second))
-            ->toScale($this->scale($scale), RoundingMode::DOWN);
+            ->toScale($this->scale($scale), RoundingMode::DOWN)
+        ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function pow($first, $second, ?int $scale = null): string
+    public function pow($number, int $exponent, ?int $scale = null): string
     {
-        return (string) BigDecimal::of($first)
-            ->power($second)
-            ->toScale($this->scale($scale), RoundingMode::DOWN);
+        return (string) BigDecimal::of($number)
+            ->power($exponent)
+            ->toScale($this->scale($scale), RoundingMode::DOWN)
+        ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function ceil($number): string
     {
         return (string) BigDecimal::of($number)
-            ->dividedBy(BigDecimal::one(), 0, RoundingMode::CEILING);
+            ->dividedBy(BigDecimal::one(), 0, RoundingMode::CEILING)
+        ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function floor($number): string
     {
         return (string) BigDecimal::of($number)
-            ->dividedBy(BigDecimal::one(), 0, RoundingMode::FLOOR);
+            ->dividedBy(BigDecimal::one(), 0, RoundingMode::FLOOR)
+        ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function round($number, int $precision = 0): string
     {
         return (string) BigDecimal::of($number)
-            ->dividedBy(BigDecimal::one(), $precision, RoundingMode::HALF_UP);
+            ->dividedBy(BigDecimal::one(), $precision, RoundingMode::HALF_UP)
+        ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function abs($number): string
     {
         return (string) BigDecimal::of($number)->abs();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function negative($number): string
     {
         return (string) BigDecimal::of($number)->negated();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function compare($first, $second): int
     {
         return BigDecimal::of($first)->compareTo(BigDecimal::of($second));
     }
 
-    /**
-     * @param int|null $scale
-     * @return int
-     */
     protected function scale(?int $scale = null): int
     {
-        if ($this->scale === null) {
-            $this->scale = (int) config('wallet.math.scale', 64);
-        }
-
-        return $scale ?? $this->scale;
+        return $scale ?? $this->mathSetting->getScale();
     }
 }

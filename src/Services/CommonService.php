@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Services;
 
 use function app;
@@ -19,16 +21,11 @@ use function compact;
 use function max;
 use Throwable;
 
+/** @deprecated  */
 class CommonService
 {
     /**
-     * @param Wallet $from
-     * @param Wallet $to
      * @param int|string $amount
-     * @param array|null $meta
-     * @param string $status
-     *
-     * @return Transfer
      *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
@@ -49,13 +46,7 @@ class CommonService
     }
 
     /**
-     * @param Wallet $from
-     * @param Wallet $to
      * @param int|string $amount
-     * @param array|null $meta
-     * @param string $status
-     *
-     * @return Transfer
      *
      * @throws AmountInvalid
      * @throws Throwable
@@ -69,7 +60,7 @@ class CommonService
             $fee = app(WalletService::class)->fee($to, $amount);
 
             $amount = max(0, $math->sub($amount, $discount));
-            $placesValue = app(WalletService::class)->decimalPlacesValue($from);
+            $placesValue = app(FloatService::class)->exponent($from);
             $withdraw = $this->forceWithdraw($from, $math->add($amount, $fee, $placesValue), $meta);
             $deposit = $this->deposit($to, $amount, $meta);
 
@@ -88,12 +79,7 @@ class CommonService
     }
 
     /**
-     * @param Wallet $wallet
      * @param int|string $amount
-     * @param array|null $meta
-     * @param bool $confirmed
-     *
-     * @return Transaction
      *
      * @throws AmountInvalid
      */
@@ -103,9 +89,7 @@ class CommonService
             $walletService = app(WalletService::class);
             $walletService->checkAmount($amount);
 
-            /**
-             * @var WalletModel $wallet
-             */
+            /** @var WalletModel $wallet */
             $wallet = $walletService->getWallet($wallet);
 
             $mathService = app(Mathable::class);
@@ -122,12 +106,7 @@ class CommonService
     }
 
     /**
-     * @param Wallet $wallet
      * @param int|string $amount
-     * @param array|null $meta
-     * @param bool $confirmed
-     *
-     * @return Transaction
      *
      * @throws AmountInvalid
      */
@@ -137,9 +116,7 @@ class CommonService
             $walletService = app(WalletService::class);
             $walletService->checkAmount($amount);
 
-            /**
-             * @var WalletModel $wallet
-             */
+            /** @var WalletModel $wallet */
             $wallet = $walletService->getWallet($wallet);
 
             $transactions = $this->multiOperation($wallet, [
@@ -155,25 +132,21 @@ class CommonService
     }
 
     /**
-     * @param Wallet $wallet
      * @param int|string $amount
-     * @param bool $allowZero
-     *
-     * @return void
      *
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      */
-    public function verifyWithdraw(Wallet $wallet, $amount, bool $allowZero = null): void
+    public function verifyWithdraw(Wallet $wallet, $amount, bool $allowZero = false): void
     {
         /**
          * @var HasWallet $wallet
          */
-        if ($amount && ! $wallet->balance) {
+        if ($amount && !$wallet->balance) {
             throw new BalanceIsEmpty(trans('wallet::errors.wallet_empty'));
         }
 
-        if (! $wallet->canWithdraw($amount, $allowZero)) {
+        if (!$wallet->canWithdraw($amount, $allowZero)) {
             throw new InsufficientFunds(trans('wallet::errors.insufficient_funds'));
         }
     }
@@ -181,10 +154,7 @@ class CommonService
     /**
      * Create Operation without DB::transaction.
      *
-     * @param Wallet $self
      * @param Operation[] $operations
-     *
-     * @return array
      */
     public function multiOperation(Wallet $self, array $operations): array
     {
@@ -199,7 +169,8 @@ class CommonService
 
                 $objects[] = $operation
                     ->setWallet($self)
-                    ->create();
+                    ->create()
+                ;
             }
 
             $this->addBalance($self, $amount);
@@ -212,8 +183,6 @@ class CommonService
      * Create Bring with DB::transaction.
      *
      * @param Bring[] $brings
-     *
-     * @return array
      *
      * @throws
      */
@@ -230,10 +199,6 @@ class CommonService
 
     /**
      * Create Bring without DB::transaction.
-     *
-     * @param array $brings
-     *
-     * @return array
      */
     public function multiBrings(array $brings): array
     {
@@ -248,42 +213,42 @@ class CommonService
     }
 
     /**
-     * @param Wallet $wallet
      * @param int|string $amount
-     *
-     * @return bool
      *
      * @throws
      */
     public function addBalance(Wallet $wallet, $amount): bool
     {
-        return app(LockService::class)->lock($this, __FUNCTION__, static function () use ($wallet, $amount) {
-            /**
-             * @var WalletModel $wallet
-             */
+        return app(LockService::class)->lock($this, __FUNCTION__, static function () use ($wallet, $amount): bool {
+            /** @var WalletModel $wallet */
             $balance = app(Storable::class)
-                ->incBalance($wallet, $amount);
+                ->incBalance($wallet, $amount)
+            ;
 
             try {
                 $result = $wallet->newQuery()
                     ->whereKey($wallet->getKey())
-                    ->update(compact('balance'));
+                    ->update(compact('balance'))
+                ;
             } catch (Throwable $throwable) {
                 app(Storable::class)
-                    ->setBalance($wallet, $wallet->getAvailableBalance());
+                    ->setBalance($wallet, $wallet->getAvailableBalance())
+                ;
 
                 throw $throwable;
             }
 
             if ($result) {
                 $wallet->fill(compact('balance'))
-                    ->syncOriginalAttributes('balance');
+                    ->syncOriginalAttributes('balance')
+                ;
             } else {
                 app(Storable::class)
-                    ->setBalance($wallet, $wallet->getAvailableBalance());
+                    ->setBalance($wallet, $wallet->getAvailableBalance())
+                ;
             }
 
-            return $result;
+            return (bool) $result;
         });
     }
 }

@@ -1,14 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Test\Models;
 
 use Bavix\Wallet\Interfaces\Taxable;
 
 class ItemTax extends Item implements Taxable
 {
-    /**
-     * @return string
-     */
     public function getTable(): string
     {
         return 'items';
@@ -21,11 +20,9 @@ class ItemTax extends Item implements Taxable
      *
      * Minimum 0; Maximum 100
      * Example: return 7.5; // 7.5%
-     *
-     * @return int|float
      */
-    public function getFeePercent()
+    public function getFeePercent(): string
     {
-        return 7.5;
+        return (string) 7.5;
     }
 }

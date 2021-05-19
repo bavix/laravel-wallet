@@ -9,6 +9,22 @@ use Illuminate\Support\Facades\Schema;
 class CreateTransfersTable extends Migration
 {
     /**
+     * @return string
+     */
+    private function table(): string
+    {
+        return (new Transfer())->getTable();
+    }
+
+    /**
+     * @return string
+     */
+    private function transactionTable(): string
+    {
+        return (new Transaction())->getTable();
+    }
+
+    /**
      * @return void
      */
     public function up(): void
@@ -17,8 +33,29 @@ class CreateTransfersTable extends Migration
             $table->bigIncrements('id');
             $table->morphs('from');
             $table->morphs('to');
+            $table
+                ->enum(
+                    'status',
+                    ['exchange', 'transfer', 'paid', 'refund', 'gift']
+                )
+                ->default('transfer');
+
+            $table
+                ->enum(
+                    'status_last',
+                    ['exchange', 'transfer', 'paid', 'refund', 'gift']
+                )
+                ->nullable();
+
             $table->unsignedBigInteger('deposit_id');
             $table->unsignedBigInteger('withdraw_id');
+
+            $table->decimal('discount', 64, 0)
+                ->default(0);
+
+            $table->decimal('fee', 64, 0)
+                ->default(0);
+
             $table->uuid('uuid')->unique();
             $table->timestamps();
 
@@ -32,22 +69,6 @@ class CreateTransfersTable extends Migration
                 ->on($this->transactionTable())
                 ->onDelete('cascade');
         });
-    }
-
-    /**
-     * @return string
-     */
-    protected function table(): string
-    {
-        return (new Transfer())->getTable();
-    }
-
-    /**
-     * @return string
-     */
-    protected function transactionTable(): string
-    {
-        return (new Transaction())->getTable();
     }
 
     /**

@@ -1,31 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Test\Models;
 
 use Bavix\Wallet\Interfaces\MinimalTaxable;
 
 class ItemMinTax extends Item implements MinimalTaxable
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getTable(): string
     {
         return 'items';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getFeePercent(): float
+    public function getFeePercent()
     {
         return 3;
     }
 
-    /**
-     * @return int
-     */
-    public function getMinimalFee(): int
+    public function getMinimalFee()
     {
         return 90;
     }

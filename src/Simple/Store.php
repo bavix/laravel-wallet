@@ -1,25 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Simple;
 
-use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Contracts\MathInterface;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Services\WalletService;
 
 class Store implements Storable
 {
-    /**
-     * @var string[]
-     */
-    protected $balanceSheets = [];
+    /** @var float[]|int[]|string[] */
+    protected array $balanceSheets = [];
 
-    /**
-     * {@inheritdoc}
-     */
+    private MathInterface $mathService;
+
+    public function __construct(MathInterface $mathService)
+    {
+        $this->mathService = $mathService;
+    }
+
     public function getBalance($object)
     {
         $wallet = app(WalletService::class)->getWallet($object);
-        if (! \array_key_exists($wallet->getKey(), $this->balanceSheets)) {
+        if (!\array_key_exists($wallet->getKey(), $this->balanceSheets)) {
             $balance = method_exists($wallet, 'getRawOriginal') ?
                 $wallet->getRawOriginal('balance', 0) : $wallet->getOriginal('balance', 0);
 
@@ -29,22 +33,15 @@ class Store implements Storable
         return $this->balanceSheets[$wallet->getKey()];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function incBalance($object, $amount): string
     {
-        $math = app(Mathable::class);
-        $balance = $math->add($this->getBalance($object), $amount);
+        $balance = $this->mathService->add($this->getBalance($object), $amount);
         $balance = $this->round($balance);
         $this->setBalance($object, $balance);
 
         return $balance;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setBalance($object, $amount): bool
     {
         $wallet = app(WalletService::class)->getWallet($object);
@@ -53,9 +50,6 @@ class Store implements Storable
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fresh(): bool
     {
         $this->balanceSheets = [];
@@ -63,12 +57,8 @@ class Store implements Storable
         return true;
     }
 
-    /**
-     * @param int|string $balance
-     * @return string
-     */
     protected function round($balance): string
     {
-        return app(Mathable::class)->round($balance ?: 0);
+        return $this->mathService->round((string) ($balance ?: 0));
     }
 }

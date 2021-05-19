@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Contracts\LockInterface;
+use Bavix\Wallet\Contracts\MathInterface;
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Rateable;
-use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Objects\EmptyLock;
@@ -18,134 +21,56 @@ use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Common\Models\Transfer;
 use Bavix\Wallet\Test\Common\Models\Wallet;
 
+/**
+ * @internal
+ */
 class SingletonTest extends TestCase
 {
-    /**
-     * @param string $object
-     * @return string
-     */
-    protected function getRefId(string $object): string
+    /** @dataProvider newables */
+    public function testNew(string $first, string $second): void
     {
-        return spl_object_hash(app($object));
+        self::assertNotSame($this->getRefId($first), $this->getRefId($second));
     }
 
-    /**
-     * @return void
-     */
-    public function testBring(): void
+    public function newables(): iterable
     {
-        self::assertNotEquals($this->getRefId(Bring::class), $this->getRefId(Bring::class));
+        yield [Transaction::class, Transaction::class];
+        yield [Transfer::class, Transfer::class];
+        yield [Wallet::class, Wallet::class];
+
+        yield [Bring::class, Bring::class];
+        yield [Cart::class, Cart::class];
+        yield [EmptyLock::class, EmptyLock::class];
+        yield [Operation::class, Operation::class];
     }
 
-    /**
-     * @return void
-     */
-    public function testCart(): void
+    /** @dataProvider singletons */
+    public function testSingleton(string $first, string $second): void
     {
-        self::assertNotEquals($this->getRefId(Cart::class), $this->getRefId(Cart::class));
+        self::assertSame($this->getRefId($first), $this->getRefId($second));
     }
 
-    /**
-     * @return void
-     */
-    public function testEmptyLock(): void
+    public function singletons(): iterable
     {
-        self::assertNotEquals($this->getRefId(EmptyLock::class), $this->getRefId(EmptyLock::class));
+        // lock
+        yield [LockInterface::class, LockInterface::class];
+
+        // math
+        yield [MathInterface::class, MathInterface::class];
+        yield [MathInterface::class, Mathable::class]; // deprecated
+
+        yield [WalletService::class, WalletService::class];
+
+        yield [Rateable::class, Rateable::class];
+        yield [Mathable::class, Mathable::class];
+        yield [DbService::class, DbService::class];
+        yield [LockService::class, LockService::class];
+        yield [ExchangeService::class, ExchangeService::class];
+        yield [CommonService::class, CommonService::class];
     }
 
-    /**
-     * @return void
-     */
-    public function testOperation(): void
+    protected function getRefId(string $object): int
     {
-        self::assertNotEquals($this->getRefId(Operation::class), $this->getRefId(Operation::class));
-    }
-
-    /**
-     * @return void
-     */
-    public function testRateable(): void
-    {
-        self::assertEquals($this->getRefId(Rateable::class), $this->getRefId(Rateable::class));
-    }
-
-    /**
-     * @return void
-     */
-    public function testStorable(): void
-    {
-        self::assertEquals($this->getRefId(Storable::class), $this->getRefId(Storable::class));
-    }
-
-    /**
-     * @return void
-     */
-    public function testMathable(): void
-    {
-        self::assertEquals($this->getRefId(Mathable::class), $this->getRefId(Mathable::class));
-    }
-
-    /**
-     * @return void
-     */
-    public function testTransaction(): void
-    {
-        self::assertNotEquals($this->getRefId(Transaction::class), $this->getRefId(Transaction::class));
-    }
-
-    /**
-     * @return void
-     */
-    public function testTransfer(): void
-    {
-        self::assertNotEquals($this->getRefId(Transfer::class), $this->getRefId(Transfer::class));
-    }
-
-    /**
-     * @return void
-     */
-    public function testWallet(): void
-    {
-        self::assertNotEquals($this->getRefId(Wallet::class), $this->getRefId(Wallet::class));
-    }
-
-    /**
-     * @return void
-     */
-    public function testExchangeService(): void
-    {
-        self::assertEquals($this->getRefId(ExchangeService::class), $this->getRefId(ExchangeService::class));
-    }
-
-    /**
-     * @return void
-     */
-    public function testCommonService(): void
-    {
-        self::assertEquals($this->getRefId(CommonService::class), $this->getRefId(CommonService::class));
-    }
-
-    /**
-     * @return void
-     */
-    public function testWalletService(): void
-    {
-        self::assertEquals($this->getRefId(WalletService::class), $this->getRefId(WalletService::class));
-    }
-
-    /**
-     * @return void
-     */
-    public function testDbService(): void
-    {
-        self::assertEquals($this->getRefId(DbService::class), $this->getRefId(DbService::class));
-    }
-
-    /**
-     * @return void
-     */
-    public function testLockService(): void
-    {
-        self::assertEquals($this->getRefId(LockService::class), $this->getRefId(LockService::class));
+        return spl_object_id(app($object));
     }
 }

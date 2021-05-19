@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Objects;
 
-use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Contracts\MathInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
-use Ramsey\Uuid\Uuid;
+use Bavix\Wallet\Services\UuidFactoryService;
 
+/** @deprecated  */
 class Operation
 {
     /**
@@ -38,28 +41,21 @@ class Operation
      * @var Wallet
      */
     protected $wallet;
+    private MathInterface $mathService;
 
-    /**
-     * Transaction constructor.
-     *
-     * @throws
-     */
-    public function __construct()
-    {
-        $this->uuid = Uuid::uuid4()->toString();
+    public function __construct(
+        MathInterface $mathService,
+        UuidFactoryService $uuidFactoryService
+    ) {
+        $this->mathService = $mathService;
+        $this->uuid = $uuidFactoryService->uuid4();
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @return string
-     */
     public function getUuid(): string
     {
         return $this->uuid;
@@ -73,25 +69,17 @@ class Operation
         return $this->amount;
     }
 
-    /**
-     * @return array|null
-     */
     public function getMeta(): ?array
     {
         return $this->meta;
     }
 
-    /**
-     * @return bool
-     */
     public function isConfirmed(): bool
     {
         return $this->confirmed;
     }
 
     /**
-     * @param string $type
-     *
      * @return static
      */
     public function setType(string $type): self
@@ -108,14 +96,12 @@ class Operation
      */
     public function setAmount($amount): self
     {
-        $this->amount = app(Mathable::class)->round($amount);
+        $this->amount = $this->mathService->round($amount);
 
         return $this;
     }
 
     /**
-     * @param array|null $meta
-     *
      * @return static
      */
     public function setMeta(?array $meta): self
@@ -126,8 +112,6 @@ class Operation
     }
 
     /**
-     * @param bool $confirmed
-     *
      * @return static
      */
     public function setConfirmed(bool $confirmed): self
@@ -137,17 +121,12 @@ class Operation
         return $this;
     }
 
-    /**
-     * @return Wallet
-     */
     public function getWallet(): Wallet
     {
         return $this->wallet;
     }
 
     /**
-     * @param Wallet $wallet
-     *
      * @return static
      */
     public function setWallet(Wallet $wallet): self
@@ -157,26 +136,14 @@ class Operation
         return $this;
     }
 
-    /**
-     * @return Transaction
-     */
     public function create(): Transaction
     {
-        /**
-         * @var Transaction $model
-         */
-        $model = $this->getWallet()
+        return $this->getWallet()
             ->transactions()
-            ->create($this->toArray());
-
-        return $model;
+            ->create($this->toArray())
+        ;
     }
 
-    /**
-     * @return array
-     *
-     * @throws
-     */
     public function toArray(): array
     {
         return [

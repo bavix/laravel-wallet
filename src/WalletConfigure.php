@@ -1,19 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet;
 
 /**
  * Class WalletConfigure.
+ *
  * @codeCoverageIgnore
  */
 class WalletConfigure
 {
     /**
      * Indicates if Wallet migrations will be run.
-     *
-     * @var bool
      */
-    public static $runsMigrations = true;
+    public static bool $runsMigrations = true;
 
     /**
      * WalletConfigure constructor.

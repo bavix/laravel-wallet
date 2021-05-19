@@ -1,14 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Commands;
 
 use Bavix\Wallet\Models\Wallet;
-use Bavix\Wallet\Services\WalletService;
 use Illuminate\Console\Command;
 
-/**
- * Class RefreshBalance.
- */
 class RefreshBalance extends Command
 {
     /**
@@ -25,13 +23,8 @@ class RefreshBalance extends Command
      */
     protected $description = 'Recalculates all wallets';
 
-    /**
-     * @return void
-     *
-     * @throws
-     */
     public function handle(): void
     {
-        Wallet::query()->each([app(WalletService::class), 'refresh']);
+        Wallet::query()->each(static fn (Wallet $wallet) => $wallet->refreshBalance());
     }
 }

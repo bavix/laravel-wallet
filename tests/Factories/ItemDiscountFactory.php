@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Test\Factories;
 
 use Bavix\Wallet\Test\Models\ItemDiscount;
@@ -17,7 +19,6 @@ class ItemDiscountFactory extends Factory
     /**
      * Define the model's default state.
      *
-     * @return array
      * @throws
      */
     public function definition(): array

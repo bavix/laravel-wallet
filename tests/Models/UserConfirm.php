@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Test\Models;
 
 use Bavix\Wallet\Interfaces\Confirmable;
@@ -16,16 +18,14 @@ use Illuminate\Database\Eloquent\Model;
  */
 class UserConfirm extends Model implements Wallet, Confirmable
 {
-    use HasWallet, CanConfirm;
+    use HasWallet;
+    use CanConfirm;
 
     /**
      * @var array
      */
     protected $fillable = ['name', 'email'];
 
-    /**
-     * @return string
-     */
     public function getTable(): string
     {
         return 'users';

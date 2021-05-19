@@ -1,78 +1,51 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Objects;
 
+use Bavix\Wallet\Contracts\MathInterface;
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
-use Ramsey\Uuid\Uuid;
+use Bavix\Wallet\Models\Wallet as WalletModel;
+use Bavix\Wallet\Services\UuidFactoryService;
 
+/** @deprecated  */
 class Bring
 {
-    /**
-     * @var string
-     */
-    protected $status;
+    protected string $status;
 
-    /**
-     * @var Wallet
-     */
-    protected $from;
+    protected Wallet $from;
 
-    /**
-     * @var Wallet
-     */
-    protected $to;
+    protected Wallet $to;
 
-    /**
-     * @var Transaction
-     */
-    protected $deposit;
+    protected Transaction $deposit;
 
-    /**
-     * @var Transaction
-     */
-    protected $withdraw;
+    protected Transaction $withdraw;
 
-    /**
-     * @var string
-     */
-    protected $uuid;
+    protected string $uuid;
 
-    /**
-     * @var int
-     */
-    protected $fee;
+    protected ?int $fee = null;
 
-    /**
-     * @var int
-     */
-    protected $discount;
+    protected int $discount = 0;
 
-    /**
-     * Bring constructor.
-     *
-     * @throws
-     */
-    public function __construct()
-    {
-        $this->uuid = Uuid::uuid4()->toString();
+    private MathInterface $mathService;
+
+    public function __construct(
+        MathInterface $mathService,
+        UuidFactoryService $uuidFactoryService
+    ) {
+        $this->mathService = $mathService;
+        $this->uuid = $uuidFactoryService->uuid4();
     }
 
-    /**
-     * @return string
-     */
     public function getStatus(): string
     {
         return $this->status;
     }
 
-    /**
-     * @param string $status
-     *
-     * @return static
-     */
     public function setStatus(string $status): self
     {
         $this->status = $status;
@@ -80,29 +53,19 @@ class Bring
         return $this;
     }
 
-    /**
-     * @param int $discount
-     *
-     * @return static
-     */
     public function setDiscount(int $discount): self
     {
-        $this->discount = app(Mathable::class)->round($discount);
+        $this->discount = (int) $this->mathService->round($discount);
 
         return $this;
     }
 
-    /**
-     * @return Wallet
-     */
     public function getFrom(): Wallet
     {
         return $this->from;
     }
 
     /**
-     * @param Wallet $from
-     *
      * @return static
      */
     public function setFrom(Wallet $from): self
@@ -112,17 +75,12 @@ class Bring
         return $this;
     }
 
-    /**
-     * @return Wallet
-     */
     public function getTo(): Wallet
     {
         return $this->to;
     }
 
     /**
-     * @param Wallet $to
-     *
      * @return static
      */
     public function setTo(Wallet $to): self
@@ -132,17 +90,12 @@ class Bring
         return $this;
     }
 
-    /**
-     * @return Transaction
-     */
     public function getDeposit(): Transaction
     {
         return $this->deposit;
     }
 
     /**
-     * @param Transaction $deposit
-     *
      * @return static
      */
     public function setDeposit(Transaction $deposit): self
@@ -152,17 +105,12 @@ class Bring
         return $this;
     }
 
-    /**
-     * @return Transaction
-     */
     public function getWithdraw(): Transaction
     {
         return $this->withdraw;
     }
 
     /**
-     * @param Transaction $withdraw
-     *
      * @return static
      */
     public function setWithdraw(Transaction $withdraw): self
@@ -172,30 +120,21 @@ class Bring
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getUuid(): string
     {
         return $this->uuid;
     }
 
-    /**
-     * @return int
-     */
     public function getDiscount(): int
     {
         return $this->discount;
     }
 
-    /**
-     * @return int
-     */
     public function getFee(): int
     {
         $fee = $this->fee;
         if ($fee === null) {
-            $fee = app(Mathable::class)->round(
+            $fee = (int) app(Mathable::class)->round(
                 app(Mathable::class)->sub(
                     app(Mathable::class)->abs($this->getWithdraw()->amount),
                     app(Mathable::class)->abs($this->getDeposit()->amount)
@@ -207,43 +146,39 @@ class Bring
     }
 
     /**
-     * @param int $fee
+     * @param float|int|string $fee
      *
      * @return Bring
      */
     public function setFee($fee): self
     {
-        $this->fee = app(Mathable::class)->round($fee);
+        $this->fee = (int) app(Mathable::class)->round($fee);
 
         return $this;
     }
 
-    /**
-     * @return Transfer
-     *
-     * @throws
-     */
     public function create(): Transfer
     {
         return app(Transfer::class)
-            ->create($this->toArray());
+            ->create($this->toArray())
+        ;
     }
 
-    /**
-     * @return array
-     *
-     * @throws
-     */
     public function toArray(): array
     {
+        /** @var WalletModel $from */
+        $from = $this->getFrom();
+        /** @var WalletModel $to */
+        $to = $this->getTo();
+
         return [
             'status' => $this->getStatus(),
             'deposit_id' => $this->getDeposit()->getKey(),
             'withdraw_id' => $this->getWithdraw()->getKey(),
-            'from_type' => $this->getFrom()->getMorphClass(),
-            'from_id' => $this->getFrom()->getKey(),
-            'to_type' => $this->getTo()->getMorphClass(),
-            'to_id' => $this->getTo()->getKey(),
+            'from_type' => $from->getMorphClass(),
+            'from_id' => $from->getKey(),
+            'to_type' => $to->getMorphClass(),
+            'to_id' => $to->getKey(),
             'discount' => $this->getDiscount(),
             'fee' => $this->getFee(),
             'uuid' => $this->getUuid(),

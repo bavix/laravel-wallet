@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Traits;
 
 use function array_unique;
@@ -19,18 +21,17 @@ trait CartPay
     use HasWallet;
 
     /**
-     * @param Cart $cart
      * @return Transfer[]
-     * @throws
      */
     public function payFreeCart(Cart $cart): array
     {
-        if (! $cart->canBuy($this)) {
+        if (!$cart->canBuy($this)) {
             throw new ProductEnded(trans('wallet::errors.product_stock'));
         }
 
         app(CommonService::class)
-            ->verifyWithdraw($this, 0, true);
+            ->verifyWithdraw($this, 0, true)
+        ;
 
         $self = $this;
 
@@ -51,11 +52,9 @@ trait CartPay
     }
 
     /**
-     * @param Cart $cart
-     * @param bool $force
      * @return Transfer[]
      */
-    public function safePayCart(Cart $cart, bool $force = null): array
+    public function safePayCart(Cart $cart, bool $force = false): array
     {
         try {
             return $this->payCart($cart, $force);
@@ -65,14 +64,11 @@ trait CartPay
     }
 
     /**
-     * @param Cart $cart
-     * @param bool $force
      * @return Transfer[]
-     * @throws
      */
-    public function payCart(Cart $cart, bool $force = null): array
+    public function payCart(Cart $cart, bool $force = false): array
     {
-        if (! $cart->canBuy($this, $force)) {
+        if (!$cart->canBuy($this, $force)) {
             throw new ProductEnded(trans('wallet::errors.product_stock'));
         }
 
@@ -107,22 +103,14 @@ trait CartPay
     }
 
     /**
-     * @param Cart $cart
      * @return Transfer[]
-     * @throws
      */
     public function forcePayCart(Cart $cart): array
     {
         return $this->payCart($cart, true);
     }
 
-    /**
-     * @param Cart $cart
-     * @param bool $force
-     * @param bool $gifts
-     * @return bool
-     */
-    public function safeRefundCart(Cart $cart, bool $force = null, bool $gifts = null): bool
+    public function safeRefundCart(Cart $cart, bool $force = false, bool $gifts = false): bool
     {
         try {
             return $this->refundCart($cart, $force, $gifts);
@@ -131,14 +119,7 @@ trait CartPay
         }
     }
 
-    /**
-     * @param Cart $cart
-     * @param bool $force
-     * @param bool $gifts
-     * @return bool
-     * @throws
-     */
-    public function refundCart(Cart $cart, bool $force = null, bool $gifts = null): bool
+    public function refundCart(Cart $cart, bool $force = false, bool $gifts = false): bool
     {
         $self = $this;
 
@@ -147,14 +128,15 @@ trait CartPay
             $transfers = $cart->alreadyBuy($self, $gifts);
             if (count($transfers) !== count($cart)) {
                 throw (new ModelNotFoundException())
-                    ->setModel($self->transfers()->getMorphClass());
+                    ->setModel($self->transfers()->getMorphClass())
+                ;
             }
 
             foreach ($cart->getItems() as $key => $product) {
                 $transfer = $transfers[$key];
                 $transfer->load('withdraw.wallet');
 
-                if (! $force) {
+                if (!$force) {
                     app(CommonService::class)->verifyWithdraw(
                         $product,
                         $transfer->deposit->amount
@@ -178,23 +160,12 @@ trait CartPay
         });
     }
 
-    /**
-     * @param Cart $cart
-     * @param bool $gifts
-     * @return bool
-     * @throws
-     */
-    public function forceRefundCart(Cart $cart, bool $gifts = null): bool
+    public function forceRefundCart(Cart $cart, bool $gifts = false): bool
     {
         return $this->refundCart($cart, true, $gifts);
     }
 
-    /**
-     * @param Cart $cart
-     * @param bool $force
-     * @return bool
-     */
-    public function safeRefundGiftCart(Cart $cart, bool $force = null): bool
+    public function safeRefundGiftCart(Cart $cart, bool $force = false): bool
     {
         try {
             return $this->refundGiftCart($cart, $force);
@@ -203,22 +174,11 @@ trait CartPay
         }
     }
 
-    /**
-     * @param Cart $cart
-     * @param bool $force
-     * @return bool
-     * @throws
-     */
-    public function refundGiftCart(Cart $cart, bool $force = null): bool
+    public function refundGiftCart(Cart $cart, bool $force = false): bool
     {
         return $this->refundCart($cart, $force, true);
     }
 
-    /**
-     * @param Cart $cart
-     * @return bool
-     * @throws
-     */
     public function forceRefundGiftCart(Cart $cart): bool
     {
         return $this->refundGiftCart($cart, true);
@@ -226,12 +186,8 @@ trait CartPay
 
     /**
      * Checks acquired product your wallet.
-     *
-     * @param Product $product
-     * @param bool $gifts
-     * @return null|Transfer
      */
-    public function paid(Product $product, bool $gifts = null): ?Transfer
+    public function paid(Product $product, bool $gifts = false): ?Transfer
     {
         return current(app(Cart::class)->addItem($product)->alreadyBuy($this, $gifts)) ?: null;
     }

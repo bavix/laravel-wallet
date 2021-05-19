@@ -11,7 +11,7 @@ use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\WalletService;
-use Bavix\Wallet\Simple\BrickMath;
+use Bavix\Wallet\Services\MathService;
 use Bavix\Wallet\Simple\Rate;
 use Bavix\Wallet\Simple\Store;
 
@@ -25,13 +25,12 @@ return [
     ],
 
     /**
-     * The parameter is used for fast packet overload.
-     * You do not need to search for the desired class by code, the library will do it itself.
+     * Cache settings for highload projects.
      */
-    'package' => [
-        'rateable' => Rate::class,
-        'storable' => Store::class,
-        'mathable' => BrickMath::class,
+    'cache' => [
+        'driver' => 'array',
+        'tags' => ['bavix-wallet-cache'],
+        'ttl' => 60 * 60 * 24,
     ],
 
     /**
@@ -39,30 +38,23 @@ return [
      *
      * If you want to replace the default cache with another,
      * then write the name of the driver cache in the key `wallet.lock.cache`.
-     * @see https://laravel.com/docs/6.x/cache#driver-prerequisites
-     *
-     * @example
-     *  'cache' => 'redis'
+     * @see https://laravel.com/docs/8.x/cache#driver-prerequisites
      */
     'lock' => [
-        'cache' => null,
-        'enabled' => false,
-        'seconds' => 1,
+        'driver' => 'array',
+        'tags' => ['bavix-wallet-lock'],
+        'ttl' => 1,
     ],
 
     /**
-     * Sometimes a slug may not match the currency and you need the ability to add an exception.
-     * The main thing is that there are not many exceptions).
-     *
-     * Syntax:
-     *  'slug' => 'currency'
-     *
-     * @example
-     *  'my-usd' => 'USD'
-     *
-     * @deprecated use wallets.meta.currency
+     * The parameter is used for fast packet overload.
+     * You do not need to search for the desired class by code, the library will do it itself.
      */
-    'currencies' => [],
+    'package' => [
+        'rateable' => Rate::class,
+        'storable' => Store::class,
+        'mathable' => MathService::class,
+    ],
 
     /**
      * Services are the main core of the library and sometimes they need to be improved.

@@ -1,42 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Interfaces;
 
+/**
+ * @deprecated
+ * @use BookkeeperInterface
+ */
 interface Storable
 {
-    /**
-     * Get balance from storage.
-     *
-     * @param Wallet $object
-     *
-     * @return int|float
-     */
-    public function getBalance($object);
+    /** @retrun int|float|string */
+    public function getBalance(Wallet $object);
 
-    /**
-     * We increase the balance by the amount.
-     *
-     * @param Wallet $object
-     * @param int|string $amount
-     *
-     * @return string
-     */
-    public function incBalance($object, $amount);
+    /** @param float|int|string $amount */
+    public function incBalance(Wallet $object, $amount);
 
-    /**
-     * We set the exact amount.
-     *
-     * @param Wallet $object
-     * @param int|string $amount
-     *
-     * @return bool
-     */
-    public function setBalance($object, $amount): bool;
+    /** @param float|int|string $amount */
+    public function setBalance(Wallet $object, $amount): bool;
 
-    /**
-     * We clean the storage, a need for consumers.
-     *
-     * @return bool
-     */
     public function fresh(): bool;
 }

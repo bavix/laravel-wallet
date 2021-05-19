@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Test\Models;
 
 use Bavix\Wallet\Traits\HasWallets;
@@ -15,11 +17,10 @@ use Laravel\Cashier\Billable;
  */
 class UserCashier extends Model
 {
-    use Billable, HasWallets, MorphOneWallet;
+    use Billable;
+    use HasWallets;
+    use MorphOneWallet;
 
-    /**
-     * @return string
-     */
     public function getTable(): string
     {
         return 'users';

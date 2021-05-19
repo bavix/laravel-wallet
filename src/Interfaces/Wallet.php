@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Interfaces;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
@@ -12,22 +14,14 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 interface Wallet
 {
     /**
-     * @param int|string $amount
-     * @param array|null $meta
-     * @param bool $confirmed
-     *
-     * @return Transaction
+     * @param float|int|string $amount
      *
      * @throws AmountInvalid
      */
     public function deposit($amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
-     * @param int|string $amount
-     * @param array|null $meta
-     * @param bool $confirmed
-     *
-     * @return Transaction
+     * @param float|int|string $amount
      *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
@@ -36,64 +30,40 @@ interface Wallet
     public function withdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
-     * @param int|string $amount
-     * @param array|null $meta
-     * @param bool $confirmed
-     *
-     * @return Transaction
+     * @param float|int|string $amount
      *
      * @throws AmountInvalid
      */
     public function forceWithdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
-     * @param self $wallet
-     * @param int|string $amount
-     * @param array|null $meta
-     *
-     * @return Transfer
+     * @param float|int|string $amount
      *
      * @throws AmountInvalid
      */
     public function transfer(self $wallet, $amount, ?array $meta = null): Transfer;
 
     /**
-     * @param self $wallet
-     * @param int|string $amount
-     * @param array|null $meta
-     *
-     * @return Transfer|null
+     * @param float|int|string $amount
      *
      * @throws AmountInvalid
      */
     public function safeTransfer(self $wallet, $amount, ?array $meta = null): ?Transfer;
 
     /**
-     * @param Wallet $wallet
-     * @param int|string $amount
-     * @param array|null $meta
-     *
-     * @return Transfer
+     * @param float|int|string $amount
      *
      * @throws AmountInvalid
      */
-    public function forceTransfer(Wallet $wallet, $amount, ?array $meta = null): Transfer;
+    public function forceTransfer(self $wallet, $amount, ?array $meta = null): Transfer;
 
     /**
-     * @param int|string $amount
-     * @param bool $allowZero
-     *
-     * @return bool
+     * @param float|int|string $amount
      */
-    public function canWithdraw($amount, bool $allowZero = null): bool;
+    public function canWithdraw($amount, bool $allowZero = false): bool;
 
-    /**
-     * @return int|float
-     */
+    /** @return float|int|string */
     public function getBalanceAttribute();
 
-    /**
-     * @return MorphMany
-     */
     public function transactions(): MorphMany;
 }

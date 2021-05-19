@@ -1,21 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Test\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Models\UserMulti;
 
+/**
+ * @internal
+ */
 class ExchangeTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testSimple(): void
     {
-        /**
-         * @var UserMulti $user
-         */
+        /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
         $usd = $user->createWallet([
             'name' => 'My USD',
@@ -26,6 +26,9 @@ class ExchangeTest extends TestCase
             'name' => 'Мои рубли',
             'slug' => 'rub',
         ]);
+
+        self::assertEquals('USD', $usd->currency);
+        self::assertEquals('RUB', $rub->currency);
 
         self::assertEquals(0, $rub->balance);
         self::assertEquals(0, $usd->balance);
@@ -48,14 +51,9 @@ class ExchangeTest extends TestCase
         self::assertEquals(Transfer::STATUS_EXCHANGE, $transfer->status);
     }
 
-    /**
-     * @return void
-     */
     public function testSafe(): void
     {
-        /**
-         * @var UserMulti $user
-         */
+        /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
         $usd = $user->createWallet([
             'name' => 'My USD',

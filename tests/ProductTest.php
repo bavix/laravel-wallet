@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Exceptions\ProductEnded;
@@ -14,16 +16,16 @@ use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\Item;
 use Bavix\Wallet\Test\Models\ItemWallet;
 
+/**
+ * @internal
+ */
 class ProductTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testPay(): void
     {
         /**
          * @var Buyer $buyer
-         * @var Item $product
+         * @var Item  $product
          */
         $buyer = BuyerFactory::new()->create();
         $product = ItemFactory::new()->create([
@@ -67,14 +69,11 @@ class ProductTest extends TestCase
         self::assertNull($buyer->safePay($product));
     }
 
-    /**
-     * @return void
-     */
     public function testRefund(): void
     {
         /**
          * @var Buyer $buyer
-         * @var Item $product
+         * @var Item  $product
          */
         $buyer = BuyerFactory::new()->create();
         $product = ItemFactory::new()->create([
@@ -113,14 +112,11 @@ class ProductTest extends TestCase
         self::assertEquals(Transfer::STATUS_REFUND, $transfer->status);
     }
 
-    /**
-     * @return void
-     */
     public function testForceRefund(): void
     {
         /**
          * @var Buyer $buyer
-         * @var Item $product
+         * @var Item  $product
          */
         $buyer = BuyerFactory::new()->create();
         $product = ItemFactory::new()->create([
@@ -151,9 +147,6 @@ class ProductTest extends TestCase
         self::assertEquals(0, $buyer->balance);
     }
 
-    /**
-     * @return void
-     */
     public function testOutOfStock(): void
     {
         $this->expectException(ProductEnded::class);
@@ -161,7 +154,7 @@ class ProductTest extends TestCase
 
         /**
          * @var Buyer $buyer
-         * @var Item $product
+         * @var Item  $product
          */
         $buyer = BuyerFactory::new()->create();
         $product = ItemFactory::new()->create([
@@ -173,14 +166,11 @@ class ProductTest extends TestCase
         $buyer->pay($product);
     }
 
-    /**
-     * @return void
-     */
     public function testForcePay(): void
     {
         /**
          * @var Buyer $buyer
-         * @var Item $product
+         * @var Item  $product
          */
         $buyer = BuyerFactory::new()->create();
         $product = ItemFactory::new()->create([
@@ -196,14 +186,11 @@ class ProductTest extends TestCase
         self::assertEquals(0, $buyer->balance);
     }
 
-    /**
-     * @return void
-     */
     public function testPayFree(): void
     {
         /**
          * @var Buyer $buyer
-         * @var Item $product
+         * @var Item  $product
          */
         $buyer = BuyerFactory::new()->create();
         $product = ItemFactory::new()->create([
@@ -228,7 +215,7 @@ class ProductTest extends TestCase
     {
         /**
          * @var Buyer $buyer
-         * @var Item $product
+         * @var Item  $product
          */
         $buyer = BuyerFactory::new()->create();
         $product = ItemFactory::new()->create([
@@ -250,9 +237,6 @@ class ProductTest extends TestCase
         self::assertEquals(0, $product->balance);
     }
 
-    /**
-     * @return void
-     */
     public function testPayFreeOutOfStock(): void
     {
         $this->expectException(ProductEnded::class);
@@ -260,7 +244,7 @@ class ProductTest extends TestCase
 
         /**
          * @var Buyer $buyer
-         * @var Item $product
+         * @var Item  $product
          */
         $buyer = BuyerFactory::new()->create();
         $product = ItemFactory::new()->create([
@@ -273,12 +257,13 @@ class ProductTest extends TestCase
 
     /**
      * @see https://github.com/bavix/laravel-wallet/issues/237
+     *
      * @throws
      */
     public function testProductMultiWallet(): void
     {
         /**
-         * @var Buyer $buyer
+         * @var Buyer      $buyer
          * @var ItemWallet $product
          */
         $buyer = BuyerFactory::new()->create();

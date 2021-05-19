@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Test\Common\Services;
 
 use Bavix\Wallet\Models\Wallet as WalletModel;
@@ -8,11 +10,6 @@ use Doctrine\DBAL\Exception\InvalidArgumentException;
 
 class WalletAdjustmentFailedService extends WalletService
 {
-    /**
-     * @param WalletModel $wallet
-     * @param array|null $meta
-     * @throws InvalidArgumentException
-     */
     public function adjustment(WalletModel $wallet, ?array $meta = null): void
     {
         throw new InvalidArgumentException(__METHOD__);
