@@ -33,7 +33,7 @@
     "brianium/paratest": "^6.2",
     "cknow/laravel-money": "^6.1",
     "infection/infection": "~0.17",
-    "laravel/cashier": "^12.5",
+    "laravel/cashier": "^13.4",
     "nunomaduro/collision": "^5.4",
     "orchestra/testbench": "^6.4",
     "phpmetrics/phpmetrics": "^v2.7",
