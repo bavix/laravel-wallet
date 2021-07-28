@@ -20,6 +20,7 @@ class CreateTransactionsTable extends Migration
         Schema::create($this->table(), function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuidMorphs('payable');
+            $table->uuid('wallet_id')->nullable();
             $table->enum('type', ['deposit', 'withdraw'])->index();
             $table->decimal('amount', 64, 0);
             $table->boolean('confirmed');
