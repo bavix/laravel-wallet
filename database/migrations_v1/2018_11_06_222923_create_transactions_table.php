@@ -1,6 +1,7 @@
 <?php
 
 use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Models\Wallet;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\MySqlConnection;
 use Illuminate\Database\PostgresConnection;
@@ -17,41 +18,20 @@ class CreateTransactionsTable extends Migration
     public function up(): void
     {
         Schema::create($this->table(), function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->morphs('payable');
+            $table->uuid('id')->primary();
+            $table->uuidMorphs('payable');
             $table->enum('type', ['deposit', 'withdraw'])->index();
             $table->decimal('amount', 64, 0);
             $table->boolean('confirmed');
-            $this->json($table, 'meta')->nullable();
+            $table->json('meta')->nullable();
             $table->uuid('uuid')->unique();
             $table->timestamps();
+
 
             $table->index(['payable_type', 'payable_id', 'type'], 'payable_type_ind');
             $table->index(['payable_type', 'payable_id', 'confirmed'], 'payable_confirmed_ind');
             $table->index(['payable_type', 'payable_id', 'type', 'confirmed'], 'payable_type_confirmed_ind');
         });
-    }
-
-    /**
-     * @param Blueprint $table
-     * @param string $column
-     * @return ColumnDefinition
-     */
-    public function json(Blueprint $table, string $column): ColumnDefinition
-    {
-        $conn = DB::connection();
-        if ($conn instanceof MySqlConnection || $conn instanceof PostgresConnection) {
-            $pdo = $conn->getPdo();
-            try {
-                $sql = 'SELECT JSON_EXTRACT(\'[10, 20, [30, 40]]\', \'$[1]\');';
-                $prepare = $pdo->prepare($sql);
-                $prepare->fetch();
-            } catch (\Throwable $throwable) {
-                return $table->text($column);
-            }
-        }
-
-        return $table->json($column);
     }
 
     /**

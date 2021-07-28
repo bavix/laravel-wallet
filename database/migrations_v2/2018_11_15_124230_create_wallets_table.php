@@ -11,25 +11,19 @@ use Illuminate\Support\Facades\Schema;
 class CreateWalletsTable extends Migration
 {
     /**
-     * @return string
-     */
-    protected function table(): string
-    {
-        return (new Wallet())->getTable();
-    }
-
-    /**
      * @return void
      */
     public function up(): void
     {
         Schema::create($this->table(), function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->morphs('holder');
+            $table->uuid('id')->primary();
+            $table->uuidMorphs('holder');
             $table->string('name');
             $table->string('slug')->index();
             $table->string('description')->nullable();
+            $table->json('meta')->nullable();
             $table->decimal('balance', 64, 0)->default(0);
+            $table->smallInteger('decimal_places')->default(2);
             $table->timestamps();
 
             $table->unique(['holder_type', 'holder_id', 'slug']);
@@ -58,6 +52,14 @@ class CreateWalletsTable extends Migration
                     ->insert($transactions->toArray());
             });
         });
+    }
+
+    /**
+     * @return string
+     */
+    protected function table(): string
+    {
+        return (new Wallet())->getTable();
     }
 
     /**

@@ -14,11 +14,22 @@ class CreateTransfersTable extends Migration
     public function up(): void
     {
         Schema::create($this->table(), function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->morphs('from');
-            $table->morphs('to');
-            $table->unsignedBigInteger('deposit_id');
-            $table->unsignedBigInteger('withdraw_id');
+            $enums = [
+                Transfer::STATUS_EXCHANGE,
+                Transfer::STATUS_TRANSFER,
+                Transfer::STATUS_PAID,
+                Transfer::STATUS_REFUND,
+                Transfer::STATUS_GIFT,
+            ];
+            $table->uuid('id')->primary();
+            $table->uuidMorphs('from');
+            $table->uuidMorphs('to');
+            $table->enum('status', $enums)->default(Transfer::STATUS_TRANSFER);
+            $table->enum('status_last', $enums)->nullable();
+            $table->foreignUuid('deposit_id');
+            $table->foreignUuid('withdraw_id');
+            $table->decimal('discount', 64, 0)->default(0);
+            $table->decimal('fee', 64, 0)->default(0);
             $table->uuid('uuid')->unique();
             $table->timestamps();
 
