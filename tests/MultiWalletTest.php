@@ -13,6 +13,7 @@ use Bavix\Wallet\Test\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Models\Item;
 use Bavix\Wallet\Test\Models\UserCashier;
 use Bavix\Wallet\Test\Models\UserMulti;
+use Throwable;
 use function compact;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\PostgresConnection;
@@ -576,5 +577,28 @@ class MultiWalletTest extends TestCase
 
         self::assertEquals($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
         self::assertEquals($transfer->deposit->amount, 100);
+    }
+
+    /**
+     * @return void
+     * @throws Throwable
+     */
+    public function testDecimalPlaces(): void
+    {
+        $slug = config('wallet.wallet.default.slug', 'default');
+
+        /**
+         * @var UserMulti $user
+         */
+        $user = UserMultiFactory::new()->create();
+        self::assertNull($user->getWallet($slug));
+
+        $wallet = $user->createWallet(['name' => 'Simple', 'slug' => $slug, 'decimal_places' => 6]);
+        self::assertNotNull($wallet);
+        self::assertNotNull($user->wallet);
+        self::assertEquals($user->wallet->id, $wallet->id);
+
+        $user->deposit(1000000000);
+        self::assertEquals(1000, $wallet->balanceFloat);
     }
 }
