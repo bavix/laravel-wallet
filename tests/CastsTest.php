@@ -7,16 +7,14 @@ use Bavix\Wallet\Test\Factories\UserFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\User;
 
+/**
+ * @internal
+ */
 class CastsTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testModelWallet(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         self::assertEquals($buyer->balance, 0);
 
@@ -28,14 +26,11 @@ class CastsTest extends TestCase
         self::assertEquals($buyer->wallet->getCasts()['id'], 'string');
     }
 
-    /**
-     * @return void
-     */
     public function testModelTransfer(): void
     {
         /**
          * @var Buyer $buyer
-         * @var User $user
+         * @var User  $user
          */
         $buyer = BuyerFactory::new()->create();
         $user = UserFactory::new()->create();
@@ -55,14 +50,9 @@ class CastsTest extends TestCase
         self::assertEquals($transfer->getCasts()['id'], 'string');
     }
 
-    /**
-     * @return void
-     */
     public function testModelTransaction(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         self::assertEquals($buyer->balance, 0);
         $deposit = $buyer->deposit(1);

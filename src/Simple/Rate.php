@@ -16,7 +16,7 @@ class Rate implements Rateable
     protected $amount;
 
     /**
-     * @var Wallet|\Bavix\Wallet\Models\Wallet
+     * @var \Bavix\Wallet\Models\Wallet|Wallet
      */
     protected $withCurrency;
 

@@ -26,11 +26,7 @@ trait HasGift
     /**
      * Give the goods safely.
      *
-     * @param Wallet $to
-     * @param Product $product
      * @param bool $force
-     *
-     * @return Transfer|null
      */
     public function safeGift(Wallet $to, Product $product, bool $force = null): ?Transfer
     {
@@ -46,11 +42,7 @@ trait HasGift
      * the goods to another user (wallet).
      * This functionality can be organized for gifts.
      *
-     * @param Wallet $to
-     * @param Product $product
      * @param bool $force
-     *
-     * @return Transfer
      *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
@@ -62,6 +54,7 @@ trait HasGift
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($to, $product, $force): Transfer {
             /**
              * Who's giving? Let's call him Santa Claus.
+             *
              * @var Customer $santa
              */
             $santa = $this;
@@ -77,14 +70,15 @@ trait HasGift
                 $amount = $math->sub($product->getAmountProduct($santa), $discount);
                 $meta = $product->getMetaProduct();
                 $fee = app(WalletService::class)
-                    ->fee($product, $amount);
+                    ->fee($product, $amount)
+                ;
 
                 $commonService = app(CommonService::class);
 
                 /**
                  * Santa pays taxes.
                  */
-                if (! $force) {
+                if (!$force) {
                     $commonService->verifyWithdraw($santa, $math->add($amount, $fee));
                 }
 
@@ -92,7 +86,8 @@ trait HasGift
                 $deposit = $commonService->deposit($product, $amount, $meta);
 
                 $from = app(WalletService::class)
-                    ->getWallet($to);
+                    ->getWallet($to)
+                ;
 
                 $transfers = $commonService->assemble([
                     app(Bring::class)
@@ -111,11 +106,6 @@ trait HasGift
 
     /**
      * to give force).
-     *
-     * @param Wallet $to
-     * @param Product $product
-     *
-     * @return Transfer
      *
      * @throws AmountInvalid
      * @throws Throwable

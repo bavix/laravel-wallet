@@ -38,14 +38,12 @@ class Cart implements Countable
     }
 
     /**
-     * @param Product $product
-     * @param int $quantity
      * @return static
      */
     public function addItem(Product $product, int $quantity = 1): self
     {
         $this->addQuantity($product, $quantity);
-        for ($i = 0; $i < $quantity; $i++) {
+        for ($i = 0; $i < $quantity; ++$i) {
             $this->items[] = $product;
         }
 
@@ -53,8 +51,6 @@ class Cart implements Countable
     }
 
     /**
-     * @param iterable $products
-     *
      * @return static
      */
     public function addItems(iterable $products): self
@@ -85,9 +81,6 @@ class Cart implements Countable
     /**
      * The method returns the transfers already paid for the goods.
      *
-     * @param Customer $customer
-     * @param bool|null $gifts
-     *
      * @return Transfer[]
      */
     public function alreadyBuy(Customer $customer, bool $gifts = null): array
@@ -97,9 +90,7 @@ class Cart implements Countable
             $status[] = Transfer::STATUS_GIFT;
         }
 
-        /**
-         * @var Transfer $query
-         */
+        /** @var Transfer $query */
         $result = [];
         $query = $customer->transfers();
         foreach ($this->getUniqueItems() as $product) {
@@ -109,7 +100,8 @@ class Cart implements Countable
                 ->whereIn('status', $status)
                 ->orderBy('id', 'desc')
                 ->limit($this->getQuantity($product))
-                ->get();
+                ->get()
+            ;
 
             foreach ($collect as $datum) {
                 $result[] = $datum;
@@ -119,16 +111,10 @@ class Cart implements Countable
         return $result;
     }
 
-    /**
-     * @param Customer $customer
-     * @param bool|null $force
-     *
-     * @return bool
-     */
     public function canBuy(Customer $customer, bool $force = null): bool
     {
         foreach ($this->items as $item) {
-            if (! $item->canBuy($customer, $this->getQuantity($item), $force)) {
+            if (!$item->canBuy($customer, $this->getQuantity($item), $force)) {
                 return false;
             }
         }
@@ -136,11 +122,6 @@ class Cart implements Countable
         return true;
     }
 
-    /**
-     * @param Customer $customer
-     *
-     * @return string
-     */
     public function getTotal(Customer $customer): string
     {
         $result = 0;
@@ -152,19 +133,11 @@ class Cart implements Countable
         return $result;
     }
 
-    /**
-     * @return int
-     */
     public function count(): int
     {
         return count($this->items);
     }
 
-    /**
-     * @param Product $product
-     *
-     * @return int
-     */
     public function getQuantity(Product $product): int
     {
         $class = get_class($product);
@@ -173,10 +146,6 @@ class Cart implements Countable
         return $this->quantity[$class][$uniq] ?? 0;
     }
 
-    /**
-     * @param Product $product
-     * @param int $quantity
-     */
     protected function addQuantity(Product $product, int $quantity): void
     {
         $class = get_class($product);

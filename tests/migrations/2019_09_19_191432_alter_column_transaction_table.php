@@ -9,8 +9,6 @@ class AlterColumnTransactionTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -21,8 +19,6 @@ class AlterColumnTransactionTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {

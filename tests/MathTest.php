@@ -7,31 +7,26 @@ use Bavix\Wallet\Simple\BrickMath;
 use Brick\Math\BigInteger;
 use Brick\Math\Exception\NumberFormatException;
 
+/**
+ * @internal
+ */
 class MathTest extends TestCase
 {
     /**
      * @dataProvider invalidProvider
-     * @param string $value
      */
     public function testAbsInvalid(string $value): void
     {
         $this->expectException(NumberFormatException::class);
 
-        /**
-         * @var Mathable $provider
-         */
+        /** @var Mathable $provider */
         $provider = app(BrickMath::class);
         $provider->abs($value);
     }
 
-    /**
-     * @return void
-     */
     public function testAbs(): void
     {
-        /**
-         * @var Mathable $provider
-         */
+        /** @var Mathable $provider */
         $provider = app(BrickMath::class);
 
         // int
@@ -45,7 +40,7 @@ class MathTest extends TestCase
         self::assertEquals(123.11, $provider->abs(-123.11));
 
         // string
-        if (! method_exists(BigInteger::class, 'parse')) {
+        if (!method_exists(BigInteger::class, 'parse')) {
             // brick/math 0.9+
             self::assertEquals(123, $provider->abs('123.'));
             self::assertEquals(.11, $provider->abs('.11'));
@@ -55,14 +50,9 @@ class MathTest extends TestCase
         self::assertEquals(123.11, $provider->abs('-123.11'));
     }
 
-    /**
-     * @return void
-     */
     public function testCompare(): void
     {
-        /**
-         * @var Mathable $provider
-         */
+        /** @var Mathable $provider */
         $provider = app(BrickMath::class);
 
         // int
@@ -81,14 +71,9 @@ class MathTest extends TestCase
         self::assertEquals(1, $provider->compare('2', '1.44'));
     }
 
-    /**
-     * @return void
-     */
     public function testAdd(): void
     {
-        /**
-         * @var Mathable $provider
-         */
+        /** @var Mathable $provider */
         $provider = app(BrickMath::class);
 
         // int
@@ -116,14 +101,9 @@ class MathTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testSub(): void
     {
-        /**
-         * @var Mathable $provider
-         */
+        /** @var Mathable $provider */
         $provider = app(BrickMath::class);
 
         // int
@@ -151,14 +131,9 @@ class MathTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testDiv(): void
     {
-        /**
-         * @var Mathable $provider
-         */
+        /** @var Mathable $provider */
         $provider = app(BrickMath::class);
 
         // int
@@ -186,14 +161,9 @@ class MathTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testMul(): void
     {
-        /**
-         * @var Mathable $provider
-         */
+        /** @var Mathable $provider */
         $provider = app(BrickMath::class);
 
         // int
@@ -221,14 +191,9 @@ class MathTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testPow(): void
     {
-        /**
-         * @var Mathable $provider
-         */
+        /** @var Mathable $provider */
         $provider = app(BrickMath::class);
 
         // int
@@ -256,14 +221,9 @@ class MathTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testCeil(): void
     {
-        /**
-         * @var Mathable $provider
-         */
+        /** @var Mathable $provider */
         $provider = app(BrickMath::class);
 
         // positive
@@ -330,14 +290,9 @@ class MathTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testFloor(): void
     {
-        /**
-         * @var Mathable $provider
-         */
+        /** @var Mathable $provider */
         $provider = app(BrickMath::class);
 
         // positive
@@ -404,14 +359,9 @@ class MathTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testRound(): void
     {
-        /**
-         * @var Mathable $provider
-         */
+        /** @var Mathable $provider */
         $provider = app(BrickMath::class);
 
         // positive
@@ -478,9 +428,6 @@ class MathTest extends TestCase
         );
     }
 
-    /**
-     * @return array
-     */
     public function invalidProvider(): array
     {
         return [

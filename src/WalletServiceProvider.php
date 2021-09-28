@@ -32,7 +32,6 @@ class WalletServiceProvider extends ServiceProvider
     /**
      * Bootstrap services.
      *
-     * @return void
      * @codeCoverageIgnore
      */
     public function boot(): void
@@ -42,7 +41,7 @@ class WalletServiceProvider extends ServiceProvider
             'wallet'
         );
 
-        if (! $this->app->runningInConsole()) {
+        if (!$this->app->runningInConsole()) {
             return;
         }
 
@@ -77,8 +76,6 @@ class WalletServiceProvider extends ServiceProvider
 
     /**
      * Register services.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -112,8 +109,6 @@ class WalletServiceProvider extends ServiceProvider
 
     /**
      * Determine if we should register the migrations.
-     *
-     * @return bool
      */
     protected function shouldMigrate(): bool
     {

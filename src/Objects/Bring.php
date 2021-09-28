@@ -60,17 +60,12 @@ class Bring
         $this->uuid = Uuid::uuid4()->toString();
     }
 
-    /**
-     * @return string
-     */
     public function getStatus(): string
     {
         return $this->status;
     }
 
     /**
-     * @param string $status
-     *
      * @return static
      */
     public function setStatus(string $status): self
@@ -81,8 +76,6 @@ class Bring
     }
 
     /**
-     * @param int $discount
-     *
      * @return static
      */
     public function setDiscount(int $discount): self
@@ -92,17 +85,12 @@ class Bring
         return $this;
     }
 
-    /**
-     * @return Wallet
-     */
     public function getFrom(): Wallet
     {
         return $this->from;
     }
 
     /**
-     * @param Wallet $from
-     *
      * @return static
      */
     public function setFrom(Wallet $from): self
@@ -112,17 +100,12 @@ class Bring
         return $this;
     }
 
-    /**
-     * @return Wallet
-     */
     public function getTo(): Wallet
     {
         return $this->to;
     }
 
     /**
-     * @param Wallet $to
-     *
      * @return static
      */
     public function setTo(Wallet $to): self
@@ -132,17 +115,12 @@ class Bring
         return $this;
     }
 
-    /**
-     * @return Transaction
-     */
     public function getDeposit(): Transaction
     {
         return $this->deposit;
     }
 
     /**
-     * @param Transaction $deposit
-     *
      * @return static
      */
     public function setDeposit(Transaction $deposit): self
@@ -152,17 +130,12 @@ class Bring
         return $this;
     }
 
-    /**
-     * @return Transaction
-     */
     public function getWithdraw(): Transaction
     {
         return $this->withdraw;
     }
 
     /**
-     * @param Transaction $withdraw
-     *
      * @return static
      */
     public function setWithdraw(Transaction $withdraw): self
@@ -172,25 +145,16 @@ class Bring
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getUuid(): string
     {
         return $this->uuid;
     }
 
-    /**
-     * @return int
-     */
     public function getDiscount(): int
     {
         return $this->discount;
     }
 
-    /**
-     * @return int
-     */
     public function getFee(): int
     {
         $fee = $this->fee;
@@ -219,19 +183,16 @@ class Bring
     }
 
     /**
-     * @return Transfer
-     *
      * @throws
      */
     public function create(): Transfer
     {
         return app(Transfer::class)
-            ->create($this->toArray());
+            ->create($this->toArray())
+        ;
     }
 
     /**
-     * @return array
-     *
      * @throws
      */
     public function toArray(): array

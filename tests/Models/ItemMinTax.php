@@ -22,9 +22,6 @@ class ItemMinTax extends Item implements MinimalTaxable
         return 3;
     }
 
-    /**
-     * @return int
-     */
     public function getMinimalFee(): int
     {
         return 90;

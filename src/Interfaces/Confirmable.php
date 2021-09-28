@@ -11,10 +11,6 @@ use Bavix\Wallet\Models\Transaction;
 interface Confirmable
 {
     /**
-     * @param Transaction $transaction
-     *
-     * @return bool
-     *
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      * @throws ConfirmedInvalid
@@ -22,34 +18,16 @@ interface Confirmable
      */
     public function confirm(Transaction $transaction): bool;
 
-    /**
-     * @param Transaction $transaction
-     *
-     * @return bool
-     */
     public function safeConfirm(Transaction $transaction): bool;
 
     /**
-     * @param Transaction $transaction
-     *
-     * @return bool
-     *
      * @throws ConfirmedInvalid
      */
     public function resetConfirm(Transaction $transaction): bool;
 
-    /**
-     * @param Transaction $transaction
-     *
-     * @return bool
-     */
     public function safeResetConfirm(Transaction $transaction): bool;
 
     /**
-     * @param Transaction $transaction
-     *
-     * @return bool
-     *
      * @throws ConfirmedInvalid
      * @throws WalletOwnerInvalid
      */

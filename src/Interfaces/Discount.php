@@ -5,9 +5,7 @@ namespace Bavix\Wallet\Interfaces;
 interface Discount extends Product
 {
     /**
-     * @param Customer $customer
-     *
-     * @return int|float
+     * @return float|int
      */
     public function getPersonalDiscount(Customer $customer);
 }

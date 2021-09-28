@@ -13,8 +13,7 @@ use Illuminate\Support\Collection;
  * Trait HasWallets
  * To use a trait, you must add HasWallet trait.
  *
- *
- * @property-read Collection|WalletModel[] $wallets
+ * @property Collection|WalletModel[] $wallets
  */
 trait HasWallets
 {
@@ -43,10 +42,6 @@ trait HasWallets
      *
      *  $user->getWallet('usd')->balance; // 50
      *  $user->getWallet('rub')->balance; // 100
-     *
-     * @param string $slug
-     *
-     * @return WalletModel|null
      */
     public function getWallet(string $slug): ?WalletModel
     {
@@ -69,15 +64,11 @@ trait HasWallets
      *  $user->getWallet('usd')->balance; // 50
      *  $user->getWallet('rub')->balance; // 100
      *
-     * @param string $slug
-     *
-     * @return WalletModel
-     *
      * @throws ModelNotFoundException
      */
     public function getWalletOrFail(string $slug): WalletModel
     {
-        if (! $this->_loadedWallets && $this->relationLoaded('wallets')) {
+        if (!$this->_loadedWallets && $this->relationLoaded('wallets')) {
             $this->_loadedWallets = true;
             $wallets = $this->getRelation('wallets');
             foreach ($wallets as $wallet) {
@@ -85,10 +76,11 @@ trait HasWallets
             }
         }
 
-        if (! array_key_exists($slug, $this->_wallets)) {
+        if (!array_key_exists($slug, $this->_wallets)) {
             $this->_wallets[$slug] = $this->wallets()
                 ->where('slug', $slug)
-                ->firstOrFail();
+                ->firstOrFail()
+            ;
         }
 
         return $this->_wallets[$slug];
@@ -96,24 +88,15 @@ trait HasWallets
 
     /**
      * method of obtaining all wallets.
-     *
-     * @return MorphMany
      */
     public function wallets(): MorphMany
     {
         return $this->morphMany(config('wallet.wallet.model', WalletModel::class), 'holder');
     }
 
-    /**
-     * @param array $data
-     *
-     * @return WalletModel
-     */
     public function createWallet(array $data): WalletModel
     {
-        /**
-         * @var WalletModel $wallet
-         */
+        /** @var WalletModel $wallet */
         $wallet = $this->wallets()->create(array_merge(
             config('wallet.wallet.creating', []),
             $data
@@ -126,10 +109,6 @@ trait HasWallets
 
     /**
      * The method checks the existence of the wallet.
-     *
-     * @param string $slug
-     *
-     * @return bool
      */
     public function hasWallet(string $slug): bool
     {

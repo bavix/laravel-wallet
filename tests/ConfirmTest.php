@@ -9,16 +9,14 @@ use Bavix\Wallet\Test\Factories\UserConfirmFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\UserConfirm;
 
+/**
+ * @internal
+ */
 class ConfirmTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testSimple(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
 
@@ -33,14 +31,9 @@ class ConfirmTest extends TestCase
         self::assertTrue($transaction->confirmed);
     }
 
-    /**
-     * @return void
-     */
     public function testSafe(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
 
@@ -55,14 +48,9 @@ class ConfirmTest extends TestCase
         self::assertFalse($transaction->confirmed);
     }
 
-    /**
-     * @return void
-     */
     public function testSafeResetConfirm(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
 
@@ -79,13 +67,10 @@ class ConfirmTest extends TestCase
 
     /**
      * @see https://github.com/bavix/laravel-wallet/issues/134
-     * @return void
      */
     public function testWithdraw(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
         $wallet->deposit(100);
@@ -97,14 +82,9 @@ class ConfirmTest extends TestCase
         self::assertFalse($transaction->confirmed);
     }
 
-    /**
-     * @return void
-     */
     public function testForce(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
 
@@ -119,14 +99,9 @@ class ConfirmTest extends TestCase
         self::assertTrue($transaction->confirmed);
     }
 
-    /**
-     * @return void
-     */
     public function testUnconfirmed(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
 
@@ -141,17 +116,12 @@ class ConfirmTest extends TestCase
         self::assertFalse($transaction->confirmed);
     }
 
-    /**
-     * @return void
-     */
     public function testConfirmedInvalid(): void
     {
         $this->expectException(ConfirmedInvalid::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.confirmed_invalid'));
 
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
 
@@ -164,17 +134,12 @@ class ConfirmTest extends TestCase
         $wallet->confirm($transaction);
     }
 
-    /**
-     * @return void
-     */
     public function testUnconfirmedInvalid(): void
     {
         $this->expectException(ConfirmedInvalid::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.unconfirmed_invalid'));
 
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
 
@@ -187,14 +152,9 @@ class ConfirmTest extends TestCase
         $wallet->resetConfirm($transaction);
     }
 
-    /**
-     * @return void
-     */
     public function testSafeUnconfirmed(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         $wallet = $buyer->wallet;
 
@@ -206,9 +166,6 @@ class ConfirmTest extends TestCase
         self::assertFalse($wallet->safeResetConfirm($transaction));
     }
 
-    /**
-     * @return void
-     */
     public function testWalletOwnerInvalid(): void
     {
         $this->expectException(WalletOwnerInvalid::class);
@@ -231,14 +188,9 @@ class ConfirmTest extends TestCase
         $secondWallet->confirm($transaction);
     }
 
-    /**
-     * @return void
-     */
     public function testUserConfirm(): void
     {
-        /**
-         * @var UserConfirm $userConfirm
-         */
+        /** @var UserConfirm $userConfirm */
         $userConfirm = UserConfirmFactory::new()->create();
         $transaction = $userConfirm->deposit(100, null, false);
         self::assertEquals($transaction->wallet->id, $userConfirm->wallet->id);
@@ -250,14 +202,9 @@ class ConfirmTest extends TestCase
         self::assertTrue($transaction->confirmed);
     }
 
-    /**
-     * @return void
-     */
     public function testConfirmWithoutWallet(): void
     {
-        /**
-         * @var UserConfirm $userConfirm
-         */
+        /** @var UserConfirm $userConfirm */
         $userConfirm = UserConfirmFactory::new()->create();
         $userConfirm->deposit(10000);
 
@@ -269,14 +216,9 @@ class ConfirmTest extends TestCase
         self::assertEquals(9000, $userConfirm->balance);
     }
 
-    /**
-     * @return void
-     */
     public function testUserConfirmByWallet(): void
     {
-        /**
-         * @var UserConfirm $userConfirm
-         */
+        /** @var UserConfirm $userConfirm */
         $userConfirm = UserConfirmFactory::new()->create();
         $transaction = $userConfirm->wallet->deposit(100, null, false);
         self::assertEquals($transaction->wallet->id, $userConfirm->wallet->id);

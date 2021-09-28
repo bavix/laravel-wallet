@@ -23,7 +23,8 @@ class BrickMath implements Mathable
     {
         return (string) BigDecimal::of($first)
             ->plus(BigDecimal::of($second))
-            ->toScale($this->scale($scale), RoundingMode::DOWN);
+            ->toScale($this->scale($scale), RoundingMode::DOWN)
+        ;
     }
 
     /**
@@ -33,7 +34,8 @@ class BrickMath implements Mathable
     {
         return (string) BigDecimal::of($first)
             ->minus(BigDecimal::of($second))
-            ->toScale($this->scale($scale), RoundingMode::DOWN);
+            ->toScale($this->scale($scale), RoundingMode::DOWN)
+        ;
     }
 
     /**
@@ -42,7 +44,8 @@ class BrickMath implements Mathable
     public function div($first, $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($first)
-            ->dividedBy(BigDecimal::of($second), $this->scale($scale), RoundingMode::DOWN);
+            ->dividedBy(BigDecimal::of($second), $this->scale($scale), RoundingMode::DOWN)
+        ;
     }
 
     /**
@@ -52,7 +55,8 @@ class BrickMath implements Mathable
     {
         return (string) BigDecimal::of($first)
             ->multipliedBy(BigDecimal::of($second))
-            ->toScale($this->scale($scale), RoundingMode::DOWN);
+            ->toScale($this->scale($scale), RoundingMode::DOWN)
+        ;
     }
 
     /**
@@ -62,7 +66,8 @@ class BrickMath implements Mathable
     {
         return (string) BigDecimal::of($first)
             ->power($second)
-            ->toScale($this->scale($scale), RoundingMode::DOWN);
+            ->toScale($this->scale($scale), RoundingMode::DOWN)
+        ;
     }
 
     /**
@@ -71,7 +76,8 @@ class BrickMath implements Mathable
     public function ceil($number): string
     {
         return (string) BigDecimal::of($number)
-            ->dividedBy(BigDecimal::one(), 0, RoundingMode::CEILING);
+            ->dividedBy(BigDecimal::one(), 0, RoundingMode::CEILING)
+        ;
     }
 
     /**
@@ -80,7 +86,8 @@ class BrickMath implements Mathable
     public function floor($number): string
     {
         return (string) BigDecimal::of($number)
-            ->dividedBy(BigDecimal::one(), 0, RoundingMode::FLOOR);
+            ->dividedBy(BigDecimal::one(), 0, RoundingMode::FLOOR)
+        ;
     }
 
     /**
@@ -89,7 +96,8 @@ class BrickMath implements Mathable
     public function round($number, int $precision = 0): string
     {
         return (string) BigDecimal::of($number)
-            ->dividedBy(BigDecimal::one(), $precision, RoundingMode::HALF_UP);
+            ->dividedBy(BigDecimal::one(), $precision, RoundingMode::HALF_UP)
+        ;
     }
 
     /**
@@ -116,10 +124,6 @@ class BrickMath implements Mathable
         return BigDecimal::of($first)->compareTo(BigDecimal::of($second));
     }
 
-    /**
-     * @param int|null $scale
-     * @return int
-     */
     protected function scale(?int $scale = null): int
     {
         if ($this->scale === null) {
