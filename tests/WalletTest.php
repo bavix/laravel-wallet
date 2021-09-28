@@ -10,16 +10,14 @@ use Bavix\Wallet\Test\Factories\UserFactory;
 use Bavix\Wallet\Test\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 
+/**
+ * @internal
+ */
 class WalletTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testDeposit(): void
     {
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFactory::new()->create();
         self::assertEquals(0, $user->balance);
 
@@ -54,35 +52,23 @@ class WalletTest extends TestCase
         self::assertEquals(4, $user->transactions()->count());
     }
 
-    /**
-     * @return void
-     */
     public function testInvalidDeposit(): void
     {
         $this->expectException(AmountInvalid::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.price_positive'));
 
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFactory::new()->create();
         $user->deposit(-1);
     }
 
-    /**
-     * @return void
-     */
     public function testFindUserByExistsWallet(): void
     {
-        /**
-         * @var User[]|Collection $users
-         */
+        /** @var Collection|User[] $users */
         $users = UserFactory::times(10)->create();
         self::assertCount(10, $users);
 
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = $users->first();
         self::assertEquals(0, $user->balance); // create default wallet
         self::assertTrue($user->wallet->exists);
@@ -112,17 +98,12 @@ class WalletTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testWithdraw(): void
     {
         $this->expectException(BalanceIsEmpty::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFactory::new()->create();
         self::assertEquals(0, $user->balance);
 
@@ -141,40 +122,27 @@ class WalletTest extends TestCase
         $user->withdraw(1);
     }
 
-    /**
-     * @return void
-     */
     public function testInvalidWithdraw(): void
     {
         $this->expectException(BalanceIsEmpty::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFactory::new()->create();
         $user->withdraw(-1);
     }
 
-    /**
-     * @return void
-     */
     public function testInsufficientFundsWithdraw(): void
     {
         $this->expectException(InsufficientFunds::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.insufficient_funds'));
 
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFactory::new()->create();
         $user->deposit(1);
         $user->withdraw(2);
     }
 
-    /**
-     * @return void
-     */
     public function testTransfer(): void
     {
         /**
@@ -222,7 +190,6 @@ class WalletTest extends TestCase
 
     /**
      * @see https://github.com/bavix/laravel-wallet/issues/286#issue-750353538
-     * @return void
      */
     public function testTransferWalletNotExists(): void
     {
@@ -241,14 +208,9 @@ class WalletTest extends TestCase
         self::assertEquals(500, $second->balance);
     }
 
-    /**
-     * @return void
-     */
     public function testTransferYourself(): void
     {
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFactory::new()->create();
         self::assertEquals(0, $user->balance);
 
@@ -260,30 +222,20 @@ class WalletTest extends TestCase
         self::assertEquals(0, $user->balance);
     }
 
-    /**
-     * @return void
-     */
     public function testBalanceIsEmpty(): void
     {
         $this->expectException(BalanceIsEmpty::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFactory::new()->create();
         self::assertEquals(0, $user->balance);
         $user->withdraw(1);
     }
 
-    /**
-     * @return void
-     */
     public function testConfirmed(): void
     {
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFactory::new()->create();
         self::assertEquals(0, $user->balance);
 
@@ -297,14 +249,9 @@ class WalletTest extends TestCase
         self::assertEquals(0, $user->balance);
     }
 
-    /**
-     * @return void
-     */
     public function testRecalculate(): void
     {
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFactory::new()->create();
         self::assertEquals(0, $user->balance);
 

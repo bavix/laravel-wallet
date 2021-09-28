@@ -15,9 +15,6 @@ use Throwable;
  */
 class DbService
 {
-    /**
-     * @return ConnectionInterface
-     */
     public function connection(): ConnectionInterface
     {
         return DB::connection(config('wallet.database.connection'));
@@ -26,12 +23,11 @@ class DbService
     /**
      * Execute a Closure within a transaction.
      *
-     * @param Closure $callback
      * @param int $attempts
      *
-     * @return mixed
-     *
      * @throws Throwable
+     *
+     * @return mixed
      */
     public function transaction(Closure $callback, $attempts = 1)
     {
@@ -46,8 +42,6 @@ class DbService
      * Get a new raw query expression.
      *
      * @param mixed $value
-     *
-     * @return Expression
      */
     public function raw($value): Expression
     {

@@ -9,16 +9,14 @@ use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Test\Factories\UserFloatFactory;
 use Bavix\Wallet\Test\Models\UserFloat as User;
 
+/**
+ * @internal
+ */
 class WalletFloatTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testDeposit(): void
     {
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFloatFactory::new()->create();
         self::assertEquals(0, $user->balance);
         self::assertEquals(0, $user->balanceFloat);
@@ -42,9 +40,6 @@ class WalletFloatTest extends TestCase
         self::assertEquals(0, $user->balanceFloat);
     }
 
-    /**
-     * @return void
-     */
     public function testInvalidDeposit(): void
     {
         $this->expectException(AmountInvalid::class);
@@ -53,17 +48,12 @@ class WalletFloatTest extends TestCase
         $user->depositFloat(-1);
     }
 
-    /**
-     * @return void
-     */
     public function testWithdraw(): void
     {
         $this->expectException(BalanceIsEmpty::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFloatFactory::new()->create();
         self::assertEquals(0, $user->balance);
 
@@ -82,9 +72,6 @@ class WalletFloatTest extends TestCase
         $user->withdraw(1);
     }
 
-    /**
-     * @return void
-     */
     public function testInvalidWithdraw(): void
     {
         $this->expectException(BalanceIsEmpty::class);
@@ -93,9 +80,6 @@ class WalletFloatTest extends TestCase
         $user->withdrawFloat(-1);
     }
 
-    /**
-     * @return void
-     */
     public function testTransfer(): void
     {
         /**
@@ -141,14 +125,9 @@ class WalletFloatTest extends TestCase
         self::assertEquals($second->balanceFloat, 0);
     }
 
-    /**
-     * @return void
-     */
     public function testTransferYourself(): void
     {
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFloatFactory::new()->create();
         self::assertEquals(0, $user->balanceFloat);
 
@@ -160,30 +139,20 @@ class WalletFloatTest extends TestCase
         self::assertEquals(0, $user->balance);
     }
 
-    /**
-     * @return void
-     */
     public function testBalanceIsEmpty(): void
     {
         $this->expectException(BalanceIsEmpty::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFloatFactory::new()->create();
         self::assertEquals(0, $user->balance);
         $user->withdrawFloat(1);
     }
 
-    /**
-     * @return void
-     */
     public function testConfirmed(): void
     {
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFloatFactory::new()->create();
         self::assertEquals($user->balance, 0);
 
@@ -202,14 +171,9 @@ class WalletFloatTest extends TestCase
         self::assertEquals($user->balanceFloat, 0);
     }
 
-    /**
-     * @return void
-     */
     public function testMantissa(): void
     {
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFloatFactory::new()->create();
         self::assertEquals($user->balance, 0);
 
@@ -234,14 +198,9 @@ class WalletFloatTest extends TestCase
         self::assertEquals($user->balanceFloat, 10000.00 + 2556.72);
     }
 
-    /**
-     * @return void
-     */
     public function testUpdateTransaction(): void
     {
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFloatFactory::new()->create();
         self::assertEquals($user->balance, 0);
 
@@ -267,14 +226,9 @@ class WalletFloatTest extends TestCase
         self::assertEquals($user->balanceFloat, 10000.00 + 2556.72);
     }
 
-    /**
-     * @return void
-     */
     public function testMathRounding(): void
     {
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFloatFactory::new()->create();
         self::assertEquals($user->balance, 0);
 
@@ -295,14 +249,9 @@ class WalletFloatTest extends TestCase
         self::assertEquals($transaction->type, Transaction::TYPE_WITHDRAW);
     }
 
-    /**
-     * @return void
-     */
     public function testEther(): void
     {
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFloatFactory::new()->create();
         self::assertEquals(0, $user->balance);
 
@@ -316,14 +265,9 @@ class WalletFloatTest extends TestCase
         self::assertEquals(0, $math->compare($user->balanceFloat, '545.8754855274419'));
     }
 
-    /**
-     * @return void
-     */
     public function testBitcoin(): void
     {
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFloatFactory::new()->create();
         self::assertEquals(0, $user->balance);
 
@@ -332,7 +276,7 @@ class WalletFloatTest extends TestCase
 
         $math = app(Mathable::class);
 
-        for ($i = 0; $i < 256; $i++) {
+        for ($i = 0; $i < 256; ++$i) {
             $user->depositFloat('0.00000001'); // Satoshi
         }
 
@@ -350,13 +294,12 @@ class WalletFloatTest extends TestCase
 
     /**
      * Case from @ucanbehack.
+     *
      * @see https://github.com/bavix/laravel-wallet/issues/149
      */
     public function testBitcoin2(): void
     {
-        /**
-         * @var User $user
-         */
+        /** @var User $user */
         $user = UserFloatFactory::new()->create();
         self::assertEquals(0, $user->balance);
 

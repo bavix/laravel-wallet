@@ -9,11 +9,11 @@ use Bavix\Wallet\Test\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Models\Item;
 use Bavix\Wallet\Test\Models\UserMulti;
 
+/**
+ * @internal
+ */
 class MultiWalletGiftTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testGiftWalletToUser(): void
     {
         /**
@@ -31,9 +31,7 @@ class MultiWalletGiftTest extends TestCase
         self::assertNotNull($first->wallet);
         self::assertNotEquals($first->wallet->id, $wallet->id);
 
-        /**
-         * @var Item $item
-         */
+        /** @var Item $item */
         $item = ItemFactory::new()->create();
         $transaction = $wallet->deposit($item->getAmountProduct($wallet));
         self::assertEquals($transaction->amount, $wallet->balance);

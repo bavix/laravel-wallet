@@ -12,7 +12,7 @@ interface Taxable
      * Minimum 0; Maximum 100
      * Example: return 7.5; // 7.5%
      *
-     * @return int|float
+     * @return float|int
      */
     public function getFeePercent();
 }

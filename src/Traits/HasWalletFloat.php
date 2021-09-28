@@ -15,8 +15,7 @@ use Throwable;
 /**
  * Trait HasWalletFloat.
  *
- *
- * @property-read float $balanceFloat
+ * @property float $balanceFloat
  */
 trait HasWalletFloat
 {
@@ -24,10 +23,6 @@ trait HasWalletFloat
 
     /**
      * @param float|string $amount
-     * @param array|null $meta
-     * @param bool $confirmed
-     *
-     * @return Transaction
      *
      * @throws AmountInvalid
      * @throws Throwable
@@ -45,10 +40,6 @@ trait HasWalletFloat
 
     /**
      * @param float|string $amount
-     * @param array|null $meta
-     * @param bool $confirmed
-     *
-     * @return Transaction
      *
      * @throws AmountInvalid
      * @throws Throwable
@@ -66,10 +57,6 @@ trait HasWalletFloat
 
     /**
      * @param float|string $amount
-     * @param array|null $meta
-     * @param bool $confirmed
-     *
-     * @return Transaction
      *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
@@ -89,8 +76,6 @@ trait HasWalletFloat
 
     /**
      * @param float|string $amount
-     *
-     * @return bool
      */
     public function canWithdrawFloat($amount): bool
     {
@@ -104,11 +89,7 @@ trait HasWalletFloat
     }
 
     /**
-     * @param Wallet $wallet
      * @param float $amount
-     * @param array|null $meta
-     *
-     * @return Transfer
      *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
@@ -127,11 +108,7 @@ trait HasWalletFloat
     }
 
     /**
-     * @param Wallet $wallet
      * @param float $amount
-     * @param array|null $meta
-     *
-     * @return Transfer|null
      */
     public function safeTransferFloat(Wallet $wallet, $amount, ?array $meta = null): ?Transfer
     {
@@ -145,11 +122,7 @@ trait HasWalletFloat
     }
 
     /**
-     * @param Wallet $wallet
      * @param float|string $amount
-     * @param array|null $meta
-     *
-     * @return Transfer
      *
      * @throws AmountInvalid
      * @throws Throwable
@@ -166,7 +139,7 @@ trait HasWalletFloat
     }
 
     /**
-     * @return int|float|string
+     * @return float|int|string
      */
     public function getBalanceFloatAttribute()
     {

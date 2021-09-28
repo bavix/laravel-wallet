@@ -8,16 +8,16 @@ use Bavix\Wallet\Test\Factories\ItemDiscountFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\ItemDiscount;
 
+/**
+ * @internal
+ */
 class GiftDiscountTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testGift(): void
     {
         /**
-         * @var Buyer $first
-         * @var Buyer $second
+         * @var Buyer        $first
+         * @var Buyer        $second
          * @var ItemDiscount $product
          */
         [$first, $second] = BuyerFactory::times(2)->create();
@@ -44,14 +44,11 @@ class GiftDiscountTest extends TestCase
         self::assertEquals($transfer->status, Transfer::STATUS_GIFT);
     }
 
-    /**
-     * @return void
-     */
     public function testRefund(): void
     {
         /**
-         * @var Buyer $first
-         * @var Buyer $second
+         * @var Buyer        $first
+         * @var Buyer        $second
          * @var ItemDiscount $product
          */
         [$first, $second] = BuyerFactory::times(2)->create();

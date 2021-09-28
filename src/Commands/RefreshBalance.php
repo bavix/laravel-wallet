@@ -26,8 +26,6 @@ class RefreshBalance extends Command
     protected $description = 'Recalculates all wallets';
 
     /**
-     * @return void
-     *
      * @throws
      */
     public function handle(): void

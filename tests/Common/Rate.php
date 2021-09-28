@@ -33,8 +33,18 @@ class Rate extends \Bavix\Wallet\Simple\Rate
     }
 
     /**
-     * @param Wallet $wallet
-     * @return int|float
+     * {@inheritdoc}
+     */
+    public function convertTo(Wallet $wallet)
+    {
+        return app(Mathable::class)->mul(
+            parent::convertTo($wallet),
+            $this->rate($wallet)
+        );
+    }
+
+    /**
+     * @return float|int
      */
     protected function rate(Wallet $wallet)
     {
@@ -48,17 +58,6 @@ class Rate extends \Bavix\Wallet\Simple\Rate
             Arr::get($this->rates, $from->currency, []),
             $to->currency,
             1
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function convertTo(Wallet $wallet)
-    {
-        return app(Mathable::class)->mul(
-            parent::convertTo($wallet),
-            $this->rate($wallet)
         );
     }
 }

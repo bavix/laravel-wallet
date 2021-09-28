@@ -19,7 +19,7 @@ class Store implements Storable
     public function getBalance($object)
     {
         $wallet = app(WalletService::class)->getWallet($object);
-        if (! \array_key_exists($wallet->getKey(), $this->balanceSheets)) {
+        if (!\array_key_exists($wallet->getKey(), $this->balanceSheets)) {
             $balance = method_exists($wallet, 'getRawOriginal') ?
                 $wallet->getRawOriginal('balance', 0) : $wallet->getOriginal('balance', 0);
 
@@ -65,7 +65,6 @@ class Store implements Storable
 
     /**
      * @param int|string $balance
-     * @return string
      */
     protected function round($balance): string
     {

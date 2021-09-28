@@ -7,16 +7,14 @@ use Bavix\Wallet\Test\Common\Models\Wallet;
 use Bavix\Wallet\Test\Factories\UserConfirmFactory;
 use Bavix\Wallet\Test\Models\UserConfirm;
 
+/**
+ * @internal
+ */
 class ConfirmMockTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testFailConfirm(): void
     {
-        /**
-         * @var UserConfirm $userConfirm
-         */
+        /** @var UserConfirm $userConfirm */
         $userConfirm = UserConfirmFactory::new()->create();
         $transaction = $userConfirm->deposit(100, null, false);
         self::assertEquals($userConfirm->wallet->id, $transaction->wallet->id);
@@ -25,11 +23,13 @@ class ConfirmMockTest extends TestCase
         self::assertFalse($transaction->confirmed);
 
         $wallet = app(WalletService::class)
-            ->getWallet($userConfirm);
+            ->getWallet($userConfirm)
+        ;
 
         $mockWallet = $this->createMock(\get_class($wallet));
         $mockWallet->method('refreshBalance')
-            ->willReturn(false);
+            ->willReturn(false)
+        ;
 
         /**
          * @var Wallet $mockWallet
@@ -42,14 +42,9 @@ class ConfirmMockTest extends TestCase
         self::assertFalse($userConfirm->safeConfirm($transaction));
     }
 
-    /**
-     * @return void
-     */
     public function testFailResetConfirm(): void
     {
-        /**
-         * @var UserConfirm $userConfirm
-         */
+        /** @var UserConfirm $userConfirm */
         $userConfirm = UserConfirmFactory::new()->create();
         $transaction = $userConfirm->deposit(100);
         self::assertEquals($userConfirm->wallet->id, $transaction->wallet->id);
@@ -58,11 +53,13 @@ class ConfirmMockTest extends TestCase
         self::assertTrue($transaction->confirmed);
 
         $wallet = app(WalletService::class)
-            ->getWallet($userConfirm);
+            ->getWallet($userConfirm)
+        ;
 
         $mockWallet = $this->createMock(\get_class($wallet));
         $mockWallet->method('refreshBalance')
-            ->willReturn(false);
+            ->willReturn(false)
+        ;
 
         /**
          * @var Wallet $mockWallet

@@ -4,11 +4,11 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Objects\EmptyLock;
 
+/**
+ * @internal
+ */
 class EmptyLockTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testSimple(): void
     {
         $empty = app(EmptyLock::class);
@@ -20,9 +20,6 @@ class EmptyLockTest extends TestCase
         }));
     }
 
-    /**
-     * @return void
-     */
     public function testOwner(): void
     {
         $empty = app(EmptyLock::class);

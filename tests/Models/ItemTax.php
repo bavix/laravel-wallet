@@ -6,9 +6,6 @@ use Bavix\Wallet\Interfaces\Taxable;
 
 class ItemTax extends Item implements Taxable
 {
-    /**
-     * @return string
-     */
     public function getTable(): string
     {
         return 'items';
@@ -22,7 +19,7 @@ class ItemTax extends Item implements Taxable
      * Minimum 0; Maximum 100
      * Example: return 7.5; // 7.5%
      *
-     * @return int|float
+     * @return float|int
      */
     public function getFeePercent()
     {
