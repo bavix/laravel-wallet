@@ -48,10 +48,7 @@ class WalletServiceProvider extends ServiceProvider
         $this->commands([RefreshBalance::class]);
 
         if ($this->shouldMigrate()) {
-            $this->loadMigrationsFrom([
-                __DIR__.'/../database/migrations_v1',
-                __DIR__.'/../database/migrations_v2',
-            ]);
+            $this->loadMigrationsFrom([__DIR__.'/../database']);
         }
 
         if (function_exists('config_path')) {
@@ -61,17 +58,8 @@ class WalletServiceProvider extends ServiceProvider
         }
 
         $this->publishes([
-            dirname(__DIR__).'/database/migrations_v1/' => database_path('migrations'),
-            dirname(__DIR__).'/database/migrations_v2/' => database_path('migrations'),
+            dirname(__DIR__).'/database/' => database_path('migrations'),
         ], 'laravel-wallet-migrations');
-
-        $this->publishes([
-            dirname(__DIR__).'/database/migrations_v1/' => database_path('migrations'),
-        ], 'laravel-wallet-migrations-v1');
-
-        $this->publishes([
-            dirname(__DIR__).'/database/migrations_v2/' => database_path('migrations'),
-        ], 'laravel-wallet-migrations-v2');
     }
 
     /**
