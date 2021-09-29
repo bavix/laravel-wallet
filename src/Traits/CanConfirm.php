@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Traits;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\ConfirmedInvalid;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
+use Bavix\Wallet\Exceptions\UnconfirmedInvalid;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
 use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Interfaces\Mathable;
@@ -59,7 +60,7 @@ trait CanConfirm
     /**
      * Removal of confirmation (forced), use at your own peril and risk.
      *
-     * @throws ConfirmedInvalid
+     * @throws UnconfirmedInvalid
      */
     public function resetConfirm(Transaction $transaction): bool
     {
@@ -74,7 +75,7 @@ trait CanConfirm
                 }
 
                 if (!$transaction->confirmed) {
-                    throw new ConfirmedInvalid(trans('wallet::errors.unconfirmed_invalid'));
+                    throw new UnconfirmedInvalid(trans('wallet::errors.unconfirmed_invalid'));
                 }
 
                 $mathService = app(Mathable::class);
