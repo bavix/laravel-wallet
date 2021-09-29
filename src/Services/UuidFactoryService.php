@@ -10,8 +10,7 @@ use Ramsey\Uuid\UuidFactoryInterface;
 
 class UuidFactoryService implements UuidInterface
 {
-    /** @var UuidFactoryInterface */
-    private $uuidFactory;
+    private UuidFactoryInterface $uuidFactory;
 
     public function __construct(UuidFactory $uuidFactory)
     {
