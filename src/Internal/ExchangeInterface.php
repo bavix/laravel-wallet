@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Bavix\Wallet\Interfaces;
+namespace Bavix\Wallet\Internal;
 
 interface ExchangeInterface
 {

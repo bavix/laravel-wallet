@@ -4,7 +4,7 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
-use Bavix\Wallet\Interfaces\MathInterface;
+use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Test\Factories\UserFloatFactory;
 use Bavix\Wallet\Test\Models\UserFloat as User;

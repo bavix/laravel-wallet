@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Simple;
 
-use Bavix\Wallet\Interfaces\ExchangeInterface;
+use Bavix\Wallet\Internal\ExchangeInterface;
 
 class Exchange implements ExchangeInterface
 {

@@ -2,27 +2,27 @@
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Objects\EmptyLock;
 use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Str;
 
 class LockService
 {
     /**
      * @var string
      */
-    protected $uniqId;
+    protected $ikey;
 
     /**
      * LockService constructor.
      */
-    public function __construct()
+    public function __construct(UuidInterface $uuidService)
     {
-        $this->uniqId = Str::random();
+        $this->ikey = $uuidService->uuid4();
     }
 
     /**
@@ -78,7 +78,7 @@ class LockService
         // @codeCoverageIgnoreStart
         if ($enabled && $store instanceof LockProvider) {
             $class = \get_class($self);
-            $uniqId = $class.$this->uniqId;
+            $uniqId = $class.$this->ikey;
             if ($self instanceof Model) {
                 $uniqId = $class.$self->getKey();
             }

@@ -2,9 +2,9 @@
 
 namespace Bavix\Wallet\Simple;
 
-use Bavix\Wallet\Interfaces\ExchangeInterface;
 use Bavix\Wallet\Interfaces\Rateable;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\ExchangeInterface;
 
 /**
  * Class Rate.

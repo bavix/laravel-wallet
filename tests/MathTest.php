@@ -2,7 +2,7 @@
 
 namespace Bavix\Wallet\Test;
 
-use Bavix\Wallet\Interfaces\MathInterface;
+use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Simple\BrickMath;
 use Brick\Math\BigInteger;
 use Brick\Math\Exception\NumberFormatException;

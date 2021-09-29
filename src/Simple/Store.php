@@ -2,8 +2,8 @@
 
 namespace Bavix\Wallet\Simple;
 
-use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\Storable;
+use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Services\WalletService;
 
 class Store implements Storable

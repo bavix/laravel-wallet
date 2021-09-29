@@ -3,8 +3,8 @@
 namespace Bavix\Wallet\Models;
 
 use function array_merge;
-use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\WalletService;
 use function config;

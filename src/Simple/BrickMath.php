@@ -2,7 +2,7 @@
 
 namespace Bavix\Wallet\Simple;
 
-use Bavix\Wallet\Interfaces\MathInterface;
+use Bavix\Wallet\Internal\MathInterface;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
 

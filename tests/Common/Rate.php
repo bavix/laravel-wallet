@@ -2,9 +2,9 @@
 
 namespace Bavix\Wallet\Test\Common;
 
-use Bavix\Wallet\Interfaces\ExchangeInterface;
-use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\ExchangeInterface;
+use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Services\WalletService;
 use Illuminate\Support\Arr;
 
