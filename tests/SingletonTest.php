@@ -3,9 +3,9 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Interfaces\Mathable;
-use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\Rateable;
 use Bavix\Wallet\Interfaces\Storable;
+use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Objects\EmptyLock;

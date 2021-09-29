@@ -2,11 +2,11 @@
 
 namespace Bavix\Wallet\Objects;
 
-use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
-use Ramsey\Uuid\Uuid;
 
 class Bring
 {
@@ -55,9 +55,9 @@ class Bring
      *
      * @throws
      */
-    public function __construct()
+    public function __construct(UuidInterface $uuidService)
     {
-        $this->uuid = Uuid::uuid4()->toString();
+        $this->uuid = $uuidService->uuid4();
     }
 
     public function getStatus(): string

@@ -4,8 +4,8 @@ namespace Bavix\Wallet\Objects;
 
 use function array_unique;
 use Bavix\Wallet\Interfaces\Customer;
-use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Models\Transfer;
 use function count;
 use Countable;

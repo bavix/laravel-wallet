@@ -2,8 +2,8 @@
 
 namespace Bavix\Wallet\Traits;
 
-use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Services\CommonService;
