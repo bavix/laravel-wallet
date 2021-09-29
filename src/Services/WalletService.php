@@ -7,6 +7,7 @@ use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Discount;
 use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\MinimalTaxable;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Interfaces\Taxable;
@@ -34,7 +35,7 @@ class WalletService
 
     public function decimalPlaces(Wallet $object): string
     {
-        return app(Mathable::class)
+        return app(MathInterface::class)
             ->pow(10, $this->decimalPlacesValue($object))
         ;
     }
@@ -68,7 +69,7 @@ class WalletService
          */
         if ($wallet instanceof MinimalTaxable) {
             $minimal = $wallet->getMinimalFee();
-            if (app(Mathable::class)->compare($fee, $minimal) === -1) {
+            if (app(MathInterface::class)->compare($fee, $minimal) === -1) {
                 $fee = $minimal;
             }
         }
@@ -85,7 +86,7 @@ class WalletService
      */
     public function checkAmount($amount): void
     {
-        if (app(Mathable::class)->compare($amount, 0) === -1) {
+        if (app(MathInterface::class)->compare($amount, 0) === -1) {
             throw new AmountInvalid(trans('wallet::errors.price_positive'));
         }
     }
@@ -110,7 +111,7 @@ class WalletService
     public function refresh(WalletModel $wallet): bool
     {
         return app(LockService::class)->lock($this, __FUNCTION__, static function () use ($wallet) {
-            $math = app(Mathable::class);
+            $math = app(MathInterface::class);
             app(Storable::class)->getBalance($wallet);
             $whatIs = $wallet->balance;
             $balance = $wallet->getAvailableBalance();
@@ -127,7 +128,7 @@ class WalletService
     public function adjustment(WalletModel $wallet, ?array $meta = null): void
     {
         app(DbService::class)->transaction(function () use ($wallet, $meta) {
-            $math = app(Mathable::class);
+            $math = app(MathInterface::class);
             app(Storable::class)->getBalance($wallet);
             $adjustmentBalance = $wallet->balance;
             $wallet->refreshBalance();

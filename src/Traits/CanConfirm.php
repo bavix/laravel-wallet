@@ -8,7 +8,7 @@ use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Exceptions\UnconfirmedInvalid;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
 use Bavix\Wallet\Interfaces\Confirmable;
-use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Services\CommonService;
@@ -39,7 +39,7 @@ trait CanConfirm
                 if ($transaction->type === Transaction::TYPE_WITHDRAW) {
                     app(CommonService::class)->verifyWithdraw(
                         $wallet,
-                        app(Mathable::class)->abs($transaction->amount)
+                        app(MathInterface::class)->abs($transaction->amount)
                     );
                 }
 
@@ -78,7 +78,7 @@ trait CanConfirm
                     throw new UnconfirmedInvalid(trans('wallet::errors.unconfirmed_invalid'));
                 }
 
-                $mathService = app(Mathable::class);
+                $mathService = app(MathInterface::class);
                 $negativeAmount = $mathService->negative($transaction->amount);
 
                 return $transaction->update(['confirmed' => false]) &&

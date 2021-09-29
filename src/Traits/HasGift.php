@@ -7,7 +7,7 @@ use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Customer;
-use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transfer;
@@ -65,7 +65,7 @@ trait HasGift
              * That's why I address him like this!
              */
             return app(DbService::class)->transaction(static function () use ($santa, $to, $product, $force): Transfer {
-                $math = app(Mathable::class);
+                $math = app(MathInterface::class);
                 $discount = app(WalletService::class)->discount($santa, $product);
                 $amount = $math->sub($product->getAmountProduct($santa), $discount);
                 $meta = $product->getMetaProduct();

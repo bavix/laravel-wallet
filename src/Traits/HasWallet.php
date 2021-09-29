@@ -6,7 +6,7 @@ use function app;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
-use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
@@ -149,7 +149,7 @@ trait HasWallet
      */
     public function canWithdraw($amount, bool $allowZero = null): bool
     {
-        $math = app(Mathable::class);
+        $math = app(MathInterface::class);
 
         /**
          * Allow to buy for free with a negative balance.

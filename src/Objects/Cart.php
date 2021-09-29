@@ -4,7 +4,7 @@ namespace Bavix\Wallet\Objects;
 
 use function array_unique;
 use Bavix\Wallet\Interfaces\Customer;
-use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Models\Transfer;
 use function count;
@@ -125,7 +125,7 @@ class Cart implements Countable
     public function getTotal(Customer $customer): string
     {
         $result = 0;
-        $math = app(Mathable::class);
+        $math = app(MathInterface::class);
         foreach ($this->items as $item) {
             $result = $math->add($result, $item->getAmountProduct($customer));
         }
@@ -150,7 +150,7 @@ class Cart implements Countable
     {
         $class = get_class($product);
         $uniq = $product->getUniqueId();
-        $math = app(Mathable::class);
+        $math = app(MathInterface::class);
         $this->quantity[$class][$uniq] = $math->add($this->getQuantity($product), $quantity);
     }
 }

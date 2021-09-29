@@ -3,6 +3,7 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\Rateable;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Objects\Bring;
@@ -55,7 +56,12 @@ class SingletonTest extends TestCase
 
     public function testMathable(): void
     {
-        self::assertEquals($this->getRefId(Mathable::class), $this->getRefId(Mathable::class));
+        self::assertEquals($this->getRefId(Mathable::class), $this->getRefId(MathInterface::class));
+    }
+
+    public function testMathInterface(): void
+    {
+        self::assertEquals($this->getRefId(MathInterface::class), $this->getRefId(MathInterface::class));
     }
 
     public function testTransaction(): void

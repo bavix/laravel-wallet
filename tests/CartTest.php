@@ -2,7 +2,7 @@
 
 namespace Bavix\Wallet\Test;
 
-use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\DbService;
@@ -261,7 +261,7 @@ class CartTest extends TestCase
             self::assertEquals(0, $item->balance);
         }
 
-        $math = app(Mathable::class);
+        $math = app(MathInterface::class);
 
         self::assertEquals($buyer->balance, $buyer->wallet->balance);
         self::assertNotNull($buyer->deposit($cart->getTotal($buyer)));

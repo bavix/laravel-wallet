@@ -2,7 +2,7 @@
 
 namespace Bavix\Wallet\Objects;
 
-use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Ramsey\Uuid\Uuid;
@@ -94,7 +94,7 @@ class Operation
      */
     public function setAmount($amount): self
     {
-        $this->amount = app(Mathable::class)->round($amount);
+        $this->amount = app(MathInterface::class)->round($amount);
 
         return $this;
     }

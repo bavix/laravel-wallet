@@ -2,7 +2,7 @@
 
 namespace Bavix\Wallet\Traits;
 
-use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Bring;
@@ -52,7 +52,7 @@ trait CanExchange
 
         return app(LockService::class)->lock($this, __FUNCTION__, static function () use ($from, $to, $amount, $meta) {
             return app(DbService::class)->transaction(static function () use ($from, $to, $amount, $meta) {
-                $math = app(Mathable::class);
+                $math = app(MathInterface::class);
                 $rate = app(ExchangeService::class)->rate($from, $to);
                 $fee = app(WalletService::class)->fee($to, $amount);
 

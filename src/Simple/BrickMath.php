@@ -2,14 +2,14 @@
 
 namespace Bavix\Wallet\Simple;
 
-use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Interfaces\MathInterface;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
 
 /**
  * Class BrickMath.
  */
-class BrickMath implements Mathable
+class BrickMath implements MathInterface
 {
     /**
      * @var int
