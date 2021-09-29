@@ -6,7 +6,7 @@ use function app;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
-use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
@@ -32,7 +32,7 @@ class CommonService
     public function transfer(Wallet $from, Wallet $to, $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($from, $to, $amount, $meta, $status) {
-            $math = app(Mathable::class);
+            $math = app(MathInterface::class);
             $discount = app(WalletService::class)->discount($from, $to);
             $newAmount = max(0, $math->sub($amount, $discount));
             $fee = app(WalletService::class)->fee($to, $newAmount);
@@ -51,7 +51,7 @@ class CommonService
     public function forceTransfer(Wallet $from, Wallet $to, $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($from, $to, $amount, $meta, $status) {
-            $math = app(Mathable::class);
+            $math = app(MathInterface::class);
             $from = app(WalletService::class)->getWallet($from);
             $discount = app(WalletService::class)->discount($from, $to);
             $fee = app(WalletService::class)->fee($to, $amount);
@@ -89,7 +89,7 @@ class CommonService
             /** @var WalletModel $wallet */
             $wallet = $walletService->getWallet($wallet);
 
-            $mathService = app(Mathable::class);
+            $mathService = app(MathInterface::class);
             $transactions = $this->multiOperation($wallet, [
                 app(Operation::class)
                     ->setType(Transaction::TYPE_WITHDRAW)
@@ -159,7 +159,7 @@ class CommonService
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($self, $operations) {
             $amount = 0;
             $objects = [];
-            $math = app(Mathable::class);
+            $math = app(MathInterface::class);
             foreach ($operations as $operation) {
                 if ($operation->isConfirmed()) {
                     $amount = $math->add($amount, $operation->getAmount());

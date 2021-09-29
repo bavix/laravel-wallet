@@ -5,6 +5,7 @@ namespace Bavix\Wallet;
 use Bavix\Wallet\Commands\RefreshBalance;
 use Bavix\Wallet\Interfaces\ExchangeInterface;
 use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\Rateable;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Models\Transaction;
@@ -78,7 +79,8 @@ class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(Rateable::class, config('wallet.package.rateable', Rate::class));
         $this->app->singleton(ExchangeInterface::class, config('wallet.package.exchange', Exchange::class));
         $this->app->singleton(Storable::class, config('wallet.package.storable', Store::class));
-        $this->app->singleton(Mathable::class, config('wallet.package.mathable', BrickMath::class));
+        $this->app->singleton(MathInterface::class, config('wallet.package.mathable', BrickMath::class));
+        $this->app->alias(MathInterface::class, Mathable::class);
         $this->app->singleton(DbService::class, config('wallet.services.db', DbService::class));
         $this->app->singleton(ExchangeService::class, config('wallet.services.exchange', ExchangeService::class));
         $this->app->singleton(CommonService::class, config('wallet.services.common', CommonService::class));

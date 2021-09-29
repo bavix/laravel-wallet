@@ -3,7 +3,7 @@
 namespace Bavix\Wallet\Models;
 
 use function array_merge;
-use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\WalletService;
@@ -94,7 +94,7 @@ class Transaction extends Model
             ->decimalPlaces($this->wallet)
         ;
 
-        return app(Mathable::class)
+        return app(MathInterface::class)
             ->div($this->amount, $decimalPlaces)
         ;
     }
@@ -104,7 +104,7 @@ class Transaction extends Model
      */
     public function setAmountFloatAttribute($amount): void
     {
-        $math = app(Mathable::class);
+        $math = app(MathInterface::class);
         $decimalPlaces = app(WalletService::class)
             ->decimalPlaces($this->wallet)
         ;

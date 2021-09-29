@@ -2,7 +2,7 @@
 
 namespace Bavix\Wallet\Objects;
 
-use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
@@ -80,7 +80,7 @@ class Bring
      */
     public function setDiscount(int $discount): self
     {
-        $this->discount = app(Mathable::class)->round($discount);
+        $this->discount = app(MathInterface::class)->round($discount);
 
         return $this;
     }
@@ -159,10 +159,10 @@ class Bring
     {
         $fee = $this->fee;
         if ($fee === null) {
-            $fee = app(Mathable::class)->round(
-                app(Mathable::class)->sub(
-                    app(Mathable::class)->abs($this->getWithdraw()->amount),
-                    app(Mathable::class)->abs($this->getDeposit()->amount)
+            $fee = app(MathInterface::class)->round(
+                app(MathInterface::class)->sub(
+                    app(MathInterface::class)->abs($this->getWithdraw()->amount),
+                    app(MathInterface::class)->abs($this->getDeposit()->amount)
                 )
             );
         }
@@ -177,7 +177,7 @@ class Bring
      */
     public function setFee($fee): self
     {
-        $this->fee = app(Mathable::class)->round($fee);
+        $this->fee = app(MathInterface::class)->round($fee);
 
         return $this;
     }

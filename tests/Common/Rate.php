@@ -3,7 +3,7 @@
 namespace Bavix\Wallet\Test\Common;
 
 use Bavix\Wallet\Interfaces\ExchangeInterface;
-use Bavix\Wallet\Interfaces\Mathable;
+use Bavix\Wallet\Interfaces\MathInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Services\WalletService;
 use Illuminate\Support\Arr;
@@ -21,21 +21,21 @@ class Rate extends \Bavix\Wallet\Simple\Rate
 
     private $walletService;
 
-    private $math;
+    private $mathService;
 
     /**
      * Rate constructor.
      */
-    public function __construct(ExchangeInterface $exchange, Mathable $math, WalletService $walletService)
+    public function __construct(ExchangeInterface $exchange, MathInterface $mathService, WalletService $walletService)
     {
         parent::__construct($exchange);
         $this->walletService = $walletService;
-        $this->math = $math;
+        $this->mathService = $mathService;
 
         foreach ($this->rates as $from => $rates) {
             foreach ($rates as $to => $rate) {
                 if (empty($this->rates[$to][$from])) {
-                    $this->rates[$to][$from] = $this->math->div(1, $rate);
+                    $this->rates[$to][$from] = $this->mathService->div(1, $rate);
                 }
             }
         }
@@ -46,7 +46,7 @@ class Rate extends \Bavix\Wallet\Simple\Rate
      */
     public function convertTo(Wallet $wallet)
     {
-        return $this->math->mul(
+        return $this->mathService->mul(
             parent::convertTo($wallet),
             $this->rate($wallet)
         );
