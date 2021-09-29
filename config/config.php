@@ -12,6 +12,7 @@ use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Simple\BrickMath;
+use Bavix\Wallet\Simple\Exchange;
 use Bavix\Wallet\Simple\Rate;
 use Bavix\Wallet\Simple\Store;
 
@@ -29,6 +30,7 @@ return [
      * You do not need to search for the desired class by code, the library will do it itself.
      */
     'package' => [
+        'exchange' => Exchange::class,
         'rateable' => Rate::class,
         'storable' => Store::class,
         'mathable' => BrickMath::class,
