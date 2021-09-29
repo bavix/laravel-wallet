@@ -2,6 +2,10 @@
 
 namespace Bavix\Wallet\Interfaces;
 
+/**
+ * @deprecated The interface was not thought out
+ * @see ExchangeInterface
+ */
 interface Rateable
 {
     /**

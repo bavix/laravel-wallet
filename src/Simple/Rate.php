@@ -2,11 +2,15 @@
 
 namespace Bavix\Wallet\Simple;
 
+use Bavix\Wallet\Interfaces\ExchangeInterface;
 use Bavix\Wallet\Interfaces\Rateable;
 use Bavix\Wallet\Interfaces\Wallet;
 
 /**
  * Class Rate.
+ *
+ * @deprecated Not used anymore
+ * @see Exchange
  */
 class Rate implements Rateable
 {
@@ -19,6 +23,13 @@ class Rate implements Rateable
      * @var \Bavix\Wallet\Models\Wallet|Wallet
      */
     protected $withCurrency;
+
+    private $exchange;
+
+    public function __construct(ExchangeInterface $exchange)
+    {
+        $this->exchange = $exchange;
+    }
 
     /**
      * {@inheritdoc}
@@ -45,6 +56,11 @@ class Rate implements Rateable
      */
     public function convertTo(Wallet $wallet)
     {
-        return $this->amount;
+        /** @var \Bavix\Wallet\Models\Wallet $wallet */
+        return $this->exchange->convertTo(
+            $this->withCurrency->currency,
+            $wallet->currency,
+            $this->amount
+        );
     }
 }
