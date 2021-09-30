@@ -37,6 +37,7 @@ class AtomicService implements LockInterface
 
     /**
      * @throws LockProviderNotFoundException
+     * @codeCoverageIgnore
      */
     private function getLockProvider(): LockProvider
     {

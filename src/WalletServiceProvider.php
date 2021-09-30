@@ -6,8 +6,11 @@ use Bavix\Wallet\Commands\RefreshBalance;
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Rateable;
 use Bavix\Wallet\Interfaces\Storable;
+use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\ExchangeInterface;
+use Bavix\Wallet\Internal\LockInterface;
 use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\StorageInterface;
 use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
@@ -16,11 +19,14 @@ use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Objects\EmptyLock;
 use Bavix\Wallet\Objects\Operation;
+use Bavix\Wallet\Services\AtomicService;
+use Bavix\Wallet\Services\BookkeeperService;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\MetaService;
+use Bavix\Wallet\Services\StorageService;
 use Bavix\Wallet\Services\UuidFactoryService;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Simple\BrickMath;
@@ -90,7 +96,10 @@ class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(LockService::class, config('wallet.services.lock', LockService::class));
         $this->app->singleton(MetaService::class);
 
+        $this->app->singleton(LockInterface::class, AtomicService::class);
         $this->app->singleton(UuidInterface::class, UuidFactoryService::class);
+        $this->app->singleton(StorageInterface::class, StorageService::class);
+        $this->app->singleton(BookkeeperInterface::class, BookkeeperService::class);
 
         // models
         $this->app->bind(Transaction::class, config('wallet.transaction.model', Transaction::class));

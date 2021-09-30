@@ -30,7 +30,7 @@ class StorageService implements StorageInterface
 
     public function missing(string $key): bool
     {
-        return $this->cache->missing($key);
+        return $this->cache->delete($key);
     }
 
     public function get(string $key): string
@@ -40,7 +40,7 @@ class StorageService implements StorageInterface
             throw new RecordNotFoundException();
         }
 
-        return $value;
+        return (string) $value;
     }
 
     public function sync(string $key, $value): bool
