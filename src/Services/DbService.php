@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Services;
 
 use Closure;
@@ -12,6 +14,8 @@ use Throwable;
  * Class DbService.
  *
  * @codeCoverageIgnore
+ *
+ * @deprecated planned to be removed from the project
  */
 class DbService
 {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Interfaces;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
@@ -57,9 +59,8 @@ interface Wallet
 
     /**
      * @param int|string $amount
-     * @param bool       $allowZero
      */
-    public function canWithdraw($amount, bool $allowZero = null): bool;
+    public function canWithdraw($amount, bool $allowZero = false): bool;
 
     /**
      * @return float|int

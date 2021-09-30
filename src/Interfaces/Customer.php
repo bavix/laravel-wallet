@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Interfaces;
 
 use Bavix\Wallet\Models\Transfer;
@@ -8,65 +10,44 @@ use Bavix\Wallet\Objects\Cart;
 interface Customer extends Wallet
 {
     /**
-     * @param bool $force
-     *
      * @throws
      */
-    public function pay(Product $product, bool $force = null): Transfer;
+    public function pay(Product $product, bool $force = false): Transfer;
 
     /**
-     * @param bool $force
-     *
      * @throws
      */
-    public function safePay(Product $product, bool $force = null): ?Transfer;
+    public function safePay(Product $product, bool $force = false): ?Transfer;
 
     /**
      * @throws
      */
     public function forcePay(Product $product): Transfer;
 
-    /**
-     * @param bool $gifts
-     */
-    public function paid(Product $product, bool $gifts = null): ?Transfer;
+    public function paid(Product $product, bool $gifts = false): ?Transfer;
 
     /**
-     * @param bool $force
-     * @param bool $gifts
-     *
      * @throws
      */
-    public function refund(Product $product, bool $force = null, bool $gifts = null): bool;
+    public function refund(Product $product, bool $force = false, bool $gifts = false): bool;
+
+    public function safeRefund(Product $product, bool $force = false, bool $gifts = false): bool;
+
+    public function forceRefund(Product $product, bool $gifts = false): bool;
 
     /**
-     * @param bool $force
-     * @param bool $gifts
-     */
-    public function safeRefund(Product $product, bool $force = null, bool $gifts = null): bool;
-
-    /**
-     * @param bool $gifts
-     */
-    public function forceRefund(Product $product, bool $gifts = null): bool;
-
-    /**
-     * @param bool $force
-     *
      * @throws
      *
      * @return Transfer[]
      */
-    public function payCart(Cart $cart, bool $force = null): array;
+    public function payCart(Cart $cart, bool $force = false): array;
 
     /**
-     * @param bool $force
-     *
      * @throws
      *
      * @return Transfer[]
      */
-    public function safePayCart(Cart $cart, bool $force = null): array;
+    public function safePayCart(Cart $cart, bool $force = false): array;
 
     /**
      * @throws
@@ -76,21 +57,11 @@ interface Customer extends Wallet
     public function forcePayCart(Cart $cart): array;
 
     /**
-     * @param bool $force
-     * @param bool $gifts
-     *
      * @throws
      */
-    public function refundCart(Cart $cart, bool $force = null, bool $gifts = null): bool;
+    public function refundCart(Cart $cart, bool $force = false, bool $gifts = false): bool;
 
-    /**
-     * @param bool $force
-     * @param bool $gifts
-     */
-    public function safeRefundCart(Cart $cart, bool $force = null, bool $gifts = null): bool;
+    public function safeRefundCart(Cart $cart, bool $force = false, bool $gifts = false): bool;
 
-    /**
-     * @param bool $gifts
-     */
-    public function forceRefundCart(Cart $cart, bool $gifts = null): bool;
+    public function forceRefundCart(Cart $cart, bool $gifts = false): bool;
 }

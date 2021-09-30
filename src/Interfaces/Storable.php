@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Interfaces;
 
+use Bavix\Wallet\Internal\BookkeeperInterface;
+
+/**
+ * @deprecated Will be removed in future versions
+ * @see BookkeeperInterface
+ */
 interface Storable
 {
     /**

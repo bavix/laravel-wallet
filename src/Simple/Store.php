@@ -3,30 +3,24 @@
 namespace Bavix\Wallet\Simple;
 
 use Bavix\Wallet\Interfaces\Storable;
-use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\BookkeeperInterface;
+use Bavix\Wallet\Internal\StorageInterface;
 use Bavix\Wallet\Services\WalletService;
 
+/**
+ * @deprecated
+ * @see BookkeeperInterface
+ */
 class Store implements Storable
 {
-    /**
-     * @var string[]
-     */
-    protected $balanceSheets = [];
-
     /**
      * {@inheritdoc}
      */
     public function getBalance($object)
     {
         $wallet = app(WalletService::class)->getWallet($object);
-        if (!\array_key_exists($wallet->getKey(), $this->balanceSheets)) {
-            $balance = method_exists($wallet, 'getRawOriginal') ?
-                $wallet->getRawOriginal('balance', 0) : $wallet->getOriginal('balance', 0);
 
-            $this->balanceSheets[$wallet->getKey()] = $this->round($balance);
-        }
-
-        return $this->balanceSheets[$wallet->getKey()];
+        return app(BookkeeperInterface::class)->amount($wallet);
     }
 
     /**
@@ -34,12 +28,9 @@ class Store implements Storable
      */
     public function incBalance($object, $amount): string
     {
-        $math = app(MathInterface::class);
-        $balance = $math->add($this->getBalance($object), $amount);
-        $balance = $this->round($balance);
-        $this->setBalance($object, $balance);
+        $wallet = app(WalletService::class)->getWallet($object);
 
-        return $balance;
+        return app(BookkeeperInterface::class)->increase($wallet, $amount);
     }
 
     /**
@@ -48,9 +39,8 @@ class Store implements Storable
     public function setBalance($object, $amount): bool
     {
         $wallet = app(WalletService::class)->getWallet($object);
-        $this->balanceSheets[$wallet->getKey()] = $this->round($amount);
 
-        return true;
+        return app(BookkeeperInterface::class)->sync($wallet, $amount);
     }
 
     /**
@@ -58,16 +48,6 @@ class Store implements Storable
      */
     public function fresh(): bool
     {
-        $this->balanceSheets = [];
-
-        return true;
-    }
-
-    /**
-     * @param int|string $balance
-     */
-    protected function round($balance): string
-    {
-        return app(MathInterface::class)->round($balance ?: 0);
+        return app(StorageInterface::class)->flush();
     }
 }

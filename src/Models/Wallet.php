@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Models;
 
 use function app;
@@ -117,6 +119,16 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         } catch (\Throwable $throwable) {
             return false;
         }
+    }
+
+    /** @codeCoverageIgnore */
+    public function getOriginalBalance(): string
+    {
+        if (method_exists($this, 'getRawOriginal')) {
+            return (string) $this->getRawOriginal('balance', 0);
+        }
+
+        return (string) $this->getOriginal('balance', 0);
     }
 
     /**

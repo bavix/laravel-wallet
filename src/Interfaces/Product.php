@@ -1,13 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Interfaces;
 
 interface Product extends Wallet
 {
-    /**
-     * @param bool $force
-     */
-    public function canBuy(Customer $customer, int $quantity = 1, bool $force = null): bool;
+    public function canBuy(Customer $customer, int $quantity = 1, bool $force = false): bool;
 
     /**
      * @return float|int

@@ -10,8 +10,8 @@ use Bavix\Wallet\Objects\Operation;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
+use Bavix\Wallet\Services\MathService;
 use Bavix\Wallet\Services\WalletService;
-use Bavix\Wallet\Simple\BrickMath;
 use Bavix\Wallet\Simple\Exchange;
 use Bavix\Wallet\Simple\Rate;
 use Bavix\Wallet\Simple\Store;
@@ -33,7 +33,7 @@ return [
         'exchange' => Exchange::class,
         'rateable' => Rate::class,
         'storable' => Store::class,
-        'mathable' => BrickMath::class,
+        'mathable' => MathService::class,
     ],
 
     /**
@@ -62,7 +62,7 @@ return [
      * @example
      *  'my-usd' => 'USD'
      *
-     * @deprecated use wallets.meta.currency
+     * @deprecated use table "wallets", column meta.currency
      */
     'currencies' => [],
 

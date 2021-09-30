@@ -3,7 +3,7 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Interfaces\Storable;
-use Bavix\Wallet\Simple\BrickMath;
+use Bavix\Wallet\Services\MathService;
 use Bavix\Wallet\Simple\Store;
 use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Common\Models\Transfer;
@@ -51,7 +51,7 @@ class TestCase extends OrchestraTestCase
         // Bind eloquent models to IoC container
         $app['config']->set('wallet.package.rateable', Rate::class);
         $app['config']->set('wallet.package.storable', Store::class);
-        $app['config']->set('wallet.package.mathable', BrickMath::class);
+        $app['config']->set('wallet.package.mathable', MathService::class);
 
         // database
         $config->set('database.connections.testing.prefix', 'tests');

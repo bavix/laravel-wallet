@@ -1,13 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet;
 
 use Bavix\Wallet\Commands\RefreshBalance;
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Rateable;
 use Bavix\Wallet\Interfaces\Storable;
+use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\ExchangeInterface;
+use Bavix\Wallet\Internal\LockInterface;
 use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\StorageInterface;
 use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
@@ -16,11 +21,15 @@ use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Objects\EmptyLock;
 use Bavix\Wallet\Objects\Operation;
+use Bavix\Wallet\Services\AtomicService;
+use Bavix\Wallet\Services\BookkeeperService;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
+use Bavix\Wallet\Services\MathService;
 use Bavix\Wallet\Services\MetaService;
+use Bavix\Wallet\Services\StorageService;
 use Bavix\Wallet\Services\UuidFactoryService;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Simple\BrickMath;
@@ -77,21 +86,49 @@ class WalletServiceProvider extends ServiceProvider
             'wallet'
         );
 
+        $this->singletons();
+        $this->legacySingleton();
+        $this->bindObjects();
+    }
+
+    /**
+     * Determine if we should register the migrations.
+     */
+    protected function shouldMigrate(): bool
+    {
+        return WalletConfigure::$runsMigrations;
+    }
+
+    private function singletons(): void
+    {
         // Bind eloquent models to IoC container
-        $this->app->singleton(Rateable::class, config('wallet.package.rateable', Rate::class));
         $this->app->singleton(ExchangeInterface::class, config('wallet.package.exchange', Exchange::class));
-        $this->app->singleton(Storable::class, config('wallet.package.storable', Store::class));
-        $this->app->singleton(MathInterface::class, config('wallet.package.mathable', BrickMath::class));
-        $this->app->alias(MathInterface::class, Mathable::class);
-        $this->app->singleton(DbService::class, config('wallet.services.db', DbService::class));
+        $this->app->singleton(MathInterface::class, config('wallet.package.mathable', MathService::class));
         $this->app->singleton(ExchangeService::class, config('wallet.services.exchange', ExchangeService::class));
         $this->app->singleton(CommonService::class, config('wallet.services.common', CommonService::class));
         $this->app->singleton(WalletService::class, config('wallet.services.wallet', WalletService::class));
+
+        $this->app->singleton(LockInterface::class, AtomicService::class);
+        $this->app->singleton(UuidInterface::class, UuidFactoryService::class);
+        $this->app->singleton(StorageInterface::class, StorageService::class);
+        $this->app->singleton(BookkeeperInterface::class, BookkeeperService::class);
+    }
+
+    private function legacySingleton(): void
+    {
+        $this->app->singleton(Rateable::class, config('wallet.package.rateable', Rate::class));
+        $this->app->singleton(Storable::class, config('wallet.package.storable', Store::class));
+
+        $this->app->alias(MathInterface::class, Mathable::class);
+        $this->app->alias(MathInterface::class, BrickMath::class);
+
+        $this->app->singleton(DbService::class, config('wallet.services.db', DbService::class));
         $this->app->singleton(LockService::class, config('wallet.services.lock', LockService::class));
         $this->app->singleton(MetaService::class);
+    }
 
-        $this->app->singleton(UuidInterface::class, UuidFactoryService::class);
-
+    private function bindObjects(): void
+    {
         // models
         $this->app->bind(Transaction::class, config('wallet.transaction.model', Transaction::class));
         $this->app->bind(Transfer::class, config('wallet.transfer.model', Transfer::class));
@@ -102,13 +139,5 @@ class WalletServiceProvider extends ServiceProvider
         $this->app->bind(Cart::class, config('wallet.objects.cart', Cart::class));
         $this->app->bind(EmptyLock::class, config('wallet.objects.emptyLock', EmptyLock::class));
         $this->app->bind(Operation::class, config('wallet.objects.operation', Operation::class));
-    }
-
-    /**
-     * Determine if we should register the migrations.
-     */
-    protected function shouldMigrate(): bool
-    {
-        return WalletConfigure::$runsMigrations;
     }
 }

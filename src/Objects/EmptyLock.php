@@ -2,9 +2,14 @@
 
 namespace Bavix\Wallet\Objects;
 
+use Illuminate\Cache\NoLock;
 use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Support\Str;
 
+/**
+ * @deprecated
+ * @see NoLock
+ */
 class EmptyLock implements Lock
 {
     /**

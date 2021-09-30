@@ -7,7 +7,6 @@ use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\WalletService;
-use Bavix\Wallet\Simple\Store;
 use Bavix\Wallet\Test\Common\Services\WalletAdjustmentFailedService;
 use Bavix\Wallet\Test\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Factories\UserMultiFactory;
@@ -276,7 +275,7 @@ class BalanceTest extends TestCase
          *
          * Here is an example:
          */
-        app()->singleton(Storable::class, Store::class);
+        app(Storable::class)->fresh();
         self::assertEquals(1000, $wallet->getRawOriginal('balance'));
 
         /**
@@ -320,7 +319,7 @@ class BalanceTest extends TestCase
          *
          * Here is an example:
          */
-        app()->singleton(Storable::class, Store::class);
+        app(Storable::class)->fresh();
         self::assertEquals($account, $wallet->getRawOriginal('balance'));
 
         /**
