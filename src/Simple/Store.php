@@ -20,10 +20,7 @@ class Store implements Storable
     {
         $wallet = app(WalletService::class)->getWallet($object);
         if (!\array_key_exists($wallet->getKey(), $this->balanceSheets)) {
-            $balance = method_exists($wallet, 'getRawOriginal') ?
-                $wallet->getRawOriginal('balance', 0) : $wallet->getOriginal('balance', 0);
-
-            $this->balanceSheets[$wallet->getKey()] = $this->round($balance);
+            $this->balanceSheets[$wallet->getKey()] = $this->round($wallet->getOriginalBalance());
         }
 
         return $this->balanceSheets[$wallet->getKey()];
