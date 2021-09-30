@@ -38,7 +38,7 @@ class BookkeeperService implements BookkeeperInterface
                 $this->getKey($wallet),
                 fn () => $this->storage->sync(
                     $this->getKey($wallet),
-                    $wallet->getAvailableBalance(),
+                    $wallet->getOriginalBalance(),
                 ),
             );
         }

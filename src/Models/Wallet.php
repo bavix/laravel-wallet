@@ -119,6 +119,15 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         }
     }
 
+    public function getOriginalBalance(): string
+    {
+        if (method_exists($this, 'getRawOriginal')) {
+            return (string) $this->getRawOriginal('balance', 0);
+        }
+
+        return (string) $this->getOriginal('balance', 0);
+    }
+
     /**
      * @return float|int
      */
