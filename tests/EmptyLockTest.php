@@ -3,6 +3,7 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Objects\EmptyLock;
+use Bavix\Wallet\Services\AtomicService;
 
 /**
  * @internal
@@ -26,5 +27,13 @@ class EmptyLockTest extends TestCase
         $str = $empty->owner();
         self::assertIsString($str);
         self::assertEquals($str, $empty->owner());
+    }
+
+    public function testAtomic(): void
+    {
+        $atomic = app(AtomicService::class);
+        $atomic->block('hello', static fn () => 'hello world');
+        $atomic->block('hello', static fn () => 'hello world');
+        self::assertTrue(true);
     }
 }

@@ -8,6 +8,7 @@ use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 
+/** @deprecated There is no alternative yet, but the class will be removed */
 class Bring
 {
     /**

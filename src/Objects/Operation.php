@@ -7,6 +7,7 @@ use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Transaction;
 
+/** @deprecated There is no alternative yet, but the class will be removed */
 class Operation
 {
     /**

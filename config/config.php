@@ -62,7 +62,7 @@ return [
      * @example
      *  'my-usd' => 'USD'
      *
-     * @deprecated use wallets.meta.currency
+     * @deprecated use table "wallets", column meta.currency
      */
     'currencies' => [],
 

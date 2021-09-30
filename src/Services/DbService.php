@@ -12,6 +12,8 @@ use Throwable;
  * Class DbService.
  *
  * @codeCoverageIgnore
+ *
+ * @deprecated planned to be removed from the project
  */
 class DbService
 {

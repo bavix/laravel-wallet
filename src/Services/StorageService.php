@@ -7,15 +7,20 @@ namespace Bavix\Wallet\Services;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\StorageInterface;
 use Illuminate\Cache\CacheManager;
-use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Config\Repository as ConfigRepository;
+use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 class StorageService implements StorageInterface
 {
-    private Repository $cache;
+    private CacheRepository $cache;
 
-    public function __construct(CacheManager $cacheManager)
-    {
-        $this->cache = $cacheManager->driver('array');
+    public function __construct(
+        CacheManager $cacheManager,
+        ConfigRepository $config
+    ) {
+        $this->cache = $cacheManager->driver(
+            $config->get('wallet.cache.driver', 'array')
+        );
     }
 
     public function flush(): bool
@@ -34,6 +39,7 @@ class StorageService implements StorageInterface
         if ($value === null) {
             throw new RecordNotFoundException();
         }
+
         return $value;
     }
 

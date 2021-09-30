@@ -4,7 +4,14 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal;
 
+use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
+
 interface LockInterface
 {
-    public function block(string $key, callable $callback): void;
+    /**
+     * @throws LockProviderNotFoundException
+     *
+     * @return mixed
+     */
+    public function block(string $key, callable $callback);
 }
