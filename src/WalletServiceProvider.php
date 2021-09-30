@@ -27,6 +27,7 @@ use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
+use Bavix\Wallet\Services\MathService;
 use Bavix\Wallet\Services\MetaService;
 use Bavix\Wallet\Services\StorageService;
 use Bavix\Wallet\Services\UuidFactoryService;
@@ -102,7 +103,7 @@ class WalletServiceProvider extends ServiceProvider
     {
         // Bind eloquent models to IoC container
         $this->app->singleton(ExchangeInterface::class, config('wallet.package.exchange', Exchange::class));
-        $this->app->singleton(MathInterface::class, config('wallet.package.mathable', BrickMath::class));
+        $this->app->singleton(MathInterface::class, config('wallet.package.mathable', MathService::class));
         $this->app->singleton(ExchangeService::class, config('wallet.services.exchange', ExchangeService::class));
         $this->app->singleton(CommonService::class, config('wallet.services.common', CommonService::class));
         $this->app->singleton(WalletService::class, config('wallet.services.wallet', WalletService::class));
@@ -117,7 +118,9 @@ class WalletServiceProvider extends ServiceProvider
     {
         $this->app->singleton(Rateable::class, config('wallet.package.rateable', Rate::class));
         $this->app->singleton(Storable::class, config('wallet.package.storable', Store::class));
+
         $this->app->alias(MathInterface::class, Mathable::class);
+        $this->app->alias(MathInterface::class, BrickMath::class);
 
         $this->app->singleton(DbService::class, config('wallet.services.db', DbService::class));
         $this->app->singleton(LockService::class, config('wallet.services.lock', LockService::class));

@@ -3,7 +3,6 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Simple\BrickMath;
 use Brick\Math\BigInteger;
 use Brick\Math\Exception\NumberFormatException;
 
@@ -20,14 +19,14 @@ class MathTest extends TestCase
         $this->expectException(NumberFormatException::class);
 
         /** @var MathInterface $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathInterface::class);
         $provider->abs($value);
     }
 
     public function testAbs(): void
     {
         /** @var MathInterface $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathInterface::class);
 
         // int
         self::assertEquals(123, $provider->abs(123));
@@ -53,7 +52,7 @@ class MathTest extends TestCase
     public function testCompare(): void
     {
         /** @var MathInterface $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathInterface::class);
 
         // int
         self::assertEquals(0, $provider->compare(1, 1));
@@ -74,7 +73,7 @@ class MathTest extends TestCase
     public function testAdd(): void
     {
         /** @var MathInterface $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathInterface::class);
 
         // int
         self::assertEquals(0, $provider->compare($provider->add(1, 5), 6));
@@ -104,7 +103,7 @@ class MathTest extends TestCase
     public function testSub(): void
     {
         /** @var MathInterface $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathInterface::class);
 
         // int
         self::assertEquals(-4, $provider->sub(1, 5));
@@ -134,7 +133,7 @@ class MathTest extends TestCase
     public function testDiv(): void
     {
         /** @var MathInterface $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathInterface::class);
 
         // int
         self::assertEquals(0.2, $provider->div(1, 5));
@@ -164,7 +163,7 @@ class MathTest extends TestCase
     public function testMul(): void
     {
         /** @var MathInterface $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathInterface::class);
 
         // int
         self::assertEquals(5, $provider->mul(1, 5));
@@ -194,7 +193,7 @@ class MathTest extends TestCase
     public function testPow(): void
     {
         /** @var MathInterface $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathInterface::class);
 
         // int
         self::assertEquals(1, $provider->pow(1, 5));
@@ -224,7 +223,7 @@ class MathTest extends TestCase
     public function testCeil(): void
     {
         /** @var MathInterface $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathInterface::class);
 
         // positive
         // int
@@ -293,7 +292,7 @@ class MathTest extends TestCase
     public function testFloor(): void
     {
         /** @var MathInterface $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathInterface::class);
 
         // positive
         // int
@@ -362,7 +361,7 @@ class MathTest extends TestCase
     public function testRound(): void
     {
         /** @var MathInterface $provider */
-        $provider = app(BrickMath::class);
+        $provider = app(MathInterface::class);
 
         // positive
         // int
