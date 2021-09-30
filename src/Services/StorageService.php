@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
+use Bavix\Wallet\Internal\LockInterface;
+use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\StorageInterface;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Config\Repository as ConfigRepository;
@@ -14,10 +16,18 @@ class StorageService implements StorageInterface
 {
     private CacheRepository $cache;
 
+    private LockInterface $lock;
+
+    private MathInterface $math;
+
     public function __construct(
         CacheManager $cacheManager,
-        ConfigRepository $config
+        ConfigRepository $config,
+        LockInterface $lock,
+        MathInterface $math
     ) {
+        $this->math = $math;
+        $this->lock = $lock;
         $this->cache = $cacheManager->driver(
             $config->get('wallet.cache.driver', 'array')
         );
@@ -40,7 +50,7 @@ class StorageService implements StorageInterface
             throw new RecordNotFoundException();
         }
 
-        return (string) $value;
+        return $this->math->round($value);
     }
 
     public function sync(string $key, $value): bool
@@ -50,10 +60,14 @@ class StorageService implements StorageInterface
 
     public function increase(string $key, $value): string
     {
-        if (!$this->cache->has($key)) {
-            throw new RecordNotFoundException();
-        }
+        return $this->lock->block(
+            $key,
+            function () use ($key, $value): string {
+                $result = $this->math->add($this->get($key), $value);
+                $this->sync($key, $result);
 
-        return (string) $this->cache->increment($key, $value);
+                return $this->math->round($result);
+            }
+        );
     }
 }
