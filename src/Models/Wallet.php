@@ -119,6 +119,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         }
     }
 
+    /** @codeCoverageIgnore */
     public function getOriginalBalance(): string
     {
         if (method_exists($this, 'getRawOriginal')) {
