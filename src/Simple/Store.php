@@ -7,6 +7,10 @@ use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\StorageInterface;
 use Bavix\Wallet\Services\WalletService;
 
+/**
+ * @deprecated
+ * @see BookkeeperInterface
+ */
 class Store implements Storable
 {
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Internal;
 
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;

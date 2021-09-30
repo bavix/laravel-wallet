@@ -1,13 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Interfaces\Rateable;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\ExchangeInterface;
 
+/**
+ * @deprecated
+ * @see ExchangeInterface
+ */
 class ExchangeService
 {
-    private $rate;
+    private Rateable $rate;
 
     public function __construct(Rateable $rate)
     {
