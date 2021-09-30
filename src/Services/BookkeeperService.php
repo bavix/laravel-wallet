@@ -36,7 +36,7 @@ class BookkeeperService implements BookkeeperInterface
         } catch (RecordNotFoundException $recordNotFoundException) {
             $this->lock->block(
                 $this->getKey($wallet),
-                static fn () => $this->storage->sync(
+                fn () => $this->storage->sync(
                     $this->getKey($wallet),
                     $wallet->getAvailableBalance(),
                 ),
