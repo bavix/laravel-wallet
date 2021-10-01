@@ -8,6 +8,7 @@ use Bavix\Wallet\Commands\RefreshBalance;
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Rateable;
 use Bavix\Wallet\Interfaces\Storable;
+use Bavix\Wallet\Internal\BasketInterface;
 use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\ExchangeInterface;
 use Bavix\Wallet\Internal\LockInterface;
@@ -22,6 +23,7 @@ use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Objects\EmptyLock;
 use Bavix\Wallet\Objects\Operation;
 use Bavix\Wallet\Services\AtomicService;
+use Bavix\Wallet\Services\BasketService;
 use Bavix\Wallet\Services\BookkeeperService;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
@@ -112,6 +114,7 @@ class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(UuidInterface::class, UuidFactoryService::class);
         $this->app->singleton(StorageInterface::class, StorageService::class);
         $this->app->singleton(BookkeeperInterface::class, BookkeeperService::class);
+        $this->app->singleton(BasketInterface::class, BasketService::class);
     }
 
     private function legacySingleton(): void
