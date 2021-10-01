@@ -3,7 +3,6 @@
 namespace Bavix\Wallet\Commands;
 
 use Bavix\Wallet\Models\Wallet;
-use Bavix\Wallet\Services\WalletService;
 use Illuminate\Console\Command;
 
 /**
@@ -30,6 +29,6 @@ class RefreshBalance extends Command
      */
     public function handle(): void
     {
-        Wallet::query()->each([app(WalletService::class), 'refresh']);
+        Wallet::query()->each(static fn (Wallet $wallet) => $wallet->refresh());
     }
 }
