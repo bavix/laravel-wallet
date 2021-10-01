@@ -21,6 +21,26 @@ use Throwable;
 
 class CommonService
 {
+    private DbService $dbService;
+    private LockService $lockService;
+    private MathInterface $math;
+    private WalletService $walletService;
+    private Storable $store;
+
+    public function __construct(
+        DbService $dbService,
+        LockService $lockService,
+        MathInterface $math,
+        WalletService $walletService,
+        Storable $store
+    ) {
+        $this->dbService = $dbService;
+        $this->lockService = $lockService;
+        $this->math = $math;
+        $this->walletService = $walletService;
+        $this->store = $store;
+    }
+
     /**
      * @param int|string $amount
      *
@@ -31,12 +51,11 @@ class CommonService
      */
     public function transfer(Wallet $from, Wallet $to, $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
-        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($from, $to, $amount, $meta, $status) {
-            $math = app(MathInterface::class);
-            $discount = app(WalletService::class)->discount($from, $to);
-            $newAmount = max(0, $math->sub($amount, $discount));
-            $fee = app(WalletService::class)->fee($to, $newAmount);
-            $this->verifyWithdraw($from, $math->add($newAmount, $fee));
+        return $this->lockService->lock($this, __FUNCTION__, function () use ($from, $to, $amount, $meta, $status) {
+            $discount = $this->walletService->discount($from, $to);
+            $newAmount = max(0, $this->math->sub($amount, $discount));
+            $fee = $this->walletService->fee($to, $newAmount);
+            $this->verifyWithdraw($from, $this->math->add($newAmount, $fee));
 
             return $this->forceTransfer($from, $to, $amount, $meta, $status);
         });
@@ -50,15 +69,14 @@ class CommonService
      */
     public function forceTransfer(Wallet $from, Wallet $to, $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
-        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($from, $to, $amount, $meta, $status) {
-            $math = app(MathInterface::class);
-            $from = app(WalletService::class)->getWallet($from);
-            $discount = app(WalletService::class)->discount($from, $to);
-            $fee = app(WalletService::class)->fee($to, $amount);
+        return $this->lockService->lock($this, __FUNCTION__, function () use ($from, $to, $amount, $meta, $status) {
+            $from = $this->walletService->getWallet($from);
+            $discount = $this->walletService->discount($from, $to);
+            $fee = $this->walletService->fee($to, $amount);
 
-            $amount = max(0, $math->sub($amount, $discount));
-            $placesValue = app(WalletService::class)->decimalPlacesValue($from);
-            $withdraw = $this->forceWithdraw($from, $math->add($amount, $fee, $placesValue), $meta);
+            $amount = max(0, $this->math->sub($amount, $discount));
+            $placesValue = $this->walletService->decimalPlacesValue($from);
+            $withdraw = $this->forceWithdraw($from, $this->math->add($amount, $fee, $placesValue), $meta);
             $deposit = $this->deposit($to, $amount, $meta);
 
             $transfers = $this->multiBrings([
@@ -82,19 +100,17 @@ class CommonService
      */
     public function forceWithdraw(Wallet $wallet, $amount, ?array $meta, bool $confirmed = true): Transaction
     {
-        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($wallet, $amount, $meta, $confirmed) {
-            $walletService = app(WalletService::class);
-            $walletService->checkAmount($amount);
+        return $this->lockService->lock($this, __FUNCTION__, function () use ($wallet, $amount, $meta, $confirmed) {
+            $this->walletService->checkAmount($amount);
 
             /** @var WalletModel $wallet */
-            $wallet = $walletService->getWallet($wallet);
+            $wallet = $this->walletService->getWallet($wallet);
 
-            $mathService = app(MathInterface::class);
             $transactions = $this->multiOperation($wallet, [
                 app(Operation::class)
                     ->setType(Transaction::TYPE_WITHDRAW)
                     ->setConfirmed($confirmed)
-                    ->setAmount($mathService->negative($amount))
+                    ->setAmount($this->math->negative($amount))
                     ->setMeta($meta),
             ]);
 
@@ -109,12 +125,11 @@ class CommonService
      */
     public function deposit(Wallet $wallet, $amount, ?array $meta, bool $confirmed = true): Transaction
     {
-        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($wallet, $amount, $meta, $confirmed) {
-            $walletService = app(WalletService::class);
-            $walletService->checkAmount($amount);
+        return $this->lockService->lock($this, __FUNCTION__, function () use ($wallet, $amount, $meta, $confirmed) {
+            $this->walletService->checkAmount($amount);
 
             /** @var WalletModel $wallet */
-            $wallet = $walletService->getWallet($wallet);
+            $wallet = $this->walletService->getWallet($wallet);
 
             $transactions = $this->multiOperation($wallet, [
                 app(Operation::class)
@@ -156,13 +171,12 @@ class CommonService
      */
     public function multiOperation(Wallet $self, array $operations): array
     {
-        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($self, $operations) {
+        return $this->lockService->lock($this, __FUNCTION__, function () use ($self, $operations) {
             $amount = 0;
             $objects = [];
-            $math = app(MathInterface::class);
             foreach ($operations as $operation) {
                 if ($operation->isConfirmed()) {
-                    $amount = $math->add($amount, $operation->getAmount());
+                    $amount = $this->math->add($amount, $operation->getAmount());
                 }
 
                 $objects[] = $operation
@@ -186,10 +200,10 @@ class CommonService
      */
     public function assemble(array $brings): array
     {
-        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($brings) {
+        return $this->lockService->lock($this, __FUNCTION__, function () use ($brings) {
             $self = $this;
 
-            return app(DbService::class)->transaction(static function () use ($self, $brings) {
+            return $this->dbService->transaction(static function () use ($self, $brings) {
                 return $self->multiBrings($brings);
             });
         });
@@ -200,7 +214,7 @@ class CommonService
      */
     public function multiBrings(array $brings): array
     {
-        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($brings) {
+        return $this->lockService->lock($this, __FUNCTION__, function () use ($brings) {
             $objects = [];
             foreach ($brings as $bring) {
                 $objects[] = $bring->create();
@@ -217,11 +231,9 @@ class CommonService
      */
     public function addBalance(Wallet $wallet, $amount): bool
     {
-        return app(LockService::class)->lock($this, __FUNCTION__, static function () use ($wallet, $amount) {
+        return $this->lockService->lock($this, __FUNCTION__, function () use ($wallet, $amount) {
             /** @var WalletModel $wallet */
-            $balance = app(Storable::class)
-                ->incBalance($wallet, $amount)
-            ;
+            $balance = $this->store->incBalance($wallet, $amount);
 
             try {
                 $result = $wallet->newQuery()
@@ -229,9 +241,7 @@ class CommonService
                     ->update(compact('balance'))
                 ;
             } catch (Throwable $throwable) {
-                app(Storable::class)
-                    ->setBalance($wallet, $wallet->getAvailableBalance())
-                ;
+                $this->store->setBalance($wallet, $wallet->getAvailableBalance());
 
                 throw $throwable;
             }
@@ -241,9 +251,7 @@ class CommonService
                     ->syncOriginalAttributes('balance')
                 ;
             } else {
-                app(Storable::class)
-                    ->setBalance($wallet, $wallet->getAvailableBalance())
-                ;
+                $this->store->setBalance($wallet, $wallet->getAvailableBalance());
             }
 
             return $result;
