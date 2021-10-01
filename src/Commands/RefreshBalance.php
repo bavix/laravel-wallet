@@ -29,6 +29,6 @@ class RefreshBalance extends Command
      */
     public function handle(): void
     {
-        Wallet::query()->each(static fn (Wallet $wallet) => $wallet->refresh());
+        Wallet::query()->each(static fn (Wallet $wallet) => $wallet->refreshBalance());
     }
 }
