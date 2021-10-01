@@ -20,7 +20,7 @@ class BasketDto implements Countable
         $this->meta = $meta;
     }
 
-    public function metadata(): array
+    public function meta(): array
     {
         return $this->meta;
     }
