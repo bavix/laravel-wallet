@@ -52,11 +52,9 @@ trait CartPay
     }
 
     /**
-     * @param bool $force
-     *
      * @return Transfer[]
      */
-    public function safePayCart(Cart $cart, bool $force = null): array
+    public function safePayCart(Cart $cart, bool $force = false): array
     {
         try {
             return $this->payCart($cart, $force);
@@ -66,13 +64,11 @@ trait CartPay
     }
 
     /**
-     * @param bool $force
-     *
      * @throws
      *
      * @return Transfer[]
      */
-    public function payCart(Cart $cart, bool $force = null): array
+    public function payCart(Cart $cart, bool $force = false): array
     {
         if (!$cart->canBuy($this, $force)) {
             throw new ProductEnded(trans('wallet::errors.product_stock'));
@@ -118,11 +114,7 @@ trait CartPay
         return $this->payCart($cart, true);
     }
 
-    /**
-     * @param bool $force
-     * @param bool $gifts
-     */
-    public function safeRefundCart(Cart $cart, bool $force = null, bool $gifts = null): bool
+    public function safeRefundCart(Cart $cart, bool $force = false, bool $gifts = false): bool
     {
         try {
             return $this->refundCart($cart, $force, $gifts);
@@ -132,12 +124,9 @@ trait CartPay
     }
 
     /**
-     * @param bool $force
-     * @param bool $gifts
-     *
      * @throws
      */
-    public function refundCart(Cart $cart, bool $force = null, bool $gifts = null): bool
+    public function refundCart(Cart $cart, bool $force = false, bool $gifts = false): bool
     {
         $self = $this;
 
@@ -179,19 +168,14 @@ trait CartPay
     }
 
     /**
-     * @param bool $gifts
-     *
      * @throws
      */
-    public function forceRefundCart(Cart $cart, bool $gifts = null): bool
+    public function forceRefundCart(Cart $cart, bool $gifts = false): bool
     {
         return $this->refundCart($cart, true, $gifts);
     }
 
-    /**
-     * @param bool $force
-     */
-    public function safeRefundGiftCart(Cart $cart, bool $force = null): bool
+    public function safeRefundGiftCart(Cart $cart, bool $force = false): bool
     {
         try {
             return $this->refundGiftCart($cart, $force);
@@ -201,11 +185,9 @@ trait CartPay
     }
 
     /**
-     * @param bool $force
-     *
      * @throws
      */
-    public function refundGiftCart(Cart $cart, bool $force = null): bool
+    public function refundGiftCart(Cart $cart, bool $force = false): bool
     {
         return $this->refundCart($cart, $force, true);
     }
@@ -220,10 +202,8 @@ trait CartPay
 
     /**
      * Checks acquired product your wallet.
-     *
-     * @param bool $gifts
      */
-    public function paid(Product $product, bool $gifts = null): ?Transfer
+    public function paid(Product $product, bool $gifts = false): ?Transfer
     {
         return current(app(Cart::class)->addItem($product)->alreadyBuy($this, $gifts)) ?: null;
     }

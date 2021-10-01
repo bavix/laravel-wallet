@@ -1,10 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Objects;
 
 use function array_unique;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Internal\BasketInterface;
+use Bavix\Wallet\Internal\Dto\AvailabilityDto;
+use Bavix\Wallet\Internal\Dto\BasketDto;
+use Bavix\Wallet\Internal\Dto\ProductDto;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Models\Transfer;
 use function count;
@@ -24,6 +30,13 @@ class Cart implements Countable
     protected $quantity = [];
 
     protected $meta = [];
+
+    private BasketInterface $basket;
+
+    public function __construct(BasketInterface $basket)
+    {
+        $this->basket = $basket;
+    }
 
     public function getMeta(): array
     {
@@ -83,7 +96,7 @@ class Cart implements Countable
      *
      * @return Transfer[]
      */
-    public function alreadyBuy(Customer $customer, bool $gifts = null): array
+    public function alreadyBuy(Customer $customer, bool $gifts = false): array
     {
         $status = [Transfer::STATUS_PAID];
         if ($gifts) {
@@ -111,15 +124,13 @@ class Cart implements Countable
         return $result;
     }
 
-    public function canBuy(Customer $customer, bool $force = null): bool
+    /**
+     * @deprecated
+     * @see BasketInterface::availability()
+     */
+    public function canBuy(Customer $customer, bool $force = false): bool
     {
-        foreach ($this->items as $item) {
-            if (!$item->canBuy($customer, $this->getQuantity($item), $force)) {
-                return false;
-            }
-        }
-
-        return true;
+        return $this->basket->availability(new AvailabilityDto($customer, $this->getBasketDto(), $force));
     }
 
     public function getTotal(Customer $customer): string
@@ -143,7 +154,7 @@ class Cart implements Countable
         $class = get_class($product);
         $uniq = $product->getUniqueId();
 
-        return $this->quantity[$class][$uniq] ?? 0;
+        return (int) ($this->quantity[$class][$uniq] ?? 0);
     }
 
     protected function addQuantity(Product $product, int $quantity): void
@@ -152,5 +163,15 @@ class Cart implements Countable
         $uniq = $product->getUniqueId();
         $math = app(MathInterface::class);
         $this->quantity[$class][$uniq] = $math->add($this->getQuantity($product), $quantity);
+    }
+
+    private function getBasketDto(): BasketDto
+    {
+        $productDto = [];
+        foreach ($this->getUniqueItems() as $product) {
+            $productDto[] = new ProductDto($product, $this->getQuantity($product));
+        }
+
+        return new BasketDto($productDto, $this->getMeta());
     }
 }

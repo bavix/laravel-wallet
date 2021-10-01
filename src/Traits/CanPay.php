@@ -19,20 +19,15 @@ trait CanPay
         return current($this->payFreeCart(app(Cart::class)->addItem($product)));
     }
 
-    /**
-     * @param bool $force
-     */
-    public function safePay(Product $product, bool $force = null): ?Transfer
+    public function safePay(Product $product, bool $force = false): ?Transfer
     {
         return current($this->safePayCart(app(Cart::class)->addItem($product), $force)) ?: null;
     }
 
     /**
-     * @param bool $force
-     *
      * @throws
      */
-    public function pay(Product $product, bool $force = null): Transfer
+    public function pay(Product $product, bool $force = false): Transfer
     {
         return current($this->payCart(app(Cart::class)->addItem($product), $force));
     }
@@ -45,50 +40,36 @@ trait CanPay
         return current($this->forcePayCart(app(Cart::class)->addItem($product)));
     }
 
-    /**
-     * @param bool $force
-     * @param bool $gifts
-     */
-    public function safeRefund(Product $product, bool $force = null, bool $gifts = null): bool
+    public function safeRefund(Product $product, bool $force = false, bool $gifts = false): bool
     {
         return $this->safeRefundCart(app(Cart::class)->addItem($product), $force, $gifts);
     }
 
     /**
-     * @param bool $force
-     * @param bool $gifts
-     *
      * @throws
      */
-    public function refund(Product $product, bool $force = null, bool $gifts = null): bool
+    public function refund(Product $product, bool $force = false, bool $gifts = false): bool
     {
         return $this->refundCart(app(Cart::class)->addItem($product), $force, $gifts);
     }
 
     /**
-     * @param bool $gifts
-     *
      * @throws
      */
-    public function forceRefund(Product $product, bool $gifts = null): bool
+    public function forceRefund(Product $product, bool $gifts = false): bool
     {
         return $this->forceRefundCart(app(Cart::class)->addItem($product), $gifts);
     }
 
-    /**
-     * @param bool $force
-     */
-    public function safeRefundGift(Product $product, bool $force = null): bool
+    public function safeRefundGift(Product $product, bool $force = false): bool
     {
         return $this->safeRefundGiftCart(app(Cart::class)->addItem($product), $force);
     }
 
     /**
-     * @param bool $force
-     *
      * @throws
      */
-    public function refundGift(Product $product, bool $force = null): bool
+    public function refundGift(Product $product, bool $force = false): bool
     {
         return $this->refundGiftCart(app(Cart::class)->addItem($product), $force);
     }
