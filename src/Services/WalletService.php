@@ -102,6 +102,8 @@ class WalletService
      *
      * @deprecated
      * @see ConsistencyInterface::checkPositive()
+     *
+     * @codeCoverageIgnore
      */
     public function checkAmount($amount): void
     {

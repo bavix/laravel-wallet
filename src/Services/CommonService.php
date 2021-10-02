@@ -155,6 +155,8 @@ class CommonService
      *
      * @deprecated
      * @see ConsistencyInterface::potential()
+     *
+     * @codeCoverageIgnore
      */
     public function verifyWithdraw(Wallet $wallet, $amount, bool $allowZero = null): void
     {
