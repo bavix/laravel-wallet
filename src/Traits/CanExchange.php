@@ -3,6 +3,7 @@
 namespace Bavix\Wallet\Traits;
 
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Bring;
@@ -19,13 +20,9 @@ trait CanExchange
      */
     public function exchange(Wallet $to, $amount, ?array $meta = null): Transfer
     {
-        $wallet = app(WalletService::class)
-            ->getWallet($this)
-        ;
+        $wallet = app(WalletService::class)->getWallet($this);
 
-        app(CommonService::class)
-            ->verifyWithdraw($wallet, $amount)
-        ;
+        app(ConsistencyInterface::class)->checkPotential($wallet, $amount);
 
         return $this->forceExchange($to, $amount, $meta);
     }

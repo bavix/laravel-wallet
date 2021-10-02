@@ -9,6 +9,7 @@ use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Bring;
@@ -79,7 +80,7 @@ trait HasGift
                  * Santa pays taxes.
                  */
                 if (!$force) {
-                    $commonService->verifyWithdraw($santa, $math->add($amount, $fee));
+                    app(ConsistencyInterface::class)->checkPotential($santa, $math->add($amount, $fee));
                 }
 
                 $withdraw = $commonService->forceWithdraw($santa, $math->add($amount, $fee), $meta);

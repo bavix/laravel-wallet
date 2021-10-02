@@ -9,6 +9,7 @@ use Bavix\Wallet\Exceptions\UnconfirmedInvalid;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
 use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Services\CommonService;
@@ -37,7 +38,7 @@ trait CanConfirm
                 }
 
                 if ($transaction->type === Transaction::TYPE_WITHDRAW) {
-                    app(CommonService::class)->verifyWithdraw(
+                    app(ConsistencyInterface::class)->checkPotential(
                         $wallet,
                         app(MathInterface::class)->abs($transaction->amount)
                     );
