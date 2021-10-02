@@ -8,13 +8,13 @@ use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Operation;
-use Bavix\Wallet\Traits\HasWallet;
 use function compact;
 use function max;
 use Throwable;
@@ -26,19 +26,22 @@ class CommonService
     private MathInterface $math;
     private WalletService $walletService;
     private Storable $store;
+    private ConsistencyInterface $consistency;
 
     public function __construct(
         DbService $dbService,
         LockService $lockService,
         MathInterface $math,
         WalletService $walletService,
-        Storable $store
+        Storable $store,
+        ConsistencyInterface $consistency
     ) {
         $this->dbService = $dbService;
         $this->lockService = $lockService;
         $this->math = $math;
         $this->walletService = $walletService;
         $this->store = $store;
+        $this->consistency = $consistency;
     }
 
     /**
@@ -55,7 +58,7 @@ class CommonService
             $discount = $this->walletService->discount($from, $to);
             $newAmount = max(0, $this->math->sub($amount, $discount));
             $fee = $this->walletService->fee($to, $newAmount);
-            $this->verifyWithdraw($from, $this->math->add($newAmount, $fee));
+            $this->consistency->checkPotential($from, $this->math->add($newAmount, $fee));
 
             return $this->forceTransfer($from, $to, $amount, $meta, $status);
         });
@@ -101,7 +104,7 @@ class CommonService
     public function forceWithdraw(Wallet $wallet, $amount, ?array $meta, bool $confirmed = true): Transaction
     {
         return $this->lockService->lock($this, __FUNCTION__, function () use ($wallet, $amount, $meta, $confirmed) {
-            $this->walletService->checkAmount($amount);
+            $this->consistency->checkPositive($amount);
 
             /** @var WalletModel $wallet */
             $wallet = $this->walletService->getWallet($wallet);
@@ -126,7 +129,7 @@ class CommonService
     public function deposit(Wallet $wallet, $amount, ?array $meta, bool $confirmed = true): Transaction
     {
         return $this->lockService->lock($this, __FUNCTION__, function () use ($wallet, $amount, $meta, $confirmed) {
-            $this->walletService->checkAmount($amount);
+            $this->consistency->checkPositive($amount);
 
             /** @var WalletModel $wallet */
             $wallet = $this->walletService->getWallet($wallet);
@@ -149,19 +152,15 @@ class CommonService
      *
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
+     *
+     * @deprecated
+     * @see ConsistencyInterface::potential()
+     *
+     * @codeCoverageIgnore
      */
     public function verifyWithdraw(Wallet $wallet, $amount, bool $allowZero = null): void
     {
-        /**
-         * @var HasWallet $wallet
-         */
-        if ($amount && !$wallet->balance) {
-            throw new BalanceIsEmpty(trans('wallet::errors.wallet_empty'));
-        }
-
-        if (!$wallet->canWithdraw($amount, $allowZero)) {
-            throw new InsufficientFunds(trans('wallet::errors.insufficient_funds'));
-        }
+        $this->consistency->checkPotential($wallet, $amount, (bool) $allowZero);
     }
 
     /**

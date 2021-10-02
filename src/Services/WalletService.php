@@ -9,6 +9,7 @@ use Bavix\Wallet\Interfaces\MinimalTaxable;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Interfaces\Taxable;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Traits\HasWallet;
@@ -16,6 +17,7 @@ use Throwable;
 
 class WalletService
 {
+    private ConsistencyInterface $consistency;
     private DbService $dbService;
     private MathInterface $math;
     private LockService $lockService;
@@ -25,12 +27,14 @@ class WalletService
         DbService $dbService,
         MathInterface $math,
         LockService $lockService,
-        Storable $store
+        Storable $store,
+        ConsistencyInterface $consistency
     ) {
         $this->dbService = $dbService;
         $this->math = $math;
         $this->lockService = $lockService;
         $this->store = $store;
+        $this->consistency = $consistency;
     }
 
     public function discount(Wallet $customer, Wallet $product): int
@@ -95,12 +99,15 @@ class WalletService
      * @param int|string $amount
      *
      * @throws AmountInvalid
+     *
+     * @deprecated
+     * @see ConsistencyInterface::checkPositive()
+     *
+     * @codeCoverageIgnore
      */
     public function checkAmount($amount): void
     {
-        if ($this->math->compare($amount, 0) === -1) {
-            throw new AmountInvalid(trans('wallet::errors.price_positive'));
-        }
+        $this->consistency->checkPositive($amount);
     }
 
     public function getWallet(Wallet $object, bool $autoSave = true): WalletModel

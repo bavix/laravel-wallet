@@ -8,6 +8,7 @@ use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
@@ -118,7 +119,7 @@ trait HasWallet
     public function transfer(Wallet $wallet, $amount, ?array $meta = null): Transfer
     {
         /** @var Wallet $this */
-        app(CommonService::class)->verifyWithdraw($this, $amount);
+        app(ConsistencyInterface::class)->checkPotential($this, $amount);
 
         return $this->forceTransfer($wallet, $amount, $meta);
     }
@@ -136,7 +137,7 @@ trait HasWallet
     public function withdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         /** @var Wallet $this */
-        app(CommonService::class)->verifyWithdraw($this, $amount);
+        app(ConsistencyInterface::class)->checkPotential($this, $amount);
 
         return $this->forceWithdraw($amount, $meta, $confirmed);
     }
@@ -152,7 +153,7 @@ trait HasWallet
         $math = app(MathInterface::class);
 
         /**
-         * Allow to buy for free with a negative balance.
+         * Allow buying for free with a negative balance.
          */
         if ($allowZero && !$math->compare($amount, 0)) {
             return true;

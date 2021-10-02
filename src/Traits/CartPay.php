@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Traits;
 use function array_unique;
 use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\CommonService;
@@ -29,9 +30,7 @@ trait CartPay
             throw new ProductEnded(trans('wallet::errors.product_stock'));
         }
 
-        app(CommonService::class)
-            ->verifyWithdraw($this, 0, true)
-        ;
+        app(ConsistencyInterface::class)->checkPotential($this, 0, true);
 
         $self = $this;
 
@@ -144,10 +143,7 @@ trait CartPay
                 $transfer->load('withdraw.wallet');
 
                 if (!$force) {
-                    app(CommonService::class)->verifyWithdraw(
-                        $product,
-                        $transfer->deposit->amount
-                    );
+                    app(ConsistencyInterface::class)->checkPotential($product, $transfer->deposit->amount);
                 }
 
                 app(CommonService::class)->forceTransfer(
