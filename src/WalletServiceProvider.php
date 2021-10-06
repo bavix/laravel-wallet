@@ -108,7 +108,6 @@ class WalletServiceProvider extends ServiceProvider
         // Bind eloquent models to IoC container
         $this->app->singleton(ExchangeInterface::class, config('wallet.package.exchange', Exchange::class));
         $this->app->singleton(MathInterface::class, config('wallet.package.mathable', MathService::class));
-        $this->app->singleton(ExchangeService::class, config('wallet.services.exchange', ExchangeService::class));
         $this->app->singleton(CommonService::class, config('wallet.services.common', CommonService::class));
         $this->app->singleton(WalletService::class, config('wallet.services.wallet', WalletService::class));
 
@@ -122,6 +121,7 @@ class WalletServiceProvider extends ServiceProvider
 
     private function legacySingleton(): void
     {
+        $this->app->singleton(ExchangeService::class, config('wallet.services.exchange', ExchangeService::class));
         $this->app->singleton(Rateable::class, config('wallet.package.rateable', Rate::class));
         $this->app->singleton(Storable::class, config('wallet.package.storable', Store::class));
 

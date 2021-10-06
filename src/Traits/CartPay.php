@@ -5,6 +5,7 @@ namespace Bavix\Wallet\Traits;
 use function array_unique;
 use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Internal\CartInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
@@ -24,7 +25,7 @@ trait CartPay
      *
      * @return Transfer[]
      */
-    public function payFreeCart(Cart $cart): array
+    public function payFreeCart(CartInterface $cart): array
     {
         if (!$cart->canBuy($this)) {
             throw new ProductEnded(trans('wallet::errors.product_stock'));
@@ -53,7 +54,7 @@ trait CartPay
     /**
      * @return Transfer[]
      */
-    public function safePayCart(Cart $cart, bool $force = false): array
+    public function safePayCart(CartInterface $cart, bool $force = false): array
     {
         try {
             return $this->payCart($cart, $force);
@@ -67,7 +68,7 @@ trait CartPay
      *
      * @return Transfer[]
      */
-    public function payCart(Cart $cart, bool $force = false): array
+    public function payCart(CartInterface $cart, bool $force = false): array
     {
         if (!$cart->canBuy($this, $force)) {
             throw new ProductEnded(trans('wallet::errors.product_stock'));
@@ -108,12 +109,12 @@ trait CartPay
      *
      * @return Transfer[]
      */
-    public function forcePayCart(Cart $cart): array
+    public function forcePayCart(CartInterface $cart): array
     {
         return $this->payCart($cart, true);
     }
 
-    public function safeRefundCart(Cart $cart, bool $force = false, bool $gifts = false): bool
+    public function safeRefundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool
     {
         try {
             return $this->refundCart($cart, $force, $gifts);
@@ -125,7 +126,7 @@ trait CartPay
     /**
      * @throws
      */
-    public function refundCart(Cart $cart, bool $force = false, bool $gifts = false): bool
+    public function refundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool
     {
         $self = $this;
 
@@ -166,7 +167,7 @@ trait CartPay
     /**
      * @throws
      */
-    public function forceRefundCart(Cart $cart, bool $gifts = false): bool
+    public function forceRefundCart(CartInterface $cart, bool $gifts = false): bool
     {
         return $this->refundCart($cart, true, $gifts);
     }
@@ -183,7 +184,7 @@ trait CartPay
     /**
      * @throws
      */
-    public function refundGiftCart(Cart $cart, bool $force = false): bool
+    public function refundGiftCart(CartInterface $cart, bool $force = false): bool
     {
         return $this->refundCart($cart, $force, true);
     }
@@ -191,7 +192,7 @@ trait CartPay
     /**
      * @throws
      */
-    public function forceRefundGiftCart(Cart $cart): bool
+    public function forceRefundGiftCart(CartInterface $cart): bool
     {
         return $this->refundGiftCart($cart, true);
     }

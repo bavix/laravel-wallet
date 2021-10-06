@@ -8,6 +8,7 @@ use function array_unique;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Internal\BasketInterface;
+use Bavix\Wallet\Internal\CartInterface;
 use Bavix\Wallet\Internal\Dto\AvailabilityDto;
 use Bavix\Wallet\Internal\Dto\BasketDto;
 use Bavix\Wallet\Internal\Dto\ProductDto;
@@ -17,19 +18,19 @@ use function count;
 use Countable;
 use function get_class;
 
-class Cart implements Countable
+class Cart implements Countable, CartInterface
 {
     /**
      * @var Product[]
      */
-    protected $items = [];
+    protected array $items = [];
 
     /**
      * @var int[]
      */
-    protected $quantity = [];
+    protected array $quantity = [];
 
-    protected $meta = [];
+    protected array $meta = [];
 
     private BasketInterface $basket;
 
@@ -157,15 +158,7 @@ class Cart implements Countable
         return (int) ($this->quantity[$class][$uniq] ?? 0);
     }
 
-    protected function addQuantity(Product $product, int $quantity): void
-    {
-        $class = get_class($product);
-        $uniq = $product->getUniqueId();
-        $math = app(MathInterface::class);
-        $this->quantity[$class][$uniq] = $math->add($this->getQuantity($product), $quantity);
-    }
-
-    private function getBasketDto(): BasketDto
+    public function getBasketDto(): BasketDto
     {
         $productDto = [];
         foreach ($this->getUniqueItems() as $product) {
@@ -173,5 +166,13 @@ class Cart implements Countable
         }
 
         return new BasketDto($productDto, $this->getMeta());
+    }
+
+    protected function addQuantity(Product $product, int $quantity): void
+    {
+        $class = get_class($product);
+        $uniq = $product->getUniqueId();
+        $math = app(MathInterface::class);
+        $this->quantity[$class][$uniq] = $math->add($this->getQuantity($product), $quantity);
     }
 }
