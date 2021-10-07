@@ -158,9 +158,9 @@ class CommonService
      *
      * @codeCoverageIgnore
      */
-    public function verifyWithdraw(Wallet $wallet, $amount, bool $allowZero = null): void
+    public function verifyWithdraw(Wallet $wallet, $amount, bool $allowZero = false): void
     {
-        $this->consistency->checkPotential($wallet, $amount, (bool) $allowZero);
+        $this->consistency->checkPotential($wallet, $amount, $allowZero);
     }
 
     /**
