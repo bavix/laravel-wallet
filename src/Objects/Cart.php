@@ -182,6 +182,7 @@ class Cart implements Countable, CartInterface
             : $product->getKey());
 
         $this->quantity[get_class($product).':'.$uniq] = $this->math
-            ->add($this->getQuantity($product), $quantity);
+            ->add($this->getQuantity($product), $quantity)
+        ;
     }
 }
