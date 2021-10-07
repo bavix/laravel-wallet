@@ -148,7 +148,6 @@ class CommonService
 
     /**
      * @param int|string $amount
-     * @param bool       $allowZero
      *
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
