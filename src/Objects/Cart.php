@@ -14,29 +14,34 @@ use Bavix\Wallet\Internal\Dto\BasketDto;
 use Bavix\Wallet\Internal\Dto\ProductDto;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Traits\HasWallet;
 use function count;
 use Countable;
 use function get_class;
+use Illuminate\Database\Eloquent\Model;
 
 class Cart implements Countable, CartInterface
 {
     /**
      * @var Product[]
      */
-    protected array $items = [];
+    private array $items = [];
 
-    /**
-     * @var int[]
-     */
-    protected array $quantity = [];
+    /** @var array<string, int> */
+    private array $quantity = [];
 
-    protected array $meta = [];
+    private array $meta = [];
 
     private BasketInterface $basket;
 
-    public function __construct(BasketInterface $basket)
-    {
+    private MathInterface $math;
+
+    public function __construct(
+        BasketInterface $basket,
+        MathInterface $math
+    ) {
         $this->basket = $basket;
+        $this->math = $math;
     }
 
     public function getMeta(): array
@@ -104,25 +109,25 @@ class Cart implements Countable, CartInterface
             $status[] = Transfer::STATUS_GIFT;
         }
 
+        /** @var HasWallet $customer */
         /** @var Transfer $query */
         $result = [];
         $query = $customer->transfers();
-        foreach ($this->getUniqueItems() as $product) {
-            $collect = (clone $query)
-                ->where('to_type', $product->getMorphClass())
-                ->where('to_id', $product->getKey())
+        foreach ($this->getBasketDto()->items() as $product) {
+            /** @var Model $item */
+            $item = $product->item();
+            $result[] = (clone $query)
+                ->where('to_type', $item->getMorphClass())
+                ->where('to_id', $item->getKey())
                 ->whereIn('status', $status)
                 ->orderBy('id', 'desc')
-                ->limit($this->getQuantity($product))
+                ->limit(count($product))
                 ->get()
+                ->all()
             ;
-
-            foreach ($collect as $datum) {
-                $result[] = $datum;
-            }
         }
 
-        return $result;
+        return array_merge(...$result);
     }
 
     /**
@@ -137,12 +142,11 @@ class Cart implements Countable, CartInterface
     public function getTotal(Customer $customer): string
     {
         $result = 0;
-        $math = app(MathInterface::class);
         foreach ($this->items as $item) {
-            $result = $math->add($result, $item->getAmountProduct($customer));
+            $result = $this->math->add($result, $item->getAmountProduct($customer));
         }
 
-        return $result;
+        return (string) $result;
     }
 
     public function count(): int
@@ -152,27 +156,32 @@ class Cart implements Countable, CartInterface
 
     public function getQuantity(Product $product): int
     {
-        $class = get_class($product);
-        $uniq = $product->getUniqueId();
+        /** @var Model $product */
+        $uniq = (string) (method_exists($product, 'getUniqueId')
+            ? $product->getUniqueId()
+            : $product->getKey());
 
-        return (int) ($this->quantity[$class][$uniq] ?? 0);
+        return (int) ($this->quantity[get_class($product).':'.$uniq] ?? 0);
     }
 
     public function getBasketDto(): BasketDto
     {
-        $productDto = [];
+        $items = [];
         foreach ($this->getUniqueItems() as $product) {
-            $productDto[] = new ProductDto($product, $this->getQuantity($product));
+            $items[] = new ProductDto($product, $this->getQuantity($product));
         }
 
-        return new BasketDto($productDto, $this->getMeta());
+        return new BasketDto($items, $this->getMeta());
     }
 
     protected function addQuantity(Product $product, int $quantity): void
     {
-        $class = get_class($product);
-        $uniq = $product->getUniqueId();
-        $math = app(MathInterface::class);
-        $this->quantity[$class][$uniq] = $math->add($this->getQuantity($product), $quantity);
+        /** @var Model|Product $product */
+        $uniq = (string) (method_exists($product, 'getUniqueId')
+            ? $product->getUniqueId()
+            : $product->getKey());
+
+        $this->quantity[get_class($product).':'.$uniq] = $this->math
+            ->add($this->getQuantity($product), $quantity);
     }
 }
