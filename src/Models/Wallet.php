@@ -107,7 +107,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     }
 
     /**
-     * The method adjusts the balance by adding an additional transaction.
+     * The method adjusts the balance by adding a transaction.
      * Used wisely, it can lead to serious problems.
      */
     public function adjustmentBalance(): bool
