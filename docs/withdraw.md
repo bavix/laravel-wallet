@@ -44,7 +44,7 @@ the user has no funds. For example, a fine for spam.
 ```php
 $user->balance; // 100
 $user->forceWithdraw(101);
-$user->balance; // int(-1)
+$user->balance; // -1
 ```
 
 ## And what will happen if the money is not enough?

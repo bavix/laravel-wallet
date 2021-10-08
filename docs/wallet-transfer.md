@@ -66,7 +66,7 @@ The transfer will be from the first user to the second.
 
 ```php
 $firstWallet->forceTransfer($lastWallet, 500); 
-$firstWallet->balance; // int(-400)
+$firstWallet->balance; // -400
 $lastWallet->balance; // 500
 ```
 

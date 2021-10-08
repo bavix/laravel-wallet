@@ -66,7 +66,7 @@ $lastWallet->balance; // 0
 
 ```php
 $firstWallet->forceTransfer($lastWallet, 500); 
-$firstWallet->balance; // int(-400)
+$firstWallet->balance; // -400
 $lastWallet->balance; // 500
 ```
 
