@@ -64,6 +64,11 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         'meta' => 'json',
     ];
 
+    protected $attributes = [
+        'balance' => 0,
+        'decimal_places' => 2,
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -109,6 +114,8 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     /**
      * The method adjusts the balance by adding a transaction.
      * Used wisely, it can lead to serious problems.
+     *
+     * @deprecated will be removed in version 7.x
      */
     public function adjustmentBalance(): bool
     {

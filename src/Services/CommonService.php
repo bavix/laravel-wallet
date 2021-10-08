@@ -166,6 +166,8 @@ class CommonService
      * Create Operation without DB::transaction.
      *
      * @param Operation[] $operations
+     *
+     * @deprecated
      */
     public function multiOperation(Wallet $self, array $operations): array
     {
@@ -195,6 +197,8 @@ class CommonService
      * @param Bring[] $brings
      *
      * @throws
+     *
+     * @deprecated
      */
     public function assemble(array $brings): array
     {
@@ -209,6 +213,8 @@ class CommonService
 
     /**
      * Create Bring without DB::transaction.
+     *
+     * @deprecated
      */
     public function multiBrings(array $brings): array
     {
@@ -226,6 +232,8 @@ class CommonService
      * @param int|string $amount
      *
      * @throws
+     *
+     * @deprecated
      */
     public function addBalance(Wallet $wallet, $amount): bool
     {

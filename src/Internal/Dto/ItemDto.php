@@ -7,7 +7,7 @@ namespace Bavix\Wallet\Internal\Dto;
 use Bavix\Wallet\Interfaces\Product;
 use Countable;
 
-class ProductDto implements Countable
+class ItemDto implements Countable
 {
     private Product $product;
 
@@ -19,7 +19,15 @@ class ProductDto implements Countable
         $this->quantity = $quantity;
     }
 
-    public function item(): Product
+    /**
+     * @return Product[]
+     */
+    public function items(): iterable
+    {
+        return array_fill(0, $this->quantity, $this->product);
+    }
+
+    public function product(): Product
     {
         return $this->product;
     }

@@ -14,17 +14,11 @@ use Bavix\Wallet\Internal\ExchangeInterface;
  */
 class Rate implements Rateable
 {
-    /**
-     * @var string
-     */
-    protected $amount;
+    protected string $amount;
 
-    /**
-     * @var \Bavix\Wallet\Models\Wallet|Wallet
-     */
-    protected $withCurrency;
+    protected Wallet $withCurrency;
 
-    private $exchange;
+    private ExchangeInterface $exchange;
 
     public function __construct(ExchangeInterface $exchange)
     {

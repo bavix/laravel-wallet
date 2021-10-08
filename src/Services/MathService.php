@@ -75,6 +75,14 @@ class MathService implements MathInterface
     /**
      * {@inheritdoc}
      */
+    public function powTen($number): string
+    {
+        return $this->pow(10, $number);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function ceil($number): string
     {
         return (string) BigDecimal::of($number)

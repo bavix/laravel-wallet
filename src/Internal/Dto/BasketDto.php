@@ -8,12 +8,12 @@ use Countable;
 
 class BasketDto implements Countable
 {
-    /** @var ProductDto[] */
+    /** @var ItemDto[] */
     private array $items;
 
     private array $meta;
 
-    /** @param ProductDto[] $items */
+    /** @param ItemDto[] $items */
     public function __construct(array $items, array $meta)
     {
         $this->items = $items;
@@ -30,8 +30,20 @@ class BasketDto implements Countable
         return count($this->items);
     }
 
-    /** @return ProductDto[] */
-    public function items(): array
+    public function total(): int
+    {
+        return count(array_merge(...array_map(static fn (ItemDto $dto) => $dto->items(), $this->items)));
+    }
+
+    public function cursor(): iterable
+    {
+        foreach ($this->items as $item) {
+            yield from $item->items();
+        }
+    }
+
+    /** @return ItemDto[] */
+    public function items(): iterable
     {
         return $this->items;
     }

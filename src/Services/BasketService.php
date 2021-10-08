@@ -14,7 +14,7 @@ class BasketService implements BasketInterface
         $basketDto = $availabilityDto->getBasketDto();
         $customer = $availabilityDto->getCustomer();
         foreach ($basketDto->items() as $productDto) {
-            if (!$productDto->item()->canBuy($customer, $productDto->count(), $availabilityDto->isForce())) {
+            if (!$productDto->product()->canBuy($customer, $productDto->count(), $availabilityDto->isForce())) {
                 return false;
             }
         }

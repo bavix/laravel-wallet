@@ -37,6 +37,9 @@ class WalletService
         $this->consistency = $consistency;
     }
 
+    /**
+     * @deprecated
+     */
     public function discount(Wallet $customer, Wallet $product): int
     {
         if ($customer instanceof Customer && $product instanceof Discount) {
@@ -47,14 +50,22 @@ class WalletService
         return 0;
     }
 
+    /**
+     * @deprecated
+     * @see Wallet::$decimal_places
+     */
     public function decimalPlacesValue(Wallet $object): int
     {
         return $this->getWallet($object)->decimal_places ?: 2;
     }
 
+    /**
+     * @deprecated
+     * @see MathInterface::powTen()
+     */
     public function decimalPlaces(Wallet $object): string
     {
-        return $this->math->pow(10, $this->decimalPlacesValue($object));
+        return $this->math->powTen($this->decimalPlacesValue($object));
     }
 
     /**
@@ -127,6 +138,10 @@ class WalletService
         return $wallet;
     }
 
+    /**
+     * @deprecated
+     * @see WalletModel::refreshBalance()
+     */
     public function refresh(WalletModel $wallet): bool
     {
         return $this->lockService->lock($this, __FUNCTION__, function () use ($wallet) {
@@ -142,6 +157,9 @@ class WalletService
 
     /**
      * @throws Throwable
+     *
+     * @deprecated
+     * @see WalletModel::adjustmentBalance()
      */
     public function adjustment(WalletModel $wallet, ?array $meta = null): void
     {

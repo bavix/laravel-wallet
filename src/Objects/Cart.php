@@ -11,10 +11,10 @@ use Bavix\Wallet\Internal\BasketInterface;
 use Bavix\Wallet\Internal\CartInterface;
 use Bavix\Wallet\Internal\Dto\AvailabilityDto;
 use Bavix\Wallet\Internal\Dto\BasketDto;
-use Bavix\Wallet\Internal\Dto\ProductDto;
+use Bavix\Wallet\Internal\Dto\ItemDto;
 use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\PurchaseInterface;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Traits\HasWallet;
 use function count;
 use Countable;
 use function get_class;
@@ -101,38 +101,20 @@ class Cart implements Countable, CartInterface
      * The method returns the transfers already paid for the goods.
      *
      * @return Transfer[]
+     *
+     * @deprecated
+     * @see PurchaseInterface::already()
      */
     public function alreadyBuy(Customer $customer, bool $gifts = false): array
     {
-        $status = [Transfer::STATUS_PAID];
-        if ($gifts) {
-            $status[] = Transfer::STATUS_GIFT;
-        }
-
-        /** @var HasWallet $customer */
-        /** @var Transfer $query */
-        $result = [];
-        $query = $customer->transfers();
-        foreach ($this->getBasketDto()->items() as $product) {
-            /** @var Model $item */
-            $item = $product->item();
-            $result[] = (clone $query)
-                ->where('to_type', $item->getMorphClass())
-                ->where('to_id', $item->getKey())
-                ->whereIn('status', $status)
-                ->orderBy('id', 'desc')
-                ->limit(count($product))
-                ->get()
-                ->all()
-            ;
-        }
-
-        return array_merge(...$result);
+        return app(PurchaseInterface::class)->already($this->getBasketDto(), $customer, $gifts);
     }
 
     /**
      * @deprecated
      * @see BasketInterface::availability()
+     *
+     * @codeCoverageIgnore
      */
     public function canBuy(Customer $customer, bool $force = false): bool
     {
@@ -168,7 +150,7 @@ class Cart implements Countable, CartInterface
     {
         $items = [];
         foreach ($this->getUniqueItems() as $product) {
-            $items[] = new ProductDto($product, $this->getQuantity($product));
+            $items[] = new ItemDto($product, $this->getQuantity($product));
         }
 
         return new BasketDto($items, $this->getMeta());
