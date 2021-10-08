@@ -32,7 +32,7 @@ As the user uses `HasWallet`, he will have `balance` property.
 Check the user's balance.
 
 ```php
-$user->balance; // int(0)
+$user->balance; // 0
 ```
 
 It is the balance of the wallet by default.
@@ -48,24 +48,24 @@ $wallet = $user->createWallet([
 $user->hasWallet('my-wallet'); // bool(true)
 
 $wallet->deposit(100);
-$wallet->balance; // int(100)
+$wallet->balance; // 100
 
 $user->deposit(10); 
-$user->balance; // int(10)
+$user->balance; // 10
 ```
 
 ## How to get the right wallet?
 
 ```php
 $myWallet = $user->getWallet('my-wallet');
-$myWallet->balance; // int(100)
+$myWallet->balance; // 100
 ```
 
 ## How to get the default wallet?
 
 ```php
 $wallet = $user->wallet;
-$wallet->balance; // int(10)
+$wallet->balance; // 10
 ```
 
 It worked! 

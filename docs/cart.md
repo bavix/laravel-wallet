@@ -62,7 +62,7 @@ Find the user and check the balance.
 
 ```php
 $user = User::first();
-$user->balance; // int(0)
+$user->balance; // 0
 ```
 
 Let's start shopping.
@@ -86,10 +86,10 @@ foreach ($products as $product) {
 }
 
 $user->deposit($cart->getTotal());
-$user->balanceFloat; // float(151.27)
+$user->balanceFloat; // 151.27
 
 (bool)$user->payCart($cart); // true
-$user->balanceFloat; // float(0)
+$user->balanceFloat; // 0
 ```
 
 It worked! 

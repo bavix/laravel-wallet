@@ -39,16 +39,16 @@ $firstWallet = $first->createWallet(compact('name'));
 $lastWallet = $last->createWallet(compact('name'));
 
 $firstWallet->deposit(100);
-$firstWallet->balance; // int(100)
-$lastWallet->balance; // int(0)
+$firstWallet->balance; // 100
+$lastWallet->balance; // 0
 ```
 
 The transfer will be from the first user to the last.
 
 ```php
 $firstWallet->transfer($lastWallet, 5); 
-$firstWallet->balance; // int(95)
-$lastWallet->balance; // int(5)
+$firstWallet->balance; // 95
+$lastWallet->balance; // 5
 ```
 
 It worked! 
@@ -58,8 +58,8 @@ It worked!
 Check the user's balance.
 
 ```php
-$firstWallet->balance; // int(100)
-$lastWallet->balance; // int(0)
+$firstWallet->balance; // 100
+$lastWallet->balance; // 0
 ```
 
 The transfer will be from the first user to the second.
@@ -67,7 +67,7 @@ The transfer will be from the first user to the second.
 ```php
 $firstWallet->forceTransfer($lastWallet, 500); 
 $firstWallet->balance; // int(-400)
-$lastWallet->balance; // int(500)
+$lastWallet->balance; // 500
 ```
 
 It worked! 

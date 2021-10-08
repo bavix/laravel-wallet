@@ -68,14 +68,14 @@ class Item extends Model implements Product, Taxable
 
 ```php
 $user = User::first();
-$user->balance; // int(103)
+$user->balance; // 103
 ```
 
 Деньги есть, это хорошо. Проверим стоимость товара.
 
 ```php
 $item = Item::first();
-$item->getAmountProduct($user); // int(100)
+$item->getAmountProduct($user); // 100
 ```
 
 Товар стоит 100 бубликов. Значит налог составит 3 бублика.
@@ -83,7 +83,7 @@ $item->getAmountProduct($user); // int(100)
 
 ```php
 $user->pay($item); // success, 100 (product) + 3 (fee) = 103
-$user->balance; // int(0)
+$user->balance; // 0
 ```
 
 ## Минимальный налог
@@ -134,7 +134,7 @@ class Item extends Model implements Product, MinimalTaxable
     
     public function getMinimalFee()
     {
-        return 5; // 3%, minimum int(5)    
+        return 5; // 3%, minimum 5    
     }
 }
 ```
@@ -145,14 +145,14 @@ class Item extends Model implements Product, MinimalTaxable
 
 ```php
 $user = User::first();
-$user->balance; // int(105)
+$user->balance; // 105
 ```
 
 Денег хватает, проверяем стоимость товара.
 
 ```php
 $item = Item::first();
-$item->getAmountProduct($user); // int(100)
+$item->getAmountProduct($user); // 100
 ```
 
 Налог 3%, а минимальный налог составляет 5 бубликов. 
@@ -160,7 +160,7 @@ $item->getAmountProduct($user); // int(100)
 
 ```php
 $user->pay($item); // успешно, 100 (product) + 5 (minimal fee) = 105
-$user->balance; // int(0)
+$user->balance; // 0
 ```
 
 #### Ошибочная операция
@@ -169,14 +169,14 @@ $user->balance; // int(0)
 
 ```php
 $user = User::first();
-$user->balance; // int(103)
+$user->balance; // 103
 ```
 
 Находим товар.
 
 ```php
 $item = Item::first();
-$item->getAmountProduct($user); // int(100)
+$item->getAmountProduct($user); // 100
 ```
 
 Налог составит 5 бубликов, а у пользователя только 103 бублика.
@@ -184,7 +184,7 @@ $item->getAmountProduct($user); // int(100)
 
 ```php
 $user->safePay($item); // ошибка, 100 (product) + 5 (minimal fee) = 105
-$user->balance; // int(103)
+$user->balance; // 103
 ```
 
 Это работает!

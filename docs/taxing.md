@@ -68,21 +68,21 @@ Find the user and check the balance.
 
 ```php
 $user = User::first();
-$user->balance; // int(103)
+$user->balance; // 103
 ```
 
 Find the goods and check the cost.
 
 ```php
 $item = Item::first();
-$item->getAmountProduct($user); // int(100)
+$item->getAmountProduct($user); // 100
 ```
 
 The user can buy a product, buy...
 
 ```php
 $user->pay($item); // success, 100 (product) + 3 (fee) = 103
-$user->balance; // int(0)
+$user->balance; // 0
 ```
 
 ## Minimal Taxing
@@ -133,7 +133,7 @@ class Item extends Model implements Product, MinimalTaxable
     
     public function getMinimalFee()
     {
-        return 5; // 3%, minimum int(5)    
+        return 5; // 3%, minimum 5    
     }
 }
 ```
@@ -144,21 +144,21 @@ Find the user and check the balance.
 
 ```php
 $user = User::first();
-$user->balance; // int(105)
+$user->balance; // 105
 ```
 
 Find the goods and check the cost.
 
 ```php
 $item = Item::first();
-$item->getAmountProduct($user); // int(100)
+$item->getAmountProduct($user); // 100
 ```
 
 The user can buy a product, buy...
 
 ```php
 $user->pay($item); // success, 100 (product) + 5 (minimal fee) = 105
-$user->balance; // int(0)
+$user->balance; // 0
 ```
 
 #### Failed
@@ -167,21 +167,21 @@ Find the user and check the balance.
 
 ```php
 $user = User::first();
-$user->balance; // int(103)
+$user->balance; // 103
 ```
 
 Find the goods and check the cost.
 
 ```php
 $item = Item::first();
-$item->getAmountProduct($user); // int(100)
+$item->getAmountProduct($user); // 100
 ```
 
 The user can buy a product, buy...
 
 ```php
 $user->safePay($item); // failed, 100 (product) + 5 (minimal fee) = 105
-$user->balance; // int(103)
+$user->balance; // 103
 ```
 
 It worked! 

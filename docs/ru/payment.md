@@ -62,28 +62,28 @@ class Item extends Model implements Product
 
 ```php
 $user = User::first();
-$user->balance; // int(100)
+$user->balance; // 100
 ```
 
 Найдет товар и проверим стоимость.
 
 ```php
 $item = Item::first();
-$item->getAmountProduct($user); // int(100)
+$item->getAmountProduct($user); // 100
 ```
 
 Процесс оплаты.
 
 ```php
 $user->pay($item);
-$user->balance; // int(0)
+$user->balance; // 0
 ```
 
 Что будет, если у пользователя нет средств?
 Тоже что и при [выводе](withdraw#failed).
 
 ```php
-$user->balance; // int(0)
+$user->balance; // 0
 $user->pay($item);
 // throw an exception
 ```

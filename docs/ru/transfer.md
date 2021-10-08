@@ -36,16 +36,16 @@ $first->getKey() !== $last->getKey(); // true
 Проверим их баланс.
 
 ```php
-$first->balance; // int(100)
-$last->balance; // int(0)
+$first->balance; // 100
+$last->balance; // 0
 ```
 
 Сделаем перевод от первого второму.
 
 ```php
 $first->transfer($last, 5); 
-$first->balance; // int(95)
-$last->balance; // int(5)
+$first->balance; // 95
+$last->balance; // 5
 ```
 
 ## Заставить перевести.
@@ -54,8 +54,8 @@ $last->balance; // int(5)
 системе разрешено уходить в минус.
 
 ```php
-$first->balance; // int(100)
-$last->balance; // int(0)
+$first->balance; // 100
+$last->balance; // 0
 ```
 
 Сделаем перевод от первого второму.
@@ -63,7 +63,7 @@ $last->balance; // int(0)
 ```php
 $first->forceTransfer($last, 500); 
 $first->balance; // int(-400)
-$last->balance; // int(500)
+$last->balance; // 500
 ```
 
 Просто работает.

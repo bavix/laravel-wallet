@@ -69,15 +69,15 @@ class Item extends Model implements Product
 
 ```php
 $user = User::first();
-$user->balance; // int(100)
+$user->balance; // 100
 ```
 
 Найдем товар, проверим стоимость и баланс.
 
 ```php
 $item = Item::first();
-$item->getAmountProduct($user); // int(100)
-$item->balance; // int(0)
+$item->getAmountProduct($user); // 100
+$item->balance; // 0
 ```
 
 Переходим к покупке.
@@ -85,8 +85,8 @@ $item->balance; // int(0)
 ```php
 $user->payFree($item);
 (bool)$user->paid($item); // bool(true)
-$user->balance; // int(100)
-$item->balance; // int(0)
+$user->balance; // 100
+$item->balance; // 0
 ```
 
 Баланс пользователя и товара остался прежним.

@@ -62,14 +62,14 @@ class Item extends Model implements Product
 
 ```php
 $user = User::first();
-$user->balance; // int(0)
+$user->balance; // 0
 ```
 
 Найдем товар и проверим баланс.
 
 ```php
 $item = Item::first();
-$item->balance; // int(100)
+$item->balance; // 100
 ```
 
 Производим возврат средств.
@@ -77,8 +77,8 @@ $item->balance; // int(100)
 ```php
 (bool)$user->paid($item); // bool(true)
 (bool)$user->refund($item); // bool(true)
-$item->balance; // int(0)
-$user->balance; // int(100)
+$item->balance; // 0
+$user->balance; // 100
 ```
 
 Просто работает!

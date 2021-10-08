@@ -38,14 +38,14 @@ $user = User::first();
 Проверим баланс.
 
 ```php
-$user->balance; // int(100)
+$user->balance; // 100
 ```
 
 Баланс не пустой, значит можем вывести.
 
 ```php
 $user->withdraw(10); 
-$user->balance; // int(90)
+$user->balance; // 90
 ```
 
 Просто работает!
@@ -58,7 +58,7 @@ $user->balance; // int(90)
 К примеру, штраф за нарушение правил сайта.
 
 ```php
-$user->balance; // int(100)
+$user->balance; // 100
 $user->forceWithdraw(101);
 $user->balance; // int(-1)
 ```

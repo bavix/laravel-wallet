@@ -23,7 +23,7 @@ As the user uses `HasWallet`, he will have `balance` property.
 Check the user's balance.
 
 ```php
-$user->balance; // int(0)
+$user->balance; // 0
 ```
 
 The balance is zero, which is what we expected.
@@ -31,7 +31,7 @@ Put it on his 10 cents account.
 
 ```php
 $user->deposit(10); 
-$user->balance; // int(10)
+$user->balance; // 10
 ```
 
 Wow! The balance is 10 cents, the money is credited.
