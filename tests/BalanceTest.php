@@ -33,6 +33,23 @@ class BalanceTest extends TestCase
         self::assertTrue($buyer->wallet->exists);
     }
 
+    public function testCheckType(): void
+    {
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        $buyer->deposit(1000);
+
+        self::assertIsString($buyer->balance);
+        self::assertIsString($buyer->wallet->balanceFloat);
+
+        self::assertIsInt($buyer->balanceInt);
+
+        self::assertSame('1000', $buyer->balance);
+        self::assertSame('10.00', $buyer->wallet->balanceFloat);
+
+        self::assertSame(1000, $buyer->balanceInt);
+    }
+
     public function testCanWithdraw(): void
     {
         /** @var Buyer $buyer */

@@ -30,7 +30,6 @@ use Illuminate\Support\Str;
  * @property string                          $slug
  * @property string                          $description
  * @property array                           $meta
- * @property int                             $balance
  * @property int                             $decimal_places
  * @property \Bavix\Wallet\Interfaces\Wallet $holder
  * @property string                          $currency
