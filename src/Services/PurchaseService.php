@@ -15,29 +15,28 @@ class PurchaseService implements PurchaseInterface
 {
     public function already(Customer $customer, BasketDto $basketDto, bool $gifts = false): array
     {
-        $status = [Transfer::STATUS_PAID];
-        if ($gifts) {
-            $status[] = Transfer::STATUS_GIFT;
-        }
+        $status = $gifts
+            ? [Transfer::STATUS_PAID, Transfer::STATUS_GIFT]
+            : [Transfer::STATUS_PAID];
 
         /** @var HasWallet $customer */
         /** @var Transfer $query */
-        $result = [];
+        $arrays = [];
         $query = $customer->transfers();
-        foreach ($basketDto->items() as $product) {
-            /** @var Model $item */
-            $item = $product->product();
-            $result[] = (clone $query)
-                ->where('to_type', $item->getMorphClass())
-                ->where('to_id', $item->getKey())
+        foreach ($basketDto->items() as $itemDto) {
+            /** @var Model $product */
+            $product = $itemDto->product();
+            $arrays[] = (clone $query)
+                ->where('to_type', $product->getMorphClass())
+                ->where('to_id', $product->getKey())
                 ->whereIn('status', $status)
                 ->orderBy('id', 'desc')
-                ->limit(count($product))
+                ->limit(count($itemDto))
                 ->get()
                 ->all()
             ;
         }
 
-        return array_merge(...$result);
+        return array_merge(...$arrays);
     }
 }
