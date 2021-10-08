@@ -62,7 +62,7 @@ $last->balance; // 0
 
 ```php
 $first->forceTransfer($last, 500); 
-$first->balance; // int(-400)
+$first->balance; // int
 $last->balance; // 500
 ```
 

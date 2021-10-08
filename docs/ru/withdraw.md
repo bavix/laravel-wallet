@@ -60,7 +60,7 @@ $user->balance; // 90
 ```php
 $user->balance; // 100
 $user->forceWithdraw(101);
-$user->balance; // int(-1)
+$user->balance; // int
 ```
 
 ## Что будет, если средств не хватает?
