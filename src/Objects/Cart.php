@@ -107,7 +107,7 @@ class Cart implements Countable, CartInterface
      */
     public function alreadyBuy(Customer $customer, bool $gifts = false): array
     {
-        return app(PurchaseInterface::class)->already($this->getBasketDto(), $customer, $gifts);
+        return app(PurchaseInterface::class)->already($customer, $this->getBasketDto(), $gifts);
     }
 
     /**

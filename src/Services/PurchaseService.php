@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PurchaseService implements PurchaseInterface
 {
-    public function already(BasketDto $basketDto, Customer $customer, bool $gifts = false): array
+    public function already(Customer $customer, BasketDto $basketDto, bool $gifts = false): array
     {
         $status = [Transfer::STATUS_PAID];
         if ($gifts) {

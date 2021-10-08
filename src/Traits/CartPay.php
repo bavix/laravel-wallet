@@ -137,7 +137,7 @@ trait CartPay
 
         return app(DbService::class)->transaction(static function () use ($self, $cart, $force, $gifts) {
             $results = [];
-            $transfers = app(PurchaseInterface::class)->already($cart->getBasketDto(), $self, $gifts);
+            $transfers = app(PurchaseInterface::class)->already($self, $cart->getBasketDto(), $gifts);
             if (count($transfers) !== $cart->getBasketDto()->total()) {
                 throw (new ModelNotFoundException())
                     ->setModel($self->transfers()->getMorphClass())
@@ -214,7 +214,7 @@ trait CartPay
     {
         $cart = app(Cart::class)->addItem($product);
         $purchases = app(PurchaseInterface::class)
-            ->already($cart->getBasketDto(), $this, $gifts)
+            ->already($this, $cart->getBasketDto(), $gifts)
         ;
 
         return current($purchases) ?: null;

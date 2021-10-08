@@ -11,5 +11,5 @@ use Bavix\Wallet\Models\Transfer;
 interface PurchaseInterface
 {
     /** @return Transfer[] */
-    public function already(BasketDto $basketDto, Customer $customer, bool $gifts = false): array;
+    public function already(Customer $customer, BasketDto $basketDto, bool $gifts = false): array;
 }
