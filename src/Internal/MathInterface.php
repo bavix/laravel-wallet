@@ -32,9 +32,12 @@ interface MathInterface
 
     /**
      * @param float|int|string $first
-     * @param int|string       $second
+     * @param float|int|string $second
      */
     public function pow($first, $second, ?int $scale = null): string;
+
+    /** @param float|int|string $number */
+    public function powTen($number): string;
 
     /**
      * @param float|int|string $number

@@ -3,7 +3,7 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Internal\Dto\BasketDto;
-use Bavix\Wallet\Internal\Dto\ProductDto;
+use Bavix\Wallet\Internal\Dto\ItemDto;
 use Bavix\Wallet\Test\Models\Item;
 
 /**
@@ -14,8 +14,8 @@ class BasketTest extends TestCase
     public function testCount(): void
     {
         $item = new Item();
-        $productDto1 = new ProductDto($item, 24);
-        $productDto2 = new ProductDto($item, 26);
+        $productDto1 = new ItemDto($item, 24);
+        $productDto2 = new ItemDto($item, 26);
         $basket = new BasketDto([$productDto1, $productDto2], []);
 
         self::assertEmpty($basket->meta());

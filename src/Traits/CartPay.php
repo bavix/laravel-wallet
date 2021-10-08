@@ -5,7 +5,11 @@ namespace Bavix\Wallet\Traits;
 use function array_unique;
 use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Internal\BasketInterface;
+use Bavix\Wallet\Internal\CartInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
+use Bavix\Wallet\Internal\Dto\AvailabilityDto;
+use Bavix\Wallet\Internal\PurchaseInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\CommonService;
@@ -24,9 +28,10 @@ trait CartPay
      *
      * @return Transfer[]
      */
-    public function payFreeCart(Cart $cart): array
+    public function payFreeCart(CartInterface $cart): array
     {
-        if (!$cart->canBuy($this)) {
+        $basketService = app(BasketInterface::class);
+        if (!$basketService->availability(new AvailabilityDto($this, $cart->getBasketDto()))) {
             throw new ProductEnded(trans('wallet::errors.product_stock'));
         }
 
@@ -36,7 +41,7 @@ trait CartPay
 
         return app(DbService::class)->transaction(static function () use ($self, $cart) {
             $results = [];
-            foreach ($cart->getItems() as $product) {
+            foreach ($cart->getBasketDto()->cursor() as $product) {
                 $results[] = app(CommonService::class)->forceTransfer(
                     $self,
                     $product,
@@ -53,7 +58,7 @@ trait CartPay
     /**
      * @return Transfer[]
      */
-    public function safePayCart(Cart $cart, bool $force = false): array
+    public function safePayCart(CartInterface $cart, bool $force = false): array
     {
         try {
             return $this->payCart($cart, $force);
@@ -67,9 +72,10 @@ trait CartPay
      *
      * @return Transfer[]
      */
-    public function payCart(Cart $cart, bool $force = false): array
+    public function payCart(CartInterface $cart, bool $force = false): array
     {
-        if (!$cart->canBuy($this, $force)) {
+        $basketService = app(BasketInterface::class);
+        if (!$basketService->availability(new AvailabilityDto($this, $cart->getBasketDto(), $force))) {
             throw new ProductEnded(trans('wallet::errors.product_stock'));
         }
 
@@ -77,7 +83,7 @@ trait CartPay
 
         return app(DbService::class)->transaction(static function () use ($self, $cart, $force) {
             $results = [];
-            foreach ($cart->getItems() as $product) {
+            foreach ($cart->getBasketDto()->cursor() as $product) {
                 if ($force) {
                     $results[] = app(CommonService::class)->forceTransfer(
                         $self,
@@ -108,12 +114,12 @@ trait CartPay
      *
      * @return Transfer[]
      */
-    public function forcePayCart(Cart $cart): array
+    public function forcePayCart(CartInterface $cart): array
     {
         return $this->payCart($cart, true);
     }
 
-    public function safeRefundCart(Cart $cart, bool $force = false, bool $gifts = false): bool
+    public function safeRefundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool
     {
         try {
             return $this->refundCart($cart, $force, $gifts);
@@ -125,21 +131,26 @@ trait CartPay
     /**
      * @throws
      */
-    public function refundCart(Cart $cart, bool $force = false, bool $gifts = false): bool
+    public function refundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool
     {
         $self = $this;
 
         return app(DbService::class)->transaction(static function () use ($self, $cart, $force, $gifts) {
             $results = [];
-            $transfers = $cart->alreadyBuy($self, $gifts);
-            if (count($transfers) !== count($cart)) {
+            $transfers = app(PurchaseInterface::class)->already($self, $cart->getBasketDto(), $gifts);
+            if (count($transfers) !== $cart->getBasketDto()->total()) {
                 throw (new ModelNotFoundException())
                     ->setModel($self->transfers()->getMorphClass())
                 ;
             }
 
-            foreach ($cart->getItems() as $key => $product) {
-                $transfer = $transfers[$key];
+            foreach ($cart->getBasketDto()->cursor() as $product) {
+                $transfer = current($transfers);
+                next($transfers);
+                /**
+                 * the code is extremely poorly written, a complete refactoring is required.
+                 * for version 6.x we will leave it as it is.
+                 */
                 $transfer->load('withdraw.wallet');
 
                 if (!$force) {
@@ -166,12 +177,12 @@ trait CartPay
     /**
      * @throws
      */
-    public function forceRefundCart(Cart $cart, bool $gifts = false): bool
+    public function forceRefundCart(CartInterface $cart, bool $gifts = false): bool
     {
         return $this->refundCart($cart, true, $gifts);
     }
 
-    public function safeRefundGiftCart(Cart $cart, bool $force = false): bool
+    public function safeRefundGiftCart(CartInterface $cart, bool $force = false): bool
     {
         try {
             return $this->refundGiftCart($cart, $force);
@@ -183,7 +194,7 @@ trait CartPay
     /**
      * @throws
      */
-    public function refundGiftCart(Cart $cart, bool $force = false): bool
+    public function refundGiftCart(CartInterface $cart, bool $force = false): bool
     {
         return $this->refundCart($cart, $force, true);
     }
@@ -191,7 +202,7 @@ trait CartPay
     /**
      * @throws
      */
-    public function forceRefundGiftCart(Cart $cart): bool
+    public function forceRefundGiftCart(CartInterface $cart): bool
     {
         return $this->refundGiftCart($cart, true);
     }
@@ -201,6 +212,11 @@ trait CartPay
      */
     public function paid(Product $product, bool $gifts = false): ?Transfer
     {
-        return current(app(Cart::class)->addItem($product)->alreadyBuy($this, $gifts)) ?: null;
+        $cart = app(Cart::class)->addItem($product);
+        $purchases = app(PurchaseInterface::class)
+            ->already($this, $cart->getBasketDto(), $gifts)
+        ;
+
+        return current($purchases) ?: null;
     }
 }

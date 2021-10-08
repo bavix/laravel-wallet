@@ -17,6 +17,4 @@ interface Product extends Wallet
      * @return array
      */
     public function getMetaProduct(): ?array;
-
-    public function getUniqueId(): string;
 }

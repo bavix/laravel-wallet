@@ -148,7 +148,6 @@ class CommonService
 
     /**
      * @param int|string $amount
-     * @param bool       $allowZero
      *
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
@@ -158,15 +157,17 @@ class CommonService
      *
      * @codeCoverageIgnore
      */
-    public function verifyWithdraw(Wallet $wallet, $amount, bool $allowZero = null): void
+    public function verifyWithdraw(Wallet $wallet, $amount, bool $allowZero = false): void
     {
-        $this->consistency->checkPotential($wallet, $amount, (bool) $allowZero);
+        $this->consistency->checkPotential($wallet, $amount, $allowZero);
     }
 
     /**
      * Create Operation without DB::transaction.
      *
      * @param Operation[] $operations
+     *
+     * @deprecated
      */
     public function multiOperation(Wallet $self, array $operations): array
     {
@@ -196,6 +197,8 @@ class CommonService
      * @param Bring[] $brings
      *
      * @throws
+     *
+     * @deprecated
      */
     public function assemble(array $brings): array
     {
@@ -210,6 +213,8 @@ class CommonService
 
     /**
      * Create Bring without DB::transaction.
+     *
+     * @deprecated
      */
     public function multiBrings(array $brings): array
     {
@@ -227,6 +232,8 @@ class CommonService
      * @param int|string $amount
      *
      * @throws
+     *
+     * @deprecated
      */
     public function addBalance(Wallet $wallet, $amount): bool
     {

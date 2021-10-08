@@ -17,7 +17,7 @@ class AvailabilityDto
     public function __construct(
         Customer $customer,
         BasketDto $basketDto,
-        bool $force
+        bool $force = false
     ) {
         $this->customer = $customer;
         $this->basketDto = $basketDto;

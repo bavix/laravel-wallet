@@ -14,6 +14,7 @@ use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\ExchangeInterface;
 use Bavix\Wallet\Internal\LockInterface;
 use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\PurchaseInterface;
 use Bavix\Wallet\Internal\StorageInterface;
 use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Transaction;
@@ -33,6 +34,7 @@ use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\MathService;
 use Bavix\Wallet\Services\MetaService;
+use Bavix\Wallet\Services\PurchaseService;
 use Bavix\Wallet\Services\StorageService;
 use Bavix\Wallet\Services\UuidFactoryService;
 use Bavix\Wallet\Services\WalletService;
@@ -100,7 +102,7 @@ class WalletServiceProvider extends ServiceProvider
      */
     protected function shouldMigrate(): bool
     {
-        return WalletConfigure::$runsMigrations;
+        return WalletConfigure::isRunsMigrations();
     }
 
     private function singletons(): void
@@ -108,7 +110,6 @@ class WalletServiceProvider extends ServiceProvider
         // Bind eloquent models to IoC container
         $this->app->singleton(ExchangeInterface::class, config('wallet.package.exchange', Exchange::class));
         $this->app->singleton(MathInterface::class, config('wallet.package.mathable', MathService::class));
-        $this->app->singleton(ExchangeService::class, config('wallet.services.exchange', ExchangeService::class));
         $this->app->singleton(CommonService::class, config('wallet.services.common', CommonService::class));
         $this->app->singleton(WalletService::class, config('wallet.services.wallet', WalletService::class));
 
@@ -118,10 +119,12 @@ class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(BookkeeperInterface::class, BookkeeperService::class);
         $this->app->singleton(BasketInterface::class, BasketService::class);
         $this->app->singleton(ConsistencyInterface::class, ConsistencyService::class);
+        $this->app->singleton(PurchaseInterface::class, PurchaseService::class);
     }
 
     private function legacySingleton(): void
     {
+        $this->app->singleton(ExchangeService::class, config('wallet.services.exchange', ExchangeService::class));
         $this->app->singleton(Rateable::class, config('wallet.package.rateable', Rate::class));
         $this->app->singleton(Storable::class, config('wallet.package.storable', Store::class));
 

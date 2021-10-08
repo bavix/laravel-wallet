@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Interfaces;
 
+use Bavix\Wallet\Internal\CartInterface;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Objects\Cart;
 
 interface Customer extends Wallet
 {
@@ -40,28 +40,28 @@ interface Customer extends Wallet
      *
      * @return Transfer[]
      */
-    public function payCart(Cart $cart, bool $force = false): array;
+    public function payCart(CartInterface $cart, bool $force = false): array;
 
     /**
      * @throws
      *
      * @return Transfer[]
      */
-    public function safePayCart(Cart $cart, bool $force = false): array;
+    public function safePayCart(CartInterface $cart, bool $force = false): array;
 
     /**
      * @throws
      *
      * @return Transfer[]
      */
-    public function forcePayCart(Cart $cart): array;
+    public function forcePayCart(CartInterface $cart): array;
 
     /**
      * @throws
      */
-    public function refundCart(Cart $cart, bool $force = false, bool $gifts = false): bool;
+    public function refundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool;
 
-    public function safeRefundCart(Cart $cart, bool $force = false, bool $gifts = false): bool;
+    public function safeRefundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool;
 
-    public function forceRefundCart(Cart $cart, bool $gifts = false): bool;
+    public function forceRefundCart(CartInterface $cart, bool $gifts = false): bool;
 }

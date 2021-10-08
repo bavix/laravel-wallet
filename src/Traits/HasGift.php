@@ -26,10 +26,8 @@ trait HasGift
 {
     /**
      * Give the goods safely.
-     *
-     * @param bool $force
      */
-    public function safeGift(Wallet $to, Product $product, bool $force = null): ?Transfer
+    public function safeGift(Wallet $to, Product $product, bool $force = false): ?Transfer
     {
         try {
             return $this->gift($to, $product, $force);
@@ -43,14 +41,12 @@ trait HasGift
      * the goods to another user (wallet).
      * This functionality can be organized for gifts.
      *
-     * @param bool $force
-     *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      * @throws Throwable
      */
-    public function gift(Wallet $to, Product $product, bool $force = null): Transfer
+    public function gift(Wallet $to, Product $product, bool $force = false): Transfer
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($to, $product, $force): Transfer {
             /**
