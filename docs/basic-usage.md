@@ -21,7 +21,7 @@ $user->withdraw(1);
 $user->balance; // 9
 
 $user->forceWithdraw(200, ['description' => 'payment of taxes']);
-$user->balance; // int
+$user->balance; // int(-191)
 ```
 
 ## Purchases

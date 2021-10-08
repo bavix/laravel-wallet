@@ -52,7 +52,7 @@ The transfer will be from the first user to the second.
 
 ```php
 $first->forceTransfer($last, 500); 
-$first->balance; // int
+$first->balance; // int(-400)
 $last->balance; // 500
 ```
 
