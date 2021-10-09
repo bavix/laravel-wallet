@@ -27,8 +27,8 @@ class User extends Model implements Wallet
 Проверим баланс.
 
 ```php
-$user->id; // int(5)
-$user->balance; // int(27)
+$user->id; // 5
+$user->balance; // 27
 ```
 
 Подтвердим операции пользователя.
@@ -45,9 +45,9 @@ where confirmed=0 and
 Операций было 212, пересчитаем баланс.
 
 ```php
-$user->balance; // int(27)
+$user->balance; // 27
 $user->wallet->refreshBalance();
-$user->balance; // int(42)
+$user->balance; // 42
 ```
 
 Просто работает!

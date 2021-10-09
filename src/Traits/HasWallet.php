@@ -25,7 +25,8 @@ use Throwable;
  * Trait HasWallet.
  *
  * @property Collection|WalletModel[] $wallets
- * @property int                      $balance
+ * @property string                   $balance
+ * @property int                      $balanceInt
  */
 trait HasWallet
 {
@@ -80,6 +81,14 @@ trait HasWallet
     {
         /** @var Wallet $this */
         return app(Storable::class)->getBalance($this);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function getBalanceIntAttribute(): int
+    {
+        return (int) $this->getBalanceAttribute();
     }
 
     /**

@@ -117,16 +117,16 @@ We will exchange rubles into dollars.
 
 ```php
 $transfer = $rub->exchange($usd, 10000);
-$rub->balance; // int(0)
-$usd->balance; // int(147), это $1.47
+$rub->balance; // 0
+$usd->balance; // 147, это $1.47
 ```
 
 Unfortunately, the world is not perfect. You will not get back your 100 rubles.
 
 ```php
 $transfer = $usd->exchange($rub, $usd->balance);
-$usd->balance; int(0)
-$rub->balance; int(9938)
+$usd->balance; 0
+$rub->balance; 9938
 ```
 
 Due to conversion and mathematical rounding, you lost 62 kopecks.

@@ -31,7 +31,7 @@ $user = User::first();
 Проверим баланс.
 
 ```php
-$user->balance; // int(0)
+$user->balance; // 0
 ```
 
 `$user->balance` - это алиас вызова `$user->wallet->balance`,
@@ -46,24 +46,24 @@ $wallet = $user->createWallet([
 ]);
 
 $wallet->deposit(100);
-$wallet->balance; // int(100)
+$wallet->balance; // 100
 
 $user->deposit(10); 
-$user->balance; // int(10)
+$user->balance; // 10
 ```
 
 ## Как обратиться к новому кошельку?
 
 ```php
 $myWallet = $user->getWallet('my-wallet');
-$myWallet->balance; // int(100)
+$myWallet->balance; // 100
 ```
 
 ## Как обратиться к кошельку по умолчанию?
 
 ```php
 $wallet = $user->wallet;
-$wallet->balance; // int(10)
+$wallet->balance; // 10
 ```
 
 Просто работает!

@@ -41,16 +41,16 @@ $firstWallet = $first->createWallet(compact('name'));
 $lastWallet = $last->createWallet(compact('name'));
 
 $firstWallet->deposit(100);
-$firstWallet->balance; // int(100)
-$lastWallet->balance; // int(0)
+$firstWallet->balance; // 100
+$lastWallet->balance; // 0
 ```
 
 Выполним перевод от первого второму.
 
 ```php
 $firstWallet->transfer($lastWallet, 5); 
-$firstWallet->balance; // int(95)
-$lastWallet->balance; // int(5)
+$firstWallet->balance; // 95
+$lastWallet->balance; // 5
 ```
 
 ## Принудительный перевод
@@ -58,16 +58,16 @@ $lastWallet->balance; // int(5)
 Проверим баланс.
 
 ```php
-$firstWallet->balance; // int(100)
-$lastWallet->balance; // int(0)
+$firstWallet->balance; // 100
+$lastWallet->balance; // 0
 ```
 
 Выполним перевод от первого второму.
 
 ```php
 $firstWallet->forceTransfer($lastWallet, 500); 
-$firstWallet->balance; // int(-400)
-$lastWallet->balance; // int(500)
+$firstWallet->balance; // -400
+$lastWallet->balance; // 500
 ```
 
 Просто работает!

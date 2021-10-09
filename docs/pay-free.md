@@ -62,15 +62,15 @@ Find the user and check the balance.
 
 ```php
 $user = User::first();
-$user->balance; // int(100)
+$user->balance; // 100
 ```
 
 Find the goods and check the cost.
 
 ```php
 $item = Item::first();
-$item->getAmountProduct($user); // int(100)
-$item->balance; // int(0)
+$item->getAmountProduct($user); // 100
+$item->balance; // 0
 ```
 
 Purchase!
@@ -78,8 +78,8 @@ Purchase!
 ```php
 $user->payFree($item);
 (bool)$user->paid($item); // bool(true)
-$user->balance; // int(100)
-$item->balance; // int(0)
+$user->balance; // 100
+$item->balance; // 0
 ```
 
 It worked! 

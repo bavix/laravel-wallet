@@ -12,16 +12,16 @@ Consider an example:
 
 ```php
 $user = User::first();
-$user->balance; // int(0)
+$user->balance; // 0
 
 $user->deposit(10);
-$user->balance; // int(10)
+$user->balance; // 10
 
 $user->withdraw(1);
-$user->balance; // int(9)
+$user->balance; // 9
 
 $user->forceWithdraw(200, ['description' => 'payment of taxes']);
-$user->balance; // int(-191)
+$user->balance; // -191
 ```
 
 ## Purchases
@@ -83,11 +83,11 @@ Proceed to purchase.
 
 ```php
 $user = User::first();
-$user->balance; // int(100)
+$user->balance; // 100
 
 $item = Item::first();
 $user->pay($item); // If you do not have enough money, throw an exception
-var_dump($user->balance); // int(0)
+var_dump($user->balance); // 0
 
 if ($user->safePay($item)) {
   // try to buy again )
@@ -118,10 +118,10 @@ Now we make transactions.
 
 ```php
 $user = User::first();
-$user->balance; // int(100)
-$user->balanceFloat; // float(1.00)
+$user->balance; // 100
+$user->balanceFloat; // 1.00
 
 $user->depositFloat(1.37);
-$user->balance; // int(237)
-$user->balanceFloat; // float(2.37)
+$user->balance; // 237
+$user->balanceFloat; // 2.37
 ```

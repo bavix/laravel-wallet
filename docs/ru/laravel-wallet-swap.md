@@ -32,12 +32,12 @@ class User extends Model implements Wallet
 $usd = $user->getWallet('usd');
 $rub = $user->getWallet('rub');
 
-$usd->balance; // int(200)
-$rub->balance; // int(0)
+$usd->balance; // 200
+$rub->balance; // 0
 
 $usd->exchange($rub, 10);
-$usd->balance; // int(190)
-$rub->balance; // int(622)
+$usd->balance; // 190
+$rub->balance; // 622
 ```
 
 Это работает.

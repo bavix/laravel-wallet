@@ -25,16 +25,16 @@ As the user uses `HasWallet`, he will have `balance` property.
 Check the user's balance.
 
 ```php
-$first->balance; // int(100)
-$last->balance; // int(0)
+$first->balance; // 100
+$last->balance; // 0
 ```
 
 The transfer will be from the first user to the second.
 
 ```php
 $first->transfer($last, 5); 
-$first->balance; // int(95)
-$last->balance; // int(5)
+$first->balance; // 95
+$last->balance; // 5
 ```
 
 It worked! 
@@ -44,16 +44,16 @@ It worked!
 Check the user's balance.
 
 ```php
-$first->balance; // int(100)
-$last->balance; // int(0)
+$first->balance; // 100
+$last->balance; // 0
 ```
 
 The transfer will be from the first user to the second.
 
 ```php
 $first->forceTransfer($last, 500); 
-$first->balance; // int(-400)
-$last->balance; // int(500)
+$first->balance; // -400
+$last->balance; // 500
 ```
 
 It worked! 

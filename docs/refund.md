@@ -62,14 +62,14 @@ Find the user and check the balance.
 
 ```php
 $user = User::first();
-$user->balance; // int(0)
+$user->balance; // 0
 ```
 
 Find the goods and check the balance.
 
 ```php
 $item = Item::first();
-$item->balance; // int(100)
+$item->balance; // 100
 ```
 
 Return of funds!
@@ -77,8 +77,8 @@ Return of funds!
 ```php
 (bool)$user->paid($item); // bool(true)
 (bool)$user->refund($item); // bool(true)
-$item->balance; // int(0)
-$user->balance; // int(100)
+$item->balance; // 0
+$user->balance; // 100
 ```
 
 It worked! 

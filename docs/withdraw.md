@@ -24,14 +24,14 @@ As the user uses `HasWallet`, he will have `balance` property.
 Check the user's balance.
 
 ```php
-$user->balance; // int(100)
+$user->balance; // 100
 ```
 
 The balance is not empty, so you can withdraw funds.
 
 ```php
 $user->withdraw(10); 
-$user->balance; // int(90)
+$user->balance; // 90
 ```
 
 It worked! 
@@ -42,9 +42,9 @@ Forced withdrawal is necessary for those cases when
 the user has no funds. For example, a fine for spam.
 
 ```php
-$user->balance; // int(100)
+$user->balance; // 100
 $user->forceWithdraw(101);
-$user->balance; // int(-1)
+$user->balance; // -1
 ```
 
 ## And what will happen if the money is not enough?

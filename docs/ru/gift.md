@@ -65,8 +65,8 @@ $first = User::first();
 $last = User::orderBy('id', 'desc')->first(); // last user
 $first->getKey() !== $last->getKey(); // true
 
-$first->balance; // int(115)
-$last->balance; // int(0)
+$first->balance; // 115
+$last->balance; // 0
 ```
 
 У дедушки есть деньги на подарок.
@@ -74,8 +74,8 @@ $last->balance; // int(0)
 
 ```php
 $item = Item::first();
-$item->getAmountProduct($first); // int(100)
-$item->balance; // int(0)
+$item->getAmountProduct($first); // 100
+$item->balance; // 0
 ```
 
 Дедушка мороз дарит подарок "ребёнку".
@@ -85,9 +85,9 @@ $item->balance; // int(0)
 ```php
 $first->gift($last, $item);
 (bool)$last->paid($item, true); // bool(true)
-$first->balance; // int(15)
-$last->balance; // int(0)
-$item->balance; // int(100)
+$first->balance; // 15
+$last->balance; // 0
+$item->balance; // 100
 ```
 
 Это работает!

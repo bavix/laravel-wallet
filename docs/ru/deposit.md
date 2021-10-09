@@ -42,7 +42,7 @@ $user = User::first();
 Проверим баланс пользователя.
 
 ```php
-$user->balance; // int(0)
+$user->balance; // 0
 ```
 
 Баланс равен нулю, как мы и ожидали.
@@ -50,7 +50,7 @@ $user->balance; // int(0)
 
 ```php
 $user->deposit(10); 
-$user->balance; // int(10)
+$user->balance; // 10
 ```
 
 Все верно! На балансе пользователя 10 бубликов.

@@ -103,16 +103,16 @@ $rub->deposit(10000);
 
 ```php
 $transfer = $rub->exchange($usd, 10000);
-$rub->balance; // int(0)
-$usd->balance; // int(147), это $1.47
+$rub->balance; // 0
+$usd->balance; // 147, это $1.47
 ```
 
 К сожалению, мир не идеален. Вы не получите обратно свои 100 рублей.  
 
 ```php
 $transfer = $usd->exchange($rub, $usd->balance);
-$usd->balance; int(0)
-$rub->balance; int(9938)
+$usd->balance; 0
+$rub->balance; 9938
 ```
 
 За счёт конвертации и математических округлений вы потеряли 62 копейки.

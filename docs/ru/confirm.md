@@ -20,15 +20,15 @@ class UserConfirm extends Model implements Wallet, Confirmable
 Теперь это доступно в библиотеке из коробки. Вот пример:
 
 ```php
-$user->balance; // int(0)
+$user->balance; // 0
 $transaction = $user->deposit(100, null, false); // не подтверждена
 $transaction->confirmed; // bool(false)
-$user->balance; // int(0)
+$user->balance; // 0
 
 $user->confirm($transaction); // bool(true)
 $transaction->confirmed; // bool(true)
 
-$user->balance; // int(100) 
+$user->balance; // 100 
 ```
 
 Это работает!

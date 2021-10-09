@@ -20,15 +20,15 @@ Sometimes you need to create an operation and confirm its field.
 That is what this trey does.
 
 ```php
-$user->balance; // int(0)
+$user->balance; // 0
 $transaction = $user->deposit(100, null, false); // not confirm
 $transaction->confirmed; // bool(false)
-$user->balance; // int(0)
+$user->balance; // 0
 
 $user->confirm($transaction); // bool(true)
 $transaction->confirmed; // bool(true)
 
-$user->balance; // int(100) 
+$user->balance; // 100 
 ```
 
 It worked! 

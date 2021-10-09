@@ -62,28 +62,28 @@ Find the user and check the balance.
 
 ```php
 $user = User::first();
-$user->balance; // int(100)
+$user->balance; // 100
 ```
 
 Find the goods and check the cost.
 
 ```php
 $item = Item::first();
-$item->getAmountProduct($user); // int(100)
+$item->getAmountProduct($user); // 100
 ```
 
 The user can buy a product, buy...
 
 ```php
 $user->pay($item);
-$user->balance; // int(0)
+$user->balance; // 0
 ```
 
 What happens if the user does not have the funds?
 The same as with the [withdrawal](withdraw#failed).
 
 ```php
-$user->balance; // int(0)
+$user->balance; // 0
 $user->pay($item);
 // throw an exception
 ```
