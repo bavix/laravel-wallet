@@ -53,6 +53,8 @@ class WalletService
     /**
      * @deprecated
      * @see Wallet::$decimal_places
+     *
+     * @codeCoverageIgnore
      */
     public function decimalPlacesValue(Wallet $object): int
     {
@@ -62,10 +64,12 @@ class WalletService
     /**
      * @deprecated
      * @see MathInterface::powTen()
+     *
+     * @codeCoverageIgnore
      */
     public function decimalPlaces(Wallet $object): string
     {
-        return $this->math->powTen($this->decimalPlacesValue($object));
+        return $this->math->powTen($this->getWallet($object)->decimal_places);
     }
 
     /**
@@ -79,12 +83,11 @@ class WalletService
     {
         $fee = 0;
         if ($wallet instanceof Taxable) {
-            $placesValue = $this->decimalPlacesValue($wallet);
             $fee = $this->math->floor(
                 $this->math->div(
                     $this->math->mul($amount, $wallet->getFeePercent(), 0),
                     100,
-                    $placesValue
+                    $this->getWallet($wallet)->decimal_places
                 )
             );
         }

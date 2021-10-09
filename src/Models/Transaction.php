@@ -92,13 +92,13 @@ class Transaction extends Model
      */
     public function getAmountFloatAttribute()
     {
-        $decimalPlaces = app(WalletService::class)
-            ->decimalPlaces($this->wallet)
-        ;
+        $math = app(MathInterface::class);
+        $decimalPlacesValue = app(WalletService::class)
+            ->getWallet($this->wallet)
+            ->decimal_places;
+        $decimalPlaces = $math->powTen($decimalPlacesValue);
 
-        return app(MathInterface::class)
-            ->div($this->amount, $decimalPlaces)
-        ;
+        return $math->div($this->amount, $decimalPlaces);
     }
 
     /**
@@ -107,9 +107,10 @@ class Transaction extends Model
     public function setAmountFloatAttribute($amount): void
     {
         $math = app(MathInterface::class);
-        $decimalPlaces = app(WalletService::class)
-            ->decimalPlaces($this->wallet)
-        ;
+        $decimalPlacesValue = app(WalletService::class)
+            ->getWallet($this->wallet)
+            ->decimal_places;
+        $decimalPlaces = $math->powTen($decimalPlacesValue);
 
         $this->amount = $math->round($math->mul($amount, $decimalPlaces));
     }
