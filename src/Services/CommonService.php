@@ -78,8 +78,7 @@ class CommonService
             $fee = $this->walletService->fee($to, $amount);
 
             $amount = max(0, $this->math->sub($amount, $discount));
-            $placesValue = $this->walletService->decimalPlacesValue($from);
-            $withdraw = $this->forceWithdraw($from, $this->math->add($amount, $fee, $placesValue), $meta);
+            $withdraw = $this->forceWithdraw($from, $this->math->add($amount, $fee, $from->decimal_places), $meta);
             $deposit = $this->deposit($to, $amount, $meta);
 
             $transfers = $this->multiBrings([
