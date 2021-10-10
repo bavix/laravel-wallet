@@ -28,7 +28,7 @@ class Item extends Model implements Product, Taxable
 {
     use HasWallet;
 
-    public function canBuy(Customer $customer, int $quantity = 1, bool $force = null): bool
+    public function canBuy(Customer $customer, int $quantity = 1, bool $force = false): bool
     {
         /**
          * If the service can be purchased once, then
@@ -99,7 +99,7 @@ class Item extends Model implements Product, MinimalTaxable
 {
     use HasWallet;
 
-    public function canBuy(Customer $customer, int $quantity = 1, bool $force = null): bool
+    public function canBuy(Customer $customer, int $quantity = 1, bool $force = false): bool
     {
         /**
          * If the service can be purchased once, then

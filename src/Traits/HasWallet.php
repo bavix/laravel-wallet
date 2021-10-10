@@ -157,7 +157,7 @@ trait HasWallet
      * @param int|string $amount
      * @param bool       $allowZero
      */
-    public function canWithdraw($amount, bool $allowZero = null): bool
+    public function canWithdraw($amount, bool $allowZero = false): bool
     {
         $math = app(MathInterface::class);
 

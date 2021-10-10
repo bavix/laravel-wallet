@@ -41,7 +41,7 @@ Add the `$quantity` parameter to the `canBuy` method.
 // old
 public function canBuy(Customer $customer, bool $force = false): bool
 // new
-public function canBuy(Customer $customer, int $quantity = 1, bool $force = null): bool
+public function canBuy(Customer $customer, int $quantity = 1, bool $force = false): bool
 ```
 
 Add method `getUniqueId` to Interface `Product`

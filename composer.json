@@ -43,9 +43,11 @@
     "symplify/easy-coding-standard": "^9.4",
     "vimeo/psalm": "^4.1"
   },
+  "conflict": {
+    "bavix/laravel-wallet-vacuum": "*"
+  },
   "suggest": {
-    "bavix/laravel-wallet-swap": "Addition to the laravel-wallet library for quick setting of exchange rates",
-    "bavix/laravel-wallet-vacuum": "Addition to the laravel-wallet library for quick fix race condition"
+    "bavix/laravel-wallet-swap": "Addition to the laravel-wallet library for quick setting of exchange rates"
   },
   "autoload": {
     "psr-4": {
