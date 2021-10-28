@@ -41,6 +41,8 @@ To perform the migration, you will be [helped by the instruction](https://bavix.
 | [Swap](https://github.com/bavix/laravel-wallet-swap) | Addition to the laravel-wallet library for quick setting of exchange rates | 
 | [Vacuum](https://github.com/bavix/laravel-wallet-vacuum) | Addition to the laravel-wallet library for quick fix race condition | 
 
+> Since version 6.2 the Vacuum package is built in and no longer requires additional steps.
+
 ### Usage
 Add the `HasWallet` trait and `Wallet` interface to model.
 ```php
@@ -92,7 +94,7 @@ class Item extends Model implements Product
 {
     use HasWallet;
 
-    public function canBuy(Customer $customer, int $quantity = 1, bool $force = null): bool
+    public function canBuy(Customer $customer, int $quantity = 1, bool $force = false): bool
     {
         /**
          * If the service can be purchased once, then

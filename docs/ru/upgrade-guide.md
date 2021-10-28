@@ -41,7 +41,7 @@ app(Bavix\Wallet\Models\Transaction::class);
 // старый вариант
 public function canBuy(Customer $customer, bool $force = false): bool
 // новый вариант
-public function canBuy(Customer $customer, int $quantity = 1, bool $force = null): bool
+public function canBuy(Customer $customer, int $quantity = 1, bool $force = false): bool
 ```
 
 Необходимо добавить метод `getUniqueId` в Interface `Product`.

@@ -27,10 +27,7 @@ class Item extends Model implements Product
      */
     protected $fillable = ['name', 'quantity', 'price'];
 
-    /**
-     * @param bool $force
-     */
-    public function canBuy(Customer $customer, int $quantity = 1, bool $force = null): bool
+    public function canBuy(Customer $customer, int $quantity = 1, bool $force = false): bool
     {
         $result = $this->quantity >= $quantity;
 
