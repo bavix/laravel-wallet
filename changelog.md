@@ -6,6 +6,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.2.0] - 2021-10-29
+### Added
+- ECS
+- Added new exception `UnconfirmedInvalid`
+
+### Changed
+- Raised the minimum php version `7.4+`
+- Merged migrations
+
+### Deprecated
+- class `Storable`
+- class `Rateable`
+- interface `Mathable`
+- class `Bring`
+- method `Cart::alreadyBuy`
+- method `Cart::canBuy`
+- class `EmptyLock`
+- class `Operation`
+- method `CommonService::verifyWithdraw`
+- method `CommonService::multiOperation`
+- method `CommonService::assemble`
+- method `CommonService::multiBrings`
+- method `CommonService::addBalance`
+- class `DbService`
+- class `ExchangeService`
+- class `LockService`
+- class `MetaService`
+- method `WalletService::discount`
+- method `WalletService::decimalPlacesValue`
+- method `WalletService::decimalPlaces`
+- method `WalletService::checkAmount`
+- method `WalletService::refresh`
+- method `WalletService::adjustment`
+- class `BrickMath`
+- class `Rate`
+- class `Store`
+
 ## [6.1.0] - 2021-04-18
 ### Added
 - Added Github Actions
@@ -630,7 +667,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/6.1.0...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/6.2.0...develop
+[6.2.0]: https://github.com/bavix/laravel-wallet/compare/6.1.0...6.2.0
 [6.1.0]: https://github.com/bavix/laravel-wallet/compare/6.0.4...6.1.0
 [6.0.4]: https://github.com/bavix/laravel-wallet/compare/6.0.3...6.0.4
 [6.0.3]: https://github.com/bavix/laravel-wallet/compare/6.0.2...6.0.3
