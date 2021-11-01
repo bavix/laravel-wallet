@@ -6,9 +6,9 @@ use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Discount;
 use Bavix\Wallet\Interfaces\MinimalTaxable;
-use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Interfaces\Taxable;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
@@ -21,19 +21,19 @@ class WalletService
     private DbService $dbService;
     private MathInterface $math;
     private LockService $lockService;
-    private Storable $store;
+    private BookkeeperInterface $bookkeeper;
 
     public function __construct(
         DbService $dbService,
         MathInterface $math,
         LockService $lockService,
-        Storable $store,
+        BookkeeperInterface $bookkeeper,
         ConsistencyInterface $consistency
     ) {
         $this->dbService = $dbService;
         $this->math = $math;
         $this->lockService = $lockService;
-        $this->store = $store;
+        $this->bookkeeper = $bookkeeper;
         $this->consistency = $consistency;
     }
 
@@ -148,12 +148,11 @@ class WalletService
     public function refresh(WalletModel $wallet): bool
     {
         return $this->lockService->lock($this, __FUNCTION__, function () use ($wallet) {
-            $this->store->getBalance($wallet);
             $whatIs = $wallet->balance;
             $balance = $wallet->getAvailableBalance();
-            $wallet->balance = $balance;
+            $wallet->balance = (string) $balance;
 
-            return $this->store->setBalance($wallet, $balance) &&
+            return $this->bookkeeper->sync($this->getWallet($wallet), $balance) &&
                 (!$this->math->compare($whatIs, $balance) || $wallet->save());
         });
     }
@@ -167,8 +166,8 @@ class WalletService
     public function adjustment(WalletModel $wallet, ?array $meta = null): void
     {
         $this->dbService->transaction(function () use ($wallet, $meta) {
-            $this->store->getBalance($wallet);
-            $adjustmentBalance = $wallet->balance;
+            $walletObject = $this->getWallet($wallet);
+            $adjustmentBalance = $this->bookkeeper->amount($walletObject);
             $wallet->refreshBalance();
             $difference = $this->math->sub($wallet->balance, $adjustmentBalance);
 

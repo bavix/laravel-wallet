@@ -4,12 +4,12 @@ namespace Bavix\Wallet\Traits;
 
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\ConsistencyInterface;
+use Bavix\Wallet\Internal\ExchangeInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
-use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\WalletService;
 
@@ -49,9 +49,14 @@ trait CanExchange
 
         return app(LockService::class)->lock($this, __FUNCTION__, static function () use ($from, $to, $amount, $meta) {
             return app(DbService::class)->transaction(static function () use ($from, $to, $amount, $meta) {
+                $walletService = app(WalletService::class);
                 $math = app(MathInterface::class);
-                $rate = app(ExchangeService::class)->rate($from, $to);
-                $fee = app(WalletService::class)->fee($to, $amount);
+                $fee = $walletService->fee($to, $amount);
+                $rate = app(ExchangeInterface::class)->convertTo(
+                    $walletService->getWallet($from)->currency,
+                    $walletService->getWallet($to)->currency,
+                    1
+                );
 
                 $withdraw = app(CommonService::class)
                     ->forceWithdraw($from, $math->add($amount, $fee), $meta)

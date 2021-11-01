@@ -31,8 +31,6 @@ return [
      */
     'package' => [
         'exchange' => Exchange::class,
-        'rateable' => Rate::class,
-        'storable' => Store::class,
         'mathable' => MathService::class,
     ],
 
@@ -51,20 +49,6 @@ return [
         'enabled' => false,
         'seconds' => 1,
     ],
-
-    /**
-     * Sometimes a slug may not match the currency and you need the ability to add an exception.
-     * The main thing is that there are not many exceptions).
-     *
-     * Syntax:
-     *  'slug' => 'currency'
-     *
-     * @example
-     *  'my-usd' => 'USD'
-     *
-     * @deprecated use table "wallets", column meta.currency
-     */
-    'currencies' => [],
 
     /**
      * Services are the main core of the library and sometimes they need to be improved.
