@@ -156,10 +156,6 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
 
     public function getCurrencyAttribute(): string
     {
-        $currencies = config('wallet.currencies', []);
-
-        return $currencies[$this->slug] ??
-            $this->meta['currency'] ??
-            Str::upper($this->slug);
+        return $this->meta['currency'] ?? Str::upper($this->slug);
     }
 }
