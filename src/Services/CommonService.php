@@ -6,8 +6,8 @@ use function app;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
-use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Models\Transaction;
@@ -25,7 +25,7 @@ class CommonService
     private LockService $lockService;
     private MathInterface $math;
     private WalletService $walletService;
-    private Storable $store;
+    private BookkeeperInterface $bookkeeper;
     private ConsistencyInterface $consistency;
 
     public function __construct(
@@ -33,14 +33,14 @@ class CommonService
         LockService $lockService,
         MathInterface $math,
         WalletService $walletService,
-        Storable $store,
+        BookkeeperInterface $bookkeeper,
         ConsistencyInterface $consistency
     ) {
         $this->dbService = $dbService;
         $this->lockService = $lockService;
         $this->math = $math;
         $this->walletService = $walletService;
-        $this->store = $store;
+        $this->bookkeeper = $bookkeeper;
         $this->consistency = $consistency;
     }
 
@@ -238,7 +238,8 @@ class CommonService
     {
         return $this->lockService->lock($this, __FUNCTION__, function () use ($wallet, $amount) {
             /** @var WalletModel $wallet */
-            $balance = $this->store->incBalance($wallet, $amount);
+            $walletObject = $this->walletService->getWallet($wallet);
+            $balance = $this->bookkeeper->increase($walletObject, $amount);
 
             try {
                 $result = $wallet->newQuery()
@@ -246,7 +247,7 @@ class CommonService
                     ->update(compact('balance'))
                 ;
             } catch (Throwable $throwable) {
-                $this->store->setBalance($wallet, $wallet->getAvailableBalance());
+                $this->bookkeeper->sync($walletObject, $wallet->getAvailableBalance());
 
                 throw $throwable;
             }
@@ -256,7 +257,7 @@ class CommonService
                     ->syncOriginalAttributes('balance')
                 ;
             } else {
-                $this->store->setBalance($wallet, $wallet->getAvailableBalance());
+                $this->bookkeeper->sync($walletObject, $wallet->getAvailableBalance());
             }
 
             return $result;
