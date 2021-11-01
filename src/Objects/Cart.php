@@ -9,12 +9,9 @@ use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Internal\BasketInterface;
 use Bavix\Wallet\Internal\CartInterface;
-use Bavix\Wallet\Internal\Dto\AvailabilityDto;
 use Bavix\Wallet\Internal\Dto\BasketDto;
 use Bavix\Wallet\Internal\Dto\ItemDto;
 use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Internal\PurchaseInterface;
-use Bavix\Wallet\Models\Transfer;
 use function count;
 use Countable;
 use function get_class;
@@ -95,30 +92,6 @@ class Cart implements Countable, CartInterface
     public function getUniqueItems(): array
     {
         return array_unique($this->items);
-    }
-
-    /**
-     * The method returns the transfers already paid for the goods.
-     *
-     * @return Transfer[]
-     *
-     * @deprecated
-     * @see PurchaseInterface::already()
-     */
-    public function alreadyBuy(Customer $customer, bool $gifts = false): array
-    {
-        return app(PurchaseInterface::class)->already($customer, $this->getBasketDto(), $gifts);
-    }
-
-    /**
-     * @deprecated
-     * @see BasketInterface::availability()
-     *
-     * @codeCoverageIgnore
-     */
-    public function canBuy(Customer $customer, bool $force = false): bool
-    {
-        return $this->basket->availability(new AvailabilityDto($customer, $this->getBasketDto(), $force));
     }
 
     public function getTotal(Customer $customer): string
