@@ -2,13 +2,12 @@
 
 namespace Bavix\Wallet\Test;
 
-use Bavix\Wallet\Interfaces\Storable;
+use Bavix\Wallet\Internal\StorageInterface;
 use Bavix\Wallet\Services\MathService;
-use Bavix\Wallet\Simple\Store;
 use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Common\Models\Transfer;
 use Bavix\Wallet\Test\Common\Models\Wallet;
-use Bavix\Wallet\Test\Common\Rate;
+use Bavix\Wallet\Test\Common\MyExchange;
 use Bavix\Wallet\Test\Common\WalletServiceProvider;
 use Illuminate\Config\Repository;
 use Illuminate\Foundation\Application;
@@ -25,7 +24,7 @@ class TestCase extends OrchestraTestCase
     public function setUp(): void
     {
         parent::setUp();
-        app(Storable::class)->fresh();
+        app(StorageInterface::class)->flush();
     }
 
     public function expectExceptionMessageStrict(string $message): void
@@ -49,8 +48,7 @@ class TestCase extends OrchestraTestCase
         $config = $app['config'];
 
         // Bind eloquent models to IoC container
-        $app['config']->set('wallet.package.rateable', Rate::class);
-        $app['config']->set('wallet.package.storable', Store::class);
+        $app['config']->set('wallet.package.exchange', MyExchange::class);
         $app['config']->set('wallet.package.mathable', MathService::class);
 
         // database
@@ -74,14 +72,6 @@ class TestCase extends OrchestraTestCase
         $config->set('wallet.transaction.model', Transaction::class);
         $config->set('wallet.transfer.model', Transfer::class);
         $config->set('wallet.wallet.model', Wallet::class);
-
-        // wallet
-        $config->set('wallet.currencies', [
-            'my-usd' => 'USD',
-            'my-eur' => 'EUR',
-            'my-rub' => 'RUB',
-            'def-curr' => 'EUR',
-        ]);
 
         $config->set('wallet.lock.enabled', false);
     }

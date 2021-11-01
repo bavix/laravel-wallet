@@ -3,7 +3,8 @@
 namespace Bavix\Wallet\Test;
 
 use function app;
-use Bavix\Wallet\Interfaces\Storable;
+use Bavix\Wallet\Internal\BookkeeperInterface;
+use Bavix\Wallet\Internal\StorageInterface;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\WalletService;
@@ -134,7 +135,7 @@ class BalanceTest extends TestCase
         self::assertEquals($wallet->balance, 0);
         self::assertTrue($wallet->exists);
 
-        self::assertEquals(0, app(Storable::class)->getBalance($wallet));
+        self::assertEquals(0, app(BookkeeperInterface::class)->amount($wallet));
     }
 
     /**
@@ -166,7 +167,7 @@ class BalanceTest extends TestCase
         ;
 
         self::assertFalse($result);
-        self::assertEquals(0, app(Storable::class)->getBalance($wallet));
+        self::assertEquals(0, app(BookkeeperInterface::class)->amount($wallet));
     }
 
     /**
@@ -292,7 +293,7 @@ class BalanceTest extends TestCase
          *
          * Here is an example:
          */
-        app(Storable::class)->fresh();
+        app(StorageInterface::class)->flush();
         self::assertEquals(1000, $wallet->getRawOriginal('balance'));
 
         /**
@@ -336,7 +337,7 @@ class BalanceTest extends TestCase
          *
          * Here is an example:
          */
-        app(Storable::class)->fresh();
+        app(StorageInterface::class)->flush();
         self::assertEquals($account, $wallet->getRawOriginal('balance'));
 
         /**
