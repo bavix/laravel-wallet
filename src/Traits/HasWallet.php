@@ -6,8 +6,8 @@ use function app;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
-use Bavix\Wallet\Interfaces\Storable;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Models\Transaction;
@@ -80,7 +80,9 @@ trait HasWallet
     public function getBalanceAttribute()
     {
         /** @var Wallet $this */
-        return app(Storable::class)->getBalance($this);
+        return app(BookkeeperInterface::class)->amount(
+            app(WalletService::class)->getWallet($this)
+        );
     }
 
     /**
