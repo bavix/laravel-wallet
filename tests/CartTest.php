@@ -3,6 +3,7 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\PurchaseInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\DbService;
@@ -112,7 +113,7 @@ class CartTest extends TestCase
 
         $transfers = $buyer->payCart($cart);
         self::assertCount(count($cart), $transfers);
-        self::assertTrue((bool) $cart->alreadyBuy($buyer));
+        self::assertTrue((bool) app(PurchaseInterface::class)->already($buyer, $cart->getBasketDto()));
         self::assertEquals(0, $buyer->balance);
 
         foreach ($transfers as $transfer) {
@@ -270,7 +271,7 @@ class CartTest extends TestCase
 
         $transfers = $buyer->payCart($cart);
         self::assertCount(count($cart), $transfers);
-        self::assertTrue((bool) $cart->alreadyBuy($buyer));
+        self::assertTrue((bool) app(PurchaseInterface::class)->already($buyer, $cart->getBasketDto()));
         self::assertEquals(0, $buyer->balance);
 
         foreach ($transfers as $transfer) {

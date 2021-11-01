@@ -2,7 +2,6 @@
 
 namespace Bavix\Wallet\Services;
 
-use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Discount;
 use Bavix\Wallet\Interfaces\MinimalTaxable;
@@ -51,28 +50,6 @@ class WalletService
     }
 
     /**
-     * @deprecated
-     * @see Wallet::$decimal_places
-     *
-     * @codeCoverageIgnore
-     */
-    public function decimalPlacesValue(Wallet $object): int
-    {
-        return $this->getWallet($object)->decimal_places ?: 2;
-    }
-
-    /**
-     * @deprecated
-     * @see MathInterface::powTen()
-     *
-     * @codeCoverageIgnore
-     */
-    public function decimalPlaces(Wallet $object): string
-    {
-        return $this->math->powTen($this->getWallet($object)->decimal_places);
-    }
-
-    /**
      * Consider the fee that the system will receive.
      *
      * @param int|string $amount
@@ -105,23 +82,6 @@ class WalletService
         }
 
         return $fee;
-    }
-
-    /**
-     * The amount of checks for errors.
-     *
-     * @param int|string $amount
-     *
-     * @throws AmountInvalid
-     *
-     * @deprecated
-     * @see ConsistencyInterface::checkPositive()
-     *
-     * @codeCoverageIgnore
-     */
-    public function checkAmount($amount): void
-    {
-        $this->consistency->checkPositive($amount);
     }
 
     public function getWallet(Wallet $object, bool $autoSave = true): WalletModel
