@@ -146,22 +146,6 @@ class CommonService
     }
 
     /**
-     * @param int|string $amount
-     *
-     * @throws BalanceIsEmpty
-     * @throws InsufficientFunds
-     *
-     * @deprecated
-     * @see ConsistencyInterface::potential()
-     *
-     * @codeCoverageIgnore
-     */
-    public function verifyWithdraw(Wallet $wallet, $amount, bool $allowZero = false): void
-    {
-        $this->consistency->checkPotential($wallet, $amount, $allowZero);
-    }
-
-    /**
      * Create Operation without DB::transaction.
      *
      * @param Operation[] $operations
