@@ -209,10 +209,6 @@ class CommonService
      */
     public function multiBrings(array $brings): array
     {
-        if (count($brings) === 1) {
-            return [current($brings)->create()];
-        }
-
         return $this->lockService->lock($this, __FUNCTION__, function () use ($brings) {
             $objects = [];
             foreach ($brings as $bring) {
