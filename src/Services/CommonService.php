@@ -175,7 +175,8 @@ class CommonService
             return $model->query()
                 ->where('uuid', array_keys($objects))
                 ->get()
-                ->all();
+                ->all()
+            ;
         });
     }
 
@@ -224,7 +225,8 @@ class CommonService
             return $model->query()
                 ->where('uuid', array_keys($objects))
                 ->get()
-                ->all();
+                ->all()
+            ;
         });
     }
 
