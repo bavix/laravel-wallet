@@ -7,6 +7,7 @@ use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
+use DateTimeImmutable;
 
 /** @deprecated There is no alternative yet, but the class will be removed */
 class Bring
@@ -209,6 +210,8 @@ class Bring
             'discount' => $this->getDiscount(),
             'fee' => $this->getFee(),
             'uuid' => $this->getUuid(),
+            'created_at' => new DateTimeImmutable(),
+            'updated_at' => new DateTimeImmutable(),
         ];
     }
 }

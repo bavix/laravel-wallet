@@ -23,12 +23,6 @@ class FilterTest extends TestCase
 
         self::assertEquals(4, $buyer->transactions()->count());
 
-        if (version_compare(PHP_VERSION, '7.3.0') < 0) {
-            self::markTestSkipped('You are using old php. Test not available.');
-
-            return;
-        }
-
         $customers = $buyer->transactions()->where('meta->account', 'customers')->count();
         $expenses = $buyer->transactions()->where('meta->account', 'expenses')->count();
         $vendors = $buyer->transactions()->where('meta->account', 'vendors')->count();
