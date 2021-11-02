@@ -6,8 +6,6 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Transaction;
-use Bavix\Wallet\Models\Transfer;
-use DateTimeImmutable;
 
 /** @deprecated There is no alternative yet, but the class will be removed */
 class Bring
@@ -182,36 +180,5 @@ class Bring
         $this->fee = app(MathInterface::class)->round($fee);
 
         return $this;
-    }
-
-    /**
-     * @throws
-     */
-    public function create(): Transfer
-    {
-        return app(Transfer::class)
-            ->create($this->toArray())
-        ;
-    }
-
-    /**
-     * @throws
-     */
-    public function toArray(): array
-    {
-        return [
-            'status' => $this->getStatus(),
-            'deposit_id' => $this->getDeposit()->getKey(),
-            'withdraw_id' => $this->getWithdraw()->getKey(),
-            'from_type' => $this->getFrom()->getMorphClass(),
-            'from_id' => $this->getFrom()->getKey(),
-            'to_type' => $this->getTo()->getMorphClass(),
-            'to_id' => $this->getTo()->getKey(),
-            'discount' => $this->getDiscount(),
-            'fee' => $this->getFee(),
-            'uuid' => $this->getUuid(),
-            'created_at' => new DateTimeImmutable(),
-            'updated_at' => new DateTimeImmutable(),
-        ];
     }
 }
