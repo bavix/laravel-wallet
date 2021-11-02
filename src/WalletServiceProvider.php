@@ -128,8 +128,7 @@ class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(Rateable::class, config('wallet.package.rateable', Rate::class));
         $this->app->singleton(Storable::class, config('wallet.package.storable', Store::class));
 
-        $this->app->alias(MathInterface::class, Mathable::class);
-        $this->app->alias(MathInterface::class, BrickMath::class);
+        $this->app->singleton(Mathable::class, BrickMath::class);
 
         $this->app->singleton(DbService::class, config('wallet.services.db', DbService::class));
         $this->app->singleton(LockService::class, config('wallet.services.lock', LockService::class));

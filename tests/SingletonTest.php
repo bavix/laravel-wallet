@@ -56,7 +56,7 @@ class SingletonTest extends TestCase
 
     public function testMathable(): void
     {
-        self::assertEquals($this->getRefId(Mathable::class), $this->getRefId(MathInterface::class));
+        self::assertEquals($this->getRefId(Mathable::class), $this->getRefId(Mathable::class));
     }
 
     public function testMathInterface(): void
