@@ -7,9 +7,11 @@ use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\Repository\TransferRepository;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
@@ -212,17 +214,18 @@ class CommonService
         return $this->lockService->lock($this, __FUNCTION__, function () use ($brings) {
             $objects = [];
             foreach ($brings as $bring) {
-                $objects[$bring->getUuid()] = $bring->toArray();
+                $objects[$bring->getUuid()] = app(TransferDtoAssembler::class)->create(
+                    $bring->getDeposit()->getKey(),
+                    $bring->getWithdraw()->getKey(),
+                    $bring->getStatus(),
+                    $bring->getFrom(),
+                    $bring->getTo(),
+                    $bring->getDiscount(),
+                    $bring->getFee()
+                );
             }
 
-            $model = app(config('wallet.transfer.model', Transfer::class));
-            $model->insert(array_values($objects));
-
-            return $model->query()
-                ->where('uuid', array_keys($objects))
-                ->get()
-                ->all()
-            ;
+            return app(TransferRepository::class)->insert($objects);
         });
     }
 
