@@ -4,6 +4,7 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\DbService;
@@ -395,6 +396,7 @@ class MultiWalletTest extends TestCase
 
         $test2 = $user->wallets()->create([
             'name' => 'Test2',
+            'uuid' => app(UuidInterface::class)->uuid4(),
         ]);
 
         self::assertEquals(
