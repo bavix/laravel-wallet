@@ -162,15 +162,20 @@ class CommonService
                     $amount = $this->math->add($amount, $operation->getAmount());
                 }
 
-                $objects[] = $operation
+                $objects[$operation->getUuid()] = $operation
                     ->setWallet($self)
-                    ->create()
+                    ->toArray()
                 ;
             }
 
+            $model = app(config('wallet.transaction.model', Transaction::class));
+            $model->insert(array_values($objects));
             $this->addBalance($self, $amount);
 
-            return $objects;
+            return $model->query()
+                ->where('uuid', array_keys($objects))
+                ->get()
+                ->all();
         });
     }
 
@@ -197,17 +202,29 @@ class CommonService
     /**
      * Create Bring without DB::transaction.
      *
+     * @param Bring[] $brings
+     *
      * @deprecated
      */
     public function multiBrings(array $brings): array
     {
+        if (count($brings) === 1) {
+            return [current($brings)->create()];
+        }
+
         return $this->lockService->lock($this, __FUNCTION__, function () use ($brings) {
             $objects = [];
             foreach ($brings as $bring) {
-                $objects[] = $bring->create();
+                $objects[$bring->getUuid()] = $bring->toArray();
             }
 
-            return $objects;
+            $model = app(config('wallet.transfer.model', Transfer::class));
+            $model->insert(array_values($objects));
+
+            return $model->query()
+                ->where('uuid', array_keys($objects))
+                ->get()
+                ->all();
         });
     }
 
