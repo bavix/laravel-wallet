@@ -28,6 +28,7 @@ use Illuminate\Support\Str;
  * @property int                             $holder_id
  * @property string                          $name
  * @property string                          $slug
+ * @property string                          $uuid
  * @property string                          $description
  * @property array                           $meta
  * @property int                             $decimal_places
@@ -49,6 +50,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         'holder_id',
         'name',
         'slug',
+        'uuid',
         'description',
         'meta',
         'balance',

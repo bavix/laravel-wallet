@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
@@ -25,6 +26,7 @@ trait MorphOneWallet
                 'name' => config('wallet.wallet.default.name', 'Default Wallet'),
                 'slug' => config('wallet.wallet.default.slug', 'default'),
                 'meta' => config('wallet.wallet.default.meta', []),
+                'uuid' => app(UuidInterface::class)->uuid4(),
                 'balance' => 0,
             ]))
         ;
