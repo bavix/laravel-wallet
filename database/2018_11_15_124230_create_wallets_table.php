@@ -17,6 +17,7 @@ class CreateWalletsTable extends Migration
             $table->morphs('holder');
             $table->string('name');
             $table->string('slug')->index();
+            $table->uuid('uuid')->unique();
             $table->string('description')->nullable();
             $table->json('meta')->nullable();
             $table->decimal('balance', 64, 0)->default(0);
