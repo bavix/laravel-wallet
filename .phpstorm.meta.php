@@ -13,7 +13,6 @@ namespace PHPSTORM_META {
     use Bavix\Wallet\Objects\EmptyLock;
     use Bavix\Wallet\Objects\Operation;
     use Bavix\Wallet\Services\CommonService;
-    use Bavix\Wallet\Services\ExchangeService;
     use Bavix\Wallet\Services\WalletService;
 
     override(\app(0), map([
