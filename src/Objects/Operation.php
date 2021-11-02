@@ -6,6 +6,8 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Models\Wallet as WalletModel;
+use DateTimeImmutable;
 
 /** @deprecated There is no alternative yet, but the class will be removed */
 class Operation
@@ -151,13 +153,21 @@ class Operation
      */
     public function toArray(): array
     {
+        $wallet = $this->getWallet();
+        $payable = $wallet instanceof WalletModel ? $wallet->holder : $wallet;
+        $meta = $this->getMeta();
+
         return [
             'type' => $this->getType(),
+            'payable_type' => $payable->getMorphClass(),
+            'payable_id' => $payable->getKey(),
             'wallet_id' => $this->getWallet()->getKey(),
             'uuid' => $this->getUuid(),
             'confirmed' => $this->isConfirmed(),
             'amount' => $this->getAmount(),
-            'meta' => $this->getMeta(),
+            'meta' => $meta === null ? null : json_encode($meta, JSON_THROW_ON_ERROR),
+            'created_at' => new DateTimeImmutable(),
+            'updated_at' => new DateTimeImmutable(),
         ];
     }
 }
