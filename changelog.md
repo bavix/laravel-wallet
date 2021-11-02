@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.2.1] - 2021-11-02
+### Fixed
+- Fix looping for old configs. #387 @AbdullahFaqeir, #391 @Hussam3bd @alexstewartja
+
 ## [6.2.0] - 2021-10-29
 ### Added
 - ECS
@@ -667,7 +671,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/6.2.0...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/6.2.1...develop
+[6.2.1]: https://github.com/bavix/laravel-wallet/compare/6.2.0...6.2.1
 [6.2.0]: https://github.com/bavix/laravel-wallet/compare/6.1.0...6.2.0
 [6.1.0]: https://github.com/bavix/laravel-wallet/compare/6.0.4...6.1.0
 [6.0.4]: https://github.com/bavix/laravel-wallet/compare/6.0.3...6.0.4
