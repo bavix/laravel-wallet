@@ -64,6 +64,6 @@ class BookkeeperService implements BookkeeperInterface
 
     private function getKey(Wallet $wallet): string
     {
-        return (string) $wallet->getKey();
+        return __CLASS__.'::'.$wallet->getKey();
     }
 }
