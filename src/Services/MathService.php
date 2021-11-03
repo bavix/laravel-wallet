@@ -67,7 +67,7 @@ class MathService implements MathInterface
     public function pow($first, $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($first)
-            ->power($second)
+            ->power((int) $second)
             ->toScale($scale ?? $this->scale, RoundingMode::DOWN)
             ;
     }

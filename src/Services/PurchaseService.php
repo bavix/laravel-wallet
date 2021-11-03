@@ -8,7 +8,6 @@ use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Internal\Dto\BasketDto;
 use Bavix\Wallet\Internal\PurchaseInterface;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Traits\HasWallet;
 use Illuminate\Database\Eloquent\Model;
 
 class PurchaseService implements PurchaseInterface
@@ -19,8 +18,6 @@ class PurchaseService implements PurchaseInterface
             ? [Transfer::STATUS_PAID, Transfer::STATUS_GIFT]
             : [Transfer::STATUS_PAID];
 
-        /** @var HasWallet $customer */
-        /** @var Transfer $query */
         $arrays = [];
         $query = $customer->transfers();
         foreach ($basketDto->items() as $itemDto) {
