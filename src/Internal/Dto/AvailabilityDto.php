@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Internal\Dto;
 
 use Bavix\Wallet\Interfaces\Customer;
 
+/** @psalm-immutable */
 class AvailabilityDto
 {
     private BasketDto $basketDto;
