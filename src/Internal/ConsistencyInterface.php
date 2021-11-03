@@ -24,5 +24,5 @@ interface ConsistencyInterface
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      */
-    public function checkPotential(Wallet $wallet, $amount, bool $allowZero = false): void;
+    public function checkPotential(Wallet $object, $amount, bool $allowZero = false): void;
 }
