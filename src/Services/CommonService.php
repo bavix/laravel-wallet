@@ -187,8 +187,6 @@ class CommonService
      *
      * @param Bring[] $brings
      *
-     * @throws
-     *
      * @deprecated
      */
     public function assemble(array $brings): array
@@ -231,8 +229,6 @@ class CommonService
 
     /**
      * @param int|string $amount
-     *
-     * @throws
      *
      * @deprecated
      */

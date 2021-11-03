@@ -24,8 +24,6 @@ trait CartPay
     use HasWallet;
 
     /**
-     * @throws
-     *
      * @return Transfer[]
      */
     public function payFreeCart(CartInterface $cart): array
@@ -68,8 +66,6 @@ trait CartPay
     }
 
     /**
-     * @throws
-     *
      * @return Transfer[]
      */
     public function payCart(CartInterface $cart, bool $force = false): array
@@ -110,8 +106,6 @@ trait CartPay
     }
 
     /**
-     * @throws
-     *
      * @return Transfer[]
      */
     public function forcePayCart(CartInterface $cart): array
@@ -128,9 +122,6 @@ trait CartPay
         }
     }
 
-    /**
-     * @throws
-     */
     public function refundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool
     {
         $self = $this;
@@ -174,9 +165,6 @@ trait CartPay
         });
     }
 
-    /**
-     * @throws
-     */
     public function forceRefundCart(CartInterface $cart, bool $gifts = false): bool
     {
         return $this->refundCart($cart, true, $gifts);
@@ -191,17 +179,11 @@ trait CartPay
         }
     }
 
-    /**
-     * @throws
-     */
     public function refundGiftCart(CartInterface $cart, bool $force = false): bool
     {
         return $this->refundCart($cart, $force, true);
     }
 
-    /**
-     * @throws
-     */
     public function forceRefundGiftCart(CartInterface $cart): bool
     {
         return $this->refundGiftCart($cart, true);
