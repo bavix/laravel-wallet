@@ -140,11 +140,6 @@ class Bring
         return $this;
     }
 
-    public function getUuid(): string
-    {
-        return $this->uuid;
-    }
-
     public function getDiscount(): int
     {
         return $this->discount;
