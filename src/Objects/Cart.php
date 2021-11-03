@@ -7,7 +7,6 @@ namespace Bavix\Wallet\Objects;
 use function array_unique;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
-use Bavix\Wallet\Internal\BasketInterface;
 use Bavix\Wallet\Internal\CartInterface;
 use Bavix\Wallet\Internal\Dto\BasketDto;
 use Bavix\Wallet\Internal\Dto\ItemDto;
@@ -29,15 +28,11 @@ class Cart implements Countable, CartInterface
 
     private array $meta = [];
 
-    private BasketInterface $basket;
-
     private MathInterface $math;
 
     public function __construct(
-        BasketInterface $basket,
         MathInterface $math
     ) {
-        $this->basket = $basket;
         $this->math = $math;
     }
 
