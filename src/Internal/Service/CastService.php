@@ -13,13 +13,9 @@ class CastService
 {
     public function getWallet(Wallet $object, bool $save = true): WalletModel
     {
-        assert($object instanceof Model);
-
-        /** @var WalletModel $wallet */
-        $wallet = $object;
-
-        if (!($object instanceof WalletModel)) {
-            $wallet = $object->getAttribute('wallet');
+        $wallet = $this->getModel($object);
+        if (!($wallet instanceof WalletModel)) {
+            $wallet = $wallet->getAttribute('wallet');
         }
 
         if ($save) {
@@ -32,12 +28,12 @@ class CastService
     /** @param Model|Wallet $object */
     public function getHolder($object): Model
     {
-        assert($object instanceof Model);
-        if ($object instanceof WalletModel) {
-            assert($object->holder instanceof Model);
+        return $this->getModel($object instanceof WalletModel ? $object->holder : $object);
+    }
 
-            return $object->holder;
-        }
+    public function getModel(object $object): Model
+    {
+        assert($object instanceof Model);
 
         return $object;
     }

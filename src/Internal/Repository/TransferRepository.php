@@ -24,9 +24,9 @@ class TransferRepository
     }
 
     /**
-     * @param TransferDto[] $transfers
+     * @param non-empty-array<int, TransferDto> $transfers
      *
-     * @return Transfer[]
+     * @return non-empty-array<int|string, Transfer>
      */
     public function insert(array $transfers): array
     {
