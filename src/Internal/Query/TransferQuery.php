@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Query;
 
-class TransferQuery
+/** @psalm-immutable */
+final class TransferQuery
 {
+    /** @var non-empty-array<int|string, string> */
     private array $uuids;
 
-    /** @param string[] $uuids */
+    /** @param non-empty-array<int|string, string> $uuids */
     public function __construct(array $uuids)
     {
         $this->uuids = $uuids;
     }
 
-    /** @return string[] */
+    /** @return non-empty-array<int|string, string> */
     public function getUuids(): array
     {
         return $this->uuids;
