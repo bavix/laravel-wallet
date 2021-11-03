@@ -35,7 +35,7 @@ class StorageService implements StorageInterface
 
     public function flush(): bool
     {
-        return $this->cache->flush();
+        return $this->cache->clear();
     }
 
     public function missing(string $key): bool

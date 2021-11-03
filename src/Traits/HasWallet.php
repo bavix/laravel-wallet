@@ -10,6 +10,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\Service\CastService;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
@@ -98,7 +99,8 @@ trait HasWallet
      */
     public function transactions(): MorphMany
     {
-        return ($this instanceof WalletModel ? $this->holder : $this)
+        return app(CastService::class)
+            ->getHolder($this)
             ->morphMany(config('wallet.transaction.model', Transaction::class), 'payable')
         ;
     }

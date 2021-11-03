@@ -68,4 +68,6 @@ interface Wallet
     public function getBalanceAttribute();
 
     public function transactions(): MorphMany;
+
+    public function transfers(): MorphMany;
 }
