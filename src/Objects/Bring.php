@@ -41,7 +41,7 @@ class Bring
     protected $uuid;
 
     /**
-     * @var int
+     * @var null|int
      */
     protected $fee;
 
@@ -50,11 +50,6 @@ class Bring
      */
     protected $discount;
 
-    /**
-     * Bring constructor.
-     *
-     * @throws
-     */
     public function __construct(UuidInterface $uuidService)
     {
         $this->uuid = $uuidService->uuid4();
