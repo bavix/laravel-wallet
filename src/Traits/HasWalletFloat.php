@@ -89,7 +89,7 @@ trait HasWalletFloat
     }
 
     /**
-     * @param float $amount
+     * @param float|string $amount
      *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
@@ -108,7 +108,7 @@ trait HasWalletFloat
     }
 
     /**
-     * @param float $amount
+     * @param float|string $amount
      */
     public function safeTransferFloat(Wallet $wallet, $amount, ?array $meta = null): ?Transfer
     {

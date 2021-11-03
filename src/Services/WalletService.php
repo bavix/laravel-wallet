@@ -10,8 +10,8 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\Service\CastService;
 use Bavix\Wallet\Models\Wallet as WalletModel;
-use Bavix\Wallet\Traits\HasWallet;
 use Throwable;
 
 class WalletService
@@ -54,7 +54,7 @@ class WalletService
      *
      * @param int|string $amount
      *
-     * @return float|int
+     * @return float|int|string
      */
     public function fee(Wallet $wallet, $amount)
     {
@@ -86,19 +86,7 @@ class WalletService
 
     public function getWallet(Wallet $object, bool $autoSave = true): WalletModel
     {
-        /** @var WalletModel $wallet */
-        $wallet = $object;
-
-        if (!($object instanceof WalletModel)) {
-            /** @var HasWallet $object */
-            $wallet = $object->wallet;
-        }
-
-        if ($autoSave) {
-            $wallet->exists or $wallet->save();
-        }
-
-        return $wallet;
+        return app(CastService::class)->getWallet($object, $autoSave);
     }
 
     /**

@@ -10,15 +10,20 @@ use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Traits\HasWallet;
+use Bavix\Wallet\Internal\Service\CastService;
 
 class ConsistencyService implements ConsistencyInterface
 {
+    private CastService $castService;
+
     private MathInterface $math;
 
-    public function __construct(MathInterface $math)
-    {
+    public function __construct(
+        MathInterface $math,
+        CastService $castService
+    ) {
         $this->math = $math;
+        $this->castService = $castService;
     }
 
     /**
@@ -39,11 +44,10 @@ class ConsistencyService implements ConsistencyInterface
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      */
-    public function checkPotential(Wallet $wallet, $amount, bool $allowZero = false): void
+    public function checkPotential(Wallet $object, $amount, bool $allowZero = false): void
     {
-        /**
-         * @var HasWallet $wallet
-         */
+        $wallet = $this->castService->getWallet($object, false);
+
         if ($amount && !$wallet->balance) {
             throw new BalanceIsEmpty(trans('wallet::errors.wallet_empty'));
         }
