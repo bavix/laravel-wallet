@@ -6,14 +6,15 @@ namespace Bavix\Wallet\Internal\Dto;
 
 use Countable;
 
+/** @psalm-immutable */
 class BasketDto implements Countable
 {
-    /** @var ItemDto[] */
+    /** @var non-empty-array<int|string, ItemDto> */
     private array $items;
 
     private array $meta;
 
-    /** @param ItemDto[] $items */
+    /** @param non-empty-array<int|string, ItemDto> $items */
     public function __construct(array $items, array $meta)
     {
         $this->items = $items;
