@@ -47,8 +47,6 @@ class LockService
 
     /**
      * @param object $self
-     *
-     * @throws
      */
     protected function bindTo($self, \Closure $closure): \Closure
     {

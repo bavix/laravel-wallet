@@ -46,8 +46,6 @@ class Operation
 
     /**
      * Transaction constructor.
-     *
-     * @throws
      */
     public function __construct(UuidInterface $uuidService, CastService $castService)
     {
@@ -140,9 +138,6 @@ class Operation
         return $this;
     }
 
-    /**
-     * @throws
-     */
     public function toArray(): array
     {
         $wallet = $this->castService->getWallet($this->getWallet());
