@@ -41,18 +41,21 @@ class Bring
     protected $uuid;
 
     /**
-     * @var null|int
+     * @var null|string
      */
     protected $fee;
 
     /**
-     * @var int
+     * @var string
      */
     protected $discount;
 
-    public function __construct(UuidInterface $uuidService)
+    private MathInterface $math;
+
+    public function __construct(UuidInterface $uuidService, MathInterface $math)
     {
         $this->uuid = $uuidService->uuid4();
+        $this->math = $math;
     }
 
     public function getStatus(): string
@@ -75,7 +78,7 @@ class Bring
      */
     public function setDiscount(int $discount): self
     {
-        $this->discount = app(MathInterface::class)->round($discount);
+        $this->discount = $this->math->round($discount);
 
         return $this;
     }
@@ -142,22 +145,22 @@ class Bring
 
     public function getDiscount(): int
     {
-        return $this->discount;
+        return (int) $this->discount;
     }
 
     public function getFee(): int
     {
         $fee = $this->fee;
         if ($fee === null) {
-            $fee = app(MathInterface::class)->round(
-                app(MathInterface::class)->sub(
-                    app(MathInterface::class)->abs($this->getWithdraw()->amount),
-                    app(MathInterface::class)->abs($this->getDeposit()->amount)
+            $fee = $this->math->round(
+                $this->math->sub(
+                    $this->math->abs($this->getWithdraw()->amount),
+                    $this->math->abs($this->getDeposit()->amount)
                 )
             );
         }
 
-        return $fee;
+        return (int) $fee;
     }
 
     /**
@@ -167,7 +170,7 @@ class Bring
      */
     public function setFee($fee): self
     {
-        $this->fee = app(MathInterface::class)->round($fee);
+        $this->fee = $this->math->round($fee);
 
         return $this;
     }
