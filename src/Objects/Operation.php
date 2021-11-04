@@ -23,7 +23,7 @@ class Operation
     protected $uuid;
 
     /**
-     * @var int
+     * @var string
      */
     protected $amount;
 
@@ -44,13 +44,19 @@ class Operation
 
     private CastService $castService;
 
+    private MathInterface $math;
+
     /**
      * Transaction constructor.
      */
-    public function __construct(UuidInterface $uuidService, CastService $castService)
-    {
+    public function __construct(
+        UuidInterface $uuidService,
+        CastService $castService,
+        MathInterface $math
+    ) {
         $this->uuid = $uuidService->uuid4();
         $this->castService = $castService;
+        $this->math = $math;
     }
 
     public function getType(): string
@@ -64,7 +70,7 @@ class Operation
     }
 
     /**
-     * @return float|int
+     * @return string
      */
     public function getAmount()
     {
@@ -98,7 +104,7 @@ class Operation
      */
     public function setAmount($amount): self
     {
-        $this->amount = app(MathInterface::class)->round($amount);
+        $this->amount = $this->math->round($amount);
 
         return $this;
     }
