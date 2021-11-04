@@ -24,19 +24,12 @@ class TransferRepository
     }
 
     /**
-     * @param non-empty-array<int, TransferDto> $objects
-     *
-     * @return non-empty-array<int|string, Transfer>
+     * @param non-empty-array<int|string, TransferDto> $objects
      */
-    public function insert(array $objects): array
+    public function insert(array $objects): void
     {
         $values = array_map(fn (TransferDto $dto): array => $this->transformer->extract($dto), $objects);
         $this->transfer->newQuery()->insert($values);
-
-        $uuids = array_map(static fn (TransferDto $dto): string => $dto->getUuid(), $objects);
-        $query = new TransferQuery($uuids);
-
-        return $this->findBy($query);
     }
 
     /** @return Transfer[] */

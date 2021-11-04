@@ -24,19 +24,12 @@ class TransactionRepository
     }
 
     /**
-     * @param non-empty-array<int, TransactionDto> $objects
-     *
-     * @return non-empty-array<int|string, Transaction>
+     * @param non-empty-array<int|string, TransactionDto> $objects
      */
-    public function insert(array $objects): array
+    public function insert(array $objects): void
     {
         $values = array_map(fn (TransactionDto $dto): array => $this->transformer->extract($dto), $objects);
         $this->transaction->newQuery()->insert($values);
-
-        $uuids = array_map(static fn (TransactionDto $dto): string => $dto->getUuid(), $objects);
-        $query = new TransactionQuery($uuids);
-
-        return $this->findBy($query);
     }
 
     /** @return Transaction[] */
