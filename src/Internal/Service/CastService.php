@@ -16,6 +16,7 @@ class CastService
         $wallet = $this->getModel($object);
         if (!($wallet instanceof WalletModel)) {
             $wallet = $wallet->getAttribute('wallet');
+            assert($wallet instanceof WalletModel);
         }
 
         if ($save) {

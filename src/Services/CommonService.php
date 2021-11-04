@@ -11,10 +11,8 @@ use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
-use Bavix\Wallet\Internal\Dto\TransferDto;
 use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Internal\Repository\TransactionRepository;
-use Bavix\Wallet\Internal\Repository\TransferRepository;
+use Bavix\Wallet\Internal\Service\AtmService;
 use Bavix\Wallet\Internal\Service\CastService;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
@@ -30,14 +28,13 @@ class CommonService
     private DbService $dbService;
     private LockService $lockService;
     private MathInterface $math;
+    private AtmService $atmService;
     private CastService $castService;
     private WalletService $walletService;
     private BookkeeperInterface $bookkeeper;
     private ConsistencyInterface $consistency;
     private TransferDtoAssembler $transferDtoAssembler;
-    private TransferRepository $transferRepository;
     private TransactionDtoAssembler $transactionDtoAssembler;
-    private TransactionRepository $transactionRepository;
 
     public function __construct(
         DbService $dbService,
@@ -48,21 +45,19 @@ class CommonService
         BookkeeperInterface $bookkeeper,
         ConsistencyInterface $consistency,
         TransferDtoAssembler $transferDtoAssembler,
-        TransferRepository $transferRepository,
         TransactionDtoAssembler $transactionDtoAssembler,
-        TransactionRepository $transactionRepository
+        AtmService $atmService
     ) {
         $this->dbService = $dbService;
         $this->lockService = $lockService;
         $this->math = $math;
+        $this->atmService = $atmService;
         $this->castService = $castService;
         $this->walletService = $walletService;
         $this->bookkeeper = $bookkeeper;
         $this->consistency = $consistency;
         $this->transferDtoAssembler = $transferDtoAssembler;
-        $this->transferRepository = $transferRepository;
         $this->transactionDtoAssembler = $transactionDtoAssembler;
-        $this->transactionRepository = $transactionRepository;
     }
 
     /**
@@ -172,6 +167,7 @@ class CommonService
      * @param non-empty-array<mixed, Operation> $operations
      *
      * @deprecated
+     * @see AtmService::makeTransactions()
      */
     public function multiOperation(Wallet $self, array $operations): array
     {
@@ -183,7 +179,7 @@ class CommonService
                     $amount = $this->math->add($amount, $operation->getAmount());
                 }
 
-                $objects[$operation->getUuid()] = $this->transactionDtoAssembler->create(
+                $object = $this->transactionDtoAssembler->create(
                     $this->castService->getHolder($self),
                     $this->castService->getWallet($self)->getKey(),
                     $operation->getType(),
@@ -191,9 +187,11 @@ class CommonService
                     $operation->isConfirmed(),
                     $operation->getMeta()
                 );
+
+                $objects[$object->getUuid()] = $object;
             }
 
-            $results = $this->transactionRepository->insert($objects);
+            $results = $this->atmService->makeTransactions($objects);
             $this->addBalance($self, $amount);
 
             return $results;
@@ -206,6 +204,7 @@ class CommonService
      * @param Bring[] $brings
      *
      * @deprecated
+     * @see AtmService::makeTransfers()
      */
     public function assemble(array $brings): array
     {
@@ -224,12 +223,14 @@ class CommonService
      * @param non-empty-array<mixed, Bring> $brings
      *
      * @deprecated
+     * @see AtmService::makeTransfers()
      */
     public function multiBrings(array $brings): array
     {
         return $this->lockService->lock($this, __FUNCTION__, function () use ($brings) {
-            $objects = array_map(
-                fn (Bring $bring): TransferDto => $this->transferDtoAssembler->create(
+            $objects = [];
+            foreach ($brings as $bring) {
+                $object = $this->transferDtoAssembler->create(
                     $bring->getDeposit()->getKey(),
                     $bring->getWithdraw()->getKey(),
                     $bring->getStatus(),
@@ -237,11 +238,12 @@ class CommonService
                     $this->castService->getModel($bring->getTo()),
                     $bring->getDiscount(),
                     $bring->getFee()
-                ),
-                $brings
-            );
+                );
 
-            return $this->transferRepository->insert($objects);
+                $objects[$object->getUuid()] = $object;
+            }
+
+            return $this->atmService->makeTransfers($objects);
         });
     }
 
