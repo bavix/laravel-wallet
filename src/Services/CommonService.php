@@ -7,11 +7,13 @@ use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\Dto\TransferDto;
 use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
 use Bavix\Wallet\Internal\Service\CastService;
 use Bavix\Wallet\Models\Transaction;
@@ -33,6 +35,9 @@ class CommonService
     private BookkeeperInterface $bookkeeper;
     private ConsistencyInterface $consistency;
     private TransferDtoAssembler $transferDtoAssembler;
+    private TransferRepository $transferRepository;
+    private TransactionDtoAssembler $transactionDtoAssembler;
+    private TransactionRepository $transactionRepository;
 
     public function __construct(
         DbService $dbService,
@@ -42,7 +47,10 @@ class CommonService
         WalletService $walletService,
         BookkeeperInterface $bookkeeper,
         ConsistencyInterface $consistency,
-        TransferDtoAssembler $transferDtoAssembler
+        TransferDtoAssembler $transferDtoAssembler,
+        TransferRepository $transferRepository,
+        TransactionDtoAssembler $transactionDtoAssembler,
+        TransactionRepository $transactionRepository
     ) {
         $this->dbService = $dbService;
         $this->lockService = $lockService;
@@ -52,6 +60,9 @@ class CommonService
         $this->bookkeeper = $bookkeeper;
         $this->consistency = $consistency;
         $this->transferDtoAssembler = $transferDtoAssembler;
+        $this->transferRepository = $transferRepository;
+        $this->transactionDtoAssembler = $transactionDtoAssembler;
+        $this->transactionRepository = $transactionRepository;
     }
 
     /**
@@ -158,7 +169,7 @@ class CommonService
     /**
      * Create Operation without DB::transaction.
      *
-     * @param Operation[] $operations
+     * @param non-empty-array<mixed, Operation> $operations
      *
      * @deprecated
      */
@@ -172,21 +183,20 @@ class CommonService
                     $amount = $this->math->add($amount, $operation->getAmount());
                 }
 
-                $objects[$operation->getUuid()] = $operation
-                    ->setWallet($self)
-                    ->toArray()
-                ;
+                $objects[$operation->getUuid()] = $this->transactionDtoAssembler->create(
+                    $this->castService->getHolder($self),
+                    $this->castService->getWallet($self)->getKey(),
+                    $operation->getType(),
+                    $operation->getAmount(),
+                    $operation->isConfirmed(),
+                    $operation->getMeta()
+                );
             }
 
-            $model = app(config('wallet.transaction.model', Transaction::class));
-            $model->insert(array_values($objects));
+            $results = $this->transactionRepository->insert($objects);
             $this->addBalance($self, $amount);
 
-            return $model->query()
-                ->where('uuid', array_keys($objects))
-                ->get()
-                ->all()
-            ;
+            return $results;
         });
     }
 
@@ -231,7 +241,7 @@ class CommonService
                 $brings
             );
 
-            return app(TransferRepository::class)->insert($objects);
+            return $this->transferRepository->insert($objects);
         });
     }
 
