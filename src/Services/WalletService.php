@@ -8,7 +8,6 @@ use Bavix\Wallet\Interfaces\MinimalTaxable;
 use Bavix\Wallet\Interfaces\Taxable;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\BookkeeperInterface;
-use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\Service\CastService;
 use Bavix\Wallet\Models\Wallet as WalletModel;
@@ -16,7 +15,6 @@ use Throwable;
 
 class WalletService
 {
-    private ConsistencyInterface $consistency;
     private DbService $dbService;
     private MathInterface $math;
     private LockService $lockService;
@@ -26,14 +24,12 @@ class WalletService
         DbService $dbService,
         MathInterface $math,
         LockService $lockService,
-        BookkeeperInterface $bookkeeper,
-        ConsistencyInterface $consistency
+        BookkeeperInterface $bookkeeper
     ) {
         $this->dbService = $dbService;
         $this->math = $math;
         $this->lockService = $lockService;
         $this->bookkeeper = $bookkeeper;
-        $this->consistency = $consistency;
     }
 
     /**
