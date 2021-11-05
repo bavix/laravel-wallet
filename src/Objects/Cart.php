@@ -11,10 +11,10 @@ use Bavix\Wallet\Internal\CartInterface;
 use Bavix\Wallet\Internal\Dto\BasketDto;
 use Bavix\Wallet\Internal\Dto\ItemDto;
 use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\Service\CastService;
 use function count;
 use Countable;
 use function get_class;
-use Illuminate\Database\Eloquent\Model;
 
 class Cart implements Countable, CartInterface
 {
@@ -28,11 +28,15 @@ class Cart implements Countable, CartInterface
 
     private array $meta = [];
 
+    private CastService $castService;
+
     private MathInterface $math;
 
     public function __construct(
+        CastService $castService,
         MathInterface $math
     ) {
+        $this->castService = $castService;
         $this->math = $math;
     }
 
@@ -48,22 +52,15 @@ class Cart implements Countable, CartInterface
         return $this;
     }
 
-    /**
-     * @return static
-     */
     public function addItem(Product $product, int $quantity = 1): self
     {
         $this->addQuantity($product, $quantity);
-        for ($i = 0; $i < $quantity; ++$i) {
-            $this->items[] = $product;
-        }
+        $products = array_fill(0, $quantity, $product);
+        $this->items = array_merge($this->items, $products);
 
         return $this;
     }
 
-    /**
-     * @return static
-     */
     public function addItems(iterable $products): self
     {
         foreach ($products as $product) {
@@ -106,32 +103,26 @@ class Cart implements Countable, CartInterface
 
     public function getQuantity(Product $product): int
     {
-        /** @var Model $product */
-        $uniq = (string) (method_exists($product, 'getUniqueId')
-            ? $product->getUniqueId()
-            : $product->getKey());
+        $model = $this->castService->getModel($product);
 
-        return (int) ($this->quantity[get_class($product).':'.$uniq] ?? 0);
+        return (int) ($this->quantity[get_class($product).':'.$model->getKey()] ?? 0);
     }
 
     public function getBasketDto(): BasketDto
     {
-        $items = [];
-        foreach ($this->getUniqueItems() as $product) {
-            $items[] = new ItemDto($product, $this->getQuantity($product));
-        }
+        $items = array_map(
+            fn (Product $product): ItemDto => new ItemDto($product, $this->getQuantity($product)),
+            $this->getUniqueItems()
+        );
 
         return new BasketDto($items, $this->getMeta());
     }
 
     protected function addQuantity(Product $product, int $quantity): void
     {
-        /** @var Model|Product $product */
-        $uniq = (string) (method_exists($product, 'getUniqueId')
-            ? $product->getUniqueId()
-            : $product->getKey());
+        $model = $this->castService->getModel($product);
 
-        $this->quantity[get_class($product).':'.$uniq] = $this->math
+        $this->quantity[get_class($product).':'.$model->getKey()] = $this->math
             ->add($this->getQuantity($product), $quantity)
         ;
     }
