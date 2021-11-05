@@ -23,10 +23,12 @@ class FilterTest extends TestCase
 
         self::assertEquals(4, $buyer->transactions()->count());
 
+        $nullable = $buyer->transactions()->whereNull('meta')->count();
         $customers = $buyer->transactions()->where('meta->account', 'customers')->count();
         $expenses = $buyer->transactions()->where('meta->account', 'expenses')->count();
         $vendors = $buyer->transactions()->where('meta->account', 'vendors')->count();
 
+        self::assertEquals(1, $nullable);
         self::assertEquals(1, $customers);
         self::assertEquals(1, $expenses);
         self::assertEquals(1, $vendors);
