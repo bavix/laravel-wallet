@@ -17,17 +17,20 @@ class WalletService
 {
     private DbService $dbService;
     private MathInterface $math;
+    private CastService $castService;
     private LockService $lockService;
     private BookkeeperInterface $bookkeeper;
 
     public function __construct(
         DbService $dbService,
         MathInterface $math,
+        CastService $castService,
         LockService $lockService,
         BookkeeperInterface $bookkeeper
     ) {
         $this->dbService = $dbService;
         $this->math = $math;
+        $this->castService = $castService;
         $this->lockService = $lockService;
         $this->bookkeeper = $bookkeeper;
     }
@@ -82,7 +85,7 @@ class WalletService
 
     public function getWallet(Wallet $object, bool $autoSave = true): WalletModel
     {
-        return app(CastService::class)->getWallet($object, $autoSave);
+        return $this->castService->getWallet($object, $autoSave);
     }
 
     /**
