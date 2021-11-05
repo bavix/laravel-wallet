@@ -54,11 +54,6 @@ class Item extends Model implements Product
         return null;
     }
 
-    public function getUniqueId(): string
-    {
-        return $this->getKey();
-    }
-
     /**
      * @param int[] $walletIds
      */

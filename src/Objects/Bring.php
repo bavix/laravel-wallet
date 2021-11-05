@@ -4,57 +4,29 @@ namespace Bavix\Wallet\Objects;
 
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Transaction;
 
 /** @deprecated There is no alternative yet, but the class will be removed */
 class Bring
 {
-    /**
-     * @var string
-     */
-    protected $status;
+    private string $status;
 
-    /**
-     * @var Wallet
-     */
-    protected $from;
+    private Wallet $from;
 
-    /**
-     * @var Wallet
-     */
-    protected $to;
+    private Wallet $to;
 
-    /**
-     * @var Transaction
-     */
-    protected $deposit;
+    private Transaction $deposit;
 
-    /**
-     * @var Transaction
-     */
-    protected $withdraw;
+    private Transaction $withdraw;
 
-    /**
-     * @var string
-     */
-    protected $uuid;
+    private ?string $fee = null;
 
-    /**
-     * @var null|string
-     */
-    protected $fee;
-
-    /**
-     * @var string
-     */
-    protected $discount;
+    private string $discount;
 
     private MathInterface $math;
 
-    public function __construct(UuidInterface $uuidService, MathInterface $math)
+    public function __construct(MathInterface $math)
     {
-        $this->uuid = $uuidService->uuid4();
         $this->math = $math;
     }
 
