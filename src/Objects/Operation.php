@@ -2,46 +2,18 @@
 
 namespace Bavix\Wallet\Objects;
 
-use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Internal\Service\CastService;
-use Bavix\Wallet\Internal\UuidInterface;
-use Bavix\Wallet\Models\Transaction;
 
 /** @deprecated There is no alternative yet, but the class will be removed */
 class Operation
 {
-    /**
-     * @var string
-     */
-    protected $type;
+    private string $type;
 
-    /**
-     * @var string
-     */
-    protected $uuid;
+    private string $amount;
 
-    /**
-     * @var string
-     */
-    protected $amount;
+    private ?array $meta;
 
-    /**
-     * @var null|array
-     */
-    protected $meta;
-
-    /**
-     * @var bool
-     */
-    protected $confirmed;
-
-    /**
-     * @var Wallet
-     */
-    protected $wallet;
-
-    private CastService $castService;
+    private bool $confirmed;
 
     private MathInterface $math;
 
@@ -49,12 +21,8 @@ class Operation
      * Transaction constructor.
      */
     public function __construct(
-        UuidInterface $uuidService,
-        CastService $castService,
         MathInterface $math
     ) {
-        $this->uuid = $uuidService->uuid4();
-        $this->castService = $castService;
         $this->math = $math;
     }
 
@@ -63,15 +31,7 @@ class Operation
         return $this->type;
     }
 
-    public function getUuid(): string
-    {
-        return $this->uuid;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAmount()
+    public function getAmount(): string
     {
         return $this->amount;
     }
