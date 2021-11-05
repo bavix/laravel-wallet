@@ -5,9 +5,17 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Internal\Transform;
 
 use Bavix\Wallet\Internal\Dto\TransactionDto;
+use Bavix\Wallet\Internal\Service\JsonService;
 
 class TransactionDtoTransformer
 {
+    private JsonService $jsonService;
+
+    public function __construct(JsonService $jsonService)
+    {
+        $this->jsonService = $jsonService;
+    }
+
     public function extract(TransactionDto $dto): array
     {
         return [
@@ -18,7 +26,7 @@ class TransactionDtoTransformer
             'type' => $dto->getType(),
             'amount' => $dto->getAmount(),
             'confirmed' => $dto->isConfirmed(),
-            'meta' => json_encode($dto->getMeta(), JSON_THROW_ON_ERROR), // @hack
+            'meta' => $this->jsonService->encode($dto->getMeta()),
             'created_at' => $dto->getCreatedAt(),
             'updated_at' => $dto->getUpdatedAt(),
         ];
