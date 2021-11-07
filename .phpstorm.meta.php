@@ -18,8 +18,6 @@ namespace PHPSTORM_META {
     override(\app(0), map([
         Cart::class => Cart::class,
         Bring::class => Bring::class,
-        Operation::class => Operation::class,
-        EmptyLock::class => EmptyLock::class,
         ExchangeService::class => ExchangeService::class,
         CommonService::class => CommonService::class,
         WalletService::class => WalletService::class,
