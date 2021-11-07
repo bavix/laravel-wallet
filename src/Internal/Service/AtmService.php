@@ -19,30 +19,34 @@ class AtmService
 {
     private TransactionRepository $transactionRepository;
     private TransferRepository $transferRepository;
+    private AssistantService $assistantService;
     private BookkeeperInterface $bookkeeper;
 
     public function __construct(
         TransactionRepository $transactionRepository,
         TransferRepository $transferRepository,
+        AssistantService $assistantService,
         BookkeeperInterface $bookkeeper
     ) {
         $this->transactionRepository = $transactionRepository;
         $this->transferRepository = $transferRepository;
+        $this->assistantService = $assistantService;
         $this->bookkeeper = $bookkeeper;
     }
 
     /**
-     * @param non-empty-array<string, TransactionDto> $objects
+     * @param non-empty-array<int|string, TransactionDto> $objects
      *
      * @return non-empty-array<string, Transaction>
      */
     public function makeTransactions(array $objects): array
     {
         $this->transactionRepository->insert($objects);
-        $query = new TransactionQuery(array_keys($objects));
+        $uuids = $this->assistantService->getUuids($objects);
+        $query = new TransactionQuery($uuids);
 
         $items = $this->transactionRepository->findBy($query);
-        assert(count($items) > 0);
+        assert(count($items) === count($uuids));
 
         $results = [];
         foreach ($items as $item) {
@@ -53,17 +57,18 @@ class AtmService
     }
 
     /**
-     * @param non-empty-array<string, TransferDto> $objects
+     * @param non-empty-array<int|string, TransferDto> $objects
      *
      * @return non-empty-array<string, Transfer>
      */
     public function makeTransfers(array $objects): array
     {
         $this->transferRepository->insert($objects);
-        $query = new TransferQuery(array_keys($objects));
+        $uuids = $this->assistantService->getUuids($objects);
+        $query = new TransferQuery($uuids);
 
         $items = $this->transferRepository->findBy($query);
-        assert(count($items) > 0);
+        assert(count($items) === count($uuids));
 
         $results = [];
         foreach ($items as $item) {
