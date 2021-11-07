@@ -12,13 +12,14 @@ use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\Service\AssistantService;
 use Bavix\Wallet\Internal\Service\AtmService;
 use Bavix\Wallet\Internal\Service\CastService;
+use Bavix\Wallet\Internal\Service\PrepareService;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Objects\Bring;
-use Bavix\Wallet\Objects\Operation;
 use function compact;
 use function max;
 use Throwable;
@@ -31,6 +32,8 @@ class CommonService
     private AtmService $atmService;
     private CastService $castService;
     private WalletService $walletService;
+    private AssistantService $assistantService;
+    private PrepareService $prepareService;
     private BookkeeperInterface $bookkeeper;
     private ConsistencyInterface $consistency;
     private TransferDtoAssembler $transferDtoAssembler;
@@ -44,6 +47,8 @@ class CommonService
         WalletService $walletService,
         BookkeeperInterface $bookkeeper,
         ConsistencyInterface $consistency,
+        AssistantService $satisfyService,
+        PrepareService $prepareService,
         TransferDtoAssembler $transferDtoAssembler,
         TransactionDtoAssembler $transactionDtoAssembler,
         AtmService $atmService
@@ -56,6 +61,8 @@ class CommonService
         $this->walletService = $walletService;
         $this->bookkeeper = $bookkeeper;
         $this->consistency = $consistency;
+        $this->assistantService = $satisfyService;
+        $this->prepareService = $prepareService;
         $this->transferDtoAssembler = $transferDtoAssembler;
         $this->transactionDtoAssembler = $transactionDtoAssembler;
     }
@@ -119,20 +126,7 @@ class CommonService
     public function forceWithdraw(Wallet $wallet, $amount, ?array $meta, bool $confirmed = true): Transaction
     {
         return $this->lockService->lock($this, __FUNCTION__, function () use ($wallet, $amount, $meta, $confirmed) {
-            $this->consistency->checkPositive($amount);
-
-            /** @var WalletModel $wallet */
-            $wallet = $this->walletService->getWallet($wallet);
-
-            $transactions = $this->multiOperation($wallet, [
-                app(Operation::class)
-                    ->setType(Transaction::TYPE_WITHDRAW)
-                    ->setConfirmed($confirmed)
-                    ->setAmount($this->math->negative($amount))
-                    ->setMeta($meta),
-            ]);
-
-            return current($transactions);
+            return $this->operation($wallet, Transaction::TYPE_WITHDRAW, $amount, $meta, $confirmed);
         });
     }
 
@@ -144,57 +138,7 @@ class CommonService
     public function deposit(Wallet $wallet, $amount, ?array $meta, bool $confirmed = true): Transaction
     {
         return $this->lockService->lock($this, __FUNCTION__, function () use ($wallet, $amount, $meta, $confirmed) {
-            $this->consistency->checkPositive($amount);
-
-            /** @var WalletModel $wallet */
-            $wallet = $this->walletService->getWallet($wallet);
-
-            $transactions = $this->multiOperation($wallet, [
-                app(Operation::class)
-                    ->setType(Transaction::TYPE_DEPOSIT)
-                    ->setConfirmed($confirmed)
-                    ->setAmount($amount)
-                    ->setMeta($meta),
-            ]);
-
-            return current($transactions);
-        });
-    }
-
-    /**
-     * Create Operation without DB::transaction.
-     *
-     * @param non-empty-array<mixed, Operation> $operations
-     *
-     * @deprecated
-     * @see AtmService::makeTransactions()
-     */
-    public function multiOperation(Wallet $self, array $operations): array
-    {
-        return $this->lockService->lock($this, __FUNCTION__, function () use ($self, $operations) {
-            $amount = 0;
-            $objects = [];
-            foreach ($operations as $operation) {
-                if ($operation->isConfirmed()) {
-                    $amount = $this->math->add($amount, $operation->getAmount());
-                }
-
-                $object = $this->transactionDtoAssembler->create(
-                    $this->castService->getHolder($self),
-                    $this->castService->getWallet($self)->getKey(),
-                    $operation->getType(),
-                    $operation->getAmount(),
-                    $operation->isConfirmed(),
-                    $operation->getMeta()
-                );
-
-                $objects[$object->getUuid()] = $object;
-            }
-
-            $results = $this->atmService->makeTransactions($objects);
-            $this->addBalance($self, $amount);
-
-            return $results;
+            return $this->operation($wallet, Transaction::TYPE_DEPOSIT, $amount, $meta, $confirmed);
         });
     }
 
@@ -280,5 +224,31 @@ class CommonService
 
             return $result;
         });
+    }
+
+    protected function operation(Wallet $wallet, string $type, $amount, ?array $meta, bool $confirmed = true): Transaction
+    {
+        assert(in_array($type, [Transaction::TYPE_DEPOSIT, Transaction::TYPE_WITHDRAW], true));
+
+        if ($type === Transaction::TYPE_DEPOSIT) {
+            $dto = $this->prepareService->deposit($wallet, (string) $amount, $meta, $confirmed);
+        } else {
+            $dto = $this->prepareService->withdraw($wallet, (string) $amount, $meta, $confirmed);
+        }
+
+        $transactions = $this->atmService->makeTransactions([$dto]); // q1
+        $object = $this->castService->getWallet($wallet);
+        $totals = $this->assistantService->getSums($transactions);
+        $total = (string) ($totals[$object->getKey()] ?? 0);
+
+        // optimize queries
+        if ($this->math->compare($total, 0) !== 0) {
+            $balance = $this->bookkeeper->increase($object, $total);
+
+            $object->newQuery()->update(compact('balance')); // ?q2
+            $object->fill(compact('balance'))->syncOriginalAttribute('balance');
+        }
+
+        return current($transactions);
     }
 }
