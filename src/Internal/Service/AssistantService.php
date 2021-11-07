@@ -6,7 +6,6 @@ namespace Bavix\Wallet\Internal\Service;
 
 use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Dto\TransferDto;
-use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Services\MathService;
 
 class AssistantService
@@ -29,7 +28,7 @@ class AssistantService
     }
 
     /**
-     * @param Transaction[] $transactions
+     * @param TransactionDto[] $transactions
      *
      * @return string[]
      */
@@ -37,10 +36,10 @@ class AssistantService
     {
         $amounts = [];
         foreach ($transactions as $transaction) {
-            if ($transaction->confirmed) {
-                $amounts[$transaction->wallet_id] = $this->mathService->add(
-                    $amounts[$transaction->wallet_id] ?? 0,
-                    $transaction->amount
+            if ($transaction->isConfirmed()) {
+                $amounts[$transaction->getWalletId()] = $this->mathService->add(
+                    $amounts[$transaction->getWalletId()] ?? 0,
+                    $transaction->getAmount()
                 );
             }
         }

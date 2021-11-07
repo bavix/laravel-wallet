@@ -238,7 +238,7 @@ class CommonService
 
         $transactions = $this->atmService->makeTransactions([$dto]); // q1
         $object = $this->castService->getWallet($wallet);
-        $totals = $this->assistantService->getSums($transactions);
+        $totals = $this->assistantService->getSums([$dto]);
         $total = (string) ($totals[$object->getKey()] ?? 0);
 
         // optimize queries
