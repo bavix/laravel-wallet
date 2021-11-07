@@ -261,8 +261,8 @@ class WalletFloatTest extends TestCase
         $math = app(MathInterface::class);
 
         $user->depositFloat('545.8754855274419');
-        self::assertEquals('545875485527442000000', $user->balance);
-        self::assertEquals(0, $math->compare($user->balanceFloat, '545.8754855274420'));
+        self::assertEquals('545875485527441900000', $user->balance);
+        self::assertEquals(0, $math->compare($user->balanceFloat, '545.8754855274419'));
     }
 
     public function testBitcoin(): void
