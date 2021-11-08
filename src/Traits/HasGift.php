@@ -11,6 +11,7 @@ use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Services\CommonService;
@@ -79,8 +80,8 @@ trait HasGift
                     app(ConsistencyInterface::class)->checkPotential($santa, $math->add($amount, $fee));
                 }
 
-                $withdraw = $commonService->forceWithdraw($santa, $math->add($amount, $fee), $meta);
-                $deposit = $commonService->deposit($product, $amount, $meta);
+                $withdraw = $commonService->operation($santa, Transaction::TYPE_WITHDRAW, $math->add($amount, $fee), $meta);
+                $deposit = $commonService->operation($product, Transaction::TYPE_DEPOSIT, $amount, $meta);
 
                 $from = app(WalletService::class)
                     ->getWallet($to)
