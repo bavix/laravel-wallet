@@ -9,11 +9,13 @@ use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\Service\AtmService;
+use Bavix\Wallet\Internal\Service\CastService;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\LockService;
@@ -87,15 +89,19 @@ trait HasGift
                     ->getWallet($to)
                 ;
 
-                $transfers = $commonService->assemble([
-                    app(Bring::class)
-                        ->setStatus(Transfer::STATUS_GIFT)
-                        ->setDiscount($discount)
-                        ->setDeposit($deposit)
-                        ->setWithdraw($withdraw)
-                        ->setFrom($from)
-                        ->setTo($product),
-                ]);
+                $castService = app(CastService::class);
+
+                $transfer = app(TransferDtoAssembler::class)->create(
+                    $deposit->getKey(),
+                    $withdraw->getKey(),
+                    Transfer::STATUS_GIFT,
+                    $castService->getModel($from),
+                    $castService->getModel($product),
+                    $discount,
+                    $fee
+                );
+
+                $transfers = app(AtmService::class)->makeTransfers([$transfer]);
 
                 return current($transfers);
             });
