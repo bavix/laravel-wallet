@@ -36,7 +36,7 @@ class TransactionRepository
     public function findBy(TransactionQuery $query): array
     {
         return $this->transaction->newQuery()
-            ->where('uuid', $query->getUuids())
+            ->whereIn('uuid', $query->getUuids())
             ->get()
             ->all()
         ;

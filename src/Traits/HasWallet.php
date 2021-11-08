@@ -158,7 +158,7 @@ trait HasWallet
     /**
      * Checks if you can withdraw funds.
      *
-     * @param int|string $amount
+     * @param float|int|string $amount
      */
     public function canWithdraw($amount, bool $allowZero = false): bool
     {
