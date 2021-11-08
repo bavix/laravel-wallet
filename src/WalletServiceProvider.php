@@ -17,7 +17,6 @@ use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
-use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\AtomicService;
 use Bavix\Wallet\Services\BasketService;
@@ -128,7 +127,6 @@ class WalletServiceProvider extends ServiceProvider
         $this->app->bind(Wallet::class, config('wallet.wallet.model', Wallet::class));
 
         // object's
-        $this->app->bind(Bring::class, config('wallet.objects.bring', Bring::class));
         $this->app->bind(Cart::class, config('wallet.objects.cart', Cart::class));
     }
 }

@@ -3,12 +3,14 @@
 namespace Bavix\Wallet\Traits;
 
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\ExchangeInterface;
 use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\Service\AtmService;
+use Bavix\Wallet\Internal\Service\CastService;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\LockService;
@@ -67,16 +69,19 @@ trait CanExchange
                     ->makeOperation($to, Transaction::TYPE_DEPOSIT, $math->floor($math->mul($amount, $rate, 1)), $meta)
                 ;
 
-                $transfers = app(CommonService::class)->multiBrings([
-                    app(Bring::class)
-                        ->setDiscount(0)
-                        ->setStatus(Transfer::STATUS_EXCHANGE)
-                        ->setDeposit($deposit)
-                        ->setWithdraw($withdraw)
-                        ->setFrom($from)
-                        ->setFee($fee)
-                        ->setTo($to),
-                ]);
+                $castService = app(CastService::class);
+
+                $transfer = app(TransferDtoAssembler::class)->create(
+                    $deposit->getKey(),
+                    $withdraw->getKey(),
+                    Transfer::STATUS_EXCHANGE,
+                    $castService->getModel($from),
+                    $castService->getModel($to),
+                    0,
+                    $fee
+                );
+
+                $transfers = app(AtmService::class)->makeTransfers([$transfer]);
 
                 return current($transfers);
             });

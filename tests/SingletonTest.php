@@ -3,7 +3,6 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
@@ -18,11 +17,6 @@ use Bavix\Wallet\Test\Common\Models\Wallet;
  */
 class SingletonTest extends TestCase
 {
-    public function testBring(): void
-    {
-        self::assertNotEquals($this->getRefId(Bring::class), $this->getRefId(Bring::class));
-    }
-
     public function testCart(): void
     {
         self::assertNotEquals($this->getRefId(Cart::class), $this->getRefId(Cart::class));
