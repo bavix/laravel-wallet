@@ -7,7 +7,6 @@ use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
@@ -38,7 +37,6 @@ class CommonService
     private BookkeeperInterface $bookkeeper;
     private ConsistencyInterface $consistency;
     private TransferDtoAssembler $transferDtoAssembler;
-    private TransactionDtoAssembler $transactionDtoAssembler;
 
     public function __construct(
         DbService $dbService,
@@ -51,7 +49,6 @@ class CommonService
         AssistantService $satisfyService,
         PrepareService $prepareService,
         TransferDtoAssembler $transferDtoAssembler,
-        TransactionDtoAssembler $transactionDtoAssembler,
         AtmService $atmService
     ) {
         $this->dbService = $dbService;
@@ -65,7 +62,6 @@ class CommonService
         $this->assistantService = $satisfyService;
         $this->prepareService = $prepareService;
         $this->transferDtoAssembler = $transferDtoAssembler;
-        $this->transactionDtoAssembler = $transactionDtoAssembler;
     }
 
     /**
@@ -102,8 +98,19 @@ class CommonService
             $fee = $this->walletService->fee($to, $amount);
 
             $amount = max(0, $this->math->sub($amount, $discount));
-            $withdraw = $this->makeOperation($from, Transaction::TYPE_WITHDRAW, $this->math->add($amount, $fee, $from->decimal_places), $meta);
-            $deposit = $this->makeOperation($to, Transaction::TYPE_DEPOSIT, $amount, $meta);
+
+            $withdrawDto = $this->prepareService->withdraw($from, $this->math->add($amount, $fee, $from->decimal_places), $meta);
+            $depositDto = $this->prepareService->deposit($to, $amount, $meta);
+            $transactions = $this->applyOperations(
+                [$withdrawDto->getWalletId() => $from, $depositDto->getWalletId() => $to],
+                [$withdrawDto, $depositDto],
+            );
+
+            $withdraw = $transactions[$withdrawDto->getUuid()] ?? null;
+            assert($withdraw !== null);
+
+            $deposit = $transactions[$depositDto->getUuid()] ?? null;
+            assert($deposit !== null);
 
             $transfers = $this->multiBrings([
                 app(Bring::class)
@@ -203,6 +210,9 @@ class CommonService
         });
     }
 
+    /**
+     * @param float|int|string $amount
+     */
     public function makeOperation(Wallet $wallet, string $type, $amount, ?array $meta, bool $confirmed = true): Transaction
     {
         assert(in_array($type, [Transaction::TYPE_DEPOSIT, Transaction::TYPE_WITHDRAW], true));
