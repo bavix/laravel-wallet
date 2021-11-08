@@ -62,6 +62,17 @@ class WalletTest extends TestCase
         $user->deposit(-1);
     }
 
+    public function testInvalidWithdraw(): void
+    {
+        $this->expectException(AmountInvalid::class);
+        $this->expectExceptionMessageStrict(trans('wallet::errors.price_positive'));
+
+        /** @var User $user */
+        $user = UserFactory::new()->create();
+        $user->deposit(1);
+        $user->withdraw(-1);
+    }
+
     public function testFindUserByExistsWallet(): void
     {
         /** @var Collection|User[] $users */
@@ -122,7 +133,7 @@ class WalletTest extends TestCase
         $user->withdraw(1);
     }
 
-    public function testInvalidWithdraw(): void
+    public function testBalanceIsEmptyWithdraw(): void
     {
         $this->expectException(BalanceIsEmpty::class);
         $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
