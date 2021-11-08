@@ -36,7 +36,7 @@ class TransferRepository
     public function findBy(TransferQuery $query): array
     {
         return $this->transfer->newQuery()
-            ->where('uuid', $query->getUuids())
+            ->whereIn('uuid', $query->getUuids())
             ->get()
             ->all()
         ;
