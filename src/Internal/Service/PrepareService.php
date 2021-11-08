@@ -8,15 +8,18 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\Dto\TransactionDto;
+use Bavix\Wallet\Internal\Dto\TransferLazyDto;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Services\ConsistencyService;
 use Bavix\Wallet\Services\MathService;
+use Bavix\Wallet\Services\WalletService;
 
 class PrepareService
 {
     private TransactionDtoAssembler $transactionDtoAssembler;
     private TransferDtoAssembler $transferDtoAssembler;
     private ConsistencyService $consistencyService;
+    private WalletService $walletService;
     private CastService $castService;
     private MathService $mathService;
 
@@ -24,12 +27,14 @@ class PrepareService
         TransactionDtoAssembler $transactionDtoAssembler,
         TransferDtoAssembler $transferDtoAssembler,
         ConsistencyService $consistencyService,
+        WalletService $walletService,
         CastService $castService,
         MathService $mathService
     ) {
         $this->transactionDtoAssembler = $transactionDtoAssembler;
         $this->transferDtoAssembler = $transferDtoAssembler;
         $this->consistencyService = $consistencyService;
+        $this->walletService = $walletService;
         $this->castService = $castService;
         $this->mathService = $mathService;
     }
@@ -59,6 +64,26 @@ class PrepareService
             $this->mathService->negative($amount),
             $confirmed,
             $meta
+        );
+    }
+
+    public function transferLazy(Wallet $from, Wallet $to, $amount, ?array $meta = null): TransferLazyDto
+    {
+        $discount = $this->walletService->discount($from, $to);
+        $from = $this->walletService->getWallet($from);
+        $fee = (string) $this->walletService->fee($to, $amount);
+
+        // replace max => mathService.max
+        $depositAmount = (string) max(0, $this->mathService->sub($amount, $discount));
+        $withdrawAmount = $this->mathService->add($depositAmount, $fee, $from->decimal_places);
+
+        return new TransferLazyDto(
+            $from,
+            $to,
+            $discount,
+            $fee,
+            $this->withdraw($from, $withdrawAmount, $meta),
+            $this->deposit($to, $depositAmount, $meta)
         );
     }
 }
