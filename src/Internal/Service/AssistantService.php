@@ -28,9 +28,9 @@ class AssistantService
     }
 
     /**
-     * @param TransactionDto[] $transactions
+     * @param non-empty-array<mixed, TransactionDto> $transactions
      *
-     * @return string[]
+     * @return array<int, string>
      */
     public function getSums(array $transactions): array
     {
@@ -44,6 +44,9 @@ class AssistantService
             }
         }
 
-        return $amounts;
+        return array_filter(
+            $amounts,
+            fn (string $amount): bool => $this->mathService->compare($amount, 0) !== 0
+        );
     }
 }
