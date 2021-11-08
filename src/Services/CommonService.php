@@ -101,8 +101,8 @@ class CommonService
             $fee = $this->walletService->fee($to, $amount);
 
             $amount = max(0, $this->math->sub($amount, $discount));
-            $withdraw = $this->forceWithdraw($from, $this->math->add($amount, $fee, $from->decimal_places), $meta);
-            $deposit = $this->deposit($to, $amount, $meta);
+            $withdraw = $this->operation($from, Transaction::TYPE_WITHDRAW, $this->math->add($amount, $fee, $from->decimal_places), $meta);
+            $deposit = $this->operation($to, Transaction::TYPE_DEPOSIT, $amount, $meta);
 
             $transfers = $this->multiBrings([
                 app(Bring::class)
@@ -115,30 +115,6 @@ class CommonService
             ]);
 
             return current($transfers);
-        });
-    }
-
-    /**
-     * @param int|string $amount
-     *
-     * @throws AmountInvalid
-     */
-    public function forceWithdraw(Wallet $wallet, $amount, ?array $meta, bool $confirmed = true): Transaction
-    {
-        return $this->lockService->lock($this, __FUNCTION__, function () use ($wallet, $amount, $meta, $confirmed) {
-            return $this->operation($wallet, Transaction::TYPE_WITHDRAW, $amount, $meta, $confirmed);
-        });
-    }
-
-    /**
-     * @param int|string $amount
-     *
-     * @throws AmountInvalid
-     */
-    public function deposit(Wallet $wallet, $amount, ?array $meta, bool $confirmed = true): Transaction
-    {
-        return $this->lockService->lock($this, __FUNCTION__, function () use ($wallet, $amount, $meta, $confirmed) {
-            return $this->operation($wallet, Transaction::TYPE_DEPOSIT, $amount, $meta, $confirmed);
         });
     }
 
@@ -226,7 +202,7 @@ class CommonService
         });
     }
 
-    protected function operation(Wallet $wallet, string $type, $amount, ?array $meta, bool $confirmed = true): Transaction
+    public function operation(Wallet $wallet, string $type, $amount, ?array $meta, bool $confirmed = true): Transaction
     {
         assert(in_array($type, [Transaction::TYPE_DEPOSIT, Transaction::TYPE_WITHDRAW], true));
 

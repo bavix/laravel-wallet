@@ -6,6 +6,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\ExchangeInterface;
 use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Bring;
 use Bavix\Wallet\Services\CommonService;
@@ -59,11 +60,11 @@ trait CanExchange
                 );
 
                 $withdraw = app(CommonService::class)
-                    ->forceWithdraw($from, $math->add($amount, $fee), $meta)
+                    ->operation($from, Transaction::TYPE_WITHDRAW, $math->add($amount, $fee), $meta)
                 ;
 
                 $deposit = app(CommonService::class)
-                    ->deposit($to, $math->floor($math->mul($amount, $rate, 1)), $meta)
+                    ->operation($to, Transaction::TYPE_DEPOSIT, $math->floor($math->mul($amount, $rate, 1)), $meta)
                 ;
 
                 $transfers = app(CommonService::class)->multiBrings([
