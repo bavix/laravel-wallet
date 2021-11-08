@@ -60,11 +60,11 @@ trait CanExchange
                 );
 
                 $withdraw = app(CommonService::class)
-                    ->operation($from, Transaction::TYPE_WITHDRAW, $math->add($amount, $fee), $meta)
+                    ->makeOperation($from, Transaction::TYPE_WITHDRAW, $math->add($amount, $fee), $meta)
                 ;
 
                 $deposit = app(CommonService::class)
-                    ->operation($to, Transaction::TYPE_DEPOSIT, $math->floor($math->mul($amount, $rate, 1)), $meta)
+                    ->makeOperation($to, Transaction::TYPE_DEPOSIT, $math->floor($math->mul($amount, $rate, 1)), $meta)
                 ;
 
                 $transfers = app(CommonService::class)->multiBrings([
