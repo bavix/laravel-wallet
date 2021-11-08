@@ -48,7 +48,7 @@ trait HasWallet
 
         return app(DbService::class)->transaction(static function () use ($self, $amount, $meta, $confirmed) {
             return app(CommonService::class)
-                ->operation($self, Transaction::TYPE_DEPOSIT, $amount, $meta, $confirmed)
+                ->makeOperation($self, Transaction::TYPE_DEPOSIT, $amount, $meta, $confirmed)
             ;
         });
     }
@@ -189,7 +189,7 @@ trait HasWallet
 
         return app(DbService::class)->transaction(static function () use ($self, $amount, $meta, $confirmed) {
             return app(CommonService::class)
-                ->operation($self, Transaction::TYPE_WITHDRAW, $amount, $meta, $confirmed)
+                ->makeOperation($self, Transaction::TYPE_WITHDRAW, $amount, $meta, $confirmed)
             ;
         });
     }

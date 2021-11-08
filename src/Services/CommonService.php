@@ -11,6 +11,7 @@ use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
+use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\Service\AssistantService;
 use Bavix\Wallet\Internal\Service\AtmService;
@@ -101,8 +102,8 @@ class CommonService
             $fee = $this->walletService->fee($to, $amount);
 
             $amount = max(0, $this->math->sub($amount, $discount));
-            $withdraw = $this->operation($from, Transaction::TYPE_WITHDRAW, $this->math->add($amount, $fee, $from->decimal_places), $meta);
-            $deposit = $this->operation($to, Transaction::TYPE_DEPOSIT, $amount, $meta);
+            $withdraw = $this->makeOperation($from, Transaction::TYPE_WITHDRAW, $this->math->add($amount, $fee, $from->decimal_places), $meta);
+            $deposit = $this->makeOperation($to, Transaction::TYPE_DEPOSIT, $amount, $meta);
 
             $transfers = $this->multiBrings([
                 app(Bring::class)
@@ -202,7 +203,7 @@ class CommonService
         });
     }
 
-    public function operation(Wallet $wallet, string $type, $amount, ?array $meta, bool $confirmed = true): Transaction
+    public function makeOperation(Wallet $wallet, string $type, $amount, ?array $meta, bool $confirmed = true): Transaction
     {
         assert(in_array($type, [Transaction::TYPE_DEPOSIT, Transaction::TYPE_WITHDRAW], true));
 
@@ -212,19 +213,36 @@ class CommonService
             $dto = $this->prepareService->withdraw($wallet, (string) $amount, $meta, $confirmed);
         }
 
-        $transactions = $this->atmService->makeTransactions([$dto]); // q1
-        $object = $this->castService->getWallet($wallet);
-        $totals = $this->assistantService->getSums([$dto]);
-        $total = (string) ($totals[$object->getKey()] ?? 0);
+        $transactions = $this->applyOperations(
+            [$dto->getWalletId() => $wallet],
+            [$dto],
+        );
 
-        // optimize queries
-        if ($this->math->compare($total, 0) !== 0) {
+        return current($transactions);
+    }
+
+    /**
+     * @param non-empty-array<int, Wallet>         $wallets
+     * @param non-empty-array<int, TransactionDto> $objects
+     *
+     * @return non-empty-array<string, Transaction>
+     */
+    public function applyOperations(array $wallets, array $objects): array
+    {
+        $transactions = $this->atmService->makeTransactions($objects); // q1
+        $totals = $this->assistantService->getSums($objects);
+
+        foreach ($totals as $walletId => $total) {
+            $wallet = $wallets[$walletId] ?? null;
+            assert($wallet !== null);
+
+            $object = $this->walletService->getWallet($wallet);
             $balance = $this->bookkeeper->increase($object, $total);
 
-            $object->newQuery()->update(compact('balance')); // ?q2
+            $object->newQuery()->update(compact('balance')); // ?qN
             $object->fill(compact('balance'))->syncOriginalAttribute('balance');
         }
 
-        return current($transactions);
+        return $transactions;
     }
 }
