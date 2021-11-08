@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Service;
 
-use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Dto\TransferDto;
 use Bavix\Wallet\Internal\Query\TransactionQuery;
@@ -20,18 +19,15 @@ class AtmService
     private TransactionRepository $transactionRepository;
     private TransferRepository $transferRepository;
     private AssistantService $assistantService;
-    private BookkeeperInterface $bookkeeper;
 
     public function __construct(
         TransactionRepository $transactionRepository,
         TransferRepository $transferRepository,
-        AssistantService $assistantService,
-        BookkeeperInterface $bookkeeper
+        AssistantService $assistantService
     ) {
         $this->transactionRepository = $transactionRepository;
         $this->transferRepository = $transferRepository;
         $this->assistantService = $assistantService;
-        $this->bookkeeper = $bookkeeper;
     }
 
     /**

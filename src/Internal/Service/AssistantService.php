@@ -18,9 +18,9 @@ class AssistantService
     }
 
     /**
-     * @param TransactionDto[]|TransferDto[] $objects
+     * @param non-empty-array<mixed, TransactionDto>|non-empty-array<mixed, TransferDto> $objects
      *
-     * @return string[]
+     * @return non-empty-array<int, string>
      */
     public function getUuids(array $objects): array
     {
