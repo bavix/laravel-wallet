@@ -8,7 +8,6 @@ namespace PHPSTORM_META {
     use Bavix\Wallet\Models\Transaction;
     use Bavix\Wallet\Models\Transfer;
     use Bavix\Wallet\Models\Wallet;
-    use Bavix\Wallet\Objects\Bring;
     use Bavix\Wallet\Objects\Cart;
     use Bavix\Wallet\Objects\EmptyLock;
     use Bavix\Wallet\Objects\Operation;
@@ -17,7 +16,6 @@ namespace PHPSTORM_META {
 
     override(\app(0), map([
         Cart::class => Cart::class,
-        Bring::class => Bring::class,
         ExchangeService::class => ExchangeService::class,
         CommonService::class => CommonService::class,
         WalletService::class => WalletService::class,

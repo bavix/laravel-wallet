@@ -18,7 +18,6 @@ use Bavix\Wallet\Internal\Service\PrepareService;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
-use Bavix\Wallet\Objects\Bring;
 use function compact;
 use function max;
 use Throwable;
@@ -120,55 +119,6 @@ class CommonService
             $transfers = $this->atmService->makeTransfers([$transfer]);
 
             return current($transfers);
-        });
-    }
-
-    /**
-     * Create Bring with DB::transaction.
-     *
-     * @param Bring[] $brings
-     *
-     * @deprecated
-     * @see AtmService::makeTransfers()
-     */
-    public function assemble(array $brings): array
-    {
-        return $this->lockService->lock($this, __FUNCTION__, function () use ($brings) {
-            $self = $this;
-
-            return $this->dbService->transaction(static function () use ($self, $brings) {
-                return $self->multiBrings($brings);
-            });
-        });
-    }
-
-    /**
-     * Create Bring without DB::transaction.
-     *
-     * @param non-empty-array<mixed, Bring> $brings
-     *
-     * @deprecated
-     * @see AtmService::makeTransfers()
-     */
-    public function multiBrings(array $brings): array
-    {
-        return $this->lockService->lock($this, __FUNCTION__, function () use ($brings) {
-            $objects = [];
-            foreach ($brings as $bring) {
-                $object = $this->transferDtoAssembler->create(
-                    $bring->getDeposit()->getKey(),
-                    $bring->getWithdraw()->getKey(),
-                    $bring->getStatus(),
-                    $this->castService->getModel($bring->getFrom()),
-                    $this->castService->getModel($bring->getTo()),
-                    $bring->getDiscount(),
-                    $bring->getFee()
-                );
-
-                $objects[$object->getUuid()] = $object;
-            }
-
-            return $this->atmService->makeTransfers($objects);
         });
     }
 
