@@ -154,13 +154,14 @@ class BalanceTest extends TestCase
 
         /** @var MockObject|Wallet $mockQuery */
         $mockQuery = $this->createMock(\get_class($wallet->newQuery()));
-        $mockQuery->method('whereKey')->willReturn($mockQuery);
-        $mockQuery->method('update')->willReturn(false);
+        $mockQuery->method('update')->willReturn(0);
 
         /** @var MockObject|Wallet $mockWallet */
         $mockWallet = $this->createMock(\get_class($wallet));
         $mockWallet->method('newQuery')->willReturn($mockQuery);
         $mockWallet->method('getKey')->willReturn($wallet->getKey());
+        $mockWallet->method('fill')->willReturn($mockWallet);
+        $mockWallet->method('syncOriginalAttribute')->willReturn($mockWallet);
 
         $result = app(CommonService::class)
             ->addBalance($mockWallet, 100)

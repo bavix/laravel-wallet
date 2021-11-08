@@ -186,27 +186,18 @@ class CommonService
             /** @var WalletModel $wallet */
             $walletObject = $this->walletService->getWallet($wallet);
             $balance = $this->bookkeeper->increase($walletObject, $amount);
+            $result = 0;
 
             try {
-                $result = $wallet->newQuery()
-                    ->whereKey($wallet->getKey())
-                    ->update(compact('balance'))
-                ;
-            } catch (Throwable $throwable) {
-                $this->bookkeeper->sync($walletObject, $wallet->getAvailableBalance());
-
-                throw $throwable;
+                $result = $walletObject->newQuery()->update(compact('balance'));
+                $walletObject->fill(compact('balance'))->syncOriginalAttribute('balance');
+            } finally {
+                if ($result === 0) {
+                    $this->bookkeeper->missing($walletObject);
+                }
             }
 
-            if ($result) {
-                $wallet->fill(compact('balance'))
-                    ->syncOriginalAttributes('balance')
-                ;
-            } else {
-                $this->bookkeeper->sync($walletObject, $wallet->getAvailableBalance());
-            }
-
-            return $result;
+            return (bool) $result;
         });
     }
 
