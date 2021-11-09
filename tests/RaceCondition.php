@@ -22,8 +22,6 @@ trait RaceCondition
             $this->refreshApplication();
         }
 
-        $this->app['config']->set('wallet.lock.enabled', extension_loaded('memcached'));
-
         return true;
     }
 }
