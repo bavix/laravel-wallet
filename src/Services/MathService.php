@@ -15,7 +15,7 @@ class MathService implements MathInterface
 
     public function __construct(ConfigRepository $config)
     {
-        $this->scale = (int) $config->get('wallet.math_scale', 64);
+        $this->scale = (int) $config->get('wallet.math.scale', 64);
     }
 
     /**
