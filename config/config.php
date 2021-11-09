@@ -27,7 +27,7 @@ return [
     ],
 
     // long arithmetic
-    'math_scale' => 64,
+    'math' => ['scale' => 64],
 
     // service overload
     'services' => [
