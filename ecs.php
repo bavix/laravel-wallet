@@ -20,6 +20,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     //$services->set(DeclareStrictTypesFixer::class);
 
     $parameters = $containerConfigurator->parameters();
+    $parameters->set(Option::PARALLEL, true);
     $parameters->set(Option::PATHS, [
         __DIR__ . '/database',
         __DIR__ . '/src',
