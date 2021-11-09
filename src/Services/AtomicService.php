@@ -23,7 +23,7 @@ class AtomicService implements LockInterface
     ) {
         $this->seconds = (int) $config->get('wallet.lock.seconds', 1);
         $this->cache = $cacheManager->driver(
-            $config->get('wallet.lock.cache', 'array')
+            $config->get('wallet.lock.driver', 'array')
         );
     }
 

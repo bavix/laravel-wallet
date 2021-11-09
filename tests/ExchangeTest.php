@@ -4,7 +4,7 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Internal\ExchangeInterface;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Simple\Exchange;
+use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Test\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Models\UserMulti;
 use Illuminate\Support\Str;
@@ -72,7 +72,7 @@ class ExchangeTest extends TestCase
 
     public function testExchangeClass(): void
     {
-        $service = app(Exchange::class);
+        $service = app(ExchangeService::class);
 
         self::assertEquals(1, $service->convertTo('USD', 'EUR', 1));
         self::assertEquals(5, $service->convertTo('USD', 'EUR', 5));
