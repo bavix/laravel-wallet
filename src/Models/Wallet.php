@@ -6,7 +6,6 @@ namespace Bavix\Wallet\Models;
 
 use function app;
 use function array_key_exists;
-use function array_merge;
 use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Exchangeable;
@@ -69,17 +68,6 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         'balance' => 0,
         'decimal_places' => 2,
     ];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCasts(): array
-    {
-        return array_merge(
-            parent::getCasts(),
-            config('wallet.wallet.casts', [])
-        );
-    }
 
     public function getTable(): string
     {

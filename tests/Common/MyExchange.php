@@ -8,25 +8,25 @@ use Illuminate\Support\Arr;
 
 class MyExchange implements ExchangeInterface
 {
+    private MathInterface $mathService;
+
     private array $rates = [
         'USD' => [
             'RUB' => 67.61,
         ],
     ];
 
-    private MathInterface $math;
-
     /**
      * Rate constructor.
      */
     public function __construct(MathInterface $mathService)
     {
-        $this->math = $mathService;
+        $this->mathService = $mathService;
 
         foreach ($this->rates as $from => $rates) {
             foreach ($rates as $to => $rate) {
                 if (empty($this->rates[$to][$from])) {
-                    $this->rates[$to][$from] = $this->math->div(1, $rate);
+                    $this->rates[$to][$from] = $this->mathService->div(1, $rate);
                 }
             }
         }
@@ -35,7 +35,7 @@ class MyExchange implements ExchangeInterface
     /** @param float|int|string $amount */
     public function convertTo(string $fromCurrency, string $toCurrency, $amount): string
     {
-        return $this->math->mul($amount, Arr::get(
+        return $this->mathService->mul($amount, Arr::get(
             Arr::get($this->rates, $fromCurrency, []),
             $toCurrency,
             1

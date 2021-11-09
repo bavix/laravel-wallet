@@ -3,7 +3,6 @@
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Internal\StorageInterface;
-use Bavix\Wallet\Services\MathService;
 use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Common\Models\Transfer;
 use Bavix\Wallet\Test\Common\Models\Wallet;
@@ -48,8 +47,7 @@ class TestCase extends OrchestraTestCase
         $config = $app['config'];
 
         // Bind eloquent models to IoC container
-        $app['config']->set('wallet.package.exchange', MyExchange::class);
-        $app['config']->set('wallet.package.mathable', MathService::class);
+        $app['config']->set('wallet.services.exchange', MyExchange::class);
 
         // database
         $config->set('database.connections.testing.prefix', 'tests');
@@ -72,7 +70,5 @@ class TestCase extends OrchestraTestCase
         $config->set('wallet.transaction.model', Transaction::class);
         $config->set('wallet.transfer.model', Transfer::class);
         $config->set('wallet.wallet.model', Wallet::class);
-
-        $config->set('wallet.lock.enabled', false);
     }
 }

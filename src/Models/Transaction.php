@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Models;
 
-use function array_merge;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
@@ -56,17 +55,6 @@ class Transaction extends Model
         'confirmed' => 'bool',
         'meta' => 'json',
     ];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCasts(): array
-    {
-        return array_merge(
-            parent::getCasts(),
-            config('wallet.transaction.casts', [])
-        );
-    }
 
     public function getTable(): string
     {
