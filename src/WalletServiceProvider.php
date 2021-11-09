@@ -17,13 +17,13 @@ use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
-use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\AtomicService;
 use Bavix\Wallet\Services\BasketService;
 use Bavix\Wallet\Services\BookkeeperService;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ConsistencyService;
 use Bavix\Wallet\Services\DbService;
+use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\MathService;
 use Bavix\Wallet\Services\MetaService;
@@ -31,7 +31,6 @@ use Bavix\Wallet\Services\PurchaseService;
 use Bavix\Wallet\Services\StorageService;
 use Bavix\Wallet\Services\UuidFactoryService;
 use Bavix\Wallet\Services\WalletService;
-use Bavix\Wallet\Simple\Exchange;
 use function config;
 use function dirname;
 use function function_exists;
@@ -58,7 +57,7 @@ class WalletServiceProvider extends ServiceProvider
         $this->commands([RefreshBalance::class]);
 
         if ($this->shouldMigrate()) {
-            $this->loadMigrationsFrom([__DIR__.'/../database']);
+            $this->loadMigrationsFrom([dirname(__DIR__).'/database']);
         }
 
         if (function_exists('config_path')) {
@@ -82,51 +81,48 @@ class WalletServiceProvider extends ServiceProvider
             'wallet'
         );
 
-        $this->singletons();
-        $this->legacySingleton();
-        $this->bindObjects();
+        $configure = config('wallet', []);
+
+        $this->singletons($configure['services'] ?? []);
+        $this->legacySingleton($configure['legacy'] ?? []);
+        $this->bindObjects($configure);
     }
 
     /**
      * Determine if we should register the migrations.
      */
-    protected function shouldMigrate(): bool
+    private function shouldMigrate(): bool
     {
         return WalletConfigure::isRunsMigrations();
     }
 
-    private function singletons(): void
+    private function singletons(array $configure): void
     {
-        // Bind eloquent models to IoC container
-        $this->app->singleton(ExchangeInterface::class, config('wallet.package.exchange', Exchange::class));
-        $this->app->singleton(MathInterface::class, config('wallet.package.mathable', MathService::class));
-        $this->app->singleton(CommonService::class, config('wallet.services.common', CommonService::class));
-        $this->app->singleton(WalletService::class, config('wallet.services.wallet', WalletService::class));
-
-        $this->app->singleton(LockInterface::class, AtomicService::class);
-        $this->app->singleton(UuidInterface::class, UuidFactoryService::class);
-        $this->app->singleton(StorageInterface::class, StorageService::class);
-        $this->app->singleton(BookkeeperInterface::class, BookkeeperService::class);
-        $this->app->singleton(BasketInterface::class, BasketService::class);
-        $this->app->singleton(ConsistencyInterface::class, ConsistencyService::class);
-        $this->app->singleton(PurchaseInterface::class, PurchaseService::class);
+        $this->app->singleton(BasketInterface::class, $configure['basket'] ?? BasketService::class);
+        $this->app->singleton(BookkeeperInterface::class, $configure['bookkeeper'] ?? BookkeeperService::class);
+        $this->app->singleton(ConsistencyInterface::class, $configure['consistency'] ?? ConsistencyService::class);
+        $this->app->singleton(ExchangeInterface::class, $configure['exchange'] ?? ExchangeService::class);
+        $this->app->singleton(LockInterface::class, $configure['atomic'] ?? AtomicService::class);
+        $this->app->singleton(MathInterface::class, $configure['math'] ?? MathService::class);
+        $this->app->singleton(PurchaseInterface::class, $configure['purchase'] ?? PurchaseService::class);
+        $this->app->singleton(StorageInterface::class, $configure['storage'] ?? StorageService::class);
+        $this->app->singleton(UuidInterface::class, $configure['uuid'] ?? UuidFactoryService::class);
     }
 
-    private function legacySingleton(): void
+    private function legacySingleton(array $configure): void
     {
-        $this->app->singleton(DbService::class, config('wallet.services.db', DbService::class));
-        $this->app->singleton(LockService::class, config('wallet.services.lock', LockService::class));
-        $this->app->singleton(MetaService::class);
+        $this->app->singleton(CommonService::class, $configure['common'] ?? null);
+        $this->app->singleton(WalletService::class, $configure['wallet'] ?? null);
+
+        $this->app->singleton(DbService::class, $configure['db'] ?? null);
+        $this->app->singleton(LockService::class, $configure['lock'] ?? null);
+        $this->app->singleton(MetaService::class, $configure['meta'] ?? null);
     }
 
-    private function bindObjects(): void
+    private function bindObjects(array $configure): void
     {
-        // models
-        $this->app->bind(Transaction::class, config('wallet.transaction.model', Transaction::class));
-        $this->app->bind(Transfer::class, config('wallet.transfer.model', Transfer::class));
-        $this->app->bind(Wallet::class, config('wallet.wallet.model', Wallet::class));
-
-        // object's
-        $this->app->bind(Cart::class, config('wallet.objects.cart', Cart::class));
+        $this->app->bind(Transaction::class, $configure['transaction']['model'] ?? null);
+        $this->app->bind(Transfer::class, $configure['transfer']['model'] ?? null);
+        $this->app->bind(Wallet::class, $configure['wallet']['model'] ?? null);
     }
 }

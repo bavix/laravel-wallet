@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Models;
 
-use function array_merge;
 use function config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -57,17 +56,6 @@ class Transfer extends Model
         'deposit_id' => 'int',
         'withdraw_id' => 'int',
     ];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCasts(): array
-    {
-        return array_merge(
-            parent::getCasts(),
-            config('wallet.transfer.casts', [])
-        );
-    }
 
     public function getTable(): string
     {
