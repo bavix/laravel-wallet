@@ -122,11 +122,7 @@ jobs:
 
       - name: Run test suite
         run: |
-          if [[ $DB_CONNECTION == "testing" ]]; then
-            composer paraunit
-          else
-            composer unit
-          fi
+          composer paraunit
         env:
           CACHE_DRIVER: ${{ matrix.caches }}
           DB_CONNECTION: ${{ matrix.databases }}
