@@ -71,6 +71,5 @@ class TestCase extends OrchestraTestCase
 
         $config->set('wallet.cache.driver', $config->get('cache.driver'));
         $config->set('wallet.lock.driver', $config->get('cache.driver'));
-        $config->set('wallet.lock.seconds', 3);
     }
 }

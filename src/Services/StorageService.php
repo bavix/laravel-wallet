@@ -40,7 +40,7 @@ class StorageService implements StorageInterface
 
     public function missing(string $key): bool
     {
-        return $this->cache->delete($key);
+        return $this->cache->forget($key);
     }
 
     public function get(string $key): string
@@ -61,7 +61,7 @@ class StorageService implements StorageInterface
     public function increase(string $key, $value): string
     {
         return $this->lock->block(
-            $key,
+            $key.'::increase',
             function () use ($key, $value): string {
                 $result = $this->math->add($this->get($key), $value);
                 $this->sync($key, $result);
