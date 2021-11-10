@@ -27,25 +27,15 @@ trait CanConfirm
      */
     public function confirm(Transaction $transaction): bool
     {
-        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
-            /** @var Confirmable|Wallet $self */
-            $self = $this;
+        return app(DbService::class)->transaction(function () use ($transaction) {
+            if ($transaction->type === Transaction::TYPE_WITHDRAW) {
+                app(ConsistencyInterface::class)->checkPotential(
+                    app(WalletService::class)->getWallet($this),
+                    app(MathInterface::class)->abs($transaction->amount)
+                );
+            }
 
-            return app(DbService::class)->transaction(static function () use ($self, $transaction) {
-                $wallet = app(WalletService::class)->getWallet($self);
-                if (!$wallet->refreshBalance()) {
-                    return false;
-                }
-
-                if ($transaction->type === Transaction::TYPE_WITHDRAW) {
-                    app(ConsistencyInterface::class)->checkPotential(
-                        $wallet,
-                        app(MathInterface::class)->abs($transaction->amount)
-                    );
-                }
-
-                return $self->forceConfirm($transaction);
-            });
+            return $this->forceConfirm($transaction);
         });
     }
 
@@ -66,19 +56,12 @@ trait CanConfirm
     public function resetConfirm(Transaction $transaction): bool
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
-            /** @var Wallet $self */
-            $self = $this;
-
-            return app(DbService::class)->transaction(static function () use ($self, $transaction) {
-                $wallet = app(WalletService::class)->getWallet($self);
-                if (!$wallet->refreshBalance()) {
-                    return false;
-                }
-
+            return app(DbService::class)->transaction(function () use ($transaction) {
                 if (!$transaction->confirmed) {
                     throw new UnconfirmedInvalid(trans('wallet::errors.unconfirmed_invalid'));
                 }
 
+                $wallet = app(WalletService::class)->getWallet($this);
                 $mathService = app(MathInterface::class);
                 $negativeAmount = $mathService->negative($transaction->amount);
 
@@ -107,18 +90,12 @@ trait CanConfirm
     public function forceConfirm(Transaction $transaction): bool
     {
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
-            /** @var Wallet $self */
-            $self = $this;
-
-            return app(DbService::class)->transaction(static function () use ($self, $transaction) {
-                $wallet = app(WalletService::class)
-                    ->getWallet($self)
-                ;
-
+            return app(DbService::class)->transaction(function () use ($transaction) {
                 if ($transaction->confirmed) {
                     throw new ConfirmedInvalid(trans('wallet::errors.confirmed_invalid'));
                 }
 
+                $wallet = app(WalletService::class)->getWallet($this);
                 if ($wallet->getKey() !== $transaction->wallet_id) {
                     throw new WalletOwnerInvalid(trans('wallet::errors.owner_invalid'));
                 }

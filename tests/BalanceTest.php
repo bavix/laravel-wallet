@@ -141,39 +141,6 @@ class BalanceTest extends TestCase
     /**
      * @throws
      */
-    public function testFailUpdate(): void
-    {
-        /** @var Buyer $buyer */
-        $buyer = BuyerFactory::new()->create();
-        self::assertFalse($buyer->relationLoaded('wallet'));
-        $wallet = $buyer->wallet;
-
-        self::assertFalse($wallet->exists);
-        self::assertEquals(0, $wallet->balance);
-        self::assertTrue($wallet->exists);
-
-        /** @var MockObject|Wallet $mockQuery */
-        $mockQuery = $this->createMock(\get_class($wallet->newQuery()));
-        $mockQuery->method('update')->willReturn(0);
-
-        /** @var MockObject|Wallet $mockWallet */
-        $mockWallet = $this->createMock(\get_class($wallet));
-        $mockWallet->method('newQuery')->willReturn($mockQuery);
-        $mockWallet->method('getKey')->willReturn($wallet->getKey());
-        $mockWallet->method('fill')->willReturn($mockWallet);
-        $mockWallet->method('syncOriginalAttribute')->willReturn($mockWallet);
-
-        $result = app(CommonService::class)
-            ->addBalance($mockWallet, 100)
-        ;
-
-        self::assertFalse($result);
-        self::assertEquals(0, app(BookkeeperInterface::class)->amount($wallet));
-    }
-
-    /**
-     * @throws
-     */
     public function testThrowUpdate(): void
     {
         $this->expectException(PDOException::class);
@@ -194,62 +161,11 @@ class BalanceTest extends TestCase
 
         /** @var MockObject|Wallet $mockWallet */
         $mockWallet = $this->createMock(\get_class($wallet));
+        $mockWallet->method('getBalanceAttribute')->willReturn('125');
         $mockWallet->method('newQuery')->willReturn($mockQuery);
         $mockWallet->method('getKey')->willReturn($wallet->getKey());
 
-        app(CommonService::class)
-            ->addBalance($mockWallet, 100)
-        ;
-    }
-
-    /**
-     * @throws
-     */
-    public function testArtisanRefresh(): void
-    {
-        /** @var UserMulti $user */
-        $user = UserMultiFactory::new()->create();
-        $wallets = \range('a', 'z');
-        $sums = [];
-        $ids = [];
-        foreach ($wallets as $name) {
-            $wallet = $user->createWallet(['name' => $name]);
-            $ids[] = $wallet->id;
-            $sums[$name] = 0;
-            $operations = \random_int(1, 10);
-            for ($i = 0; $i < $operations; ++$i) {
-                $amount = \random_int(10, 10000);
-                $confirmed = (bool) \random_int(0, 1);
-                $deposit = $wallet->deposit($amount, null, $confirmed);
-                self::assertIsInt($deposit->wallet_id);
-
-                if ($confirmed) {
-                    $sums[$name] += $amount;
-                }
-
-                self::assertEquals($amount, $deposit->amount);
-                self::assertEquals($confirmed, $deposit->confirmed);
-                self::assertEquals($sums[$name], $wallet->balance);
-            }
-        }
-
-        /**
-         * Check for the number of created wallets.
-         * Make sure you didn't accidentally create the default wallet.
-         *
-         * @see https://github.com/bavix/laravel-wallet/issues/218
-         */
-        self::assertCount(count($wallets), $user->wallets);
-
-        // fresh balance
-        DB::table(config('wallet.wallet.table'))
-            ->update(['balance' => 0])
-        ;
-
-        $this->artisan('wallet:refresh');
-        Wallet::query()->whereKey($ids)->each(function (Wallet $wallet) use ($sums) {
-            self::assertEquals($sums[$wallet->name], $wallet->balance);
-        });
+        $mockWallet->newQuery()->whereKey($wallet->getKey())->update(['balance' => 100]);
     }
 
     public function testEqualWallet(): void
@@ -294,7 +210,7 @@ class BalanceTest extends TestCase
          *
          * Here is an example:
          */
-        app(StorageInterface::class)->flush();
+        app(BookkeeperInterface::class)->missing($buyer->wallet);
         self::assertEquals(1000, $wallet->getRawOriginal('balance'));
 
         /**
@@ -338,7 +254,7 @@ class BalanceTest extends TestCase
          *
          * Here is an example:
          */
-        app(StorageInterface::class)->flush();
+        app(BookkeeperInterface::class)->missing($wallet);
         self::assertEquals($account, $wallet->getRawOriginal('balance'));
 
         /**
