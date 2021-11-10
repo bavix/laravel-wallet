@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet;
 
-use Bavix\Wallet\Commands\RefreshBalance;
 use Bavix\Wallet\Internal\BasketInterface;
 use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
@@ -53,8 +52,6 @@ class WalletServiceProvider extends ServiceProvider
         if (!$this->app->runningInConsole()) {
             return;
         }
-
-        $this->commands([RefreshBalance::class]);
 
         if ($this->shouldMigrate()) {
             $this->loadMigrationsFrom([dirname(__DIR__).'/database']);
