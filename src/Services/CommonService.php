@@ -72,14 +72,12 @@ class CommonService
      */
     public function transfer(Wallet $from, Wallet $to, $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
-        return $this->lockService->lock($this, __FUNCTION__, function () use ($from, $to, $amount, $meta, $status) {
-            $discount = $this->walletService->discount($from, $to);
-            $newAmount = max(0, $this->math->sub($amount, $discount));
-            $fee = $this->walletService->fee($to, $newAmount);
-            $this->consistency->checkPotential($from, $this->math->add($newAmount, $fee));
+        $discount = $this->walletService->discount($from, $to);
+        $newAmount = max(0, $this->math->sub($amount, $discount));
+        $fee = $this->walletService->fee($to, $newAmount);
+        $this->consistency->checkPotential($from, $this->math->add($newAmount, $fee));
 
-            return $this->forceTransfer($from, $to, $amount, $meta, $status);
-        });
+        return $this->forceTransfer($from, $to, $amount, $meta, $status);
     }
 
     /**
@@ -90,7 +88,7 @@ class CommonService
      */
     public function forceTransfer(Wallet $from, Wallet $to, $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
-        return $this->lockService->lock($this, __FUNCTION__, function () use ($from, $to, $amount, $meta, $status) {
+        return $this->dbService->transaction(function () use ($from, $to, $amount, $meta, $status) {
             $transferLazyDto = $this->prepareService->transferLazy($from, $to, $amount, $meta);
             $withdrawDto = $transferLazyDto->getWithdrawDto();
             $depositDto = $transferLazyDto->getDepositDto();
@@ -136,7 +134,10 @@ class CommonService
             $result = 0;
 
             try {
-                $result = $walletObject->newQuery()->update(compact('balance'));
+                $result = $walletObject->newQuery()
+                    ->whereKey($walletObject->getKey())
+                    ->update(compact('balance'));
+
                 $walletObject->fill(compact('balance'))->syncOriginalAttribute('balance');
             } finally {
                 if ($result === 0) {
@@ -189,7 +190,7 @@ class CommonService
 
             $balance = $this->bookkeeper->increase($object, $total);
 
-            $object->newQuery()->update(compact('balance')); // ?qN
+            $object->newQuery()->whereKey($object->getKey())->update(compact('balance')); // ?qN
             $object->fill(compact('balance'))->syncOriginalAttribute('balance');
         }
 
