@@ -43,12 +43,9 @@ trait HasWallet
      */
     public function deposit($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        /** @var Wallet $self */
-        $self = $this;
-
-        return app(DbService::class)->transaction(static function () use ($self, $amount, $meta, $confirmed) {
+        return app(DbService::class)->transaction(function () use ($amount, $meta, $confirmed) {
             return app(CommonService::class)
-                ->makeOperation($self, Transaction::TYPE_DEPOSIT, $amount, $meta, $confirmed)
+                ->makeOperation($this, Transaction::TYPE_DEPOSIT, $amount, $meta, $confirmed)
             ;
         });
     }
