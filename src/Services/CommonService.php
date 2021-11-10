@@ -136,7 +136,8 @@ class CommonService
             try {
                 $result = $walletObject->newQuery()
                     ->whereKey($walletObject->getKey())
-                    ->update(compact('balance'));
+                    ->update(compact('balance'))
+                ;
 
                 $walletObject->fill(compact('balance'))->syncOriginalAttribute('balance');
             } finally {
