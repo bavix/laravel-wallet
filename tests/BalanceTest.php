@@ -4,17 +4,13 @@ namespace Bavix\Wallet\Test;
 
 use function app;
 use Bavix\Wallet\Internal\BookkeeperInterface;
-use Bavix\Wallet\Internal\StorageInterface;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Test\Common\Services\WalletAdjustmentFailedService;
 use Bavix\Wallet\Test\Factories\BuyerFactory;
-use Bavix\Wallet\Test\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Models\Buyer;
-use Bavix\Wallet\Test\Models\UserMulti;
 use Illuminate\Database\SQLiteConnection;
-use Illuminate\Support\Facades\DB;
 use PDOException;
 use PHPUnit\Framework\MockObject\MockObject;
 
