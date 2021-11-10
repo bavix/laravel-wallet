@@ -23,7 +23,6 @@ class TestCase extends OrchestraTestCase
     public function setUp(): void
     {
         parent::setUp();
-        app(StorageInterface::class)->flush();
     }
 
     public function expectExceptionMessageStrict(string $message): void
@@ -47,7 +46,7 @@ class TestCase extends OrchestraTestCase
         $config = $app['config'];
 
         // Bind eloquent models to IoC container
-        $app['config']->set('wallet.services.exchange', MyExchange::class);
+        $config->set('wallet.services.exchange', MyExchange::class);
 
         // database
         $config->set('database.connections.testing.prefix', 'tests');
@@ -70,5 +69,9 @@ class TestCase extends OrchestraTestCase
         $config->set('wallet.transaction.model', Transaction::class);
         $config->set('wallet.transfer.model', Transfer::class);
         $config->set('wallet.wallet.model', Wallet::class);
+
+        $config->set('wallet.cache.driver', $config->get('cache.driver'));
+        $config->set('wallet.lock.driver', $config->get('cache.driver'));
+        $config->set('wallet.lock.seconds', 3);
     }
 }

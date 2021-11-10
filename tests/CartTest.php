@@ -147,13 +147,15 @@ class CartTest extends TestCase
 
         $cart = app(Cart::class);
         $amount = 0;
+        $price = 0;
         for ($i = 0; $i < count($products) - 1; ++$i) {
             $rnd = random_int(1, 5);
             $cart->addItem($products[$i], $rnd);
-            $buyer->deposit($products[$i]->getAmountProduct($buyer) * $rnd);
+            $price += $products[$i]->getAmountProduct($buyer) * $rnd;
             $amount += $rnd;
         }
 
+        $buyer->deposit($price);
         self::assertCount($amount, $cart->getItems());
 
         $transfers = $buyer->payCart($cart);
