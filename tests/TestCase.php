@@ -2,7 +2,6 @@
 
 namespace Bavix\Wallet\Test;
 
-use Bavix\Wallet\Internal\StorageInterface;
 use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Common\Models\Transfer;
 use Bavix\Wallet\Test\Common\Models\Wallet;

@@ -6,10 +6,10 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Internal\UuidInterface;
 use Closure;
+use function get_class;
 use Illuminate\Database\Eloquent\Model;
 use ReflectionException;
 use ReflectionFunction;
-use function get_class;
 
 /**
  * @deprecated
