@@ -2,7 +2,6 @@
 
 namespace PHPSTORM_META {
 
-    use app;
     use Bavix\Wallet\Internal\BasketInterface;
     use Bavix\Wallet\Internal\BookkeeperInterface;
     use Bavix\Wallet\Internal\CartInterface;
@@ -20,7 +19,7 @@ namespace PHPSTORM_META {
     use Bavix\Wallet\Services\MetaService;
     use Bavix\Wallet\Services\WalletService;
 
-    override(app(0), map([
+    override(\app(0), map([
         BasketInterface::class => BasketInterface::class,
         BookkeeperInterface::class => BookkeeperInterface::class,
         CartInterface::class => CartInterface::class,
