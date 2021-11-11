@@ -3,13 +3,12 @@
 namespace Bavix\Wallet\Traits;
 
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\ConsistencyInterface;
+use Bavix\Wallet\Internal\Dto\TransferLazyDto;
 use Bavix\Wallet\Internal\ExchangeInterface;
 use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Internal\Service\AtmService;
 use Bavix\Wallet\Internal\Service\CastService;
-use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Internal\Service\PrepareService;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
@@ -47,41 +46,32 @@ trait CanExchange
      */
     public function forceExchange(Wallet $to, $amount, ?array $meta = null): Transfer
     {
-        /** @var Wallet $from */
-        $from = app(WalletService::class)->getWallet($this);
-
-        return app(LockService::class)->lock($this, __FUNCTION__, static function () use ($from, $to, $amount, $meta) {
-            return app(DbService::class)->transaction(static function () use ($from, $to, $amount, $meta) {
-                $walletService = app(WalletService::class);
-                $math = app(MathInterface::class);
-                $fee = $walletService->fee($to, $amount);
+        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($to, $amount, $meta) {
+            return app(DbService::class)->transaction(function () use ($to, $amount, $meta) {
+                $prepareService = app(PrepareService::class);
+                $mathService = app(MathInterface::class);
+                $castService = app(CastService::class);
+                $fee = app(WalletService::class)->fee($to, $amount);
                 $rate = app(ExchangeInterface::class)->convertTo(
-                    $walletService->getWallet($from)->currency,
-                    $walletService->getWallet($to)->currency,
+                    $castService->getWallet($this)->currency,
+                    $castService->getWallet($to)->currency,
                     1
                 );
 
-                $withdraw = app(CommonService::class)
-                    ->makeTransaction($from, Transaction::TYPE_WITHDRAW, $math->add($amount, $fee), $meta)
-                ;
+                $withdrawDto = $prepareService->withdraw($this, $mathService->add($amount, $fee), $meta);
+                $depositDto = $prepareService->deposit($to, $mathService->floor($mathService->mul($amount, $rate, 1)), $meta);
 
-                $deposit = app(CommonService::class)
-                    ->makeTransaction($to, Transaction::TYPE_DEPOSIT, $math->floor($math->mul($amount, $rate, 1)), $meta)
-                ;
-
-                $castService = app(CastService::class);
-
-                $transfer = app(TransferDtoAssembler::class)->create(
-                    $deposit->getKey(),
-                    $withdraw->getKey(),
-                    Transfer::STATUS_EXCHANGE,
-                    $castService->getModel($from),
-                    $castService->getModel($to),
+                $transferLazyDto = new TransferLazyDto(
+                    $this,
+                    $to,
                     0,
-                    $fee
+                    $fee,
+                    $withdrawDto,
+                    $depositDto,
+                    Transfer::STATUS_EXCHANGE,
                 );
 
-                $transfers = app(AtmService::class)->makeTransfers([$transfer]);
+                $transfers = app(CommonService::class)->applyTransfers([$transferLazyDto]);
 
                 return current($transfers);
             });
