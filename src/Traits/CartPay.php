@@ -36,21 +36,21 @@ trait CartPay
 
         app(ConsistencyInterface::class)->checkPotential($this, 0, true);
 
-        $self = $this;
-
-        return app(DbService::class)->transaction(static function () use ($self, $cart) {
-            $results = [];
+        return app(DbService::class)->transaction(function () use ($cart) {
+            $transfers = [];
+            $prepareService = app(PrepareService::class);
+            $metaService = app(MetaService::class);
             foreach ($cart->getBasketDto()->cursor() as $product) {
-                $results[] = app(CommonService::class)->forceTransfer(
-                    $self,
+                $transfers[] = $prepareService->transferLazy(
+                    $this,
                     $product,
+                    Transfer::STATUS_PAID,
                     0,
-                    app(MetaService::class)->getMeta($cart, $product),
-                    Transfer::STATUS_PAID
+                    $metaService->getMeta($cart, $product)
                 );
             }
 
-            return $results;
+            return app(CommonService::class)->applyTransfers($transfers);
         });
     }
 
@@ -117,17 +117,17 @@ trait CartPay
 
     public function refundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool
     {
-        $self = $this;
-
-        return app(DbService::class)->transaction(static function () use ($self, $cart, $force, $gifts) {
+        return app(DbService::class)->transaction(function () use ($cart, $force, $gifts) {
             $results = [];
-            $transfers = app(PurchaseInterface::class)->already($self, $cart->getBasketDto(), $gifts);
+            $transfers = app(PurchaseInterface::class)->already($this, $cart->getBasketDto(), $gifts);
             if (count($transfers) !== $cart->getBasketDto()->total()) {
                 throw (new ModelNotFoundException())
-                    ->setModel($self->transfers()->getMorphClass())
+                    ->setModel($this->transfers()->getMorphClass())
                 ;
             }
 
+            $objects = [];
+            $prepareService = app(PrepareService::class);
             foreach ($cart->getBasketDto()->cursor() as $product) {
                 $transfer = current($transfers);
                 next($transfers);
@@ -135,19 +135,25 @@ trait CartPay
                  * the code is extremely poorly written, a complete refactoring is required.
                  * for version 6.x we will leave it as it is.
                  */
-                $transfer->load('withdraw.wallet');
+                $transfer->load('withdraw.wallet'); // fixme: need optimize
 
-                if (!$force) {
-                    app(ConsistencyInterface::class)->checkPotential($product, $transfer->deposit->amount);
-                }
-
-                app(CommonService::class)->forceTransfer(
+                $objects[] = $prepareService->transferLazy(
                     $product,
                     $transfer->withdraw->wallet,
-                    $transfer->deposit->amount,
+                    Transfer::STATUS_TRANSFER,
+                    $transfer->deposit->amount, // fixme: need optimize
                     app(MetaService::class)->getMeta($cart, $product)
                 );
+            }
 
+            if ($force === false) {
+                app(ConsistencyInterface::class)->checkTransfer($objects);
+            }
+
+            app(CommonService::class)->applyTransfers($objects);
+
+            // fixme: one query update for
+            foreach ($transfers as $transfer) {
                 $results[] = $transfer->update([
                     'status' => Transfer::STATUS_REFUND,
                     'status_last' => $transfer->status,
