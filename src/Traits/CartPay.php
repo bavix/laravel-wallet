@@ -10,6 +10,7 @@ use Bavix\Wallet\Internal\CartInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\Dto\AvailabilityDto;
 use Bavix\Wallet\Internal\PurchaseInterface;
+use Bavix\Wallet\Internal\Service\PrepareService;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\CommonService;
@@ -75,33 +76,25 @@ trait CartPay
             throw new ProductEnded(trans('wallet::errors.product_stock'));
         }
 
-        $self = $this;
-
-        return app(DbService::class)->transaction(static function () use ($self, $cart, $force) {
-            $results = [];
+        return app(DbService::class)->transaction(function () use ($cart, $force) {
+            $transfers = [];
+            $prepareService = app(PrepareService::class);
+            $metaService = app(MetaService::class);
             foreach ($cart->getBasketDto()->cursor() as $product) {
-                if ($force) {
-                    $results[] = app(CommonService::class)->forceTransfer(
-                        $self,
-                        $product,
-                        $product->getAmountProduct($self),
-                        app(MetaService::class)->getMeta($cart, $product),
-                        Transfer::STATUS_PAID
-                    );
-
-                    continue;
-                }
-
-                $results[] = app(CommonService::class)->transfer(
-                    $self,
+                $transfers[] = $prepareService->transferLazy(
+                    $this,
                     $product,
-                    $product->getAmountProduct($self),
-                    app(MetaService::class)->getMeta($cart, $product),
-                    Transfer::STATUS_PAID
+                    Transfer::STATUS_PAID,
+                    $product->getAmountProduct($this),
+                    $metaService->getMeta($cart, $product)
                 );
             }
 
-            return $results;
+            if ($force === false) {
+                app(ConsistencyInterface::class)->checkTransfer($transfers);
+            }
+
+            return app(CommonService::class)->applyTransfers($transfers);
         });
     }
 

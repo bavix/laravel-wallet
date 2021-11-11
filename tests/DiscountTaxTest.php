@@ -74,7 +74,7 @@ class DiscountTaxTest extends TestCase
         self::assertEquals($product->getKey(), $transfer->to->getKey());
     }
 
-    public function testRefund(): void
+    public function testRefundPersonalDiscountAndTax(): void
     {
         /**
          * @var Buyer           $buyer

@@ -15,13 +15,16 @@ class TransferLazyDto
     private TransactionDto $depositDto;
     private TransactionDto $withdrawDto;
 
+    private string $status;
+
     public function __construct(
         Wallet $fromWallet,
         Wallet $toWallet,
         int $discount,
         string $fee,
         TransactionDto $withdrawDto,
-        TransactionDto $depositDto
+        TransactionDto $depositDto,
+        string $status
     ) {
         $this->fromWallet = $fromWallet;
         $this->toWallet = $toWallet;
@@ -30,6 +33,8 @@ class TransferLazyDto
 
         $this->withdrawDto = $withdrawDto;
         $this->depositDto = $depositDto;
+
+        $this->status = $status;
     }
 
     public function getFromWallet(): Wallet
@@ -60,5 +65,10 @@ class TransferLazyDto
     public function getDepositDto(): TransactionDto
     {
         return $this->depositDto;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
     }
 }
