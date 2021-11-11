@@ -53,6 +53,9 @@ class TestCase extends OrchestraTestCase
         $config->set('database.connections.pgsql.prefix', 'tests');
         $config->set('database.connections.mysql.prefix', 'tests');
 
+        $mysql = $config->get('database.connections.mysql');
+        $config->set('database.connections.mariadb', array_merge($mysql, ['port' => 3307]));
+
         // new table name's
         $config->set('wallet.transaction.table', 'transaction');
         $config->set('wallet.transfer.table', 'transfer');

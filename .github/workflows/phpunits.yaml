@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         php-versions: [7.4, 8.0, 8.1]
-        databases: [testing, pgsql, mysql]
+        databases: [testing, pgsql, mysql, mariadb]
         caches: [array, redis, memcached]
 
     services:
@@ -70,6 +70,19 @@ jobs:
         ports:
           - 3306:3306
 
+      mariadb:
+        image: mariadb:10.5
+        env:
+          MYSQL_ROOT_PASSWORD: wallet
+          MYSQL_DATABASE: wallet
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+        ports:
+          - 3307:3306
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -109,7 +122,11 @@ jobs:
 
       - name: Run test suite
         run: |
-          composer parabench
+          if [[ $DB_CONNECTION == "mariadb" ]]; then
+            composer unit
+          else
+            composer parabench
+          fi
         env:
           CACHE_DRIVER: ${{ matrix.caches }}
           DB_CONNECTION: ${{ matrix.databases }}
