@@ -82,8 +82,8 @@ trait HasGift
                     app(ConsistencyInterface::class)->checkPotential($santa, $math->add($amount, $fee));
                 }
 
-                $withdraw = $commonService->makeOperation($santa, Transaction::TYPE_WITHDRAW, $math->add($amount, $fee), $meta);
-                $deposit = $commonService->makeOperation($product, Transaction::TYPE_DEPOSIT, $amount, $meta);
+                $withdraw = $commonService->makeTransaction($santa, Transaction::TYPE_WITHDRAW, $math->add($amount, $fee), $meta);
+                $deposit = $commonService->makeTransaction($product, Transaction::TYPE_DEPOSIT, $amount, $meta);
 
                 $from = app(WalletService::class)
                     ->getWallet($to)

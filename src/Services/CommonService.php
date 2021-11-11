@@ -3,14 +3,11 @@
 namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
-use Bavix\Wallet\Exceptions\BalanceIsEmpty;
-use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\BookkeeperInterface;
-use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDto;
-use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\Dto\TransferLazyDto;
 use Bavix\Wallet\Internal\Service\AssistantService;
 use Bavix\Wallet\Internal\Service\AtmService;
 use Bavix\Wallet\Internal\Service\CastService;
@@ -19,31 +16,26 @@ use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use function compact;
-use function max;
 use Throwable;
 
 class CommonService
 {
     private DbService $dbService;
     private LockService $lockService;
-    private MathInterface $math;
     private AtmService $atmService;
     private CastService $castService;
     private WalletService $walletService;
     private AssistantService $assistantService;
     private PrepareService $prepareService;
     private BookkeeperInterface $bookkeeper;
-    private ConsistencyInterface $consistency;
     private TransferDtoAssembler $transferDtoAssembler;
 
     public function __construct(
         DbService $dbService,
         LockService $lockService,
-        MathInterface $math,
         CastService $castService,
         WalletService $walletService,
         BookkeeperInterface $bookkeeper,
-        ConsistencyInterface $consistency,
         AssistantService $satisfyService,
         PrepareService $prepareService,
         TransferDtoAssembler $transferDtoAssembler,
@@ -51,33 +43,13 @@ class CommonService
     ) {
         $this->dbService = $dbService;
         $this->lockService = $lockService;
-        $this->math = $math;
         $this->atmService = $atmService;
         $this->castService = $castService;
         $this->walletService = $walletService;
         $this->bookkeeper = $bookkeeper;
-        $this->consistency = $consistency;
         $this->assistantService = $satisfyService;
         $this->prepareService = $prepareService;
         $this->transferDtoAssembler = $transferDtoAssembler;
-    }
-
-    /**
-     * @param int|string $amount
-     *
-     * @throws AmountInvalid
-     * @throws BalanceIsEmpty
-     * @throws InsufficientFunds
-     * @throws Throwable
-     */
-    public function transfer(Wallet $from, Wallet $to, $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
-    {
-        $discount = $this->walletService->discount($from, $to);
-        $newAmount = max(0, $this->math->sub($amount, $discount));
-        $fee = $this->walletService->fee($to, $newAmount);
-        $this->consistency->checkPotential($from, $this->math->add($newAmount, $fee));
-
-        return $this->forceTransfer($from, $to, $amount, $meta, $status);
     }
 
     /**
@@ -88,35 +60,55 @@ class CommonService
      */
     public function forceTransfer(Wallet $from, Wallet $to, $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
-        return $this->dbService->transaction(function () use ($from, $to, $amount, $meta, $status) {
-            $transferLazyDto = $this->prepareService->transferLazy($from, $to, $amount, $meta);
-            $withdrawDto = $transferLazyDto->getWithdrawDto();
-            $depositDto = $transferLazyDto->getDepositDto();
+        $transferLazyDto = $this->prepareService->transferLazy($from, $to, $status, $amount, $meta);
+        $transfers = $this->applyTransfers([$transferLazyDto]);
 
-            $transactions = $this->applyOperations(
-                [$withdrawDto->getWalletId() => $from, $depositDto->getWalletId() => $to],
-                [$withdrawDto, $depositDto],
-            );
+        return current($transfers);
+    }
 
-            $withdraw = $transactions[$withdrawDto->getUuid()] ?? null;
-            assert($withdraw !== null);
+    /**
+     * @param TransferLazyDto[] $objects
+     *
+     * @return Transfer[]
+     */
+    public function applyTransfers(array $objects): array
+    {
+        return $this->dbService->transaction(function () use ($objects): array {
+            $wallets = [];
+            $operations = [];
+            foreach ($objects as $object) {
+                $fromWallet = $this->castService->getWallet($object->getFromWallet());
+                $wallets[$fromWallet->getKey()] = $fromWallet;
 
-            $deposit = $transactions[$depositDto->getUuid()] ?? null;
-            assert($deposit !== null);
+                $toWallet = $this->castService->getWallet($object->getToWallet());
+                $wallets[$toWallet->getKey()] = $toWallet;
 
-            $transfer = $this->transferDtoAssembler->create(
-                $deposit->getKey(),
-                $withdraw->getKey(),
-                $status,
-                $this->castService->getModel($transferLazyDto->getFromWallet()),
-                $this->castService->getModel($transferLazyDto->getToWallet()),
-                $transferLazyDto->getDiscount(),
-                $transferLazyDto->getFee()
-            );
+                $operations[] = $object->getWithdrawDto();
+                $operations[] = $object->getDepositDto();
+            }
 
-            $transfers = $this->atmService->makeTransfers([$transfer]);
+            $transactions = $this->applyTransactions($wallets, $operations);
 
-            return current($transfers);
+            $transfers = [];
+            foreach ($objects as $object) {
+                $withdraw = $transactions[$object->getWithdrawDto()->getUuid()] ?? null;
+                assert($withdraw !== null);
+
+                $deposit = $transactions[$object->getDepositDto()->getUuid()] ?? null;
+                assert($deposit !== null);
+
+                $transfers[] = $this->transferDtoAssembler->create(
+                    $deposit->getKey(),
+                    $withdraw->getKey(),
+                    $object->getStatus(),
+                    $this->castService->getModel($object->getFromWallet()),
+                    $this->castService->getModel($object->getToWallet()),
+                    $object->getDiscount(),
+                    $object->getFee()
+                );
+            }
+
+            return $this->atmService->makeTransfers($transfers);
         });
     }
 
@@ -153,7 +145,7 @@ class CommonService
     /**
      * @param float|int|string $amount
      */
-    public function makeOperation(Wallet $wallet, string $type, $amount, ?array $meta, bool $confirmed = true): Transaction
+    public function makeTransaction(Wallet $wallet, string $type, $amount, ?array $meta, bool $confirmed = true): Transaction
     {
         assert(in_array($type, [Transaction::TYPE_DEPOSIT, Transaction::TYPE_WITHDRAW], true));
 
@@ -163,7 +155,7 @@ class CommonService
             $dto = $this->prepareService->withdraw($wallet, (string) $amount, $meta, $confirmed);
         }
 
-        $transactions = $this->applyOperations(
+        $transactions = $this->applyTransactions(
             [$dto->getWalletId() => $wallet],
             [$dto],
         );
@@ -177,7 +169,7 @@ class CommonService
      *
      * @return non-empty-array<string, Transaction>
      */
-    public function applyOperations(array $wallets, array $objects): array
+    public function applyTransactions(array $wallets, array $objects): array
     {
         $transactions = $this->atmService->makeTransactions($objects); // q1
         $totals = $this->assistantService->getSums($objects);
