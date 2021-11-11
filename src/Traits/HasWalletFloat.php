@@ -10,7 +10,6 @@ use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\Service\CastService;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Services\WalletService;
 use Throwable;
 
 /**
@@ -32,7 +31,7 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(MathInterface::class);
-        $decimalPlacesValue = app(WalletService::class)->getWallet($this)->decimal_places;
+        $decimalPlacesValue = app(CastService::class)->getWallet($this)->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
@@ -49,7 +48,7 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(MathInterface::class);
-        $decimalPlacesValue = app(WalletService::class)->getWallet($this)->decimal_places;
+        $decimalPlacesValue = app(CastService::class)->getWallet($this)->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
@@ -68,7 +67,7 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(MathInterface::class);
-        $decimalPlacesValue = app(WalletService::class)->getWallet($this)->decimal_places;
+        $decimalPlacesValue = app(CastService::class)->getWallet($this)->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
@@ -82,7 +81,7 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(MathInterface::class);
-        $decimalPlacesValue = app(WalletService::class)->getWallet($this)->decimal_places;
+        $decimalPlacesValue = app(CastService::class)->getWallet($this)->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
@@ -101,7 +100,7 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(MathInterface::class);
-        $decimalPlacesValue = app(WalletService::class)->getWallet($this)->decimal_places;
+        $decimalPlacesValue = app(CastService::class)->getWallet($this)->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
@@ -115,7 +114,7 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(MathInterface::class);
-        $decimalPlacesValue = app(WalletService::class)->getWallet($this)->decimal_places;
+        $decimalPlacesValue = app(CastService::class)->getWallet($this)->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
@@ -132,7 +131,7 @@ trait HasWalletFloat
     {
         /** @var Wallet $this */
         $math = app(MathInterface::class);
-        $decimalPlacesValue = app(WalletService::class)->getWallet($this)->decimal_places;
+        $decimalPlacesValue = app(CastService::class)->getWallet($this)->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 

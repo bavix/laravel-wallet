@@ -16,7 +16,6 @@ use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
-use Bavix\Wallet\Services\WalletService;
 use function config;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
@@ -77,7 +76,7 @@ trait HasWallet
     {
         /** @var Wallet $this */
         return app(BookkeeperInterface::class)->amount(
-            app(WalletService::class)->getWallet($this)
+            app(CastService::class)->getWallet($this)
         );
     }
 
@@ -217,7 +216,7 @@ trait HasWallet
     public function transfers(): MorphMany
     {
         /** @var Wallet $this */
-        return app(WalletService::class)
+        return app(CastService::class)
             ->getWallet($this, false)
             ->morphMany(config('wallet.transfer.model', Transfer::class), 'from')
         ;

@@ -121,7 +121,7 @@ class CommonService
     {
         return $this->lockService->lock($this, __FUNCTION__, function () use ($wallet, $amount) {
             /** @var WalletModel $wallet */
-            $walletObject = $this->walletService->getWallet($wallet);
+            $walletObject = $this->castService->getWallet($wallet);
             $balance = $this->bookkeeper->increase($walletObject, $amount);
             $result = 0;
 
@@ -178,7 +178,7 @@ class CommonService
             $wallet = $wallets[$walletId] ?? null;
             assert($wallet !== null);
 
-            $object = $this->walletService->getWallet($wallet);
+            $object = $this->castService->getWallet($wallet);
             assert((int) $object->getKey() === $walletId);
 
             $balance = $this->bookkeeper->increase($object, $total);
