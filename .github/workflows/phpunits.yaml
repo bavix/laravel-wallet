@@ -85,9 +85,11 @@ jobs:
 
     steps:
       - name: Checkout
+        id: git_checkout
         uses: actions/checkout@v2
 
       - name: Setup PHP
+        id: php_install
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
@@ -95,10 +97,11 @@ jobs:
           coverage: pcov
 
       - name: Validate composer.json and composer.lock
+        id: composer_validate
         run: composer validate --strict
 
       - name: Cache Composer packages
-        id: composer-cache
+        id: composer_cache
         uses: actions/cache@v2
         with:
           path: vendor
@@ -107,20 +110,24 @@ jobs:
             ${{ runner.os }}-php-
 
       - name: Install dependencies
+        id: composer_dependencies
         run: composer install --prefer-dist --no-progress
 
-      - name: Prepare run test suite
-        run: |
-          mkdir build
-
       - name: Prepare codeclimate
+        id: codeclimate_prepare
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
-        if: ${{ matrix.php-versions == '8.0' }}
+        if: ${{ matrix.php-versions == '8.0' && matrix.caches == 'array' && matrix.databases == 'testing' }}
+
+      - name: Prepare run test suite
+        id: unit_prepare
+        run: |
+          mkdir build
 
       - name: Run test suite
+        id: unit_run
         run: |
           if [[ $DB_CONNECTION == "mariadb" ]]; then
             composer unit
@@ -132,18 +139,20 @@ jobs:
           DB_CONNECTION: ${{ matrix.databases }}
 
       - name: Run mutation test suite
+        id: infect_run
         run: composer infect
         env:
           CACHE_DRIVER: ${{ matrix.caches }}
           DB_CONNECTION: ${{ matrix.databases }}
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
-        if: ${{ matrix.php-versions == '8.0' }}
+        if: ${{ steps.codeclimate_prepare.outputs.should_skip != 'true' }}
 
       - name: Send coverage
+        id: codeclimate_send
         run: |
           ./cc-test-reporter after-build --coverage-input-type clover --exit-code 0
           bash <(curl -s https://codecov.io/bash)
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        if: ${{ matrix.php-versions == '8.0' }}
+        if: ${{ steps.codeclimate_prepare.outputs.should_skip != 'true' }}
