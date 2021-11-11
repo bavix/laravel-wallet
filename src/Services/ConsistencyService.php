@@ -9,20 +9,23 @@ use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\ConsistencyInterface;
+use Bavix\Wallet\Internal\Dto\TransferLazyDto;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\Service\CastService;
 
 class ConsistencyService implements ConsistencyInterface
 {
     private CastService $castService;
-
-    private MathInterface $math;
+    private MathInterface $mathService;
+    private WalletService $walletService;
 
     public function __construct(
-        MathInterface $math,
+        WalletService $walletService,
+        MathInterface $mathService,
         CastService $castService
     ) {
-        $this->math = $math;
+        $this->walletService = $walletService;
+        $this->mathService = $mathService;
         $this->castService = $castService;
     }
 
@@ -33,7 +36,7 @@ class ConsistencyService implements ConsistencyInterface
      */
     public function checkPositive($amount): void
     {
-        if ($this->math->compare($amount, 0) === -1) {
+        if ($this->mathService->compare($amount, 0) === -1) {
             throw new AmountInvalid(trans('wallet::errors.price_positive'));
         }
     }
@@ -54,6 +57,32 @@ class ConsistencyService implements ConsistencyInterface
 
         if (!$wallet->canWithdraw($amount, $allowZero)) {
             throw new InsufficientFunds(trans('wallet::errors.insufficient_funds'));
+        }
+    }
+
+    /**
+     * @param TransferLazyDto[] $objects
+     *
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     */
+    public function checkTransfer(array $objects): void
+    {
+        $wallets = [];
+        $totalAmount = [];
+        foreach ($objects as $object) {
+            $withdrawDto = $object->getWithdrawDto();
+            $wallet = $this->castService->getWallet($object->getFromWallet(), false);
+            $wallets[] = $wallet;
+
+            $totalAmount[$wallet->uuid] = $this->mathService->add(
+                ($totalAmount[$wallet->uuid] ?? 0),
+                $this->mathService->negative($withdrawDto->getAmount())
+            );
+        }
+
+        foreach ($wallets as $wallet) {
+            $this->checkPotential($wallet, $totalAmount[$wallet->uuid] ?? -1);
         }
     }
 }
