@@ -8,8 +8,6 @@ use Bavix\Wallet\Internal\UuidInterface;
 use Closure;
 use function get_class;
 use Illuminate\Database\Eloquent\Model;
-use ReflectionException;
-use ReflectionFunction;
 
 /**
  * @deprecated
@@ -36,20 +34,7 @@ class LockService
 
         return $this->atomicService->block(
             "legacy_{$name}.{$uniqId}",
-            $this->bindTo($self, $closure)
+            $closure->bindTo($self)
         );
-    }
-
-    /**
-     * @throws ReflectionException
-     */
-    protected function bindTo(object $self, Closure $closure): Closure
-    {
-        $reflect = new ReflectionFunction($closure);
-        if (strpos((string) $reflect, 'static') === false) {
-            return $closure->bindTo($self);
-        }
-
-        return $closure;
     }
 }
