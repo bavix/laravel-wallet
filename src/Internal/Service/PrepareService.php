@@ -71,10 +71,10 @@ class PrepareService
     {
         $discount = $this->walletService->discount($from, $to);
         $from = $this->walletService->getWallet($from);
+        $fee = (string) $this->walletService->fee($to, $amount);
 
         // replace max => mathService.max
         $depositAmount = (string) max(0, $this->mathService->sub($amount, $discount));
-        $fee = (string) $this->walletService->fee($to, $depositAmount);
 
         $withdrawAmount = $this->mathService->add($depositAmount, $fee, $from->decimal_places);
 
