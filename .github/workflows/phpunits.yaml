@@ -15,6 +15,7 @@ env:
 jobs:
   units:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         php-versions: [7.4, 8.0, 8.1]
@@ -113,13 +114,17 @@ jobs:
         id: composer-dependencies
         run: composer install --prefer-dist --no-progress
 
+      - name: Check codeclimate
+        id: codeclimate-check
+        run: "echo ::set-output name=skip::${{ matrix.php-versions == '8.0' && matrix.caches == 'array' && matrix.databases == 'testing' }}"
+
       - name: Prepare codeclimate
         id: codeclimate-prepare
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
-        if: ${{ matrix.php-versions == '8.0' && matrix.caches == 'array' && matrix.databases == 'testing' }}
+        if: ${{ steps.codeclimate-check.outputs.skip }}
 
       - name: Prepare run test suite
         id: unit-prepare
@@ -145,7 +150,7 @@ jobs:
           CACHE_DRIVER: ${{ matrix.caches }}
           DB_CONNECTION: ${{ matrix.databases }}
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
-        if: ${{ steps.codeclimate-prepare.outputs.skip }}
+        if: ${{ steps.codeclimate-check.outputs.skip }}
 
       - name: Send coverage
         id: codeclimate-send
@@ -155,4 +160,4 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        if: ${{ steps.codeclimate-prepare.outputs.skip }}
+        if: ${{ steps.codeclimate-check.outputs.skip }}
