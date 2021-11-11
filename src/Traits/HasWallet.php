@@ -71,8 +71,6 @@ trait HasWallet
      *  $user2->deposit(100);
      *  var_dump($user2->balance); // 300
      *
-     * @throws Throwable
-     *
      * @return float|int|string
      */
     public function getBalanceAttribute()

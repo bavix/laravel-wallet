@@ -237,7 +237,7 @@ class DiscountTaxTest extends TestCase
         self::assertEquals($buyer->balance, 0);
     }
 
-    public function testPayFree(): void
+    public function testPayFreeAndRefund(): void
     {
         /**
          * @var Buyer           $buyer
