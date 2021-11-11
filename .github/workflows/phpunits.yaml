@@ -124,7 +124,7 @@ jobs:
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
-        if: ${{ steps.codeclimate-check.outputs.skip === 'true' }}
+        if: ${{ steps.codeclimate-check.outputs.skip == 'true' }}
 
       - name: Prepare run test suite
         id: unit-prepare
@@ -150,7 +150,7 @@ jobs:
           CACHE_DRIVER: ${{ matrix.caches }}
           DB_CONNECTION: ${{ matrix.databases }}
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
-        if: ${{ steps.codeclimate-check.outputs.skip === 'true' }}
+        if: ${{ steps.codeclimate-check.outputs.skip == 'true' }}
 
       - name: Send coverage
         id: codeclimate-send
@@ -160,4 +160,4 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        if: ${{ steps.codeclimate-check.outputs.skip === 'true' }}
+        if: ${{ steps.codeclimate-check.outputs.skip == 'true' }}
