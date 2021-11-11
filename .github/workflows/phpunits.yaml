@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         php-versions: [7.4, 8.0, 8.1]
-        databases: [testing, pgsql, mysql, mariadb]
+        databases: [testing, pgsql, mysql]
         caches: [array, redis, memcached]
 
     services:
@@ -69,19 +69,6 @@ jobs:
           --health-retries 3
         ports:
           - 3306:3306
-
-      mariadb:
-        image: mariadb:10.5
-        env:
-          MYSQL_ROOT_PASSWORD: wallet
-          MYSQL_DATABASE: wallet
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
-        ports:
-          - 3307:3306
 
     steps:
       - name: Checkout

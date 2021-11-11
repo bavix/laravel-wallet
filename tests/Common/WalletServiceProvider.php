@@ -12,8 +12,6 @@ class WalletServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        $this->loadMigrationsFrom([
-            dirname(__DIR__).'/migrations',
-        ]);
+        $this->loadMigrationsFrom([dirname(__DIR__).'/migrations']);
     }
 }
