@@ -22,7 +22,7 @@ trait CanExchange
      */
     public function exchange(Wallet $to, $amount, ?array $meta = null): Transfer
     {
-        $wallet = app(WalletService::class)->getWallet($this);
+        $wallet = app(CastService::class)->getWallet($this);
 
         app(ConsistencyInterface::class)->checkPotential($wallet, $amount);
 

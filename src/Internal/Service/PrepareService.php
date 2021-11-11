@@ -70,7 +70,7 @@ class PrepareService
     public function transferLazy(Wallet $from, Wallet $to, string $status, $amount, ?array $meta = null): TransferLazyDto
     {
         $discount = $this->walletService->discount($from, $to);
-        $from = $this->walletService->getWallet($from);
+        $from = $this->castService->getWallet($from);
         $fee = (string) $this->walletService->fee($to, $amount);
 
         // replace max => mathService.max

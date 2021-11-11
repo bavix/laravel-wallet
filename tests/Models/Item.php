@@ -4,9 +4,9 @@ namespace Bavix\Wallet\Test\Models;
 
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Internal\Service\CastService;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
-use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Traits\HasWallet;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -44,7 +44,7 @@ class Item extends Model implements Product
     public function getAmountProduct(Customer $customer)
     {
         /** @var Wallet $wallet */
-        $wallet = app(WalletService::class)->getWallet($customer);
+        $wallet = app(CastService::class)->getWallet($customer);
 
         return $this->price + $wallet->holder_id;
     }

@@ -63,7 +63,7 @@ class WalletService
                 $this->math->div(
                     $this->math->mul($amount, $wallet->getFeePercent(), 0),
                     100,
-                    $this->getWallet($wallet)->decimal_places
+                    $this->castService->getWallet($wallet)->decimal_places
                 )
             );
         }
@@ -83,11 +83,6 @@ class WalletService
         return $fee;
     }
 
-    public function getWallet(Wallet $object, bool $autoSave = true): WalletModel
-    {
-        return $this->castService->getWallet($object, $autoSave);
-    }
-
     /**
      * @deprecated
      * @see WalletModel::refreshBalance()
@@ -99,7 +94,7 @@ class WalletService
             $balance = $wallet->getAvailableBalance();
             $wallet->balance = (string) $balance;
 
-            return $this->bookkeeper->sync($this->getWallet($wallet), $balance) &&
+            return $this->bookkeeper->sync($this->castService->getWallet($wallet), $balance) &&
                 (!$this->math->compare($whatIs, $balance) || $wallet->save());
         });
     }
@@ -113,7 +108,7 @@ class WalletService
     public function adjustment(WalletModel $wallet, ?array $meta = null): void
     {
         $this->dbService->transaction(function () use ($wallet, $meta) {
-            $walletObject = $this->getWallet($wallet);
+            $walletObject = $this->castService->getWallet($wallet);
             $adjustmentBalance = $this->bookkeeper->amount($walletObject);
             $wallet->refreshBalance();
             $difference = $this->math->sub($wallet->balance, $adjustmentBalance);

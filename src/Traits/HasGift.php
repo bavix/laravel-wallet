@@ -85,17 +85,13 @@ trait HasGift
                 $withdraw = $commonService->makeTransaction($santa, Transaction::TYPE_WITHDRAW, $math->add($amount, $fee), $meta);
                 $deposit = $commonService->makeTransaction($product, Transaction::TYPE_DEPOSIT, $amount, $meta);
 
-                $from = app(WalletService::class)
-                    ->getWallet($to)
-                ;
-
                 $castService = app(CastService::class);
 
                 $transfer = app(TransferDtoAssembler::class)->create(
                     $deposit->getKey(),
                     $withdraw->getKey(),
                     Transfer::STATUS_GIFT,
-                    $castService->getModel($from),
+                    $castService->getWallet($to),
                     $castService->getModel($product),
                     $discount,
                     $fee

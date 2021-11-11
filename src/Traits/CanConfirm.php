@@ -9,11 +9,11 @@ use Bavix\Wallet\Exceptions\UnconfirmedInvalid;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\Service\CastService;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\LockService;
-use Bavix\Wallet\Services\WalletService;
 
 trait CanConfirm
 {
@@ -28,7 +28,7 @@ trait CanConfirm
         return app(DbService::class)->transaction(function () use ($transaction) {
             if ($transaction->type === Transaction::TYPE_WITHDRAW) {
                 app(ConsistencyInterface::class)->checkPotential(
-                    app(WalletService::class)->getWallet($this),
+                    app(CastService::class)->getWallet($this),
                     app(MathInterface::class)->abs($transaction->amount)
                 );
             }
@@ -59,7 +59,7 @@ trait CanConfirm
                     throw new UnconfirmedInvalid(trans('wallet::errors.unconfirmed_invalid'));
                 }
 
-                $wallet = app(WalletService::class)->getWallet($this);
+                $wallet = app(CastService::class)->getWallet($this);
                 $mathService = app(MathInterface::class);
                 $negativeAmount = $mathService->negative($transaction->amount);
 
@@ -93,7 +93,7 @@ trait CanConfirm
                     throw new ConfirmedInvalid(trans('wallet::errors.confirmed_invalid'));
                 }
 
-                $wallet = app(WalletService::class)->getWallet($this);
+                $wallet = app(CastService::class)->getWallet($this);
                 if ($wallet->getKey() !== $transaction->wallet_id) {
                     throw new WalletOwnerInvalid(trans('wallet::errors.owner_invalid'));
                 }
