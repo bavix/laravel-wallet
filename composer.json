@@ -27,7 +27,7 @@
     "illuminate/database": "^6.0|^7.0|^8.0",
     "doctrine/dbal": "^2.8|^3.0",
     "ramsey/uuid": "^3.0|^4.0",
-    "brick/math": "^0.8",
+    "brick/math": "~0.8",
     "ext-json": "*"
   },
   "require-dev": {
@@ -37,7 +37,6 @@
     "laravel/cashier": "^13.6",
     "nunomaduro/collision": "^5.10",
     "orchestra/testbench": "^6.23",
-    "phpmetrics/phpmetrics": "^v2.7",
     "phpstan/phpstan": "^1.1",
     "phpunit/phpunit": "^9.5",
     "psalm/plugin-laravel": "^1.5",
@@ -63,13 +62,11 @@
     "paraunit":"@php vendor/bin/paratest --coverage-xml=build/coverage-xml --log-junit=build/junit.xml",
     "parabench":"@php ./vendor/bin/testbench package:test --parallel --coverage-xml=build/coverage-xml --log-junit=build/junit.xml",
     "infect": "@php vendor/bin/infection --coverage=build --min-msi=50 -j$(nproc)",
-    "metrics": "@php vendor/bin/phpmetrics --config=phpmetrics.json",
     "phpstan": "@php vendor/bin/phpstan analyse -vvv --debug --memory-limit 2G -l 7 src/",
     "ecs": "@php vendor/bin/ecs check",
     "ecs-fix": "@php vendor/bin/ecs check --fix",
     "ecs-cc": "@php vendor/bin/ecs --clear-cache",
-    "psalm": "@php vendor/bin/psalm src/",
-    "psalm-dry": "@php vendor/bin/psalm --alter --issues=InvalidReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType --dry-run src/"
+    "psalm": "@php vendor/bin/psalm"
   },
   "extra": {
     "laravel": {
