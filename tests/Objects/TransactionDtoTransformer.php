@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Test\Objects;
 
 use Bavix\Wallet\Internal\Dto\TransactionDto;
