@@ -11,6 +11,7 @@ use Bavix\Wallet\Test\Models\ItemTax;
 
 /**
  * @internal
+ * @coversNothing
  */
 class TaxTest extends TestCase
 {

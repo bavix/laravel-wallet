@@ -8,6 +8,7 @@ use Bavix\Wallet\Test\Models\Item;
 
 /**
  * @internal
+ * @coversNothing
  */
 class BasketTest extends TestCase
 {

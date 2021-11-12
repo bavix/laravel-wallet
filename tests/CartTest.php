@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
  * @internal
+ * @coversNothing
  */
 class CartTest extends TestCase
 {

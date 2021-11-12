@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 
 /**
  * @internal
+ * @coversNothing
  */
 class ExchangeTest extends TestCase
 {

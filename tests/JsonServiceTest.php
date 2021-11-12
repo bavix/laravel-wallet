@@ -8,6 +8,7 @@ use Bavix\Wallet\Internal\Service\JsonService;
 
 /**
  * @internal
+ * @coversNothing
  */
 final class JsonServiceTest extends TestCase
 {

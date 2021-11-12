@@ -23,6 +23,7 @@ use Throwable;
 
 /**
  * @internal
+ * @coversNothing
  */
 class MultiWalletTest extends TestCase
 {

@@ -8,6 +8,7 @@ use Bavix\Wallet\Test\Models\Buyer;
 
 /**
  * @internal
+ * @coversNothing
  */
 class BookkeeperTest extends TestCase
 {
