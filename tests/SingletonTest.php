@@ -16,53 +16,52 @@ use Bavix\Wallet\Test\Common\Models\Wallet;
 
 /**
  * @internal
- * @coversNothing
  */
 class SingletonTest extends TestCase
 {
     public function testCart(): void
     {
-        self::assertNotEquals($this->getRefId(Cart::class), $this->getRefId(Cart::class));
+        self::assertNotSame($this->getRefId(Cart::class), $this->getRefId(Cart::class));
     }
 
     public function testMathInterface(): void
     {
-        self::assertEquals($this->getRefId(MathInterface::class), $this->getRefId(MathInterface::class));
+        self::assertSame($this->getRefId(MathInterface::class), $this->getRefId(MathInterface::class));
     }
 
     public function testTransaction(): void
     {
-        self::assertNotEquals($this->getRefId(Transaction::class), $this->getRefId(Transaction::class));
+        self::assertNotSame($this->getRefId(Transaction::class), $this->getRefId(Transaction::class));
     }
 
     public function testTransfer(): void
     {
-        self::assertNotEquals($this->getRefId(Transfer::class), $this->getRefId(Transfer::class));
+        self::assertNotSame($this->getRefId(Transfer::class), $this->getRefId(Transfer::class));
     }
 
     public function testWallet(): void
     {
-        self::assertNotEquals($this->getRefId(Wallet::class), $this->getRefId(Wallet::class));
+        self::assertNotSame($this->getRefId(Wallet::class), $this->getRefId(Wallet::class));
     }
 
     public function testCommonService(): void
     {
-        self::assertEquals($this->getRefId(CommonService::class), $this->getRefId(CommonService::class));
+        self::assertSame($this->getRefId(CommonService::class), $this->getRefId(CommonService::class));
     }
 
     public function testWalletService(): void
     {
-        self::assertEquals($this->getRefId(WalletService::class), $this->getRefId(WalletService::class));
+        self::assertSame($this->getRefId(WalletService::class), $this->getRefId(WalletService::class));
     }
 
     public function testDbService(): void
     {
-        self::assertEquals($this->getRefId(DbService::class), $this->getRefId(DbService::class));
+        self::assertSame($this->getRefId(DbService::class), $this->getRefId(DbService::class));
     }
 
     public function testLockService(): void
     {
-        self::assertEquals($this->getRefId(LockService::class), $this->getRefId(LockService::class));
+        self::assertSame($this->getRefId(LockService::class), $this->getRefId(LockService::class));
     }
 
     protected function getRefId(string $object): string

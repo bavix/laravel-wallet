@@ -13,7 +13,6 @@ use Bavix\Wallet\Test\Models\UserMulti;
 
 /**
  * @internal
- * @coversNothing
  */
 class MultiWalletGiftTest extends TestCase
 {
@@ -32,30 +31,30 @@ class MultiWalletGiftTest extends TestCase
         $wallet = $first->createWallet(['name' => 'Gift', 'slug' => 'gifter']);
         self::assertNotNull($wallet);
         self::assertNotNull($first->wallet);
-        self::assertNotEquals($first->wallet->id, $wallet->id);
+        self::assertNotSame($first->wallet->id, $wallet->id);
 
         /** @var Item $item */
         $item = ItemFactory::new()->create();
         $transaction = $wallet->deposit($item->getAmountProduct($wallet));
-        self::assertEquals($transaction->amount, $wallet->balance);
-        self::assertEquals($item->getAmountProduct($wallet), $wallet->balance);
+        self::assertSame($transaction->amount, $wallet->balance);
+        self::assertSame($item->getAmountProduct($wallet), $wallet->balanceInt);
         self::assertNotNull($transaction);
 
         $transfer = $wallet->gift($second, $item);
         self::assertNotNull($transfer);
 
-        self::assertEquals($wallet->balance, 0);
-        self::assertEquals($first->balance, 1);
-        self::assertEquals($second->balance, 2);
-        self::assertEquals($transfer->status, Transfer::STATUS_GIFT);
+        self::assertSame($wallet->balanceInt, 0);
+        self::assertSame($first->balanceInt, 1);
+        self::assertSame($second->balanceInt, 2);
+        self::assertSame($transfer->status, Transfer::STATUS_GIFT);
 
-        self::assertEquals($transfer->withdraw->wallet->holder->id, $first->id);
+        self::assertSame($transfer->withdraw->wallet->holder->id, $first->id);
         self::assertInstanceOf(UserMulti::class, $transfer->withdraw->wallet->holder);
 
-        self::assertEquals($wallet->id, $transfer->withdraw->wallet->id);
+        self::assertSame($wallet->id, $transfer->withdraw->wallet->id);
         self::assertInstanceOf(Wallet::class, $transfer->withdraw->wallet);
 
-        self::assertEquals($second->id, $transfer->from->holder_id);
+        self::assertSame((int) $second->id, (int) $transfer->from->holder_id);
         self::assertInstanceOf(UserMulti::class, $transfer->from->holder);
 
         self::assertFalse((bool) $wallet->paid($item));

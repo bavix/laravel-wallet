@@ -16,7 +16,6 @@ use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 /**
  * @internal
- * @coversNothing
  */
 class TestCase extends OrchestraTestCase
 {

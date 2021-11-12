@@ -12,7 +12,6 @@ use Bavix\Wallet\Test\Models\ItemMinTax;
 
 /**
  * @internal
- * @coversNothing
  */
 class MinTaxTest extends TestCase
 {
@@ -34,10 +33,10 @@ class MinTaxTest extends TestCase
 
         $balance = $product->getAmountProduct($buyer) + $fee;
 
-        self::assertEquals($buyer->balance, 0);
+        self::assertSame(0, $buyer->balanceInt);
         $buyer->deposit($balance);
 
-        self::assertNotEquals($buyer->balance, 0);
+        self::assertNotSame(0, $buyer->balanceInt);
         $transfer = $buyer->pay($product);
         self::assertNotNull($transfer);
 
@@ -48,16 +47,16 @@ class MinTaxTest extends TestCase
         $withdraw = $transfer->withdraw;
         $deposit = $transfer->deposit;
 
-        self::assertEquals($withdraw->amount, -$balance);
-        self::assertEquals($deposit->amount, $product->getAmountProduct($buyer));
-        self::assertNotEquals($deposit->amount, $withdraw->amount);
-        self::assertEquals($transfer->fee, $fee);
+        self::assertSame($withdraw->amountInt, (int) -$balance);
+        self::assertSame($deposit->amount, (string) $product->getAmountProduct($buyer));
+        self::assertNotSame($deposit->amount, $withdraw->amount);
+        self::assertSame((int) $transfer->fee, $fee);
 
         $buyer->refund($product);
-        self::assertEquals($buyer->balance, $deposit->amount);
-        self::assertEquals($product->balance, 0);
+        self::assertSame($buyer->balance, $deposit->amount);
+        self::assertSame(0, $product->balanceInt);
 
         $buyer->withdraw($buyer->balance);
-        self::assertEquals($buyer->balance, 0);
+        self::assertSame(0, $buyer->balanceInt);
     }
 }

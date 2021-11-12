@@ -22,7 +22,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
  * @internal
- * @coversNothing
  */
 class CartTest extends TestCase
 {
@@ -44,7 +43,7 @@ class CartTest extends TestCase
             ->setMeta(['type' => $expected])
         ;
 
-        self::assertEquals(0, $buyer->balance);
+        self::assertSame(0, $buyer->balanceInt);
         self::assertNotNull($buyer->deposit($cart->getTotal($buyer)));
 
         $transfers = $buyer->payCart($cart);
@@ -55,9 +54,9 @@ class CartTest extends TestCase
         /** @var Transaction[] $transactions */
         $transactions = [$transfer->deposit, $transfer->withdraw];
         foreach ($transactions as $transaction) {
-            self::assertEquals($product->price, $transaction->meta['price']);
-            self::assertEquals($product->name, $transaction->meta['name']);
-            self::assertEquals($expected, $transaction->meta['type']);
+            self::assertSame($product->price, $transaction->meta['price']);
+            self::assertSame($product->name, $transaction->meta['name']);
+            self::assertSame($expected, $transaction->meta['type']);
         }
     }
 
@@ -85,7 +84,7 @@ class CartTest extends TestCase
             ->setMeta(['type' => $expected])
         ;
 
-        self::assertEquals(0, $buyer->balance);
+        self::assertSame(0, $buyer->balanceInt);
         self::assertNotNull($buyer->deposit($cart->getTotal($buyer)));
 
         $transfers = $buyer->payCart($cart);
@@ -97,7 +96,7 @@ class CartTest extends TestCase
         $transactions = [$transfer->deposit, $transfer->withdraw];
         foreach ($transactions as $transaction) {
             self::assertCount(1, $transaction->meta);
-            self::assertEquals($expected, $transaction->meta['type']);
+            self::assertSame($expected, $transaction->meta['type']);
         }
     }
 
@@ -114,30 +113,30 @@ class CartTest extends TestCase
 
         $cart = app(Cart::class)->addItems($products);
         foreach ($cart->getItems() as $product) {
-            self::assertEquals(0, $product->balance);
+            self::assertSame(0, $product->getBalanceIntAttribute());
         }
 
-        self::assertEquals($buyer->balance, $buyer->wallet->balance);
+        self::assertSame($buyer->balance, $buyer->wallet->balance);
         self::assertNotNull($buyer->deposit($cart->getTotal($buyer)));
-        self::assertEquals($buyer->balance, $buyer->wallet->balance);
+        self::assertSame($buyer->balance, $buyer->wallet->balance);
 
         $transfers = $buyer->payCart($cart);
         self::assertCount(count($cart), $transfers);
         self::assertTrue((bool) app(PurchaseInterface::class)->already($buyer, $cart->getBasketDto()));
-        self::assertEquals(0, $buyer->balance);
+        self::assertSame(0, $buyer->balanceInt);
 
         foreach ($transfers as $transfer) {
-            self::assertEquals(Transfer::STATUS_PAID, $transfer->status);
+            self::assertSame(Transfer::STATUS_PAID, $transfer->status);
         }
 
         foreach ($cart->getItems() as $product) {
-            self::assertEquals($product->balance, $product->getAmountProduct($buyer));
+            self::assertSame($product->balance, (string) $product->getAmountProduct($buyer));
         }
 
         self::assertTrue($buyer->refundCart($cart));
         foreach ($transfers as $transfer) {
             $transfer->refresh();
-            self::assertEquals(Transfer::STATUS_REFUND, $transfer->status);
+            self::assertSame(Transfer::STATUS_REFUND, $transfer->status);
         }
     }
 
@@ -174,7 +173,7 @@ class CartTest extends TestCase
         self::assertTrue($buyer->refundCart($cart));
         foreach ($transfers as $transfer) {
             $transfer->refresh();
-            self::assertEquals(Transfer::STATUS_REFUND, $transfer->status);
+            self::assertSame(Transfer::STATUS_REFUND, $transfer->status);
         }
     }
 
@@ -246,7 +245,7 @@ class CartTest extends TestCase
                 ->count()
             ;
 
-            self::assertEquals($total[$product->getKey()], $count);
+            self::assertSame($total[$product->getKey()], $count);
         }
     }
 
@@ -271,41 +270,41 @@ class CartTest extends TestCase
         $cart->addItem($product, 1);
 
         foreach ($cart->getItems() as $item) {
-            self::assertEquals(0, $item->balance);
+            self::assertSame(0, $item->getBalanceIntAttribute());
         }
 
         $math = app(MathInterface::class);
 
-        self::assertEquals($buyer->balance, $buyer->wallet->balance);
+        self::assertSame($buyer->balance, $buyer->wallet->balance);
         self::assertNotNull($buyer->deposit($cart->getTotal($buyer)));
-        self::assertEquals(0, $math->compare($cart->getTotal($buyer), $buyer->balance));
-        self::assertEquals($buyer->balance, $buyer->wallet->balance);
+        self::assertSame(0, $math->compare($cart->getTotal($buyer), $buyer->balance));
+        self::assertSame($buyer->balance, $buyer->wallet->balance);
 
         $transfers = $buyer->payCart($cart);
         self::assertCount(count($cart), $transfers);
         self::assertTrue((bool) app(PurchaseInterface::class)->already($buyer, $cart->getBasketDto()));
-        self::assertEquals(0, $buyer->balance);
+        self::assertSame(0, $buyer->balanceInt);
 
         foreach ($transfers as $transfer) {
-            self::assertEquals(Transfer::STATUS_PAID, $transfer->status);
+            self::assertSame(Transfer::STATUS_PAID, $transfer->status);
         }
 
         foreach ($cart->getItems() as $product) {
-            self::assertEquals($product->balance, $product->getAmountProduct($buyer));
+            self::assertSame($product->balance, (string) $product->getAmountProduct($buyer));
         }
 
         self::assertTrue($buyer->refundCart($cart));
-        self::assertEquals(0, $math->compare($cart->getTotal($buyer), $buyer->balance));
-        self::assertEquals($transactionLevel, app(DbService::class)->connection()->transactionLevel()); // check case #1
+        self::assertSame(0, $math->compare($cart->getTotal($buyer), $buyer->balance));
+        self::assertSame($transactionLevel, app(DbService::class)->connection()->transactionLevel()); // check case #1
 
         foreach ($transfers as $transfer) {
             $transfer->refresh();
-            self::assertEquals(Transfer::STATUS_REFUND, $transfer->status);
+            self::assertSame(Transfer::STATUS_REFUND, $transfer->status);
         }
 
         $withdraw = $buyer->withdraw($buyer->balance); // problem place... withdrawal
         self::assertNotNull($withdraw);
-        self::assertEquals(0, $buyer->balance);
+        self::assertSame(0, $buyer->balanceInt);
 
         // check in the database
         $balance = $buyer->wallet::query()
@@ -314,6 +313,6 @@ class CartTest extends TestCase
             ->value('balance')
         ;
 
-        self::assertEquals(0, $balance);
+        self::assertSame(0, (int) $balance);
     }
 }

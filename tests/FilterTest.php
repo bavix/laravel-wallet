@@ -9,7 +9,6 @@ use Bavix\Wallet\Test\Models\Buyer;
 
 /**
  * @internal
- * @coversNothing
  */
 class FilterTest extends TestCase
 {
@@ -24,17 +23,17 @@ class FilterTest extends TestCase
         $buyer->withdraw(150, ['account' => 'expenses']);
         $buyer->deposit(500, ['account' => 'vendors']);
 
-        self::assertEquals(4, $buyer->transactions()->count());
+        self::assertSame(4, $buyer->transactions()->count());
 
         $nullable = $buyer->transactions()->whereNull('meta')->count();
         $customers = $buyer->transactions()->where('meta->account', 'customers')->count();
         $expenses = $buyer->transactions()->where('meta->account', 'expenses')->count();
         $vendors = $buyer->transactions()->where('meta->account', 'vendors')->count();
 
-        self::assertEquals(1, $nullable);
-        self::assertEquals(1, $customers);
-        self::assertEquals(1, $expenses);
-        self::assertEquals(1, $vendors);
+        self::assertSame(1, $nullable);
+        self::assertSame(1, $customers);
+        self::assertSame(1, $expenses);
+        self::assertSame(1, $vendors);
 
         $countByPeriods = $buyer->transactions()
             ->whereIn('meta->account', ['customers', 'expenses', 'vendors'])
@@ -42,6 +41,6 @@ class FilterTest extends TestCase
             ->count()
         ;
 
-        self::assertEquals(3, $countByPeriods);
+        self::assertSame(3, $countByPeriods);
     }
 }

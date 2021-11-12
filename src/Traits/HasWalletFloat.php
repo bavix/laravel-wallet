@@ -17,7 +17,7 @@ use Throwable;
 /**
  * Trait HasWalletFloat.
  *
- * @property float $balanceFloat
+ * @property string $balanceFloat
  */
 trait HasWalletFloat
 {

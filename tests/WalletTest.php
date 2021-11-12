@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 /**
  * @internal
- * @coversNothing
  */
 class WalletTest extends TestCase
 {
@@ -22,37 +21,37 @@ class WalletTest extends TestCase
     {
         /** @var User $user */
         $user = UserFactory::new()->create();
-        self::assertEquals(0, $user->balance);
+        self::assertSame(0, $user->balanceInt);
 
         $user->deposit(10);
-        self::assertEquals(10, $user->balance);
+        self::assertSame(10, $user->balanceInt);
 
         $user->deposit(10);
-        self::assertEquals(20, $user->balance);
+        self::assertSame(20, $user->balanceInt);
 
         $user->deposit(980);
-        self::assertEquals(1000, $user->balance);
+        self::assertSame(1000, $user->balanceInt);
 
-        self::assertEquals(3, $user->transactions()->count());
+        self::assertSame(3, $user->transactions()->count());
 
-        $user->withdraw($user->balance);
-        self::assertEquals(0, $user->balance);
+        $user->withdraw($user->balanceInt);
+        self::assertSame(0, $user->balanceInt);
 
-        self::assertEquals(
+        self::assertSame(
             3,
             $user->transactions()
                 ->where(['type' => Transaction::TYPE_DEPOSIT])
                 ->count()
         );
 
-        self::assertEquals(
+        self::assertSame(
             1,
             $user->transactions()
                 ->where(['type' => Transaction::TYPE_WITHDRAW])
                 ->count()
         );
 
-        self::assertEquals(4, $user->transactions()->count());
+        self::assertSame(4, $user->transactions()->count());
     }
 
     public function testInvalidDeposit(): void
@@ -84,7 +83,7 @@ class WalletTest extends TestCase
 
         /** @var User $user */
         $user = $users->first();
-        self::assertEquals(0, $user->balance); // create default wallet
+        self::assertSame(0, $user->balanceInt); // create default wallet
         self::assertTrue($user->wallet->exists);
 
         $ids = [];
@@ -119,19 +118,19 @@ class WalletTest extends TestCase
 
         /** @var User $user */
         $user = UserFactory::new()->create();
-        self::assertEquals(0, $user->balance);
+        self::assertSame(0, $user->balanceInt);
 
         $user->deposit(100);
-        self::assertEquals(100, $user->balance);
+        self::assertSame(100, $user->balanceInt);
 
         $user->withdraw(10);
-        self::assertEquals(90, $user->balance);
+        self::assertSame(90, $user->balanceInt);
 
         $user->withdraw(81);
-        self::assertEquals(9, $user->balance);
+        self::assertSame(9, $user->balanceInt);
 
         $user->withdraw(9);
-        self::assertEquals(0, $user->balance);
+        self::assertSame(0, $user->balanceInt);
 
         $user->withdraw(1);
     }
@@ -164,42 +163,42 @@ class WalletTest extends TestCase
          * @var User $second
          */
         [$first, $second] = UserFactory::times(2)->create();
-        self::assertNotEquals($first->id, $second->id);
-        self::assertEquals(0, $first->balance);
-        self::assertEquals(0, $second->balance);
+        self::assertNotSame($first->id, $second->id);
+        self::assertSame(0, $first->balanceInt);
+        self::assertSame(0, $second->balanceInt);
 
         $first->deposit(100);
-        self::assertEquals(100, $first->balance);
+        self::assertSame(100, $first->balanceInt);
 
         $second->deposit(100);
-        self::assertEquals(100, $second->balance);
+        self::assertSame(100, $second->balanceInt);
 
         $first->transfer($second, 100);
-        self::assertEquals(0, $first->balance);
-        self::assertEquals(200, $second->balance);
+        self::assertSame(0, $first->balanceInt);
+        self::assertSame(200, $second->balanceInt);
 
         $second->transfer($first, 100);
-        self::assertEquals(100, $second->balance);
-        self::assertEquals(100, $first->balance);
+        self::assertSame(100, $second->balanceInt);
+        self::assertSame(100, $first->balanceInt);
 
         $second->transfer($first, 100);
-        self::assertEquals(0, $second->balance);
-        self::assertEquals(200, $first->balance);
+        self::assertSame(0, $second->balanceInt);
+        self::assertSame(200, $first->balanceInt);
 
-        $first->withdraw($first->balance);
-        self::assertEquals(0, $first->balance);
+        $first->withdraw($first->balanceInt);
+        self::assertSame(0, $first->balanceInt);
 
         self::assertNull($first->safeTransfer($second, 100));
-        self::assertEquals(0, $first->balance);
-        self::assertEquals(0, $second->balance);
+        self::assertSame(0, $first->balanceInt);
+        self::assertSame(0, $second->balanceInt);
 
         self::assertNotNull($first->forceTransfer($second, 100));
-        self::assertEquals(-100, $first->balance);
-        self::assertEquals(100, $second->balance);
+        self::assertSame(-100, $first->balanceInt);
+        self::assertSame(100, $second->balanceInt);
 
         self::assertNotNull($second->forceTransfer($first, 100));
-        self::assertEquals(0, $first->balance);
-        self::assertEquals(0, $second->balance);
+        self::assertSame(0, $first->balanceInt);
+        self::assertSame(0, $second->balanceInt);
     }
 
     /**
@@ -212,28 +211,28 @@ class WalletTest extends TestCase
          * @var User $second
          */
         [$first, $second] = UserFactory::times(2)->create();
-        self::assertNotEquals($first->getKey(), $second->getKey());
+        self::assertNotSame($first->getKey(), $second->getKey());
 
         self::assertNotNull($first->deposit(1000));
-        self::assertEquals(1000, $first->balance);
+        self::assertSame(1000, $first->balanceInt);
 
         self::assertNotNull($first->transfer($second, 500));
-        self::assertEquals(500, $first->balance);
-        self::assertEquals(500, $second->balance);
+        self::assertSame(500, $first->balanceInt);
+        self::assertSame(500, $second->balanceInt);
     }
 
     public function testTransferYourself(): void
     {
         /** @var User $user */
         $user = UserFactory::new()->create();
-        self::assertEquals(0, $user->balance);
+        self::assertSame(0, $user->balanceInt);
 
         $user->deposit(100);
         $user->transfer($user, 100);
-        self::assertEquals(100, $user->balance);
+        self::assertSame(100, $user->balanceInt);
 
-        $user->withdraw($user->balance);
-        self::assertEquals(0, $user->balance);
+        $user->withdraw($user->balanceInt);
+        self::assertSame(0, $user->balanceInt);
     }
 
     public function testBalanceIsEmpty(): void
@@ -243,7 +242,7 @@ class WalletTest extends TestCase
 
         /** @var User $user */
         $user = UserFactory::new()->create();
-        self::assertEquals(0, $user->balance);
+        self::assertSame(0, $user->balanceInt);
         $user->withdraw(1);
     }
 
@@ -251,34 +250,34 @@ class WalletTest extends TestCase
     {
         /** @var User $user */
         $user = UserFactory::new()->create();
-        self::assertEquals(0, $user->balance);
+        self::assertSame(0, $user->balanceInt);
 
         $user->deposit(1);
-        self::assertEquals(1, $user->balance);
+        self::assertSame(1, $user->balanceInt);
 
         $user->withdraw(1, null, false);
-        self::assertEquals(1, $user->balance);
+        self::assertSame(1, $user->balanceInt);
 
         $user->withdraw(1);
-        self::assertEquals(0, $user->balance);
+        self::assertSame(0, $user->balanceInt);
     }
 
     public function testRecalculate(): void
     {
         /** @var User $user */
         $user = UserFactory::new()->create();
-        self::assertEquals(0, $user->balance);
+        self::assertSame(0, $user->balanceInt);
 
         $user->deposit(100, null, false);
-        self::assertEquals(0, $user->balance);
+        self::assertSame(0, $user->balanceInt);
 
         $user->transactions()->update(['confirmed' => true]);
-        self::assertEquals(0, $user->balance);
+        self::assertSame(0, $user->balanceInt);
 
         $user->wallet->refreshBalance();
-        self::assertEquals(100, $user->balance);
+        self::assertSame(100, $user->balanceInt);
 
-        $user->withdraw($user->balance);
-        self::assertEquals(0, $user->balance);
+        $user->withdraw($user->balanceInt);
+        self::assertSame(0, $user->balanceInt);
     }
 }

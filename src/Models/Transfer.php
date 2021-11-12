@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * Class Transfer.
  *
  * @property string      $status
- * @property int         $discount
+ * @property string      $discount
  * @property int         $deposit_id
  * @property int         $withdraw_id
  * @property string      $from_type
@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property string      $to_type
  * @property int         $to_id
  * @property string      $uuid
- * @property int         $fee
+ * @property string      $fee
  * @property Transaction $deposit
  * @property Transaction $withdraw
  */

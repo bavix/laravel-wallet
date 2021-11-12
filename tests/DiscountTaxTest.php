@@ -17,7 +17,6 @@ use Bavix\Wallet\Test\Models\ItemDiscountTax;
 
 /**
  * @internal
- * @coversNothing
  */
 class DiscountTaxTest extends TestCase
 {
@@ -30,26 +29,26 @@ class DiscountTaxTest extends TestCase
         $buyer = BuyerFactory::new()->create();
         $product = ItemDiscountTaxFactory::new()->create();
 
-        self::assertEquals(0, $buyer->balance);
+        self::assertSame(0, $buyer->balanceInt);
         $fee = app(WalletService::class)->fee($product, $product->getAmountProduct($buyer));
         $buyer->deposit($product->getAmountProduct($buyer) + $fee);
 
-        self::assertEquals($buyer->balance, $product->getAmountProduct($buyer) + $fee);
+        self::assertSame($buyer->balanceInt, (int) $product->getAmountProduct($buyer) + $fee);
         $transfer = $buyer->pay($product);
         self::assertNotNull($transfer);
-        self::assertEquals(Transfer::STATUS_PAID, $transfer->status);
+        self::assertSame(Transfer::STATUS_PAID, $transfer->status);
 
-        self::assertEquals(
-            $buyer->balance,
+        self::assertSame(
+            $buyer->balanceInt,
             $product->getPersonalDiscount($buyer)
         );
 
-        self::assertEquals(
-            $transfer->discount,
+        self::assertSame(
+            (int) $transfer->discount,
             $product->getPersonalDiscount($buyer)
         );
 
-        self::assertEquals($transfer->fee, $fee);
+        self::assertSame((int) $transfer->fee, (int) $fee);
 
         /**
          * @var Transaction $withdraw
@@ -64,17 +63,17 @@ class DiscountTaxTest extends TestCase
         self::assertInstanceOf(Buyer::class, $withdraw->payable);
         self::assertInstanceOf(Item::class, $deposit->payable);
 
-        self::assertEquals($buyer->getKey(), $withdraw->payable->getKey());
-        self::assertEquals($product->getKey(), $deposit->payable->getKey());
+        self::assertSame($buyer->getKey(), $withdraw->payable->getKey());
+        self::assertSame($product->getKey(), $deposit->payable->getKey());
 
         self::assertInstanceOf(Buyer::class, $transfer->from->holder);
         self::assertInstanceOf(Wallet::class, $transfer->from);
         self::assertInstanceOf(Item::class, $transfer->to);
         self::assertInstanceOf(Wallet::class, $transfer->to->wallet);
 
-        self::assertEquals($buyer->wallet->getKey(), $transfer->from->getKey());
-        self::assertEquals($buyer->getKey(), $transfer->from->holder->getKey());
-        self::assertEquals($product->getKey(), $transfer->to->getKey());
+        self::assertSame($buyer->wallet->getKey(), $transfer->from->getKey());
+        self::assertSame($buyer->getKey(), $transfer->from->holder->getKey());
+        self::assertSame($product->getKey(), $transfer->to->getKey());
     }
 
     public function testRefundPersonalDiscountAndTax(): void
@@ -86,62 +85,62 @@ class DiscountTaxTest extends TestCase
         $buyer = BuyerFactory::new()->create();
         $product = ItemDiscountTaxFactory::new()->create();
 
-        self::assertEquals($buyer->balance, 0);
+        self::assertSame($buyer->balanceInt, 0);
         $discount = app(WalletService::class)->discount($buyer, $product);
         $fee = app(WalletService::class)->fee($product, $product->getAmountProduct($buyer));
         $buyer->deposit($product->getAmountProduct($buyer) + $fee - $discount);
 
-        self::assertEquals($buyer->balance, $product->getAmountProduct($buyer) + $fee - $discount);
+        self::assertSame($buyer->balanceInt, (int) ($product->getAmountProduct($buyer) + $fee - $discount));
         $transfer = $buyer->pay($product);
         self::assertNotNull($transfer);
-        self::assertEquals($transfer->status, Transfer::STATUS_PAID);
+        self::assertSame($transfer->status, Transfer::STATUS_PAID);
 
-        self::assertEquals(
-            $transfer->discount,
+        self::assertSame(
+            (int) $transfer->discount,
             $product->getPersonalDiscount($buyer)
         );
 
-        self::assertEquals($transfer->fee, $fee);
+        self::assertSame((int) $transfer->fee, (int) $fee);
 
         self::assertTrue($buyer->refund($product));
-        self::assertEquals(
-            $buyer->balance,
-            $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
+        self::assertSame(
+            $buyer->balanceInt,
+            (int) $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
         );
 
-        self::assertEquals($product->balance, 0);
+        self::assertSame($product->balanceInt, 0);
 
         $transfer->refresh();
-        self::assertEquals($transfer->status, Transfer::STATUS_REFUND);
+        self::assertSame($transfer->status, Transfer::STATUS_REFUND);
 
         self::assertFalse($buyer->safeRefund($product));
-        self::assertEquals(
-            $buyer->balance,
-            $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
+        self::assertSame(
+            $buyer->balanceInt,
+            (int) $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
         );
 
         self::assertNull($buyer->safePay($product));
         $buyer->deposit($fee);
         $transfer = $buyer->pay($product);
         self::assertNotNull($transfer);
-        self::assertEquals(0, $buyer->balance);
-        self::assertEquals(
-            $product->balance,
-            $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
+        self::assertSame(0, $buyer->balanceInt);
+        self::assertSame(
+            $product->balanceInt,
+            (int) $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
         );
 
-        self::assertEquals($transfer->status, Transfer::STATUS_PAID);
+        self::assertSame($transfer->status, Transfer::STATUS_PAID);
 
         self::assertTrue($buyer->refund($product));
-        self::assertEquals(
-            $buyer->balance,
-            $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
+        self::assertSame(
+            $buyer->balanceInt,
+            (int) $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
         );
 
-        self::assertEquals($product->balance, 0);
+        self::assertSame($product->balanceInt, 0);
 
         $transfer->refresh();
-        self::assertEquals($transfer->status, Transfer::STATUS_REFUND);
+        self::assertSame($transfer->status, Transfer::STATUS_REFUND);
     }
 
     public function testForceRefund(): void
@@ -153,47 +152,47 @@ class DiscountTaxTest extends TestCase
         $buyer = BuyerFactory::new()->create();
         $product = ItemDiscountTaxFactory::new()->create();
 
-        self::assertEquals(0, $buyer->balance);
+        self::assertSame(0, $buyer->balanceInt);
         $discount = app(WalletService::class)->discount($buyer, $product);
         $fee = app(WalletService::class)->fee($product, $product->getAmountProduct($buyer));
         $buyer->deposit($product->getAmountProduct($buyer) + $fee - $discount);
 
         $paidPrice = $buyer->balance;
-        self::assertEquals($buyer->balance, $product->getAmountProduct($buyer) + $fee - $discount);
+        self::assertSame($buyer->balanceInt, (int) $product->getAmountProduct($buyer) + $fee - $discount);
 
         $transfer = $buyer->pay($product);
-        self::assertEquals(0, $buyer->balance);
+        self::assertSame(0, $buyer->balanceInt);
 
-        self::assertEquals(
-            $product->balance,
-            -$transfer->withdraw->amount - $fee
+        self::assertSame(
+            $product->balanceInt,
+            (int) -$transfer->withdraw->amount - $fee
         );
 
-        self::assertEquals(
-            $transfer->discount,
+        self::assertSame(
+            (int) $transfer->discount,
             $product->getPersonalDiscount($buyer)
         );
 
-        self::assertEquals($transfer->fee, $fee);
+        self::assertSame((int) $transfer->fee, (int) $fee);
 
         $product->withdraw($product->balance);
-        self::assertEquals($product->balance, 0);
+        self::assertSame($product->balanceInt, 0);
 
         self::assertFalse($buyer->safeRefund($product));
         self::assertTrue($buyer->forceRefund($product));
 
-        self::assertEquals($paidPrice - $fee, -$product->balance);
-        self::assertEquals(
-            $product->balance,
-            -($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer))
+        self::assertSame((int) $paidPrice - $fee, -$product->balanceInt);
+        self::assertSame(
+            $product->balanceInt,
+            (int) -($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer))
         );
 
-        self::assertEquals($paidPrice - $fee, $buyer->balance);
+        self::assertSame((int) $paidPrice - $fee, $buyer->balanceInt);
         $product->deposit(-$product->balance);
         $buyer->withdraw($buyer->balance);
 
-        self::assertEquals($product->balance, 0);
-        self::assertEquals($buyer->balance, 0);
+        self::assertSame($product->balanceInt, 0);
+        self::assertSame($buyer->balanceInt, 0);
     }
 
     public function testOutOfStock(): void
@@ -227,17 +226,17 @@ class DiscountTaxTest extends TestCase
             'quantity' => 1,
         ]);
 
-        self::assertEquals($buyer->balance, 0);
+        self::assertSame($buyer->balanceInt, 0);
         $buyer->forcePay($product);
 
         $fee = app(WalletService::class)->fee($product, $product->getAmountProduct($buyer));
-        self::assertEquals(
-            $buyer->balance,
-            -($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)) - $fee
+        self::assertSame(
+            $buyer->balanceInt,
+            (int) -($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)) - $fee
         );
 
         $buyer->deposit(-$buyer->balance);
-        self::assertEquals($buyer->balance, 0);
+        self::assertSame($buyer->balanceInt, 0);
     }
 
     public function testPayFreeAndRefund(): void
@@ -251,18 +250,18 @@ class DiscountTaxTest extends TestCase
             'quantity' => 1,
         ]);
 
-        self::assertEquals($buyer->balance, 0);
+        self::assertSame($buyer->balanceInt, 0);
 
         $transfer = $buyer->payFree($product);
-        self::assertEquals($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
-        self::assertEquals($transfer->withdraw->type, Transaction::TYPE_WITHDRAW);
+        self::assertSame($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
+        self::assertSame($transfer->withdraw->type, Transaction::TYPE_WITHDRAW);
 
-        self::assertEquals($buyer->balance, 0);
-        self::assertEquals($product->balance, 0);
+        self::assertSame($buyer->balanceInt, 0);
+        self::assertSame($product->balanceInt, 0);
 
         $buyer->refund($product);
-        self::assertEquals($buyer->balance, 0);
-        self::assertEquals($product->balance, 0);
+        self::assertSame($buyer->balanceInt, 0);
+        self::assertSame($product->balanceInt, 0);
     }
 
     public function testFreePay(): void
@@ -277,25 +276,25 @@ class DiscountTaxTest extends TestCase
         ]);
 
         $buyer->forceWithdraw(1000);
-        self::assertEquals($buyer->balance, -1000);
+        self::assertSame($buyer->balanceInt, -1000);
 
         $transfer = $buyer->payFree($product);
-        self::assertEquals($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
-        self::assertEquals($transfer->withdraw->type, Transaction::TYPE_WITHDRAW);
+        self::assertSame($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
+        self::assertSame($transfer->withdraw->type, Transaction::TYPE_WITHDRAW);
 
-        self::assertEquals(
-            $transfer->discount,
+        self::assertSame(
+            (int) $transfer->discount,
             $product->getPersonalDiscount($buyer)
         );
 
-        self::assertEquals($transfer->fee, 0);
+        self::assertSame('0', $transfer->fee);
 
-        self::assertEquals($buyer->balance, -1000);
-        self::assertEquals($product->balance, 0);
+        self::assertSame($buyer->balanceInt, -1000);
+        self::assertSame($product->balanceInt, 0);
 
         $buyer->refund($product);
-        self::assertEquals($buyer->balance, -1000);
-        self::assertEquals($product->balance, 0);
+        self::assertSame($buyer->balanceInt, -1000);
+        self::assertSame($product->balanceInt, 0);
     }
 
     public function testPayFreeOutOfStock(): void
