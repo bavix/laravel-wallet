@@ -31,9 +31,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set(Option::SKIP, [
         PhpdocToCommentFixer::class,
-        DeclareStrictTypesFixer::class => [
-            __DIR__ . '/tests',
-        ],
     ]);
 
     $containerConfigurator->import(SetList::CLEAN_CODE);
