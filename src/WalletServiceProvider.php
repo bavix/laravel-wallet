@@ -83,7 +83,7 @@ class WalletServiceProvider extends ServiceProvider
         $configure = config('wallet', []);
 
         $this->singletons($configure['services'] ?? []);
-        $this->legacySingleton($configure['legacy'] ?? []);
+        $this->legacySingleton(); // without configuration
         $this->bindObjects($configure);
     }
 
@@ -109,14 +109,14 @@ class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(UuidInterface::class, $configure['uuid'] ?? UuidFactoryService::class);
     }
 
-    private function legacySingleton(array $configure): void
+    private function legacySingleton(): void
     {
-        $this->app->singleton(CommonService::class, $configure['common'] ?? null);
-        $this->app->singleton(WalletService::class, $configure['wallet'] ?? null);
+        $this->app->singleton(CommonService::class);
+        $this->app->singleton(WalletService::class);
 
-        $this->app->singleton(DbService::class, $configure['db'] ?? null);
-        $this->app->singleton(LockService::class, $configure['lock'] ?? null);
-        $this->app->singleton(MetaService::class, $configure['meta'] ?? null);
+        $this->app->singleton(DbService::class);
+        $this->app->singleton(LockService::class);
+        $this->app->singleton(MetaService::class);
     }
 
     private function bindObjects(array $configure): void
