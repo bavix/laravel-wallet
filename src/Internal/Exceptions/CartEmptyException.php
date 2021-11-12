@@ -6,6 +6,6 @@ namespace Bavix\Wallet\Internal\Exceptions;
 
 use LogicException;
 
-final class CartEmptyException extends LogicException
+final class CartEmptyException extends LogicException implements LogicExceptionInterface
 {
 }

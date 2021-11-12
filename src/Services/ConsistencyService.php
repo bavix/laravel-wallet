@@ -68,7 +68,7 @@ class ConsistencyService implements ConsistencyInterface
     }
 
     /**
-     * @param TransferLazyDto[] $objects
+     * @param array<TransferLazyDto> $objects
      *
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
