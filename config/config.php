@@ -35,7 +35,7 @@ return [
      * A system for dealing with race conditions.
      */
     'lock' => [
-        'driver' => null,
+        'driver' => 'array',
         'seconds' => 1,
     ],
 
