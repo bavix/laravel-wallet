@@ -11,6 +11,7 @@ use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\Dto\AvailabilityDto;
 use Bavix\Wallet\Internal\PurchaseInterface;
 use Bavix\Wallet\Internal\Service\PrepareService;
+use Bavix\Wallet\Internal\TranslatorInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\CommonService;
@@ -25,13 +26,15 @@ trait CartPay
     use HasWallet;
 
     /**
-     * @return Transfer[]
+     * @return non-empty-array<Transfer>
      */
     public function payFreeCart(CartInterface $cart): array
     {
         $basketService = app(BasketInterface::class);
         if (!$basketService->availability(new AvailabilityDto($this, $cart->getBasketDto()))) {
-            throw new ProductEnded(trans('wallet::errors.product_stock'));
+            throw new ProductEnded(
+                app(TranslatorInterface::class)->get('wallet::errors.product_stock')
+            );
         }
 
         app(ConsistencyInterface::class)->checkPotential($this, 0, true);
@@ -67,13 +70,15 @@ trait CartPay
     }
 
     /**
-     * @return Transfer[]
+     * @return non-empty-array<Transfer>
      */
     public function payCart(CartInterface $cart, bool $force = false): array
     {
         $basketService = app(BasketInterface::class);
         if (!$basketService->availability(new AvailabilityDto($this, $cart->getBasketDto(), $force))) {
-            throw new ProductEnded(trans('wallet::errors.product_stock'));
+            throw new ProductEnded(
+                app(TranslatorInterface::class)->get('wallet::errors.product_stock')
+            );
         }
 
         return app(DbService::class)->transaction(function () use ($cart, $force) {
@@ -99,7 +104,7 @@ trait CartPay
     }
 
     /**
-     * @return Transfer[]
+     * @return non-empty-array<Transfer>
      */
     public function forcePayCart(CartInterface $cart): array
     {

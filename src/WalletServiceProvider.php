@@ -11,7 +11,9 @@ use Bavix\Wallet\Internal\ExchangeInterface;
 use Bavix\Wallet\Internal\LockInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\PurchaseInterface;
+use Bavix\Wallet\Internal\Service\TranslatorService;
 use Bavix\Wallet\Internal\StorageInterface;
+use Bavix\Wallet\Internal\TranslatorInterface;
 use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
@@ -98,6 +100,7 @@ class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(BasketInterface::class, $configure['basket'] ?? BasketService::class);
         $this->app->singleton(BookkeeperInterface::class, $configure['bookkeeper'] ?? BookkeeperService::class);
         $this->app->singleton(ConsistencyInterface::class, $configure['consistency'] ?? ConsistencyService::class);
+        $this->app->singleton(TranslatorInterface::class, $configure['translator'] ?? TranslatorService::class);
         $this->app->singleton(ExchangeInterface::class, $configure['exchange'] ?? ExchangeService::class);
         $this->app->singleton(LockInterface::class, $configure['atomic'] ?? AtomicService::class);
         $this->app->singleton(MathInterface::class, $configure['math'] ?? MathService::class);

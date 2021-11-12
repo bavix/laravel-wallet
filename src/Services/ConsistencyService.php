@@ -12,19 +12,20 @@ use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\Dto\TransferLazyDto;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\Service\CastService;
+use Bavix\Wallet\Internal\TranslatorInterface;
 
 class ConsistencyService implements ConsistencyInterface
 {
     private CastService $castService;
     private MathInterface $mathService;
-    private WalletService $walletService;
+    private TranslatorInterface $translatorService;
 
     public function __construct(
-        WalletService $walletService,
+        TranslatorInterface $translatorService,
         MathInterface $mathService,
         CastService $castService
     ) {
-        $this->walletService = $walletService;
+        $this->translatorService = $translatorService;
         $this->mathService = $mathService;
         $this->castService = $castService;
     }
@@ -37,7 +38,9 @@ class ConsistencyService implements ConsistencyInterface
     public function checkPositive($amount): void
     {
         if ($this->mathService->compare($amount, 0) === -1) {
-            throw new AmountInvalid(trans('wallet::errors.price_positive'));
+            throw new AmountInvalid(
+                $this->translatorService->get('wallet::errors.price_positive')
+            );
         }
     }
 
@@ -52,11 +55,15 @@ class ConsistencyService implements ConsistencyInterface
         $wallet = $this->castService->getWallet($object, false);
 
         if (($this->mathService->compare($amount, 0) !== 0) && !$wallet->getBalanceAttribute()) {
-            throw new BalanceIsEmpty(trans('wallet::errors.wallet_empty'));
+            throw new BalanceIsEmpty(
+                $this->translatorService->get('wallet::errors.wallet_empty')
+            );
         }
 
         if (!$wallet->canWithdraw($amount, $allowZero)) {
-            throw new InsufficientFunds(trans('wallet::errors.insufficient_funds'));
+            throw new InsufficientFunds(
+                $this->translatorService->get('wallet::errors.insufficient_funds')
+            );
         }
     }
 

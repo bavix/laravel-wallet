@@ -24,7 +24,6 @@ class CommonService
     private LockService $lockService;
     private AtmService $atmService;
     private CastService $castService;
-    private WalletService $walletService;
     private AssistantService $assistantService;
     private PrepareService $prepareService;
     private BookkeeperInterface $bookkeeper;
@@ -34,7 +33,6 @@ class CommonService
         DbService $dbService,
         LockService $lockService,
         CastService $castService,
-        WalletService $walletService,
         BookkeeperInterface $bookkeeper,
         AssistantService $satisfyService,
         PrepareService $prepareService,
@@ -45,7 +43,6 @@ class CommonService
         $this->lockService = $lockService;
         $this->atmService = $atmService;
         $this->castService = $castService;
-        $this->walletService = $walletService;
         $this->bookkeeper = $bookkeeper;
         $this->assistantService = $satisfyService;
         $this->prepareService = $prepareService;
@@ -67,9 +64,9 @@ class CommonService
     }
 
     /**
-     * @param TransferLazyDto[] $objects
+     * @param non-empty-array<TransferLazyDto> $objects
      *
-     * @return Transfer[]
+     * @return non-empty-array<Transfer>
      */
     public function applyTransfers(array $objects): array
     {
@@ -164,7 +161,7 @@ class CommonService
     }
 
     /**
-     * @param non-empty-array<int, Wallet>         $wallets
+     * @param non-empty-array<int|string, Wallet>  $wallets
      * @param non-empty-array<int, TransactionDto> $objects
      *
      * @return non-empty-array<string, Transaction>

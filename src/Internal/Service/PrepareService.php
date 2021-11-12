@@ -6,7 +6,6 @@ namespace Bavix\Wallet\Internal\Service;
 
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
-use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Dto\TransferLazyDto;
 use Bavix\Wallet\Models\Transaction;
@@ -17,7 +16,6 @@ use Bavix\Wallet\Services\WalletService;
 class PrepareService
 {
     private TransactionDtoAssembler $transactionDtoAssembler;
-    private TransferDtoAssembler $transferDtoAssembler;
     private ConsistencyService $consistencyService;
     private WalletService $walletService;
     private CastService $castService;
@@ -25,14 +23,12 @@ class PrepareService
 
     public function __construct(
         TransactionDtoAssembler $transactionDtoAssembler,
-        TransferDtoAssembler $transferDtoAssembler,
         ConsistencyService $consistencyService,
         WalletService $walletService,
         CastService $castService,
         MathService $mathService
     ) {
         $this->transactionDtoAssembler = $transactionDtoAssembler;
-        $this->transferDtoAssembler = $transferDtoAssembler;
         $this->consistencyService = $consistencyService;
         $this->walletService = $walletService;
         $this->castService = $castService;
@@ -67,6 +63,9 @@ class PrepareService
         );
     }
 
+    /**
+     * @param float|int|string $amount
+     */
     public function transferLazy(Wallet $from, Wallet $to, string $status, $amount, ?array $meta = null): TransferLazyDto
     {
         $discount = $this->walletService->discount($from, $to);

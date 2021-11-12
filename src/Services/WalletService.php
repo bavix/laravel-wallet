@@ -51,7 +51,7 @@ class WalletService
     /**
      * Consider the fee that the system will receive.
      *
-     * @param int|string $amount
+     * @param float|int|string $amount
      *
      * @return float|int|string
      */

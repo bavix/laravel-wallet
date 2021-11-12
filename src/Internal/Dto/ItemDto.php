@@ -23,7 +23,7 @@ class ItemDto implements Countable
     /**
      * @return Product[]
      */
-    public function items(): iterable
+    public function items(): array
     {
         return array_fill(0, $this->quantity, $this->product);
     }

@@ -42,7 +42,7 @@ class AtmService
         $query = new TransactionQuery($uuids);
 
         $items = $this->transactionRepository->findBy($query);
-        assert(count($items) === count($uuids));
+        assert(count($items) > 0);
 
         $results = [];
         foreach ($items as $item) {
@@ -64,7 +64,7 @@ class AtmService
         $query = new TransferQuery($uuids);
 
         $items = $this->transferRepository->findBy($query);
-        assert(count($items) === count($uuids));
+        assert(count($items) > 0);
 
         $results = [];
         foreach ($items as $item) {

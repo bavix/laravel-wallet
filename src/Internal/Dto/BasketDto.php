@@ -44,7 +44,7 @@ class BasketDto implements Countable
     }
 
     /** @return ItemDto[] */
-    public function items(): iterable
+    public function items(): array
     {
         return $this->items;
     }

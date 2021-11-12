@@ -42,7 +42,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     use HasGift;
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $fillable = [
         'holder_type',

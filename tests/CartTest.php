@@ -2,6 +2,7 @@
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Internal\Exceptions\CartEmptyException;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\PurchaseInterface;
 use Bavix\Wallet\Models\Transfer;
@@ -55,6 +56,12 @@ class CartTest extends TestCase
             self::assertEquals($product->name, $transaction->meta['name']);
             self::assertEquals($expected, $transaction->meta['type']);
         }
+    }
+
+    public function testCartGetBasketDtoCartEmpty(): void
+    {
+        $this->expectException(CartEmptyException::class);
+        app(Cart::class)->getBasketDto();
     }
 
     public function testCartMetaItemNoMeta(): void

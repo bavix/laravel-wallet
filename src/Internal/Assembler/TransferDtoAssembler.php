@@ -24,7 +24,7 @@ class TransferDtoAssembler
         Model $fromModel,
         Model $toModel,
         int $discount,
-        int $fee
+        string $fee
     ): TransferDto {
         return new TransferDto(
             $this->uuidService->uuid4(),

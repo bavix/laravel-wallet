@@ -2,5 +2,3 @@ parameters:
   checkMissingIterableValueType: false
   fileExtensions:
     - php
-  ignoreErrors:
-    - '#Call to an undefined method Bavix\\Wallet\\Interfaces\\Wallet::morphOne\(\)\.#'
