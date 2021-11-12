@@ -30,7 +30,7 @@ class ConfirmTest extends TestCase
         self::assertFalse($transaction->confirmed);
 
         $wallet->confirm($transaction);
-        self::assertSame($transaction->amount, $wallet->balance);
+        self::assertSame($transaction->amountInt, $wallet->balanceInt);
         self::assertTrue($transaction->confirmed);
     }
 
@@ -98,7 +98,7 @@ class ConfirmTest extends TestCase
         self::assertFalse($transaction->confirmed);
 
         $wallet->forceConfirm($transaction);
-        self::assertSame($transaction->amount, $wallet->balance);
+        self::assertSame($transaction->amountInt, $wallet->balanceInt);
         self::assertTrue($transaction->confirmed);
     }
 

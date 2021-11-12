@@ -45,12 +45,12 @@ class TaxTest extends TestCase
         $deposit = $transfer->deposit;
 
         self::assertSame($withdraw->amountInt, -$balance);
-        self::assertSame($deposit->amountInt, $product->getAmountProduct($buyer));
-        self::assertNotSame($deposit->amount, $withdraw->amount);
+        self::assertSame($deposit->amountInt, (int) $product->getAmountProduct($buyer));
+        self::assertNotSame($deposit->amountInt, $withdraw->amountInt);
         self::assertSame((int) $transfer->fee, $fee);
 
         $buyer->refund($product);
-        self::assertSame($buyer->balance, $deposit->amount);
+        self::assertSame($buyer->balanceInt, $deposit->amountInt);
         self::assertSame($product->balanceInt, 0);
 
         $buyer->withdraw($buyer->balance);
@@ -70,7 +70,7 @@ class TaxTest extends TestCase
         ]);
 
         $fee = (int) ($product->getAmountProduct($santa) * $product->getFeePercent() / 100);
-        $balance = $product->getAmountProduct($santa) + $fee;
+        $balance = (int) ($product->getAmountProduct($santa) + $fee);
 
         self::assertSame($santa->balanceInt, 0);
         self::assertSame($child->balanceInt, 0);
@@ -90,7 +90,7 @@ class TaxTest extends TestCase
 
         self::assertSame($withdraw->amountInt, (int) -$balance);
         self::assertSame($deposit->amountInt, (int) $product->getAmountProduct($santa));
-        self::assertNotSame($deposit->amount, $withdraw->amount);
+        self::assertNotSame($deposit->amountInt, $withdraw->amountInt);
         self::assertSame($fee, (int) $transfer->fee);
 
         self::assertFalse($santa->safeRefundGift($product));

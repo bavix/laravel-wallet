@@ -287,7 +287,7 @@ class DiscountTaxTest extends TestCase
             $product->getPersonalDiscount($buyer)
         );
 
-        self::assertSame('0', $transfer->fee);
+        self::assertSame(0, (int) $transfer->fee);
 
         self::assertSame($buyer->balanceInt, -1000);
         self::assertSame($product->balanceInt, 0);

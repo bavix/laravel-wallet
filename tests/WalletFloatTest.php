@@ -181,10 +181,10 @@ class WalletFloatTest extends TestCase
 
         $user->deposit(1000000);
         self::assertSame($user->balanceInt, 1000000);
-        self::assertSame($user->balanceFloat, '10000.00');
+        self::assertSame((float) $user->balanceFloat, 10000.00);
 
         $transaction = $user->withdrawFloat(2556.72);
-        self::assertSame($transaction->amount, '-255672');
+        self::assertSame($transaction->amountInt, -255672);
         self::assertSame((float) $transaction->amountFloat, -2556.72);
         self::assertSame($transaction->type, Transaction::TYPE_WITHDRAW);
 
@@ -207,11 +207,11 @@ class WalletFloatTest extends TestCase
         self::assertSame(0, $user->balanceInt);
 
         $user->deposit(1000000);
-        self::assertSame('1000000', $user->balance);
-        self::assertSame('10000.00', $user->balanceFloat);
+        self::assertSame(1000000, $user->balanceInt);
+        self::assertSame(10000.00, (float) $user->balanceFloat);
 
         $transaction = $user->withdrawFloat(2556.72);
-        self::assertSame('-255672', $transaction->amount);
+        self::assertSame(-255672, $transaction->amountInt);
         self::assertSame(-2556.72, (float) $transaction->amountFloat);
         self::assertSame(Transaction::TYPE_WITHDRAW, $transaction->type);
 
@@ -220,7 +220,7 @@ class WalletFloatTest extends TestCase
         self::assertTrue($transaction->save());
         self::assertTrue($user->wallet->refreshBalance());
 
-        self::assertSame('255672', $transaction->amount);
+        self::assertSame(255672, $transaction->amountInt);
         self::assertSame(2556.72, (float) $transaction->amountFloat);
         self::assertSame(Transaction::TYPE_DEPOSIT, $transaction->type);
 
@@ -235,19 +235,19 @@ class WalletFloatTest extends TestCase
         self::assertSame(0, $user->balanceInt);
 
         $user->deposit(1000000);
-        self::assertSame('1000000', $user->balance);
-        self::assertSame('10000.00', $user->balanceFloat);
+        self::assertSame(1000000, $user->balanceInt);
+        self::assertSame(10000.00, (float) $user->balanceFloat);
 
         $transaction = $user->withdrawFloat(0.2 + 0.1);
-        self::assertSame($transaction->amount, '-30');
+        self::assertSame($transaction->amountInt, -30);
         self::assertSame($transaction->type, Transaction::TYPE_WITHDRAW);
 
         $transaction = $user->withdrawFloat(0.2 + 0.105);
-        self::assertSame($transaction->amount, '-31');
+        self::assertSame($transaction->amountInt, -31);
         self::assertSame($transaction->type, Transaction::TYPE_WITHDRAW);
 
         $transaction = $user->withdrawFloat(0.2 + 0.104);
-        self::assertSame($transaction->amount, '-30');
+        self::assertSame($transaction->amountInt, -30);
         self::assertSame($transaction->type, Transaction::TYPE_WITHDRAW);
     }
 
@@ -313,7 +313,7 @@ class WalletFloatTest extends TestCase
         $user->wallet->refreshBalance();
         $user->refresh();
 
-        self::assertSame('0.09699977', $user->balanceFloat);
-        self::assertSame('9699977', $user->balance);
+        self::assertSame(0.09699977, (float) $user->balanceFloat);
+        self::assertSame(9699977, $user->balanceInt);
     }
 }
