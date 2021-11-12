@@ -28,7 +28,7 @@ interface ConsistencyInterface
     public function checkPotential(Wallet $object, $amount, bool $allowZero = false): void;
 
     /**
-     * @param array<TransferLazyDto> $objects
+     * @param TransferLazyDto[] $objects
      *
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds

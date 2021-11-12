@@ -8,8 +8,6 @@ use function app;
 use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\WalletService;
-use Bavix\Wallet\Test\Common\Services\WalletAdjustmentFailedService;
 use Bavix\Wallet\Test\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Illuminate\Database\SQLiteConnection;
@@ -226,57 +224,6 @@ class BalanceTest extends TestCase
         self::assertSame(1000, (int) $wallet->getRawOriginal('balance'));
     }
 
-    /**
-     * @dataProvider providerAdjustment
-     */
-    public function testAdjustment(int $account, int $adjust): void
-    {
-        /** @var Buyer $buyer */
-        $buyer = BuyerFactory::new()->create();
-        $wallet = $buyer->wallet;
-
-        self::assertSame(0, $wallet->balanceInt);
-
-        $wallet->deposit($account);
-        self::assertSame($account, $wallet->balanceInt);
-
-        Wallet::whereKey($buyer->wallet->getKey())
-            ->update(['balance' => $adjust])
-        ;
-
-        /**
-         * Create a state when the cache is empty.
-         * For example, something went wrong and your database has incorrect data.
-         * Unfortunately, the library will work with what is.
-         * But there is an opportunity to recount the balance.
-         *
-         * Here is an example:
-         */
-        app(BookkeeperInterface::class)->missing($wallet);
-        self::assertSame($account, (int) $wallet->getRawOriginal('balance'));
-
-        /**
-         * We load the model from the base and our balance is 10.
-         */
-        $wallet->refresh();
-        self::assertSame($adjust, $wallet->balanceInt);
-        self::assertSame($adjust, (int) $wallet->getRawOriginal('balance'));
-
-        /**
-         * Now we fill the cache with relevant data (PS, the data inside the model will be updated).
-         */
-        $wallet->adjustmentBalance();
-        self::assertSame($adjust, $wallet->balanceInt);
-        self::assertSame($adjust, (int) $wallet->getRawOriginal('balance'));
-
-        /**
-         * Reapply, just in case...
-         */
-        $wallet->refreshBalance();
-        self::assertSame($adjust, $wallet->balanceInt);
-        self::assertSame($adjust, (int) $wallet->getRawOriginal('balance'));
-    }
-
     public function testFailUpdate(): void
     {
         /** @var Buyer $buyer */
@@ -310,39 +257,5 @@ class BalanceTest extends TestCase
 
         self::assertFalse($result);
         self::assertSame('0', $bookkeeper->amount($wallet));
-    }
-
-    /**
-     * @dataProvider providerAdjustment
-     */
-    public function testAdjustmentFailed(int $account, int $adjust): void
-    {
-        /** @var Buyer $buyer */
-        $buyer = BuyerFactory::new()->create();
-        $wallet = $buyer->wallet;
-
-        self::assertSame(0, $wallet->balanceInt);
-
-        $wallet->deposit($account);
-        self::assertSame($account, $wallet->balanceInt);
-
-        Wallet::whereKey($buyer->wallet->getKey())
-            ->update(['balance' => $adjust])
-        ;
-
-        app()->singleton(WalletService::class, WalletAdjustmentFailedService::class);
-        self::assertFalse($wallet->adjustmentBalance());
-    }
-
-    /**
-     * @return int[][]
-     */
-    public function providerAdjustment(): array
-    {
-        return [
-            [2000, 1000],
-            [1000, 2000],
-            [2000, 2000],
-        ];
     }
 }
