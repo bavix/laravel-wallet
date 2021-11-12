@@ -10,6 +10,7 @@ use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Internal\CartInterface;
 use Bavix\Wallet\Internal\Dto\BasketDto;
 use Bavix\Wallet\Internal\Dto\ItemDto;
+use Bavix\Wallet\Internal\Exceptions\CartEmptyException;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\Service\CastService;
 use function count;
@@ -108,12 +109,19 @@ class Cart implements Countable, CartInterface
         return (int) ($this->quantity[get_class($product).':'.$model->getKey()] ?? 0);
     }
 
+    /**
+     * @throws CartEmptyException
+     */
     public function getBasketDto(): BasketDto
     {
         $items = array_map(
             fn (Product $product): ItemDto => new ItemDto($product, $this->getQuantity($product)),
             $this->getUniqueItems()
         );
+
+        if (count($items) === 0) {
+            throw new CartEmptyException();
+        }
 
         return new BasketDto($items, $this->getMeta());
     }

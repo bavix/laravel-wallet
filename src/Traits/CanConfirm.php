@@ -10,6 +10,7 @@ use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\Service\CastService;
+use Bavix\Wallet\Internal\TranslatorInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\DbService;
@@ -56,7 +57,9 @@ trait CanConfirm
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
             return app(DbService::class)->transaction(function () use ($transaction) {
                 if (!$transaction->confirmed) {
-                    throw new UnconfirmedInvalid(trans('wallet::errors.unconfirmed_invalid'));
+                    throw new UnconfirmedInvalid(
+                        app(TranslatorInterface::class)->get('wallet::errors.unconfirmed_invalid')
+                    );
                 }
 
                 $wallet = app(CastService::class)->getWallet($this);
@@ -90,12 +93,16 @@ trait CanConfirm
         return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
             return app(DbService::class)->transaction(function () use ($transaction) {
                 if ($transaction->confirmed) {
-                    throw new ConfirmedInvalid(trans('wallet::errors.confirmed_invalid'));
+                    throw new ConfirmedInvalid(
+                        app(TranslatorInterface::class)->get('wallet::errors.confirmed_invalid')
+                    );
                 }
 
                 $wallet = app(CastService::class)->getWallet($this);
                 if ($wallet->getKey() !== $transaction->wallet_id) {
-                    throw new WalletOwnerInvalid(trans('wallet::errors.owner_invalid'));
+                    throw new WalletOwnerInvalid(
+                        app(TranslatorInterface::class)->get('wallet::errors.owner_invalid')
+                    );
                 }
 
                 return $transaction->update(['confirmed' => true]) &&

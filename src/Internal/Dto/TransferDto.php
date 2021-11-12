@@ -23,7 +23,7 @@ class TransferDto
     private int $toId;
 
     private int $discount;
-    private int $fee;
+    private string $fee;
 
     private DateTimeImmutable $createdAt;
     private DateTimeImmutable $updatedAt;
@@ -38,7 +38,7 @@ class TransferDto
         string $toType,
         int $toId,
         int $discount,
-        int $fee
+        string $fee
     ) {
         $this->uuid = $uuid;
         $this->depositId = $depositId;
@@ -99,7 +99,7 @@ class TransferDto
         return $this->discount;
     }
 
-    public function getFee(): int
+    public function getFee(): string
     {
         return $this->fee;
     }

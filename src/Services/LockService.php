@@ -24,6 +24,9 @@ class LockService
         $this->atomicService = $atomicService;
     }
 
+    /**
+     * @return mixed
+     */
     public function lock(object $self, string $name, Closure $closure)
     {
         $class = get_class($self);
