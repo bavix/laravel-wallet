@@ -6,6 +6,6 @@ namespace Bavix\Wallet\Internal\Exceptions;
 
 use LogicException;
 
-final class LockProviderNotFoundException extends LogicException
+final class LockProviderNotFoundException extends LogicException implements LogicExceptionInterface
 {
 }
