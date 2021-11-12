@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.2.4] - 2021-11-13
+### Fixed
+- Fixed error LockProviderNotFoundException
+
 ## [6.2.3] - 2021-11-08
 ### Fixed
 - Fixed a bug with `migrate:refresh`
@@ -679,7 +683,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/6.2.3...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/6.2.4...develop
+[6.2.4]: https://github.com/bavix/laravel-wallet/compare/6.2.3...6.2.4
 [6.2.3]: https://github.com/bavix/laravel-wallet/compare/6.2.2...6.2.3
 [6.2.2]: https://github.com/bavix/laravel-wallet/compare/6.2.1...6.2.2
 [6.2.1]: https://github.com/bavix/laravel-wallet/compare/6.2.0...6.2.1
