@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'price_positive' => 'Цена должна быть положительной',
     'product_stock' => 'Товар отсутствует',
