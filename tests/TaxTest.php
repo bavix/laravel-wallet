@@ -88,14 +88,14 @@ class TaxTest extends TestCase
         $withdraw = $transfer->withdraw;
         $deposit = $transfer->deposit;
 
-        self::assertSame($withdraw->amountInt, (int) -$balance);
+        self::assertSame($withdraw->amountInt, -$balance);
         self::assertSame($deposit->amountInt, (int) $product->getAmountProduct($santa));
         self::assertNotSame($deposit->amountInt, $withdraw->amountInt);
         self::assertSame($fee, (int) $transfer->fee);
 
         self::assertFalse($santa->safeRefundGift($product));
         self::assertTrue($child->refundGift($product));
-        self::assertSame($santa->balance, $deposit->amount);
+        self::assertSame($santa->balanceInt, $deposit->amountInt);
         self::assertSame($child->balanceInt, 0);
         self::assertSame($product->balanceInt, 0);
 
