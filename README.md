@@ -63,6 +63,7 @@ $user->balance; // 0
 
 $user->deposit(10);
 $user->balance; // 10
+$user->balanceInt; // int(10)
 
 $user->withdraw(1);
 $user->balance; // 9

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet;
 
+use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
 use Bavix\Wallet\Internal\BasketInterface;
 use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
@@ -85,6 +88,7 @@ class WalletServiceProvider extends ServiceProvider
         $this->singletons($configure['services'] ?? []);
         $this->legacySingleton(); // without configuration
         $this->bindObjects($configure);
+        $this->assemblers($configure['assemblers'] ?? []);
     }
 
     /**
@@ -107,6 +111,13 @@ class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(PurchaseInterface::class, $configure['purchase'] ?? PurchaseService::class);
         $this->app->singleton(StorageInterface::class, $configure['storage'] ?? StorageService::class);
         $this->app->singleton(UuidInterface::class, $configure['uuid'] ?? UuidFactoryService::class);
+    }
+
+    private function assemblers(array $configure): void
+    {
+        $this->app->singleton(TransactionDtoAssembler::class, $configure['transaction'] ?? null);
+        $this->app->singleton(TransferLazyDtoAssembler::class, $configure['transfer_lazy'] ?? null);
+        $this->app->singleton(TransferDtoAssembler::class, $configure['transfer'] ?? null);
     }
 
     private function legacySingleton(): void

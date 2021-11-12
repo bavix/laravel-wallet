@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
@@ -49,6 +52,15 @@ return [
         'purchase' => PurchaseService::class,
         'storage' => StorageService::class,
         'uuid' => UuidFactoryService::class,
+    ],
+
+    /**
+     * Builder class, needed to create DTO.
+     */
+    'assemblers' => [
+        'transaction' => TransactionDtoAssembler::class,
+        'transfer_lazy' => TransferLazyDtoAssembler::class,
+        'transfer' => TransferDtoAssembler::class,
     ],
 
     /**
