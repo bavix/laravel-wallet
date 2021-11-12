@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'price_positive' => 'The price should be positive',
     'product_stock' => 'The product is out of stock',

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'price_positive' => 'يجب أن يكون السعر موجبًا',
     'product_stock' => 'المنتج غير متوفر',

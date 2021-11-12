@@ -17,7 +17,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'syntax' => 'short',
         ]]);
 
-    //$services->set(DeclareStrictTypesFixer::class);
+    $services->set(DeclareStrictTypesFixer::class);
 
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::PARALLEL, true);
@@ -32,6 +32,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::SKIP, [
         PhpUnitTestClassRequiresCoversFixer::class,
         PhpdocToCommentFixer::class,
+        DeclareStrictTypesFixer::class => [
+            __DIR__ . '/tests',
+        ],
     ]);
 
     $containerConfigurator->import(SetList::CLEAN_CODE);

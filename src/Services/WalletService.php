@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Interfaces\Customer;
@@ -52,10 +54,8 @@ class WalletService
      * Consider the fee that the system will receive.
      *
      * @param float|int|string $amount
-     *
-     * @return float|int|string
      */
-    public function fee(Wallet $wallet, $amount)
+    public function fee(Wallet $wallet, $amount): string
     {
         $fee = 0;
         if ($wallet instanceof Taxable) {
@@ -80,7 +80,7 @@ class WalletService
             }
         }
 
-        return $fee;
+        return (string) $fee;
     }
 
     /**
