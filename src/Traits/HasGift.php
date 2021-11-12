@@ -53,7 +53,7 @@ trait HasGift
      */
     public function gift(Wallet $to, Product $product, bool $force = false): Transfer
     {
-        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($to, $product, $force): Transfer {
+        return app(LockService::class)->lock($this, function () use ($to, $product, $force): Transfer {
             /**
              * Who's giving? Let's call him Santa Claus.
              *

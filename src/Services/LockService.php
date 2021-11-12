@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
-use Bavix\Wallet\Internal\UuidInterface;
 use Closure;
 use function get_class;
 use Illuminate\Database\Eloquent\Model;
@@ -15,29 +14,21 @@ use Illuminate\Database\Eloquent\Model;
  */
 class LockService
 {
-    private string $ikey;
     private AtomicService $atomicService;
 
-    public function __construct(UuidInterface $uuidService, AtomicService $atomicService)
+    public function __construct(AtomicService $atomicService)
     {
-        $this->ikey = $uuidService->uuid4();
         $this->atomicService = $atomicService;
     }
 
     /**
      * @return mixed
      */
-    public function lock(object $self, string $name, Closure $closure)
+    public function lock(Model $self, Closure $closure)
     {
-        $class = get_class($self);
-        $uniqId = $class.$this->ikey;
-        if ($self instanceof Model) {
-            $uniqId = $class.$self->getKey();
-        }
-
         return $this->atomicService->block(
-            "legacy_{$name}.{$uniqId}",
-            $closure->bindTo($self)
+            'legacy_'.get_class($self).$self->getKey(),
+            $closure
         );
     }
 }

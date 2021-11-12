@@ -48,7 +48,7 @@ trait CanExchange
      */
     public function forceExchange(Wallet $to, $amount, ?array $meta = null): Transfer
     {
-        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($to, $amount, $meta) {
+        return app(LockService::class)->lock($this, function () use ($to, $amount, $meta) {
             return app(DbService::class)->transaction(function () use ($to, $amount, $meta) {
                 $prepareService = app(PrepareService::class);
                 $mathService = app(MathInterface::class);
