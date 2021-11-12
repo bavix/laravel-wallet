@@ -42,5 +42,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(SetList::PHP_CS_FIXER);
     $containerConfigurator->import(SetList::CONTROL_STRUCTURES);
     $containerConfigurator->import(SetList::NAMESPACES);
-    //$containerConfigurator->import(SetList::STRICT);
+    $containerConfigurator->import(SetList::STRICT);
 };
