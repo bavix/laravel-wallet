@@ -47,7 +47,7 @@ return [
      *  'cache' => 'redis'
      */
     'lock' => [
-        'cache' => null,
+        'cache' => 'array',
         'enabled' => false,
         'seconds' => 1,
     ],
