@@ -6,6 +6,6 @@ namespace Bavix\Wallet\Exceptions;
 
 use LogicException;
 
-class InsufficientFunds extends LogicException
+final class InsufficientFunds extends LogicException implements LogicExceptionInterface
 {
 }

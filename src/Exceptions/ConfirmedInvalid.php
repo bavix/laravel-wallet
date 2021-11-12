@@ -6,6 +6,6 @@ namespace Bavix\Wallet\Exceptions;
 
 use InvalidArgumentException;
 
-final class ConfirmedInvalid extends InvalidArgumentException
+final class ConfirmedInvalid extends InvalidArgumentException implements InvalidArgumentExceptionInterface
 {
 }

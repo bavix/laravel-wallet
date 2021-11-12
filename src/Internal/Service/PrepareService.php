@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Internal\Service;
 
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
 use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Dto\TransferLazyDto;
 use Bavix\Wallet\Models\Transaction;
@@ -15,6 +16,7 @@ use Bavix\Wallet\Services\WalletService;
 
 class PrepareService
 {
+    private TransferLazyDtoAssembler $transferLazyDtoAssembler;
     private TransactionDtoAssembler $transactionDtoAssembler;
     private ConsistencyService $consistencyService;
     private WalletService $walletService;
@@ -22,12 +24,14 @@ class PrepareService
     private MathService $mathService;
 
     public function __construct(
+        TransferLazyDtoAssembler $transferLazyDtoAssembler,
         TransactionDtoAssembler $transactionDtoAssembler,
         ConsistencyService $consistencyService,
         WalletService $walletService,
         CastService $castService,
         MathService $mathService
     ) {
+        $this->transferLazyDtoAssembler = $transferLazyDtoAssembler;
         $this->transactionDtoAssembler = $transactionDtoAssembler;
         $this->consistencyService = $consistencyService;
         $this->walletService = $walletService;
@@ -70,14 +74,13 @@ class PrepareService
     {
         $discount = $this->walletService->discount($from, $to);
         $from = $this->castService->getWallet($from);
-        $fee = (string) $this->walletService->fee($to, $amount);
+        $fee = $this->walletService->fee($to, $amount);
 
-        // replace max => mathService.max
-        $depositAmount = (string) max(0, $this->mathService->sub($amount, $discount));
-
+        $amountWithoutDiscount = $this->mathService->sub($amount, $discount);
+        $depositAmount = $this->mathService->compare($amountWithoutDiscount, 0) === -1 ? '0' : $amountWithoutDiscount;
         $withdrawAmount = $this->mathService->add($depositAmount, $fee, $from->decimal_places);
 
-        return new TransferLazyDto(
+        return $this->transferLazyDtoAssembler->create(
             $from,
             $to,
             $discount,
