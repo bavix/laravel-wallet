@@ -100,23 +100,6 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         return app(WalletService::class)->refresh($this);
     }
 
-    /**
-     * The method adjusts the balance by adding a transaction.
-     * Used wisely, it can lead to serious problems.
-     *
-     * @deprecated will be removed in version 7.x
-     */
-    public function adjustmentBalance(): bool
-    {
-        try {
-            app(WalletService::class)->adjustment($this);
-
-            return true;
-        } catch (\Throwable $throwable) {
-            return false;
-        }
-    }
-
     /** @codeCoverageIgnore */
     public function getOriginalBalance(): string
     {

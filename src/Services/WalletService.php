@@ -13,24 +13,20 @@ use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\Service\CastService;
 use Bavix\Wallet\Models\Wallet as WalletModel;
-use Throwable;
 
 class WalletService
 {
-    private DbService $dbService;
     private MathInterface $math;
     private CastService $castService;
     private LockService $lockService;
     private BookkeeperInterface $bookkeeper;
 
     public function __construct(
-        DbService $dbService,
         MathInterface $math,
         CastService $castService,
         LockService $lockService,
         BookkeeperInterface $bookkeeper
     ) {
-        $this->dbService = $dbService;
         $this->math = $math;
         $this->castService = $castService;
         $this->lockService = $lockService;
@@ -96,33 +92,6 @@ class WalletService
 
             return $this->bookkeeper->sync($this->castService->getWallet($wallet), $balance) &&
                 (!$this->math->compare($whatIs, $balance) || $wallet->save());
-        });
-    }
-
-    /**
-     * @throws Throwable
-     *
-     * @deprecated
-     * @see WalletModel::adjustmentBalance()
-     */
-    public function adjustment(WalletModel $wallet, ?array $meta = null): void
-    {
-        $this->dbService->transaction(function () use ($wallet, $meta) {
-            $walletObject = $this->castService->getWallet($wallet);
-            $adjustmentBalance = $this->bookkeeper->amount($walletObject);
-            $wallet->refreshBalance();
-            $difference = $this->math->sub($wallet->balance, $adjustmentBalance);
-
-            switch ($this->math->compare($difference, 0)) {
-                case -1:
-                    $wallet->deposit($this->math->abs($difference), $meta);
-
-                    break;
-                case 1:
-                    $wallet->forceWithdraw($this->math->abs($difference), $meta);
-
-                    break;
-            }
         });
     }
 }
