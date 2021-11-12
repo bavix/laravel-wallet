@@ -28,10 +28,10 @@ class MinTaxTest extends TestCase
 
         $fee = (int) ($product->getAmountProduct($buyer) * $product->getFeePercent() / 100);
         if ($fee < $product->getMinimalFee()) {
-            $fee = $product->getMinimalFee();
+            $fee = (int) $product->getMinimalFee();
         }
 
-        $balance = $product->getAmountProduct($buyer) + $fee;
+        $balance = (int) ($product->getAmountProduct($buyer) + $fee);
 
         self::assertSame(0, $buyer->balanceInt);
         $buyer->deposit($balance);
@@ -47,13 +47,13 @@ class MinTaxTest extends TestCase
         $withdraw = $transfer->withdraw;
         $deposit = $transfer->deposit;
 
-        self::assertSame($withdraw->amountInt, (int) -$balance);
-        self::assertSame($deposit->amount, (string) $product->getAmountProduct($buyer));
-        self::assertNotSame($deposit->amount, $withdraw->amount);
+        self::assertSame($withdraw->amountInt, -$balance);
+        self::assertSame($deposit->amountInt, (int) $product->getAmountProduct($buyer));
+        self::assertNotSame($deposit->amountInt, $withdraw->amountInt);
         self::assertSame((int) $transfer->fee, $fee);
 
         $buyer->refund($product);
-        self::assertSame($buyer->balance, $deposit->amount);
+        self::assertSame($buyer->balanceInt, $deposit->amountInt);
         self::assertSame(0, $product->balanceInt);
 
         $buyer->withdraw($buyer->balance);
