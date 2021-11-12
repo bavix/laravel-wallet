@@ -56,7 +56,7 @@ trait CanConfirm
      */
     public function resetConfirm(Transaction $transaction): bool
     {
-        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
+        return app(LockService::class)->lock($this, function () use ($transaction) {
             return app(DbService::class)->transaction(function () use ($transaction) {
                 if (!$transaction->confirmed) {
                     throw new UnconfirmedInvalid(
@@ -92,7 +92,7 @@ trait CanConfirm
      */
     public function forceConfirm(Transaction $transaction): bool
     {
-        return app(LockService::class)->lock($this, __FUNCTION__, function () use ($transaction) {
+        return app(LockService::class)->lock($this, function () use ($transaction) {
             return app(DbService::class)->transaction(function () use ($transaction) {
                 if ($transaction->confirmed) {
                     throw new ConfirmedInvalid(

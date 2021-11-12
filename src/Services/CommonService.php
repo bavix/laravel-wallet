@@ -23,7 +23,6 @@ use Throwable;
 class CommonService
 {
     private DbService $dbService;
-    private LockService $lockService;
     private AtmService $atmService;
     private CastService $castService;
     private AssistantService $assistantService;
@@ -33,7 +32,6 @@ class CommonService
 
     public function __construct(
         DbService $dbService,
-        LockService $lockService,
         CastService $castService,
         BookkeeperInterface $bookkeeper,
         AssistantService $satisfyService,
@@ -42,7 +40,6 @@ class CommonService
         AtmService $atmService
     ) {
         $this->dbService = $dbService;
-        $this->lockService = $lockService;
         $this->atmService = $atmService;
         $this->castService = $castService;
         $this->bookkeeper = $bookkeeper;
@@ -118,7 +115,7 @@ class CommonService
      */
     public function addBalance(Wallet $wallet, $amount): bool
     {
-        return $this->lockService->lock($this, __FUNCTION__, function () use ($wallet, $amount) {
+        return $this->dbService->transaction(function () use ($wallet, $amount) {
             /** @var WalletModel $wallet */
             $walletObject = $this->castService->getWallet($wallet);
             $balance = $this->bookkeeper->increase($walletObject, $amount);
