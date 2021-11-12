@@ -9,7 +9,6 @@ use Bavix\Wallet\Test\Models\User;
 
 /**
  * @internal
- * @coversNothing
  */
 class TableTest extends TestCase
 {

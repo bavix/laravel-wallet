@@ -21,8 +21,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int         $wallet_id
  * @property string      $uuid
  * @property string      $type
- * @property int|string  $amount
- * @property float       $amountFloat
+ * @property string      $amount
+ * @property int         $amountInt
+ * @property string      $amountFloat
  * @property bool        $confirmed
  * @property array       $meta
  * @property Wallet      $payable
@@ -75,10 +76,12 @@ class Transaction extends Model
         return $this->belongsTo(config('wallet.wallet.model', WalletModel::class));
     }
 
-    /**
-     * @return float|int
-     */
-    public function getAmountFloatAttribute()
+    public function getAmountIntAttribute(): int
+    {
+        return (int) $this->amount;
+    }
+
+    public function getAmountFloatAttribute(): string
     {
         $math = app(MathInterface::class);
         $decimalPlacesValue = app(CastService::class)
@@ -90,7 +93,7 @@ class Transaction extends Model
     }
 
     /**
-     * @param float|int $amount
+     * @param float|int|string $amount
      */
     public function setAmountFloatAttribute($amount): void
     {

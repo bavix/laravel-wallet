@@ -12,7 +12,6 @@ use Bavix\Wallet\Test\Models\Buyer;
 
 /**
  * @internal
- * @coversNothing
  */
 class WalletExtensionTest extends TestCase
 {
@@ -29,9 +28,9 @@ class WalletExtensionTest extends TestCase
         self::assertFalse($buyer->relationLoaded('wallet'));
         $transaction = $buyer->deposit(1000, ['bank_method' => 'VietComBank']);
 
-        self::assertEquals($transaction->amount, $buyer->balance);
+        self::assertSame($transaction->amount, $buyer->balance);
         self::assertInstanceOf(Transaction::class, $transaction);
-        self::assertEquals('VietComBank', $transaction->bank_method);
+        self::assertSame('VietComBank', $transaction->bank_method);
     }
 
     public function testTransactionMoneyAttribute(): void
@@ -46,10 +45,10 @@ class WalletExtensionTest extends TestCase
         self::assertFalse($buyer->relationLoaded('wallet'));
         $transaction = $buyer->deposit(1000, ['currency' => 'EUR']);
 
-        self::assertEquals($transaction->amount, $buyer->balance);
+        self::assertSame($transaction->amount, $buyer->balance);
         self::assertInstanceOf(TransactionMoney::class, $transaction);
-        self::assertEquals(1000, $transaction->currency->getAmount());
-        self::assertEquals('EUR', $transaction->currency->getCurrency()->getCode());
+        self::assertSame('1000', $transaction->currency->getAmount());
+        self::assertSame('EUR', $transaction->currency->getCurrency()->getCode());
     }
 
     public function testNoCustomAttribute(): void
@@ -59,7 +58,7 @@ class WalletExtensionTest extends TestCase
         self::assertFalse($buyer->relationLoaded('wallet'));
         $transaction = $buyer->deposit(1000);
 
-        self::assertEquals($transaction->amount, $buyer->balance);
+        self::assertSame($transaction->amount, $buyer->balance);
         self::assertInstanceOf(Transaction::class, $transaction);
         self::assertNull($transaction->bank_method);
     }

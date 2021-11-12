@@ -9,7 +9,6 @@ use Bavix\Wallet\Internal\StorageInterface;
 
 /**
  * @internal
- * @coversNothing
  */
 class StorageTest extends TestCase
 {

@@ -24,9 +24,6 @@ class Item extends Model implements Product
 {
     use HasWallet;
 
-    /**
-     * @var array
-     */
     protected $fillable = ['name', 'quantity', 'price'];
 
     public function canBuy(Customer $customer, int $quantity = 1, bool $force = false): bool
@@ -40,9 +37,6 @@ class Item extends Model implements Product
         return $result && !$customer->paid($this);
     }
 
-    /**
-     * @return float|int
-     */
     public function getAmountProduct(Customer $customer)
     {
         /** @var Wallet $wallet */

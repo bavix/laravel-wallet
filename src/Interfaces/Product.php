@@ -9,7 +9,7 @@ interface Product extends Wallet
     public function canBuy(Customer $customer, int $quantity = 1, bool $force = false): bool;
 
     /**
-     * @return float|int
+     * @return float|int|string
      */
     public function getAmountProduct(Customer $customer);
 

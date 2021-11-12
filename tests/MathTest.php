@@ -10,7 +10,6 @@ use Brick\Math\Exception\NumberFormatException;
 
 /**
  * @internal
- * @coversNothing
  */
 class MathTest extends TestCase
 {
@@ -32,24 +31,24 @@ class MathTest extends TestCase
         $provider = app(MathInterface::class);
 
         // int
-        self::assertEquals(123, $provider->abs(123));
-        self::assertEquals(123, $provider->abs(-123));
+        self::assertSame(123, (int) $provider->abs(123));
+        self::assertSame(123, (int) $provider->abs(-123));
 
         // float
-        self::assertEquals(0, $provider->abs(.0));
-        self::assertEquals(123, $provider->abs(123.0));
-        self::assertEquals(123.11, $provider->abs(123.11));
-        self::assertEquals(123.11, $provider->abs(-123.11));
+        self::assertSame(0, (int) $provider->abs(.0));
+        self::assertSame(123, (int) $provider->abs(123.0));
+        self::assertSame(123.11, (float) $provider->abs(123.11));
+        self::assertSame(123.11, (float) $provider->abs(-123.11));
 
         // string
         if (!method_exists(BigInteger::class, 'parse')) {
             // brick/math 0.9+
-            self::assertEquals(123, $provider->abs('123.'));
-            self::assertEquals(.11, $provider->abs('.11'));
+            self::assertSame(123, (int) $provider->abs('123.'));
+            self::assertSame(.11, (float) $provider->abs('.11'));
         }
 
-        self::assertEquals(123.11, $provider->abs('123.11'));
-        self::assertEquals(123.11, $provider->abs('-123.11'));
+        self::assertSame(123.11, (float) $provider->abs('123.11'));
+        self::assertSame(123.11, (float) $provider->abs('-123.11'));
     }
 
     public function testCompare(): void
@@ -58,19 +57,19 @@ class MathTest extends TestCase
         $provider = app(MathInterface::class);
 
         // int
-        self::assertEquals(0, $provider->compare(1, 1));
-        self::assertEquals(-1, $provider->compare(1, 2));
-        self::assertEquals(1, $provider->compare(2, 1));
+        self::assertSame(0, $provider->compare(1, 1));
+        self::assertSame(-1, $provider->compare(1, 2));
+        self::assertSame(1, $provider->compare(2, 1));
 
         // float
-        self::assertEquals(0, $provider->compare(1.33, 1.33));
-        self::assertEquals(-1, $provider->compare(1.44, 2));
-        self::assertEquals(1, $provider->compare(2, 1.44));
+        self::assertSame(0, $provider->compare(1.33, 1.33));
+        self::assertSame(-1, $provider->compare(1.44, 2));
+        self::assertSame(1, $provider->compare(2, 1.44));
 
         // string
-        self::assertEquals(0, $provider->compare('1.33', '1.33'));
-        self::assertEquals(-1, $provider->compare('1.44', '2'));
-        self::assertEquals(1, $provider->compare('2', '1.44'));
+        self::assertSame(0, $provider->compare('1.33', '1.33'));
+        self::assertSame(-1, $provider->compare('1.44', '2'));
+        self::assertSame(1, $provider->compare('2', '1.44'));
     }
 
     public function testAdd(): void
@@ -79,14 +78,14 @@ class MathTest extends TestCase
         $provider = app(MathInterface::class);
 
         // int
-        self::assertEquals(0, $provider->compare($provider->add(1, 5), 6));
-        self::assertEquals(0, $provider->compare($provider->add(-1, 5), 4));
+        self::assertSame(0, $provider->compare($provider->add(1, 5), 6));
+        self::assertSame(0, $provider->compare($provider->add(-1, 5), 4));
 
         // float
-        self::assertEquals(0, $provider->compare($provider->add(1.17, 4.83), 6.));
-        self::assertEquals(0, $provider->compare($provider->add(-1.44, 5.43), 3.99));
+        self::assertSame(0, $provider->compare($provider->add(1.17, 4.83), 6.));
+        self::assertSame(0, $provider->compare($provider->add(-1.44, 5.43), 3.99));
 
-        self::assertEquals(
+        self::assertSame(
             0,
             $provider->compare(
                 $provider->add('4.331733759839529271053448625299468628', 1.4),
@@ -94,7 +93,7 @@ class MathTest extends TestCase
             )
         );
 
-        self::assertEquals(
+        self::assertSame(
             0,
             $provider->compare(
                 $provider->add('5.731733759839529271053448625299468628', '-5.731733759839529271053448625299468627'),
@@ -109,14 +108,14 @@ class MathTest extends TestCase
         $provider = app(MathInterface::class);
 
         // int
-        self::assertEquals(-4, $provider->sub(1, 5));
-        self::assertEquals(-6, $provider->sub(-1, 5));
+        self::assertSame(-4, (int) $provider->sub(1, 5));
+        self::assertSame(-6, (int) $provider->sub(-1, 5));
 
         // float
-        self::assertEquals(-3.66, $provider->sub(1.17, 4.83));
-        self::assertEquals(-6.87, $provider->sub(-1.44, 5.43));
+        self::assertSame(-3.66, (float) $provider->sub(1.17, 4.83));
+        self::assertSame(-6.87, (float) $provider->sub(-1.44, 5.43));
 
-        self::assertEquals(
+        self::assertSame(
             0,
             $provider->compare(
                 $provider->sub('4.331733759839529271053448625299468628', 1.4),
@@ -124,7 +123,7 @@ class MathTest extends TestCase
             )
         );
 
-        self::assertEquals(
+        self::assertSame(
             0,
             $provider->compare(
                 $provider->sub('5.731733759839529271053448625299468628', '5.731733759839529271053448625299468627'),
@@ -139,14 +138,14 @@ class MathTest extends TestCase
         $provider = app(MathInterface::class);
 
         // int
-        self::assertEquals(0.2, $provider->div(1, 5));
-        self::assertEquals(-0.2, $provider->div(-1, 5));
+        self::assertSame(0.2, (float) $provider->div(1, 5));
+        self::assertSame(-0.2, (float) $provider->div(-1, 5));
 
         // float
-        self::assertEquals(0.24223602484472, $provider->div(1.17, 4.83));
-        self::assertEquals(-0.26519337016574, $provider->div(-1.44, 5.43));
+        self::assertSame(0.24223602484472, (float) $provider->div(1.17, 4.83));
+        self::assertSame(-0.26519337016574, (float) $provider->div(-1.44, 5.43));
 
-        self::assertEquals(
+        self::assertSame(
             0,
             $provider->compare(
                 $provider->div('4.331733759839529271053448625299468628', 1.4),
@@ -154,7 +153,7 @@ class MathTest extends TestCase
             )
         );
 
-        self::assertEquals(
+        self::assertSame(
             0,
             $provider->compare(
                 $provider->div('5.731733759839529271053448625299468628', '5.731733759839529271053448625299468627'),
@@ -169,14 +168,14 @@ class MathTest extends TestCase
         $provider = app(MathInterface::class);
 
         // int
-        self::assertEquals(5, $provider->mul(1, 5));
-        self::assertEquals(-5, $provider->mul(-1, 5));
+        self::assertSame(5, (int) $provider->mul(1, 5));
+        self::assertSame(-5, (int) $provider->mul(-1, 5));
 
         // float
-        self::assertEquals(5.6511, $provider->mul(1.17, 4.83));
-        self::assertEquals(-7.8192, $provider->mul(-1.44, 5.43));
+        self::assertSame(5.6511, (float) $provider->mul(1.17, 4.83));
+        self::assertSame(-7.8192, (float) $provider->mul(-1.44, 5.43));
 
-        self::assertEquals(
+        self::assertSame(
             0,
             $provider->compare(
                 $provider->mul('4.331733759839529271053448625299468628', 1.4),
@@ -184,7 +183,7 @@ class MathTest extends TestCase
             )
         );
 
-        self::assertEquals(
+        self::assertSame(
             0,
             $provider->compare(
                 $provider->mul('5.731733759839529271053448625299468628', '5.731733759839529271053448625299468627'),
@@ -199,14 +198,14 @@ class MathTest extends TestCase
         $provider = app(MathInterface::class);
 
         // int
-        self::assertEquals(1, $provider->pow(1, 5));
-        self::assertEquals(-1, $provider->pow(-1, 5));
+        self::assertSame(1, (int) $provider->pow(1, 5));
+        self::assertSame(-1, (int) $provider->pow(-1, 5));
 
         // float
-        self::assertEquals(1.87388721, $provider->pow(1.17, 4));
-        self::assertEquals(-6.1917364224, $provider->pow(-1.44, 5));
+        self::assertSame(1.87388721, (float) $provider->pow(1.17, 4));
+        self::assertSame(-6.1917364224, (float) $provider->pow(-1.44, 5));
 
-        self::assertEquals(
+        self::assertSame(
             0,
             $provider->compare(
                 $provider->pow('4.331733759839529271053448625299468628', 14),
@@ -214,7 +213,7 @@ class MathTest extends TestCase
             )
         );
 
-        self::assertEquals(
+        self::assertSame(
             0,
             $provider->compare(
                 $provider->pow('5.731733759839529271053448625299468628', 6),
@@ -230,64 +229,64 @@ class MathTest extends TestCase
 
         // positive
         // int
-        self::assertEquals(
-            35458,
+        self::assertSame(
+            '35458',
             $provider->ceil(35458)
         );
 
         // float
-        self::assertEquals(35458, $provider->ceil('35458.00000000'));
-        self::assertEquals(
-            35459,
+        self::assertSame('35458', $provider->ceil('35458.00000000'));
+        self::assertSame(
+            '35459',
             $provider->ceil(35458.0000001)
         );
-        self::assertEquals(
-            35459,
+        self::assertSame(
+            '35459',
             $provider->ceil(35458.4)
         );
-        self::assertEquals(
-            35459,
+        self::assertSame(
+            '35459',
             $provider->ceil(35458.5)
         );
-        self::assertEquals(
-            35459,
+        self::assertSame(
+            '35459',
             $provider->ceil(35458.6)
         );
 
         // string
-        self::assertEquals(
-            35459,
+        self::assertSame(
+            '35459',
             $provider->ceil('35458.1485207464760293448564751702377579632773756221209731837301291644')
         );
 
         // negative
         // int
-        self::assertEquals(
-            -35458,
+        self::assertSame(
+            '-35458',
             $provider->ceil(-35458)
         );
 
         // float
-        self::assertEquals(
-            -35458,
+        self::assertSame(
+            '-35458',
             $provider->ceil(-35458.0000001)
         );
-        self::assertEquals(
-            -35458,
+        self::assertSame(
+            '-35458',
             $provider->ceil(-35458.4)
         );
-        self::assertEquals(
-            -35458,
+        self::assertSame(
+            '-35458',
             $provider->ceil(-35458.5)
         );
-        self::assertEquals(
-            -35458,
+        self::assertSame(
+            '-35458',
             $provider->ceil(-35458.6)
         );
 
         // string
-        self::assertEquals(
-            -35458,
+        self::assertSame(
+            '-35458',
             $provider->ceil('-35458.1485207464760293448564751702377579632773756221209731837301291644')
         );
     }
@@ -299,64 +298,64 @@ class MathTest extends TestCase
 
         // positive
         // int
-        self::assertEquals(
-            35458,
+        self::assertSame(
+            '35458',
             $provider->floor(35458)
         );
 
         // float
-        self::assertEquals(35458, $provider->floor('35458.00000000'));
-        self::assertEquals(
-            35458,
+        self::assertSame('35458', $provider->floor('35458.00000000'));
+        self::assertSame(
+            '35458',
             $provider->floor(35458.0000001)
         );
-        self::assertEquals(
-            35458,
+        self::assertSame(
+            '35458',
             $provider->floor(35458.4)
         );
-        self::assertEquals(
-            35458,
+        self::assertSame(
+            '35458',
             $provider->floor(35458.5)
         );
-        self::assertEquals(
-            35458,
+        self::assertSame(
+            '35458',
             $provider->floor(35458.6)
         );
 
         // string
-        self::assertEquals(
-            35458,
+        self::assertSame(
+            '35458',
             $provider->floor('35458.1485207464760293448564751702377579632773756221209731837301291644')
         );
 
         // negative
         // int
-        self::assertEquals(
-            -35458,
+        self::assertSame(
+            '-35458',
             $provider->floor(-35458)
         );
 
         // float
-        self::assertEquals(
-            -35459,
+        self::assertSame(
+            '-35459',
             $provider->floor(-35458.0000001)
         );
-        self::assertEquals(
-            -35459,
+        self::assertSame(
+            '-35459',
             $provider->floor(-35458.4)
         );
-        self::assertEquals(
-            -35459,
+        self::assertSame(
+            '-35459',
             $provider->floor(-35458.5)
         );
-        self::assertEquals(
-            -35459,
+        self::assertSame(
+            '-35459',
             $provider->floor(-35458.6)
         );
 
         // string
-        self::assertEquals(
-            -35459,
+        self::assertSame(
+            '-35459',
             $provider->floor('-35458.1485207464760293448564751702377579632773756221209731837301291644')
         );
     }
@@ -368,64 +367,64 @@ class MathTest extends TestCase
 
         // positive
         // int
-        self::assertEquals(
-            35458,
+        self::assertSame(
+            '35458',
             $provider->round(35458)
         );
 
         // float
-        self::assertEquals(35458, $provider->round('35458.00000000'));
-        self::assertEquals(
-            35458,
+        self::assertSame('35458', $provider->round('35458.00000000'));
+        self::assertSame(
+            '35458',
             $provider->round(35458.0000001)
         );
-        self::assertEquals(
-            35458,
+        self::assertSame(
+            '35458',
             $provider->round(35458.4)
         );
-        self::assertEquals(
-            35459,
+        self::assertSame(
+            '35459',
             $provider->round(35458.5)
         );
-        self::assertEquals(
-            35459,
+        self::assertSame(
+            '35459',
             $provider->round(35458.6)
         );
 
         // string
-        self::assertEquals(
-            35458,
+        self::assertSame(
+            '35458',
             $provider->round('35458.1485207464760293448564751702377579632773756221209731837301291644')
         );
 
         // negative
         // int
-        self::assertEquals(
-            -35458,
+        self::assertSame(
+            '-35458',
             $provider->round(-35458)
         );
 
         // float
-        self::assertEquals(
-            -35458,
+        self::assertSame(
+            '-35458',
             $provider->round(-35458.0000001)
         );
-        self::assertEquals(
-            -35458,
+        self::assertSame(
+            '-35458',
             $provider->round(-35458.4)
         );
-        self::assertEquals(
-            -35459,
+        self::assertSame(
+            '-35459',
             $provider->round(-35458.5)
         );
-        self::assertEquals(
-            -35459,
+        self::assertSame(
+            '-35459',
             $provider->round(-35458.6)
         );
 
         // string
-        self::assertEquals(
-            -35458,
+        self::assertSame(
+            '-35458',
             $provider->round('-35458.1485207464760293448564751702377579632773756221209731837301291644')
         );
     }
