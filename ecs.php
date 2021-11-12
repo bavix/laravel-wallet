@@ -30,7 +30,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     $parameters->set(Option::SKIP, [
-        PhpUnitTestClassRequiresCoversFixer::class,
         PhpdocToCommentFixer::class,
         DeclareStrictTypesFixer::class => [
             __DIR__ . '/tests',

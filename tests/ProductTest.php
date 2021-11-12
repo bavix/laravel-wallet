@@ -16,6 +16,7 @@ use Bavix\Wallet\Test\Models\ItemWallet;
 
 /**
  * @internal
+ * @coversNothing
  */
 class ProductTest extends TestCase
 {

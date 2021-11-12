@@ -16,6 +16,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @internal
+ * @coversNothing
  */
 class BalanceTest extends TestCase
 {

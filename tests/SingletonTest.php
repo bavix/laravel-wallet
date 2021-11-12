@@ -14,6 +14,7 @@ use Bavix\Wallet\Test\Common\Models\Wallet;
 
 /**
  * @internal
+ * @coversNothing
  */
 class SingletonTest extends TestCase
 {

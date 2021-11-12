@@ -10,6 +10,7 @@ use Bavix\Wallet\Test\Models\Buyer;
 
 /**
  * @internal
+ * @coversNothing
  */
 class WalletExtensionTest extends TestCase
 {

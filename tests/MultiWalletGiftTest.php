@@ -11,6 +11,7 @@ use Bavix\Wallet\Test\Models\UserMulti;
 
 /**
  * @internal
+ * @coversNothing
  */
 class MultiWalletGiftTest extends TestCase
 {

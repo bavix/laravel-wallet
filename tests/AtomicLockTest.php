@@ -6,6 +6,7 @@ use Bavix\Wallet\Internal\LockInterface;
 
 /**
  * @internal
+ * @coversNothing
  */
 class AtomicLockTest extends TestCase
 {
