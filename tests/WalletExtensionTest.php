@@ -16,7 +16,7 @@ use Bavix\Wallet\Test\Models\Buyer;
  */
 class WalletExtensionTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->app->bind(TransactionDtoTransformer::class, Objects\TransactionDtoTransformer::class);
