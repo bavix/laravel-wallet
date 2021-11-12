@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PhpCsFixer\Fixer\ArrayNotation\ArraySyntaxFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer;
+use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitTestClassRequiresCoversFixer;
 use PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -31,6 +32,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set(Option::SKIP, [
         PhpdocToCommentFixer::class,
+        PhpUnitStrictFixer::class => [
+            __DIR__ . '/tests'
+        ],
     ]);
 
     $containerConfigurator->import(SetList::CLEAN_CODE);
@@ -39,4 +43,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(SetList::CONTROL_STRUCTURES);
     $containerConfigurator->import(SetList::NAMESPACES);
     $containerConfigurator->import(SetList::STRICT);
+    $containerConfigurator->import(SetList::PHPUNIT);
 };
