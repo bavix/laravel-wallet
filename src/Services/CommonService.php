@@ -6,7 +6,7 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDto;
@@ -28,7 +28,7 @@ final class CommonService
     private AssistantService $assistantService;
     private PrepareService $prepareService;
     private BookkeeperInterface $bookkeeper;
-    private TransferDtoAssembler $transferDtoAssembler;
+    private TransferDtoAssemblerInterface $transferDtoAssembler;
 
     public function __construct(
         CastService $castService,
@@ -36,7 +36,7 @@ final class CommonService
         AssistantService $satisfyService,
         DatabaseInterface $databaseService,
         PrepareService $prepareService,
-        TransferDtoAssembler $transferDtoAssembler,
+        TransferDtoAssemblerInterface $transferDtoAssembler,
         AtmService $atmService
     ) {
         $this->atmService = $atmService;

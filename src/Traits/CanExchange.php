@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Traits;
 
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
@@ -63,7 +63,7 @@ trait CanExchange
 
                 $withdrawDto = $prepareService->withdraw($this, $mathService->add($amount, $fee), $meta);
                 $depositDto = $prepareService->deposit($to, $mathService->floor($mathService->mul($amount, $rate, 1)), $meta);
-                $transferLazyDto = app(TransferLazyDtoAssembler::class)->create(
+                $transferLazyDto = app(TransferLazyDtoAssemblerInterface::class)->create(
                     $this,
                     $to,
                     0,

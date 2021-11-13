@@ -8,7 +8,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Dto\TransferLazyDto;
 
-final class TransferLazyDtoAssembler implements TransferLazyDtoAssemblerInterface
+interface TransferLazyDtoAssemblerInterface
 {
     public function create(
         Wallet $fromWallet,
@@ -18,15 +18,5 @@ final class TransferLazyDtoAssembler implements TransferLazyDtoAssemblerInterfac
         TransactionDto $withdrawDto,
         TransactionDto $depositDto,
         string $status
-    ): TransferLazyDto {
-        return new TransferLazyDto(
-            $fromWallet,
-            $toWallet,
-            $discount,
-            $fee,
-            $withdrawDto,
-            $depositDto,
-            $status
-        );
-    }
+    ): TransferLazyDto;
 }

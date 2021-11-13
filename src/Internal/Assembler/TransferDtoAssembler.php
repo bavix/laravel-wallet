@@ -8,7 +8,7 @@ use Bavix\Wallet\Internal\Dto\TransferDto;
 use Bavix\Wallet\Internal\UuidInterface;
 use Illuminate\Database\Eloquent\Model;
 
-final class TransferDtoAssembler
+final class TransferDtoAssembler implements TransferDtoAssemblerInterface
 {
     private UuidInterface $uuidService;
 
