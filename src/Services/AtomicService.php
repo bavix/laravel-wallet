@@ -12,7 +12,7 @@ use Illuminate\Config\Repository as ConfigRepository;
 use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
-class AtomicService implements LockInterface
+final class AtomicService implements LockInterface
 {
     private CacheRepository $cache;
 

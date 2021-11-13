@@ -7,7 +7,7 @@ namespace Bavix\Wallet\Internal\Dto;
 use Countable;
 
 /** @psalm-immutable */
-class BasketDto implements Countable
+final class BasketDto implements Countable
 {
     /** @var non-empty-array<int|string, ItemDto> */
     private array $items;

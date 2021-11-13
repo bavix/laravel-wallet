@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test;
 
-use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
+use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
 use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Common\Models\TransactionMoney;
 use Bavix\Wallet\Test\Factories\BuyerFactory;
@@ -18,7 +18,7 @@ class WalletExtensionTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->app->bind(TransactionDtoTransformer::class, Objects\TransactionDtoTransformer::class);
+        $this->app->bind(TransactionDtoTransformerInterface::class, Objects\TransactionDtoTransformerCustom::class);
     }
 
     public function testCustomAttribute(): void

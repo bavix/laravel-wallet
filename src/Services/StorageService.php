@@ -13,7 +13,7 @@ use Illuminate\Cache\CacheManager;
 use Illuminate\Config\Repository as ConfigRepository;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
-class StorageService implements StorageInterface
+final class StorageService implements StorageInterface
 {
     private CacheRepository $cache;
 

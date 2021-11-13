@@ -7,7 +7,7 @@ namespace Bavix\Wallet\Internal\Transform;
 use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Service\JsonService;
 
-class TransactionDtoTransformer
+final class TransactionDtoTransformer implements TransactionDtoTransformerInterface
 {
     private JsonService $jsonService;
 

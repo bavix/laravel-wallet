@@ -6,13 +6,13 @@ namespace Bavix\Wallet\Internal\Service;
 
 use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Dto\TransferDto;
-use Bavix\Wallet\Services\MathService;
+use Bavix\Wallet\Internal\MathInterface;
 
-class AssistantService
+final class AssistantService
 {
-    private MathService $mathService;
+    private MathInterface $mathService;
 
-    public function __construct(MathService $mathService)
+    public function __construct(MathInterface $mathService)
     {
         $this->mathService = $mathService;
     }

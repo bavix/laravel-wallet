@@ -18,10 +18,9 @@ use Bavix\Wallet\Internal\Service\PrepareService;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
-use function compact;
 use Throwable;
 
-class CommonService
+final class CommonService
 {
     private AtmService $atmService;
     private CastService $castService;
@@ -125,10 +124,10 @@ class CommonService
             try {
                 $result = $walletObject->newQuery()
                     ->whereKey($walletObject->getKey())
-                    ->update(compact('balance'))
+                    ->update(['balance' => $balance])
                 ;
 
-                $walletObject->fill(compact('balance'))->syncOriginalAttribute('balance');
+                $walletObject->fill(['balance' => $balance])->syncOriginalAttribute('balance');
             } finally {
                 if ($result === 0) {
                     $this->bookkeeper->missing($walletObject);
@@ -180,8 +179,8 @@ class CommonService
 
             $balance = $this->bookkeeper->increase($object, $total);
 
-            $object->newQuery()->whereKey($object->getKey())->update(compact('balance')); // ?qN
-            $object->fill(compact('balance'))->syncOriginalAttribute('balance');
+            $object->newQuery()->whereKey($object->getKey())->update(['balance' => $balance]); // ?qN
+            $object->fill(['balance' => $balance])->syncOriginalAttribute('balance');
         }
 
         return $transactions;

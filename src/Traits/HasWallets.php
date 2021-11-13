@@ -83,9 +83,11 @@ trait HasWallets
                     ->firstOrFail()
                 ;
             } catch (EloquentModelNotFoundException $exception) {
-                throw (new ModelNotFoundException('Model not found', ExceptionInterface::MODEL_NOT_FOUND))
-                    ->setModel($exception->getModel())
-                    ;
+                throw new ModelNotFoundException(
+                    $exception->getMessage(),
+                    ExceptionInterface::MODEL_NOT_FOUND,
+                    $exception
+                );
             }
         }
 

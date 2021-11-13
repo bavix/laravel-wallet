@@ -6,6 +6,8 @@ use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
 use Bavix\Wallet\Internal\Service\DatabaseService;
+use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
+use Bavix\Wallet\Internal\Transform\TransferDtoTransformer;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
@@ -54,6 +56,14 @@ return [
         'storage' => StorageService::class,
         'database' => DatabaseService::class,
         'uuid' => UuidFactoryService::class,
+    ],
+
+    /**
+     * Objects of transformer from DTO to array.
+     */
+    'transformers' => [
+        'transaction' => TransactionDtoTransformer::class,
+        'transfer_lazy' => TransferDtoTransformer::class,
     ],
 
     /**

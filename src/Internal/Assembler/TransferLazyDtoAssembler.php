@@ -8,7 +8,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Dto\TransferLazyDto;
 
-class TransferLazyDtoAssembler
+final class TransferLazyDtoAssembler
 {
     public function create(
         Wallet $fromWallet,

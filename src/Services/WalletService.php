@@ -14,7 +14,7 @@ use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\Service\CastService;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 
-class WalletService
+final class WalletService
 {
     private MathInterface $math;
     private CastService $castService;

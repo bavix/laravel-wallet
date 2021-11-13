@@ -7,29 +7,29 @@ namespace Bavix\Wallet\Internal\Service;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
+use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Dto\TransferLazyDto;
+use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Models\Transaction;
-use Bavix\Wallet\Services\ConsistencyService;
-use Bavix\Wallet\Services\MathService;
 use Bavix\Wallet\Services\WalletService;
 
-class PrepareService
+final class PrepareService
 {
     private TransferLazyDtoAssembler $transferLazyDtoAssembler;
     private TransactionDtoAssembler $transactionDtoAssembler;
-    private ConsistencyService $consistencyService;
+    private ConsistencyInterface $consistencyService;
     private WalletService $walletService;
     private CastService $castService;
-    private MathService $mathService;
+    private MathInterface $mathService;
 
     public function __construct(
         TransferLazyDtoAssembler $transferLazyDtoAssembler,
         TransactionDtoAssembler $transactionDtoAssembler,
-        ConsistencyService $consistencyService,
+        ConsistencyInterface $consistencyService,
         WalletService $walletService,
         CastService $castService,
-        MathService $mathService
+        MathInterface $mathService
     ) {
         $this->transferLazyDtoAssembler = $transferLazyDtoAssembler;
         $this->transactionDtoAssembler = $transactionDtoAssembler;

@@ -7,7 +7,7 @@ namespace Bavix\Wallet\Internal\Dto;
 use Bavix\Wallet\Interfaces\Customer;
 
 /** @psalm-immutable */
-class AvailabilityDto
+final class AvailabilityDto
 {
     private BasketDto $basketDto;
 
@@ -18,7 +18,7 @@ class AvailabilityDto
     public function __construct(
         Customer $customer,
         BasketDto $basketDto,
-        bool $force = false
+        bool $force
     ) {
         $this->customer = $customer;
         $this->basketDto = $basketDto;

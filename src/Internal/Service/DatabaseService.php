@@ -14,7 +14,7 @@ use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\RecordsNotFoundException;
 use Throwable;
 
-class DatabaseService implements DatabaseInterface
+final class DatabaseService implements DatabaseInterface
 {
     private ConnectionInterface $connection;
 

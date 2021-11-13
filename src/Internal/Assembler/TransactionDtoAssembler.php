@@ -8,7 +8,7 @@ use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\UuidInterface;
 use Illuminate\Database\Eloquent\Model;
 
-class TransactionDtoAssembler
+final class TransactionDtoAssembler
 {
     private UuidInterface $uuidService;
 

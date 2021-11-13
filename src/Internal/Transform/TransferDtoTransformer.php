@@ -6,7 +6,7 @@ namespace Bavix\Wallet\Internal\Transform;
 
 use Bavix\Wallet\Internal\Dto\TransferDto;
 
-class TransferDtoTransformer
+final class TransferDtoTransformer implements TransferDtoTransformerInterface
 {
     public function extract(TransferDto $dto): array
     {
