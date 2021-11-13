@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Service;
 
+use Bavix\Wallet\Internal\AssistantInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Dto\TransferDto;
 use Bavix\Wallet\Internal\MathInterface;
 
-final class AssistantService
+final class AssistantService implements AssistantInterface
 {
     private MathInterface $mathService;
 
@@ -18,7 +19,7 @@ final class AssistantService
     }
 
     /**
-     * @param non-empty-array<mixed, TransactionDto|TransferDto> $objects
+     * @param non-empty-array<TransactionDto|TransferDto> $objects
      *
      * @return non-empty-array<int|string, string>
      */
@@ -28,7 +29,7 @@ final class AssistantService
     }
 
     /**
-     * @param non-empty-array<mixed, TransactionDto> $transactions
+     * @param non-empty-array<TransactionDto> $transactions
      *
      * @return array<int, string>
      */

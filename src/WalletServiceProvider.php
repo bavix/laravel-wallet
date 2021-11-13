@@ -10,6 +10,8 @@ use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
+use Bavix\Wallet\Internal\AssistantInterface;
+use Bavix\Wallet\Internal\AtmInterface;
 use Bavix\Wallet\Internal\BasketInterface;
 use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
@@ -18,6 +20,12 @@ use Bavix\Wallet\Internal\ExchangeInterface;
 use Bavix\Wallet\Internal\LockInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\PurchaseInterface;
+use Bavix\Wallet\Internal\Repository\TransactionRepository;
+use Bavix\Wallet\Internal\Repository\TransactionRepositoryInterface;
+use Bavix\Wallet\Internal\Repository\TransferRepository;
+use Bavix\Wallet\Internal\Repository\TransferRepositoryInterface;
+use Bavix\Wallet\Internal\Service\AssistantService;
+use Bavix\Wallet\Internal\Service\AtmService;
 use Bavix\Wallet\Internal\Service\DatabaseService;
 use Bavix\Wallet\Internal\Service\TranslatorService;
 use Bavix\Wallet\Internal\StorageInterface;
@@ -96,10 +104,24 @@ final class WalletServiceProvider extends ServiceProvider
         $this->singletons($configure['services'] ?? []);
         $this->legacySingleton(); // without configuration
 
+        $this->repositories($configure['repositories'] ?? []);
         $this->transformers($configure['transformers'] ?? []);
         $this->assemblers($configure['assemblers'] ?? []);
 
         $this->bindObjects($configure);
+    }
+
+    public function repositories(array $configure): void
+    {
+        $this->app->singleton(
+            TransactionRepositoryInterface::class,
+            $configure['transaction'] ?? TransactionRepository::class
+        );
+
+        $this->app->singleton(
+            TransferRepositoryInterface::class,
+            $configure['transfer'] ?? TransferRepository::class
+        );
     }
 
     /**
@@ -112,6 +134,8 @@ final class WalletServiceProvider extends ServiceProvider
 
     private function singletons(array $configure): void
     {
+        $this->app->singleton(AtmInterface::class, $configure['atm'] ?? AtmService::class);
+        $this->app->singleton(AssistantInterface::class, $configure['assistant'] ?? AssistantService::class);
         $this->app->singleton(BasketInterface::class, $configure['basket'] ?? BasketService::class);
         $this->app->singleton(BookkeeperInterface::class, $configure['bookkeeper'] ?? BookkeeperService::class);
         $this->app->singleton(ConsistencyInterface::class, $configure['consistency'] ?? ConsistencyService::class);

@@ -12,11 +12,11 @@ use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
+use Bavix\Wallet\Internal\AtmInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Internal\Service\AtmService;
 use Bavix\Wallet\Internal\Service\CastService;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
@@ -100,7 +100,7 @@ trait HasGift
                     $fee
                 );
 
-                $transfers = app(AtmService::class)->makeTransfers([$transfer]);
+                $transfers = app(AtmInterface::class)->makeTransfers([$transfer]);
 
                 return current($transfers);
             });
