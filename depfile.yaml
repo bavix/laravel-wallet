@@ -1,0 +1,75 @@
+paths:
+  - ./src
+
+layers:
+  - name: Legacy
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Legacy$
+
+  - name: UI
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Traits.*
+
+  - name: Repository
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Internal\\Repository\\.*Repository$
+
+  - name: Infra
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Internal\\Service\\.*Service$
+
+  - name: Service
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Services\\.*Service$
+
+  - name: ServiceInterface
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Service\\.*ServiceInterface$
+      - type: className
+        regex: ^Bavix\\.*Services\\.*ServiceInterface$
+
+  - name: ModelNotFoundException
+    collectors:
+      - type: className
+        regex: ^Illuminate\\Database\\Eloquent\\ModelNotFoundException$
+
+  - name: EloquentModel
+    collectors:
+      - type: className
+        regex: ^Illuminate\\Database\\Eloquent\\Model$
+
+  - name: Config
+    collectors:
+      - type: className
+        regex: ^Illuminate\\Config\\Repository$
+
+  - name: Cache
+    collectors:
+      - type: className
+        regex: ^Illuminate\\Contracts\\Cache\\Repository$
+
+ruleset:
+  UI:
+    - ModelNotFoundException
+    - ServiceInterface
+    - Legacy # delete as soon as possible
+  Infra:
+    - ServiceInterface
+    - Config
+    - Cache
+    - Legacy
+  ServiceInterface:
+    - EloquentModel
+  Service:
+    - ServiceInterface
+    - Repository
+    - EloquentModel
+  Legacy:
+    - ServiceInterface
+    - EloquentModel

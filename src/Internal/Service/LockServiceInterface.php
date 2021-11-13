@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Bavix\Wallet\Internal;
+namespace Bavix\Wallet\Internal\Service;
 
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 
-interface LockInterface
+interface LockServiceInterface
 {
     /**
      * @throws LockProviderNotFoundException

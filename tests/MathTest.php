@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test;
 
-use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Brick\Math\BigInteger;
 use Brick\Math\Exception\NumberFormatException;
 
@@ -20,15 +20,15 @@ class MathTest extends TestCase
     {
         $this->expectException(NumberFormatException::class);
 
-        /** @var MathInterface $provider */
-        $provider = app(MathInterface::class);
+        /** @var MathServiceInterface $provider */
+        $provider = app(MathServiceInterface::class);
         $provider->abs($value);
     }
 
     public function testAbs(): void
     {
-        /** @var MathInterface $provider */
-        $provider = app(MathInterface::class);
+        /** @var MathServiceInterface $provider */
+        $provider = app(MathServiceInterface::class);
 
         // int
         self::assertSame(123, (int) $provider->abs(123));
@@ -53,8 +53,8 @@ class MathTest extends TestCase
 
     public function testCompare(): void
     {
-        /** @var MathInterface $provider */
-        $provider = app(MathInterface::class);
+        /** @var MathServiceInterface $provider */
+        $provider = app(MathServiceInterface::class);
 
         // int
         self::assertSame(0, $provider->compare(1, 1));
@@ -74,8 +74,8 @@ class MathTest extends TestCase
 
     public function testAdd(): void
     {
-        /** @var MathInterface $provider */
-        $provider = app(MathInterface::class);
+        /** @var MathServiceInterface $provider */
+        $provider = app(MathServiceInterface::class);
 
         // int
         self::assertSame(0, $provider->compare($provider->add(1, 5), 6));
@@ -104,8 +104,8 @@ class MathTest extends TestCase
 
     public function testSub(): void
     {
-        /** @var MathInterface $provider */
-        $provider = app(MathInterface::class);
+        /** @var MathServiceInterface $provider */
+        $provider = app(MathServiceInterface::class);
 
         // int
         self::assertSame(-4, (int) $provider->sub(1, 5));
@@ -134,8 +134,8 @@ class MathTest extends TestCase
 
     public function testDiv(): void
     {
-        /** @var MathInterface $provider */
-        $provider = app(MathInterface::class);
+        /** @var MathServiceInterface $provider */
+        $provider = app(MathServiceInterface::class);
 
         // int
         self::assertSame(0.2, (float) $provider->div(1, 5));
@@ -164,8 +164,8 @@ class MathTest extends TestCase
 
     public function testMul(): void
     {
-        /** @var MathInterface $provider */
-        $provider = app(MathInterface::class);
+        /** @var MathServiceInterface $provider */
+        $provider = app(MathServiceInterface::class);
 
         // int
         self::assertSame(5, (int) $provider->mul(1, 5));
@@ -194,8 +194,8 @@ class MathTest extends TestCase
 
     public function testPow(): void
     {
-        /** @var MathInterface $provider */
-        $provider = app(MathInterface::class);
+        /** @var MathServiceInterface $provider */
+        $provider = app(MathServiceInterface::class);
 
         // int
         self::assertSame(1, (int) $provider->pow(1, 5));
@@ -224,8 +224,8 @@ class MathTest extends TestCase
 
     public function testCeil(): void
     {
-        /** @var MathInterface $provider */
-        $provider = app(MathInterface::class);
+        /** @var MathServiceInterface $provider */
+        $provider = app(MathServiceInterface::class);
 
         // positive
         // int
@@ -293,8 +293,8 @@ class MathTest extends TestCase
 
     public function testFloor(): void
     {
-        /** @var MathInterface $provider */
-        $provider = app(MathInterface::class);
+        /** @var MathServiceInterface $provider */
+        $provider = app(MathServiceInterface::class);
 
         // positive
         // int
@@ -362,8 +362,8 @@ class MathTest extends TestCase
 
     public function testRound(): void
     {
-        /** @var MathInterface $provider */
-        $provider = app(MathInterface::class);
+        /** @var MathServiceInterface $provider */
+        $provider = app(MathServiceInterface::class);
 
         // positive
         // int

@@ -9,7 +9,7 @@ use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
-use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Services\WalletServiceLegacy;
 use Bavix\Wallet\Test\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Factories\ItemDiscountTaxFactory;
 use Bavix\Wallet\Test\Models\Buyer;
@@ -31,7 +31,7 @@ class DiscountTaxTest extends TestCase
         $product = ItemDiscountTaxFactory::new()->create();
 
         self::assertSame(0, $buyer->balanceInt);
-        $fee = app(WalletService::class)->fee($product, $product->getAmountProduct($buyer));
+        $fee = app(WalletServiceLegacy::class)->fee($product, $product->getAmountProduct($buyer));
         $buyer->deposit($product->getAmountProduct($buyer) + $fee);
 
         self::assertSame($buyer->balanceInt, (int) $product->getAmountProduct($buyer) + $fee);
@@ -87,8 +87,8 @@ class DiscountTaxTest extends TestCase
         $product = ItemDiscountTaxFactory::new()->create();
 
         self::assertSame($buyer->balanceInt, 0);
-        $discount = app(WalletService::class)->discount($buyer, $product);
-        $fee = app(WalletService::class)->fee($product, $product->getAmountProduct($buyer));
+        $discount = app(WalletServiceLegacy::class)->discount($buyer, $product);
+        $fee = app(WalletServiceLegacy::class)->fee($product, $product->getAmountProduct($buyer));
         $buyer->deposit($product->getAmountProduct($buyer) + $fee - $discount);
 
         self::assertSame($buyer->balanceInt, (int) ($product->getAmountProduct($buyer) + $fee - $discount));
@@ -154,8 +154,8 @@ class DiscountTaxTest extends TestCase
         $product = ItemDiscountTaxFactory::new()->create();
 
         self::assertSame(0, $buyer->balanceInt);
-        $discount = app(WalletService::class)->discount($buyer, $product);
-        $fee = app(WalletService::class)->fee($product, $product->getAmountProduct($buyer));
+        $discount = app(WalletServiceLegacy::class)->discount($buyer, $product);
+        $fee = app(WalletServiceLegacy::class)->fee($product, $product->getAmountProduct($buyer));
         $buyer->deposit($product->getAmountProduct($buyer) + $fee - $discount);
 
         $paidPrice = $buyer->balance;
@@ -211,7 +211,7 @@ class DiscountTaxTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $fee = app(WalletService::class)->fee($product, $product->getAmountProduct($buyer));
+        $fee = app(WalletServiceLegacy::class)->fee($product, $product->getAmountProduct($buyer));
         $buyer->deposit($product->getAmountProduct($buyer) + $fee);
         $buyer->pay($product);
         $buyer->pay($product);
@@ -231,7 +231,7 @@ class DiscountTaxTest extends TestCase
         self::assertSame($buyer->balanceInt, 0);
         $buyer->forcePay($product);
 
-        $fee = app(WalletService::class)->fee($product, $product->getAmountProduct($buyer));
+        $fee = app(WalletServiceLegacy::class)->fee($product, $product->getAmountProduct($buyer));
         self::assertSame(
             $buyer->balanceInt,
             (int) -($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)) - $fee

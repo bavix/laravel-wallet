@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Bavix\Wallet\Internal;
+namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Dto\TransferDto;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 
-interface AtmInterface
+interface AtmServiceInterface
 {
     /**
      * @param non-empty-array<int|string, TransactionDto> $objects

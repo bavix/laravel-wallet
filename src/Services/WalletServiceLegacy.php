@@ -9,23 +9,21 @@ use Bavix\Wallet\Interfaces\Discount;
 use Bavix\Wallet\Interfaces\MinimalTaxable;
 use Bavix\Wallet\Interfaces\Taxable;
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Internal\BookkeeperInterface;
-use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Internal\Service\CastService;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 
-final class WalletService
+final class WalletServiceLegacy
 {
-    private MathInterface $math;
-    private CastService $castService;
-    private LockService $lockService;
-    private BookkeeperInterface $bookkeeper;
+    private MathServiceInterface $math;
+    private CastServiceInterface $castService;
+    private LockServiceLegacy $lockService;
+    private BookkeeperServiceInterface $bookkeeper;
 
     public function __construct(
-        MathInterface $math,
-        CastService $castService,
-        LockService $lockService,
-        BookkeeperInterface $bookkeeper
+        MathServiceInterface $math,
+        CastServiceInterface $castService,
+        LockServiceLegacy $lockService,
+        BookkeeperServiceInterface $bookkeeper
     ) {
         $this->math = $math;
         $this->castService = $castService;

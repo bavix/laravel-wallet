@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Models;
 
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Internal\Service\CastService;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
+use Bavix\Wallet\Services\CastService;
 use function config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -83,7 +83,7 @@ class Transaction extends Model
 
     public function getAmountFloatAttribute(): string
     {
-        $math = app(MathInterface::class);
+        $math = app(MathServiceInterface::class);
         $decimalPlacesValue = app(CastService::class)
             ->getWallet($this->wallet)
             ->decimal_places;
@@ -97,7 +97,7 @@ class Transaction extends Model
      */
     public function setAmountFloatAttribute($amount): void
     {
-        $math = app(MathInterface::class);
+        $math = app(MathServiceInterface::class);
         $decimalPlacesValue = app(CastService::class)
             ->getWallet($this->wallet)
             ->decimal_places;

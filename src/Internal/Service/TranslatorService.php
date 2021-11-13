@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Service;
 
-use Bavix\Wallet\Internal\TranslatorInterface;
 use Illuminate\Contracts\Translation\Translator;
 
-final class TranslatorService implements TranslatorInterface
+final class TranslatorService implements TranslatorServiceInterface
 {
     private Translator $translator;
 

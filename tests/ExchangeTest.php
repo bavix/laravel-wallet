@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test;
 
-use Bavix\Wallet\Internal\ExchangeInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\ExchangeService;
+use Bavix\Wallet\Services\ExchangeServiceInterface;
 use Bavix\Wallet\Test\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Models\UserMulti;
 use Illuminate\Support\Str;
@@ -103,7 +103,7 @@ class ExchangeTest extends TestCase
         self::assertSame($superWallet->holder_id, $user->id);
         self::assertInstanceOf($superWallet->holder_type, $user);
 
-        $rate = app(ExchangeInterface::class)
+        $rate = app(ExchangeServiceInterface::class)
             ->convertTo($usd->currency, $rub->currency, 1000)
         ;
 
@@ -112,13 +112,13 @@ class ExchangeTest extends TestCase
 
     public function testExchange(): void
     {
-        $rate = app(ExchangeInterface::class)
+        $rate = app(ExchangeServiceInterface::class)
             ->convertTo('USD', 'RUB', 1)
         ;
 
         self::assertSame(67.61, (float) $rate);
 
-        $rate = app(ExchangeInterface::class)
+        $rate = app(ExchangeServiceInterface::class)
             ->convertTo('RUB', 'USD', 1)
         ;
 

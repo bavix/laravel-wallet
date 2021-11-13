@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Bavix\Wallet\Internal\Service;
+namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Illuminate\Database\Eloquent\Model;
 
 /** @psalm-internal */
-final class CastService
+final class CastService implements CastServiceInterface
 {
     public function getWallet(Wallet $object, bool $save = true): WalletModel
     {

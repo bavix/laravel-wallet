@@ -6,7 +6,7 @@ namespace Bavix\Wallet\Test\Models;
 
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Discount;
-use Bavix\Wallet\Internal\Service\CastService;
+use Bavix\Wallet\Services\CastService;
 
 class ItemDiscount extends Item implements Discount
 {

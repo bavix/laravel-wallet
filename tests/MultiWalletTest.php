@@ -8,7 +8,7 @@ use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
-use Bavix\Wallet\Internal\UuidInterface;
+use Bavix\Wallet\Internal\Service\UuidServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Test\Factories\ItemFactory;
@@ -389,7 +389,7 @@ class MultiWalletTest extends TestCase
 
         $test2 = $user->wallets()->create([
             'name' => 'Test2',
-            'uuid' => app(UuidInterface::class)->uuid4(),
+            'uuid' => app(UuidServiceInterface::class)->uuid4(),
         ]);
 
         self::assertSame(

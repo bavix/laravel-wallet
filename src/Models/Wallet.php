@@ -10,9 +10,9 @@ use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Exchangeable;
 use Bavix\Wallet\Interfaces\WalletFloat;
-use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
-use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
+use Bavix\Wallet\Services\WalletServiceLegacy;
 use Bavix\Wallet\Traits\CanConfirm;
 use Bavix\Wallet\Traits\CanExchange;
 use Bavix\Wallet\Traits\CanPayFloat;
@@ -101,8 +101,8 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
      */
     public function refreshBalance(): bool
     {
-        return app(DatabaseInterface::class)->transaction(
-            fn () => app(WalletService::class)->refresh($this)
+        return app(DatabaseServiceInterface::class)->transaction(
+            fn () => app(WalletServiceLegacy::class)->refresh($this)
         );
     }
 

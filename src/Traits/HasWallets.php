@@ -7,7 +7,7 @@ namespace Bavix\Wallet\Traits;
 use function array_key_exists;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
-use Bavix\Wallet\Internal\UuidInterface;
+use Bavix\Wallet\Internal\Service\UuidServiceInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use function config;
 use Illuminate\Database\Eloquent\ModelNotFoundException as EloquentModelNotFoundException;
@@ -108,7 +108,7 @@ trait HasWallets
         $wallet = $this->wallets()->create(array_merge(
             config('wallet.wallet.creating', []),
             $data,
-            ['uuid' => app(UuidInterface::class)->uuid4()]
+            ['uuid' => app(UuidServiceInterface::class)->uuid4()]
         ));
 
         $this->_wallets[$wallet->slug] = $wallet;

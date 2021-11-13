@@ -8,10 +8,10 @@ use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Internal\Service\CastService;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Services\CastServiceInterface;
 use Throwable;
 
 /**
@@ -32,8 +32,8 @@ trait HasWalletFloat
     public function forceWithdrawFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         /** @var Wallet $this */
-        $math = app(MathInterface::class);
-        $decimalPlacesValue = app(CastService::class)->getWallet($this)->decimal_places;
+        $math = app(MathServiceInterface::class);
+        $decimalPlacesValue = app(CastServiceInterface::class)->getWallet($this)->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
@@ -49,8 +49,8 @@ trait HasWalletFloat
     public function depositFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         /** @var Wallet $this */
-        $math = app(MathInterface::class);
-        $decimalPlacesValue = app(CastService::class)->getWallet($this)->decimal_places;
+        $math = app(MathServiceInterface::class);
+        $decimalPlacesValue = app(CastServiceInterface::class)->getWallet($this)->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
@@ -68,8 +68,8 @@ trait HasWalletFloat
     public function withdrawFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         /** @var Wallet $this */
-        $math = app(MathInterface::class);
-        $decimalPlacesValue = app(CastService::class)->getWallet($this)->decimal_places;
+        $math = app(MathServiceInterface::class);
+        $decimalPlacesValue = app(CastServiceInterface::class)->getWallet($this)->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
@@ -82,8 +82,8 @@ trait HasWalletFloat
     public function canWithdrawFloat($amount): bool
     {
         /** @var Wallet $this */
-        $math = app(MathInterface::class);
-        $decimalPlacesValue = app(CastService::class)->getWallet($this)->decimal_places;
+        $math = app(MathServiceInterface::class);
+        $decimalPlacesValue = app(CastServiceInterface::class)->getWallet($this)->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
@@ -101,8 +101,8 @@ trait HasWalletFloat
     public function transferFloat(Wallet $wallet, $amount, ?array $meta = null): Transfer
     {
         /** @var Wallet $this */
-        $math = app(MathInterface::class);
-        $decimalPlacesValue = app(CastService::class)->getWallet($this)->decimal_places;
+        $math = app(MathServiceInterface::class);
+        $decimalPlacesValue = app(CastServiceInterface::class)->getWallet($this)->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
@@ -115,8 +115,8 @@ trait HasWalletFloat
     public function safeTransferFloat(Wallet $wallet, $amount, ?array $meta = null): ?Transfer
     {
         /** @var Wallet $this */
-        $math = app(MathInterface::class);
-        $decimalPlacesValue = app(CastService::class)->getWallet($this)->decimal_places;
+        $math = app(MathServiceInterface::class);
+        $decimalPlacesValue = app(CastServiceInterface::class)->getWallet($this)->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
@@ -132,8 +132,8 @@ trait HasWalletFloat
     public function forceTransferFloat(Wallet $wallet, $amount, ?array $meta = null): Transfer
     {
         /** @var Wallet $this */
-        $math = app(MathInterface::class);
-        $decimalPlacesValue = app(CastService::class)->getWallet($this)->decimal_places;
+        $math = app(MathServiceInterface::class);
+        $decimalPlacesValue = app(CastServiceInterface::class)->getWallet($this)->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);
         $result = $math->round($math->mul($amount, $decimalPlaces, $decimalPlacesValue));
 
@@ -146,8 +146,8 @@ trait HasWalletFloat
     public function getBalanceFloatAttribute()
     {
         /** @var Wallet $this */
-        $math = app(MathInterface::class);
-        $wallet = app(CastService::class)->getWallet($this);
+        $math = app(MathServiceInterface::class);
+        $wallet = app(CastServiceInterface::class)->getWallet($this);
         $decimalPlacesValue = $wallet->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);
 

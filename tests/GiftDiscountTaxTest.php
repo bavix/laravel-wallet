@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Services\WalletServiceLegacy;
 use Bavix\Wallet\Test\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Factories\ItemDiscountTaxFactory;
 use Bavix\Wallet\Test\Models\Buyer;
@@ -31,7 +31,7 @@ class GiftDiscountTaxTest extends TestCase
         self::assertSame(0, $first->balanceInt);
         self::assertSame(0, $second->balanceInt);
 
-        $fee = app(WalletService::class)->fee(
+        $fee = app(WalletServiceLegacy::class)->fee(
             $product,
             $product->getAmountProduct($first) - $product->getPersonalDiscount($first)
         );
@@ -67,7 +67,7 @@ class GiftDiscountTaxTest extends TestCase
         self::assertSame($first->balanceInt, 0);
         self::assertSame($second->balanceInt, 0);
 
-        $fee = app(WalletService::class)->fee(
+        $fee = app(WalletServiceLegacy::class)->fee(
             $product,
             $product->getAmountProduct($first) - $product->getPersonalDiscount($first)
         );
@@ -97,7 +97,7 @@ class GiftDiscountTaxTest extends TestCase
 
         self::assertNull($second->wallet->safeGift($first, $product));
 
-        $secondFee = app(WalletService::class)->fee(
+        $secondFee = app(WalletServiceLegacy::class)->fee(
             $product,
             (int) ($product->getAmountProduct($second) - $product->getPersonalDiscount($second))
         );

@@ -39,7 +39,7 @@ We will take the data from the array, and not from the database.
 
 ```php
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Services\WalletServiceLegacy;
 use Illuminate\Support\Arr;
 
 class MyRateService extends \Bavix\Wallet\Simple\Rate
@@ -57,8 +57,8 @@ class MyRateService extends \Bavix\Wallet\Simple\Rate
 
     protected function rate(Wallet $wallet)
     {
-        $from = app(WalletService::class)->getWallet($this->withCurrency);
-        $to = app(WalletService::class)->getWallet($wallet);
+        $from = app(WalletServiceLegacy::class)->getWallet($this->withCurrency);
+        $to = app(WalletServiceLegacy::class)->getWallet($wallet);
 
         return Arr::get(
             Arr::get($this->rates, $from->currency, []),

@@ -6,17 +6,17 @@ namespace Bavix\Wallet\Traits;
 
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
-use Bavix\Wallet\Internal\ConsistencyInterface;
-use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
-use Bavix\Wallet\Internal\ExchangeInterface;
-use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Internal\Service\CastService;
-use Bavix\Wallet\Internal\Service\PrepareService;
+use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
+use Bavix\Wallet\Internal\Service\PrepareServiceInterface;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\LockService;
-use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Services\CastServiceInterface;
+use Bavix\Wallet\Services\CommonServiceLegacy;
+use Bavix\Wallet\Services\ConsistencyServiceInterface;
+use Bavix\Wallet\Services\ExchangeServiceInterface;
+use Bavix\Wallet\Services\LockServiceLegacy;
+use Bavix\Wallet\Services\WalletServiceLegacy;
 
 trait CanExchange
 {
@@ -25,9 +25,9 @@ trait CanExchange
      */
     public function exchange(Wallet $to, $amount, ?array $meta = null): Transfer
     {
-        $wallet = app(CastService::class)->getWallet($this);
+        $wallet = app(CastServiceInterface::class)->getWallet($this);
 
-        app(ConsistencyInterface::class)->checkPotential($wallet, $amount);
+        app(ConsistencyServiceInterface::class)->checkPotential($wallet, $amount);
 
         return $this->forceExchange($to, $amount, $meta);
     }
@@ -49,13 +49,13 @@ trait CanExchange
      */
     public function forceExchange(Wallet $to, $amount, ?array $meta = null): Transfer
     {
-        return app(LockService::class)->lock($this, function () use ($to, $amount, $meta) {
-            return app(DatabaseInterface::class)->transaction(function () use ($to, $amount, $meta) {
-                $prepareService = app(PrepareService::class);
-                $mathService = app(MathInterface::class);
-                $castService = app(CastService::class);
-                $fee = app(WalletService::class)->fee($to, $amount);
-                $rate = app(ExchangeInterface::class)->convertTo(
+        return app(LockServiceLegacy::class)->lock($this, function () use ($to, $amount, $meta) {
+            return app(DatabaseServiceInterface::class)->transaction(function () use ($to, $amount, $meta) {
+                $prepareService = app(PrepareServiceInterface::class);
+                $mathService = app(MathServiceInterface::class);
+                $castService = app(CastServiceInterface::class);
+                $fee = app(WalletServiceLegacy::class)->fee($to, $amount);
+                $rate = app(ExchangeServiceInterface::class)->convertTo(
                     $castService->getWallet($this)->currency,
                     $castService->getWallet($to)->currency,
                     1
@@ -73,7 +73,7 @@ trait CanExchange
                     Transfer::STATUS_EXCHANGE,
                 );
 
-                $transfers = app(CommonService::class)->applyTransfers([$transferLazyDto]);
+                $transfers = app(CommonServiceLegacy::class)->applyTransfers([$transferLazyDto]);
 
                 return current($transfers);
             });

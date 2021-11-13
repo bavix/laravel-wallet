@@ -2,17 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Bavix\Wallet\Services;
+namespace Bavix\Wallet\Internal\Service;
 
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
-use Bavix\Wallet\Internal\LockInterface;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Config\Repository as ConfigRepository;
 use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
-final class AtomicService implements LockInterface
+final class LockService implements LockServiceInterface
 {
     private CacheRepository $cache;
 

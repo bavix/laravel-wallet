@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Internal\Assembler;
 
 use Bavix\Wallet\Internal\Dto\TransferDto;
-use Bavix\Wallet\Internal\UuidInterface;
+use Bavix\Wallet\Internal\Service\UuidServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 
 final class TransferDtoAssembler implements TransferDtoAssemblerInterface
 {
-    private UuidInterface $uuidService;
+    private UuidServiceInterface $uuidService;
 
-    public function __construct(UuidInterface $uuidService)
+    public function __construct(UuidServiceInterface $uuidService)
     {
         $this->uuidService = $uuidService;
     }

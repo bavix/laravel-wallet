@@ -6,21 +6,21 @@ namespace Bavix\Wallet\Traits;
 
 use function array_unique;
 use Bavix\Wallet\Exceptions\ProductEnded;
+use Bavix\Wallet\Interfaces\CartInterface;
 use Bavix\Wallet\Interfaces\Product;
-use Bavix\Wallet\Internal\BasketInterface;
-use Bavix\Wallet\Internal\CartInterface;
-use Bavix\Wallet\Internal\ConsistencyInterface;
-use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Internal\Dto\AvailabilityDto;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
-use Bavix\Wallet\Internal\PurchaseInterface;
-use Bavix\Wallet\Internal\Service\PrepareService;
-use Bavix\Wallet\Internal\TranslatorInterface;
+use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
+use Bavix\Wallet\Internal\Service\PrepareServiceInterface;
+use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
-use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\MetaService;
+use Bavix\Wallet\Services\BasketServiceInterface;
+use Bavix\Wallet\Services\CommonServiceLegacy;
+use Bavix\Wallet\Services\ConsistencyServiceInterface;
+use Bavix\Wallet\Services\MetaServiceLegacy;
+use Bavix\Wallet\Services\PurchaseServiceInterface;
 use function count;
 
 trait CartPay
@@ -32,20 +32,20 @@ trait CartPay
      */
     public function payFreeCart(CartInterface $cart): array
     {
-        $basketService = app(BasketInterface::class);
+        $basketService = app(BasketServiceInterface::class);
         if (!$basketService->availability(new AvailabilityDto($this, $cart->getBasketDto(), false))) {
             throw new ProductEnded(
-                app(TranslatorInterface::class)->get('wallet::errors.product_stock'),
+                app(TranslatorServiceInterface::class)->get('wallet::errors.product_stock'),
                 ExceptionInterface::PRODUCT_ENDED
             );
         }
 
-        app(ConsistencyInterface::class)->checkPotential($this, 0, true);
+        app(ConsistencyServiceInterface::class)->checkPotential($this, 0, true);
 
-        return app(DatabaseInterface::class)->transaction(function () use ($cart) {
+        return app(DatabaseServiceInterface::class)->transaction(function () use ($cart) {
             $transfers = [];
-            $prepareService = app(PrepareService::class);
-            $metaService = app(MetaService::class);
+            $prepareService = app(PrepareServiceInterface::class);
+            $metaService = app(MetaServiceLegacy::class);
             foreach ($cart->getBasketDto()->cursor() as $product) {
                 $transfers[] = $prepareService->transferLazy(
                     $this,
@@ -56,7 +56,7 @@ trait CartPay
                 );
             }
 
-            return app(CommonService::class)->applyTransfers($transfers);
+            return app(CommonServiceLegacy::class)->applyTransfers($transfers);
         });
     }
 
@@ -77,18 +77,18 @@ trait CartPay
      */
     public function payCart(CartInterface $cart, bool $force = false): array
     {
-        $basketService = app(BasketInterface::class);
+        $basketService = app(BasketServiceInterface::class);
         if (!$basketService->availability(new AvailabilityDto($this, $cart->getBasketDto(), $force))) {
             throw new ProductEnded(
-                app(TranslatorInterface::class)->get('wallet::errors.product_stock'),
+                app(TranslatorServiceInterface::class)->get('wallet::errors.product_stock'),
                 ExceptionInterface::PRODUCT_ENDED
             );
         }
 
-        return app(DatabaseInterface::class)->transaction(function () use ($cart, $force) {
+        return app(DatabaseServiceInterface::class)->transaction(function () use ($cart, $force) {
             $transfers = [];
-            $prepareService = app(PrepareService::class);
-            $metaService = app(MetaService::class);
+            $prepareService = app(PrepareServiceInterface::class);
+            $metaService = app(MetaServiceLegacy::class);
             foreach ($cart->getBasketDto()->cursor() as $product) {
                 $transfers[] = $prepareService->transferLazy(
                     $this,
@@ -100,10 +100,10 @@ trait CartPay
             }
 
             if ($force === false) {
-                app(ConsistencyInterface::class)->checkTransfer($transfers);
+                app(ConsistencyServiceInterface::class)->checkTransfer($transfers);
             }
 
-            return app(CommonService::class)->applyTransfers($transfers);
+            return app(CommonServiceLegacy::class)->applyTransfers($transfers);
         });
     }
 
@@ -126,9 +126,9 @@ trait CartPay
 
     public function refundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool
     {
-        return app(DatabaseInterface::class)->transaction(function () use ($cart, $force, $gifts) {
+        return app(DatabaseServiceInterface::class)->transaction(function () use ($cart, $force, $gifts) {
             $results = [];
-            $transfers = app(PurchaseInterface::class)->already($this, $cart->getBasketDto(), $gifts);
+            $transfers = app(PurchaseServiceInterface::class)->already($this, $cart->getBasketDto(), $gifts);
             if (count($transfers) !== $cart->getBasketDto()->total()) {
                 throw new ModelNotFoundException(
                     "No query results for model [{$this->transfers()->getMorphClass()}]",
@@ -137,7 +137,7 @@ trait CartPay
             }
 
             $objects = [];
-            $prepareService = app(PrepareService::class);
+            $prepareService = app(PrepareServiceInterface::class);
             foreach ($cart->getBasketDto()->cursor() as $product) {
                 $transfer = current($transfers);
                 next($transfers);
@@ -152,15 +152,15 @@ trait CartPay
                     $transfer->withdraw->wallet,
                     Transfer::STATUS_TRANSFER,
                     $transfer->deposit->amount, // fixme: need optimize
-                    app(MetaService::class)->getMeta($cart, $product)
+                    app(MetaServiceLegacy::class)->getMeta($cart, $product)
                 );
             }
 
             if ($force === false) {
-                app(ConsistencyInterface::class)->checkTransfer($objects);
+                app(ConsistencyServiceInterface::class)->checkTransfer($objects);
             }
 
-            app(CommonService::class)->applyTransfers($objects);
+            app(CommonServiceLegacy::class)->applyTransfers($objects);
 
             // fixme: one query update for
             foreach ($transfers as $transfer) {
@@ -204,7 +204,7 @@ trait CartPay
     public function paid(Product $product, bool $gifts = false): ?Transfer
     {
         $cart = app(Cart::class)->addItem($product);
-        $purchases = app(PurchaseInterface::class)
+        $purchases = app(PurchaseServiceInterface::class)
             ->already($this, $cart->getBasketDto(), $gifts)
         ;
 

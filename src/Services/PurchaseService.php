@@ -6,11 +6,10 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Internal\Dto\BasketDto;
-use Bavix\Wallet\Internal\PurchaseInterface;
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\Eloquent\Model;
 
-final class PurchaseService implements PurchaseInterface
+final class PurchaseService implements PurchaseServiceInterface
 {
     public function already(Customer $customer, BasketDto $basketDto, bool $gifts = false): array
     {

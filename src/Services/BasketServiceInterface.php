@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Bavix\Wallet\Internal;
+namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Internal\Dto\AvailabilityDto;
 
-interface BasketInterface
+interface BasketServiceInterface
 {
     public function availability(AvailabilityDto $availabilityDto): bool;
 }

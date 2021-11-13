@@ -7,7 +7,7 @@ namespace Bavix\Wallet\Test;
 use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Common\Models\Transfer;
 use Bavix\Wallet\Test\Common\Models\Wallet;
-use Bavix\Wallet\Test\Common\MyExchange;
+use Bavix\Wallet\Test\Common\MyExchangeService;
 use Bavix\Wallet\Test\Common\TestServiceProvider;
 use Bavix\Wallet\WalletServiceProvider;
 use Illuminate\Config\Repository;
@@ -35,7 +35,7 @@ class TestCase extends OrchestraTestCase
     protected function getPackageProviders($app): array
     {
         // Bind eloquent models to IoC container
-        $app['config']->set('wallet.services.exchange', MyExchange::class);
+        $app['config']->set('wallet.services.exchange', MyExchangeService::class);
         $app['config']->set('wallet.transaction.model', Transaction::class);
         $app['config']->set('wallet.transfer.model', Transfer::class);
         $app['config']->set('wallet.wallet.model', Wallet::class);

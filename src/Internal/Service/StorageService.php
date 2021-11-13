@@ -2,30 +2,27 @@
 
 declare(strict_types=1);
 
-namespace Bavix\Wallet\Services;
+namespace Bavix\Wallet\Internal\Service;
 
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
-use Bavix\Wallet\Internal\LockInterface;
-use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Internal\StorageInterface;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Config\Repository as ConfigRepository;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
-final class StorageService implements StorageInterface
+final class StorageService implements StorageServiceInterface
 {
     private CacheRepository $cache;
 
-    private LockInterface $lock;
+    private LockServiceInterface $lock;
 
-    private MathInterface $math;
+    private MathServiceInterface $math;
 
     public function __construct(
         CacheManager $cacheManager,
         ConfigRepository $config,
-        LockInterface $lock,
-        MathInterface $math
+        LockServiceInterface $lock,
+        MathServiceInterface $math
     ) {
         $this->math = $math;
         $this->lock = $lock;

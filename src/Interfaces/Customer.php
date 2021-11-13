@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Interfaces;
 
-use Bavix\Wallet\Internal\CartInterface;
 use Bavix\Wallet\Models\Transfer;
 
 interface Customer extends Wallet

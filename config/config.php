@@ -7,23 +7,27 @@ use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
-use Bavix\Wallet\Internal\Service\AssistantService;
-use Bavix\Wallet\Internal\Service\AtmService;
 use Bavix\Wallet\Internal\Service\DatabaseService;
+use Bavix\Wallet\Internal\Service\JsonService;
+use Bavix\Wallet\Internal\Service\LockService;
+use Bavix\Wallet\Internal\Service\MathService;
+use Bavix\Wallet\Internal\Service\PrepareService;
+use Bavix\Wallet\Internal\Service\StorageService;
+use Bavix\Wallet\Internal\Service\TranslatorService;
+use Bavix\Wallet\Internal\Service\UuidService;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
 use Bavix\Wallet\Internal\Transform\TransferDtoTransformer;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
-use Bavix\Wallet\Services\AtomicService;
+use Bavix\Wallet\Services\AssistantService;
+use Bavix\Wallet\Services\AtmService;
 use Bavix\Wallet\Services\BasketService;
 use Bavix\Wallet\Services\BookkeeperService;
+use Bavix\Wallet\Services\CastService;
 use Bavix\Wallet\Services\ConsistencyService;
 use Bavix\Wallet\Services\ExchangeService;
-use Bavix\Wallet\Services\MathService;
 use Bavix\Wallet\Services\PurchaseService;
-use Bavix\Wallet\Services\StorageService;
-use Bavix\Wallet\Services\UuidFactoryService;
 
 return [
     /**
@@ -47,21 +51,31 @@ return [
     ],
 
     /**
+     * Internal services that can be overloaded.
+     */
+    'internal' => [
+        'database' => DatabaseService::class,
+        'json' => JsonService::class,
+        'lock' => LockService::class,
+        'math' => MathService::class,
+        'prepare' => PrepareService::class,
+        'storage' => StorageService::class,
+        'translator' => TranslatorService::class,
+        'uuid' => UuidService::class,
+    ],
+
+    /**
      * Services that can be overloaded.
      */
     'services' => [
-        'atm' => AtmService::class,
         'assistant' => AssistantService::class,
+        'atm' => AtmService::class,
         'basket' => BasketService::class,
         'bookkeeper' => BookkeeperService::class,
+        'cast' => CastService::class,
         'consistency' => ConsistencyService::class,
         'exchange' => ExchangeService::class,
-        'atomic' => AtomicService::class,
-        'math' => MathService::class,
         'purchase' => PurchaseService::class,
-        'storage' => StorageService::class,
-        'database' => DatabaseService::class,
-        'uuid' => UuidFactoryService::class,
     ],
 
     /**

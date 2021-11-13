@@ -7,7 +7,7 @@ namespace Bavix\Wallet\Test;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
-use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Test\Factories\UserFloatFactory;
 use Bavix\Wallet\Test\Models\UserFloat as User;
@@ -265,7 +265,7 @@ class WalletFloatTest extends TestCase
         $user->wallet->decimal_places = 18;
         $user->wallet->save();
 
-        $math = app(MathInterface::class);
+        $math = app(MathServiceInterface::class);
 
         $user->depositFloat('545.8754855274419');
         self::assertSame('545875485527441900000', $user->balance);
@@ -281,7 +281,7 @@ class WalletFloatTest extends TestCase
         $user->wallet->decimal_places = 32; // bitcoin wallet
         $user->wallet->save();
 
-        $math = app(MathInterface::class);
+        $math = app(MathServiceInterface::class);
 
         for ($i = 0; $i < 256; ++$i) {
             $user->depositFloat('0.00000001'); // Satoshi

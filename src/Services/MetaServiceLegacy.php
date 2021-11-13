@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Interfaces\CartInterface;
 use Bavix\Wallet\Interfaces\Product;
-use Bavix\Wallet\Internal\CartInterface;
 
 /** @deprecated */
-final class MetaService
+final class MetaServiceLegacy
 {
     public function getMeta(CartInterface $cart, Product $product): ?array
     {

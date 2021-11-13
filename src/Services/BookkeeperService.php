@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
-use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
-use Bavix\Wallet\Internal\LockInterface;
-use Bavix\Wallet\Internal\StorageInterface;
+use Bavix\Wallet\Internal\Service\LockServiceInterface;
+use Bavix\Wallet\Internal\Service\StorageServiceInterface;
 use Bavix\Wallet\Models\Wallet;
 
-final class BookkeeperService implements BookkeeperInterface
+final class BookkeeperService implements BookkeeperServiceInterface
 {
-    private StorageInterface $storage;
+    private StorageServiceInterface $storage;
 
-    private LockInterface $lock;
+    private LockServiceInterface $lock;
 
     public function __construct(
-        StorageInterface $storage,
-        LockInterface $lock
+        StorageServiceInterface $storage,
+        LockServiceInterface $lock
     ) {
         $this->storage = $storage;
         $this->lock = $lock;

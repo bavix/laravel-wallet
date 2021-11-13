@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Traits;
 
-use Bavix\Wallet\Internal\Service\CastService;
-use Bavix\Wallet\Internal\UuidInterface;
+use Bavix\Wallet\Internal\Service\UuidServiceInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
+use Bavix\Wallet\Services\CastServiceInterface;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
@@ -22,7 +22,7 @@ trait MorphOneWallet
      */
     public function wallet(): MorphOne
     {
-        return app(CastService::class)
+        return app(CastServiceInterface::class)
             ->getHolder($this)
             ->morphOne(config('wallet.wallet.model', WalletModel::class), 'holder')
             ->where('slug', config('wallet.wallet.default.slug', 'default'))
@@ -30,7 +30,7 @@ trait MorphOneWallet
                 'name' => config('wallet.wallet.default.name', 'Default Wallet'),
                 'slug' => config('wallet.wallet.default.slug', 'default'),
                 'meta' => config('wallet.wallet.default.meta', []),
-                'uuid' => app(UuidInterface::class)->uuid4(),
+                'uuid' => app(UuidServiceInterface::class)->uuid4(),
                 'balance' => 0,
             ]))
         ;

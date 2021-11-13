@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Objects;
 
 use function array_unique;
+use Bavix\Wallet\Interfaces\CartInterface;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
-use Bavix\Wallet\Internal\CartInterface;
 use Bavix\Wallet\Internal\Dto\BasketDto;
 use Bavix\Wallet\Internal\Dto\ItemDto;
 use Bavix\Wallet\Internal\Exceptions\CartEmptyException;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
-use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Internal\Service\CastService;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
+use Bavix\Wallet\Services\CastService;
 use function count;
 use Countable;
 use function get_class;
@@ -32,11 +32,11 @@ final class Cart implements Countable, CartInterface
 
     private CastService $castService;
 
-    private MathInterface $math;
+    private MathServiceInterface $math;
 
     public function __construct(
         CastService $castService,
-        MathInterface $math
+        MathServiceInterface $math
     ) {
         $this->castService = $castService;
         $this->math = $math;

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Service;
 
-use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Closure;
@@ -14,7 +13,7 @@ use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\RecordsNotFoundException;
 use Throwable;
 
-final class DatabaseService implements DatabaseInterface
+final class DatabaseService implements DatabaseServiceInterface
 {
     private ConnectionInterface $connection;
 

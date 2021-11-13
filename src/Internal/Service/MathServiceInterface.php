@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Bavix\Wallet\Internal;
+namespace Bavix\Wallet\Internal\Service;
 
-interface MathInterface
+interface MathServiceInterface
 {
     /**
      * @param float|int|string $first

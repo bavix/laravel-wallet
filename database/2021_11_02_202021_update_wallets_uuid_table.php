@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Bavix\Wallet\Internal\UuidInterface;
+use Bavix\Wallet\Internal\Service\UuidServiceInterface;
 use Bavix\Wallet\Models\Wallet;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -28,7 +28,7 @@ class UpdateWalletsUuidTable extends Migration
 
         Wallet::query()->chunk(10000, static function (Collection $wallets) {
             $wallets->each(function (Wallet $wallet) {
-                $wallet->uuid = app(UuidInterface::class)->uuid4();
+                $wallet->uuid = app(UuidServiceInterface::class)->uuid4();
                 $wallet->save();
             });
         });

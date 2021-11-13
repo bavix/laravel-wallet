@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Bavix\Wallet\Services;
+namespace Bavix\Wallet\Internal\Service;
 
-use Bavix\Wallet\Internal\UuidInterface;
 use Ramsey\Uuid\UuidFactory;
 use Ramsey\Uuid\UuidFactoryInterface;
 
-final class UuidFactoryService implements UuidInterface
+final class UuidService implements UuidServiceInterface
 {
     private UuidFactoryInterface $uuidFactory;
 

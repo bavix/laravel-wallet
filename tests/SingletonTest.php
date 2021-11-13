@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test;
 
-use Bavix\Wallet\Internal\DatabaseInterface;
-use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Objects\Cart;
-use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\LockService;
-use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Services\CommonServiceLegacy;
+use Bavix\Wallet\Services\LockServiceLegacy;
+use Bavix\Wallet\Services\WalletServiceLegacy;
 use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Common\Models\Transfer;
 use Bavix\Wallet\Test\Common\Models\Wallet;
@@ -26,7 +26,7 @@ class SingletonTest extends TestCase
 
     public function testMathInterface(): void
     {
-        self::assertSame($this->getRefId(MathInterface::class), $this->getRefId(MathInterface::class));
+        self::assertSame($this->getRefId(MathServiceInterface::class), $this->getRefId(MathServiceInterface::class));
     }
 
     public function testTransaction(): void
@@ -46,22 +46,22 @@ class SingletonTest extends TestCase
 
     public function testCommonService(): void
     {
-        self::assertSame($this->getRefId(CommonService::class), $this->getRefId(CommonService::class));
+        self::assertSame($this->getRefId(CommonServiceLegacy::class), $this->getRefId(CommonServiceLegacy::class));
     }
 
     public function testWalletService(): void
     {
-        self::assertSame($this->getRefId(WalletService::class), $this->getRefId(WalletService::class));
+        self::assertSame($this->getRefId(WalletServiceLegacy::class), $this->getRefId(WalletServiceLegacy::class));
     }
 
     public function testDatabaseService(): void
     {
-        self::assertSame($this->getRefId(DatabaseInterface::class), $this->getRefId(DatabaseInterface::class));
+        self::assertSame($this->getRefId(DatabaseServiceInterface::class), $this->getRefId(DatabaseServiceInterface::class));
     }
 
     public function testLockService(): void
     {
-        self::assertSame($this->getRefId(LockService::class), $this->getRefId(LockService::class));
+        self::assertSame($this->getRefId(LockServiceLegacy::class), $this->getRefId(LockServiceLegacy::class));
     }
 
     protected function getRefId(string $object): string

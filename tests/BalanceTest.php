@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test;
 
 use function app;
-use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Models\Wallet;
-use Bavix\Wallet\Services\CommonService;
+use Bavix\Wallet\Services\BookkeeperServiceInterface;
+use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Test\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Models\Buyer;
 use Illuminate\Database\SQLiteConnection;
@@ -90,7 +90,7 @@ class BalanceTest extends TestCase
         $wallet->deposit(1000);
         self::assertSame(1000, $wallet->balanceInt);
 
-        $result = app(CommonService::class)->addBalance($wallet, 100);
+        $result = app(CommonServiceLegacy::class)->addBalance($wallet, 100);
         self::assertTrue($result);
 
         self::assertSame($wallet->balanceInt, 1100);
@@ -102,7 +102,7 @@ class BalanceTest extends TestCase
         self::assertTrue($wallet->delete());
         self::assertFalse($wallet->exists);
         self::assertSame($wallet->getKey(), $key);
-        $result = app(CommonService::class)->addBalance($wallet, 100);
+        $result = app(CommonServiceLegacy::class)->addBalance($wallet, 100);
         self::assertTrue($result); // automatic create default wallet
 
         $wallet->refreshBalance();
@@ -131,7 +131,7 @@ class BalanceTest extends TestCase
         self::assertSame($wallet->balanceInt, 0);
         self::assertTrue($wallet->exists);
 
-        self::assertSame('0', app(BookkeeperInterface::class)->amount($wallet));
+        self::assertSame('0', app(BookkeeperServiceInterface::class)->amount($wallet));
     }
 
     /**
@@ -206,7 +206,7 @@ class BalanceTest extends TestCase
          *
          * Here is an example:
          */
-        app(BookkeeperInterface::class)->missing($buyer->wallet);
+        app(BookkeeperServiceInterface::class)->missing($buyer->wallet);
         self::assertSame(1000, (int) $wallet->getRawOriginal('balance'));
 
         /**
@@ -248,10 +248,10 @@ class BalanceTest extends TestCase
         $mockWallet->method('syncOriginalAttribute')->willReturn($mockWallet);
         $mockWallet->method('__get')->with('uuid')->willReturn($wallet->uuid);
 
-        $bookkeeper = app(BookkeeperInterface::class);
+        $bookkeeper = app(BookkeeperServiceInterface::class);
         $bookkeeper->sync($wallet, 100500); // init
 
-        $result = app(CommonService::class)
+        $result = app(CommonServiceLegacy::class)
             ->addBalance($mockWallet, 100)
         ;
 

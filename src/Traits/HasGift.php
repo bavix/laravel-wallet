@@ -12,17 +12,17 @@ use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
-use Bavix\Wallet\Internal\AtmInterface;
-use Bavix\Wallet\Internal\ConsistencyInterface;
-use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
-use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Internal\Service\CastService;
+use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\LockService;
-use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Services\AtmServiceInterface;
+use Bavix\Wallet\Services\CastServiceInterface;
+use Bavix\Wallet\Services\CommonServiceLegacy;
+use Bavix\Wallet\Services\ConsistencyServiceInterface;
+use Bavix\Wallet\Services\LockServiceLegacy;
+use Bavix\Wallet\Services\WalletServiceLegacy;
 use Throwable;
 
 /**
@@ -54,7 +54,7 @@ trait HasGift
      */
     public function gift(Wallet $to, Product $product, bool $force = false): Transfer
     {
-        return app(LockService::class)->lock($this, function () use ($to, $product, $force): Transfer {
+        return app(LockServiceLegacy::class)->lock($this, function () use ($to, $product, $force): Transfer {
             /**
              * Who's giving? Let's call him Santa Claus.
              *
@@ -67,28 +67,28 @@ trait HasGift
              * I think it is wrong to make the "assemble" method public.
              * That's why I address him like this!
              */
-            return app(DatabaseInterface::class)->transaction(static function () use ($santa, $to, $product, $force): Transfer {
-                $math = app(MathInterface::class);
-                $discount = app(WalletService::class)->discount($santa, $product);
+            return app(DatabaseServiceInterface::class)->transaction(static function () use ($santa, $to, $product, $force): Transfer {
+                $math = app(MathServiceInterface::class);
+                $discount = app(WalletServiceLegacy::class)->discount($santa, $product);
                 $amount = $math->sub($product->getAmountProduct($santa), $discount);
                 $meta = $product->getMetaProduct();
-                $fee = app(WalletService::class)
+                $fee = app(WalletServiceLegacy::class)
                     ->fee($product, $amount)
                 ;
 
-                $commonService = app(CommonService::class);
+                $commonService = app(CommonServiceLegacy::class);
 
                 /**
                  * Santa pays taxes.
                  */
                 if (!$force) {
-                    app(ConsistencyInterface::class)->checkPotential($santa, $math->add($amount, $fee));
+                    app(ConsistencyServiceInterface::class)->checkPotential($santa, $math->add($amount, $fee));
                 }
 
                 $withdraw = $commonService->makeTransaction($santa, Transaction::TYPE_WITHDRAW, $math->add($amount, $fee), $meta);
                 $deposit = $commonService->makeTransaction($product, Transaction::TYPE_DEPOSIT, $amount, $meta);
 
-                $castService = app(CastService::class);
+                $castService = app(CastServiceInterface::class);
 
                 $transfer = app(TransferDtoAssemblerInterface::class)->create(
                     $deposit->getKey(),
@@ -100,7 +100,7 @@ trait HasGift
                     $fee
                 );
 
-                $transfers = app(AtmInterface::class)->makeTransfers([$transfer]);
+                $transfers = app(AtmServiceInterface::class)->makeTransfers([$transfer]);
 
                 return current($transfers);
             });

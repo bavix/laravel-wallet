@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Bavix\Wallet\Services;
+namespace Bavix\Wallet\Internal\Service;
 
-use Bavix\Wallet\Internal\MathInterface;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
 use Illuminate\Config\Repository as ConfigRepository;
 
-final class MathService implements MathInterface
+final class MathService implements MathServiceInterface
 {
     private int $scale;
 

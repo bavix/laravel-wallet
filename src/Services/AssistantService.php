@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Bavix\Wallet\Internal\Service;
+namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Dto\TransferDto;
-use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
 
-final class AssistantService implements AssistantInterface
+final class AssistantService implements AssistantServiceInterface
 {
-    private MathInterface $mathService;
+    private MathServiceInterface $mathService;
 
-    public function __construct(MathInterface $mathService)
+    public function __construct(MathServiceInterface $mathService)
     {
         $this->mathService = $mathService;
     }

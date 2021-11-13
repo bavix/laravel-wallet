@@ -9,15 +9,15 @@ use Bavix\Wallet\Exceptions\ConfirmedInvalid;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Exceptions\UnconfirmedInvalid;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
-use Bavix\Wallet\Internal\ConsistencyInterface;
-use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
-use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Internal\Service\CastService;
-use Bavix\Wallet\Internal\TranslatorInterface;
+use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
+use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
 use Bavix\Wallet\Models\Transaction;
-use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\LockService;
+use Bavix\Wallet\Services\CastServiceInterface;
+use Bavix\Wallet\Services\CommonServiceLegacy;
+use Bavix\Wallet\Services\ConsistencyServiceInterface;
+use Bavix\Wallet\Services\LockServiceLegacy;
 
 trait CanConfirm
 {
@@ -30,11 +30,11 @@ trait CanConfirm
      */
     public function confirm(Transaction $transaction): bool
     {
-        return app(DatabaseInterface::class)->transaction(function () use ($transaction) {
+        return app(DatabaseServiceInterface::class)->transaction(function () use ($transaction) {
             if ($transaction->type === Transaction::TYPE_WITHDRAW) {
-                app(ConsistencyInterface::class)->checkPotential(
-                    app(CastService::class)->getWallet($this),
-                    app(MathInterface::class)->abs($transaction->amount)
+                app(ConsistencyServiceInterface::class)->checkPotential(
+                    app(CastServiceInterface::class)->getWallet($this),
+                    app(MathServiceInterface::class)->abs($transaction->amount)
                 );
             }
 
@@ -58,22 +58,22 @@ trait CanConfirm
      */
     public function resetConfirm(Transaction $transaction): bool
     {
-        return app(LockService::class)->lock($this, function () use ($transaction) {
-            return app(DatabaseInterface::class)->transaction(function () use ($transaction) {
+        return app(LockServiceLegacy::class)->lock($this, function () use ($transaction) {
+            return app(DatabaseServiceInterface::class)->transaction(function () use ($transaction) {
                 if (!$transaction->confirmed) {
                     throw new UnconfirmedInvalid(
-                        app(TranslatorInterface::class)->get('wallet::errors.unconfirmed_invalid'),
+                        app(TranslatorServiceInterface::class)->get('wallet::errors.unconfirmed_invalid'),
                         ExceptionInterface::UNCONFIRMED_INVALID
                     );
                 }
 
-                $wallet = app(CastService::class)->getWallet($this);
-                $mathService = app(MathInterface::class);
+                $wallet = app(CastServiceInterface::class)->getWallet($this);
+                $mathService = app(MathServiceInterface::class);
                 $negativeAmount = $mathService->negative($transaction->amount);
 
                 return $transaction->update(['confirmed' => false]) &&
                     // update balance
-                    app(CommonService::class)
+                    app(CommonServiceLegacy::class)
                         ->addBalance($wallet, $negativeAmount)
                     ;
             });
@@ -95,26 +95,26 @@ trait CanConfirm
      */
     public function forceConfirm(Transaction $transaction): bool
     {
-        return app(LockService::class)->lock($this, function () use ($transaction) {
-            return app(DatabaseInterface::class)->transaction(function () use ($transaction) {
+        return app(LockServiceLegacy::class)->lock($this, function () use ($transaction) {
+            return app(DatabaseServiceInterface::class)->transaction(function () use ($transaction) {
                 if ($transaction->confirmed) {
                     throw new ConfirmedInvalid(
-                        app(TranslatorInterface::class)->get('wallet::errors.confirmed_invalid'),
+                        app(TranslatorServiceInterface::class)->get('wallet::errors.confirmed_invalid'),
                         ExceptionInterface::CONFIRMED_INVALID
                     );
                 }
 
-                $wallet = app(CastService::class)->getWallet($this);
+                $wallet = app(CastServiceInterface::class)->getWallet($this);
                 if ($wallet->getKey() !== $transaction->wallet_id) {
                     throw new WalletOwnerInvalid(
-                        app(TranslatorInterface::class)->get('wallet::errors.owner_invalid'),
+                        app(TranslatorServiceInterface::class)->get('wallet::errors.owner_invalid'),
                         ExceptionInterface::WALLET_OWNER_INVALID
                     );
                 }
 
                 return $transaction->update(['confirmed' => true]) &&
                     // update balance
-                    app(CommonService::class)
+                    app(CommonServiceLegacy::class)
                         ->addBalance($wallet, $transaction->amount)
                     ;
             });

@@ -10,47 +10,53 @@ use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
-use Bavix\Wallet\Internal\AtmInterface;
-use Bavix\Wallet\Internal\BasketInterface;
-use Bavix\Wallet\Internal\BookkeeperInterface;
-use Bavix\Wallet\Internal\ConsistencyInterface;
-use Bavix\Wallet\Internal\DatabaseInterface;
-use Bavix\Wallet\Internal\ExchangeInterface;
-use Bavix\Wallet\Internal\LockInterface;
-use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Internal\PurchaseInterface;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransactionRepositoryInterface;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
 use Bavix\Wallet\Internal\Repository\TransferRepositoryInterface;
-use Bavix\Wallet\Internal\Service\AssistantInterface;
-use Bavix\Wallet\Internal\Service\AssistantService;
-use Bavix\Wallet\Internal\Service\AtmService;
 use Bavix\Wallet\Internal\Service\DatabaseService;
+use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
+use Bavix\Wallet\Internal\Service\JsonService;
+use Bavix\Wallet\Internal\Service\JsonServiceInterface;
+use Bavix\Wallet\Internal\Service\LockService as NewLockService;
+use Bavix\Wallet\Internal\Service\LockServiceInterface;
+use Bavix\Wallet\Internal\Service\MathService;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
+use Bavix\Wallet\Internal\Service\PrepareService;
+use Bavix\Wallet\Internal\Service\PrepareServiceInterface;
+use Bavix\Wallet\Internal\Service\StorageService;
+use Bavix\Wallet\Internal\Service\StorageServiceInterface;
 use Bavix\Wallet\Internal\Service\TranslatorService;
-use Bavix\Wallet\Internal\StorageInterface;
+use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
+use Bavix\Wallet\Internal\Service\UuidService;
+use Bavix\Wallet\Internal\Service\UuidServiceInterface;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
 use Bavix\Wallet\Internal\Transform\TransferDtoTransformer;
 use Bavix\Wallet\Internal\Transform\TransferDtoTransformerInterface;
-use Bavix\Wallet\Internal\TranslatorInterface;
-use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
-use Bavix\Wallet\Services\AtomicService;
+use Bavix\Wallet\Services\AssistantService;
+use Bavix\Wallet\Services\AssistantServiceInterface;
+use Bavix\Wallet\Services\AtmService;
+use Bavix\Wallet\Services\AtmServiceInterface;
 use Bavix\Wallet\Services\BasketService;
+use Bavix\Wallet\Services\BasketServiceInterface;
 use Bavix\Wallet\Services\BookkeeperService;
-use Bavix\Wallet\Services\CommonService;
+use Bavix\Wallet\Services\BookkeeperServiceInterface;
+use Bavix\Wallet\Services\CastService;
+use Bavix\Wallet\Services\CastServiceInterface;
+use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\ConsistencyService;
+use Bavix\Wallet\Services\ConsistencyServiceInterface;
 use Bavix\Wallet\Services\ExchangeService;
-use Bavix\Wallet\Services\LockService;
-use Bavix\Wallet\Services\MathService;
-use Bavix\Wallet\Services\MetaService;
+use Bavix\Wallet\Services\ExchangeServiceInterface;
+use Bavix\Wallet\Services\LockServiceLegacy;
+use Bavix\Wallet\Services\MetaServiceLegacy;
 use Bavix\Wallet\Services\PurchaseService;
-use Bavix\Wallet\Services\StorageService;
-use Bavix\Wallet\Services\UuidFactoryService;
-use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Services\PurchaseServiceInterface;
+use Bavix\Wallet\Services\WalletServiceLegacy;
 use function config;
 use function dirname;
 use function function_exists;
@@ -101,7 +107,8 @@ final class WalletServiceProvider extends ServiceProvider
 
         $configure = config('wallet', []);
 
-        $this->singletons($configure['services'] ?? []);
+        $this->internal($configure['internal'] ?? []);
+        $this->services($configure['services'] ?? []);
         $this->legacySingleton(); // without configuration
 
         $this->repositories($configure['repositories'] ?? []);
@@ -132,21 +139,28 @@ final class WalletServiceProvider extends ServiceProvider
         return WalletConfigure::isRunsMigrations();
     }
 
-    private function singletons(array $configure): void
+    private function internal(array $configure): void
     {
-        $this->app->singleton(AtmInterface::class, $configure['atm'] ?? AtmService::class);
-        $this->app->singleton(AssistantInterface::class, $configure['assistant'] ?? AssistantService::class);
-        $this->app->singleton(BasketInterface::class, $configure['basket'] ?? BasketService::class);
-        $this->app->singleton(BookkeeperInterface::class, $configure['bookkeeper'] ?? BookkeeperService::class);
-        $this->app->singleton(ConsistencyInterface::class, $configure['consistency'] ?? ConsistencyService::class);
-        $this->app->singleton(TranslatorInterface::class, $configure['translator'] ?? TranslatorService::class);
-        $this->app->singleton(ExchangeInterface::class, $configure['exchange'] ?? ExchangeService::class);
-        $this->app->singleton(LockInterface::class, $configure['atomic'] ?? AtomicService::class);
-        $this->app->singleton(MathInterface::class, $configure['math'] ?? MathService::class);
-        $this->app->singleton(PurchaseInterface::class, $configure['purchase'] ?? PurchaseService::class);
-        $this->app->singleton(StorageInterface::class, $configure['storage'] ?? StorageService::class);
-        $this->app->singleton(DatabaseInterface::class, $configure['database'] ?? DatabaseService::class);
-        $this->app->singleton(UuidInterface::class, $configure['uuid'] ?? UuidFactoryService::class);
+        $this->app->singleton(DatabaseServiceInterface::class, $configure['database'] ?? DatabaseService::class);
+        $this->app->singleton(JsonServiceInterface::class, $configure['json'] ?? JsonService::class);
+        $this->app->singleton(LockServiceInterface::class, $configure['lock'] ?? NewLockService::class);
+        $this->app->singleton(MathServiceInterface::class, $configure['math'] ?? MathService::class);
+        $this->app->singleton(PrepareServiceInterface::class, $configure['prepare'] ?? PrepareService::class);
+        $this->app->singleton(StorageServiceInterface::class, $configure['storage'] ?? StorageService::class);
+        $this->app->singleton(TranslatorServiceInterface::class, $configure['translator'] ?? TranslatorService::class);
+        $this->app->singleton(UuidServiceInterface::class, $configure['uuid'] ?? UuidService::class);
+    }
+
+    private function services(array $configure): void
+    {
+        $this->app->singleton(AssistantServiceInterface::class, $configure['assistant'] ?? AssistantService::class);
+        $this->app->singleton(AtmServiceInterface::class, $configure['atm'] ?? AtmService::class);
+        $this->app->singleton(BasketServiceInterface::class, $configure['basket'] ?? BasketService::class);
+        $this->app->singleton(BookkeeperServiceInterface::class, $configure['bookkeeper'] ?? BookkeeperService::class);
+        $this->app->singleton(CastServiceInterface::class, $configure['cast'] ?? CastService::class);
+        $this->app->singleton(ConsistencyServiceInterface::class, $configure['consistency'] ?? ConsistencyService::class);
+        $this->app->singleton(ExchangeServiceInterface::class, $configure['exchange'] ?? ExchangeService::class);
+        $this->app->singleton(PurchaseServiceInterface::class, $configure['purchase'] ?? PurchaseService::class);
     }
 
     private function assemblers(array $configure): void
@@ -182,11 +196,11 @@ final class WalletServiceProvider extends ServiceProvider
 
     private function legacySingleton(): void
     {
-        $this->app->singleton(CommonService::class);
-        $this->app->singleton(WalletService::class);
+        $this->app->singleton(CommonServiceLegacy::class);
+        $this->app->singleton(WalletServiceLegacy::class);
 
-        $this->app->singleton(LockService::class);
-        $this->app->singleton(MetaService::class);
+        $this->app->singleton(LockServiceLegacy::class);
+        $this->app->singleton(MetaServiceLegacy::class);
     }
 
     private function bindObjects(array $configure): void

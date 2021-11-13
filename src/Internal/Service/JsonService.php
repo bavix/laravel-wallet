@@ -9,7 +9,7 @@ use Throwable;
 /**
  * @psalm-internal
  */
-final class JsonService
+final class JsonService implements JsonServiceInterface
 {
     public function encode(?array $data): ?string
     {

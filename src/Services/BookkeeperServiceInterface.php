@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Bavix\Wallet\Internal;
+namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Models\Wallet;
 
-interface BookkeeperInterface
+interface BookkeeperServiceInterface
 {
     public function missing(Wallet $wallet): bool;
 

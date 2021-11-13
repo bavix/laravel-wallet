@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
-use Bavix\Wallet\Internal\ExchangeInterface;
-
-final class ExchangeService implements ExchangeInterface
+final class ExchangeService implements ExchangeServiceInterface
 {
     public function convertTo(string $fromCurrency, string $toCurrency, $amount): string
     {

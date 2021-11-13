@@ -7,37 +7,33 @@ namespace Bavix\Wallet\Services;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
-use Bavix\Wallet\Internal\AtmInterface;
-use Bavix\Wallet\Internal\BookkeeperInterface;
-use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Dto\TransferLazyDto;
-use Bavix\Wallet\Internal\Service\AssistantInterface;
-use Bavix\Wallet\Internal\Service\CastService;
-use Bavix\Wallet\Internal\Service\PrepareService;
+use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
+use Bavix\Wallet\Internal\Service\PrepareServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Throwable;
 
-final class CommonService
+final class CommonServiceLegacy
 {
-    private AtmInterface $atmService;
-    private CastService $castService;
-    private DatabaseInterface $databaseService;
-    private AssistantInterface $assistantService;
-    private PrepareService $prepareService;
-    private BookkeeperInterface $bookkeeper;
+    private AtmServiceInterface $atmService;
+    private CastServiceInterface $castService;
+    private DatabaseServiceInterface $databaseService;
+    private AssistantServiceInterface $assistantService;
+    private PrepareServiceInterface $prepareService;
+    private BookkeeperServiceInterface $bookkeeper;
     private TransferDtoAssemblerInterface $transferDtoAssembler;
 
     public function __construct(
-        CastService $castService,
-        BookkeeperInterface $bookkeeper,
-        AssistantInterface $satisfyService,
-        DatabaseInterface $databaseService,
-        PrepareService $prepareService,
+        CastServiceInterface $castService,
+        BookkeeperServiceInterface $bookkeeper,
+        AssistantServiceInterface $satisfyService,
+        DatabaseServiceInterface $databaseService,
+        PrepareServiceInterface $prepareService,
         TransferDtoAssemblerInterface $transferDtoAssembler,
-        AtmInterface $atmService
+        AtmServiceInterface $atmService
     ) {
         $this->atmService = $atmService;
         $this->castService = $castService;

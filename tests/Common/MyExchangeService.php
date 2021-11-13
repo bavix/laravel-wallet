@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Common;
 
-use Bavix\Wallet\Internal\ExchangeInterface;
-use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
+use Bavix\Wallet\Services\ExchangeServiceInterface;
 use Illuminate\Support\Arr;
 
-class MyExchange implements ExchangeInterface
+class MyExchangeService implements ExchangeServiceInterface
 {
-    private MathInterface $mathService;
+    private MathServiceInterface $mathService;
 
     private array $rates = [
         'USD' => [
@@ -21,7 +21,7 @@ class MyExchange implements ExchangeInterface
     /**
      * Rate constructor.
      */
-    public function __construct(MathInterface $mathService)
+    public function __construct(MathServiceInterface $mathService)
     {
         $this->mathService = $mathService;
 

@@ -7,10 +7,10 @@ namespace Bavix\Wallet\Test;
 use Bavix\Wallet\Internal\Exceptions\CartEmptyException;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
-use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Internal\PurchaseInterface;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
+use Bavix\Wallet\Services\PurchaseServiceInterface;
 use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Factories\ItemFactory;
@@ -123,7 +123,7 @@ class CartTest extends TestCase
 
         $transfers = $buyer->payCart($cart);
         self::assertCount(count($cart), $transfers);
-        self::assertTrue((bool) app(PurchaseInterface::class)->already($buyer, $cart->getBasketDto()));
+        self::assertTrue((bool) app(PurchaseServiceInterface::class)->already($buyer, $cart->getBasketDto()));
         self::assertSame(0, $buyer->balanceInt);
 
         foreach ($transfers as $transfer) {
@@ -272,7 +272,7 @@ class CartTest extends TestCase
             self::assertSame(0, $item->getBalanceIntAttribute());
         }
 
-        $math = app(MathInterface::class);
+        $math = app(MathServiceInterface::class);
 
         self::assertSame($buyer->balance, $buyer->wallet->balance);
         self::assertNotNull($buyer->deposit($cart->getTotal($buyer)));
@@ -281,7 +281,7 @@ class CartTest extends TestCase
 
         $transfers = $buyer->payCart($cart);
         self::assertCount(count($cart), $transfers);
-        self::assertTrue((bool) app(PurchaseInterface::class)->already($buyer, $cart->getBasketDto()));
+        self::assertTrue((bool) app(PurchaseServiceInterface::class)->already($buyer, $cart->getBasketDto()));
         self::assertSame(0, $buyer->balanceInt);
 
         foreach ($transfers as $transfer) {
