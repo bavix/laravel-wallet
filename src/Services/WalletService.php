@@ -88,10 +88,13 @@ class WalletService
         return $this->lockService->lock($wallet, function () use ($wallet) {
             $whatIs = $wallet->balance;
             $balance = $wallet->getAvailableBalance();
+            if ($this->math->compare($whatIs, $balance) === 0) {
+                return true;
+            }
+
             $wallet->balance = (string) $balance;
 
-            return $this->bookkeeper->sync($this->castService->getWallet($wallet), $balance) &&
-                (!$this->math->compare($whatIs, $balance) || $wallet->save());
+            return $wallet->save() && $this->bookkeeper->sync($wallet, $balance);
         });
     }
 }
