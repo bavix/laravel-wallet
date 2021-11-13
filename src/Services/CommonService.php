@@ -7,12 +7,12 @@ namespace Bavix\Wallet\Services;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
+use Bavix\Wallet\Internal\AssistantInterface;
+use Bavix\Wallet\Internal\AtmInterface;
 use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Dto\TransferLazyDto;
-use Bavix\Wallet\Internal\Service\AssistantService;
-use Bavix\Wallet\Internal\Service\AtmService;
 use Bavix\Wallet\Internal\Service\CastService;
 use Bavix\Wallet\Internal\Service\PrepareService;
 use Bavix\Wallet\Models\Transaction;
@@ -22,10 +22,10 @@ use Throwable;
 
 final class CommonService
 {
-    private AtmService $atmService;
+    private AtmInterface $atmService;
     private CastService $castService;
     private DatabaseInterface $databaseService;
-    private AssistantService $assistantService;
+    private AssistantInterface $assistantService;
     private PrepareService $prepareService;
     private BookkeeperInterface $bookkeeper;
     private TransferDtoAssemblerInterface $transferDtoAssembler;
@@ -33,11 +33,11 @@ final class CommonService
     public function __construct(
         CastService $castService,
         BookkeeperInterface $bookkeeper,
-        AssistantService $satisfyService,
+        AssistantInterface $satisfyService,
         DatabaseInterface $databaseService,
         PrepareService $prepareService,
         TransferDtoAssemblerInterface $transferDtoAssembler,
-        AtmService $atmService
+        AtmInterface $atmService
     ) {
         $this->atmService = $atmService;
         $this->castService = $castService;

@@ -5,6 +5,10 @@ declare(strict_types=1);
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
+use Bavix\Wallet\Internal\Repository\TransactionRepository;
+use Bavix\Wallet\Internal\Repository\TransferRepository;
+use Bavix\Wallet\Internal\Service\AssistantService;
+use Bavix\Wallet\Internal\Service\AtmService;
 use Bavix\Wallet\Internal\Service\DatabaseService;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
 use Bavix\Wallet\Internal\Transform\TransferDtoTransformer;
@@ -46,6 +50,8 @@ return [
      * Services that can be overloaded.
      */
     'services' => [
+        'atm' => AtmService::class,
+        'assistant' => AssistantService::class,
         'basket' => BasketService::class,
         'bookkeeper' => BookkeeperService::class,
         'consistency' => ConsistencyService::class,
@@ -59,11 +65,19 @@ return [
     ],
 
     /**
+     * Repositories for fetching data from the database.
+     */
+    'repositories' => [
+        'transaction' => TransactionRepository::class,
+        'transfer' => TransferRepository::class,
+    ],
+
+    /**
      * Objects of transformer from DTO to array.
      */
     'transformers' => [
         'transaction' => TransactionDtoTransformer::class,
-        'transfer_lazy' => TransferDtoTransformer::class,
+        'transfer' => TransferDtoTransformer::class,
     ],
 
     /**

@@ -4,26 +4,28 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Service;
 
+use Bavix\Wallet\Internal\AssistantInterface;
+use Bavix\Wallet\Internal\AtmInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Dto\TransferDto;
 use Bavix\Wallet\Internal\Query\TransactionQuery;
 use Bavix\Wallet\Internal\Query\TransferQuery;
-use Bavix\Wallet\Internal\Repository\TransactionRepository;
-use Bavix\Wallet\Internal\Repository\TransferRepository;
+use Bavix\Wallet\Internal\Repository\TransactionRepositoryInterface;
+use Bavix\Wallet\Internal\Repository\TransferRepositoryInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 
 /** @psalm-internal */
-final class AtmService
+final class AtmService implements AtmInterface
 {
-    private TransactionRepository $transactionRepository;
-    private TransferRepository $transferRepository;
-    private AssistantService $assistantService;
+    private TransactionRepositoryInterface $transactionRepository;
+    private TransferRepositoryInterface $transferRepository;
+    private AssistantInterface $assistantService;
 
     public function __construct(
-        TransactionRepository $transactionRepository,
-        TransferRepository $transferRepository,
-        AssistantService $assistantService
+        TransactionRepositoryInterface $transactionRepository,
+        TransferRepositoryInterface $transferRepository,
+        AssistantInterface $assistantService
     ) {
         $this->transactionRepository = $transactionRepository;
         $this->transferRepository = $transferRepository;
