@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Models;
 
-use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Contracts\WalletInterface;
 use Bavix\Wallet\Traits\HasWallet;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $email
  */
-class User extends Model implements Wallet
+class User extends Model implements WalletInterface
 {
     use HasWallet;
 

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Contracts\ProductInterface;
 use function app;
+use Bavix\Wallet\Contracts\WalletInterface;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
@@ -33,7 +35,7 @@ trait HasGift
     /**
      * Give the goods safely.
      */
-    public function safeGift(Wallet $to, Product $product, bool $force = false): ?Transfer
+    public function safeGift(WalletInterface $to, ProductInterface $product, bool $force = false): ?Transfer
     {
         try {
             return $this->gift($to, $product, $force);
@@ -52,7 +54,7 @@ trait HasGift
      * @throws InsufficientFunds
      * @throws Throwable
      */
-    public function gift(Wallet $to, Product $product, bool $force = false): Transfer
+    public function gift(WalletInterface $to, ProductInterface $product, bool $force = false): Transfer
     {
         return app(LockService::class)->lock($this, function () use ($to, $product, $force): Transfer {
             /**
@@ -113,7 +115,7 @@ trait HasGift
      * @throws AmountInvalid
      * @throws Throwable
      */
-    public function forceGift(Wallet $to, Product $product): Transfer
+    public function forceGift(WalletInterface $to, ProductInterface $product): Transfer
     {
         return $this->gift($to, $product, true);
     }

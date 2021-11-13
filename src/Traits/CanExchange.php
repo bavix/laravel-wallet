@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Traits;
 
-use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Contracts\WalletInterface;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\DatabaseInterface;
@@ -23,7 +23,7 @@ trait CanExchange
     /**
      * {@inheritdoc}
      */
-    public function exchange(Wallet $to, $amount, ?array $meta = null): Transfer
+    public function exchange(WalletInterface $to, $amount, ?array $meta = null): Transfer
     {
         $wallet = app(CastService::class)->getWallet($this);
 
@@ -35,7 +35,7 @@ trait CanExchange
     /**
      * {@inheritdoc}
      */
-    public function safeExchange(Wallet $to, $amount, ?array $meta = null): ?Transfer
+    public function safeExchange(WalletInterface $to, $amount, ?array $meta = null): ?Transfer
     {
         try {
             return $this->exchange($to, $amount, $meta);
@@ -47,7 +47,7 @@ trait CanExchange
     /**
      * {@inheritdoc}
      */
-    public function forceExchange(Wallet $to, $amount, ?array $meta = null): Transfer
+    public function forceExchange(WalletInterface $to, $amount, ?array $meta = null): Transfer
     {
         return app(LockService::class)->lock($this, function () use ($to, $amount, $meta) {
             return app(DatabaseInterface::class)->transaction(function () use ($to, $amount, $meta) {

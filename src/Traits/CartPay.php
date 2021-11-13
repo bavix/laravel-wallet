@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Traits;
 
 use function array_unique;
+use Bavix\Wallet\Contracts\ProductInterface;
 use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Internal\BasketInterface;
@@ -201,7 +202,7 @@ trait CartPay
     /**
      * Checks acquired product your wallet.
      */
-    public function paid(Product $product, bool $gifts = false): ?Transfer
+    public function paid(ProductInterface $product, bool $gifts = false): ?Transfer
     {
         $cart = app(Cart::class)->addItem($product);
         $purchases = app(PurchaseInterface::class)

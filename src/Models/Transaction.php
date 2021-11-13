@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Models;
 
-use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Contracts\WalletInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\Service\CastService;
 use Bavix\Wallet\Models\Wallet as WalletModel;
@@ -16,18 +16,18 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 /**
  * Class Transaction.
  *
- * @property string      $payable_type
- * @property int         $payable_id
- * @property int         $wallet_id
- * @property string      $uuid
- * @property string      $type
- * @property string      $amount
- * @property int         $amountInt
- * @property string      $amountFloat
- * @property bool        $confirmed
- * @property array       $meta
- * @property Wallet      $payable
- * @property WalletModel $wallet
+ * @property string          $payable_type
+ * @property int             $payable_id
+ * @property int             $wallet_id
+ * @property string          $uuid
+ * @property string          $type
+ * @property string          $amount
+ * @property int             $amountInt
+ * @property string          $amountFloat
+ * @property bool            $confirmed
+ * @property array           $meta
+ * @property WalletInterface $payable
+ * @property WalletModel     $wallet
  */
 class Transaction extends Model
 {

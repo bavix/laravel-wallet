@@ -4,31 +4,31 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Dto;
 
-use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Contracts\ProductInterface;
 use Countable;
 
 /** @psalm-immutable */
 final class ItemDto implements Countable
 {
-    private Product $product;
+    private ProductInterface $product;
 
     private int $quantity;
 
-    public function __construct(Product $product, int $quantity)
+    public function __construct(ProductInterface $product, int $quantity)
     {
         $this->product = $product;
         $this->quantity = $quantity;
     }
 
     /**
-     * @return Product[]
+     * @return ProductInterface[]
      */
     public function items(): array
     {
         return array_fill(0, $this->quantity, $this->product);
     }
 
-    public function product(): Product
+    public function product(): ProductInterface
     {
         return $this->product;
     }

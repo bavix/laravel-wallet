@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Models;
 
-use Bavix\Wallet\Interfaces\MinimalTaxable;
+use Bavix\Wallet\Contracts\TaxMinimalInterface;
 
-class ItemMinTax extends Item implements MinimalTaxable
+class ItemMinTax extends Item implements TaxMinimalInterface
 {
     /**
      * {@inheritdoc}

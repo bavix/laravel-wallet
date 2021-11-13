@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
-use Bavix\Wallet\Interfaces\Customer;
+use Bavix\Wallet\Contracts\CustomerInterface;
+use Bavix\Wallet\Contracts\PersonalDiscountInterface;
+use Bavix\Wallet\Contracts\WalletInterface;
 use Bavix\Wallet\Interfaces\Discount;
 use Bavix\Wallet\Interfaces\MinimalTaxable;
 use Bavix\Wallet\Interfaces\Taxable;
@@ -36,9 +38,9 @@ final class WalletService
     /**
      * @deprecated
      */
-    public function discount(Wallet $customer, Wallet $product): int
+    public function discount(WalletInterface $customer, WalletInterface $product): int
     {
-        if ($customer instanceof Customer && $product instanceof Discount) {
+        if ($customer instanceof CustomerInterface && $product instanceof PersonalDiscountInterface) {
             return (int) $product->getPersonalDiscount($customer);
         }
 
@@ -51,7 +53,7 @@ final class WalletService
      *
      * @param float|int|string $amount
      */
-    public function fee(Wallet $wallet, $amount): string
+    public function fee(WalletInterface $wallet, $amount): string
     {
         $fee = 0;
         if ($wallet instanceof Taxable) {

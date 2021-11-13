@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Models;
 
-use Bavix\Wallet\Interfaces\Customer;
+use Bavix\Wallet\Contracts\CustomerInterface;
 use Bavix\Wallet\Interfaces\Discount;
 use Bavix\Wallet\Internal\Service\CastService;
 
@@ -15,7 +15,7 @@ class ItemDiscount extends Item implements Discount
         return 'items';
     }
 
-    public function getPersonalDiscount(Customer $customer): int
+    public function getPersonalDiscount(CustomerInterface $customer): int
     {
         return app(CastService::class)
             ->getWallet($customer)

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal;
 
+use Bavix\Wallet\Contracts\WalletInterface;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
-use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Dto\TransferLazyDto;
 
 interface ConsistencyInterface
@@ -25,7 +25,7 @@ interface ConsistencyInterface
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      */
-    public function checkPotential(Wallet $object, $amount, bool $allowZero = false): void;
+    public function checkPotential(WalletInterface $object, $amount, bool $allowZero = false): void;
 
     /**
      * @param TransferLazyDto[] $objects

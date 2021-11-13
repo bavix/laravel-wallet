@@ -2,17 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Bavix\Wallet\Test\Models;
+namespace Bavix\Wallet\Contracts;
 
-use Bavix\Wallet\Contracts\TaxInterface;
-
-class ItemTax extends Item implements TaxInterface
+interface TaxInterface
 {
-    public function getTable(): string
-    {
-        return 'items';
-    }
-
     /**
      * Specify the percentage of the amount.
      * For example, the product costs $100, the equivalent of 15%.
@@ -23,8 +16,5 @@ class ItemTax extends Item implements TaxInterface
      *
      * @return float|int
      */
-    public function getFeePercent()
-    {
-        return 7.5;
-    }
+    public function getFeePercent();
 }

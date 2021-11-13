@@ -4,17 +4,12 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Interfaces;
 
-interface Product extends Wallet
+use Bavix\Wallet\Contracts\ProductInterface;
+
+/**
+ * @deprecated Will be removed in version 7.1
+ * @see ProductInterface
+ */
+interface Product extends ProductInterface, Wallet
 {
-    public function canBuy(Customer $customer, int $quantity = 1, bool $force = false): bool;
-
-    /**
-     * @return float|int|string
-     */
-    public function getAmountProduct(Customer $customer);
-
-    /**
-     * @return array
-     */
-    public function getMetaProduct(): ?array;
 }

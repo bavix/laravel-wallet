@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Objects;
 
 use function array_unique;
-use Bavix\Wallet\Interfaces\Customer;
-use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Contracts\CustomerInterface;
+use Bavix\Wallet\Contracts\ProductInterface;
 use Bavix\Wallet\Internal\CartInterface;
 use Bavix\Wallet\Internal\Dto\BasketDto;
 use Bavix\Wallet\Internal\Dto\ItemDto;
@@ -21,7 +21,7 @@ use function get_class;
 final class Cart implements Countable, CartInterface
 {
     /**
-     * @var Product[]
+     * @var ProductInterface[]
      */
     private array $items = [];
 
@@ -54,7 +54,7 @@ final class Cart implements Countable, CartInterface
         return $this;
     }
 
-    public function addItem(Product $product, int $quantity = 1): self
+    public function addItem(ProductInterface $product, int $quantity = 1): self
     {
         $this->addQuantity($product, $quantity);
         $products = array_fill(0, $quantity, $product);
@@ -73,7 +73,7 @@ final class Cart implements Countable, CartInterface
     }
 
     /**
-     * @return Product[]
+     * @return ProductInterface[]
      */
     public function getItems(): array
     {
@@ -81,14 +81,14 @@ final class Cart implements Countable, CartInterface
     }
 
     /**
-     * @return Product[]
+     * @return ProductInterface[]
      */
     public function getUniqueItems(): array
     {
         return array_unique($this->items);
     }
 
-    public function getTotal(Customer $customer): string
+    public function getTotal(CustomerInterface $customer): string
     {
         $result = 0;
         foreach ($this->items as $item) {
@@ -103,7 +103,7 @@ final class Cart implements Countable, CartInterface
         return count($this->items);
     }
 
-    public function getQuantity(Product $product): int
+    public function getQuantity(ProductInterface $product): int
     {
         $model = $this->castService->getModel($product);
 
@@ -116,7 +116,7 @@ final class Cart implements Countable, CartInterface
     public function getBasketDto(): BasketDto
     {
         $items = array_map(
-            fn (Product $product): ItemDto => new ItemDto($product, $this->getQuantity($product)),
+            fn (ProductInterface $product): ItemDto => new ItemDto($product, $this->getQuantity($product)),
             $this->getUniqueItems()
         );
 
@@ -130,7 +130,7 @@ final class Cart implements Countable, CartInterface
         return new BasketDto($items, $this->getMeta());
     }
 
-    private function addQuantity(Product $product, int $quantity): void
+    private function addQuantity(ProductInterface $product, int $quantity): void
     {
         $model = $this->castService->getModel($product);
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Models;
 
-use Bavix\Wallet\Interfaces\Customer;
+use Bavix\Wallet\Contracts\CustomerInterface;
 use Bavix\Wallet\Traits\CanPay;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $email
  */
-class Buyer extends Model implements Customer
+class Buyer extends Model implements CustomerInterface
 {
     use CanPay;
 

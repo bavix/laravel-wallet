@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Dto;
 
-use Bavix\Wallet\Interfaces\Customer;
+use Bavix\Wallet\Contracts\CustomerInterface;
 
 /** @psalm-immutable */
 final class AvailabilityDto
 {
     private BasketDto $basketDto;
 
-    private Customer $customer;
+    private CustomerInterface $customer;
 
     private bool $force;
 
     public function __construct(
-        Customer $customer,
+        CustomerInterface $customer,
         BasketDto $basketDto,
         bool $force
     ) {
@@ -30,7 +30,7 @@ final class AvailabilityDto
         return $this->basketDto;
     }
 
-    public function getCustomer(): Customer
+    public function getCustomer(): CustomerInterface
     {
         return $this->customer;
     }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Contracts\WalletInterface;
 use Bavix\Wallet\Exceptions\AmountInvalid;
-use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\AssistantInterface;
 use Bavix\Wallet\Internal\AtmInterface;
@@ -54,7 +54,7 @@ final class CommonService
      * @throws AmountInvalid
      * @throws Throwable
      */
-    public function forceTransfer(Wallet $from, Wallet $to, $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
+    public function forceTransfer(WalletInterface $from, WalletInterface $to, $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
         $transferLazyDto = $this->prepareService->transferLazy($from, $to, $status, $amount, $meta);
         $transfers = $this->applyTransfers([$transferLazyDto]);
@@ -113,7 +113,7 @@ final class CommonService
      *
      * @deprecated
      */
-    public function addBalance(Wallet $wallet, $amount): bool
+    public function addBalance(WalletInterface $wallet, $amount): bool
     {
         return $this->databaseService->transaction(function () use ($wallet, $amount) {
             /** @var WalletModel $wallet */
@@ -141,7 +141,7 @@ final class CommonService
     /**
      * @param float|int|string $amount
      */
-    public function makeTransaction(Wallet $wallet, string $type, $amount, ?array $meta, bool $confirmed = true): Transaction
+    public function makeTransaction(WalletInterface $wallet, string $type, $amount, ?array $meta, bool $confirmed = true): Transaction
     {
         assert(in_array($type, [Transaction::TYPE_DEPOSIT, Transaction::TYPE_WITHDRAW], true));
 
@@ -160,8 +160,8 @@ final class CommonService
     }
 
     /**
-     * @param non-empty-array<int|string, Wallet>  $wallets
-     * @param non-empty-array<int, TransactionDto> $objects
+     * @param non-empty-array<int|string, WalletInterface> $wallets
+     * @param non-empty-array<int, TransactionDto>         $objects
      *
      * @return non-empty-array<string, Transaction>
      */

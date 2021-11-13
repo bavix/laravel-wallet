@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Models;
 
-use Bavix\Wallet\Interfaces\Taxable;
+use Bavix\Wallet\Contracts\TaxInterface;
 
-class ItemDiscountTax extends ItemDiscount implements Taxable
+class ItemDiscountTax extends ItemDiscount implements TaxInterface
 {
     /**
      * Specify the percentage of the amount.

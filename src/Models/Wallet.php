@@ -6,10 +6,11 @@ namespace Bavix\Wallet\Models;
 
 use function app;
 use function array_key_exists;
-use Bavix\Wallet\Interfaces\Confirmable;
-use Bavix\Wallet\Interfaces\Customer;
-use Bavix\Wallet\Interfaces\Exchangeable;
-use Bavix\Wallet\Interfaces\WalletFloat;
+use Bavix\Wallet\Contracts\ConfirmInterface;
+use Bavix\Wallet\Contracts\CustomerInterface;
+use Bavix\Wallet\Contracts\ExchangeInterface;
+use Bavix\Wallet\Contracts\WalletFloatInterface;
+use Bavix\Wallet\Contracts\WalletInterface;
 use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Services\WalletService;
@@ -25,18 +26,18 @@ use Illuminate\Support\Str;
 /**
  * Class Wallet.
  *
- * @property string                          $holder_type
- * @property int                             $holder_id
- * @property string                          $name
- * @property string                          $slug
- * @property string                          $uuid
- * @property string                          $description
- * @property array                           $meta
- * @property int                             $decimal_places
- * @property \Bavix\Wallet\Interfaces\Wallet $holder
- * @property string                          $currency
+ * @property string          $holder_type
+ * @property int             $holder_id
+ * @property string          $name
+ * @property string          $slug
+ * @property string          $uuid
+ * @property string          $description
+ * @property array           $meta
+ * @property int             $decimal_places
+ * @property WalletInterface $holder
+ * @property string          $currency
  */
-class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchangeable
+class Wallet extends Model implements CustomerInterface, WalletFloatInterface, ConfirmInterface, ExchangeInterface
 {
     use CanConfirm;
     use CanExchange;

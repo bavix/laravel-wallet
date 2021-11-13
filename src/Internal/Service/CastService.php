@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Service;
 
-use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Contracts\WalletInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Illuminate\Database\Eloquent\Model;
 
 /** @psalm-internal */
 final class CastService
 {
-    public function getWallet(Wallet $object, bool $save = true): WalletModel
+    public function getWallet(WalletInterface $object, bool $save = true): WalletModel
     {
         $wallet = $this->getModel($object);
         if (!($wallet instanceof WalletModel)) {
@@ -26,7 +26,7 @@ final class CastService
         return $wallet;
     }
 
-    /** @param Model|Wallet $object */
+    /** @param Model|WalletInterface  $object */
     public function getHolder($object): Model
     {
         return $this->getModel($object instanceof WalletModel ? $object->holder : $object);

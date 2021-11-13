@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Dto;
 
-use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Contracts\WalletInterface;
 
 final class TransferLazyDto
 {
-    private Wallet $fromWallet;
-    private Wallet $toWallet;
+    private WalletInterface $fromWallet;
+    private WalletInterface $toWallet;
 
     private int $discount;
     private string $fee;
@@ -20,8 +20,8 @@ final class TransferLazyDto
     private string $status;
 
     public function __construct(
-        Wallet $fromWallet,
-        Wallet $toWallet,
+        WalletInterface $fromWallet,
+        WalletInterface $toWallet,
         int $discount,
         string $fee,
         TransactionDto $withdrawDto,
@@ -39,12 +39,12 @@ final class TransferLazyDto
         $this->status = $status;
     }
 
-    public function getFromWallet(): Wallet
+    public function getFromWallet(): WalletInterface
     {
         return $this->fromWallet;
     }
 
-    public function getToWallet(): Wallet
+    public function getToWallet(): WalletInterface
     {
         return $this->toWallet;
     }

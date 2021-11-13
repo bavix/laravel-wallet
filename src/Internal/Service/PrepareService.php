@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Service;
 
-use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Contracts\WalletInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
@@ -39,7 +39,7 @@ final class PrepareService
         $this->mathService = $mathService;
     }
 
-    public function deposit(Wallet $wallet, string $amount, ?array $meta, bool $confirmed = true): TransactionDto
+    public function deposit(WalletInterface $wallet, string $amount, ?array $meta, bool $confirmed = true): TransactionDto
     {
         $this->consistencyService->checkPositive($amount);
 
@@ -53,7 +53,7 @@ final class PrepareService
         );
     }
 
-    public function withdraw(Wallet $wallet, string $amount, ?array $meta, bool $confirmed = true): TransactionDto
+    public function withdraw(WalletInterface $wallet, string $amount, ?array $meta, bool $confirmed = true): TransactionDto
     {
         $this->consistencyService->checkPositive($amount);
 
@@ -70,7 +70,7 @@ final class PrepareService
     /**
      * @param float|int|string $amount
      */
-    public function transferLazy(Wallet $from, Wallet $to, string $status, $amount, ?array $meta = null): TransferLazyDto
+    public function transferLazy(WalletInterface $from, WalletInterface $to, string $status, $amount, ?array $meta = null): TransferLazyDto
     {
         $discount = $this->walletService->discount($from, $to);
         $from = $this->castService->getWallet($from);
