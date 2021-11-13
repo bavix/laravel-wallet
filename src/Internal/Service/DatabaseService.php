@@ -36,11 +36,11 @@ class DatabaseService implements DatabaseInterface
      */
     public function transaction(Closure $closure)
     {
-        if ($this->connection->transactionLevel() > 0) {
-            return $closure();
-        }
-
         try {
+            if ($this->connection->transactionLevel() > 0) {
+                return $closure();
+            }
+
             return $this->connection->transaction($closure);
         } catch (RecordsNotFoundException|ExceptionInterface $exception) {
             throw $exception;
