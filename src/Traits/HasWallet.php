@@ -11,13 +11,13 @@ use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
+use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\Service\CastService;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\DbService;
 use function config;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
@@ -44,7 +44,7 @@ trait HasWallet
      */
     public function deposit($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        return app(DbService::class)->transaction(function () use ($amount, $meta, $confirmed) {
+        return app(DatabaseInterface::class)->transaction(function () use ($amount, $meta, $confirmed) {
             return app(CommonService::class)
                 ->makeTransaction($this, Transaction::TYPE_DEPOSIT, $amount, $meta, $confirmed)
             ;
@@ -183,7 +183,7 @@ trait HasWallet
         /** @var Wallet $self */
         $self = $this;
 
-        return app(DbService::class)->transaction(static function () use ($self, $amount, $meta, $confirmed) {
+        return app(DatabaseInterface::class)->transaction(static function () use ($self, $amount, $meta, $confirmed) {
             return app(CommonService::class)
                 ->makeTransaction($self, Transaction::TYPE_WITHDRAW, $amount, $meta, $confirmed)
             ;
@@ -204,7 +204,7 @@ trait HasWallet
         /** @var Wallet $self */
         $self = $this;
 
-        return app(DbService::class)->transaction(static function () use ($self, $amount, $wallet, $meta) {
+        return app(DatabaseInterface::class)->transaction(static function () use ($self, $amount, $wallet, $meta) {
             return app(CommonService::class)
                 ->forceTransfer($self, $wallet, $amount, $meta)
             ;

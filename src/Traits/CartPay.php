@@ -10,14 +10,15 @@ use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Internal\BasketInterface;
 use Bavix\Wallet\Internal\CartInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
+use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Internal\Dto\AvailabilityDto;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\PurchaseInterface;
 use Bavix\Wallet\Internal\Service\PrepareService;
 use Bavix\Wallet\Internal\TranslatorInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\MetaService;
 use function count;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -35,13 +36,14 @@ trait CartPay
         $basketService = app(BasketInterface::class);
         if (!$basketService->availability(new AvailabilityDto($this, $cart->getBasketDto()))) {
             throw new ProductEnded(
-                app(TranslatorInterface::class)->get('wallet::errors.product_stock')
+                app(TranslatorInterface::class)->get('wallet::errors.product_stock'),
+                ExceptionInterface::PRODUCT_ENDED
             );
         }
 
         app(ConsistencyInterface::class)->checkPotential($this, 0, true);
 
-        return app(DbService::class)->transaction(function () use ($cart) {
+        return app(DatabaseInterface::class)->transaction(function () use ($cart) {
             $transfers = [];
             $prepareService = app(PrepareService::class);
             $metaService = app(MetaService::class);
@@ -79,11 +81,12 @@ trait CartPay
         $basketService = app(BasketInterface::class);
         if (!$basketService->availability(new AvailabilityDto($this, $cart->getBasketDto(), $force))) {
             throw new ProductEnded(
-                app(TranslatorInterface::class)->get('wallet::errors.product_stock')
+                app(TranslatorInterface::class)->get('wallet::errors.product_stock'),
+                ExceptionInterface::PRODUCT_ENDED
             );
         }
 
-        return app(DbService::class)->transaction(function () use ($cart, $force) {
+        return app(DatabaseInterface::class)->transaction(function () use ($cart, $force) {
             $transfers = [];
             $prepareService = app(PrepareService::class);
             $metaService = app(MetaService::class);
@@ -124,7 +127,7 @@ trait CartPay
 
     public function refundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool
     {
-        return app(DbService::class)->transaction(function () use ($cart, $force, $gifts) {
+        return app(DatabaseInterface::class)->transaction(function () use ($cart, $force, $gifts) {
             $results = [];
             $transfers = app(PurchaseInterface::class)->already($this, $cart->getBasketDto(), $gifts);
             if (count($transfers) !== $cart->getBasketDto()->total()) {

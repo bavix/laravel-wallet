@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Exceptions;
 
-use LogicException;
+use InvalidArgumentException;
 
-final class CartEmptyException extends LogicException implements LogicExceptionInterface
+final class CartEmptyException extends InvalidArgumentException implements InvalidArgumentExceptionInterface
 {
 }

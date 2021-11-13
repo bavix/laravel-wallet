@@ -10,12 +10,13 @@ use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Exceptions\UnconfirmedInvalid;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
 use Bavix\Wallet\Internal\ConsistencyInterface;
+use Bavix\Wallet\Internal\DatabaseInterface;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\Service\CastService;
 use Bavix\Wallet\Internal\TranslatorInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\LockService;
 
 trait CanConfirm
@@ -28,7 +29,7 @@ trait CanConfirm
      */
     public function confirm(Transaction $transaction): bool
     {
-        return app(DbService::class)->transaction(function () use ($transaction) {
+        return app(DatabaseInterface::class)->transaction(function () use ($transaction) {
             if ($transaction->type === Transaction::TYPE_WITHDRAW) {
                 app(ConsistencyInterface::class)->checkPotential(
                     app(CastService::class)->getWallet($this),
@@ -57,10 +58,11 @@ trait CanConfirm
     public function resetConfirm(Transaction $transaction): bool
     {
         return app(LockService::class)->lock($this, function () use ($transaction) {
-            return app(DbService::class)->transaction(function () use ($transaction) {
+            return app(DatabaseInterface::class)->transaction(function () use ($transaction) {
                 if (!$transaction->confirmed) {
                     throw new UnconfirmedInvalid(
-                        app(TranslatorInterface::class)->get('wallet::errors.unconfirmed_invalid')
+                        app(TranslatorInterface::class)->get('wallet::errors.unconfirmed_invalid'),
+                        ExceptionInterface::UNCONFIRMED_INVALID
                     );
                 }
 
@@ -93,17 +95,19 @@ trait CanConfirm
     public function forceConfirm(Transaction $transaction): bool
     {
         return app(LockService::class)->lock($this, function () use ($transaction) {
-            return app(DbService::class)->transaction(function () use ($transaction) {
+            return app(DatabaseInterface::class)->transaction(function () use ($transaction) {
                 if ($transaction->confirmed) {
                     throw new ConfirmedInvalid(
-                        app(TranslatorInterface::class)->get('wallet::errors.confirmed_invalid')
+                        app(TranslatorInterface::class)->get('wallet::errors.confirmed_invalid'),
+                        ExceptionInterface::CONFIRMED_INVALID
                     );
                 }
 
                 $wallet = app(CastService::class)->getWallet($this);
                 if ($wallet->getKey() !== $transaction->wallet_id) {
                     throw new WalletOwnerInvalid(
-                        app(TranslatorInterface::class)->get('wallet::errors.owner_invalid')
+                        app(TranslatorInterface::class)->get('wallet::errors.owner_invalid'),
+                        ExceptionInterface::WALLET_OWNER_INVALID
                     );
                 }
 

@@ -10,10 +10,12 @@ use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
 use Bavix\Wallet\Internal\BasketInterface;
 use Bavix\Wallet\Internal\BookkeeperInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
+use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Internal\ExchangeInterface;
 use Bavix\Wallet\Internal\LockInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\PurchaseInterface;
+use Bavix\Wallet\Internal\Service\DatabaseService;
 use Bavix\Wallet\Internal\Service\TranslatorService;
 use Bavix\Wallet\Internal\StorageInterface;
 use Bavix\Wallet\Internal\TranslatorInterface;
@@ -26,7 +28,6 @@ use Bavix\Wallet\Services\BasketService;
 use Bavix\Wallet\Services\BookkeeperService;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\ConsistencyService;
-use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\MathService;
@@ -110,6 +111,7 @@ class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(MathInterface::class, $configure['math'] ?? MathService::class);
         $this->app->singleton(PurchaseInterface::class, $configure['purchase'] ?? PurchaseService::class);
         $this->app->singleton(StorageInterface::class, $configure['storage'] ?? StorageService::class);
+        $this->app->singleton(DatabaseInterface::class, $configure['database'] ?? DatabaseService::class);
         $this->app->singleton(UuidInterface::class, $configure['uuid'] ?? UuidFactoryService::class);
     }
 
@@ -125,7 +127,6 @@ class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(CommonService::class);
         $this->app->singleton(WalletService::class);
 
-        $this->app->singleton(DbService::class);
         $this->app->singleton(LockService::class);
         $this->app->singleton(MetaService::class);
     }
