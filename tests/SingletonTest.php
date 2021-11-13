@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Services\LockService;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Test\Common\Models\Transaction;
@@ -54,9 +54,9 @@ class SingletonTest extends TestCase
         self::assertSame($this->getRefId(WalletService::class), $this->getRefId(WalletService::class));
     }
 
-    public function testDbService(): void
+    public function testDatabaseService(): void
     {
-        self::assertSame($this->getRefId(DbService::class), $this->getRefId(DbService::class));
+        self::assertSame($this->getRefId(DatabaseInterface::class), $this->getRefId(DatabaseInterface::class));
     }
 
     public function testLockService(): void

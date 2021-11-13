@@ -9,7 +9,6 @@ use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\PurchaseInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
-use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Factories\ItemFactory;
@@ -254,15 +253,11 @@ class CartTest extends TestCase
      */
     public function testWithdrawal(): void
     {
-        $transactionLevel = app(DbService::class)
-            ->connection()
-            ->transactionLevel()
-        ;
-
         /**
          * @var Buyer $buyer
          * @var Item  $product
          */
+        $transactionLevel = 0;
         $buyer = BuyerFactory::new()->create();
         $product = ItemFactory::new()->create(['quantity' => 1]);
 
@@ -295,7 +290,7 @@ class CartTest extends TestCase
 
         self::assertTrue($buyer->refundCart($cart));
         self::assertSame(0, $math->compare($cart->getTotal($buyer), $buyer->balance));
-        self::assertSame($transactionLevel, app(DbService::class)->connection()->transactionLevel()); // check case #1
+        self::assertSame($transactionLevel, $buyer->getConnection()->transactionLevel()); // check case #1
 
         foreach ($transfers as $transfer) {
             $transfer->refresh();

@@ -10,6 +10,7 @@ use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\Dto\TransferLazyDto;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\Service\CastService;
 use Bavix\Wallet\Internal\TranslatorInterface;
@@ -39,7 +40,8 @@ class ConsistencyService implements ConsistencyInterface
     {
         if ($this->mathService->compare($amount, 0) === -1) {
             throw new AmountInvalid(
-                $this->translatorService->get('wallet::errors.price_positive')
+                $this->translatorService->get('wallet::errors.price_positive'),
+                ExceptionInterface::AMOUNT_INVALID
             );
         }
     }
@@ -56,13 +58,15 @@ class ConsistencyService implements ConsistencyInterface
 
         if (($this->mathService->compare($amount, 0) !== 0) && !$wallet->getBalanceAttribute()) {
             throw new BalanceIsEmpty(
-                $this->translatorService->get('wallet::errors.wallet_empty')
+                $this->translatorService->get('wallet::errors.wallet_empty'),
+                ExceptionInterface::BALANCE_IS_EMPTY
             );
         }
 
         if (!$wallet->canWithdraw($amount, $allowZero)) {
             throw new InsufficientFunds(
-                $this->translatorService->get('wallet::errors.insufficient_funds')
+                $this->translatorService->get('wallet::errors.insufficient_funds'),
+                ExceptionInterface::INSUFFICIENT_FUNDS
             );
         }
     }

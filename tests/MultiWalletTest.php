@@ -9,7 +9,6 @@ use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Test\Factories\ItemFactory;
 use Bavix\Wallet\Test\Factories\UserCashierFactory;
 use Bavix\Wallet\Test\Factories\UserMultiFactory;
@@ -18,7 +17,6 @@ use Bavix\Wallet\Test\Models\UserCashier;
 use Bavix\Wallet\Test\Models\UserMulti;
 use function compact;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\PostgresConnection;
 use Illuminate\Database\QueryException;
 use function range;
 use Throwable;
@@ -366,21 +364,8 @@ class MultiWalletTest extends TestCase
         /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
 
-        $user->createWallet([
-            'name' => 'deposit',
-        ]);
-
-        if (app(DbService::class)->connection() instanceof PostgresConnection) {
-            // enable autocommit for pgsql
-            app(DbService::class)
-                ->connection()
-                ->commit()
-            ;
-        }
-
-        $user->createWallet([
-            'name' => 'deposit',
-        ]);
+        $user->createWallet(['name' => 'deposit']);
+        $user->createWallet(['name' => 'deposit']);
     }
 
     public function testGetWallet(): void

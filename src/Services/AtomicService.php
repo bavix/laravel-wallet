@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\LockInterface;
 use Illuminate\Cache\CacheManager;
@@ -46,6 +47,9 @@ class AtomicService implements LockInterface
             return $store;
         }
 
-        throw new LockProviderNotFoundException();
+        throw new LockProviderNotFoundException(
+            'Lockable cache not found',
+            ExceptionInterface::LOCK_PROVIDER_NOT_FOUND
+        );
     }
 }

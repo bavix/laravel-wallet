@@ -8,6 +8,7 @@ use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\BookkeeperInterface;
+use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Dto\TransferLazyDto;
 use Bavix\Wallet\Internal\Service\AssistantService;
@@ -22,28 +23,28 @@ use Throwable;
 
 class CommonService
 {
-    private DbService $dbService;
     private AtmService $atmService;
     private CastService $castService;
+    private DatabaseInterface $databaseService;
     private AssistantService $assistantService;
     private PrepareService $prepareService;
     private BookkeeperInterface $bookkeeper;
     private TransferDtoAssembler $transferDtoAssembler;
 
     public function __construct(
-        DbService $dbService,
         CastService $castService,
         BookkeeperInterface $bookkeeper,
         AssistantService $satisfyService,
+        DatabaseInterface $databaseService,
         PrepareService $prepareService,
         TransferDtoAssembler $transferDtoAssembler,
         AtmService $atmService
     ) {
-        $this->dbService = $dbService;
         $this->atmService = $atmService;
         $this->castService = $castService;
         $this->bookkeeper = $bookkeeper;
         $this->assistantService = $satisfyService;
+        $this->databaseService = $databaseService;
         $this->prepareService = $prepareService;
         $this->transferDtoAssembler = $transferDtoAssembler;
     }
@@ -69,7 +70,7 @@ class CommonService
      */
     public function applyTransfers(array $objects): array
     {
-        return $this->dbService->transaction(function () use ($objects): array {
+        return $this->databaseService->transaction(function () use ($objects): array {
             $wallets = [];
             $operations = [];
             foreach ($objects as $object) {
@@ -115,7 +116,7 @@ class CommonService
      */
     public function addBalance(Wallet $wallet, $amount): bool
     {
-        return $this->dbService->transaction(function () use ($wallet, $amount) {
+        return $this->databaseService->transaction(function () use ($wallet, $amount) {
             /** @var WalletModel $wallet */
             $walletObject = $this->castService->getWallet($wallet);
             $balance = $this->bookkeeper->increase($walletObject, $amount);

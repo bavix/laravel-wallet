@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Internal\LockInterface;
 use Closure;
 use function get_class;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * @deprecated
- * @see AtomicService
+ * @see LockInterface
  */
 class LockService
 {
-    private AtomicService $atomicService;
+    private LockInterface $lockService;
 
-    public function __construct(AtomicService $atomicService)
+    public function __construct(LockInterface $lockService)
     {
-        $this->atomicService = $atomicService;
+        $this->lockService = $lockService;
     }
 
     /**
@@ -26,7 +27,7 @@ class LockService
      */
     public function lock(Model $self, Closure $closure)
     {
-        return $this->atomicService->block(
+        return $this->lockService->block(
             'legacy_'.get_class($self).$self->getKey(),
             $closure
         );

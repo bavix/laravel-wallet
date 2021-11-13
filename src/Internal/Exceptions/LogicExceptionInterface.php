@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Exceptions;
 
-interface LogicExceptionInterface
+interface LogicExceptionInterface extends ExceptionInterface
 {
 }

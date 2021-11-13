@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Exceptions\ProductEnded;
+use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
-use Bavix\Wallet\Services\DbService;
 use Bavix\Wallet\Test\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Factories\ItemFactory;
 use Bavix\Wallet\Test\Factories\ItemWalletFactory;
@@ -276,7 +276,7 @@ class ProductTest extends TestCase
         self::assertSame((string) $product->getAmountProduct($buyer), $buyer->balance);
 
         $product->createWallet(['name' => 'testing']);
-        app(DbService::class)->transaction(function () use ($product, $buyer) {
+        app(DatabaseInterface::class)->transaction(function () use ($product, $buyer) {
             $transfer = $buyer->pay($product);
             $product->transfer($product->getWallet('testing'), $transfer->deposit->amount, $transfer->toArray());
         });

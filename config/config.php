@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
+use Bavix\Wallet\Internal\Service\DatabaseService;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
@@ -51,6 +52,7 @@ return [
         'math' => MathService::class,
         'purchase' => PurchaseService::class,
         'storage' => StorageService::class,
+        'database' => DatabaseService::class,
         'uuid' => UuidFactoryService::class,
     ],
 

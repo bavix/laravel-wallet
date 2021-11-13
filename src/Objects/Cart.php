@@ -11,6 +11,7 @@ use Bavix\Wallet\Internal\CartInterface;
 use Bavix\Wallet\Internal\Dto\BasketDto;
 use Bavix\Wallet\Internal\Dto\ItemDto;
 use Bavix\Wallet\Internal\Exceptions\CartEmptyException;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\Service\CastService;
 use function count;
@@ -120,7 +121,10 @@ class Cart implements Countable, CartInterface
         );
 
         if (count($items) === 0) {
-            throw new CartEmptyException();
+            throw new CartEmptyException(
+                'Cart is empty',
+                ExceptionInterface::CART_EMPTY
+            );
         }
 
         return new BasketDto($items, $this->getMeta());

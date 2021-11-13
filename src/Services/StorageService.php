@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\LockInterface;
 use Bavix\Wallet\Internal\MathInterface;
@@ -47,7 +48,10 @@ class StorageService implements StorageInterface
     {
         $value = $this->cache->get($key);
         if ($value === null) {
-            throw new RecordNotFoundException();
+            throw new RecordNotFoundException(
+                'The repository did not find the object',
+                ExceptionInterface::RECORD_NOT_FOUND
+            );
         }
 
         return $this->math->round($value);
