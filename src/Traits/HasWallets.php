@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Traits;
 
 use function array_key_exists;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use function config;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\ModelNotFoundException as EloquentModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
 
@@ -75,10 +77,16 @@ trait HasWallets
         }
 
         if (!array_key_exists($slug, $this->_wallets)) {
-            $this->_wallets[$slug] = $this->wallets()
-                ->where('slug', $slug)
-                ->firstOrFail()
-            ;
+            try {
+                $this->_wallets[$slug] = $this->wallets()
+                    ->where('slug', $slug)
+                    ->firstOrFail()
+                ;
+            } catch (EloquentModelNotFoundException $exception) {
+                throw (new ModelNotFoundException('Model not found', ExceptionInterface::MODEL_NOT_FOUND))
+                    ->setModel($exception->getModel())
+                    ;
+            }
         }
 
         return $this->_wallets[$slug];

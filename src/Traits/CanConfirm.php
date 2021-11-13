@@ -26,6 +26,7 @@ trait CanConfirm
      * @throws InsufficientFunds
      * @throws ConfirmedInvalid
      * @throws WalletOwnerInvalid
+     * @throws ExceptionInterface
      */
     public function confirm(Transaction $transaction): bool
     {
@@ -45,7 +46,7 @@ trait CanConfirm
     {
         try {
             return $this->confirm($transaction);
-        } catch (\Throwable $throwable) {
+        } catch (ExceptionInterface $throwable) {
             return false;
         }
     }
@@ -83,7 +84,7 @@ trait CanConfirm
     {
         try {
             return $this->resetConfirm($transaction);
-        } catch (\Throwable $throwable) {
+        } catch (ExceptionInterface $throwable) {
             return false;
         }
     }

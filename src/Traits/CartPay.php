@@ -13,6 +13,7 @@ use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Internal\Dto\AvailabilityDto;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Internal\PurchaseInterface;
 use Bavix\Wallet\Internal\Service\PrepareService;
 use Bavix\Wallet\Internal\TranslatorInterface;
@@ -21,8 +22,6 @@ use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\CommonService;
 use Bavix\Wallet\Services\MetaService;
 use function count;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Throwable;
 
 trait CartPay
 {
@@ -68,7 +67,7 @@ trait CartPay
     {
         try {
             return $this->payCart($cart, $force);
-        } catch (Throwable $throwable) {
+        } catch (ExceptionInterface $throwable) {
             return [];
         }
     }
@@ -120,7 +119,7 @@ trait CartPay
     {
         try {
             return $this->refundCart($cart, $force, $gifts);
-        } catch (Throwable $throwable) {
+        } catch (ExceptionInterface $throwable) {
             return false;
         }
     }
@@ -131,7 +130,7 @@ trait CartPay
             $results = [];
             $transfers = app(PurchaseInterface::class)->already($this, $cart->getBasketDto(), $gifts);
             if (count($transfers) !== $cart->getBasketDto()->total()) {
-                throw (new ModelNotFoundException())
+                throw (new ModelNotFoundException('Model not found', ExceptionInterface::MODEL_NOT_FOUND))
                     ->setModel($this->transfers()->getMorphClass())
                 ;
             }
@@ -183,7 +182,7 @@ trait CartPay
     {
         try {
             return $this->refundGiftCart($cart, $force);
-        } catch (Throwable $throwable) {
+        } catch (ExceptionInterface $throwable) {
             return false;
         }
     }

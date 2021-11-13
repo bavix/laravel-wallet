@@ -8,6 +8,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\DatabaseInterface;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\ExchangeInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\Service\CastService;
@@ -38,7 +39,7 @@ trait CanExchange
     {
         try {
             return $this->exchange($to, $amount, $meta);
-        } catch (\Throwable $throwable) {
+        } catch (ExceptionInterface $throwable) {
             return null;
         }
     }
