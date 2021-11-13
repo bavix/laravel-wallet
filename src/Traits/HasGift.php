@@ -14,6 +14,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\DatabaseInterface;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\Service\AtmService;
 use Bavix\Wallet\Internal\Service\CastService;
@@ -36,7 +37,7 @@ trait HasGift
     {
         try {
             return $this->gift($to, $product, $force);
-        } catch (Throwable $throwable) {
+        } catch (ExceptionInterface $throwable) {
             return null;
         }
     }

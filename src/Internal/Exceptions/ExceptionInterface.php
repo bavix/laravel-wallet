@@ -19,4 +19,5 @@ interface ExceptionInterface extends Throwable
     public const LOCK_PROVIDER_NOT_FOUND = 1 << 8;
     public const RECORD_NOT_FOUND = 1 << 9;
     public const TRANSACTION_FAILED = 1 << 10;
+    public const MODEL_NOT_FOUND = 1 << 11;
 }
