@@ -253,11 +253,12 @@ class CartTest extends TestCase
      */
     public function testWithdrawal(): void
     {
+        $transactionLevel = Buyer::query()->getConnection()->transactionLevel();
+
         /**
          * @var Buyer $buyer
          * @var Item  $product
          */
-        $transactionLevel = 0;
         $buyer = BuyerFactory::new()->create();
         $product = ItemFactory::new()->create(['quantity' => 1]);
 
