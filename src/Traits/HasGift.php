@@ -11,7 +11,7 @@ use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\ConsistencyInterface;
 use Bavix\Wallet\Internal\DatabaseInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
@@ -90,7 +90,7 @@ trait HasGift
 
                 $castService = app(CastService::class);
 
-                $transfer = app(TransferDtoAssembler::class)->create(
+                $transfer = app(TransferDtoAssemblerInterface::class)->create(
                     $deposit->getKey(),
                     $withdraw->getKey(),
                     Transfer::STATUS_GIFT,
