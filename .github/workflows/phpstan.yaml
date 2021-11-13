@@ -34,5 +34,5 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
-      - name: Run psalm
+      - name: Run phpstan
         run: composer phpstan
