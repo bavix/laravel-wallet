@@ -9,7 +9,7 @@ use Bavix\Wallet\Models\Wallet as WalletModel;
 use Illuminate\Database\Eloquent\Model;
 
 /** @psalm-internal */
-class CastService
+final class CastService
 {
     public function getWallet(Wallet $object, bool $save = true): WalletModel
     {

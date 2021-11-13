@@ -6,7 +6,7 @@ namespace Bavix\Wallet\Internal\Dto;
 
 use Bavix\Wallet\Interfaces\Wallet;
 
-class TransferLazyDto
+final class TransferLazyDto
 {
     private Wallet $fromWallet;
     private Wallet $toWallet;

@@ -15,7 +15,7 @@ use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\Service\CastService;
 use Bavix\Wallet\Internal\TranslatorInterface;
 
-class ConsistencyService implements ConsistencyInterface
+final class ConsistencyService implements ConsistencyInterface
 {
     private CastService $castService;
     private MathInterface $mathService;

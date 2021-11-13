@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Exceptions\ProductEnded;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
@@ -222,6 +223,7 @@ class DiscountTest extends TestCase
     public function testOutOfStock(): void
     {
         $this->expectException(ProductEnded::class);
+        $this->expectExceptionCode(ExceptionInterface::PRODUCT_ENDED);
         $this->expectExceptionMessageStrict(trans('wallet::errors.product_stock'));
 
         /**
@@ -315,6 +317,7 @@ class DiscountTest extends TestCase
     public function testPayFreeOutOfStock(): void
     {
         $this->expectException(ProductEnded::class);
+        $this->expectExceptionCode(ExceptionInterface::PRODUCT_ENDED);
         $this->expectExceptionMessageStrict(trans('wallet::errors.product_stock'));
 
         /**

@@ -8,7 +8,8 @@ use Bavix\Wallet\Test\Common\Models\Transaction;
 use Bavix\Wallet\Test\Common\Models\Transfer;
 use Bavix\Wallet\Test\Common\Models\Wallet;
 use Bavix\Wallet\Test\Common\MyExchange;
-use Bavix\Wallet\Test\Common\WalletServiceProvider;
+use Bavix\Wallet\Test\Common\TestServiceProvider;
+use Bavix\Wallet\WalletServiceProvider;
 use Illuminate\Config\Repository;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -39,7 +40,10 @@ class TestCase extends OrchestraTestCase
         $app['config']->set('wallet.transfer.model', Transfer::class);
         $app['config']->set('wallet.wallet.model', Wallet::class);
 
-        return [WalletServiceProvider::class];
+        return [
+            WalletServiceProvider::class,
+            TestServiceProvider::class,
+        ];
     }
 
     /**

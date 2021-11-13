@@ -6,17 +6,17 @@ namespace Bavix\Wallet\Internal\Repository;
 
 use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Query\TransactionQuery;
-use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
+use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
 use Bavix\Wallet\Models\Transaction;
 
-class TransactionRepository
+final class TransactionRepository implements TransactionRepositoryInterface
 {
-    private TransactionDtoTransformer $transformer;
+    private TransactionDtoTransformerInterface $transformer;
 
     private Transaction $transaction;
 
     public function __construct(
-        TransactionDtoTransformer $transformer,
+        TransactionDtoTransformerInterface $transformer,
         Transaction $transaction
     ) {
         $this->transformer = $transformer;

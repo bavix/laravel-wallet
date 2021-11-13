@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Internal\Exceptions\CartEmptyException;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Internal\PurchaseInterface;
 use Bavix\Wallet\Models\Transfer;
@@ -17,7 +19,6 @@ use Bavix\Wallet\Test\Models\Buyer;
 use Bavix\Wallet\Test\Models\Item;
 use Bavix\Wallet\Test\Models\ItemMeta;
 use function count;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
  * @internal
@@ -62,6 +63,7 @@ class CartTest extends TestCase
     public function testCartGetBasketDtoCartEmpty(): void
     {
         $this->expectException(CartEmptyException::class);
+        $this->expectExceptionCode(ExceptionInterface::CART_EMPTY);
         app(Cart::class)->getBasketDto();
     }
 
@@ -186,6 +188,7 @@ class CartTest extends TestCase
          * @var Item[] $products
          */
         $this->expectException(ModelNotFoundException::class);
+        $this->expectExceptionCode(ExceptionInterface::MODEL_NOT_FOUND);
         $buyer = BuyerFactory::new()->create();
         $products = ItemFactory::times(10)->create([
             'quantity' => 10,

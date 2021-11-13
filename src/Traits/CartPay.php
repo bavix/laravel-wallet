@@ -33,7 +33,7 @@ trait CartPay
     public function payFreeCart(CartInterface $cart): array
     {
         $basketService = app(BasketInterface::class);
-        if (!$basketService->availability(new AvailabilityDto($this, $cart->getBasketDto()))) {
+        if (!$basketService->availability(new AvailabilityDto($this, $cart->getBasketDto(), false))) {
             throw new ProductEnded(
                 app(TranslatorInterface::class)->get('wallet::errors.product_stock'),
                 ExceptionInterface::PRODUCT_ENDED
@@ -130,9 +130,10 @@ trait CartPay
             $results = [];
             $transfers = app(PurchaseInterface::class)->already($this, $cart->getBasketDto(), $gifts);
             if (count($transfers) !== $cart->getBasketDto()->total()) {
-                throw (new ModelNotFoundException('Model not found', ExceptionInterface::MODEL_NOT_FOUND))
-                    ->setModel($this->transfers()->getMorphClass())
-                ;
+                throw new ModelNotFoundException(
+                    "No query results for model [{$this->transfers()->getMorphClass()}]",
+                    ExceptionInterface::MODEL_NOT_FOUND
+                );
             }
 
             $objects = [];

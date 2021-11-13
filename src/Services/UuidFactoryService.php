@@ -8,7 +8,7 @@ use Bavix\Wallet\Internal\UuidInterface;
 use Ramsey\Uuid\UuidFactory;
 use Ramsey\Uuid\UuidFactoryInterface;
 
-class UuidFactoryService implements UuidInterface
+final class UuidFactoryService implements UuidInterface
 {
     private UuidFactoryInterface $uuidFactory;
 

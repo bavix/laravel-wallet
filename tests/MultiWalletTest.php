@@ -6,6 +6,8 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
@@ -16,7 +18,6 @@ use Bavix\Wallet\Test\Models\Item;
 use Bavix\Wallet\Test\Models\UserCashier;
 use Bavix\Wallet\Test\Models\UserMulti;
 use function compact;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use function range;
 use Throwable;
@@ -174,6 +175,7 @@ class MultiWalletTest extends TestCase
     public function testTransferWalletNotExists(): void
     {
         $this->expectException(ModelNotFoundException::class);
+        $this->expectExceptionCode(ExceptionInterface::MODEL_NOT_FOUND);
 
         /** @var UserMulti $userMulti */
         $userMulti = UserMultiFactory::new()->create();
@@ -185,6 +187,7 @@ class MultiWalletTest extends TestCase
     public function testInvalidDeposit(): void
     {
         $this->expectException(AmountInvalid::class);
+        $this->expectExceptionCode(ExceptionInterface::AMOUNT_INVALID);
         $this->expectExceptionMessageStrict(trans('wallet::errors.price_positive'));
 
         /** @var UserMulti $user */
@@ -199,6 +202,7 @@ class MultiWalletTest extends TestCase
     public function testWithdraw(): void
     {
         $this->expectException(BalanceIsEmpty::class);
+        $this->expectExceptionCode(ExceptionInterface::BALANCE_IS_EMPTY);
         $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
         /** @var UserMulti $user */
@@ -227,6 +231,7 @@ class MultiWalletTest extends TestCase
     public function testInvalidWithdraw(): void
     {
         $this->expectException(BalanceIsEmpty::class);
+        $this->expectExceptionCode(ExceptionInterface::BALANCE_IS_EMPTY);
         $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
         /** @var UserMulti $user */
@@ -322,6 +327,7 @@ class MultiWalletTest extends TestCase
     public function testBalanceIsEmpty(): void
     {
         $this->expectException(BalanceIsEmpty::class);
+        $this->expectExceptionCode(ExceptionInterface::BALANCE_IS_EMPTY);
         $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
         /** @var UserMulti $user */

@@ -9,7 +9,7 @@ use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
 use Illuminate\Config\Repository as ConfigRepository;
 
-class MathService implements MathInterface
+final class MathService implements MathInterface
 {
     private int $scale;
 

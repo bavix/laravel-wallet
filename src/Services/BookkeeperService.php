@@ -10,7 +10,7 @@ use Bavix\Wallet\Internal\LockInterface;
 use Bavix\Wallet\Internal\StorageInterface;
 use Bavix\Wallet\Models\Wallet;
 
-class BookkeeperService implements BookkeeperInterface
+final class BookkeeperService implements BookkeeperInterface
 {
     private StorageInterface $storage;
 

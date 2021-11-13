@@ -8,7 +8,7 @@ use Bavix\Wallet\Interfaces\Product;
 use Countable;
 
 /** @psalm-immutable */
-class ItemDto implements Countable
+final class ItemDto implements Countable
 {
     private Product $product;
 

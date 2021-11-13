@@ -10,7 +10,7 @@ use Bavix\Wallet\Internal\PurchaseInterface;
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\Eloquent\Model;
 
-class PurchaseService implements PurchaseInterface
+final class PurchaseService implements PurchaseInterface
 {
     public function already(Customer $customer, BasketDto $basketDto, bool $gifts = false): array
     {

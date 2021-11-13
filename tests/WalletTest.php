@@ -7,6 +7,7 @@ namespace Bavix\Wallet\Test;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Test\Factories\UserFactory;
 use Bavix\Wallet\Test\Models\User;
@@ -57,6 +58,7 @@ class WalletTest extends TestCase
     public function testInvalidDeposit(): void
     {
         $this->expectException(AmountInvalid::class);
+        $this->expectExceptionCode(ExceptionInterface::AMOUNT_INVALID);
         $this->expectExceptionMessageStrict(trans('wallet::errors.price_positive'));
 
         /** @var User $user */
@@ -67,6 +69,7 @@ class WalletTest extends TestCase
     public function testInvalidWithdraw(): void
     {
         $this->expectException(AmountInvalid::class);
+        $this->expectExceptionCode(ExceptionInterface::AMOUNT_INVALID);
         $this->expectExceptionMessageStrict(trans('wallet::errors.price_positive'));
 
         /** @var User $user */
@@ -114,6 +117,7 @@ class WalletTest extends TestCase
     public function testWithdraw(): void
     {
         $this->expectException(BalanceIsEmpty::class);
+        $this->expectExceptionCode(ExceptionInterface::BALANCE_IS_EMPTY);
         $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
         /** @var User $user */
@@ -138,6 +142,7 @@ class WalletTest extends TestCase
     public function testBalanceIsEmptyWithdraw(): void
     {
         $this->expectException(BalanceIsEmpty::class);
+        $this->expectExceptionCode(ExceptionInterface::BALANCE_IS_EMPTY);
         $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
         /** @var User $user */
@@ -148,6 +153,7 @@ class WalletTest extends TestCase
     public function testInsufficientFundsWithdraw(): void
     {
         $this->expectException(InsufficientFunds::class);
+        $this->expectExceptionCode(ExceptionInterface::INSUFFICIENT_FUNDS);
         $this->expectExceptionMessageStrict(trans('wallet::errors.insufficient_funds'));
 
         /** @var User $user */
@@ -238,6 +244,7 @@ class WalletTest extends TestCase
     public function testBalanceIsEmpty(): void
     {
         $this->expectException(BalanceIsEmpty::class);
+        $this->expectExceptionCode(ExceptionInterface::BALANCE_IS_EMPTY);
         $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
         /** @var User $user */

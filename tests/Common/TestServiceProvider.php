@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Common;
 
-use Bavix\Wallet\WalletServiceProvider as ServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
-class WalletServiceProvider extends ServiceProvider
+final class TestServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        parent::boot();
-
         $this->loadMigrationsFrom([dirname(__DIR__).'/migrations']);
     }
 }

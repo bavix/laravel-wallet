@@ -7,6 +7,7 @@ namespace Bavix\Wallet\Test;
 use Bavix\Wallet\Exceptions\ConfirmedInvalid;
 use Bavix\Wallet\Exceptions\UnconfirmedInvalid;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Test\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Factories\UserConfirmFactory;
 use Bavix\Wallet\Test\Models\Buyer;
@@ -122,6 +123,7 @@ class ConfirmTest extends TestCase
     public function testConfirmedInvalid(): void
     {
         $this->expectException(ConfirmedInvalid::class);
+        $this->expectExceptionCode(ExceptionInterface::CONFIRMED_INVALID);
         $this->expectExceptionMessageStrict(trans('wallet::errors.confirmed_invalid'));
 
         /** @var Buyer $buyer */
@@ -140,6 +142,7 @@ class ConfirmTest extends TestCase
     public function testUnconfirmedInvalid(): void
     {
         $this->expectException(UnconfirmedInvalid::class);
+        $this->expectExceptionCode(ExceptionInterface::UNCONFIRMED_INVALID);
         $this->expectExceptionMessageStrict(trans('wallet::errors.unconfirmed_invalid'));
 
         /** @var Buyer $buyer */
@@ -172,6 +175,7 @@ class ConfirmTest extends TestCase
     public function testWalletOwnerInvalid(): void
     {
         $this->expectException(WalletOwnerInvalid::class);
+        $this->expectExceptionCode(ExceptionInterface::WALLET_OWNER_INVALID);
         $this->expectExceptionMessageStrict(trans('wallet::errors.owner_invalid'));
 
         /**

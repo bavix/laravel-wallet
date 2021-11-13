@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Exceptions\InsufficientFunds;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Test\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Factories\ItemTaxFactory;
@@ -106,6 +107,7 @@ class TaxTest extends TestCase
     public function testGiftFail(): void
     {
         $this->expectException(InsufficientFunds::class);
+        $this->expectExceptionCode(ExceptionInterface::INSUFFICIENT_FUNDS);
         $this->expectExceptionMessageStrict(trans('wallet::errors.insufficient_funds'));
 
         /**

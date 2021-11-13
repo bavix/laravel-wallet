@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @deprecated
  * @see LockInterface
  */
-class LockService
+final class LockService
 {
     private LockInterface $lockService;
 

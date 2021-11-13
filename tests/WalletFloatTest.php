@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Test;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\MathInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Test\Factories\UserFloatFactory;
@@ -45,6 +46,7 @@ class WalletFloatTest extends TestCase
     public function testInvalidDeposit(): void
     {
         $this->expectException(AmountInvalid::class);
+        $this->expectExceptionCode(ExceptionInterface::AMOUNT_INVALID);
         $this->expectExceptionMessageStrict(trans('wallet::errors.price_positive'));
         $user = UserFloatFactory::new()->create();
         $user->depositFloat(-1);
@@ -53,6 +55,7 @@ class WalletFloatTest extends TestCase
     public function testWithdraw(): void
     {
         $this->expectException(BalanceIsEmpty::class);
+        $this->expectExceptionCode(ExceptionInterface::BALANCE_IS_EMPTY);
         $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
         /** @var User $user */
@@ -77,6 +80,7 @@ class WalletFloatTest extends TestCase
     public function testInvalidWithdraw(): void
     {
         $this->expectException(BalanceIsEmpty::class);
+        $this->expectExceptionCode(ExceptionInterface::BALANCE_IS_EMPTY);
         $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
         $user = UserFloatFactory::new()->create();
         $user->withdrawFloat(-1);
@@ -144,6 +148,7 @@ class WalletFloatTest extends TestCase
     public function testBalanceIsEmpty(): void
     {
         $this->expectException(BalanceIsEmpty::class);
+        $this->expectExceptionCode(ExceptionInterface::BALANCE_IS_EMPTY);
         $this->expectExceptionMessageStrict(trans('wallet::errors.wallet_empty'));
 
         /** @var User $user */

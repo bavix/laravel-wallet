@@ -14,7 +14,7 @@ use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 
 /** @psalm-internal */
-class AtmService
+final class AtmService
 {
     private TransactionRepository $transactionRepository;
     private TransferRepository $transferRepository;

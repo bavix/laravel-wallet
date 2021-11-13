@@ -33,6 +33,7 @@
   "require-dev": {
     "brianium/paratest": "^6.3",
     "cknow/laravel-money": "^6.1",
+    "ergebnis/phpstan-rules": "^1.0",
     "infection/infection": "~0.25",
     "laravel/cashier": "^13.6",
     "nunomaduro/collision": "^5.10",
@@ -63,6 +64,7 @@
     "parabench":"@php ./vendor/bin/testbench package:test --parallel --coverage-xml=build/coverage-xml --log-junit=build/junit.xml",
     "infect": "@php vendor/bin/infection --coverage=build --min-msi=50 -j$(nproc)",
     "phpstan": "@php vendor/bin/phpstan analyse -vvv --debug --memory-limit 2G -l 7 src/",
+    "phpstan-baseline": "@php vendor/bin/phpstan analyse -vvv --debug --memory-limit 2G -l 7 src/ --generate-baseline",
     "ecs": "@php vendor/bin/ecs check",
     "ecs-fix": "@php vendor/bin/ecs check --fix",
     "ecs-cc": "@php vendor/bin/ecs --clear-cache",

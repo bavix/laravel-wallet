@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test;
 
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\StorageInterface;
 
@@ -15,6 +16,7 @@ class StorageTest extends TestCase
     public function testFlush(): void
     {
         $this->expectException(RecordNotFoundException::class);
+        $this->expectExceptionCode(ExceptionInterface::RECORD_NOT_FOUND);
         $storage = app(StorageInterface::class);
 
         self::assertTrue($storage->sync('hello', 34));

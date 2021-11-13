@@ -18,7 +18,7 @@ use function count;
 use Countable;
 use function get_class;
 
-class Cart implements Countable, CartInterface
+final class Cart implements Countable, CartInterface
 {
     /**
      * @var Product[]
@@ -130,7 +130,7 @@ class Cart implements Countable, CartInterface
         return new BasketDto($items, $this->getMeta());
     }
 
-    protected function addQuantity(Product $product, int $quantity): void
+    private function addQuantity(Product $product, int $quantity): void
     {
         $model = $this->castService->getModel($product);
 

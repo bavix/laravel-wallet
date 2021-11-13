@@ -7,7 +7,7 @@ namespace Bavix\Wallet\Services;
 use Bavix\Wallet\Internal\BasketInterface;
 use Bavix\Wallet\Internal\Dto\AvailabilityDto;
 
-class BasketService implements BasketInterface
+final class BasketService implements BasketInterface
 {
     public function availability(AvailabilityDto $availabilityDto): bool
     {

@@ -18,6 +18,10 @@ use Bavix\Wallet\Internal\PurchaseInterface;
 use Bavix\Wallet\Internal\Service\DatabaseService;
 use Bavix\Wallet\Internal\Service\TranslatorService;
 use Bavix\Wallet\Internal\StorageInterface;
+use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
+use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
+use Bavix\Wallet\Internal\Transform\TransferDtoTransformer;
+use Bavix\Wallet\Internal\Transform\TransferDtoTransformerInterface;
 use Bavix\Wallet\Internal\TranslatorInterface;
 use Bavix\Wallet\Internal\UuidInterface;
 use Bavix\Wallet\Models\Transaction;
@@ -41,7 +45,7 @@ use function dirname;
 use function function_exists;
 use Illuminate\Support\ServiceProvider;
 
-class WalletServiceProvider extends ServiceProvider
+final class WalletServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap services.
@@ -88,8 +92,11 @@ class WalletServiceProvider extends ServiceProvider
 
         $this->singletons($configure['services'] ?? []);
         $this->legacySingleton(); // without configuration
-        $this->bindObjects($configure);
+
+        $this->transformers($configure['transformers'] ?? []);
         $this->assemblers($configure['assemblers'] ?? []);
+
+        $this->bindObjects($configure);
     }
 
     /**
@@ -120,6 +127,19 @@ class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(TransactionDtoAssembler::class, $configure['transaction'] ?? null);
         $this->app->singleton(TransferLazyDtoAssembler::class, $configure['transfer_lazy'] ?? null);
         $this->app->singleton(TransferDtoAssembler::class, $configure['transfer'] ?? null);
+    }
+
+    private function transformers(array $configure): void
+    {
+        $this->app->singleton(
+            TransactionDtoTransformerInterface::class,
+            $configure['transaction'] ?? TransactionDtoTransformer::class
+        );
+
+        $this->app->singleton(
+            TransferDtoTransformerInterface::class,
+            $configure['transfer'] ?? TransferDtoTransformer::class
+        );
     }
 
     private function legacySingleton(): void
