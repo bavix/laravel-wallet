@@ -46,10 +46,10 @@ namespace PHPSTORM_META {
         TransferRepositoryInterface::class => TransferRepositoryInterface::class,
 
         // internal.service
-        CastServiceInterface::class => CastServiceInterface::class,
         DatabaseServiceInterface::class => DatabaseServiceInterface::class,
         JsonServiceInterface::class => JsonServiceInterface::class,
         LockServiceInterface::class => LockServiceInterface::class,
+        MathServiceInterface::class => MathServiceInterface::class,
         PrepareServiceInterface::class => PrepareServiceInterface::class,
         StorageServiceInterface::class => StorageServiceInterface::class,
         TranslatorServiceInterface::class => TranslatorServiceInterface::class,
@@ -72,9 +72,9 @@ namespace PHPSTORM_META {
         AtmServiceInterface::class => AtmServiceInterface::class,
         BasketServiceInterface::class => BasketServiceInterface::class,
         BookkeeperServiceInterface::class => BookkeeperServiceInterface::class,
+        CastServiceInterface::class => CastServiceInterface::class,
         ConsistencyServiceInterface::class => ConsistencyServiceInterface::class,
         ExchangeServiceInterface::class => ExchangeServiceInterface::class,
-        MathServiceInterface::class => MathServiceInterface::class,
         PurchaseServiceInterface::class => PurchaseServiceInterface::class,
 
         // lagacy.services
