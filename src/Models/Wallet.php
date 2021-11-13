@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Models;
 
+use Bavix\Wallet\Internal\DatabaseInterface;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use function app;
 use function array_key_exists;
 use Bavix\Wallet\Interfaces\Confirmable;
@@ -94,10 +96,14 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     /**
      * Under ideal conditions, you will never need a method.
      * Needed to deal with out-of-sync.
+     *
+     * @throws ExceptionInterface
      */
     public function refreshBalance(): bool
     {
-        return app(WalletService::class)->refresh($this);
+        return app(DatabaseInterface::class)->transaction(
+            fn () => app(WalletService::class)->refresh($this)
+        );
     }
 
     /** @codeCoverageIgnore */
