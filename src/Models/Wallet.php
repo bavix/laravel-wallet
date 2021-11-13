@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Models;
 
-use Bavix\Wallet\Internal\DatabaseInterface;
-use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use function app;
 use function array_key_exists;
 use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Exchangeable;
 use Bavix\Wallet\Interfaces\WalletFloat;
+use Bavix\Wallet\Internal\DatabaseInterface;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Traits\CanConfirm;
 use Bavix\Wallet\Traits\CanExchange;
