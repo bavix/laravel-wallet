@@ -7,6 +7,8 @@ namespace PHPSTORM_META {
     use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
     use Bavix\Wallet\Internal\Repository\TransactionRepositoryInterface;
     use Bavix\Wallet\Internal\Repository\TransferRepositoryInterface;
+    use Bavix\Wallet\Services\AtomicKeyService;
+    use Bavix\Wallet\Services\AtomicKeyServiceInterface;
     use Bavix\Wallet\Services\CastServiceInterface;
     use Bavix\Wallet\Internal\Service\JsonServiceInterface;
     use Bavix\Wallet\Services\DiscountServiceInterface;
@@ -32,7 +34,6 @@ namespace PHPSTORM_META {
     use Bavix\Wallet\Internal\Service\UuidServiceInterface;
     use Bavix\Wallet\Objects\Cart;
     use Bavix\Wallet\Services\CommonServiceLegacy;
-    use Bavix\Wallet\Services\LockServiceLegacy;
     use Bavix\Wallet\Services\MetaServiceLegacy;
     use Bavix\Wallet\Services\TaxServiceInterface;
     use Bavix\Wallet\Services\WalletServiceLegacy;
@@ -71,6 +72,7 @@ namespace PHPSTORM_META {
         // services
         AssistantServiceInterface::class => AssistantServiceInterface::class,
         AtmServiceInterface::class => AtmServiceInterface::class,
+        AtomicKeyServiceInterface::class => AtomicKeyServiceInterface::class,
         BasketServiceInterface::class => BasketServiceInterface::class,
         BookkeeperServiceInterface::class => BookkeeperServiceInterface::class,
         CastServiceInterface::class => CastServiceInterface::class,
@@ -83,7 +85,6 @@ namespace PHPSTORM_META {
 
         // lagacy.services
         CommonServiceLegacy::class => CommonServiceLegacy::class,
-        LockServiceLegacy::class => LockServiceLegacy::class,
         MetaServiceLegacy::class => MetaServiceLegacy::class,
         WalletServiceLegacy::class => WalletServiceLegacy::class,
     ]));

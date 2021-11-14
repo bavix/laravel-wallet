@@ -11,13 +11,14 @@ use Bavix\Wallet\Exceptions\UnconfirmedInvalid;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
+use Bavix\Wallet\Internal\Service\LockServiceInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
 use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Services\AtomicKeyServiceInterface;
 use Bavix\Wallet\Services\CastServiceInterface;
 use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
-use Bavix\Wallet\Services\LockServiceLegacy;
 
 trait CanConfirm
 {
@@ -58,7 +59,11 @@ trait CanConfirm
      */
     public function resetConfirm(Transaction $transaction): bool
     {
-        return app(LockServiceLegacy::class)->lock($this, fn () => app(DatabaseServiceInterface::class)->transaction(function () use ($transaction) {
+        $atomicKey = app(AtomicKeyServiceInterface::class)
+            ->getIdentifier($this)
+        ;
+
+        return app(LockServiceInterface::class)->block($atomicKey, fn () => app(DatabaseServiceInterface::class)->transaction(function () use ($transaction) {
             if (!$transaction->confirmed) {
                 throw new UnconfirmedInvalid(
                     app(TranslatorServiceInterface::class)->get('wallet::errors.unconfirmed_invalid'),
@@ -93,7 +98,11 @@ trait CanConfirm
      */
     public function forceConfirm(Transaction $transaction): bool
     {
-        return app(LockServiceLegacy::class)->lock($this, fn () => app(DatabaseServiceInterface::class)->transaction(function () use ($transaction) {
+        $atomicKey = app(AtomicKeyServiceInterface::class)
+            ->getIdentifier($this)
+        ;
+
+        return app(LockServiceInterface::class)->block($atomicKey, fn () => app(DatabaseServiceInterface::class)->transaction(function () use ($transaction) {
             if ($transaction->confirmed) {
                 throw new ConfirmedInvalid(
                     app(TranslatorServiceInterface::class)->get('wallet::errors.confirmed_invalid'),

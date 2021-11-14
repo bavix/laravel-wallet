@@ -41,6 +41,8 @@ use Bavix\Wallet\Services\AssistantService;
 use Bavix\Wallet\Services\AssistantServiceInterface;
 use Bavix\Wallet\Services\AtmService;
 use Bavix\Wallet\Services\AtmServiceInterface;
+use Bavix\Wallet\Services\AtomicKeyService;
+use Bavix\Wallet\Services\AtomicKeyServiceInterface;
 use Bavix\Wallet\Services\BasketService;
 use Bavix\Wallet\Services\BasketServiceInterface;
 use Bavix\Wallet\Services\BookkeeperService;
@@ -54,7 +56,6 @@ use Bavix\Wallet\Services\DiscountService;
 use Bavix\Wallet\Services\DiscountServiceInterface;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\ExchangeServiceInterface;
-use Bavix\Wallet\Services\LockServiceLegacy;
 use Bavix\Wallet\Services\MetaServiceLegacy;
 use Bavix\Wallet\Services\PrepareService;
 use Bavix\Wallet\Services\PrepareServiceInterface;
@@ -160,6 +161,7 @@ final class WalletServiceProvider extends ServiceProvider
     {
         $this->app->singleton(AssistantServiceInterface::class, $configure['assistant'] ?? AssistantService::class);
         $this->app->singleton(AtmServiceInterface::class, $configure['atm'] ?? AtmService::class);
+        $this->app->singleton(AtomicKeyServiceInterface::class, $configure['key'] ?? AtomicKeyService::class);
         $this->app->singleton(BasketServiceInterface::class, $configure['basket'] ?? BasketService::class);
         $this->app->singleton(BookkeeperServiceInterface::class, $configure['bookkeeper'] ?? BookkeeperService::class);
         $this->app->singleton(CastServiceInterface::class, $configure['cast'] ?? CastService::class);
@@ -211,8 +213,6 @@ final class WalletServiceProvider extends ServiceProvider
     {
         $this->app->singleton(CommonServiceLegacy::class);
         $this->app->singleton(WalletServiceLegacy::class);
-
-        $this->app->singleton(LockServiceLegacy::class);
         $this->app->singleton(MetaServiceLegacy::class);
     }
 

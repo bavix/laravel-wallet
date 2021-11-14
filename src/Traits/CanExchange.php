@@ -8,13 +8,14 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
+use Bavix\Wallet\Internal\Service\LockServiceInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Services\AtomicKeyServiceInterface;
 use Bavix\Wallet\Services\CastServiceInterface;
 use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
 use Bavix\Wallet\Services\ExchangeServiceInterface;
-use Bavix\Wallet\Services\LockServiceLegacy;
 use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\TaxServiceInterface;
 
@@ -49,7 +50,11 @@ trait CanExchange
      */
     public function forceExchange(Wallet $to, $amount, ?array $meta = null): Transfer
     {
-        return app(LockServiceLegacy::class)->lock($this, fn () => app(DatabaseServiceInterface::class)->transaction(function () use ($to, $amount, $meta) {
+        $atomicKey = app(AtomicKeyServiceInterface::class)
+            ->getIdentifier($this)
+        ;
+
+        return app(LockServiceInterface::class)->block($atomicKey, fn () => app(DatabaseServiceInterface::class)->transaction(function () use ($to, $amount, $meta) {
             $prepareService = app(PrepareServiceInterface::class);
             $mathService = app(MathServiceInterface::class);
             $castService = app(CastServiceInterface::class);
