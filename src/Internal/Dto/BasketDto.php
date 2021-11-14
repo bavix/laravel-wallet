@@ -33,7 +33,7 @@ final class BasketDto implements BasketDtoInterface
 
     public function total(): int
     {
-        return count(array_merge(...array_map(static fn (ItemDtoInterface $dto) => $dto->items(), $this->items)));
+        return iterator_count($this->cursor());
     }
 
     /** @return Generator<array-key, Product, mixed, void> */

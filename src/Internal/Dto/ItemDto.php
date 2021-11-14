@@ -10,7 +10,6 @@ use Bavix\Wallet\Interfaces\Product;
 final class ItemDto implements ItemDtoInterface
 {
     private Product $product;
-
     private int $quantity;
 
     public function __construct(Product $product, int $quantity)
