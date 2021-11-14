@@ -34,5 +34,9 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
+      - name: Install deptrac
+        run: composer req --dev qossmic/deptrac-shim
+        if: hashFiles('vendor/bin/deptrac') == ''
+
       - name: Run deptrac
-        run: composer deptrac
+        run: php vendor/bin/deptrac analyse
