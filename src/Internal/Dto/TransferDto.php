@@ -7,7 +7,7 @@ namespace Bavix\Wallet\Internal\Dto;
 use DateTimeImmutable;
 
 /** @psalm-immutable */
-final class TransferDto
+final class TransferDto implements TransferDtoInterface
 {
     private string $uuid;
 

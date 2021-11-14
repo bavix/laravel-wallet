@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet;
 
+use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
@@ -171,6 +173,11 @@ final class WalletServiceProvider extends ServiceProvider
 
     private function assemblers(array $configure): void
     {
+        $this->app->singleton(
+            AvailabilityDtoAssemblerInterface::class,
+            $configure['availability'] ?? AvailabilityDtoAssembler::class
+        );
+
         $this->app->singleton(
             TransactionDtoAssemblerInterface::class,
             $configure['transaction'] ?? TransactionDtoAssembler::class

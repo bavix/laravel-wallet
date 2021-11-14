@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Transform;
 
-use Bavix\Wallet\Internal\Dto\TransactionDto;
+use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 
 interface TransactionDtoTransformerInterface
 {
-    public function extract(TransactionDto $dto): array;
+    public function extract(TransactionDtoInterface $dto): array;
 }

@@ -6,7 +6,6 @@ namespace Bavix\Wallet\Test\Infra;
 
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Services\ExchangeServiceInterface;
-use Illuminate\Support\Arr;
 
 class MyExchangeService implements ExchangeServiceInterface
 {
@@ -37,10 +36,6 @@ class MyExchangeService implements ExchangeServiceInterface
     /** @param float|int|string $amount */
     public function convertTo(string $fromCurrency, string $toCurrency, $amount): string
     {
-        return $this->mathService->mul($amount, Arr::get(
-            Arr::get($this->rates, $fromCurrency, []),
-            $toCurrency,
-            1
-        ));
+        return $this->mathService->mul($amount, $this->rates[$fromCurrency][$toCurrency] ?? 1);
     }
 }

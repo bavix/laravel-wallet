@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Internal\Assembler;
 
 use Bavix\Wallet\Internal\Dto\TransferDto;
+use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
 use Bavix\Wallet\Internal\Service\UuidServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,7 +26,7 @@ final class TransferDtoAssembler implements TransferDtoAssemblerInterface
         Model $toModel,
         int $discount,
         string $fee
-    ): TransferDto {
+    ): TransferDtoInterface {
         return new TransferDto(
             $this->uuidService->uuid4(),
             $depositId,

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
@@ -102,6 +103,7 @@ return [
      * Builder class, needed to create DTO.
      */
     'assemblers' => [
+        'availability' => AvailabilityDtoAssembler::class,
         'transaction' => TransactionDtoAssembler::class,
         'transfer_lazy' => TransferLazyDtoAssembler::class,
         'transfer' => TransferDtoAssembler::class,

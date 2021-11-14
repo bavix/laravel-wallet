@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Assembler;
 
-use Bavix\Wallet\Internal\Dto\TransferDto;
+use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
 use Illuminate\Database\Eloquent\Model;
 
 interface TransferDtoAssemblerInterface
@@ -17,5 +17,5 @@ interface TransferDtoAssemblerInterface
         Model $toModel,
         int $discount,
         string $fee
-    ): TransferDto;
+    ): TransferDtoInterface;
 }

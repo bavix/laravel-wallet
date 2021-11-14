@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Internal\Assembler;
 
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Internal\Dto\TransactionDto;
-use Bavix\Wallet\Internal\Dto\TransferLazyDto;
+use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
+use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 
 interface TransferLazyDtoAssemblerInterface
 {
@@ -15,8 +15,8 @@ interface TransferLazyDtoAssemblerInterface
         Wallet $toWallet,
         int $discount,
         string $fee,
-        TransactionDto $withdrawDto,
-        TransactionDto $depositDto,
+        TransactionDtoInterface $withdrawDto,
+        TransactionDtoInterface $depositDto,
         string $status
-    ): TransferLazyDto;
+    ): TransferLazyDtoInterface;
 }

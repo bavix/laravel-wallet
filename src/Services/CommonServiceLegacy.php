@@ -7,8 +7,8 @@ namespace Bavix\Wallet\Services;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
-use Bavix\Wallet\Internal\Dto\TransactionDto;
-use Bavix\Wallet\Internal\Dto\TransferLazyDto;
+use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
+use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
@@ -58,7 +58,7 @@ final class CommonServiceLegacy
     }
 
     /**
-     * @param non-empty-array<TransferLazyDto> $objects
+     * @param non-empty-array<TransferLazyDtoInterface> $objects
      *
      * @return non-empty-array<Transfer>
      */
@@ -155,8 +155,8 @@ final class CommonServiceLegacy
     }
 
     /**
-     * @param non-empty-array<int|string, Wallet>  $wallets
-     * @param non-empty-array<int, TransactionDto> $objects
+     * @param non-empty-array<int|string, Wallet>           $wallets
+     * @param non-empty-array<int, TransactionDtoInterface> $objects
      *
      * @return non-empty-array<string, Transaction>
      */

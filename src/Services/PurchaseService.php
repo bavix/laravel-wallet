@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Interfaces\Customer;
-use Bavix\Wallet\Internal\Dto\BasketDto;
+use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\Eloquent\Model;
 
 final class PurchaseService implements PurchaseServiceInterface
 {
-    public function already(Customer $customer, BasketDto $basketDto, bool $gifts = false): array
+    public function already(Customer $customer, BasketDtoInterface $basketDto, bool $gifts = false): array
     {
         $status = $gifts
             ? [Transfer::STATUS_PAID, Transfer::STATUS_GIFT]

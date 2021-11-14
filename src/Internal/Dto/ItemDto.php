@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Internal\Dto;
 
 use Bavix\Wallet\Interfaces\Product;
-use Countable;
 
 /** @psalm-immutable */
-final class ItemDto implements Countable
+final class ItemDto implements ItemDtoInterface
 {
     private Product $product;
 

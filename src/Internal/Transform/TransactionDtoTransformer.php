@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Transform;
 
-use Bavix\Wallet\Internal\Dto\TransactionDto;
-use Bavix\Wallet\Internal\Service\JsonService;
+use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
+use Bavix\Wallet\Internal\Service\JsonServiceInterface;
 
 final class TransactionDtoTransformer implements TransactionDtoTransformerInterface
 {
-    private JsonService $jsonService;
+    private JsonServiceInterface $jsonService;
 
-    public function __construct(JsonService $jsonService)
+    public function __construct(JsonServiceInterface $jsonService)
     {
         $this->jsonService = $jsonService;
     }
 
-    public function extract(TransactionDto $dto): array
+    public function extract(TransactionDtoInterface $dto): array
     {
         return [
             'uuid' => $dto->getUuid(),

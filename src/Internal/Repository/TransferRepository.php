@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Repository;
 
-use Bavix\Wallet\Internal\Dto\TransferDto;
+use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
 use Bavix\Wallet\Internal\Query\TransferQuery;
 use Bavix\Wallet\Internal\Transform\TransferDtoTransformerInterface;
 use Bavix\Wallet\Models\Transfer;
@@ -24,11 +24,11 @@ final class TransferRepository implements TransferRepositoryInterface
     }
 
     /**
-     * @param non-empty-array<int|string, TransferDto> $objects
+     * @param non-empty-array<int|string, TransferDtoInterface> $objects
      */
     public function insert(array $objects): void
     {
-        $values = array_map(fn (TransferDto $dto): array => $this->transformer->extract($dto), $objects);
+        $values = array_map(fn (TransferDtoInterface $dto): array => $this->transformer->extract($dto), $objects);
         $this->transfer->newQuery()->insert($values);
     }
 

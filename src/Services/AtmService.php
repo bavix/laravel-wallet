@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
-use Bavix\Wallet\Internal\Dto\TransactionDto;
-use Bavix\Wallet\Internal\Dto\TransferDto;
+use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
+use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
 use Bavix\Wallet\Internal\Query\TransactionQuery;
 use Bavix\Wallet\Internal\Query\TransferQuery;
 use Bavix\Wallet\Internal\Repository\TransactionRepositoryInterface;
@@ -31,7 +31,7 @@ final class AtmService implements AtmServiceInterface
     }
 
     /**
-     * @param non-empty-array<int|string, TransactionDto> $objects
+     * @param non-empty-array<int|string, TransactionDtoInterface> $objects
      *
      * @return non-empty-array<string, Transaction>
      */
@@ -53,7 +53,7 @@ final class AtmService implements AtmServiceInterface
     }
 
     /**
-     * @param non-empty-array<int|string, TransferDto> $objects
+     * @param non-empty-array<int|string, TransferDtoInterface> $objects
      *
      * @return non-empty-array<string, Transfer>
      */

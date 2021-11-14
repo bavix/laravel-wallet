@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Assembler;
 
-use Bavix\Wallet\Internal\Dto\TransactionDto;
+use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Illuminate\Database\Eloquent\Model;
 
 interface TransactionDtoAssemblerInterface
@@ -16,5 +16,5 @@ interface TransactionDtoAssemblerInterface
         string $amount,
         bool $confirmed,
         ?array $meta
-    ): TransactionDto;
+    ): TransactionDtoInterface;
 }

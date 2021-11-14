@@ -8,7 +8,7 @@ use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Internal\Dto\TransferLazyDto;
+use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
@@ -70,7 +70,7 @@ final class ConsistencyService implements ConsistencyServiceInterface
     }
 
     /**
-     * @param TransferLazyDto[] $objects
+     * @param TransferLazyDtoInterface[] $objects
      *
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds

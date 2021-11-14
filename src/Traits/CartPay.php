@@ -8,7 +8,7 @@ use function array_unique;
 use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Interfaces\CartInterface;
 use Bavix\Wallet\Interfaces\Product;
-use Bavix\Wallet\Internal\Dto\AvailabilityDto;
+use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
@@ -33,7 +33,8 @@ trait CartPay
     public function payFreeCart(CartInterface $cart): array
     {
         $basketService = app(BasketServiceInterface::class);
-        if (!$basketService->availability(new AvailabilityDto($this, $cart->getBasketDto(), false))) {
+        $availabilityAssembler = app(AvailabilityDtoAssemblerInterface::class);
+        if (!$basketService->availability($availabilityAssembler->create($this, $cart->getBasketDto(), false))) {
             throw new ProductEnded(
                 app(TranslatorServiceInterface::class)->get('wallet::errors.product_stock'),
                 ExceptionInterface::PRODUCT_ENDED
@@ -78,7 +79,8 @@ trait CartPay
     public function payCart(CartInterface $cart, bool $force = false): array
     {
         $basketService = app(BasketServiceInterface::class);
-        if (!$basketService->availability(new AvailabilityDto($this, $cart->getBasketDto(), $force))) {
+        $availabilityAssembler = app(AvailabilityDtoAssemblerInterface::class);
+        if (!$basketService->availability($availabilityAssembler->create($this, $cart->getBasketDto(), $force))) {
             throw new ProductEnded(
                 app(TranslatorServiceInterface::class)->get('wallet::errors.product_stock'),
                 ExceptionInterface::PRODUCT_ENDED

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Internal\Assembler;
 
 use Bavix\Wallet\Internal\Dto\TransactionDto;
+use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Service\UuidServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,7 +25,7 @@ final class TransactionDtoAssembler implements TransactionDtoAssemblerInterface
         string $amount,
         bool $confirmed,
         ?array $meta
-    ): TransactionDto {
+    ): TransactionDtoInterface {
         return new TransactionDto(
             $this->uuidService->uuid4(),
             $payable->getMorphClass(),

@@ -13,6 +13,16 @@ layers:
         regex: ^Bavix\\.*\\Traits\\.*
 
   # internal
+  - name: Dto
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*\\Internal\\Dto\\.*Dto$
+
+  - name: DtoInterface
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*\\Internal\\Dto\\.*DtoInterface$
+
   - name: AssemblerDto
     collectors:
       - type: className
@@ -88,29 +98,50 @@ ruleset:
     - ModelNotFoundException
     - ServiceInterface
     - Legacy # delete as soon as possible
+
   Infra:
     - ServiceInterface
     - Config
     - Cache
-  ServiceInterface:
-    - EloquentModel
+
+  Dto:
+    - DtoInterface
+
+  TransformInterface:
+    - DtoInterface
   Transform:
     - TransformInterface
-    - Infra
+    - ServiceInterface
+    - DtoInterface
+
+  RepositoryInterface:
+    - DtoInterface
   Repository:
     - RepositoryInterface
     - TransformInterface
+    - DtoInterface
+
+  ServiceInterface:
+    - EloquentModel
+    - DtoInterface
   Service:
     - AssemblerDtoInterface
     - RepositoryInterface
     - ServiceInterface
     - EloquentModel
-  Legacy:
-    - AssemblerDtoInterface
-    - ServiceInterface
+    - DtoInterface
+
   AssemblerDtoInterface:
     - EloquentModel
+    - DtoInterface
   AssemblerDto:
     - AssemblerDtoInterface
     - ServiceInterface
     - EloquentModel
+    - DtoInterface
+    - Dto
+
+  Legacy:
+    - AssemblerDtoInterface
+    - ServiceInterface
+    - DtoInterface

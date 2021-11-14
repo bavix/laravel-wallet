@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Repository;
 
-use Bavix\Wallet\Internal\Dto\TransactionDto;
+use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Query\TransactionQuery;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
 use Bavix\Wallet\Models\Transaction;
@@ -24,11 +24,11 @@ final class TransactionRepository implements TransactionRepositoryInterface
     }
 
     /**
-     * @param non-empty-array<int|string, TransactionDto> $objects
+     * @param non-empty-array<int|string, TransactionDtoInterface> $objects
      */
     public function insert(array $objects): void
     {
-        $values = array_map(fn (TransactionDto $dto): array => $this->transformer->extract($dto), $objects);
+        $values = array_map(fn (TransactionDtoInterface $dto): array => $this->transformer->extract($dto), $objects);
         $this->transaction->newQuery()->insert($values);
     }
 
