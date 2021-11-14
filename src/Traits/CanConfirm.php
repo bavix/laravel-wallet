@@ -58,26 +58,24 @@ trait CanConfirm
      */
     public function resetConfirm(Transaction $transaction): bool
     {
-        return app(LockServiceLegacy::class)->lock($this, function () use ($transaction) {
-            return app(DatabaseServiceInterface::class)->transaction(function () use ($transaction) {
-                if (!$transaction->confirmed) {
-                    throw new UnconfirmedInvalid(
-                        app(TranslatorServiceInterface::class)->get('wallet::errors.unconfirmed_invalid'),
-                        ExceptionInterface::UNCONFIRMED_INVALID
-                    );
-                }
+        return app(LockServiceLegacy::class)->lock($this, fn () => app(DatabaseServiceInterface::class)->transaction(function () use ($transaction) {
+            if (!$transaction->confirmed) {
+                throw new UnconfirmedInvalid(
+                    app(TranslatorServiceInterface::class)->get('wallet::errors.unconfirmed_invalid'),
+                    ExceptionInterface::UNCONFIRMED_INVALID
+                );
+            }
 
-                $wallet = app(CastServiceInterface::class)->getWallet($this);
-                $mathService = app(MathServiceInterface::class);
-                $negativeAmount = $mathService->negative($transaction->amount);
+            $wallet = app(CastServiceInterface::class)->getWallet($this);
+            $mathService = app(MathServiceInterface::class);
+            $negativeAmount = $mathService->negative($transaction->amount);
 
-                return $transaction->update(['confirmed' => false]) &&
-                    // update balance
-                    app(CommonServiceLegacy::class)
-                        ->addBalance($wallet, $negativeAmount)
-                    ;
-            });
-        });
+            return $transaction->update(['confirmed' => false]) &&
+                // update balance
+                app(CommonServiceLegacy::class)
+                    ->addBalance($wallet, $negativeAmount)
+                ;
+        }));
     }
 
     public function safeResetConfirm(Transaction $transaction): bool
@@ -95,29 +93,27 @@ trait CanConfirm
      */
     public function forceConfirm(Transaction $transaction): bool
     {
-        return app(LockServiceLegacy::class)->lock($this, function () use ($transaction) {
-            return app(DatabaseServiceInterface::class)->transaction(function () use ($transaction) {
-                if ($transaction->confirmed) {
-                    throw new ConfirmedInvalid(
-                        app(TranslatorServiceInterface::class)->get('wallet::errors.confirmed_invalid'),
-                        ExceptionInterface::CONFIRMED_INVALID
-                    );
-                }
+        return app(LockServiceLegacy::class)->lock($this, fn () => app(DatabaseServiceInterface::class)->transaction(function () use ($transaction) {
+            if ($transaction->confirmed) {
+                throw new ConfirmedInvalid(
+                    app(TranslatorServiceInterface::class)->get('wallet::errors.confirmed_invalid'),
+                    ExceptionInterface::CONFIRMED_INVALID
+                );
+            }
 
-                $wallet = app(CastServiceInterface::class)->getWallet($this);
-                if ($wallet->getKey() !== $transaction->wallet_id) {
-                    throw new WalletOwnerInvalid(
-                        app(TranslatorServiceInterface::class)->get('wallet::errors.owner_invalid'),
-                        ExceptionInterface::WALLET_OWNER_INVALID
-                    );
-                }
+            $wallet = app(CastServiceInterface::class)->getWallet($this);
+            if ($wallet->getKey() !== $transaction->wallet_id) {
+                throw new WalletOwnerInvalid(
+                    app(TranslatorServiceInterface::class)->get('wallet::errors.owner_invalid'),
+                    ExceptionInterface::WALLET_OWNER_INVALID
+                );
+            }
 
-                return $transaction->update(['confirmed' => true]) &&
-                    // update balance
-                    app(CommonServiceLegacy::class)
-                        ->addBalance($wallet, $transaction->amount)
-                    ;
-            });
-        });
+            return $transaction->update(['confirmed' => true]) &&
+                // update balance
+                app(CommonServiceLegacy::class)
+                    ->addBalance($wallet, $transaction->amount)
+                ;
+        }));
     }
 }

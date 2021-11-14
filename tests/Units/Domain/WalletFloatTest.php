@@ -185,8 +185,8 @@ class WalletFloatTest extends TestCase
         $user = UserFloatFactory::new()->create();
         self::assertSame(0, $user->balanceInt);
 
-        $user->deposit(1000000);
-        self::assertSame($user->balanceInt, 1000000);
+        $user->deposit(1_000_000);
+        self::assertSame($user->balanceInt, 1_000_000);
         self::assertSame((float) $user->balanceFloat, 10000.00);
 
         $transaction = $user->withdrawFloat(2556.72);
@@ -194,7 +194,7 @@ class WalletFloatTest extends TestCase
         self::assertSame((float) $transaction->amountFloat, -2556.72);
         self::assertSame($transaction->type, Transaction::TYPE_WITHDRAW);
 
-        self::assertSame($user->balanceInt, 1000000 - 255672);
+        self::assertSame($user->balanceInt, 1_000_000 - 255672);
         self::assertSame((float) $user->balanceFloat, 10000.00 - 2556.72);
 
         $transaction = $user->depositFloat(2556.72 * 2);
@@ -202,7 +202,7 @@ class WalletFloatTest extends TestCase
         self::assertSame((float) $transaction->amountFloat, 2556.72 * 2);
         self::assertSame($transaction->type, Transaction::TYPE_DEPOSIT);
 
-        self::assertSame($user->balanceInt, 1000000 + 255672);
+        self::assertSame($user->balanceInt, 1_000_000 + 255672);
         self::assertSame((float) $user->balanceFloat, 10000.00 + 2556.72);
     }
 
@@ -212,8 +212,8 @@ class WalletFloatTest extends TestCase
         $user = UserFloatFactory::new()->create();
         self::assertSame(0, $user->balanceInt);
 
-        $user->deposit(1000000);
-        self::assertSame(1000000, $user->balanceInt);
+        $user->deposit(1_000_000);
+        self::assertSame(1_000_000, $user->balanceInt);
         self::assertSame(10000.00, (float) $user->balanceFloat);
 
         $transaction = $user->withdrawFloat(2556.72);
@@ -230,7 +230,7 @@ class WalletFloatTest extends TestCase
         self::assertSame(2556.72, (float) $transaction->amountFloat);
         self::assertSame(Transaction::TYPE_DEPOSIT, $transaction->type);
 
-        self::assertSame($user->balanceInt, 1000000 + 255672);
+        self::assertSame($user->balanceInt, 1_000_000 + 255672);
         self::assertSame((float) $user->balanceFloat, 10000.00 + 2556.72);
     }
 
@@ -240,8 +240,8 @@ class WalletFloatTest extends TestCase
         $user = UserFloatFactory::new()->create();
         self::assertSame(0, $user->balanceInt);
 
-        $user->deposit(1000000);
-        self::assertSame(1000000, $user->balanceInt);
+        $user->deposit(1_000_000);
+        self::assertSame(1_000_000, $user->balanceInt);
         self::assertSame(10000.00, (float) $user->balanceFloat);
 
         $transaction = $user->withdrawFloat(0.2 + 0.1);
@@ -320,6 +320,6 @@ class WalletFloatTest extends TestCase
         $user->refresh();
 
         self::assertSame(0.09699977, (float) $user->balanceFloat);
-        self::assertSame(9699977, $user->balanceInt);
+        self::assertSame(9_699_977, $user->balanceInt);
     }
 }

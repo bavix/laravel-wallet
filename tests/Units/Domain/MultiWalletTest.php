@@ -519,7 +519,7 @@ class MultiWalletTest extends TestCase
         self::assertNotNull($user->wallet);
         self::assertSame($user->wallet->id, $wallet->id);
 
-        $user->deposit(1000000000);
+        $user->deposit(1_000_000_000);
         self::assertSame(1000., (float) $wallet->balanceFloat);
     }
 }

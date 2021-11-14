@@ -13,10 +13,7 @@ use Cknow\Money\Money;
  */
 class TransactionMoney extends \Bavix\Wallet\Models\Transaction
 {
-    /**
-     * @var Money
-     */
-    protected $currency;
+    protected ?\Cknow\Money\Money $currency = null;
 
     public function getCurrencyAttribute(): Money
     {

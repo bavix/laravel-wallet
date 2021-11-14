@@ -184,10 +184,6 @@ class CartTest extends TestCase
      */
     public function testModelNotFoundException(): void
     {
-        /**
-         * @var Buyer  $buyer
-         * @var Item[] $products
-         */
         $this->expectException(ModelNotFoundException::class);
         $this->expectExceptionCode(ExceptionInterface::MODEL_NOT_FOUND);
         $buyer = BuyerFactory::new()->create();

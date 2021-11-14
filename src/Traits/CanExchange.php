@@ -49,35 +49,33 @@ trait CanExchange
      */
     public function forceExchange(Wallet $to, $amount, ?array $meta = null): Transfer
     {
-        return app(LockServiceLegacy::class)->lock($this, function () use ($to, $amount, $meta) {
-            return app(DatabaseServiceInterface::class)->transaction(function () use ($to, $amount, $meta) {
-                $prepareService = app(PrepareServiceInterface::class);
-                $mathService = app(MathServiceInterface::class);
-                $castService = app(CastServiceInterface::class);
-                $taxService = app(TaxServiceInterface::class);
-                $fee = $taxService->getFee($to, $amount);
-                $rate = app(ExchangeServiceInterface::class)->convertTo(
-                    $castService->getWallet($this)->currency,
-                    $castService->getWallet($to)->currency,
-                    1
-                );
+        return app(LockServiceLegacy::class)->lock($this, fn () => app(DatabaseServiceInterface::class)->transaction(function () use ($to, $amount, $meta) {
+            $prepareService = app(PrepareServiceInterface::class);
+            $mathService = app(MathServiceInterface::class);
+            $castService = app(CastServiceInterface::class);
+            $taxService = app(TaxServiceInterface::class);
+            $fee = $taxService->getFee($to, $amount);
+            $rate = app(ExchangeServiceInterface::class)->convertTo(
+                $castService->getWallet($this)->currency,
+                $castService->getWallet($to)->currency,
+                1
+            );
 
-                $withdrawDto = $prepareService->withdraw($this, $mathService->add($amount, $fee), $meta);
-                $depositDto = $prepareService->deposit($to, $mathService->floor($mathService->mul($amount, $rate, 1)), $meta);
-                $transferLazyDto = app(TransferLazyDtoAssemblerInterface::class)->create(
-                    $this,
-                    $to,
-                    0,
-                    $fee,
-                    $withdrawDto,
-                    $depositDto,
-                    Transfer::STATUS_EXCHANGE,
-                );
+            $withdrawDto = $prepareService->withdraw($this, $mathService->add($amount, $fee), $meta);
+            $depositDto = $prepareService->deposit($to, $mathService->floor($mathService->mul($amount, $rate, 1)), $meta);
+            $transferLazyDto = app(TransferLazyDtoAssemblerInterface::class)->create(
+                $this,
+                $to,
+                0,
+                $fee,
+                $withdrawDto,
+                $depositDto,
+                Transfer::STATUS_EXCHANGE,
+            );
 
-                $transfers = app(CommonServiceLegacy::class)->applyTransfers([$transferLazyDto]);
+            $transfers = app(CommonServiceLegacy::class)->applyTransfers([$transferLazyDto]);
 
-                return current($transfers);
-            });
-        });
+            return current($transfers);
+        }));
     }
 }

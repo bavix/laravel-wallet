@@ -44,11 +44,8 @@ trait HasWallet
      */
     public function deposit($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
-        return app(DatabaseServiceInterface::class)->transaction(function () use ($amount, $meta, $confirmed) {
-            return app(CommonServiceLegacy::class)
-                ->makeTransaction($this, Transaction::TYPE_DEPOSIT, $amount, $meta, $confirmed)
-            ;
-        });
+        return app(DatabaseServiceInterface::class)->transaction(fn () => app(CommonServiceLegacy::class)
+            ->makeTransaction($this, Transaction::TYPE_DEPOSIT, $amount, $meta, $confirmed));
     }
 
     /**
@@ -183,11 +180,8 @@ trait HasWallet
         /** @var Wallet $self */
         $self = $this;
 
-        return app(DatabaseServiceInterface::class)->transaction(static function () use ($self, $amount, $meta, $confirmed) {
-            return app(CommonServiceLegacy::class)
-                ->makeTransaction($self, Transaction::TYPE_WITHDRAW, $amount, $meta, $confirmed)
-            ;
-        });
+        return app(DatabaseServiceInterface::class)->transaction(static fn () => app(CommonServiceLegacy::class)
+            ->makeTransaction($self, Transaction::TYPE_WITHDRAW, $amount, $meta, $confirmed));
     }
 
     /**
@@ -204,11 +198,8 @@ trait HasWallet
         /** @var Wallet $self */
         $self = $this;
 
-        return app(DatabaseServiceInterface::class)->transaction(static function () use ($self, $amount, $wallet, $meta) {
-            return app(CommonServiceLegacy::class)
-                ->forceTransfer($self, $wallet, $amount, $meta)
-            ;
-        });
+        return app(DatabaseServiceInterface::class)->transaction(static fn () => app(CommonServiceLegacy::class)
+            ->forceTransfer($self, $wallet, $amount, $meta));
     }
 
     /**
