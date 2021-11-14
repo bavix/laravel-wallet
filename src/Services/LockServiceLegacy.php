@@ -7,7 +7,6 @@ namespace Bavix\Wallet\Services;
 use Bavix\Wallet\Internal\Service\LockServiceInterface;
 use Closure;
 use function get_class;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * @deprecated
@@ -25,10 +24,16 @@ final class LockServiceLegacy
     /**
      * @return mixed
      */
-    public function lock(Model $self, Closure $closure)
+    public function lock(object $self, Closure $closure)
     {
+        assert(method_exists($self, 'getKey'));
+        $key = $self->getKey();
+        if (method_exists($self, 'getUuid')) {
+            $key = $self->getUuid();
+        }
+
         return $this->lockService->block(
-            'legacy_'.get_class($self).$self->getKey(),
+            'legacy_'.get_class($self).$key,
             $closure
         );
     }

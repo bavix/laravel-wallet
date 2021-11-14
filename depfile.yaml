@@ -10,18 +10,45 @@ layers:
   - name: UI
     collectors:
       - type: className
-        regex: ^Bavix\\.*Traits.*
+        regex: ^Bavix\\.*\\Traits\\.*
+
+  # internal
+  - name: AssemblerDto
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*\\Internal\\Assembler\\.*DtoAssembler$
+
+  - name: AssemblerDtoInterface
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*\\Internal\\Assembler\\.*DtoAssemblerInterface$
+
+  - name: RepositoryInterface
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Internal\\Repository\\.*RepositoryInterface$
 
   - name: Repository
     collectors:
       - type: className
         regex: ^Bavix\\.*Internal\\Repository\\.*Repository$
 
+  - name: Transform
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Internal\\Transform\\.*DtoTransformer$
+
+  - name: TransformInterface
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Internal\\Transform\\.*DtoTransformerInterface$
+
   - name: Infra
     collectors:
       - type: className
         regex: ^Bavix\\.*Internal\\Service\\.*Service$
 
+  # contracts
   - name: Service
     collectors:
       - type: className
@@ -34,6 +61,7 @@ layers:
       - type: className
         regex: ^Bavix\\.*Services\\.*ServiceInterface$
 
+  # framework
   - name: ModelNotFoundException
     collectors:
       - type: className
@@ -56,6 +84,7 @@ layers:
 
 ruleset:
   UI:
+    - AssemblerDtoInterface # delete as soon as possible
     - ModelNotFoundException
     - ServiceInterface
     - Legacy # delete as soon as possible
@@ -63,13 +92,25 @@ ruleset:
     - ServiceInterface
     - Config
     - Cache
-    - Legacy
   ServiceInterface:
     - EloquentModel
+  Transform:
+    - TransformInterface
+    - Infra
+  Repository:
+    - RepositoryInterface
+    - TransformInterface
   Service:
+    - AssemblerDtoInterface
+    - RepositoryInterface
     - ServiceInterface
-    - Repository
     - EloquentModel
   Legacy:
+    - AssemblerDtoInterface
+    - ServiceInterface
+  AssemblerDtoInterface:
+    - EloquentModel
+  AssemblerDto:
+    - AssemblerDtoInterface
     - ServiceInterface
     - EloquentModel

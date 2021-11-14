@@ -21,8 +21,9 @@ use Bavix\Wallet\Services\AtmServiceInterface;
 use Bavix\Wallet\Services\CastServiceInterface;
 use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
+use Bavix\Wallet\Services\DiscountServiceInterface;
 use Bavix\Wallet\Services\LockServiceLegacy;
-use Bavix\Wallet\Services\WalletServiceLegacy;
+use Bavix\Wallet\Services\TaxServiceInterface;
 use Throwable;
 
 /**
@@ -68,13 +69,13 @@ trait HasGift
              * That's why I address him like this!
              */
             return app(DatabaseServiceInterface::class)->transaction(static function () use ($santa, $to, $product, $force): Transfer {
-                $math = app(MathServiceInterface::class);
-                $discount = app(WalletServiceLegacy::class)->discount($santa, $product);
-                $amount = $math->sub($product->getAmountProduct($santa), $discount);
+                $mathService = app(MathServiceInterface::class);
+                $discountService = app(DiscountServiceInterface::class);
+                $taxService = app(TaxServiceInterface::class);
+                $discount = $discountService->getDiscount($santa, $product);
+                $amount = $mathService->sub($product->getAmountProduct($santa), $discount);
                 $meta = $product->getMetaProduct();
-                $fee = app(WalletServiceLegacy::class)
-                    ->fee($product, $amount)
-                ;
+                $fee = $taxService->getFee($product, $amount);
 
                 $commonService = app(CommonServiceLegacy::class);
 
@@ -82,10 +83,10 @@ trait HasGift
                  * Santa pays taxes.
                  */
                 if (!$force) {
-                    app(ConsistencyServiceInterface::class)->checkPotential($santa, $math->add($amount, $fee));
+                    app(ConsistencyServiceInterface::class)->checkPotential($santa, $mathService->add($amount, $fee));
                 }
 
-                $withdraw = $commonService->makeTransaction($santa, Transaction::TYPE_WITHDRAW, $math->add($amount, $fee), $meta);
+                $withdraw = $commonService->makeTransaction($santa, Transaction::TYPE_WITHDRAW, $mathService->add($amount, $fee), $meta);
                 $deposit = $commonService->makeTransaction($product, Transaction::TYPE_DEPOSIT, $amount, $meta);
 
                 $castService = app(CastServiceInterface::class);

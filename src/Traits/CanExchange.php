@@ -9,14 +9,14 @@ use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
-use Bavix\Wallet\Internal\Service\PrepareServiceInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\CastServiceInterface;
 use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
 use Bavix\Wallet\Services\ExchangeServiceInterface;
 use Bavix\Wallet\Services\LockServiceLegacy;
-use Bavix\Wallet\Services\WalletServiceLegacy;
+use Bavix\Wallet\Services\PrepareServiceInterface;
+use Bavix\Wallet\Services\TaxServiceInterface;
 
 trait CanExchange
 {
@@ -54,7 +54,8 @@ trait CanExchange
                 $prepareService = app(PrepareServiceInterface::class);
                 $mathService = app(MathServiceInterface::class);
                 $castService = app(CastServiceInterface::class);
-                $fee = app(WalletServiceLegacy::class)->fee($to, $amount);
+                $taxService = app(TaxServiceInterface::class);
+                $fee = $taxService->getFee($to, $amount);
                 $rate = app(ExchangeServiceInterface::class)->convertTo(
                     $castService->getWallet($this)->currency,
                     $castService->getWallet($to)->currency,

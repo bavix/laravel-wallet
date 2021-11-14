@@ -9,7 +9,8 @@ namespace PHPSTORM_META {
     use Bavix\Wallet\Internal\Repository\TransferRepositoryInterface;
     use Bavix\Wallet\Services\CastServiceInterface;
     use Bavix\Wallet\Internal\Service\JsonServiceInterface;
-    use Bavix\Wallet\Internal\Service\PrepareServiceInterface;
+    use Bavix\Wallet\Services\DiscountServiceInterface;
+    use Bavix\Wallet\Services\PrepareServiceInterface;
     use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
     use Bavix\Wallet\Internal\Transform\TransferDtoTransformerInterface;
     use Bavix\Wallet\Models\Transaction;
@@ -33,6 +34,7 @@ namespace PHPSTORM_META {
     use Bavix\Wallet\Services\CommonServiceLegacy;
     use Bavix\Wallet\Services\LockServiceLegacy;
     use Bavix\Wallet\Services\MetaServiceLegacy;
+    use Bavix\Wallet\Services\TaxServiceInterface;
     use Bavix\Wallet\Services\WalletServiceLegacy;
 
     override(\app(0), map([
@@ -50,7 +52,6 @@ namespace PHPSTORM_META {
         JsonServiceInterface::class => JsonServiceInterface::class,
         LockServiceInterface::class => LockServiceInterface::class,
         MathServiceInterface::class => MathServiceInterface::class,
-        PrepareServiceInterface::class => PrepareServiceInterface::class,
         StorageServiceInterface::class => StorageServiceInterface::class,
         TranslatorServiceInterface::class => TranslatorServiceInterface::class,
         UuidServiceInterface::class => UuidServiceInterface::class,
@@ -74,8 +75,11 @@ namespace PHPSTORM_META {
         BookkeeperServiceInterface::class => BookkeeperServiceInterface::class,
         CastServiceInterface::class => CastServiceInterface::class,
         ConsistencyServiceInterface::class => ConsistencyServiceInterface::class,
+        DiscountServiceInterface::class => DiscountServiceInterface::class,
         ExchangeServiceInterface::class => ExchangeServiceInterface::class,
+        PrepareServiceInterface::class => PrepareServiceInterface::class,
         PurchaseServiceInterface::class => PurchaseServiceInterface::class,
+        TaxServiceInterface::class => TaxServiceInterface::class,
 
         // lagacy.services
         CommonServiceLegacy::class => CommonServiceLegacy::class,

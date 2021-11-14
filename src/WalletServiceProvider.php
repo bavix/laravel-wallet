@@ -22,8 +22,6 @@ use Bavix\Wallet\Internal\Service\LockService as NewLockService;
 use Bavix\Wallet\Internal\Service\LockServiceInterface;
 use Bavix\Wallet\Internal\Service\MathService;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
-use Bavix\Wallet\Internal\Service\PrepareService;
-use Bavix\Wallet\Internal\Service\PrepareServiceInterface;
 use Bavix\Wallet\Internal\Service\StorageService;
 use Bavix\Wallet\Internal\Service\StorageServiceInterface;
 use Bavix\Wallet\Internal\Service\TranslatorService;
@@ -50,12 +48,18 @@ use Bavix\Wallet\Services\CastServiceInterface;
 use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\ConsistencyService;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
+use Bavix\Wallet\Services\DiscountService;
+use Bavix\Wallet\Services\DiscountServiceInterface;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\ExchangeServiceInterface;
 use Bavix\Wallet\Services\LockServiceLegacy;
 use Bavix\Wallet\Services\MetaServiceLegacy;
+use Bavix\Wallet\Services\PrepareService;
+use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\PurchaseService;
 use Bavix\Wallet\Services\PurchaseServiceInterface;
+use Bavix\Wallet\Services\TaxService;
+use Bavix\Wallet\Services\TaxServiceInterface;
 use Bavix\Wallet\Services\WalletServiceLegacy;
 use function config;
 use function dirname;
@@ -145,7 +149,6 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(JsonServiceInterface::class, $configure['json'] ?? JsonService::class);
         $this->app->singleton(LockServiceInterface::class, $configure['lock'] ?? NewLockService::class);
         $this->app->singleton(MathServiceInterface::class, $configure['math'] ?? MathService::class);
-        $this->app->singleton(PrepareServiceInterface::class, $configure['prepare'] ?? PrepareService::class);
         $this->app->singleton(StorageServiceInterface::class, $configure['storage'] ?? StorageService::class);
         $this->app->singleton(TranslatorServiceInterface::class, $configure['translator'] ?? TranslatorService::class);
         $this->app->singleton(UuidServiceInterface::class, $configure['uuid'] ?? UuidService::class);
@@ -159,8 +162,11 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(BookkeeperServiceInterface::class, $configure['bookkeeper'] ?? BookkeeperService::class);
         $this->app->singleton(CastServiceInterface::class, $configure['cast'] ?? CastService::class);
         $this->app->singleton(ConsistencyServiceInterface::class, $configure['consistency'] ?? ConsistencyService::class);
+        $this->app->singleton(DiscountServiceInterface::class, $configure['discount'] ?? DiscountService::class);
         $this->app->singleton(ExchangeServiceInterface::class, $configure['exchange'] ?? ExchangeService::class);
+        $this->app->singleton(PrepareServiceInterface::class, $configure['prepare'] ?? PrepareService::class);
         $this->app->singleton(PurchaseServiceInterface::class, $configure['purchase'] ?? PurchaseService::class);
+        $this->app->singleton(TaxServiceInterface::class, $configure['tax'] ?? TaxService::class);
     }
 
     private function assemblers(array $configure): void

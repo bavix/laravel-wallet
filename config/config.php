@@ -11,7 +11,6 @@ use Bavix\Wallet\Internal\Service\DatabaseService;
 use Bavix\Wallet\Internal\Service\JsonService;
 use Bavix\Wallet\Internal\Service\LockService;
 use Bavix\Wallet\Internal\Service\MathService;
-use Bavix\Wallet\Internal\Service\PrepareService;
 use Bavix\Wallet\Internal\Service\StorageService;
 use Bavix\Wallet\Internal\Service\TranslatorService;
 use Bavix\Wallet\Internal\Service\UuidService;
@@ -26,8 +25,11 @@ use Bavix\Wallet\Services\BasketService;
 use Bavix\Wallet\Services\BookkeeperService;
 use Bavix\Wallet\Services\CastService;
 use Bavix\Wallet\Services\ConsistencyService;
+use Bavix\Wallet\Services\DiscountService;
 use Bavix\Wallet\Services\ExchangeService;
+use Bavix\Wallet\Services\PrepareService;
 use Bavix\Wallet\Services\PurchaseService;
+use Bavix\Wallet\Services\TaxService;
 
 return [
     /**
@@ -58,7 +60,6 @@ return [
         'json' => JsonService::class,
         'lock' => LockService::class,
         'math' => MathService::class,
-        'prepare' => PrepareService::class,
         'storage' => StorageService::class,
         'translator' => TranslatorService::class,
         'uuid' => UuidService::class,
@@ -74,8 +75,11 @@ return [
         'bookkeeper' => BookkeeperService::class,
         'cast' => CastService::class,
         'consistency' => ConsistencyService::class,
+        'discount' => DiscountService::class,
         'exchange' => ExchangeService::class,
+        'prepare' => PrepareService::class,
         'purchase' => PurchaseService::class,
+        'tax' => TaxService::class,
     ],
 
     /**

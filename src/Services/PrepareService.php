@@ -2,41 +2,42 @@
 
 declare(strict_types=1);
 
-namespace Bavix\Wallet\Internal\Service;
+namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Dto\TransferLazyDto;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transaction;
-use Bavix\Wallet\Services\CastServiceInterface;
-use Bavix\Wallet\Services\ConsistencyServiceInterface;
-use Bavix\Wallet\Services\WalletServiceLegacy;
 
 final class PrepareService implements PrepareServiceInterface
 {
     private TransferLazyDtoAssemblerInterface $transferLazyDtoAssembler;
     private TransactionDtoAssemblerInterface $transactionDtoAssembler;
+    private DiscountServiceInterface $personalDiscountService;
     private ConsistencyServiceInterface $consistencyService;
-    private WalletServiceLegacy $walletService;
     private CastServiceInterface $castService;
     private MathServiceInterface $mathService;
+    private TaxServiceInterface $taxService;
 
     public function __construct(
         TransferLazyDtoAssemblerInterface $transferLazyDtoAssembler,
         TransactionDtoAssemblerInterface $transactionDtoAssembler,
+        DiscountServiceInterface $personalDiscountService,
         ConsistencyServiceInterface $consistencyService,
-        WalletServiceLegacy $walletService,
         CastServiceInterface $castService,
-        MathServiceInterface $mathService
+        MathServiceInterface $mathService,
+        TaxServiceInterface $taxService
     ) {
         $this->transferLazyDtoAssembler = $transferLazyDtoAssembler;
         $this->transactionDtoAssembler = $transactionDtoAssembler;
+        $this->personalDiscountService = $personalDiscountService;
         $this->consistencyService = $consistencyService;
-        $this->walletService = $walletService;
         $this->castService = $castService;
         $this->mathService = $mathService;
+        $this->taxService = $taxService;
     }
 
     public function deposit(Wallet $wallet, string $amount, ?array $meta, bool $confirmed = true): TransactionDto
@@ -72,9 +73,9 @@ final class PrepareService implements PrepareServiceInterface
      */
     public function transferLazy(Wallet $from, Wallet $to, string $status, $amount, ?array $meta = null): TransferLazyDto
     {
-        $discount = $this->walletService->discount($from, $to);
+        $discount = $this->personalDiscountService->getDiscount($from, $to);
         $from = $this->castService->getWallet($from);
-        $fee = $this->walletService->fee($to, $amount);
+        $fee = $this->taxService->getFee($to, $amount);
 
         $amountWithoutDiscount = $this->mathService->sub($amount, $discount);
         $depositAmount = $this->mathService->compare($amountWithoutDiscount, 0) === -1 ? '0' : $amountWithoutDiscount;
