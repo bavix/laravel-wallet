@@ -27,13 +27,9 @@ final class LockServiceLegacy
     public function lock(object $self, Closure $closure)
     {
         assert(method_exists($self, 'getKey'));
-        $key = $self->getKey();
-        if (method_exists($self, 'getUuid')) {
-            $key = $self->getUuid();
-        }
 
         return $this->lockService->block(
-            'legacy_'.get_class($self).$key,
+            'legacy_'.get_class($self).$self->getKey(),
             $closure
         );
     }
