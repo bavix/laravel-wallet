@@ -29,8 +29,11 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property Wallet      $payable
  * @property WalletModel $wallet
  */
-class Transaction extends Model implements TransactionInterface
+class Transaction extends Model
 {
+    public const TYPE_DEPOSIT = 'deposit';
+    public const TYPE_WITHDRAW = 'withdraw';
+
     /**
      * @var string[]
      */
