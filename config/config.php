@@ -22,7 +22,7 @@ use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\AssistantService;
 use Bavix\Wallet\Services\AtmService;
-use Bavix\Wallet\Services\AtomicKeyService;
+use Bavix\Wallet\Services\AtomicService;
 use Bavix\Wallet\Services\BasketService;
 use Bavix\Wallet\Services\BookkeeperService;
 use Bavix\Wallet\Services\CastService;
@@ -73,7 +73,7 @@ return [
     'services' => [
         'assistant' => AssistantService::class,
         'atm' => AtmService::class,
-        'key' => AtomicKeyService::class,
+        'atomic' => AtomicService::class,
         'basket' => BasketService::class,
         'bookkeeper' => BookkeeperService::class,
         'cast' => CastService::class,

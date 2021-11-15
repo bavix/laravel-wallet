@@ -14,12 +14,11 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
-use Bavix\Wallet\Internal\Service\LockServiceInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\AtmServiceInterface;
-use Bavix\Wallet\Services\AtomicKeyServiceInterface;
+use Bavix\Wallet\Services\AtomicServiceInterface;
 use Bavix\Wallet\Services\CastServiceInterface;
 use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
@@ -56,11 +55,7 @@ trait HasGift
      */
     public function gift(Wallet $to, Product $product, bool $force = false): Transfer
     {
-        $atomicKey = app(AtomicKeyServiceInterface::class)
-            ->getIdentifier($this)
-        ;
-
-        return app(LockServiceInterface::class)->block($atomicKey, function () use ($to, $product, $force): Transfer {
+        return app(AtomicServiceInterface::class)->block($this, function () use ($to, $product, $force): Transfer {
             /**
              * Who's giving? Let's call him Santa Claus.
              *
