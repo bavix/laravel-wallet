@@ -59,6 +59,15 @@ layers:
         regex: ^Bavix\\.*Internal\\Service\\.*Service$
 
   # contracts
+  - name: Model
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Models\\Transaction$
+      - type: className
+        regex: ^Bavix\\.*Models\\Transfer$
+      - type: className
+        regex: ^Bavix\\.*Models\\Wallet$
+
   - name: Service
     collectors:
       - type: className
@@ -97,6 +106,7 @@ ruleset:
     - AssemblerDtoInterface # delete as soon as possible
     - ModelNotFoundException
     - ServiceInterface
+    - Model
     - Legacy # delete as soon as possible
 
   Infra:
@@ -107,6 +117,13 @@ ruleset:
   Dto:
     - DtoInterface
 
+  Model:
+    - AssemblerDtoInterface
+    - ServiceInterface
+    - EloquentModel
+    - Legacy
+    - UI
+
   TransformInterface:
     - DtoInterface
   Transform:
@@ -116,20 +133,24 @@ ruleset:
 
   RepositoryInterface:
     - DtoInterface
+    - Model
   Repository:
     - RepositoryInterface
     - TransformInterface
     - DtoInterface
+    - Model
 
   ServiceInterface:
     - EloquentModel
     - DtoInterface
+    - Model
   Service:
     - AssemblerDtoInterface
     - RepositoryInterface
     - ServiceInterface
     - EloquentModel
     - DtoInterface
+    - Model
 
   AssemblerDtoInterface:
     - EloquentModel
@@ -145,3 +166,4 @@ ruleset:
     - AssemblerDtoInterface
     - ServiceInterface
     - DtoInterface
+    - Model
