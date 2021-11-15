@@ -7,6 +7,11 @@ layers:
       - type: className
         regex: ^Bavix\\.*Legacy$
 
+  - name: Contract
+    collectors:
+      - type: className
+        regex: ^Bavix\\Wallet\\Interfaces\\.*
+
   - name: UI
     collectors:
       - type: className
@@ -109,11 +114,18 @@ layers:
         regex: ^Illuminate\\Contracts\\Cache\\Repository$
 
 ruleset:
+  Contract:
+    - InternalException
+    - DtoInterface
+    - UIException
+    - Model
+
   UI:
     - AssemblerDtoInterface # delete as soon as possible
     - InternalException
     - ServiceInterface
     - UIException
+    - Contract
     - Model
     - Legacy # delete as soon as possible
 
@@ -126,8 +138,11 @@ ruleset:
     - Config
     - Cache
 
+  DtoInterface:
+    - Contract
   Dto:
     - DtoInterface
+    - Contract
 
   Model:
     - AssemblerDtoInterface
@@ -135,6 +150,7 @@ ruleset:
     - ServiceInterface
     - EloquentModel
     - UIException
+    - Contract
     - Legacy
     - UI
 
@@ -159,6 +175,7 @@ ruleset:
     - EloquentModel
     - DtoInterface
     - UIException
+    - Contract
     - Model
   Service:
     - AssemblerDtoInterface
@@ -168,16 +185,19 @@ ruleset:
     - EloquentModel
     - DtoInterface
     - UIException
+    - Contract
     - Model
 
   AssemblerDtoInterface:
     - EloquentModel
     - DtoInterface
+    - Contract
   AssemblerDto:
     - AssemblerDtoInterface
     - ServiceInterface
     - EloquentModel
     - DtoInterface
+    - Contract
     - Dto
 
   Legacy:
@@ -185,4 +205,5 @@ ruleset:
     - ServiceInterface
     - DtoInterface
     - UIException
+    - Contract
     - Model

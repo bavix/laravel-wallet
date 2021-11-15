@@ -9,6 +9,7 @@ use Bavix\Wallet\Interfaces\CartInterface;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Internal\Dto\BasketDto;
+use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
 use Bavix\Wallet\Internal\Dto\ItemDto;
 use Bavix\Wallet\Internal\Exceptions\CartEmptyException;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
@@ -113,7 +114,7 @@ final class Cart implements Countable, CartInterface
     /**
      * @throws CartEmptyException
      */
-    public function getBasketDto(): BasketDto
+    public function getBasketDto(): BasketDtoInterface
     {
         $items = array_map(
             fn (Product $product): ItemDto => new ItemDto($product, $this->getQuantity($product)),
