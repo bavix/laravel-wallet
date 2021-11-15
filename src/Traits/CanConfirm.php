@@ -34,7 +34,7 @@ trait CanConfirm
             if ($transaction->type === Transaction::TYPE_WITHDRAW) {
                 app(ConsistencyServiceInterface::class)->checkPotential(
                     app(CastServiceInterface::class)->getWallet($this),
-                    app(MathServiceInterface::class)->abs($transaction->amount)
+                    app(MathServiceInterface::class)->negative($transaction->amount)
                 );
             }
 
