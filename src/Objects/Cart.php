@@ -11,10 +11,11 @@ use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Internal\Dto\BasketDto;
 use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
 use Bavix\Wallet\Internal\Dto\ItemDto;
+use Bavix\Wallet\Internal\Dto\ItemDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\CartEmptyException;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
-use Bavix\Wallet\Services\CastService;
+use Bavix\Wallet\Services\CastServiceInterface;
 use function count;
 use Countable;
 use function get_class;
@@ -31,12 +32,12 @@ final class Cart implements Countable, CartInterface
 
     private array $meta = [];
 
-    private CastService $castService;
+    private CastServiceInterface $castService;
 
     private MathServiceInterface $math;
 
     public function __construct(
-        CastService $castService,
+        CastServiceInterface $castService,
         MathServiceInterface $math
     ) {
         $this->castService = $castService;
@@ -117,7 +118,7 @@ final class Cart implements Countable, CartInterface
     public function getBasketDto(): BasketDtoInterface
     {
         $items = array_map(
-            fn (Product $product): ItemDto => new ItemDto($product, $this->getQuantity($product)),
+            fn (Product $product): ItemDtoInterface => new ItemDto($product, $this->getQuantity($product)),
             $this->getUniqueItems()
         );
 

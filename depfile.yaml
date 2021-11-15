@@ -6,6 +6,8 @@ layers:
     collectors:
       - type: className
         regex: ^Bavix\\.*Legacy$
+      - type: className
+        regex: ^Bavix\\.*\\Objects\\Cart$
 
   - name: Contract
     collectors:
@@ -202,8 +204,10 @@ ruleset:
 
   Legacy:
     - AssemblerDtoInterface
+    - InternalException
     - ServiceInterface
     - DtoInterface
     - UIException
     - Contract
     - Model
+    - Dto # Cart from objects
