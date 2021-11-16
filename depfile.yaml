@@ -207,15 +207,13 @@ ruleset:
     - Model
 
   AssemblerDtoInterface:
-    - QueryInterface
     - EloquentModel
     - DtoInterface
     - Contract
   AssemblerDto:
     - AssemblerDtoInterface
     - QueryInterface
-    - Query
-    - ServiceInterface
+    - ServiceInterface # UUID
     - EloquentModel
     - DtoInterface
     - Contract
