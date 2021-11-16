@@ -15,19 +15,75 @@ use Illuminate\Database\RecordsNotFoundException;
 
 interface Customer extends Wallet
 {
-    public function pay(Product $product, bool $force = false): Transfer;
+    /**
+     * @throws ProductEnded
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
+     */
+    public function payFree(Product $product): Transfer;
 
     public function safePay(Product $product, bool $force = false): ?Transfer;
 
+    /**
+     * @throws ProductEnded
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
+     */
+    public function pay(Product $product, bool $force = false): Transfer;
+
+    /**
+     * @throws ProductEnded
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
+     */
     public function forcePay(Product $product): Transfer;
-
-    public function paid(Product $product, bool $gifts = false): ?Transfer;
-
-    public function refund(Product $product, bool $force = false, bool $gifts = false): bool;
 
     public function safeRefund(Product $product, bool $force = false, bool $gifts = false): bool;
 
+    /**
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
+     */
+    public function refund(Product $product, bool $force = false, bool $gifts = false): bool;
+
+    /**
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
+     */
     public function forceRefund(Product $product, bool $gifts = false): bool;
+
+    public function safeRefundGift(Product $product, bool $force = false): bool;
+
+    /**
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
+     */
+    public function refundGift(Product $product, bool $force = false): bool;
+
+    /**
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
+     */
+    public function forceRefundGift(Product $product): bool;
 
     /**
      * @throws ProductEnded
@@ -41,6 +97,9 @@ interface Customer extends Wallet
      */
     public function payFreeCart(CartInterface $cart): array;
 
+    /** @return Transfer[] */
+    public function safePayCart(CartInterface $cart, bool $force = false): array;
+
     /**
      * @throws ProductEnded
      * @throws BalanceIsEmpty
@@ -53,9 +112,6 @@ interface Customer extends Wallet
      */
     public function payCart(CartInterface $cart, bool $force = false): array;
 
-    /** @return Transfer[] */
-    public function safePayCart(CartInterface $cart, bool $force = false): array;
-
     /**
      * @throws ProductEnded
      * @throws RecordsNotFoundException
@@ -65,6 +121,8 @@ interface Customer extends Wallet
      * @return non-empty-array<Transfer>
      */
     public function forcePayCart(CartInterface $cart): array;
+
+    public function safeRefundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool;
 
     /**
      * @throws BalanceIsEmpty
@@ -76,8 +134,6 @@ interface Customer extends Wallet
      */
     public function refundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool;
 
-    public function safeRefundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool;
-
     /**
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -85,6 +141,8 @@ interface Customer extends Wallet
      * @throws ExceptionInterface
      */
     public function forceRefundCart(CartInterface $cart, bool $gifts = false): bool;
+
+    public function safeRefundGiftCart(CartInterface $cart, bool $force = false): bool;
 
     /**
      * @throws BalanceIsEmpty
@@ -103,4 +161,6 @@ interface Customer extends Wallet
      * @throws ExceptionInterface
      */
     public function forceRefundGiftCart(CartInterface $cart): bool;
+
+    public function paid(Product $product, bool $gifts = false): ?Transfer;
 }
