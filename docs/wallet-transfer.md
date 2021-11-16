@@ -34,9 +34,8 @@ $first->getKey() !== $last->getKey(); // true
 
 Create new wallets for users.
 ```php
-$name = 'New Wallet';
-$firstWallet = $first->createWallet(compact('name'));
-$lastWallet = $last->createWallet(compact('name'));
+$firstWallet = $first->createWallet(['name' => 'First User Wallet']);
+$lastWallet = $last->createWallet(['name' => 'Second User Wallet']);
 
 $firstWallet->deposit(100);
 $firstWallet->balance; // 100

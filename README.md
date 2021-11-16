@@ -59,7 +59,7 @@ Now we make transactions.
 
 ```php
 $user = User::first();
-$user->balance; // 0
+$user->balanceInt; // 0
 
 $user->deposit(10);
 $user->balance; // 10
@@ -115,11 +115,6 @@ class Item extends Model implements Product
             'title' => $this->title, 
             'description' => 'Purchase of Product #' . $this->id,
         ];
-    }
-    
-    public function getUniqueId(): string
-    {
-        return (string)$this->getKey();
     }
 }
 ```

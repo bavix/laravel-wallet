@@ -14,6 +14,8 @@ class UserConfirm extends Model implements Wallet, Confirmable
 }
 ```
 
+> You can only confirm the transaction with the wallet you paid with.
+
 ### Example:
 
 Sometimes you need to create an operation and confirm its field. 

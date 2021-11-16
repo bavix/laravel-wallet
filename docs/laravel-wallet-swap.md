@@ -25,11 +25,26 @@ class User extends Model implements Wallet
 ```
 
 ### Simple example
+Let's create wallets with currency:
+```php
+$usd = $user->createWallet([
+    'name' => 'My Dollars',
+    'slug' => 'usd',
+    'meta' => ['currency' => 'USD'],
+]);
+
+$rub = $user->createWallet([
+    'name' => 'My Ruble',
+    'slug' => 'rub',
+    'meta' => ['currency' => 'RUB'],
+]);
+```
+
 Find wallets and exchange from one to another.
 
 ```php
-$usd = $user->getWallet('usd');
 $rub = $user->getWallet('rub');
+$usd = $user->getWallet('usd');
 
 $usd->balance; // 200
 $rub->balance; // 0

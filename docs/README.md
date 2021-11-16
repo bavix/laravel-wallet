@@ -1,7 +1,5 @@
 # Introduction
 
-How long does it take to add virtual cards to the project? Hah, we'll see.
-
 ---
 
 ![Laravel Wallet](https://user-images.githubusercontent.com/5111255/48687709-a7c2fa00-ebd3-11e8-8714-c4f3efe93f02.png)

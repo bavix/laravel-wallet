@@ -45,13 +45,8 @@ class Item extends Model implements Product
     {
         return [
             'title' => $this->title, 
-            'description' => 'Purchase of Product #' . $this->getUniqueId(), 
+            'description' => 'Purchase of Product #' . $this->getKey(), 
         ];
-    }
-    
-    public function getUniqueId(): string
-    {
-        return (string)$this->getKey();
     }
 }
 ```
@@ -86,6 +81,7 @@ foreach ($products as $product) {
 }
 
 $user->deposit($cart->getTotal());
+$user->balanceInt; // 15127
 $user->balanceFloat; // 151.27
 
 (bool)$user->payCart($cart); // true

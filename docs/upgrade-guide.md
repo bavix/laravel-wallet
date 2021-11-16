@@ -163,4 +163,6 @@ Your code on 6.x:
     'mathable' => BrickMath::class,
 ```
 
+## 6.x.x → 7.x.x
 
+TODO
