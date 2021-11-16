@@ -2,9 +2,12 @@
 
 namespace PHPSTORM_META {
 
+    use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssemblerInterface;
     use Bavix\Wallet\Internal\Assembler\TransactionDtoAssemblerInterface;
+    use Bavix\Wallet\Internal\Assembler\TransactionQueryAssemblerInterface;
     use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
     use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
+    use Bavix\Wallet\Internal\Assembler\TransferQueryAssemblerInterface;
     use Bavix\Wallet\Internal\Repository\TransactionRepositoryInterface;
     use Bavix\Wallet\Internal\Repository\TransferRepositoryInterface;
     use Bavix\Wallet\Services\AtomicService;
@@ -40,9 +43,13 @@ namespace PHPSTORM_META {
 
     override(\app(0), map([
         // internal.assembler
+        AvailabilityDtoAssemblerInterface::class => AvailabilityDtoAssemblerInterface::class,
         TransactionDtoAssemblerInterface::class => TransactionDtoAssemblerInterface::class,
         TransferDtoAssemblerInterface::class => TransferDtoAssemblerInterface::class,
         TransferLazyDtoAssemblerInterface::class => TransferLazyDtoAssemblerInterface::class,
+        // internal.query in assembler
+        TransactionQueryAssemblerInterface::class => TransactionQueryAssemblerInterface::class,
+        TransferQueryAssemblerInterface::class => TransferQueryAssemblerInterface::class,
 
         // internal.repositories
         TransactionRepositoryInterface::class => TransactionRepositoryInterface::class,

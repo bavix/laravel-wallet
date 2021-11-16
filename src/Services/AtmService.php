@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Internal\Assembler\TransactionQueryAssemblerInterface;
+use Bavix\Wallet\Internal\Assembler\TransferQueryAssemblerInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
-use Bavix\Wallet\Internal\Query\TransactionQuery;
-use Bavix\Wallet\Internal\Query\TransferQuery;
 use Bavix\Wallet\Internal\Repository\TransactionRepositoryInterface;
 use Bavix\Wallet\Internal\Repository\TransferRepositoryInterface;
 use Bavix\Wallet\Models\Transaction;
@@ -16,15 +16,21 @@ use Bavix\Wallet\Models\Transfer;
 /** @psalm-internal */
 final class AtmService implements AtmServiceInterface
 {
+    private TransactionQueryAssemblerInterface $transactionQueryAssembler;
+    private TransferQueryAssemblerInterface $transferQueryAssembler;
     private TransactionRepositoryInterface $transactionRepository;
     private TransferRepositoryInterface $transferRepository;
     private AssistantServiceInterface $assistantService;
 
     public function __construct(
+        TransactionQueryAssemblerInterface $transactionQueryAssembler,
+        TransferQueryAssemblerInterface $transferQueryAssembler,
         TransactionRepositoryInterface $transactionRepository,
         TransferRepositoryInterface $transferRepository,
         AssistantServiceInterface $assistantService
     ) {
+        $this->transactionQueryAssembler = $transactionQueryAssembler;
+        $this->transferQueryAssembler = $transferQueryAssembler;
         $this->transactionRepository = $transactionRepository;
         $this->transferRepository = $transferRepository;
         $this->assistantService = $assistantService;
@@ -39,8 +45,7 @@ final class AtmService implements AtmServiceInterface
     {
         $this->transactionRepository->insert($objects);
         $uuids = $this->assistantService->getUuids($objects);
-        $query = new TransactionQuery($uuids);
-
+        $query = $this->transactionQueryAssembler->create($uuids);
         $items = $this->transactionRepository->findBy($query);
         assert(count($items) > 0);
 
@@ -61,8 +66,7 @@ final class AtmService implements AtmServiceInterface
     {
         $this->transferRepository->insert($objects);
         $uuids = $this->assistantService->getUuids($objects);
-        $query = new TransferQuery($uuids);
-
+        $query = $this->transferQueryAssembler->create($uuids);
         $items = $this->transferRepository->findBy($query);
         assert(count($items) > 0);
 

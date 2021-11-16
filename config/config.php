@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\TransactionQueryAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\TransferQueryAssembler;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
 use Bavix\Wallet\Internal\Service\DatabaseService;
@@ -109,6 +111,8 @@ return [
         'transaction' => TransactionDtoAssembler::class,
         'transfer_lazy' => TransferLazyDtoAssembler::class,
         'transfer' => TransferDtoAssembler::class,
+        'transaction_query' => TransactionQueryAssembler::class,
+        'transfer_query' => TransferQueryAssembler::class,
     ],
 
     /**

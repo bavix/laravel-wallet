@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Internal\Query;
 
 /** @psalm-immutable */
-final class TransferQuery
+final class TransferQuery implements TransferQueryInterface
 {
     /** @var non-empty-array<int|string, string> */
     private array $uuids;

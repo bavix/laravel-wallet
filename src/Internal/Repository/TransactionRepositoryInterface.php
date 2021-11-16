@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Internal\Repository;
 
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
-use Bavix\Wallet\Internal\Query\TransactionQuery;
+use Bavix\Wallet\Internal\Query\TransactionQueryInterface;
 use Bavix\Wallet\Models\Transaction;
 
 interface TransactionRepositoryInterface
@@ -16,5 +16,5 @@ interface TransactionRepositoryInterface
     public function insert(array $objects): void;
 
     /** @return Transaction[] */
-    public function findBy(TransactionQuery $query): array;
+    public function findBy(TransactionQueryInterface $query): array;
 }

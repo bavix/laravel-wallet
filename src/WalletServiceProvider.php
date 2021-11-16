@@ -8,10 +8,14 @@ use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssemblerInterface;
+use Bavix\Wallet\Internal\Assembler\TransactionQueryAssembler;
+use Bavix\Wallet\Internal\Assembler\TransactionQueryAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
+use Bavix\Wallet\Internal\Assembler\TransferQueryAssembler;
+use Bavix\Wallet\Internal\Assembler\TransferQueryAssemblerInterface;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransactionRepositoryInterface;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
@@ -193,6 +197,16 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(
             TransferDtoAssemblerInterface::class,
             $configure['transfer'] ?? TransferDtoAssembler::class
+        );
+
+        $this->app->singleton(
+            TransactionQueryAssemblerInterface::class,
+            $configure['transaction_query'] ?? TransactionQueryAssembler::class
+        );
+
+        $this->app->singleton(
+            TransferQueryAssemblerInterface::class,
+            $configure['transfer_query'] ?? TransferQueryAssembler::class
         );
     }
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Internal\Repository;
 
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
-use Bavix\Wallet\Internal\Query\TransactionQuery;
+use Bavix\Wallet\Internal\Query\TransactionQueryInterface;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
 use Bavix\Wallet\Models\Transaction;
 
@@ -33,7 +33,7 @@ final class TransactionRepository implements TransactionRepositoryInterface
     }
 
     /** @return Transaction[] */
-    public function findBy(TransactionQuery $query): array
+    public function findBy(TransactionQueryInterface $query): array
     {
         return $this->transaction->newQuery()
             ->whereIn('uuid', $query->getUuids())

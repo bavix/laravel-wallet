@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Internal\Repository;
 
 use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
-use Bavix\Wallet\Internal\Query\TransferQuery;
+use Bavix\Wallet\Internal\Query\TransferQueryInterface;
 use Bavix\Wallet\Internal\Transform\TransferDtoTransformerInterface;
 use Bavix\Wallet\Models\Transfer;
 
@@ -33,7 +33,7 @@ final class TransferRepository implements TransferRepositoryInterface
     }
 
     /** @return Transfer[] */
-    public function findBy(TransferQuery $query): array
+    public function findBy(TransferQueryInterface $query): array
     {
         return $this->transfer->newQuery()
             ->whereIn('uuid', $query->getUuids())

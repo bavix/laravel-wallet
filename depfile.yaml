@@ -52,6 +52,16 @@ layers:
       - type: className
         regex: ^Bavix\\.*\\Internal\\Assembler\\.*DtoAssemblerInterface$
 
+  - name: QueryInterface
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Internal\\Query\\.*QueryInterface$
+
+  - name: Query
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Internal\\Query\\.*Query$
+
   - name: RepositoryInterface
     collectors:
       - type: className
@@ -163,12 +173,18 @@ ruleset:
     - ServiceInterface
     - DtoInterface
 
+  QueryInterface:
+  Query:
+    - QueryInterface
+
   RepositoryInterface:
+    - QueryInterface
     - DtoInterface
     - Model
   Repository:
     - RepositoryInterface
     - TransformInterface
+    - QueryInterface
     - DtoInterface
     - Model
 
@@ -191,11 +207,14 @@ ruleset:
     - Model
 
   AssemblerDtoInterface:
+    - QueryInterface
     - EloquentModel
     - DtoInterface
     - Contract
   AssemblerDto:
     - AssemblerDtoInterface
+    - QueryInterface
+    - Query
     - ServiceInterface
     - EloquentModel
     - DtoInterface
