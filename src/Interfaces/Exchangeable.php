@@ -8,6 +8,7 @@ use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\RecordsNotFoundException;
@@ -20,6 +21,7 @@ interface Exchangeable
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
@@ -35,6 +37,7 @@ interface Exchangeable
      * @param int|string $amount
      *
      * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface

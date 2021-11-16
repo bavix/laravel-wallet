@@ -8,11 +8,14 @@ use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\CastServiceInterface;
-use Throwable;
+use Illuminate\Database\RecordsNotFoundException;
 
 /**
  * Trait HasWalletFloat.
@@ -27,7 +30,10 @@ trait HasWalletFloat
      * @param float|string $amount
      *
      * @throws AmountInvalid
-     * @throws Throwable
+     * @throws LockProviderNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function forceWithdrawFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
@@ -43,7 +49,10 @@ trait HasWalletFloat
      * @param float|string $amount
      *
      * @throws AmountInvalid
-     * @throws Throwable
+     * @throws LockProviderNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function depositFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
@@ -61,7 +70,10 @@ trait HasWalletFloat
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
-     * @throws Throwable
+     * @throws LockProviderNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function withdrawFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
@@ -92,7 +104,10 @@ trait HasWalletFloat
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
-     * @throws Throwable
+     * @throws LockProviderNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function transferFloat(Wallet $wallet, $amount, ?array $meta = null): Transfer
     {
@@ -121,7 +136,10 @@ trait HasWalletFloat
      * @param float|string $amount
      *
      * @throws AmountInvalid
-     * @throws Throwable
+     * @throws LockProviderNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function forceTransferFloat(Wallet $wallet, $amount, ?array $meta = null): Transfer
     {

@@ -11,6 +11,7 @@ use Bavix\Wallet\Exceptions\UnconfirmedInvalid;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Models\Transaction;
 use Illuminate\Database\RecordsNotFoundException;
@@ -23,6 +24,7 @@ interface Confirmable
      * @throws ConfirmedInvalid
      * @throws WalletOwnerInvalid
      * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
@@ -34,6 +36,7 @@ interface Confirmable
     /**
      * @throws UnconfirmedInvalid
      * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
@@ -46,6 +49,7 @@ interface Confirmable
      * @throws ConfirmedInvalid
      * @throws WalletOwnerInvalid
      * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface

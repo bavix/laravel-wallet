@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
-use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
@@ -18,7 +17,6 @@ use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Illuminate\Database\RecordsNotFoundException;
-use Throwable;
 
 final class CommonServiceLegacy
 {
@@ -51,8 +49,11 @@ final class CommonServiceLegacy
     /**
      * @param int|string $amount
      *
-     * @throws AmountInvalid
-     * @throws Throwable
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function forceTransfer(Wallet $from, Wallet $to, $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
     {
@@ -65,6 +66,8 @@ final class CommonServiceLegacy
     /**
      * @param non-empty-array<TransferLazyDtoInterface> $objects
      *
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
@@ -149,6 +152,9 @@ final class CommonServiceLegacy
 
     /**
      * @param float|int|string $amount
+     *
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
      */
     public function makeTransaction(Wallet $wallet, string $type, $amount, ?array $meta, bool $confirmed = true): Transaction
     {
