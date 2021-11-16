@@ -4,7 +4,13 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Interfaces;
 
+use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Exceptions\InsufficientFunds;
+use Bavix\Wallet\Exceptions\ProductEnded;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Models\Transfer;
+use Illuminate\Database\RecordsNotFoundException;
 
 interface Customer extends Wallet
 {
@@ -23,6 +29,25 @@ interface Customer extends Wallet
     public function forceRefund(Product $product, bool $gifts = false): bool;
 
     /**
+     * @throws ProductEnded
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
+     *
+     * @return Transfer[]
+     */
+    public function payFreeCart(CartInterface $cart): array;
+
+    /**
+     * @throws ProductEnded
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
+     *
      * @return Transfer[]
      */
     public function payCart(CartInterface $cart, bool $force = false): array;

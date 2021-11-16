@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Traits;
 
 use function array_unique;
+use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Interfaces\CartInterface;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
 use Bavix\Wallet\Models\Transfer;
@@ -22,12 +25,20 @@ use Bavix\Wallet\Services\MetaServiceLegacy;
 use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\PurchaseServiceInterface;
 use function count;
+use Illuminate\Database\RecordsNotFoundException;
 
 trait CartPay
 {
     use HasWallet;
 
     /**
+     * @throws ProductEnded
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
+     *
      * @return non-empty-array<Transfer>
      */
     public function payFreeCart(CartInterface $cart): array
@@ -74,6 +85,13 @@ trait CartPay
     }
 
     /**
+     * @throws ProductEnded
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
+     *
      * @return non-empty-array<Transfer>
      */
     public function payCart(CartInterface $cart, bool $force = false): array
