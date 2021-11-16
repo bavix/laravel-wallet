@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Internal\Service;
 
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Config\Repository as ConfigRepository;
@@ -12,20 +13,18 @@ use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 final class StorageService implements StorageServiceInterface
 {
+    private LockServiceInterface $lockService;
+    private MathServiceInterface $mathService;
     private CacheRepository $cache;
-
-    private LockServiceInterface $lock;
-
-    private MathServiceInterface $math;
 
     public function __construct(
         CacheManager $cacheManager,
         ConfigRepository $config,
-        LockServiceInterface $lock,
-        MathServiceInterface $math
+        LockServiceInterface $lockService,
+        MathServiceInterface $mathService
     ) {
-        $this->math = $math;
-        $this->lock = $lock;
+        $this->mathService = $mathService;
+        $this->lockService = $lockService;
         $this->cache = $cacheManager->driver(
             $config->get('wallet.cache.driver', 'array')
         );
@@ -41,6 +40,7 @@ final class StorageService implements StorageServiceInterface
         return $this->cache->forget($key);
     }
 
+    /** @throws RecordNotFoundException */
     public function get(string $key): string
     {
         $value = $this->cache->get($key);
@@ -51,7 +51,7 @@ final class StorageService implements StorageServiceInterface
             );
         }
 
-        return $this->math->round($value);
+        return $this->mathService->round($value);
     }
 
     public function sync(string $key, $value): bool
@@ -59,15 +59,21 @@ final class StorageService implements StorageServiceInterface
         return $this->cache->set($key, $value);
     }
 
+    /**
+     * @param float|int|string $value
+     *
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     */
     public function increase(string $key, $value): string
     {
-        return $this->lock->block(
+        return $this->lockService->block(
             $key.'::increase',
             function () use ($key, $value): string {
-                $result = $this->math->add($this->get($key), $value);
+                $result = $this->mathService->add($this->get($key), $value);
                 $this->sync($key, $result);
 
-                return $this->math->round($result);
+                return $this->mathService->round($result);
             }
         );
     }

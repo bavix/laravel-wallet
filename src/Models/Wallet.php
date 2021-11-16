@@ -11,6 +11,8 @@ use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Exchangeable;
 use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Services\WalletServiceLegacy;
 use Bavix\Wallet\Traits\CanConfirm;
@@ -20,6 +22,7 @@ use Bavix\Wallet\Traits\HasGift;
 use function config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\RecordsNotFoundException;
 use Illuminate\Support\Str;
 
 /**
@@ -97,6 +100,9 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
      * Under ideal conditions, you will never need a method.
      * Needed to deal with out-of-sync.
      *
+     * @throws LockProviderNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
     public function refreshBalance(): bool

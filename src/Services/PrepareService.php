@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
@@ -40,6 +41,9 @@ final class PrepareService implements PrepareServiceInterface
         $this->taxService = $taxService;
     }
 
+    /**
+     * @throws AmountInvalid
+     */
     public function deposit(Wallet $wallet, string $amount, ?array $meta, bool $confirmed = true): TransactionDtoInterface
     {
         $this->consistencyService->checkPositive($amount);
@@ -54,6 +58,9 @@ final class PrepareService implements PrepareServiceInterface
         );
     }
 
+    /**
+     * @throws AmountInvalid
+     */
     public function withdraw(Wallet $wallet, string $amount, ?array $meta, bool $confirmed = true): TransactionDtoInterface
     {
         $this->consistencyService->checkPositive($amount);
@@ -70,6 +77,8 @@ final class PrepareService implements PrepareServiceInterface
 
     /**
      * @param float|int|string $amount
+     *
+     * @throws AmountInvalid
      */
     public function transferLazy(Wallet $from, Wallet $to, string $status, $amount, ?array $meta = null): TransferLazyDtoInterface
     {

@@ -33,14 +33,14 @@ final class DatabaseService implements DatabaseServiceInterface
      *
      * @return mixed
      */
-    public function transaction(Closure $closure)
+    public function transaction(callable $callback)
     {
         try {
             if ($this->connection->transactionLevel() > 0) {
-                return $closure();
+                return $callback();
             }
 
-            return $this->connection->transaction($closure);
+            return $this->connection->transaction(Closure::fromCallable($callback));
         } catch (RecordsNotFoundException|ExceptionInterface $exception) {
             throw $exception;
         } catch (Throwable $throwable) {

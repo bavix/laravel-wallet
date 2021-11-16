@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
+use Illuminate\Database\RecordsNotFoundException;
 
 final class WalletServiceLegacy
 {
@@ -24,8 +28,13 @@ final class WalletServiceLegacy
     }
 
     /**
-     * @deprecated
+     * @throws LockProviderNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
+     *
      * @see WalletModel::refreshBalance()
+     * @deprecated
      */
     public function refresh(WalletModel $wallet): bool
     {

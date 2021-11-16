@@ -6,7 +6,6 @@ namespace Bavix\Wallet\Internal\Service;
 
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
-use Closure;
 use Illuminate\Database\RecordsNotFoundException;
 
 interface DatabaseServiceInterface
@@ -18,5 +17,5 @@ interface DatabaseServiceInterface
      *
      * @return mixed
      */
-    public function transaction(Closure $closure);
+    public function transaction(callable $callback);
 }

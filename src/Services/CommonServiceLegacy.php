@@ -9,10 +9,15 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
+use Illuminate\Database\RecordsNotFoundException;
 use Throwable;
 
 final class CommonServiceLegacy
@@ -59,6 +64,10 @@ final class CommonServiceLegacy
 
     /**
      * @param non-empty-array<TransferLazyDtoInterface> $objects
+     *
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      *
      * @return non-empty-array<Transfer>
      */
@@ -107,6 +116,11 @@ final class CommonServiceLegacy
      * @param int|string $amount
      *
      * @deprecated
+     *
+     * @throws LockProviderNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function addBalance(Wallet $wallet, $amount): bool
     {
@@ -157,6 +171,9 @@ final class CommonServiceLegacy
     /**
      * @param non-empty-array<int|string, Wallet>           $wallets
      * @param non-empty-array<int, TransactionDtoInterface> $objects
+     *
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
      *
      * @return non-empty-array<string, Transaction>
      */
