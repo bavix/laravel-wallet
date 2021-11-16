@@ -72,9 +72,7 @@ trait CartPay
         });
     }
 
-    /**
-     * @return Transfer[]
-     */
+    /** @return Transfer[] */
     public function safePayCart(CartInterface $cart, bool $force = false): array
     {
         try {
@@ -128,6 +126,11 @@ trait CartPay
     }
 
     /**
+     * @throws ProductEnded
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
+     *
      * @return non-empty-array<Transfer>
      */
     public function forcePayCart(CartInterface $cart): array
@@ -144,6 +147,14 @@ trait CartPay
         }
     }
 
+    /**
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
+     */
     public function refundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool
     {
         return app(DatabaseServiceInterface::class)->transaction(function () use ($cart, $force, $gifts) {
@@ -194,6 +205,12 @@ trait CartPay
         });
     }
 
+    /**
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
+     */
     public function forceRefundCart(CartInterface $cart, bool $gifts = false): bool
     {
         return $this->refundCart($cart, true, $gifts);
@@ -208,11 +225,25 @@ trait CartPay
         }
     }
 
+    /**
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
+     */
     public function refundGiftCart(CartInterface $cart, bool $force = false): bool
     {
         return $this->refundCart($cart, $force, true);
     }
 
+    /**
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
+     */
     public function forceRefundGiftCart(CartInterface $cart): bool
     {
         return $this->refundGiftCart($cart, true);

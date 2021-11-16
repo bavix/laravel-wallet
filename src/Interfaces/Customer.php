@@ -8,6 +8,7 @@ use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\RecordsNotFoundException;
@@ -36,7 +37,7 @@ interface Customer extends Wallet
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      *
-     * @return Transfer[]
+     * @return non-empty-array<Transfer>
      */
     public function payFreeCart(CartInterface $cart): array;
 
@@ -48,23 +49,58 @@ interface Customer extends Wallet
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      *
-     * @return Transfer[]
+     * @return non-empty-array<Transfer>
      */
     public function payCart(CartInterface $cart, bool $force = false): array;
 
-    /**
-     * @return Transfer[]
-     */
+    /** @return Transfer[] */
     public function safePayCart(CartInterface $cart, bool $force = false): array;
 
     /**
-     * @return Transfer[]
+     * @throws ProductEnded
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
+     *
+     * @return non-empty-array<Transfer>
      */
     public function forcePayCart(CartInterface $cart): array;
 
+    /**
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
+     */
     public function refundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool;
 
     public function safeRefundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool;
 
+    /**
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
+     */
     public function forceRefundCart(CartInterface $cart, bool $gifts = false): bool;
+
+    /**
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
+     */
+    public function refundGiftCart(CartInterface $cart, bool $force = false): bool;
+
+    /**
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
+     */
+    public function forceRefundGiftCart(CartInterface $cart): bool;
 }
