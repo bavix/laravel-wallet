@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Now everything is in contracts. It became easier for you to modify the package to suit your needs.
 - Updated package core. If you are tied to the kernel, then you will have to rewrite some code.
 - Optimized the algorithm for transfers and purchases. When paying for a large basket, the productivity increase at the peak is up to 24 times.
+- If a batch of transactions does not change the balance, then the accounting service will not update the wallet balance.
 
 ### Fixed
 - Fixed issues with postgres. There was a bug when working with currencies, for some reason the request sometimes dropped and went into a deadlock.
