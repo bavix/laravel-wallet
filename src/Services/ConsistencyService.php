@@ -84,9 +84,9 @@ final class ConsistencyService implements ConsistencyServiceInterface
             $wallet = $this->castService->getWallet($object->getFromWallet(), false);
             $wallets[] = $wallet;
 
-            $totalAmount[$wallet->uuid] = $this->mathService->add(
+            $totalAmount[$wallet->uuid] = $this->mathService->sub(
                 ($totalAmount[$wallet->uuid] ?? 0),
-                $this->mathService->negative($withdrawDto->getAmount())
+                $withdrawDto->getAmount()
             );
         }
 
