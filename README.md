@@ -17,20 +17,14 @@ laravel-wallet - Easy work with virtual wallet.
 [[Documentation](https://bavix.github.io/laravel-wallet/)] 
 [[Get Started](https://bavix.github.io/laravel-wallet/#/basic-usage)] 
 
-[[Документация](https://bavix.github.io/laravel-wallet/#/ru/)] 
-[[Как начать](https://bavix.github.io/laravel-wallet/#/ru/basic-usage)] 
-
 * **Vendor**: bavix
 * **Package**: laravel-wallet
 * **Version**: [![Latest Stable Version](https://poser.pugx.org/bavix/laravel-wallet/v)](https://packagist.org/packages/bavix/laravel-wallet)
-* **PHP Version**: 7.3+ (if you are using version 5.x then 7.2+)
-* **Laravel Version**: `5.5`, `5.6`, `5.7`, `5.8`, `6.x`, `7.x`, `8.x`
+* **PHP Version**: 7.4+
+* **Laravel Version**: `6.x`, `7.x`, `8.x`
 * **[Composer](https://getcomposer.org/):** `composer require bavix/laravel-wallet`
 
 ### Upgrade Guide
-
-> Starting with version 5.x, support for Laravel 5 has been discontinued.
-> Update laravel or use version 4.x.
 
 To perform the migration, you will be [helped by the instruction](https://bavix.github.io/laravel-wallet/#/upgrade-guide).
 
@@ -39,9 +33,6 @@ To perform the migration, you will be [helped by the instruction](https://bavix.
 | Extension | Description | 
 | ----- | ----- | 
 | [Swap](https://github.com/bavix/laravel-wallet-swap) | Addition to the laravel-wallet library for quick setting of exchange rates | 
-| [Vacuum](https://github.com/bavix/laravel-wallet-vacuum) | Addition to the laravel-wallet library for quick fix race condition | 
-
-> Since version 6.2 the Vacuum package is built in and no longer requires additional steps.
 
 ### Usage
 Add the `HasWallet` trait and `Wallet` interface to model.
