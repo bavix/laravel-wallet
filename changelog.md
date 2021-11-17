@@ -6,6 +6,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Updated
+- Optimization of the `payFreeCart` and `payFree` request. Now the package does not update the repository. But there is no point in updating it, because the client does not pay anything.
+- Now everything is in contracts. It became easier for you to modify the package to suit your needs.
+- Updated package core. If you are tied to the kernel, then you will have to rewrite some code.
+- Optimized the algorithm for transfers and purchases. When paying for a large basket, the productivity increase at the peak is up to 24 times.
+
+### Fixed
+- Fixed issues with postgres. There was a bug when working with currencies, for some reason the request sometimes dropped and went into a deadlock.
+
+### Added
+- Added `uuid` column to the wallet table.
+- Added `phpstan`, `psalm`, `deptrac`, `rector`. The package update should now be smoother and with fewer bugs.
+
+### Renamed
+- rename `CommonService` to `CommonServiceLegacy`
+- rename `MetaService` to `MetaServiceLegacy`
+- rename `WalletService` to `WalletServiceLegacy`
+
+### Removed
+- command `RefreshBalance`. Now you need to write this class yourself.
+- class `Storable`
+- class `Rateable`
+- interface `Mathable`
+- class `Bring`
+- method `Cart::alreadyBuy`
+- method `Cart::canBuy`
+- class `EmptyLock`
+- class `Operation`
+- method `CommonService::verifyWithdraw`
+- method `CommonService::multiOperation`
+- method `CommonService::assemble`
+- method `CommonService::multiBrings`
+- class `DbService`
+- class `ExchangeService`
+- class `LockService`
+- method `WalletService::discount`
+- method `WalletService::decimalPlacesValue`
+- method `WalletService::decimalPlaces`
+- method `WalletService::checkAmount`
+- method `WalletService::adjustment`
+- class `BrickMath`
+- class `Rate`
+- class `Store`
+
 ## [6.2.4] - 2021-11-13
 ### Fixed
 - Fixed error LockProviderNotFoundException
@@ -75,7 +119,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [6.0.4] - 2021-04-07
 ### Fixed
-- Updated key "confirmed_invalid" in Arabic; #316 @omarhen 
+- Updated key `confirmed_invalid` in Arabic; #316 @omarhen 
 
 ## [6.0.3] - 2021-01-31
 ### Added
