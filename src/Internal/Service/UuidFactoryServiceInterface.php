@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Service;
 
-interface UuidServiceInterface
+interface UuidFactoryServiceInterface
 {
     public function uuid4(): string;
 }

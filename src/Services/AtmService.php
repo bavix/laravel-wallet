@@ -43,10 +43,15 @@ final class AtmService implements AtmServiceInterface
      */
     public function makeTransactions(array $objects): array
     {
-        $this->transactionRepository->insert($objects);
-        $uuids = $this->assistantService->getUuids($objects);
-        $query = $this->transactionQueryAssembler->create($uuids);
-        $items = $this->transactionRepository->findBy($query);
+        if (count($objects) === 1) {
+            $items = [$this->transactionRepository->insertOne(reset($objects))];
+        } else {
+            $this->transactionRepository->insert($objects);
+            $uuids = $this->assistantService->getUuids($objects);
+            $query = $this->transactionQueryAssembler->create($uuids);
+            $items = $this->transactionRepository->findBy($query);
+        }
+
         assert(count($items) > 0);
 
         $results = [];
@@ -64,10 +69,15 @@ final class AtmService implements AtmServiceInterface
      */
     public function makeTransfers(array $objects): array
     {
-        $this->transferRepository->insert($objects);
-        $uuids = $this->assistantService->getUuids($objects);
-        $query = $this->transferQueryAssembler->create($uuids);
-        $items = $this->transferRepository->findBy($query);
+        if (count($objects) === 1) {
+            $items = [$this->transferRepository->insertOne(reset($objects))];
+        } else {
+            $this->transferRepository->insert($objects);
+            $uuids = $this->assistantService->getUuids($objects);
+            $query = $this->transferQueryAssembler->create($uuids);
+            $items = $this->transferRepository->findBy($query);
+        }
+
         assert(count($items) > 0);
 
         $results = [];

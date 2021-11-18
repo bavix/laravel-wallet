@@ -16,7 +16,7 @@ use Bavix\Wallet\Internal\Service\LockService;
 use Bavix\Wallet\Internal\Service\MathService;
 use Bavix\Wallet\Internal\Service\StorageService;
 use Bavix\Wallet\Internal\Service\TranslatorService;
-use Bavix\Wallet\Internal\Service\UuidService;
+use Bavix\Wallet\Internal\Service\UuidFactoryService;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
 use Bavix\Wallet\Internal\Transform\TransferDtoTransformer;
 use Bavix\Wallet\Models\Transaction;
@@ -66,7 +66,7 @@ return [
         'math' => MathService::class,
         'storage' => StorageService::class,
         'translator' => TranslatorService::class,
-        'uuid' => UuidService::class,
+        'uuid' => UuidFactoryService::class,
     ],
 
     /**

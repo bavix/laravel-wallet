@@ -170,7 +170,6 @@ ruleset:
     - DtoInterface
   Transform:
     - TransformInterface
-    - ServiceInterface
     - DtoInterface
 
   QueryInterface:
@@ -184,6 +183,7 @@ ruleset:
   Repository:
     - RepositoryInterface
     - TransformInterface
+    - ServiceInterface # json service only
     - QueryInterface
     - DtoInterface
     - Model

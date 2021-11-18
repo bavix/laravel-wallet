@@ -32,6 +32,17 @@ final class TransferRepository implements TransferRepositoryInterface
         $this->transfer->newQuery()->insert($values);
     }
 
+    public function insertOne(TransferDtoInterface $dto): Transfer
+    {
+        $attributes = $this->transformer->extract($dto);
+        $instance = $this->transfer->newInstance($attributes);
+        $instance->saveQuietly();
+
+        assert($instance->getKey() !== null);
+
+        return $instance;
+    }
+
     /** @return Transfer[] */
     public function findBy(TransferQueryInterface $query): array
     {

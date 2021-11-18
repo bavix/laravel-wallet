@@ -7,7 +7,7 @@ namespace Bavix\Wallet\Internal\Service;
 use Ramsey\Uuid\UuidFactory;
 use Ramsey\Uuid\UuidFactoryInterface;
 
-final class UuidService implements UuidServiceInterface
+final class UuidFactoryService implements UuidFactoryServiceInterface
 {
     private UuidFactoryInterface $uuidFactory;
 

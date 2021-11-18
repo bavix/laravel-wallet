@@ -34,7 +34,7 @@ namespace PHPSTORM_META {
     use Bavix\Wallet\Services\PurchaseServiceInterface;
     use Bavix\Wallet\Internal\Service\StorageServiceInterface;
     use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
-    use Bavix\Wallet\Internal\Service\UuidServiceInterface;
+    use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
     use Bavix\Wallet\Objects\Cart;
     use Bavix\Wallet\Services\CommonServiceLegacy;
     use Bavix\Wallet\Services\MetaServiceLegacy;
@@ -62,7 +62,7 @@ namespace PHPSTORM_META {
         MathServiceInterface::class => MathServiceInterface::class,
         StorageServiceInterface::class => StorageServiceInterface::class,
         TranslatorServiceInterface::class => TranslatorServiceInterface::class,
-        UuidServiceInterface::class => UuidServiceInterface::class,
+        UuidFactoryServiceInterface::class => UuidFactoryServiceInterface::class,
 
         // internal.transform
         TransactionDtoTransformerInterface::class => TransactionDtoTransformerInterface::class,

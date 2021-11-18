@@ -32,8 +32,8 @@ use Bavix\Wallet\Internal\Service\StorageService;
 use Bavix\Wallet\Internal\Service\StorageServiceInterface;
 use Bavix\Wallet\Internal\Service\TranslatorService;
 use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
-use Bavix\Wallet\Internal\Service\UuidService;
-use Bavix\Wallet\Internal\Service\UuidServiceInterface;
+use Bavix\Wallet\Internal\Service\UuidFactoryService;
+use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
 use Bavix\Wallet\Internal\Transform\TransferDtoTransformer;
@@ -158,7 +158,7 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(MathServiceInterface::class, $configure['math'] ?? MathService::class);
         $this->app->singleton(StorageServiceInterface::class, $configure['storage'] ?? StorageService::class);
         $this->app->singleton(TranslatorServiceInterface::class, $configure['translator'] ?? TranslatorService::class);
-        $this->app->singleton(UuidServiceInterface::class, $configure['uuid'] ?? UuidService::class);
+        $this->app->singleton(UuidFactoryServiceInterface::class, $configure['uuid'] ?? UuidFactoryService::class);
     }
 
     private function services(array $configure): void
