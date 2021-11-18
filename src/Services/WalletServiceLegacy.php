@@ -11,6 +11,7 @@ use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Illuminate\Database\RecordsNotFoundException;
 
+/** @deprecated */
 final class WalletServiceLegacy
 {
     private MathServiceInterface $math;

@@ -18,6 +18,7 @@ use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Illuminate\Database\RecordsNotFoundException;
 
+/** @deprecated */
 final class CommonServiceLegacy
 {
     private AtmServiceInterface $atmService;

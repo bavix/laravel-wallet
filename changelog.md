@@ -25,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - rename `MetaService` to `MetaServiceLegacy`
 - rename `WalletService` to `WalletServiceLegacy`
 
+### Deprecated
+- class `CommonServiceLegacy`
+- class `WalletServiceLegacy`
+
 ### Removed
 - command `RefreshBalance`. Now you need to write this class yourself.
 - class `Storable`
