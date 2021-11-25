@@ -46,8 +46,7 @@ final class TransactionRepository implements TransactionRepositoryInterface
     {
         $attributes = $this->transformer->extract($dto);
         $instance = $this->transaction->newInstance($attributes);
-        $instance->save();
-
+        assert($instance->save() === true);
         assert($instance->getKey() !== null);
 
         return $instance;
