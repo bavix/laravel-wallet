@@ -36,9 +36,7 @@ final class TransferRepository implements TransferRepositoryInterface
     {
         $attributes = $this->transformer->extract($dto);
         $instance = $this->transfer->newInstance($attributes);
-        $instance->saveQuietly();
-
-        assert($instance->getKey() !== null);
+        $instance::withoutEvents(static fn () => $instance->save());
 
         return $instance;
     }

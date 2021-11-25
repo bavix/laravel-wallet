@@ -30,6 +30,7 @@ class WalletExtensionTest extends TestCase
         self::assertFalse($buyer->relationLoaded('wallet'));
         $transaction = $buyer->deposit(1000, ['bank_method' => 'VietComBank']);
 
+        self::assertTrue($transaction->getKey() > 0);
         self::assertSame($transaction->amountInt, $buyer->balanceInt);
         self::assertInstanceOf(Transaction::class, $transaction);
         self::assertSame('VietComBank', $transaction->bank_method);
@@ -47,6 +48,7 @@ class WalletExtensionTest extends TestCase
         self::assertFalse($buyer->relationLoaded('wallet'));
         $transaction = $buyer->deposit(1000, ['currency' => 'EUR']);
 
+        self::assertTrue($transaction->getKey() > 0);
         self::assertSame($transaction->amountInt, $buyer->balanceInt);
         self::assertInstanceOf(TransactionMoney::class, $transaction);
         self::assertSame('1000', $transaction->currency->getAmount());
