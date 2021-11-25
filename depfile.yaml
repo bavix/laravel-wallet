@@ -1,0 +1,230 @@
+paths:
+  - ./src
+
+layers:
+  - name: Legacy
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Legacy$
+      - type: className
+        regex: ^Bavix\\.*\\Objects\\Cart$
+
+  - name: Contract
+    collectors:
+      - type: className
+        regex: ^Bavix\\Wallet\\Interfaces\\.*
+
+  - name: UI
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*\\Traits\\.*
+
+  - name: UIException
+    collectors:
+      - type: className
+        regex: ^Illuminate\\Database\\Eloquent\\ModelNotFoundException$
+      - type: className
+        regex: ^Bavix\\Wallet\\Exceptions\\.*
+
+  # internal
+  - name: InternalException
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*\\Internal\\Exceptions\\.*
+
+  - name: Dto
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*\\Internal\\Dto\\.*Dto$
+
+  - name: DtoInterface
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*\\Internal\\Dto\\.*DtoInterface$
+
+  - name: AssemblerDto
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*\\Internal\\Assembler\\.*DtoAssembler$
+
+  - name: AssemblerDtoInterface
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*\\Internal\\Assembler\\.*DtoAssemblerInterface$
+
+  - name: QueryInterface
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Internal\\Query\\.*QueryInterface$
+
+  - name: Query
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Internal\\Query\\.*Query$
+
+  - name: RepositoryInterface
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Internal\\Repository\\.*RepositoryInterface$
+
+  - name: Repository
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Internal\\Repository\\.*Repository$
+
+  - name: Transform
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Internal\\Transform\\.*DtoTransformer$
+
+  - name: TransformInterface
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Internal\\Transform\\.*DtoTransformerInterface$
+
+  - name: Infra
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Internal\\Service\\.*Service$
+
+  # contracts
+  - name: Model
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Models\\Transaction$
+      - type: className
+        regex: ^Bavix\\.*Models\\Transfer$
+      - type: className
+        regex: ^Bavix\\.*Models\\Wallet$
+
+  - name: Service
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Services\\.*Service$
+
+  - name: ServiceInterface
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*Service\\.*ServiceInterface$
+      - type: className
+        regex: ^Bavix\\.*Services\\.*ServiceInterface$
+
+  # framework
+  - name: EloquentModel
+    collectors:
+      - type: className
+        regex: ^Illuminate\\Database\\Eloquent\\Model$
+
+  - name: Config
+    collectors:
+      - type: className
+        regex: ^Illuminate\\Config\\Repository$
+
+  - name: Cache
+    collectors:
+      - type: className
+        regex: ^Illuminate\\Contracts\\Cache\\Repository$
+
+ruleset:
+  Contract:
+    - InternalException
+    - DtoInterface
+    - UIException
+    - Model
+
+  UI:
+    - AssemblerDtoInterface # delete as soon as possible
+    - InternalException
+    - ServiceInterface
+    - UIException
+    - Contract
+    - Model
+    - Legacy # delete as soon as possible
+
+  UIException:
+    - InternalException
+
+  Infra:
+    - InternalException
+    - ServiceInterface
+    - Config
+    - Cache
+
+  DtoInterface:
+    - Contract
+  Dto:
+    - DtoInterface
+    - Contract
+
+  Model:
+    - AssemblerDtoInterface
+    - InternalException
+    - ServiceInterface
+    - EloquentModel
+    - UIException
+    - Contract
+    - Legacy
+    - UI
+
+  TransformInterface:
+    - DtoInterface
+  Transform:
+    - TransformInterface
+    - DtoInterface
+
+  QueryInterface:
+  Query:
+    - QueryInterface
+
+  RepositoryInterface:
+    - QueryInterface
+    - DtoInterface
+    - Model
+  Repository:
+    - RepositoryInterface
+    - TransformInterface
+    - ServiceInterface # json service only
+    - QueryInterface
+    - DtoInterface
+    - Model
+
+  ServiceInterface:
+    - InternalException
+    - EloquentModel
+    - DtoInterface
+    - UIException
+    - Contract
+    - Model
+  Service:
+    - AssemblerDtoInterface
+    - RepositoryInterface
+    - InternalException
+    - ServiceInterface
+    - EloquentModel
+    - DtoInterface
+    - UIException
+    - Contract
+    - Model
+
+  AssemblerDtoInterface:
+    - EloquentModel
+    - DtoInterface
+    - Contract
+  AssemblerDto:
+    - AssemblerDtoInterface
+    - QueryInterface
+    - ServiceInterface # UUID
+    - EloquentModel
+    - DtoInterface
+    - Contract
+    - Dto
+
+  Legacy:
+    - AssemblerDtoInterface
+    - InternalException
+    - ServiceInterface
+    - DtoInterface
+    - UIException
+    - Contract
+    - Model
+    - Dto # Cart from objects

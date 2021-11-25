@@ -4,50 +4,76 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet;
 
-use Bavix\Wallet\Commands\RefreshBalance;
-use Bavix\Wallet\Interfaces\Mathable;
-use Bavix\Wallet\Interfaces\Rateable;
-use Bavix\Wallet\Interfaces\Storable;
-use Bavix\Wallet\Internal\BasketInterface;
-use Bavix\Wallet\Internal\BookkeeperInterface;
-use Bavix\Wallet\Internal\ConsistencyInterface;
-use Bavix\Wallet\Internal\ExchangeInterface;
-use Bavix\Wallet\Internal\LockInterface;
-use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Internal\PurchaseInterface;
-use Bavix\Wallet\Internal\StorageInterface;
-use Bavix\Wallet\Internal\UuidInterface;
+use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssemblerInterface;
+use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\TransactionDtoAssemblerInterface;
+use Bavix\Wallet\Internal\Assembler\TransactionQueryAssembler;
+use Bavix\Wallet\Internal\Assembler\TransactionQueryAssemblerInterface;
+use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
+use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
+use Bavix\Wallet\Internal\Assembler\TransferQueryAssembler;
+use Bavix\Wallet\Internal\Assembler\TransferQueryAssemblerInterface;
+use Bavix\Wallet\Internal\Repository\TransactionRepository;
+use Bavix\Wallet\Internal\Repository\TransactionRepositoryInterface;
+use Bavix\Wallet\Internal\Repository\TransferRepository;
+use Bavix\Wallet\Internal\Repository\TransferRepositoryInterface;
+use Bavix\Wallet\Internal\Service\DatabaseService;
+use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
+use Bavix\Wallet\Internal\Service\JsonService;
+use Bavix\Wallet\Internal\Service\JsonServiceInterface;
+use Bavix\Wallet\Internal\Service\LockService;
+use Bavix\Wallet\Internal\Service\LockServiceInterface;
+use Bavix\Wallet\Internal\Service\MathService;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
+use Bavix\Wallet\Internal\Service\StorageService;
+use Bavix\Wallet\Internal\Service\StorageServiceInterface;
+use Bavix\Wallet\Internal\Service\TranslatorService;
+use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
+use Bavix\Wallet\Internal\Service\UuidFactoryService;
+use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
+use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
+use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
+use Bavix\Wallet\Internal\Transform\TransferDtoTransformer;
+use Bavix\Wallet\Internal\Transform\TransferDtoTransformerInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
-use Bavix\Wallet\Objects\Bring;
-use Bavix\Wallet\Objects\Cart;
-use Bavix\Wallet\Objects\EmptyLock;
-use Bavix\Wallet\Objects\Operation;
+use Bavix\Wallet\Services\AssistantService;
+use Bavix\Wallet\Services\AssistantServiceInterface;
+use Bavix\Wallet\Services\AtmService;
+use Bavix\Wallet\Services\AtmServiceInterface;
 use Bavix\Wallet\Services\AtomicService;
+use Bavix\Wallet\Services\AtomicServiceInterface;
 use Bavix\Wallet\Services\BasketService;
+use Bavix\Wallet\Services\BasketServiceInterface;
 use Bavix\Wallet\Services\BookkeeperService;
-use Bavix\Wallet\Services\CommonService;
+use Bavix\Wallet\Services\BookkeeperServiceInterface;
+use Bavix\Wallet\Services\CastService;
+use Bavix\Wallet\Services\CastServiceInterface;
+use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\ConsistencyService;
-use Bavix\Wallet\Services\DbService;
+use Bavix\Wallet\Services\ConsistencyServiceInterface;
+use Bavix\Wallet\Services\DiscountService;
+use Bavix\Wallet\Services\DiscountServiceInterface;
 use Bavix\Wallet\Services\ExchangeService;
-use Bavix\Wallet\Services\LockService;
-use Bavix\Wallet\Services\MathService;
-use Bavix\Wallet\Services\MetaService;
+use Bavix\Wallet\Services\ExchangeServiceInterface;
+use Bavix\Wallet\Services\MetaServiceLegacy;
+use Bavix\Wallet\Services\PrepareService;
+use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\PurchaseService;
-use Bavix\Wallet\Services\StorageService;
-use Bavix\Wallet\Services\UuidFactoryService;
-use Bavix\Wallet\Services\WalletService;
-use Bavix\Wallet\Simple\BrickMath;
-use Bavix\Wallet\Simple\Exchange;
-use Bavix\Wallet\Simple\Rate;
-use Bavix\Wallet\Simple\Store;
+use Bavix\Wallet\Services\PurchaseServiceInterface;
+use Bavix\Wallet\Services\TaxService;
+use Bavix\Wallet\Services\TaxServiceInterface;
+use Bavix\Wallet\Services\WalletServiceLegacy;
 use function config;
 use function dirname;
 use function function_exists;
 use Illuminate\Support\ServiceProvider;
 
-class WalletServiceProvider extends ServiceProvider
+final class WalletServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap services.
@@ -65,10 +91,8 @@ class WalletServiceProvider extends ServiceProvider
             return;
         }
 
-        $this->commands([RefreshBalance::class]);
-
         if ($this->shouldMigrate()) {
-            $this->loadMigrationsFrom([__DIR__.'/../database']);
+            $this->loadMigrationsFrom([dirname(__DIR__).'/database']);
         }
 
         if (function_exists('config_path')) {
@@ -92,60 +116,124 @@ class WalletServiceProvider extends ServiceProvider
             'wallet'
         );
 
-        $this->singletons();
-        $this->legacySingleton();
-        $this->bindObjects();
+        $configure = config('wallet', []);
+
+        $this->internal($configure['internal'] ?? []);
+        $this->services($configure['services'] ?? []);
+        $this->legacySingleton(); // without configuration
+
+        $this->repositories($configure['repositories'] ?? []);
+        $this->transformers($configure['transformers'] ?? []);
+        $this->assemblers($configure['assemblers'] ?? []);
+
+        $this->bindObjects($configure);
+    }
+
+    public function repositories(array $configure): void
+    {
+        $this->app->singleton(
+            TransactionRepositoryInterface::class,
+            $configure['transaction'] ?? TransactionRepository::class
+        );
+
+        $this->app->singleton(
+            TransferRepositoryInterface::class,
+            $configure['transfer'] ?? TransferRepository::class
+        );
     }
 
     /**
      * Determine if we should register the migrations.
      */
-    protected function shouldMigrate(): bool
+    private function shouldMigrate(): bool
     {
         return WalletConfigure::isRunsMigrations();
     }
 
-    private function singletons(): void
+    private function internal(array $configure): void
     {
-        // Bind eloquent models to IoC container
-        $this->app->singleton(ExchangeInterface::class, config('wallet.package.exchange', Exchange::class));
-        $this->app->singleton(MathInterface::class, config('wallet.package.mathable', MathService::class));
-        $this->app->singleton(CommonService::class, config('wallet.services.common', CommonService::class));
-        $this->app->singleton(WalletService::class, config('wallet.services.wallet', WalletService::class));
+        $this->app->singleton(DatabaseServiceInterface::class, $configure['database'] ?? DatabaseService::class);
+        $this->app->singleton(JsonServiceInterface::class, $configure['json'] ?? JsonService::class);
+        $this->app->singleton(LockServiceInterface::class, $configure['lock'] ?? LockService::class);
+        $this->app->singleton(MathServiceInterface::class, $configure['math'] ?? MathService::class);
+        $this->app->singleton(StorageServiceInterface::class, $configure['storage'] ?? StorageService::class);
+        $this->app->singleton(TranslatorServiceInterface::class, $configure['translator'] ?? TranslatorService::class);
+        $this->app->singleton(UuidFactoryServiceInterface::class, $configure['uuid'] ?? UuidFactoryService::class);
+    }
 
-        $this->app->singleton(LockInterface::class, AtomicService::class);
-        $this->app->singleton(UuidInterface::class, UuidFactoryService::class);
-        $this->app->singleton(StorageInterface::class, StorageService::class);
-        $this->app->singleton(BookkeeperInterface::class, BookkeeperService::class);
-        $this->app->singleton(BasketInterface::class, BasketService::class);
-        $this->app->singleton(ConsistencyInterface::class, ConsistencyService::class);
-        $this->app->singleton(PurchaseInterface::class, PurchaseService::class);
+    private function services(array $configure): void
+    {
+        $this->app->singleton(AssistantServiceInterface::class, $configure['assistant'] ?? AssistantService::class);
+        $this->app->singleton(AtmServiceInterface::class, $configure['atm'] ?? AtmService::class);
+        $this->app->singleton(AtomicServiceInterface::class, $configure['atomic'] ?? AtomicService::class);
+        $this->app->singleton(BasketServiceInterface::class, $configure['basket'] ?? BasketService::class);
+        $this->app->singleton(BookkeeperServiceInterface::class, $configure['bookkeeper'] ?? BookkeeperService::class);
+        $this->app->singleton(CastServiceInterface::class, $configure['cast'] ?? CastService::class);
+        $this->app->singleton(ConsistencyServiceInterface::class, $configure['consistency'] ?? ConsistencyService::class);
+        $this->app->singleton(DiscountServiceInterface::class, $configure['discount'] ?? DiscountService::class);
+        $this->app->singleton(ExchangeServiceInterface::class, $configure['exchange'] ?? ExchangeService::class);
+        $this->app->singleton(PrepareServiceInterface::class, $configure['prepare'] ?? PrepareService::class);
+        $this->app->singleton(PurchaseServiceInterface::class, $configure['purchase'] ?? PurchaseService::class);
+        $this->app->singleton(TaxServiceInterface::class, $configure['tax'] ?? TaxService::class);
+    }
+
+    private function assemblers(array $configure): void
+    {
+        $this->app->singleton(
+            AvailabilityDtoAssemblerInterface::class,
+            $configure['availability'] ?? AvailabilityDtoAssembler::class
+        );
+
+        $this->app->singleton(
+            TransactionDtoAssemblerInterface::class,
+            $configure['transaction'] ?? TransactionDtoAssembler::class
+        );
+
+        $this->app->singleton(
+            TransferLazyDtoAssemblerInterface::class,
+            $configure['transfer_lazy'] ?? TransferLazyDtoAssembler::class
+        );
+
+        $this->app->singleton(
+            TransferDtoAssemblerInterface::class,
+            $configure['transfer'] ?? TransferDtoAssembler::class
+        );
+
+        $this->app->singleton(
+            TransactionQueryAssemblerInterface::class,
+            $configure['transaction_query'] ?? TransactionQueryAssembler::class
+        );
+
+        $this->app->singleton(
+            TransferQueryAssemblerInterface::class,
+            $configure['transfer_query'] ?? TransferQueryAssembler::class
+        );
+    }
+
+    private function transformers(array $configure): void
+    {
+        $this->app->singleton(
+            TransactionDtoTransformerInterface::class,
+            $configure['transaction'] ?? TransactionDtoTransformer::class
+        );
+
+        $this->app->singleton(
+            TransferDtoTransformerInterface::class,
+            $configure['transfer'] ?? TransferDtoTransformer::class
+        );
     }
 
     private function legacySingleton(): void
     {
-        $this->app->singleton(ExchangeService::class, config('wallet.services.exchange', ExchangeService::class));
-        $this->app->singleton(Rateable::class, config('wallet.package.rateable', Rate::class));
-        $this->app->singleton(Storable::class, config('wallet.package.storable', Store::class));
-
-        $this->app->singleton(Mathable::class, BrickMath::class);
-
-        $this->app->singleton(DbService::class, config('wallet.services.db', DbService::class));
-        $this->app->singleton(LockService::class, config('wallet.services.lock', LockService::class));
-        $this->app->singleton(MetaService::class);
+        $this->app->singleton(CommonServiceLegacy::class);
+        $this->app->singleton(WalletServiceLegacy::class);
+        $this->app->singleton(MetaServiceLegacy::class);
     }
 
-    private function bindObjects(): void
+    private function bindObjects(array $configure): void
     {
-        // models
-        $this->app->bind(Transaction::class, config('wallet.transaction.model', Transaction::class));
-        $this->app->bind(Transfer::class, config('wallet.transfer.model', Transfer::class));
-        $this->app->bind(Wallet::class, config('wallet.wallet.model', Wallet::class));
-
-        // object's
-        $this->app->bind(Bring::class, config('wallet.objects.bring', Bring::class));
-        $this->app->bind(Cart::class, config('wallet.objects.cart', Cart::class));
-        $this->app->bind(EmptyLock::class, config('wallet.objects.emptyLock', EmptyLock::class));
-        $this->app->bind(Operation::class, config('wallet.objects.operation', Operation::class));
+        $this->app->bind(Transaction::class, $configure['transaction']['model'] ?? null);
+        $this->app->bind(Transfer::class, $configure['transfer']['model'] ?? null);
+        $this->app->bind(Wallet::class, $configure['wallet']['model'] ?? null);
     }
 }

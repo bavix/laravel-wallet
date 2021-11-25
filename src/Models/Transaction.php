@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Models;
 
-use function array_merge;
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
-use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Services\CastServiceInterface;
 use function config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,8 +21,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int         $wallet_id
  * @property string      $uuid
  * @property string      $type
- * @property int|string  $amount
- * @property float       $amountFloat
+ * @property string      $amount
+ * @property int         $amountInt
+ * @property string      $amountFloat
  * @property bool        $confirmed
  * @property array       $meta
  * @property Wallet      $payable
@@ -35,7 +35,7 @@ class Transaction extends Model
     public const TYPE_WITHDRAW = 'withdraw';
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $fillable = [
         'payable_type',
@@ -57,17 +57,6 @@ class Transaction extends Model
         'meta' => 'json',
     ];
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getCasts(): array
-    {
-        return array_merge(
-            parent::getCasts(),
-            config('wallet.transaction.casts', [])
-        );
-    }
-
     public function getTable(): string
     {
         if (!$this->table) {
@@ -87,13 +76,15 @@ class Transaction extends Model
         return $this->belongsTo(config('wallet.wallet.model', WalletModel::class));
     }
 
-    /**
-     * @return float|int
-     */
-    public function getAmountFloatAttribute()
+    public function getAmountIntAttribute(): int
     {
-        $math = app(MathInterface::class);
-        $decimalPlacesValue = app(WalletService::class)
+        return (int) $this->amount;
+    }
+
+    public function getAmountFloatAttribute(): string
+    {
+        $math = app(MathServiceInterface::class);
+        $decimalPlacesValue = app(CastServiceInterface::class)
             ->getWallet($this->wallet)
             ->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);
@@ -102,12 +93,12 @@ class Transaction extends Model
     }
 
     /**
-     * @param float|int $amount
+     * @param float|int|string $amount
      */
     public function setAmountFloatAttribute($amount): void
     {
-        $math = app(MathInterface::class);
-        $decimalPlacesValue = app(WalletService::class)
+        $math = app(MathServiceInterface::class);
+        $decimalPlacesValue = app(CastServiceInterface::class)
             ->getWallet($this->wallet)
             ->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);

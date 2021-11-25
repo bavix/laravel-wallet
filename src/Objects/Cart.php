@@ -5,42 +5,42 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Objects;
 
 use function array_unique;
+use Bavix\Wallet\Interfaces\CartInterface;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Product;
-use Bavix\Wallet\Internal\BasketInterface;
-use Bavix\Wallet\Internal\CartInterface;
-use Bavix\Wallet\Internal\Dto\AvailabilityDto;
 use Bavix\Wallet\Internal\Dto\BasketDto;
+use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
 use Bavix\Wallet\Internal\Dto\ItemDto;
-use Bavix\Wallet\Internal\MathInterface;
-use Bavix\Wallet\Internal\PurchaseInterface;
-use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Internal\Dto\ItemDtoInterface;
+use Bavix\Wallet\Internal\Exceptions\CartEmptyException;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
+use Bavix\Wallet\Services\CastServiceInterface;
 use function count;
 use Countable;
 use function get_class;
-use Illuminate\Database\Eloquent\Model;
 
-class Cart implements Countable, CartInterface
+final class Cart implements Countable, CartInterface
 {
     /**
      * @var Product[]
      */
     private array $items = [];
 
-    /** @var array<string, int> */
+    /** @var array<string, string> */
     private array $quantity = [];
 
     private array $meta = [];
 
-    private BasketInterface $basket;
+    private CastServiceInterface $castService;
 
-    private MathInterface $math;
+    private MathServiceInterface $math;
 
     public function __construct(
-        BasketInterface $basket,
-        MathInterface $math
+        CastServiceInterface $castService,
+        MathServiceInterface $math
     ) {
-        $this->basket = $basket;
+        $this->castService = $castService;
         $this->math = $math;
     }
 
@@ -56,22 +56,15 @@ class Cart implements Countable, CartInterface
         return $this;
     }
 
-    /**
-     * @return static
-     */
     public function addItem(Product $product, int $quantity = 1): self
     {
         $this->addQuantity($product, $quantity);
-        for ($i = 0; $i < $quantity; ++$i) {
-            $this->items[] = $product;
-        }
+        $products = array_fill(0, $quantity, $product);
+        $this->items = array_merge($this->items, $products);
 
         return $this;
     }
 
-    /**
-     * @return static
-     */
     public function addItems(iterable $products): self
     {
         foreach ($products as $product) {
@@ -97,30 +90,6 @@ class Cart implements Countable, CartInterface
         return array_unique($this->items);
     }
 
-    /**
-     * The method returns the transfers already paid for the goods.
-     *
-     * @return Transfer[]
-     *
-     * @deprecated
-     * @see PurchaseInterface::already()
-     */
-    public function alreadyBuy(Customer $customer, bool $gifts = false): array
-    {
-        return app(PurchaseInterface::class)->already($customer, $this->getBasketDto(), $gifts);
-    }
-
-    /**
-     * @deprecated
-     * @see BasketInterface::availability()
-     *
-     * @codeCoverageIgnore
-     */
-    public function canBuy(Customer $customer, bool $force = false): bool
-    {
-        return $this->basket->availability(new AvailabilityDto($customer, $this->getBasketDto(), $force));
-    }
-
     public function getTotal(Customer $customer): string
     {
         $result = 0;
@@ -138,32 +107,36 @@ class Cart implements Countable, CartInterface
 
     public function getQuantity(Product $product): int
     {
-        /** @var Model $product */
-        $uniq = (string) (method_exists($product, 'getUniqueId')
-            ? $product->getUniqueId()
-            : $product->getKey());
+        $model = $this->castService->getModel($product);
 
-        return (int) ($this->quantity[get_class($product).':'.$uniq] ?? 0);
+        return (int) ($this->quantity[get_class($product).':'.$model->getKey()] ?? 0);
     }
 
-    public function getBasketDto(): BasketDto
+    /**
+     * @throws CartEmptyException
+     */
+    public function getBasketDto(): BasketDtoInterface
     {
-        $items = [];
-        foreach ($this->getUniqueItems() as $product) {
-            $items[] = new ItemDto($product, $this->getQuantity($product));
+        $items = array_map(
+            fn (Product $product): ItemDtoInterface => new ItemDto($product, $this->getQuantity($product)),
+            $this->getUniqueItems()
+        );
+
+        if (count($items) === 0) {
+            throw new CartEmptyException(
+                'Cart is empty',
+                ExceptionInterface::CART_EMPTY
+            );
         }
 
         return new BasketDto($items, $this->getMeta());
     }
 
-    protected function addQuantity(Product $product, int $quantity): void
+    private function addQuantity(Product $product, int $quantity): void
     {
-        /** @var Model|Product $product */
-        $uniq = (string) (method_exists($product, 'getUniqueId')
-            ? $product->getUniqueId()
-            : $product->getKey());
+        $model = $this->castService->getModel($product);
 
-        $this->quantity[get_class($product).':'.$uniq] = $this->math
+        $this->quantity[get_class($product).':'.$model->getKey()] = $this->math
             ->add($this->getQuantity($product), $quantity)
         ;
     }

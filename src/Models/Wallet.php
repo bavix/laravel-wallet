@@ -6,12 +6,15 @@ namespace Bavix\Wallet\Models;
 
 use function app;
 use function array_key_exists;
-use function array_merge;
 use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Exchangeable;
 use Bavix\Wallet\Interfaces\WalletFloat;
-use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
+use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
+use Bavix\Wallet\Services\WalletServiceLegacy;
 use Bavix\Wallet\Traits\CanConfirm;
 use Bavix\Wallet\Traits\CanExchange;
 use Bavix\Wallet\Traits\CanPayFloat;
@@ -19,6 +22,7 @@ use Bavix\Wallet\Traits\HasGift;
 use function config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\RecordsNotFoundException;
 use Illuminate\Support\Str;
 
 /**
@@ -28,6 +32,7 @@ use Illuminate\Support\Str;
  * @property int                             $holder_id
  * @property string                          $name
  * @property string                          $slug
+ * @property string                          $uuid
  * @property string                          $description
  * @property array                           $meta
  * @property int                             $decimal_places
@@ -42,13 +47,14 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     use HasGift;
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $fillable = [
         'holder_type',
         'holder_id',
         'name',
         'slug',
+        'uuid',
         'description',
         'meta',
         'balance',
@@ -67,17 +73,6 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         'balance' => 0,
         'decimal_places' => 2,
     ];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCasts(): array
-    {
-        return array_merge(
-            parent::getCasts(),
-            config('wallet.wallet.casts', [])
-        );
-    }
 
     public function getTable(): string
     {
@@ -104,31 +99,21 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     /**
      * Under ideal conditions, you will never need a method.
      * Needed to deal with out-of-sync.
+     *
+     * @throws LockProviderNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function refreshBalance(): bool
     {
-        return app(WalletService::class)->refresh($this);
-    }
-
-    /**
-     * The method adjusts the balance by adding a transaction.
-     * Used wisely, it can lead to serious problems.
-     *
-     * @deprecated will be removed in version 7.x
-     */
-    public function adjustmentBalance(): bool
-    {
-        try {
-            app(WalletService::class)->adjustment($this);
-
-            return true;
-        } catch (\Throwable $throwable) {
-            return false;
-        }
+        return app(DatabaseServiceInterface::class)->transaction(
+            fn () => app(WalletServiceLegacy::class)->refresh($this)
+        );
     }
 
     /** @codeCoverageIgnore */
-    public function getOriginalBalance(): string
+    public function getOriginalBalanceAttribute(): string
     {
         if (method_exists($this, 'getRawOriginal')) {
             return (string) $this->getRawOriginal('balance', 0);
@@ -156,10 +141,6 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
 
     public function getCurrencyAttribute(): string
     {
-        $currencies = config('wallet.currencies', []);
-
-        return $currencies[$this->slug] ??
-            $this->meta['currency'] ??
-            Str::upper($this->slug);
+        return $this->meta['currency'] ?? Str::upper($this->slug);
     }
 }

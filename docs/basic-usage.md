@@ -71,11 +71,6 @@ class Item extends Model implements Product
             'description' => 'Purchase of Product #' . $this->id,
         ];
     }
-    
-    public function getUniqueId(): string
-    {
-        return (string)$this->getKey();
-    }
 }
 ```
 

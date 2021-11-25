@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'price_positive' => 'قیمت باید عددی مثبت باشد',
     'product_stock' => 'کالا موجود نیست',

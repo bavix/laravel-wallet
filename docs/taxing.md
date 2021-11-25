@@ -49,12 +49,7 @@ class Item extends Model implements Product, Taxable
             'description' => 'Purchase of Product #' . $this->id,
         ];
     }
-    
-    public function getUniqueId(): string
-    {
-        return (string)$this->getKey();
-    }
-    
+
     public function getFeePercent()
     {
         return 0.03; // 3%    
@@ -120,12 +115,7 @@ class Item extends Model implements Product, MinimalTaxable
             'description' => 'Purchase of Product #' . $this->id,
         ];
     }
-    
-    public function getUniqueId(): string
-    {
-        return (string)$this->getKey();
-    }
-    
+
     public function getFeePercent()
     {
         return 0.03; // 3%    

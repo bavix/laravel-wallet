@@ -4,48 +4,52 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
-use Bavix\Wallet\Internal\LockInterface;
-use Illuminate\Cache\CacheManager;
-use Illuminate\Config\Repository as ConfigRepository;
-use Illuminate\Contracts\Cache\LockProvider;
-use Illuminate\Contracts\Cache\Repository as CacheRepository;
+use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
+use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
+use Bavix\Wallet\Internal\Service\LockServiceInterface;
+use Illuminate\Database\RecordsNotFoundException;
 
-class AtomicService implements LockInterface
+final class AtomicService implements AtomicServiceInterface
 {
-    private CacheRepository $cache;
+    private const PREFIX = 'wallet_atomic::';
 
-    private int $seconds;
+    private DatabaseServiceInterface $databaseService;
+    private LockServiceInterface $lockService;
+    private CastServiceInterface $castService;
 
     public function __construct(
-        CacheManager $cacheManager,
-        ConfigRepository $config
+        DatabaseServiceInterface $databaseService,
+        LockServiceInterface $lockService,
+        CastServiceInterface $castService
     ) {
-        $this->seconds = (int) $config->get('wallet.lock.seconds', 1);
-        $this->cache = $cacheManager->driver(
-            $config->get('wallet.lock.cache', 'array')
-        );
-    }
-
-    /** @throws LockProviderNotFoundException */
-    public function block(string $key, callable $callback)
-    {
-        return $this->getLockProvider()->lock($key)
-            ->block($this->seconds, $callback)
-        ;
+        $this->databaseService = $databaseService;
+        $this->lockService = $lockService;
+        $this->castService = $castService;
     }
 
     /**
      * @throws LockProviderNotFoundException
-     * @codeCoverageIgnore
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
+     *
+     * @return mixed
      */
-    private function getLockProvider(): LockProvider
+    public function block(Wallet $object, callable $callback)
     {
-        $store = $this->cache->getStore();
-        if ($store instanceof LockProvider) {
-            return $store;
-        }
+        return $this->lockService->block(
+            $this->key($object),
+            fn () => $this->databaseService->transaction($callback)
+        );
+    }
 
-        throw new LockProviderNotFoundException();
+    private function key(Wallet $object): string
+    {
+        $wallet = $this->castService->getWallet($object);
+
+        return self::PREFIX.'::'.get_class($wallet).'::'.$wallet->uuid;
     }
 }

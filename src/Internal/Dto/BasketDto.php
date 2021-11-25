@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Dto;
 
-use Countable;
+use Bavix\Wallet\Interfaces\Product;
+use Generator;
 
-class BasketDto implements Countable
+final class BasketDto implements BasketDtoInterface
 {
-    /** @var ItemDto[] */
+    /** @var non-empty-array<int|string, ItemDtoInterface> */
     private array $items;
 
     private array $meta;
 
-    /** @param ItemDto[] $items */
+    /** @param non-empty-array<int|string, ItemDtoInterface> $items */
     public function __construct(array $items, array $meta)
     {
         $this->items = $items;
@@ -32,18 +33,19 @@ class BasketDto implements Countable
 
     public function total(): int
     {
-        return count(array_merge(...array_map(static fn (ItemDto $dto) => $dto->items(), $this->items)));
+        return iterator_count($this->cursor());
     }
 
-    public function cursor(): iterable
+    /** @return Generator<array-key, Product, mixed, void> */
+    public function cursor(): Generator
     {
         foreach ($this->items as $item) {
             yield from $item->items();
         }
     }
 
-    /** @return ItemDto[] */
-    public function items(): iterable
+    /** @return non-empty-array<int|string, ItemDtoInterface> */
+    public function items(): array
     {
         return $this->items;
     }

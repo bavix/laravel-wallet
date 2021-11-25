@@ -15,6 +15,7 @@ env:
 jobs:
   units:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         php-versions: [7.4, 8.0, 8.1]
@@ -85,9 +86,11 @@ jobs:
 
     steps:
       - name: Checkout
+        id: git-checkout
         uses: actions/checkout@v2
 
       - name: Setup PHP
+        id: php-install
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
@@ -95,6 +98,7 @@ jobs:
           coverage: pcov
 
       - name: Validate composer.json and composer.lock
+        id: composer-validate
         run: composer validate --strict
 
       - name: Cache Composer packages
@@ -107,43 +111,53 @@ jobs:
             ${{ runner.os }}-php-
 
       - name: Install dependencies
+        id: composer-dependencies
         run: composer install --prefer-dist --no-progress
 
-      - name: Prepare run test suite
-        run: |
-          mkdir build
+      - name: Check codeclimate
+        id: codeclimate-check
+        run: "echo ::set-output name=execute::${{ matrix.php-versions == '8.0' && matrix.caches == 'array' && matrix.databases == 'testing' }}"
 
       - name: Prepare codeclimate
+        id: codeclimate-prepare
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
-        if: ${{ matrix.php-versions == '8.0' }}
+        if: ${{ steps.codeclimate-check.outputs.execute == 'true' }}
+
+      - name: Prepare run test suite
+        id: unit-prepare
+        run: |
+          mkdir build
 
       - name: Run test suite
+        id: unit-run
         run: |
-          if [[ $DB_CONNECTION == "testing" ]]; then
-            composer paraunit
-          else
+          if [[ $DB_CONNECTION == "mariadb" ]]; then
             composer unit
+          else
+            composer parabench
           fi
         env:
           CACHE_DRIVER: ${{ matrix.caches }}
           DB_CONNECTION: ${{ matrix.databases }}
 
       - name: Run mutation test suite
+        id: infect-run
         run: composer infect
         env:
           CACHE_DRIVER: ${{ matrix.caches }}
           DB_CONNECTION: ${{ matrix.databases }}
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
-        if: ${{ matrix.php-versions == '8.0' }}
+        if: ${{ steps.codeclimate-check.outputs.execute == 'true' }}
 
       - name: Send coverage
+        id: codeclimate-send
         run: |
           ./cc-test-reporter after-build --coverage-input-type clover --exit-code 0
           bash <(curl -s https://codecov.io/bash)
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        if: ${{ matrix.php-versions == '8.0' }}
+        if: ${{ steps.codeclimate-check.outputs.execute == 'true' }}

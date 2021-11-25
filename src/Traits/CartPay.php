@@ -1,118 +1,145 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Traits;
 
 use function array_unique;
+use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Exceptions\ProductEnded;
+use Bavix\Wallet\Interfaces\CartInterface;
 use Bavix\Wallet\Interfaces\Product;
-use Bavix\Wallet\Internal\BasketInterface;
-use Bavix\Wallet\Internal\CartInterface;
-use Bavix\Wallet\Internal\ConsistencyInterface;
-use Bavix\Wallet\Internal\Dto\AvailabilityDto;
-use Bavix\Wallet\Internal\PurchaseInterface;
+use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssemblerInterface;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
+use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
-use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\DbService;
-use Bavix\Wallet\Services\MetaService;
+use Bavix\Wallet\Services\AtomicServiceInterface;
+use Bavix\Wallet\Services\BasketServiceInterface;
+use Bavix\Wallet\Services\CommonServiceLegacy;
+use Bavix\Wallet\Services\ConsistencyServiceInterface;
+use Bavix\Wallet\Services\MetaServiceLegacy;
+use Bavix\Wallet\Services\PrepareServiceInterface;
+use Bavix\Wallet\Services\PurchaseServiceInterface;
 use function count;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Throwable;
+use Illuminate\Database\RecordsNotFoundException;
 
 trait CartPay
 {
     use HasWallet;
 
     /**
-     * @throws
+     * @throws ProductEnded
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      *
-     * @return Transfer[]
+     * @return non-empty-array<Transfer>
      */
     public function payFreeCart(CartInterface $cart): array
     {
-        $basketService = app(BasketInterface::class);
-        if (!$basketService->availability(new AvailabilityDto($this, $cart->getBasketDto()))) {
-            throw new ProductEnded(trans('wallet::errors.product_stock'));
-        }
-
-        app(ConsistencyInterface::class)->checkPotential($this, 0, true);
-
-        $self = $this;
-
-        return app(DbService::class)->transaction(static function () use ($self, $cart) {
-            $results = [];
-            foreach ($cart->getBasketDto()->cursor() as $product) {
-                $results[] = app(CommonService::class)->forceTransfer(
-                    $self,
-                    $product,
-                    0,
-                    app(MetaService::class)->getMeta($cart, $product),
-                    Transfer::STATUS_PAID
+        return app(AtomicServiceInterface::class)->block($this, function () use ($cart) {
+            $basketService = app(BasketServiceInterface::class);
+            $availabilityAssembler = app(AvailabilityDtoAssemblerInterface::class);
+            if (!$basketService->availability($availabilityAssembler->create($this, $cart->getBasketDto(), false))) {
+                throw new ProductEnded(
+                    app(TranslatorServiceInterface::class)->get('wallet::errors.product_stock'),
+                    ExceptionInterface::PRODUCT_ENDED
                 );
             }
 
-            return $results;
+            app(ConsistencyServiceInterface::class)->checkPotential($this, 0, true);
+
+            $transfers = [];
+            $prepareService = app(PrepareServiceInterface::class);
+            $metaService = app(MetaServiceLegacy::class);
+            foreach ($cart->getBasketDto()->cursor() as $product) {
+                $transfers[] = $prepareService->transferLazy(
+                    $this,
+                    $product,
+                    Transfer::STATUS_PAID,
+                    0,
+                    $metaService->getMeta($cart, $product)
+                );
+            }
+
+            return app(CommonServiceLegacy::class)->applyTransfers($transfers);
         });
     }
 
-    /**
-     * @return Transfer[]
-     */
+    /** @return Transfer[] */
     public function safePayCart(CartInterface $cart, bool $force = false): array
     {
         try {
             return $this->payCart($cart, $force);
-        } catch (Throwable $throwable) {
+        } catch (ExceptionInterface $throwable) {
             return [];
         }
     }
 
     /**
-     * @throws
+     * @throws ProductEnded
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      *
-     * @return Transfer[]
+     * @return non-empty-array<Transfer>
      */
     public function payCart(CartInterface $cart, bool $force = false): array
     {
-        $basketService = app(BasketInterface::class);
-        if (!$basketService->availability(new AvailabilityDto($this, $cart->getBasketDto(), $force))) {
-            throw new ProductEnded(trans('wallet::errors.product_stock'));
-        }
-
-        $self = $this;
-
-        return app(DbService::class)->transaction(static function () use ($self, $cart, $force) {
-            $results = [];
-            foreach ($cart->getBasketDto()->cursor() as $product) {
-                if ($force) {
-                    $results[] = app(CommonService::class)->forceTransfer(
-                        $self,
-                        $product,
-                        $product->getAmountProduct($self),
-                        app(MetaService::class)->getMeta($cart, $product),
-                        Transfer::STATUS_PAID
-                    );
-
-                    continue;
-                }
-
-                $results[] = app(CommonService::class)->transfer(
-                    $self,
-                    $product,
-                    $product->getAmountProduct($self),
-                    app(MetaService::class)->getMeta($cart, $product),
-                    Transfer::STATUS_PAID
+        return app(AtomicServiceInterface::class)->block($this, function () use ($cart, $force) {
+            $basketService = app(BasketServiceInterface::class);
+            $availabilityAssembler = app(AvailabilityDtoAssemblerInterface::class);
+            if (!$basketService->availability($availabilityAssembler->create($this, $cart->getBasketDto(), $force))) {
+                throw new ProductEnded(
+                    app(TranslatorServiceInterface::class)->get('wallet::errors.product_stock'),
+                    ExceptionInterface::PRODUCT_ENDED
                 );
             }
 
-            return $results;
+            $transfers = [];
+            $prepareService = app(PrepareServiceInterface::class);
+            $metaService = app(MetaServiceLegacy::class);
+            foreach ($cart->getBasketDto()->cursor() as $product) {
+                $transfers[] = $prepareService->transferLazy(
+                    $this,
+                    $product,
+                    Transfer::STATUS_PAID,
+                    $product->getAmountProduct($this),
+                    $metaService->getMeta($cart, $product)
+                );
+            }
+
+            if ($force === false) {
+                app(ConsistencyServiceInterface::class)->checkTransfer($transfers);
+            }
+
+            return app(CommonServiceLegacy::class)->applyTransfers($transfers);
         });
     }
 
     /**
-     * @throws
+     * @throws ProductEnded
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      *
-     * @return Transfer[]
+     * @return non-empty-array<Transfer>
      */
     public function forcePayCart(CartInterface $cart): array
     {
@@ -123,27 +150,35 @@ trait CartPay
     {
         try {
             return $this->refundCart($cart, $force, $gifts);
-        } catch (Throwable $throwable) {
+        } catch (ExceptionInterface $throwable) {
             return false;
         }
     }
 
     /**
-     * @throws
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
      */
     public function refundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool
     {
-        $self = $this;
-
-        return app(DbService::class)->transaction(static function () use ($self, $cart, $force, $gifts) {
+        return app(AtomicServiceInterface::class)->block($this, function () use ($cart, $force, $gifts) {
             $results = [];
-            $transfers = app(PurchaseInterface::class)->already($self, $cart->getBasketDto(), $gifts);
+            $transfers = app(PurchaseServiceInterface::class)->already($this, $cart->getBasketDto(), $gifts);
             if (count($transfers) !== $cart->getBasketDto()->total()) {
-                throw (new ModelNotFoundException())
-                    ->setModel($self->transfers()->getMorphClass())
-                ;
+                throw new ModelNotFoundException(
+                    "No query results for model [{$this->transfers()->getMorphClass()}]",
+                    ExceptionInterface::MODEL_NOT_FOUND
+                );
             }
 
+            $objects = [];
+            $prepareService = app(PrepareServiceInterface::class);
             foreach ($cart->getBasketDto()->cursor() as $product) {
                 $transfer = current($transfers);
                 next($transfers);
@@ -151,19 +186,25 @@ trait CartPay
                  * the code is extremely poorly written, a complete refactoring is required.
                  * for version 6.x we will leave it as it is.
                  */
-                $transfer->load('withdraw.wallet');
+                $transfer->load('withdraw.wallet'); // fixme: need optimize
 
-                if (!$force) {
-                    app(ConsistencyInterface::class)->checkPotential($product, $transfer->deposit->amount);
-                }
-
-                app(CommonService::class)->forceTransfer(
+                $objects[] = $prepareService->transferLazy(
                     $product,
                     $transfer->withdraw->wallet,
-                    $transfer->deposit->amount,
-                    app(MetaService::class)->getMeta($cart, $product)
+                    Transfer::STATUS_TRANSFER,
+                    $transfer->deposit->amount, // fixme: need optimize
+                    app(MetaServiceLegacy::class)->getMeta($cart, $product)
                 );
+            }
 
+            if ($force === false) {
+                app(ConsistencyServiceInterface::class)->checkTransfer($objects);
+            }
+
+            app(CommonServiceLegacy::class)->applyTransfers($objects);
+
+            // fixme: one query update for
+            foreach ($transfers as $transfer) {
                 $results[] = $transfer->update([
                     'status' => Transfer::STATUS_REFUND,
                     'status_last' => $transfer->status,
@@ -175,7 +216,12 @@ trait CartPay
     }
 
     /**
-     * @throws
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
      */
     public function forceRefundCart(CartInterface $cart, bool $gifts = false): bool
     {
@@ -186,13 +232,20 @@ trait CartPay
     {
         try {
             return $this->refundGiftCart($cart, $force);
-        } catch (Throwable $throwable) {
+        } catch (ExceptionInterface $throwable) {
             return false;
         }
     }
 
     /**
-     * @throws
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
      */
     public function refundGiftCart(CartInterface $cart, bool $force = false): bool
     {
@@ -200,7 +253,12 @@ trait CartPay
     }
 
     /**
-     * @throws
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
      */
     public function forceRefundGiftCart(CartInterface $cart): bool
     {
@@ -213,7 +271,7 @@ trait CartPay
     public function paid(Product $product, bool $gifts = false): ?Transfer
     {
         $cart = app(Cart::class)->addItem($product);
-        $purchases = app(PurchaseInterface::class)
+        $purchases = app(PurchaseServiceInterface::class)
             ->already($this, $cart->getBasketDto(), $gifts)
         ;
 

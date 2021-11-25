@@ -163,4 +163,34 @@ Your code on 6.x:
     'mathable' => BrickMath::class,
 ```
 
+## 6.x.x → 7.x.x
 
+*Update `config/wallet.php`*
+
+The `config/wallet.php` config has changed a lot, if you have it in your project, then replace it run.
+
+```bash
+php artisan vendor:publish --tag=laravel-wallet-config --force
+```
+
+Then return your settings. The package configuration has changed globally and there is no point in describing each key 🔑
+
+---
+
+*UUID for wallet*
+
+The uuid field has been added to the wallet table, which is now actively used.
+If you have a highload, then I recommend that you add the field yourself and mark the migration (UpdateWalletsUuidTable) completed.
+If you have mysql, it is better to do this via [pt-online-schema-change](https://www.percona.com/doc/percona-toolkit/3.0/pt-online-schema-change.html).
+
+If you have a small project and a small wallet base, then the migration will be applied automatically.
+
+---
+
+That's it, you can use all 7.x functions to the fullest. 
+The contract did not change globally, added more stringency and toned down the performance of the package. 
+On a basket of 150 products, the acceleration is a whopping 24x.
+
+All changes can be found in the [pull request](https://github.com/bavix/laravel-wallet/pull/407/files). 
+The kernel has changed globally, I would not recommend switching to version 7.0.0 at the very beginning, there may be bugs. 
+I advise you should at least 7.0.1.

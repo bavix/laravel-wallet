@@ -1,18 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Exceptions\InsufficientFunds;
+use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
 use function current;
+use Illuminate\Database\RecordsNotFoundException;
 
 trait CanPay
 {
     use CartPay;
 
     /**
-     * @throws
+     * @throws ProductEnded
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function payFree(Product $product): Transfer
     {
@@ -25,7 +43,14 @@ trait CanPay
     }
 
     /**
-     * @throws
+     * @throws ProductEnded
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function pay(Product $product, bool $force = false): Transfer
     {
@@ -33,7 +58,12 @@ trait CanPay
     }
 
     /**
-     * @throws
+     * @throws ProductEnded
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function forcePay(Product $product): Transfer
     {
@@ -46,7 +76,14 @@ trait CanPay
     }
 
     /**
-     * @throws
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
      */
     public function refund(Product $product, bool $force = false, bool $gifts = false): bool
     {
@@ -54,7 +91,12 @@ trait CanPay
     }
 
     /**
-     * @throws
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
      */
     public function forceRefund(Product $product, bool $gifts = false): bool
     {
@@ -67,7 +109,14 @@ trait CanPay
     }
 
     /**
-     * @throws
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
      */
     public function refundGift(Product $product, bool $force = false): bool
     {
@@ -75,7 +124,12 @@ trait CanPay
     }
 
     /**
-     * @throws
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
      */
     public function forceRefundGift(Product $product): bool
     {

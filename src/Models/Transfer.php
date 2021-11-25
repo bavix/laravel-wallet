@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Models;
 
-use function array_merge;
 use function config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * Class Transfer.
  *
  * @property string      $status
- * @property int         $discount
+ * @property string      $discount
  * @property int         $deposit_id
  * @property int         $withdraw_id
  * @property string      $from_type
@@ -22,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property string      $to_type
  * @property int         $to_id
  * @property string      $uuid
- * @property int         $fee
+ * @property string      $fee
  * @property Transaction $deposit
  * @property Transaction $withdraw
  */
@@ -35,7 +34,7 @@ class Transfer extends Model
     public const STATUS_GIFT = 'gift';
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $fillable = [
         'status',
@@ -57,17 +56,6 @@ class Transfer extends Model
         'deposit_id' => 'int',
         'withdraw_id' => 'int',
     ];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCasts(): array
-    {
-        return array_merge(
-            parent::getCasts(),
-            config('wallet.transfer.casts', [])
-        );
-    }
 
     public function getTable(): string
     {

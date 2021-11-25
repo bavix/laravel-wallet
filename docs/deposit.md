@@ -24,6 +24,7 @@ Check the user's balance.
 
 ```php
 $user->balance; // 0
+$user->balanceInt; // 0
 ```
 
 The balance is zero, which is what we expected.
@@ -32,6 +33,7 @@ Put it on his 10 cents account.
 ```php
 $user->deposit(10); 
 $user->balance; // 10
+$user->balanceInt; // 10
 ```
 
 Wow! The balance is 10 cents, the money is credited.

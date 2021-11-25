@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Traits;
 
 use function array_key_exists;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
+use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use function config;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\ModelNotFoundException as EloquentModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
 
@@ -72,10 +77,18 @@ trait HasWallets
         }
 
         if (!array_key_exists($slug, $this->_wallets)) {
-            $this->_wallets[$slug] = $this->wallets()
-                ->where('slug', $slug)
-                ->firstOrFail()
-            ;
+            try {
+                $this->_wallets[$slug] = $this->wallets()
+                    ->where('slug', $slug)
+                    ->firstOrFail()
+                ;
+            } catch (EloquentModelNotFoundException $exception) {
+                throw new ModelNotFoundException(
+                    $exception->getMessage(),
+                    ExceptionInterface::MODEL_NOT_FOUND,
+                    $exception
+                );
+            }
         }
 
         return $this->_wallets[$slug];
@@ -94,7 +107,8 @@ trait HasWallets
         /** @var WalletModel $wallet */
         $wallet = $this->wallets()->create(array_merge(
             config('wallet.wallet.creating', []),
-            $data
+            $data,
+            ['uuid' => app(UuidFactoryServiceInterface::class)->uuid4()]
         ));
 
         $this->_wallets[$wallet->slug] = $wallet;

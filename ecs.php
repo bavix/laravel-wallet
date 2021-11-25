@@ -17,18 +17,21 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'syntax' => 'short',
         ]]);
 
-    //$services->set(DeclareStrictTypesFixer::class);
+    $services->set(DeclareStrictTypesFixer::class);
 
     $parameters = $containerConfigurator->parameters();
+    $parameters->set(Option::PARALLEL, true);
     $parameters->set(Option::PATHS, [
+        __DIR__ . '/config',
         __DIR__ . '/database',
+        __DIR__ . '/resources/lang',
         __DIR__ . '/src',
         __DIR__ . '/tests',
     ]);
 
     $parameters->set(Option::SKIP, [
-        PhpUnitTestClassRequiresCoversFixer::class,
         PhpdocToCommentFixer::class,
+        PhpUnitTestClassRequiresCoversFixer::class,
     ]);
 
     $containerConfigurator->import(SetList::CLEAN_CODE);
@@ -36,5 +39,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(SetList::PHP_CS_FIXER);
     $containerConfigurator->import(SetList::CONTROL_STRUCTURES);
     $containerConfigurator->import(SetList::NAMESPACES);
-    //$containerConfigurator->import(SetList::STRICT);
+    $containerConfigurator->import(SetList::STRICT);
+    $containerConfigurator->import(SetList::PHPUNIT);
 };

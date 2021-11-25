@@ -1,79 +1,100 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Internal\ConsistencyInterface;
-use Bavix\Wallet\Internal\MathInterface;
+use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Objects\Bring;
-use Bavix\Wallet\Services\CommonService;
-use Bavix\Wallet\Services\DbService;
-use Bavix\Wallet\Services\ExchangeService;
-use Bavix\Wallet\Services\LockService;
-use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Services\AtomicServiceInterface;
+use Bavix\Wallet\Services\CastServiceInterface;
+use Bavix\Wallet\Services\CommonServiceLegacy;
+use Bavix\Wallet\Services\ConsistencyServiceInterface;
+use Bavix\Wallet\Services\ExchangeServiceInterface;
+use Bavix\Wallet\Services\PrepareServiceInterface;
+use Bavix\Wallet\Services\TaxServiceInterface;
+use Illuminate\Database\RecordsNotFoundException;
 
 trait CanExchange
 {
     /**
-     * {@inheritdoc}
+     * @param int|string $amount
+     *
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function exchange(Wallet $to, $amount, ?array $meta = null): Transfer
     {
-        $wallet = app(WalletService::class)->getWallet($this);
+        $wallet = app(CastServiceInterface::class)->getWallet($this);
 
-        app(ConsistencyInterface::class)->checkPotential($wallet, $amount);
+        app(ConsistencyServiceInterface::class)->checkPotential($wallet, $amount);
 
         return $this->forceExchange($to, $amount, $meta);
     }
 
     /**
-     * {@inheritdoc}
+     * @param int|string $amount
      */
     public function safeExchange(Wallet $to, $amount, ?array $meta = null): ?Transfer
     {
         try {
             return $this->exchange($to, $amount, $meta);
-        } catch (\Throwable $throwable) {
+        } catch (ExceptionInterface $throwable) {
             return null;
         }
     }
 
     /**
-     * {@inheritdoc}
+     * @param int|string $amount
+     *
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function forceExchange(Wallet $to, $amount, ?array $meta = null): Transfer
     {
-        /** @var Wallet $from */
-        $from = app(WalletService::class)->getWallet($this);
+        return app(AtomicServiceInterface::class)->block($this, function () use ($to, $amount, $meta) {
+            $prepareService = app(PrepareServiceInterface::class);
+            $mathService = app(MathServiceInterface::class);
+            $castService = app(CastServiceInterface::class);
+            $taxService = app(TaxServiceInterface::class);
+            $fee = $taxService->getFee($to, $amount);
+            $rate = app(ExchangeServiceInterface::class)->convertTo(
+                $castService->getWallet($this)->currency,
+                $castService->getWallet($to)->currency,
+                1
+            );
 
-        return app(LockService::class)->lock($this, __FUNCTION__, static function () use ($from, $to, $amount, $meta) {
-            return app(DbService::class)->transaction(static function () use ($from, $to, $amount, $meta) {
-                $math = app(MathInterface::class);
-                $rate = app(ExchangeService::class)->rate($from, $to);
-                $fee = app(WalletService::class)->fee($to, $amount);
+            $withdrawDto = $prepareService->withdraw($this, $mathService->add($amount, $fee), $meta);
+            $depositDto = $prepareService->deposit($to, $mathService->floor($mathService->mul($amount, $rate, 1)), $meta);
+            $transferLazyDto = app(TransferLazyDtoAssemblerInterface::class)->create(
+                $this,
+                $to,
+                0,
+                $fee,
+                $withdrawDto,
+                $depositDto,
+                Transfer::STATUS_EXCHANGE,
+            );
 
-                $withdraw = app(CommonService::class)
-                    ->forceWithdraw($from, $math->add($amount, $fee), $meta)
-                ;
+            $transfers = app(CommonServiceLegacy::class)->applyTransfers([$transferLazyDto]);
 
-                $deposit = app(CommonService::class)
-                    ->deposit($to, $math->floor($math->mul($amount, $rate, 1)), $meta)
-                ;
-
-                $transfers = app(CommonService::class)->multiBrings([
-                    app(Bring::class)
-                        ->setDiscount(0)
-                        ->setStatus(Transfer::STATUS_EXCHANGE)
-                        ->setDeposit($deposit)
-                        ->setWithdraw($withdraw)
-                        ->setFrom($from)
-                        ->setFee($fee)
-                        ->setTo($to),
-                ]);
-
-                return current($transfers);
-            });
+            return current($transfers);
         });
     }
 }

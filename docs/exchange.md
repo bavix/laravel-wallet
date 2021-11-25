@@ -12,23 +12,6 @@ $user->createWallet([
 ]);
 ```
 
-> Management via config file is deprecated. 
-> Create wallets with parameter in meta.currency.
-> In the 7.x release, the ability to specify the currency through wallet.php will be removed.
-
-Currencies are configured in the general configuration file `config/wallet.php`.
-
-```php
-    'currencies' => [
-        'xbtc' => 'BTC',
-        'dollar' => 'USD',
-        'ruble' => 'RUB',
-    ],
-```
-
-The key in the configuration is the `slug` of your wallet.
-Value, this is the currency of your wallet.
-
 Service for working with currencies you need to write yourself or
 use [library](https://github.com/bavix/laravel-wallet-swap).
 
@@ -38,42 +21,38 @@ We will write a simple service.
 We will take the data from the array, and not from the database.
 
 ```php
-use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Services\WalletService;
-use Illuminate\Support\Arr;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
+use Bavix\Wallet\Services\ExchangeServiceInterface;
 
-class MyRateService extends \Bavix\Wallet\Simple\Rate
+class MyExchangeService implements ExchangeServiceInterface
 {
-
-    // list of exchange rates (take from the database)
-    protected $rates = [
+    private array $rates = [
         'USD' => [
             'RUB' => 67.61,
         ],
-        'RUB' => [
-            'USD' => 0.0147907114,
-        ],
     ];
 
-    protected function rate(Wallet $wallet)
-    {
-        $from = app(WalletService::class)->getWallet($this->withCurrency);
-        $to = app(WalletService::class)->getWallet($wallet);
+    private MathServiceInterface $mathService;
 
-        return Arr::get(
-            Arr::get($this->rates, $from->currency, []),
-            $to->currency,
-            1
-        );
+    public function __construct(MathServiceInterface $mathService)
+    {
+        $this->mathService = $mathService;
+
+        foreach ($this->rates as $from => $rates) {
+            foreach ($rates as $to => $rate) {
+                if (empty($this->rates[$to][$from])) {
+                    $this->rates[$to][$from] = $this->mathService->div(1, $rate);
+                }
+            }
+        }
     }
 
-    public function convertTo(Wallet $wallet)
+    /** @param float|int|string $amount */
+    public function convertTo(string $fromCurrency, string $toCurrency, $amount): string
     {
-        return parent::convertTo($wallet) * $this->rate($wallet);
+        return $this->mathService->mul($amount, $this->rates[$fromCurrency][$toCurrency] ?? 1);
     }
-
 }
-
 ```
 
 #### Service Registration
@@ -83,8 +62,8 @@ The service you wrote must be registered, this is done in the file `config/walle
 ```php
 return [
     // ...
-    'package' => [
-        'rateable' => MyRateService::class,
+    'services' => [
+        'exchange' => MyExchangeService::class,
         // ...
     ],
     // ...
@@ -98,12 +77,12 @@ Create two wallets.
 ```php
 $usd = $user->createWallet([
     'name' => 'My Dollars',
-    'slug' => 'dollar',
+    'meta' => ['currency' => 'USD'],
 ]);
 
 $rub = $user->createWallet([
-    'name' => 'My Rub',
-    'slug' => 'ruble',
+    'name' => 'My Ruble',
+    'meta' => ['currency' => 'RUB'],
 ]);
 ```
 
