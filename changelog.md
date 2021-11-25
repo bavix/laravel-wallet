@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.0.0] - 2021-11-25
 ### Updated
 - Optimization of the `payFreeCart` and `payFree` request. Now the package does not update the repository. But there is no point in updating it, because the client does not pay anything.
 - Now everything is in contracts. It became easier for you to modify the package to suit your needs.
@@ -732,7 +733,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/6.2.4...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/7.0.0...develop
+[7.0.0]: https://github.com/bavix/laravel-wallet/compare/6.2.4...7.0.0
 [6.2.4]: https://github.com/bavix/laravel-wallet/compare/6.2.3...6.2.4
 [6.2.3]: https://github.com/bavix/laravel-wallet/compare/6.2.2...6.2.3
 [6.2.2]: https://github.com/bavix/laravel-wallet/compare/6.2.1...6.2.2
