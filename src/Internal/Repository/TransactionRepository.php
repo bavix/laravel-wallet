@@ -39,14 +39,14 @@ final class TransactionRepository implements TransactionRepositoryInterface
             );
         }
 
-        assert($this->transaction->newQuery()->insert($values) === true);
+        $this->transaction->newQuery()->insert($values);
     }
 
     public function insertOne(TransactionDtoInterface $dto): Transaction
     {
         $attributes = $this->transformer->extract($dto);
         $instance = $this->transaction->newInstance($attributes);
-        assert($instance->saveQuietly() === true);
+        $instance->saveQuietly();
 
         return $instance;
     }
