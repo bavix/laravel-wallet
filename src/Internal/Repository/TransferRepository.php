@@ -29,14 +29,14 @@ final class TransferRepository implements TransferRepositoryInterface
     public function insert(array $objects): void
     {
         $values = array_map(fn (TransferDtoInterface $dto): array => $this->transformer->extract($dto), $objects);
-        $this->transfer->newQuery()->insert($values);
+        assert($this->transfer->newQuery()->insert($values) === true);
     }
 
     public function insertOne(TransferDtoInterface $dto): Transfer
     {
         $attributes = $this->transformer->extract($dto);
         $instance = $this->transfer->newInstance($attributes);
-        $instance->saveQuietly();
+        $instance->save();
 
         assert($instance->getKey() !== null);
 
