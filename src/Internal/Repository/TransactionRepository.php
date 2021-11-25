@@ -9,7 +9,6 @@ use Bavix\Wallet\Internal\Query\TransactionQueryInterface;
 use Bavix\Wallet\Internal\Service\JsonServiceInterface;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
 use Bavix\Wallet\Models\Transaction;
-use function PHPUnit\Framework\assertTrue;
 
 final class TransactionRepository implements TransactionRepositoryInterface
 {
@@ -40,14 +39,14 @@ final class TransactionRepository implements TransactionRepositoryInterface
             );
         }
 
-        assertTrue($this->transaction->newQuery()->insert($values));
+        assert($this->transaction->newQuery()->insert($values) === true);
     }
 
     public function insertOne(TransactionDtoInterface $dto): Transaction
     {
         $attributes = $this->transformer->extract($dto);
         $instance = $this->transaction->newInstance($attributes);
-        assertTrue($instance->saveQuietly());
+        assert($instance->saveQuietly() === true);
 
         return $instance;
     }
