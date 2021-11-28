@@ -44,7 +44,10 @@ final class StateService implements StateServiceInterface
                 continue;
             }
 
-            $this->bookkeeperService->increase($wallet, $diffValue);
+            $balance = $this->bookkeeperService->increase($wallet, $diffValue);
+            $wallet->newQuery()->whereKey($wallet->getKey())->update(['balance' => $balance]); // ?qN
+            $wallet->fill(['balance' => $balance])->syncOriginalAttribute('balance');
+
             $flags[$wallet->uuid] = true;
         }
 

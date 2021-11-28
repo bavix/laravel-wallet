@@ -200,12 +200,8 @@ final class CommonServiceLegacy
             $object = $this->castService->getWallet($wallet);
             assert((int) $object->getKey() === $walletId);
 
-            $object->getBalanceAttribute();
-            $balance = $this->regulatorService->increase($object, $total);
+            $this->regulatorService->increase($object, $total);
             $this->stateService->persist($object);
-
-            $object->newQuery()->whereKey($object->getKey())->update(['balance' => $balance]); // ?qN
-            $object->fill(['balance' => $balance])->syncOriginalAttribute('balance');
         }
 
         return $transactions;
