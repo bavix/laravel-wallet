@@ -19,4 +19,7 @@ interface RegulatorServiceInterface
 
     /** @param float|int|string $value */
     public function increase(Wallet $wallet, $value): string;
+
+    /** @param float|int|string $value */
+    public function decrease(Wallet $wallet, $value): string;
 }

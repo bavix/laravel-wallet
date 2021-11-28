@@ -74,6 +74,12 @@ final class RegulatorService implements RegulatorServiceInterface
         }
     }
 
+    /** @param float|int|string $value */
+    public function decrease(Wallet $wallet, $value): string
+    {
+        return $this->increase($wallet, $this->mathService->negative($value));
+    }
+
     private function getKey(string $uuid): string
     {
         return $this->idempotentKey.'::'.$uuid;

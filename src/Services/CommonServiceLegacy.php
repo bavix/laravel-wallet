@@ -13,7 +13,6 @@ use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
-use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
@@ -30,7 +29,6 @@ final class CommonServiceLegacy
     private RegulatorServiceInterface $regulatorService;
     private TransferDtoAssemblerInterface $transferDtoAssembler;
     private StateServiceInterface $stateService;
-    private MathServiceInterface $mathService;
 
     public function __construct(
         CastServiceInterface $castService,
@@ -40,8 +38,7 @@ final class CommonServiceLegacy
         TransferDtoAssemblerInterface $transferDtoAssembler,
         RegulatorServiceInterface $regulatorService,
         StateServiceInterface $stateService,
-        AtmServiceInterface $atmService,
-        MathServiceInterface $mathService
+        AtmServiceInterface $atmService
     ) {
         $this->atmService = $atmService;
         $this->castService = $castService;
@@ -51,7 +48,6 @@ final class CommonServiceLegacy
         $this->regulatorService = $regulatorService;
         $this->transferDtoAssembler = $transferDtoAssembler;
         $this->stateService = $stateService;
-        $this->mathService = $mathService;
     }
 
     /**
@@ -147,11 +143,11 @@ final class CommonServiceLegacy
                     ->whereKey($walletObject->getKey())
                     ->update(['balance' => $balance])
                 ;
-
-                $walletObject->fill(['balance' => $balance])->syncOriginalAttribute('balance');
             } finally {
                 if ($result === 0) {
-                    $this->regulatorService->increase($walletObject, $this->mathService->negative($amount));
+                    $this->regulatorService->decrease($walletObject, $amount);
+                } else {
+                    $walletObject->fill(['balance' => $balance])->syncOriginalAttribute('balance');
                 }
             }
 

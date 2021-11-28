@@ -254,6 +254,7 @@ class CartTest extends TestCase
     public function testWithdrawal(): void
     {
         $transactionLevel = Buyer::query()->getConnection()->transactionLevel();
+        self::assertSame(0, $transactionLevel);
 
         /**
          * @var Buyer $buyer
