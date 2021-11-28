@@ -29,8 +29,12 @@ final class StateService implements StateServiceInterface
 
     public function commit(): void
     {
-        foreach (array_unique($this->wallets) as $wallet) {
-            $this->bookkeeperService->increase($wallet, $this->regulatorService->diff($wallet));
+        $flags = [];
+        foreach ($this->wallets as $wallet) {
+            if ($flags[$wallet->uuid] ?? true) {
+                $this->bookkeeperService->increase($wallet, $this->regulatorService->diff($wallet));
+                $flags[$wallet->uuid] = false;
+            }
         }
 
         $this->purge();
