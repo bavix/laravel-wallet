@@ -69,9 +69,9 @@ final class RegulatorService implements RegulatorServiceInterface
         } catch (RecordNotFoundException $exception) {
             $value = $this->mathService->round($value);
             $this->storageService->sync($this->getKey($wallet->uuid), $value);
-        } finally {
-            return $this->amount($wallet);
         }
+
+        return $this->amount($wallet);
     }
 
     /** @param float|int|string $value */

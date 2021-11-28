@@ -157,6 +157,7 @@ final class WalletServiceProvider extends ServiceProvider
         return WalletConfigure::isRunsMigrations();
     }
 
+    /** @codeCoverageIgnore */
     private function contextBinding(array $bookkeeperStore): void
     {
         $this->app->when(BookkeeperServiceInterface::class)
