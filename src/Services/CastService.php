@@ -21,7 +21,6 @@ final class CastService implements CastServiceInterface
 
         if ($save && !$wallet->exists) {
             $wallet->save();
-            $wallet->getBalanceAttribute(); // update balance in store
         }
 
         return $wallet;
