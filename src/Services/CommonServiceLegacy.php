@@ -15,7 +15,6 @@ use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Models\Wallet as WalletModel;
 use Illuminate\Database\RecordsNotFoundException;
 
 /** @deprecated */
@@ -116,42 +115,6 @@ final class CommonServiceLegacy
             }
 
             return $this->atmService->makeTransfers($transfers);
-        });
-    }
-
-    /**
-     * @param int|string $amount
-     *
-     * @deprecated
-     *
-     * @throws LockProviderNotFoundException
-     * @throws RecordsNotFoundException
-     * @throws TransactionFailedException
-     * @throws ExceptionInterface
-     */
-    public function addBalance(Wallet $wallet, $amount): bool
-    {
-        return $this->databaseService->transaction(function () use ($wallet, $amount) {
-            /** @var WalletModel $wallet */
-            $walletObject = $this->castService->getWallet($wallet);
-            $balance = $this->regulatorService->increase($walletObject, $amount);
-            $this->stateService->persist($wallet);
-            $result = 0;
-
-            try {
-                $result = $walletObject->newQuery()
-                    ->whereKey($walletObject->getKey())
-                    ->update(['balance' => $balance])
-                ;
-            } finally {
-                if ($result === 0) {
-                    $this->regulatorService->decrease($walletObject, $amount);
-                } else {
-                    $walletObject->fill(['balance' => $balance])->syncOriginalAttribute('balance');
-                }
-            }
-
-            return (bool) $result;
         });
     }
 

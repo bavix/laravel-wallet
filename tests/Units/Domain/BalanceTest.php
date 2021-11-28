@@ -7,8 +7,8 @@ namespace Bavix\Wallet\Test\Units\Domain;
 use function app;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\BookkeeperServiceInterface;
-use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
+use Bavix\Wallet\Services\StateServiceInterface;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\TestCase;
@@ -77,7 +77,7 @@ class BalanceTest extends TestCase
     /**
      * @throws
      */
-    public function testSimple(): void
+    public function testSimpleLLLL(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -92,8 +92,10 @@ class BalanceTest extends TestCase
         $wallet->deposit(1000);
         self::assertSame(1000, $wallet->balanceInt);
 
-        $result = app(CommonServiceLegacy::class)->addBalance($wallet, 100);
-        self::assertTrue($result);
+        $result = app(RegulatorServiceInterface::class)->increase($wallet, 100);
+        app(StateServiceInterface::class)->persist($wallet);
+
+        self::assertSame(1100, (int) $result);
 
         self::assertSame(1100, $wallet->balanceInt);
         self::assertTrue($wallet->refreshBalance());
@@ -104,8 +106,10 @@ class BalanceTest extends TestCase
         self::assertTrue($wallet->delete());
         self::assertFalse($wallet->exists);
         self::assertSame($wallet->getKey(), $key);
-        $result = app(CommonServiceLegacy::class)->addBalance($wallet, 100);
-        self::assertTrue($result); // automatic create default wallet
+        $result = app(RegulatorServiceInterface::class)->increase($wallet, 100);
+        app(StateServiceInterface::class)->persist($wallet);
+
+        self::assertSame(1100, (int) $result); // automatic create default wallet
 
         $wallet->refreshBalance();
         $balance = 0;
@@ -225,41 +229,5 @@ class BalanceTest extends TestCase
         $wallet->refreshBalance();
         self::assertSame(1000, $wallet->balanceInt);
         self::assertSame(1000, (int) $wallet->getRawOriginal('balance'));
-    }
-
-    public function testFailUpdate(): void
-    {
-        /** @var Buyer $buyer */
-        $buyer = BuyerFactory::new()->create();
-        self::assertFalse($buyer->relationLoaded('wallet'));
-        $wallet = $buyer->wallet;
-
-        self::assertFalse($wallet->exists);
-        self::assertSame(0, $wallet->balanceInt);
-        self::assertTrue($wallet->exists);
-
-        /** @var MockObject|Wallet $mockQuery */
-        $mockQuery = $this->createMock(\get_class($wallet->newQuery()));
-        $mockQuery->method('whereKey')->willReturn($mockQuery);
-        $mockQuery->method('update')->willReturn(0);
-
-        /** @var MockObject|Wallet $mockWallet */
-        $mockWallet = $this->createMock(\get_class($wallet));
-        $mockWallet->method('newQuery')->willReturn($mockQuery);
-        $mockWallet->method('getKey')->willReturn($wallet->getKey());
-        $mockWallet->method('fill')->willReturn($mockWallet);
-        $mockWallet->method('syncOriginalAttribute')->willReturn($mockWallet);
-        $mockWallet->method('__get')->with('uuid')->willReturn($wallet->uuid);
-
-        $bookkeeper = app(BookkeeperServiceInterface::class);
-        $regulator = app(RegulatorServiceInterface::class);
-        $result = app(CommonServiceLegacy::class)
-            ->addBalance($mockWallet, 100)
-        ;
-
-        self::assertFalse($result);
-        self::assertSame('0', $regulator->amount($wallet));
-        self::assertSame('0', $bookkeeper->amount($wallet));
-        self::assertSame('0', $wallet->balance);
     }
 }
