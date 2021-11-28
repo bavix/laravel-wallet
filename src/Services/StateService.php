@@ -31,8 +31,9 @@ final class StateService implements StateServiceInterface
     {
         foreach (array_unique($this->wallets) as $wallet) {
             $this->bookkeeperService->increase($wallet, $this->regulatorService->diff($wallet));
-            $this->regulatorService->missing($wallet);
         }
+
+        $this->purge();
     }
 
     public function purge(): void
