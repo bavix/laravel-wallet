@@ -24,7 +24,6 @@ To enable the fight against race conditions, you need to select a provider that 
 There is a setting for storing the state of the wallet, I recommend choosing `redis` here too.
 
 ```php
-
     /**
      * Storage of the state of the balance of wallets.
      */
