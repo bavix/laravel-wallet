@@ -34,6 +34,7 @@ use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\PrepareService;
 use Bavix\Wallet\Services\PurchaseService;
 use Bavix\Wallet\Services\RegulatorService;
+use Bavix\Wallet\Services\StateService;
 use Bavix\Wallet\Services\TaxService;
 
 return [
@@ -80,6 +81,7 @@ return [
         'basket' => BasketService::class,
         'bookkeeper' => BookkeeperService::class,
         'regulator' => RegulatorService::class,
+        'state' => StateService::class,
         'cast' => CastService::class,
         'consistency' => ConsistencyService::class,
         'discount' => DiscountService::class,

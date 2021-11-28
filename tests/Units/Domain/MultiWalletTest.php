@@ -13,6 +13,8 @@ use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Services\BookkeeperServiceInterface;
+use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Test\Infra\Factories\ItemFactory;
 use Bavix\Wallet\Test\Infra\Factories\UserCashierFactory;
 use Bavix\Wallet\Test\Infra\Factories\UserMultiFactory;
@@ -538,6 +540,9 @@ class MultiWalletTest extends TestCase
         }
 
         self::assertCount(10, $wallets);
+        foreach ($wallets as $wallet) {
+            self::assertSame(0, (int) app(RegulatorServiceInterface::class)->diff($wallet));
+        }
 
         $funds = null;
 
@@ -548,7 +553,10 @@ class MultiWalletTest extends TestCase
                     $wallet->withdraw(100);
                     $wallet->deposit(50);
 
-                    self::assertSame(950 + $key, $wallet->balanceInt);
+                    $value = 950 + $key;
+                    self::assertSame($value, $wallet->balanceInt);
+                    self::assertSame($value, (int) app(RegulatorServiceInterface::class)->amount($wallet));
+                    self::assertSame(0, (int) app(BookkeeperServiceInterface::class)->amount($wallet));
                 }
 
                 $wallet = reset($wallets);
@@ -563,6 +571,8 @@ class MultiWalletTest extends TestCase
         self::assertNotNull($funds);
         foreach ($wallets as $wallet) {
             self::assertSame(0, $wallet->balanceInt);
+            self::assertSame(0, (int) app(RegulatorServiceInterface::class)->diff($wallet));
+            self::assertSame(0, (int) app(BookkeeperServiceInterface::class)->amount($wallet));
         }
     }
 }

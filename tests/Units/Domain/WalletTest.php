@@ -11,6 +11,8 @@ use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Services\BookkeeperServiceInterface;
+use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Test\Infra\Factories\UserFactory;
 use Bavix\Wallet\Test\Infra\Models\User;
 use Bavix\Wallet\Test\Infra\TestCase;
@@ -302,7 +304,10 @@ class WalletTest extends TestCase
 
         try {
             app(DatabaseServiceInterface::class)->transaction(static function () use ($user) {
+                self::assertSame(0, (int) app(RegulatorServiceInterface::class)->diff($user->wallet));
                 $user->withdraw(10000);
+                self::assertSame(-10000, (int) app(RegulatorServiceInterface::class)->diff($user->wallet));
+                self::assertSame(0, (int) app(RegulatorServiceInterface::class)->amount($user->wallet));
 
                 throw new RuntimeException('hello world');
             });
@@ -315,5 +320,6 @@ class WalletTest extends TestCase
         }
 
         self::assertSame(10000, $user->balanceInt);
+        self::assertSame(0, (int) app(RegulatorServiceInterface::class)->diff($user->wallet));
     }
 }
