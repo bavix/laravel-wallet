@@ -95,10 +95,10 @@ class BalanceTest extends TestCase
         $result = app(CommonServiceLegacy::class)->addBalance($wallet, 100);
         self::assertTrue($result);
 
-        self::assertSame($wallet->balanceInt, 1100);
+        self::assertSame(1100, $wallet->balanceInt);
         self::assertTrue($wallet->refreshBalance());
 
-        self::assertSame($wallet->balanceInt, 1000);
+        self::assertSame(1000, $wallet->balanceInt);
 
         $key = $wallet->getKey();
         self::assertTrue($wallet->delete());
@@ -195,6 +195,7 @@ class BalanceTest extends TestCase
 
         $wallet->deposit(1000);
         self::assertSame(1000, $wallet->balanceInt);
+        self::assertSame(0, (int) app(RegulatorServiceInterface::class)->diff($wallet));
 
         Wallet::whereKey($buyer->wallet->getKey())
             ->update(['balance' => 10])
