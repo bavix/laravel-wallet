@@ -17,15 +17,18 @@ final class WalletServiceLegacy
     private MathServiceInterface $mathService;
     private RegulatorServiceInterface $regulatorService;
     private AtomicServiceInterface $atomicService;
+    private StateServiceInterface $stateService;
 
     public function __construct(
         MathServiceInterface $mathService,
         RegulatorServiceInterface $regulatorService,
-        AtomicServiceInterface $atomicService
+        AtomicServiceInterface $atomicService,
+        StateServiceInterface $stateService
     ) {
         $this->mathService = $mathService;
         $this->regulatorService = $regulatorService;
         $this->atomicService = $atomicService;
+        $this->stateService = $stateService;
     }
 
     /**
@@ -46,9 +49,10 @@ final class WalletServiceLegacy
                 return true;
             }
 
-            $wallet->balance = (string) $balance;
+            $this->stateService->persist($wallet);
+            $wallet->fill(['balance' => $balance])->syncOriginalAttribute('balance');
 
-            return $wallet->save() && $this->regulatorService->sync($wallet, $balance);
+            return $this->regulatorService->sync($wallet, $balance);
         });
     }
 }
