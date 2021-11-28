@@ -6,8 +6,10 @@ namespace Bavix\Wallet\Test\Units\Domain;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
+use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
@@ -17,6 +19,7 @@ use Bavix\Wallet\Test\Infra\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Infra\Models\Item;
 use Bavix\Wallet\Test\Infra\Models\UserCashier;
 use Bavix\Wallet\Test\Infra\Models\UserMulti;
+use Bavix\Wallet\Test\Infra\PackageModels\Wallet;
 use Bavix\Wallet\Test\Infra\TestCase;
 use function compact;
 use Illuminate\Database\QueryException;
@@ -521,5 +524,45 @@ class MultiWalletTest extends TestCase
 
         $user->deposit(1_000_000_000);
         self::assertSame(1000., (float) $wallet->balanceFloat);
+    }
+
+    public function testMultiWalletTransactionState(): void
+    {
+        /** @var UserMulti $user */
+        $user = UserMultiFactory::new()->create();
+
+        /** @var Wallet[] $wallets */
+        $wallets = [];
+        foreach (range(1, 10) as $item) {
+            $wallets[] = $user->createWallet(['name' => 'index'.$item]);
+        }
+
+        self::assertCount(10, $wallets);
+
+        $funds = null;
+
+        try {
+            app(DatabaseServiceInterface::class)->transaction(function () use ($wallets) {
+                foreach ($wallets as $key => $wallet) {
+                    $wallet->deposit(1000 + $key); // 1000 + [0...9]
+                    $wallet->withdraw(100);
+                    $wallet->deposit(50);
+
+                    self::assertSame(950 + $key, $wallet->balanceInt);
+                }
+
+                $wallet = reset($wallets);
+                self::assertIsObject($wallet);
+
+                $wallet->withdraw(1000); // failed
+            });
+        } catch (InsufficientFunds $funds) {
+            self::assertSame(ExceptionInterface::INSUFFICIENT_FUNDS, $funds->getCode());
+        }
+
+        self::assertNotNull($funds);
+        foreach ($wallets as $wallet) {
+            self::assertSame(0, $wallet->balanceInt);
+        }
     }
 }
