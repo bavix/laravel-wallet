@@ -162,7 +162,7 @@ final class WalletServiceProvider extends ServiceProvider
     {
         $this->app->when(BookkeeperServiceInterface::class)
             ->needs(StorageServiceInterface::class)
-            ->give(fn () => $this->app->makeWith(
+            ->give(fn () => $this->app->make(
                 StorageServiceInterface::class,
                 [
                     'cacheRepository' => $this->app->make(CacheManager::class)
@@ -173,7 +173,7 @@ final class WalletServiceProvider extends ServiceProvider
 
         $this->app->when(RegulatorServiceInterface::class)
             ->needs(StorageServiceInterface::class)
-            ->give(fn () => $this->app->makeWith(
+            ->give(fn () => $this->app->make(
                 StorageServiceInterface::class,
                 [
                     'cacheRepository' => $this->app->make(CacheManager::class)

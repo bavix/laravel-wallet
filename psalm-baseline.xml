@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.13.1@5cf660f63b548ccd4a56f62d916ee4d6028e01a3">
-  <file src="src/WalletServiceProvider.php">
-    <UndefinedInterfaceMethod occurrences="2">
-      <code>makeWith</code>
-      <code>makeWith</code>
-    </UndefinedInterfaceMethod>
-  </file>
-</files>
