@@ -72,7 +72,7 @@ class TestCase extends OrchestraTestCase
         $config->set('wallet.transfer.table', 'transfer');
         $config->set('wallet.wallet.table', 'wallet');
 
-        $config->set('wallet.bookkeeper.driver', $config->get('cache.driver'));
+        $config->set('wallet.cache.driver', $config->get('cache.driver'));
         $config->set('wallet.lock.driver', $config->get('cache.driver'));
     }
 }
