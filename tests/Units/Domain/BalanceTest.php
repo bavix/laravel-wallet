@@ -8,6 +8,7 @@ use function app;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\BookkeeperServiceInterface;
 use Bavix\Wallet\Services\CommonServiceLegacy;
+use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\TestCase;
@@ -250,13 +251,14 @@ class BalanceTest extends TestCase
         $mockWallet->method('__get')->with('uuid')->willReturn($wallet->uuid);
 
         $bookkeeper = app(BookkeeperServiceInterface::class);
-        $bookkeeper->sync($wallet, 100500); // init
-
+        $regulator = app(RegulatorServiceInterface::class);
         $result = app(CommonServiceLegacy::class)
             ->addBalance($mockWallet, 100)
         ;
 
         self::assertFalse($result);
+        self::assertSame('0', $regulator->amount($wallet));
         self::assertSame('0', $bookkeeper->amount($wallet));
+        self::assertSame('0', $wallet->balance);
     }
 }

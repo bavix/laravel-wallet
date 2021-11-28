@@ -1,0 +1,7 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Foundation\\\\Application\\:\\:makeWith\\(\\)\\.$#"
+			count: 2
+			path: src/WalletServiceProvider.php
+

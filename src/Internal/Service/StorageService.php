@@ -7,43 +7,38 @@ namespace Bavix\Wallet\Internal\Service;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
-use Illuminate\Cache\CacheManager;
-use Illuminate\Config\Repository as ConfigRepository;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 final class StorageService implements StorageServiceInterface
 {
     private LockServiceInterface $lockService;
     private MathServiceInterface $mathService;
-    private CacheRepository $cache;
+    private CacheRepository $cacheRepository;
 
     public function __construct(
-        CacheManager $cacheManager,
-        ConfigRepository $config,
         LockServiceInterface $lockService,
-        MathServiceInterface $mathService
+        MathServiceInterface $mathService,
+        CacheRepository $cacheRepository
     ) {
+        $this->cacheRepository = $cacheRepository;
         $this->mathService = $mathService;
         $this->lockService = $lockService;
-        $this->cache = $cacheManager->driver(
-            $config->get('wallet.cache.driver', 'array')
-        );
     }
 
     public function flush(): bool
     {
-        return $this->cache->clear();
+        return $this->cacheRepository->clear();
     }
 
     public function missing(string $key): bool
     {
-        return $this->cache->forget($key);
+        return $this->cacheRepository->forget($key);
     }
 
     /** @throws RecordNotFoundException */
     public function get(string $key): string
     {
-        $value = $this->cache->get($key);
+        $value = $this->cacheRepository->get($key);
         if ($value === null) {
             throw new RecordNotFoundException(
                 'The repository did not find the object',
@@ -54,9 +49,10 @@ final class StorageService implements StorageServiceInterface
         return $this->mathService->round($value);
     }
 
+    /** @param float|int|string $value */
     public function sync(string $key, $value): bool
     {
-        return $this->cache->set($key, $value);
+        return $this->cacheRepository->set($key, $value);
     }
 
     /**

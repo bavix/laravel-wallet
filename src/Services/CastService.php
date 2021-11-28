@@ -19,8 +19,9 @@ final class CastService implements CastServiceInterface
             assert($wallet instanceof WalletModel);
         }
 
-        if ($save) {
-            $wallet->exists or $wallet->save();
+        if ($save && !$wallet->exists) {
+            $wallet->save();
+            $wallet->getBalanceAttribute(); // update balance in store
         }
 
         return $wallet;

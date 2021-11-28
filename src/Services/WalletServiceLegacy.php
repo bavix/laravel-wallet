@@ -15,16 +15,16 @@ use Illuminate\Database\RecordsNotFoundException;
 final class WalletServiceLegacy
 {
     private MathServiceInterface $math;
-    private BookkeeperServiceInterface $bookkeeper;
+    private RegulatorServiceInterface $regulatorService;
     private AtomicServiceInterface $atomicService;
 
     public function __construct(
         MathServiceInterface $math,
-        BookkeeperServiceInterface $bookkeeper,
+        RegulatorServiceInterface $regulatorService,
         AtomicServiceInterface $atomicService
     ) {
         $this->math = $math;
-        $this->bookkeeper = $bookkeeper;
+        $this->regulatorService = $regulatorService;
         $this->atomicService = $atomicService;
     }
 
@@ -48,7 +48,7 @@ final class WalletServiceLegacy
 
             $wallet->balance = (string) $balance;
 
-            return $wallet->save() && $this->bookkeeper->sync($wallet, $balance);
+            return $wallet->save() && $this->regulatorService->sync($wallet, $balance);
         });
     }
 }

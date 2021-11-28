@@ -65,12 +65,17 @@ use Bavix\Wallet\Services\PrepareService;
 use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\PurchaseService;
 use Bavix\Wallet\Services\PurchaseServiceInterface;
+use Bavix\Wallet\Services\RegulatorService;
+use Bavix\Wallet\Services\RegulatorServiceInterface;
+use Bavix\Wallet\Services\StateService;
+use Bavix\Wallet\Services\StateServiceInterface;
 use Bavix\Wallet\Services\TaxService;
 use Bavix\Wallet\Services\TaxServiceInterface;
 use Bavix\Wallet\Services\WalletServiceLegacy;
 use function config;
 use function dirname;
 use function function_exists;
+use Illuminate\Cache\CacheManager;
 use Illuminate\Support\ServiceProvider;
 
 final class WalletServiceProvider extends ServiceProvider
@@ -118,6 +123,8 @@ final class WalletServiceProvider extends ServiceProvider
 
         $configure = config('wallet', []);
 
+        $this->contextBinding($configure['cache'] ?? []);
+
         $this->internal($configure['internal'] ?? []);
         $this->services($configure['services'] ?? []);
         $this->legacySingleton(); // without configuration
@@ -150,13 +157,39 @@ final class WalletServiceProvider extends ServiceProvider
         return WalletConfigure::isRunsMigrations();
     }
 
+    private function contextBinding(array $bookkeeperStore): void
+    {
+        $this->app->when(BookkeeperServiceInterface::class)
+            ->needs(StorageServiceInterface::class)
+            ->give(fn () => $this->app->makeWith(
+                StorageServiceInterface::class,
+                [
+                    'cacheRepository' => $this->app->make(CacheManager::class)
+                        ->driver($bookkeeperStore['driver'] ?? null),
+                ],
+            ))
+        ;
+
+        $this->app->when(RegulatorServiceInterface::class)
+            ->needs(StorageServiceInterface::class)
+            ->give(fn () => $this->app->makeWith(
+                StorageServiceInterface::class,
+                [
+                    'cacheRepository' => $this->app->make(CacheManager::class)
+                        ->driver('array'),
+                ],
+            ))
+        ;
+    }
+
     private function internal(array $configure): void
     {
+        $this->app->bind(StorageServiceInterface::class, $configure['storage'] ?? StorageService::class);
+
         $this->app->singleton(DatabaseServiceInterface::class, $configure['database'] ?? DatabaseService::class);
         $this->app->singleton(JsonServiceInterface::class, $configure['json'] ?? JsonService::class);
         $this->app->singleton(LockServiceInterface::class, $configure['lock'] ?? LockService::class);
         $this->app->singleton(MathServiceInterface::class, $configure['math'] ?? MathService::class);
-        $this->app->singleton(StorageServiceInterface::class, $configure['storage'] ?? StorageService::class);
         $this->app->singleton(TranslatorServiceInterface::class, $configure['translator'] ?? TranslatorService::class);
         $this->app->singleton(UuidFactoryServiceInterface::class, $configure['uuid'] ?? UuidFactoryService::class);
     }
@@ -168,6 +201,8 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(AtomicServiceInterface::class, $configure['atomic'] ?? AtomicService::class);
         $this->app->singleton(BasketServiceInterface::class, $configure['basket'] ?? BasketService::class);
         $this->app->singleton(BookkeeperServiceInterface::class, $configure['bookkeeper'] ?? BookkeeperService::class);
+        $this->app->singleton(RegulatorServiceInterface::class, $configure['regulator'] ?? RegulatorService::class);
+        $this->app->singleton(StateServiceInterface::class, $configure['state'] ?? StateService::class);
         $this->app->singleton(CastServiceInterface::class, $configure['cast'] ?? CastService::class);
         $this->app->singleton(ConsistencyServiceInterface::class, $configure['consistency'] ?? ConsistencyService::class);
         $this->app->singleton(DiscountServiceInterface::class, $configure['discount'] ?? DiscountService::class);

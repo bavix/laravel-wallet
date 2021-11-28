@@ -13,6 +13,7 @@ use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
@@ -26,25 +27,31 @@ final class CommonServiceLegacy
     private DatabaseServiceInterface $databaseService;
     private AssistantServiceInterface $assistantService;
     private PrepareServiceInterface $prepareService;
-    private BookkeeperServiceInterface $bookkeeper;
+    private RegulatorServiceInterface $regulatorService;
     private TransferDtoAssemblerInterface $transferDtoAssembler;
+    private StateServiceInterface $stateService;
+    private MathServiceInterface $mathService;
 
     public function __construct(
         CastServiceInterface $castService,
-        BookkeeperServiceInterface $bookkeeper,
         AssistantServiceInterface $satisfyService,
         DatabaseServiceInterface $databaseService,
         PrepareServiceInterface $prepareService,
         TransferDtoAssemblerInterface $transferDtoAssembler,
-        AtmServiceInterface $atmService
+        RegulatorServiceInterface $regulatorService,
+        StateServiceInterface $stateService,
+        AtmServiceInterface $atmService,
+        MathServiceInterface $mathService
     ) {
         $this->atmService = $atmService;
         $this->castService = $castService;
-        $this->bookkeeper = $bookkeeper;
         $this->assistantService = $satisfyService;
         $this->databaseService = $databaseService;
         $this->prepareService = $prepareService;
+        $this->regulatorService = $regulatorService;
         $this->transferDtoAssembler = $transferDtoAssembler;
+        $this->stateService = $stateService;
+        $this->mathService = $mathService;
     }
 
     /**
@@ -131,7 +138,8 @@ final class CommonServiceLegacy
         return $this->databaseService->transaction(function () use ($wallet, $amount) {
             /** @var WalletModel $wallet */
             $walletObject = $this->castService->getWallet($wallet);
-            $balance = $this->bookkeeper->increase($walletObject, $amount);
+            $balance = $this->regulatorService->increase($walletObject, $amount);
+            $this->stateService->persist($wallet);
             $result = 0;
 
             try {
@@ -143,7 +151,7 @@ final class CommonServiceLegacy
                 $walletObject->fill(['balance' => $balance])->syncOriginalAttribute('balance');
             } finally {
                 if ($result === 0) {
-                    $this->bookkeeper->missing($walletObject);
+                    $this->regulatorService->increase($walletObject, $this->mathService->negative($amount));
                 }
             }
 
@@ -196,7 +204,9 @@ final class CommonServiceLegacy
             $object = $this->castService->getWallet($wallet);
             assert((int) $object->getKey() === $walletId);
 
-            $balance = $this->bookkeeper->increase($object, $total);
+            $object->getBalanceAttribute();
+            $balance = $this->regulatorService->increase($object, $total);
+            $this->stateService->persist($object);
 
             $object->newQuery()->whereKey($object->getKey())->update(['balance' => $balance]); // ?qN
             $object->fill(['balance' => $balance])->syncOriginalAttribute('balance');
