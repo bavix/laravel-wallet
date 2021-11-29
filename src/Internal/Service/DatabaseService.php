@@ -47,7 +47,11 @@ final class DatabaseService implements DatabaseServiceInterface
 
             return $this->connection->transaction(function () use ($callback) {
                 $result = $callback();
-                $this->stateService->commit();
+                if ($result === false || (is_countable($result) && count($result) === 0)) {
+                    $this->stateService->purge();
+                } else {
+                    $this->stateService->commit();
+                }
 
                 return $result;
             });

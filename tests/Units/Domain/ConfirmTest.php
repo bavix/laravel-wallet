@@ -8,6 +8,8 @@ use Bavix\Wallet\Exceptions\ConfirmedInvalid;
 use Bavix\Wallet\Exceptions\UnconfirmedInvalid;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Services\BookkeeperServiceInterface;
+use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Factories\UserConfirmFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
@@ -33,6 +35,9 @@ class ConfirmTest extends TestCase
         self::assertFalse($transaction->confirmed);
 
         $wallet->confirm($transaction);
+        self::assertSame($transaction->amountInt, (int) app(BookkeeperServiceInterface::class)->amount($wallet));
+        self::assertSame($transaction->amountInt, (int) app(RegulatorServiceInterface::class)->amount($wallet));
+        self::assertSame(0, (int) app(RegulatorServiceInterface::class)->diff($wallet));
         self::assertSame($transaction->amountInt, $wallet->balanceInt);
         self::assertTrue($transaction->confirmed);
     }
@@ -68,6 +73,9 @@ class ConfirmTest extends TestCase
         self::assertTrue($transaction->confirmed);
 
         $wallet->safeResetConfirm($transaction);
+        self::assertSame(0, (int) app(BookkeeperServiceInterface::class)->amount($wallet));
+        self::assertSame(0, (int) app(RegulatorServiceInterface::class)->amount($wallet));
+        self::assertSame(0, (int) app(RegulatorServiceInterface::class)->diff($wallet));
         self::assertSame(0, $wallet->balanceInt);
         self::assertFalse($transaction->confirmed);
     }

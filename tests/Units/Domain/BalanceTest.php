@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test\Units\Domain;
 
 use function app;
+use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\BookkeeperServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
@@ -77,7 +78,7 @@ class BalanceTest extends TestCase
     /**
      * @throws
      */
-    public function testSimpleLLLL(): void
+    public function testSimple(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -229,5 +230,40 @@ class BalanceTest extends TestCase
         $wallet->refreshBalance();
         self::assertSame(1000, $wallet->balanceInt);
         self::assertSame(1000, (int) $wallet->getRawOriginal('balance'));
+    }
+
+    public function testTransactionRollback(): void
+    {
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        self::assertFalse($buyer->relationLoaded('wallet'));
+        $wallet = $buyer->wallet;
+
+        self::assertFalse($wallet->exists);
+        self::assertSame(0, $wallet->balanceInt);
+        self::assertTrue($wallet->exists);
+
+        $bookkeeper = app(BookkeeperServiceInterface::class);
+        $regulator = app(RegulatorServiceInterface::class);
+
+        $wallet->deposit(1000);
+        self::assertSame(0, (int) $regulator->diff($wallet));
+        self::assertSame(1000, (int) $regulator->amount($wallet));
+        self::assertSame(1000, (int) $bookkeeper->amount($wallet));
+        self::assertSame(1000, $wallet->balanceInt);
+
+        app(DatabaseServiceInterface::class)->transaction(function () use ($wallet, $regulator, $bookkeeper) {
+            $wallet->deposit(10000);
+            self::assertSame(10000, (int) $regulator->diff($wallet));
+            self::assertSame(11000, (int) $regulator->amount($wallet));
+            self::assertSame(1000, (int) $bookkeeper->amount($wallet));
+
+            return false; // rollback
+        });
+
+        self::assertSame(0, (int) $regulator->diff($wallet));
+        self::assertSame(1000, (int) $regulator->amount($wallet));
+        self::assertSame(1000, (int) $bookkeeper->amount($wallet));
+        self::assertSame(1000, $wallet->balanceInt);
     }
 }
