@@ -133,7 +133,7 @@ final class WalletServiceProvider extends ServiceProvider
         $this->bindObjects($configure);
     }
 
-    public function repositories(array $configure): void
+    private function repositories(array $configure): void
     {
         $this->app->singleton(
             TransactionRepositoryInterface::class,
