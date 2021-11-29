@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test\Units\Domain;
 
 use function app;
-use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\BookkeeperServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
@@ -182,85 +181,5 @@ class BalanceTest extends TestCase
         self::assertSame($wallet->getKey(), $wallet->wallet->getKey());
         self::assertSame($wallet->getKey(), $wallet->wallet->wallet->getKey());
         self::assertSame($wallet->getKey(), $wallet->wallet->wallet->wallet->getKey());
-    }
-
-    /**
-     * @see https://github.com/bavix/laravel-wallet/issues/49
-     */
-    public function testForceUpdate(): void
-    {
-        /** @var Buyer $buyer */
-        $buyer = BuyerFactory::new()->create();
-        $wallet = $buyer->wallet;
-
-        self::assertSame(0, $wallet->balanceInt);
-
-        $wallet->deposit(1000);
-        self::assertSame(1000, $wallet->balanceInt);
-        self::assertSame(0, (int) app(RegulatorServiceInterface::class)->diff($wallet));
-
-        Wallet::whereKey($buyer->wallet->getKey())
-            ->update(['balance' => 10])
-        ;
-
-        /**
-         * Create a state when the cache is empty.
-         * For example, something went wrong and your database has incorrect data.
-         * Unfortunately, the library will work with what is.
-         * But there is an opportunity to recount the balance.
-         *
-         * Here is an example:
-         */
-        app(BookkeeperServiceInterface::class)->missing($buyer->wallet);
-        self::assertSame(1000, (int) $wallet->getRawOriginal('balance'));
-
-        /**
-         * We load the model from the base and our balance is 10.
-         */
-        $wallet->refresh();
-        self::assertSame(10, $wallet->balanceInt);
-        self::assertSame(10, (int) $wallet->getRawOriginal('balance'));
-
-        /**
-         * Now we fill the cache with relevant data (PS, the data inside the model will be updated).
-         */
-        $wallet->refreshBalance();
-        self::assertSame(1000, $wallet->balanceInt);
-        self::assertSame(1000, (int) $wallet->getRawOriginal('balance'));
-    }
-
-    public function testTransactionRollback(): void
-    {
-        /** @var Buyer $buyer */
-        $buyer = BuyerFactory::new()->create();
-        self::assertFalse($buyer->relationLoaded('wallet'));
-        $wallet = $buyer->wallet;
-
-        self::assertFalse($wallet->exists);
-        self::assertSame(0, $wallet->balanceInt);
-        self::assertTrue($wallet->exists);
-
-        $bookkeeper = app(BookkeeperServiceInterface::class);
-        $regulator = app(RegulatorServiceInterface::class);
-
-        $wallet->deposit(1000);
-        self::assertSame(0, (int) $regulator->diff($wallet));
-        self::assertSame(1000, (int) $regulator->amount($wallet));
-        self::assertSame(1000, (int) $bookkeeper->amount($wallet));
-        self::assertSame(1000, $wallet->balanceInt);
-
-        app(DatabaseServiceInterface::class)->transaction(function () use ($wallet, $regulator, $bookkeeper) {
-            $wallet->deposit(10000);
-            self::assertSame(10000, (int) $regulator->diff($wallet));
-            self::assertSame(11000, (int) $regulator->amount($wallet));
-            self::assertSame(1000, (int) $bookkeeper->amount($wallet));
-
-            return false; // rollback
-        });
-
-        self::assertSame(0, (int) $regulator->diff($wallet));
-        self::assertSame(1000, (int) $regulator->amount($wallet));
-        self::assertSame(1000, (int) $bookkeeper->amount($wallet));
-        self::assertSame(1000, $wallet->balanceInt);
     }
 }
