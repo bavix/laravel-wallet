@@ -145,6 +145,8 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
      * @deprecated
      * @see getAvailableBalanceAttribute
      * @codeCoverageIgnore
+     *
+     * @return float|int
      */
     public function getAvailableBalance()
     {
