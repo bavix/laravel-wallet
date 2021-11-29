@@ -110,7 +110,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     {
         return app(AtomicServiceInterface::class)->block($this, function () {
             $whatIs = $this->balance;
-            $balance = $this->getAvailableBalance();
+            $balance = $this->getAvailableBalanceAttribute();
             if (app(MathServiceInterface::class)->compare($whatIs, $balance) === 0) {
                 return true;
             }
@@ -132,13 +132,23 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     /**
      * @return float|int
      */
-    public function getAvailableBalance()
+    public function getAvailableBalanceAttribute()
     {
         return $this->transactions()
             ->where('wallet_id', $this->getKey())
             ->where('confirmed', true)
             ->sum('amount')
         ;
+    }
+
+    /**
+     * @deprecated
+     * @see getAvailableBalanceAttribute
+     * @codeCoverageIgnore
+     */
+    public function getAvailableBalance()
+    {
+        return $this->getAvailableBalanceAttribute();
     }
 
     public function holder(): MorphTo

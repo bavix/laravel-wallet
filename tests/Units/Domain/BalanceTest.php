@@ -11,7 +11,6 @@ use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\TestCase;
-use Illuminate\Database\SQLiteConnection;
 use PDOException;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -76,7 +75,7 @@ class BalanceTest extends TestCase
     /**
      * @throws
      */
-    public function testSimple(): void
+    public function testSimpleJJJ(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -91,13 +90,18 @@ class BalanceTest extends TestCase
         $wallet->deposit(1000);
         self::assertSame(1000, $wallet->balanceInt);
 
-        $result = app(RegulatorServiceInterface::class)->increase($wallet, 100);
+        $regulator = app(RegulatorServiceInterface::class);
+        $result = $regulator->increase($wallet, 100);
 
+        self::assertSame(100, (int) $regulator->diff($wallet));
+        self::assertSame(1100, (int) $regulator->amount($wallet));
         self::assertSame(1100, (int) $result);
 
         self::assertSame(1100, $wallet->balanceInt);
         self::assertTrue($wallet->refreshBalance());
 
+        self::assertSame(0, (int) $regulator->diff($wallet));
+        self::assertSame(1000, (int) $regulator->amount($wallet));
         self::assertSame(1000, $wallet->balanceInt);
 
         $key = $wallet->getKey();
@@ -106,18 +110,19 @@ class BalanceTest extends TestCase
         self::assertSame($wallet->getKey(), $key);
         $result = app(RegulatorServiceInterface::class)->increase($wallet, 100);
 
-        self::assertSame(1100, (int) $result); // automatic create default wallet
+        // databases that do not support fk will not delete data... need to help them
+        $wallet->transactions()->where('wallet_id', $key)->delete();
 
-        $wallet->refreshBalance();
-        $balance = 0;
-        if ($wallet->getConnection() instanceof SQLiteConnection) {
-            $balance = 1000;
-        }
+        self::assertFalse($wallet->exists);
+        self::assertSame(1100, (int) $result);
 
-        self::assertSame($wallet->balanceInt, (int) $balance);
+        $wallet->refreshBalance(); // automatic create default wallet
+        self::assertTrue($wallet->exists);
+
+        self::assertSame(0, $wallet->balanceInt);
 
         $wallet->deposit(1);
-        self::assertSame($wallet->balanceInt, (int) $balance + 1);
+        self::assertSame(1, $wallet->balanceInt);
     }
 
     /**
