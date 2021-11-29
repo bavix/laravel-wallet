@@ -123,6 +123,19 @@ class StateTest extends TestCase
         self::assertSame(10100, (int) $bookkeeper->amount($buyer->wallet));
         self::assertSame(10100, $buyer->balanceInt);
 
+        app(DatabaseServiceInterface::class)->transaction(function () use ($bookkeeper, $regulator, $buyer) {
+            self::assertTrue($buyer->wallet->refreshBalance());
+            self::assertSame(-100, (int) $regulator->diff($buyer->wallet));
+            self::assertSame(10100, (int) $bookkeeper->amount($buyer->wallet));
+            self::assertSame(10000, $buyer->balanceInt); // bookkeeper.amount+regulator.diff
+
+            return []; // if count() === 0 then rollback. cancel refreshBalance
+        });
+
+        self::assertSame(0, (int) $regulator->diff($buyer->wallet));
+        self::assertSame(10100, (int) $bookkeeper->amount($buyer->wallet));
+        self::assertSame(10100, $buyer->balanceInt);
+
         self::assertTrue($buyer->wallet->refreshBalance());
 
         self::assertSame(0, (int) $regulator->diff($buyer->wallet));
