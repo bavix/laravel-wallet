@@ -27,7 +27,6 @@ final class CommonServiceLegacy
     private PrepareServiceInterface $prepareService;
     private RegulatorServiceInterface $regulatorService;
     private TransferDtoAssemblerInterface $transferDtoAssembler;
-    private StateServiceInterface $stateService;
 
     public function __construct(
         CastServiceInterface $castService,
@@ -36,7 +35,6 @@ final class CommonServiceLegacy
         PrepareServiceInterface $prepareService,
         TransferDtoAssemblerInterface $transferDtoAssembler,
         RegulatorServiceInterface $regulatorService,
-        StateServiceInterface $stateService,
         AtmServiceInterface $atmService
     ) {
         $this->atmService = $atmService;
@@ -46,7 +44,6 @@ final class CommonServiceLegacy
         $this->prepareService = $prepareService;
         $this->regulatorService = $regulatorService;
         $this->transferDtoAssembler = $transferDtoAssembler;
-        $this->stateService = $stateService;
     }
 
     /**
@@ -164,7 +161,6 @@ final class CommonServiceLegacy
             assert((int) $object->getKey() === $walletId);
 
             $this->regulatorService->increase($object, $total);
-            $this->stateService->persist($object);
         }
 
         return $transactions;

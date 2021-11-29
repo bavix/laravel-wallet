@@ -6,7 +6,7 @@ namespace Bavix\Wallet\Internal\Service;
 
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
-use Bavix\Wallet\Services\StateServiceInterface;
+use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Illuminate\Config\Repository as ConfigRepository;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\ConnectionResolverInterface;
@@ -15,15 +15,15 @@ use Throwable;
 
 final class DatabaseService implements DatabaseServiceInterface
 {
-    private StateServiceInterface $stateService;
+    private RegulatorServiceInterface $regulatorService;
     private ConnectionInterface $connection;
 
     public function __construct(
-        StateServiceInterface $stateService,
         ConnectionResolverInterface $connectionResolver,
+        RegulatorServiceInterface $regulatorService,
         ConfigRepository $config
     ) {
-        $this->stateService = $stateService;
+        $this->regulatorService = $regulatorService;
         $this->connection = $connectionResolver->connection(
             $config->get('wallet.database.connection')
         );
@@ -43,24 +43,24 @@ final class DatabaseService implements DatabaseServiceInterface
                 return $callback();
             }
 
-            $this->stateService->purge();
+            $this->regulatorService->purge();
 
             return $this->connection->transaction(function () use ($callback) {
                 $result = $callback();
                 if ($result === false || (is_countable($result) && count($result) === 0)) {
-                    $this->stateService->purge();
+                    $this->regulatorService->purge();
                 } else {
-                    $this->stateService->commit();
+                    $this->regulatorService->approve();
                 }
 
                 return $result;
             });
         } catch (RecordsNotFoundException|ExceptionInterface $exception) {
-            $this->stateService->purge();
+            $this->regulatorService->purge();
 
             throw $exception;
         } catch (Throwable $throwable) {
-            $this->stateService->purge();
+            $this->regulatorService->purge();
 
             throw new TransactionFailedException(
                 'Transaction failed',

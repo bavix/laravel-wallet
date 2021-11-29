@@ -22,4 +22,8 @@ interface RegulatorServiceInterface
 
     /** @param float|int|string $value */
     public function decrease(Wallet $wallet, $value): string;
+
+    public function approve(): void;
+
+    public function purge(): void;
 }

@@ -17,6 +17,9 @@ final class RegulatorService implements RegulatorServiceInterface
     private MathServiceInterface $mathService;
     private string $idempotentKey;
 
+    /** @var Wallet[] */
+    private array $wallets = [];
+
     public function __construct(
         UuidFactoryServiceInterface $uuidFactoryService,
         BookkeeperServiceInterface $bookkeeperService,
@@ -31,6 +34,8 @@ final class RegulatorService implements RegulatorServiceInterface
 
     public function missing(Wallet $wallet): bool
     {
+        unset($this->wallets[$wallet->uuid]);
+
         return $this->storageService->missing($this->getKey($wallet->uuid));
     }
 
@@ -53,6 +58,8 @@ final class RegulatorService implements RegulatorServiceInterface
     /** @param float|int|string $value */
     public function sync(Wallet $wallet, $value): bool
     {
+        $this->persist($wallet);
+
         return $this->storageService->sync(
             $this->getKey($wallet->uuid),
             $this->mathService->round(
@@ -64,6 +71,8 @@ final class RegulatorService implements RegulatorServiceInterface
     /** @param float|int|string $value */
     public function increase(Wallet $wallet, $value): string
     {
+        $this->persist($wallet);
+
         try {
             $this->storageService->increase($this->getKey($wallet->uuid), $value);
         } catch (RecordNotFoundException $exception) {
@@ -78,6 +87,34 @@ final class RegulatorService implements RegulatorServiceInterface
     public function decrease(Wallet $wallet, $value): string
     {
         return $this->increase($wallet, $this->mathService->negative($value));
+    }
+
+    public function approve(): void
+    {
+        foreach ($this->wallets as $wallet) {
+            $diffValue = $this->diff($wallet);
+            if ($this->mathService->compare($diffValue, 0) === 0) {
+                continue;
+            }
+
+            $balance = $this->bookkeeperService->increase($wallet, $diffValue);
+            $wallet->newQuery()->whereKey($wallet->getKey())->update(['balance' => $balance]); // ?qN
+            $wallet->fill(['balance' => $balance])->syncOriginalAttribute('balance');
+        }
+
+        $this->purge();
+    }
+
+    public function purge(): void
+    {
+        foreach ($this->wallets as $wallet) {
+            $this->missing($wallet);
+        }
+    }
+
+    private function persist(Wallet $wallet): void
+    {
+        $this->wallets[$wallet->uuid] = $wallet;
     }
 
     private function getKey(string $uuid): string

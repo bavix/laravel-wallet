@@ -67,11 +67,8 @@ use Bavix\Wallet\Services\PurchaseService;
 use Bavix\Wallet\Services\PurchaseServiceInterface;
 use Bavix\Wallet\Services\RegulatorService;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
-use Bavix\Wallet\Services\StateService;
-use Bavix\Wallet\Services\StateServiceInterface;
 use Bavix\Wallet\Services\TaxService;
 use Bavix\Wallet\Services\TaxServiceInterface;
-use Bavix\Wallet\Services\WalletServiceLegacy;
 use function config;
 use function dirname;
 use function function_exists;
@@ -203,7 +200,6 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(BasketServiceInterface::class, $configure['basket'] ?? BasketService::class);
         $this->app->singleton(BookkeeperServiceInterface::class, $configure['bookkeeper'] ?? BookkeeperService::class);
         $this->app->singleton(RegulatorServiceInterface::class, $configure['regulator'] ?? RegulatorService::class);
-        $this->app->singleton(StateServiceInterface::class, $configure['state'] ?? StateService::class);
         $this->app->singleton(CastServiceInterface::class, $configure['cast'] ?? CastService::class);
         $this->app->singleton(ConsistencyServiceInterface::class, $configure['consistency'] ?? ConsistencyService::class);
         $this->app->singleton(DiscountServiceInterface::class, $configure['discount'] ?? DiscountService::class);
@@ -262,7 +258,6 @@ final class WalletServiceProvider extends ServiceProvider
     private function legacySingleton(): void
     {
         $this->app->singleton(CommonServiceLegacy::class);
-        $this->app->singleton(WalletServiceLegacy::class);
         $this->app->singleton(MetaServiceLegacy::class);
     }
 

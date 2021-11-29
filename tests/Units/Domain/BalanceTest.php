@@ -9,7 +9,6 @@ use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\BookkeeperServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
-use Bavix\Wallet\Services\StateServiceInterface;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\TestCase;
@@ -94,7 +93,6 @@ class BalanceTest extends TestCase
         self::assertSame(1000, $wallet->balanceInt);
 
         $result = app(RegulatorServiceInterface::class)->increase($wallet, 100);
-        app(StateServiceInterface::class)->persist($wallet);
 
         self::assertSame(1100, (int) $result);
 
@@ -108,7 +106,6 @@ class BalanceTest extends TestCase
         self::assertFalse($wallet->exists);
         self::assertSame($wallet->getKey(), $key);
         $result = app(RegulatorServiceInterface::class)->increase($wallet, 100);
-        app(StateServiceInterface::class)->persist($wallet);
 
         self::assertSame(1100, (int) $result); // automatic create default wallet
 
