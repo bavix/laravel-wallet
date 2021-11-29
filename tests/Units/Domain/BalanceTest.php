@@ -75,7 +75,7 @@ class BalanceTest extends TestCase
     /**
      * @throws
      */
-    public function testSimpleJJJ(): void
+    public function testSimple(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
