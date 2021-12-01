@@ -114,7 +114,7 @@ return [
      */
     'assemblers' => [
         'availability' => AvailabilityDtoAssembler::class,
-        'balance_changed_event' => BalanceUpdatedEventAssembler::class,
+        'balance_updated_event' => BalanceUpdatedEventAssembler::class,
         'transaction' => TransactionDtoAssembler::class,
         'transfer_lazy' => TransferLazyDtoAssembler::class,
         'transfer' => TransferDtoAssembler::class,
