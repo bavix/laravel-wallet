@@ -6,6 +6,8 @@ namespace Bavix\Wallet;
 
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssemblerInterface;
+use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssembler;
+use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionQueryAssembler;
@@ -16,12 +18,16 @@ use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferQueryAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferQueryAssemblerInterface;
+use Bavix\Wallet\Internal\Events\BalanceUpdatedEvent;
+use Bavix\Wallet\Internal\Events\BalanceUpdatedEventInterface;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransactionRepositoryInterface;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
 use Bavix\Wallet\Internal\Repository\TransferRepositoryInterface;
 use Bavix\Wallet\Internal\Service\DatabaseService;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
+use Bavix\Wallet\Internal\Service\DispatcherService;
+use Bavix\Wallet\Internal\Service\DispatcherServiceInterface;
 use Bavix\Wallet\Internal\Service\JsonService;
 use Bavix\Wallet\Internal\Service\JsonServiceInterface;
 use Bavix\Wallet\Internal\Service\LockService;
@@ -129,6 +135,7 @@ final class WalletServiceProvider extends ServiceProvider
         $this->repositories($configure['repositories'] ?? []);
         $this->transformers($configure['transformers'] ?? []);
         $this->assemblers($configure['assemblers'] ?? []);
+        $this->events($configure['events'] ?? []);
 
         $this->bindObjects($configure);
     }
@@ -185,6 +192,7 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->bind(StorageServiceInterface::class, $configure['storage'] ?? StorageService::class);
 
         $this->app->singleton(DatabaseServiceInterface::class, $configure['database'] ?? DatabaseService::class);
+        $this->app->singleton(DispatcherServiceInterface::class, $configure['dispatcher'] ?? DispatcherService::class);
         $this->app->singleton(JsonServiceInterface::class, $configure['json'] ?? JsonService::class);
         $this->app->singleton(LockServiceInterface::class, $configure['lock'] ?? LockService::class);
         $this->app->singleton(MathServiceInterface::class, $configure['math'] ?? MathService::class);
@@ -214,6 +222,11 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(
             AvailabilityDtoAssemblerInterface::class,
             $configure['availability'] ?? AvailabilityDtoAssembler::class
+        );
+
+        $this->app->singleton(
+            BalanceUpdatedEventAssemblerInterface::class,
+            $configure['balance_updated_event'] ?? BalanceUpdatedEventAssembler::class
         );
 
         $this->app->singleton(
@@ -252,6 +265,14 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(
             TransferDtoTransformerInterface::class,
             $configure['transfer'] ?? TransferDtoTransformer::class
+        );
+    }
+
+    private function events(array $configure): void
+    {
+        $this->app->bind(
+            BalanceUpdatedEventInterface::class,
+            $configure['balance_updated'] ?? BalanceUpdatedEvent::class
         );
     }
 

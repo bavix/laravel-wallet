@@ -32,6 +32,16 @@ layers:
       - type: className
         regex: ^Bavix\\.*\\Internal\\Exceptions\\.*
 
+  - name: Event
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*\\Internal\\Events\\.*Event$
+
+  - name: EventInterface
+    collectors:
+      - type: className
+        regex: ^Bavix\\.*\\Internal\\Events\\.*EventInterface$
+
   - name: Dto
     collectors:
       - type: className
@@ -147,8 +157,13 @@ ruleset:
   Infra:
     - InternalException
     - ServiceInterface
+    - EventInterface
     - Config
     - Cache
+
+  EventInterface:
+  Event:
+    - EventInterface
 
   DtoInterface:
     - Contract
@@ -190,6 +205,7 @@ ruleset:
 
   ServiceInterface:
     - InternalException
+    - EventInterface
     - EloquentModel
     - DtoInterface
     - UIException

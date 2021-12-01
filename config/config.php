@@ -3,14 +3,17 @@
 declare(strict_types=1);
 
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionQueryAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferQueryAssembler;
+use Bavix\Wallet\Internal\Events\BalanceUpdatedEvent;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
 use Bavix\Wallet\Internal\Service\DatabaseService;
+use Bavix\Wallet\Internal\Service\DispatcherService;
 use Bavix\Wallet\Internal\Service\JsonService;
 use Bavix\Wallet\Internal\Service\LockService;
 use Bavix\Wallet\Internal\Service\MathService;
@@ -62,6 +65,7 @@ return [
      */
     'internal' => [
         'database' => DatabaseService::class,
+        'dispatcher' => DispatcherService::class,
         'json' => JsonService::class,
         'lock' => LockService::class,
         'math' => MathService::class,
@@ -110,11 +114,19 @@ return [
      */
     'assemblers' => [
         'availability' => AvailabilityDtoAssembler::class,
+        'balance_changed_event' => BalanceUpdatedEventAssembler::class,
         'transaction' => TransactionDtoAssembler::class,
         'transfer_lazy' => TransferLazyDtoAssembler::class,
         'transfer' => TransferDtoAssembler::class,
         'transaction_query' => TransactionQueryAssembler::class,
         'transfer_query' => TransferQueryAssembler::class,
+    ],
+
+    /**
+     * Package system events.
+     */
+    'events' => [
+        'balance_updated' => BalanceUpdatedEvent::class,
     ],
 
     /**
