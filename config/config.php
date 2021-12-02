@@ -12,6 +12,7 @@ use Bavix\Wallet\Internal\Assembler\TransferQueryAssembler;
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEvent;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
+use Bavix\Wallet\Internal\Service\ClockService;
 use Bavix\Wallet\Internal\Service\DatabaseService;
 use Bavix\Wallet\Internal\Service\DispatcherService;
 use Bavix\Wallet\Internal\Service\JsonService;
@@ -64,6 +65,7 @@ return [
      * Internal services that can be overloaded.
      */
     'internal' => [
+        'clock' => ClockService::class,
         'database' => DatabaseService::class,
         'dispatcher' => DispatcherService::class,
         'json' => JsonService::class,
