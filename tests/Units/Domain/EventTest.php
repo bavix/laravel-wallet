@@ -84,6 +84,9 @@ class EventTest extends TestCase
         $buyer = BuyerFactory::new()->create();
         self::assertSame(0, $buyer->wallet->balanceInt);
 
+        self::assertNotNull($buyer->deposit(0)); // no event
+        self::assertNotNull($buyer->withdraw(0)); // no event
+
         app(DatabaseServiceInterface::class)->transaction(function () use ($buyer) {
             $transaction = $buyer->deposit(100);
             self::assertNotNull($transaction);
@@ -92,11 +95,12 @@ class EventTest extends TestCase
             $transaction = $buyer->withdraw(100);
             self::assertNotNull($transaction);
             self::assertSame(-100, $transaction->amountInt);
-        });
+        }); // no event
 
         /**
          * The balance has not changed. Balance update event will not be generated.
          */
         self::assertSame(0, $buyer->balanceInt);
+        self::assertCount(4, $buyer->transactions()->get());
     }
 }
