@@ -109,7 +109,7 @@ final class RegulatorService implements RegulatorServiceInterface
             $wallet->newQuery()->whereKey($wallet->getKey())->update(['balance' => $balance]); // ?qN
             $wallet->fill(['balance' => $balance])->syncOriginalAttribute('balance');
 
-            $event = $this->balanceUpdatedEventAssembler->create($wallet, $balance);
+            $event = $this->balanceUpdatedEventAssembler->create($wallet);
             $this->dispatcherService->dispatch($event);
         }
 

@@ -9,5 +9,5 @@ use Bavix\Wallet\Models\Wallet;
 
 interface BalanceUpdatedEventAssemblerInterface
 {
-    public function create(Wallet $wallet, string $balance): BalanceUpdatedEventInterface;
+    public function create(Wallet $wallet): BalanceUpdatedEventInterface;
 }
