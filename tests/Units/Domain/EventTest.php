@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test\Units\Domain;
 
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEventInterface;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\UnknownEventException;
 use Bavix\Wallet\Internal\Service\ClockServiceInterface;
+use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Listeners\BalanceUpdatedThrowDateListener;
 use Bavix\Wallet\Test\Infra\Listeners\BalanceUpdatedThrowIdListener;
@@ -69,5 +71,32 @@ class EventTest extends TestCase
         $this->expectExceptionCode(789);
 
         $buyer->deposit(789);
+    }
+
+    /**
+     * @throws ExceptionInterface
+     */
+    public function testBalanceNotChanged(): void
+    {
+        Event::listen(BalanceUpdatedEventInterface::class, BalanceUpdatedThrowIdListener::class);
+
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        self::assertSame(0, $buyer->wallet->balanceInt);
+
+        app(DatabaseServiceInterface::class)->transaction(function () use ($buyer) {
+            $transaction = $buyer->deposit(100);
+            self::assertNotNull($transaction);
+            self::assertSame(100, $transaction->amountInt);
+
+            $transaction = $buyer->withdraw(100);
+            self::assertNotNull($transaction);
+            self::assertSame(-100, $transaction->amountInt);
+        });
+
+        /**
+         * The balance has not changed. Balance update event will not be generated.
+         */
+        self::assertSame(0, $buyer->balanceInt);
     }
 }
