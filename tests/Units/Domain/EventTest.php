@@ -5,17 +5,21 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test\Units\Domain;
 
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEventInterface;
+use Bavix\Wallet\Internal\Events\WalletCreatedEventInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\UnknownEventException;
 use Bavix\Wallet\Internal\Service\ClockServiceInterface;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
+use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Listeners\BalanceUpdatedThrowDateListener;
 use Bavix\Wallet\Test\Infra\Listeners\BalanceUpdatedThrowIdListener;
 use Bavix\Wallet\Test\Infra\Listeners\BalanceUpdatedThrowUuidListener;
+use Bavix\Wallet\Test\Infra\Listeners\WalletCreatedThrowListener;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\Services\ClockFakeService;
 use Bavix\Wallet\Test\Infra\TestCase;
+use DateTimeInterface;
 use Illuminate\Support\Facades\Event;
 
 /**
@@ -45,7 +49,7 @@ class EventTest extends TestCase
 
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        self::assertSame(0, $buyer->wallet->balanceInt);
+        self::assertSame(0, $buyer->wallet->balanceInt); // auto create wallet
 
         // unit
         $this->expectException(UnknownEventException::class);
@@ -71,6 +75,31 @@ class EventTest extends TestCase
         $this->expectExceptionCode(789);
 
         $buyer->deposit(789);
+    }
+
+    public function testWalletCreatedThrowListener(): void
+    {
+        $this->app->bind(ClockServiceInterface::class, ClockFakeService::class);
+
+        Event::listen(WalletCreatedEventInterface::class, WalletCreatedThrowListener::class);
+
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+
+        $uuidFactoryService = app(UuidFactoryServiceInterface::class);
+        $buyer->wallet->uuid = $uuidFactoryService->uuid4();
+
+        $holderType = $buyer->getMorphClass();
+        $uuid = $buyer->wallet->uuid;
+        $createdAt = app(ClockServiceInterface::class)->now()->format(DateTimeInterface::ATOM);
+
+        $message = hash('sha256', $holderType.$uuid.$createdAt);
+
+        // unit
+        $this->expectException(UnknownEventException::class);
+        $this->expectExceptionMessage($message);
+
+        $buyer->getBalanceIntAttribute();
     }
 
     /**
