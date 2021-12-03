@@ -192,15 +192,18 @@ ruleset:
     - QueryInterface
 
   RepositoryInterface:
+    - InternalException
     - QueryInterface
     - DtoInterface
     - Model
   Repository:
     - RepositoryInterface
     - TransformInterface
+    - InternalException
     - ServiceInterface # json service only
     - QueryInterface
     - DtoInterface
+    - UIException
     - Model
 
   ServiceInterface:

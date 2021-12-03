@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Internal\Service;
 
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEventInterface;
 use Bavix\Wallet\Internal\Events\EventInterface;
+use Bavix\Wallet\Internal\Events\WalletCreatedEventInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\UnknownEventException;
 use Illuminate\Events\Dispatcher;
@@ -48,6 +49,10 @@ final class DispatcherService implements DispatcherServiceInterface
     {
         if ($event instanceof BalanceUpdatedEventInterface) {
             return BalanceUpdatedEventInterface::class;
+        }
+
+        if ($event instanceof WalletCreatedEventInterface) {
+            return WalletCreatedEventInterface::class;
         }
 
         throw new UnknownEventException(
