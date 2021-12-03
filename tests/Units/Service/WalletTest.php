@@ -29,14 +29,14 @@ class WalletTest extends TestCase
 
         self::assertNull($walletService->findBySlug($buyer, 'default'));
         self::assertNull($walletService->findByUuid($uuid));
-        self::assertNull($walletService->findById(1));
+        self::assertNull($walletService->findById(-1));
 
         $buyer->wallet->uuid = $uuid; // @hack
         $buyer->deposit(100);
 
         self::assertNotNull($walletService->findBySlug($buyer, 'default'));
         self::assertNotNull($walletService->findByUuid($uuid));
-        self::assertNotNull($walletService->findById(1));
+        self::assertNotNull($walletService->findById((int) $buyer->wallet->getKey()));
     }
 
     public function testGetBySlug(): void
@@ -56,7 +56,7 @@ class WalletTest extends TestCase
         $this->expectException(ModelNotFoundException::class);
         $this->expectExceptionCode(ExceptionInterface::MODEL_NOT_FOUND);
 
-        app(WalletServiceInterface::class)->getById(1);
+        app(WalletServiceInterface::class)->getById(-1);
     }
 
     public function testGetByUuid(): void
