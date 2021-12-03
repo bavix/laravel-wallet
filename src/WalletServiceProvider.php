@@ -18,12 +18,18 @@ use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferQueryAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferQueryAssemblerInterface;
+use Bavix\Wallet\Internal\Assembler\WalletCreatedEventAssembler;
+use Bavix\Wallet\Internal\Assembler\WalletCreatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEvent;
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEventInterface;
+use Bavix\Wallet\Internal\Events\WalletCreatedEvent;
+use Bavix\Wallet\Internal\Events\WalletCreatedEventInterface;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransactionRepositoryInterface;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
 use Bavix\Wallet\Internal\Repository\TransferRepositoryInterface;
+use Bavix\Wallet\Internal\Repository\WalletRepository;
+use Bavix\Wallet\Internal\Repository\WalletRepositoryInterface;
 use Bavix\Wallet\Internal\Service\ClockService;
 use Bavix\Wallet\Internal\Service\ClockServiceInterface;
 use Bavix\Wallet\Internal\Service\DatabaseService;
@@ -77,6 +83,8 @@ use Bavix\Wallet\Services\RegulatorService;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Services\TaxService;
 use Bavix\Wallet\Services\TaxServiceInterface;
+use Bavix\Wallet\Services\WalletService;
+use Bavix\Wallet\Services\WalletServiceInterface;
 use function config;
 use function dirname;
 use function function_exists;
@@ -153,6 +161,11 @@ final class WalletServiceProvider extends ServiceProvider
             TransferRepositoryInterface::class,
             $configure['transfer'] ?? TransferRepository::class
         );
+
+        $this->app->singleton(
+            WalletRepositoryInterface::class,
+            $configure['wallet'] ?? WalletRepository::class
+        );
     }
 
     /**
@@ -218,6 +231,7 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(PrepareServiceInterface::class, $configure['prepare'] ?? PrepareService::class);
         $this->app->singleton(PurchaseServiceInterface::class, $configure['purchase'] ?? PurchaseService::class);
         $this->app->singleton(TaxServiceInterface::class, $configure['tax'] ?? TaxService::class);
+        $this->app->singleton(WalletServiceInterface::class, $configure['wallet'] ?? WalletService::class);
     }
 
     private function assemblers(array $configure): void
@@ -256,6 +270,11 @@ final class WalletServiceProvider extends ServiceProvider
             TransferQueryAssemblerInterface::class,
             $configure['transfer_query'] ?? TransferQueryAssembler::class
         );
+
+        $this->app->singleton(
+            WalletCreatedEventAssemblerInterface::class,
+            $configure['wallet_created_event'] ?? WalletCreatedEventAssembler::class
+        );
     }
 
     private function transformers(array $configure): void
@@ -276,6 +295,11 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->bind(
             BalanceUpdatedEventInterface::class,
             $configure['balance_updated'] ?? BalanceUpdatedEvent::class
+        );
+
+        $this->app->bind(
+            WalletCreatedEventInterface::class,
+            $configure['wallet_created'] ?? WalletCreatedEvent::class
         );
     }
 
