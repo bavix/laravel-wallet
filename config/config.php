@@ -10,6 +10,7 @@ use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferQueryAssembler;
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEvent;
+use Bavix\Wallet\Internal\Events\WalletCreatedEvent;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
 use Bavix\Wallet\Internal\Repository\WalletRepository;
@@ -133,6 +134,7 @@ return [
      */
     'events' => [
         'balance_updated' => BalanceUpdatedEvent::class,
+        'wallet_created' => WalletCreatedEvent::class,
     ],
 
     /**
