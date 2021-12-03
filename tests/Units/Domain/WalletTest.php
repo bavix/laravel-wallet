@@ -8,11 +8,16 @@ use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
+use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Test\Infra\Factories\UserFactory;
 use Bavix\Wallet\Test\Infra\Models\User;
 use Bavix\Wallet\Test\Infra\TestCase;
 use Illuminate\Database\Eloquent\Collection;
+use RuntimeException;
+use Throwable;
 
 /**
  * @internal
@@ -287,5 +292,33 @@ class WalletTest extends TestCase
 
         $user->withdraw($user->balanceInt);
         self::assertSame(0, $user->balanceInt);
+    }
+
+    public function testCrash(): void
+    {
+        /** @var User $user */
+        $user = UserFactory::new()->create();
+        $user->deposit(10000);
+        self::assertSame(10000, $user->balanceInt);
+
+        try {
+            app(DatabaseServiceInterface::class)->transaction(static function () use ($user) {
+                self::assertSame(0, (int) app(RegulatorServiceInterface::class)->diff($user->wallet));
+                $user->withdraw(10000);
+                self::assertSame(-10000, (int) app(RegulatorServiceInterface::class)->diff($user->wallet));
+                self::assertSame(0, (int) app(RegulatorServiceInterface::class)->amount($user->wallet));
+
+                throw new RuntimeException('hello world');
+            });
+        } catch (Throwable $throwable) {
+            self::assertInstanceOf(TransactionFailedException::class, $throwable);
+            self::assertNotNull($throwable->getPrevious());
+
+            self::assertInstanceOf(RuntimeException::class, $throwable->getPrevious());
+            self::assertSame('hello world', $throwable->getPrevious()->getMessage());
+        }
+
+        self::assertSame(10000, $user->balanceInt);
+        self::assertSame(0, (int) app(RegulatorServiceInterface::class)->diff($user->wallet));
     }
 }

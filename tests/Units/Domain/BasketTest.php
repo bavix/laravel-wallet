@@ -26,9 +26,11 @@ class BasketTest extends TestCase
 
         $items = $basket->items();
         self::assertNotFalse(current($items));
+        self::assertSame(0, key($items));
         self::assertSame(24, current($items)->count());
         self::assertNotFalse(next($items));
         self::assertSame(26, current($items)->count());
+        self::assertSame(1, key($items));
     }
 
     public function testMeta(): void

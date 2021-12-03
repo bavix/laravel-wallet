@@ -13,8 +13,9 @@ use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
-use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
-use Bavix\Wallet\Services\WalletServiceLegacy;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
+use Bavix\Wallet\Services\AtomicServiceInterface;
+use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Traits\CanConfirm;
 use Bavix\Wallet\Traits\CanExchange;
 use Bavix\Wallet\Traits\CanPayFloat;
@@ -107,9 +108,15 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
      */
     public function refreshBalance(): bool
     {
-        return app(DatabaseServiceInterface::class)->transaction(
-            fn () => app(WalletServiceLegacy::class)->refresh($this)
-        );
+        return app(AtomicServiceInterface::class)->block($this, function () {
+            $whatIs = $this->balance;
+            $balance = $this->getAvailableBalanceAttribute();
+            if (app(MathServiceInterface::class)->compare($whatIs, $balance) === 0) {
+                return true;
+            }
+
+            return app(RegulatorServiceInterface::class)->sync($this, $balance);
+        });
     }
 
     /** @codeCoverageIgnore */
@@ -125,13 +132,25 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     /**
      * @return float|int
      */
-    public function getAvailableBalance()
+    public function getAvailableBalanceAttribute()
     {
         return $this->transactions()
             ->where('wallet_id', $this->getKey())
             ->where('confirmed', true)
             ->sum('amount')
         ;
+    }
+
+    /**
+     * @deprecated
+     * @see getAvailableBalanceAttribute
+     * @codeCoverageIgnore
+     *
+     * @return float|int
+     */
+    public function getAvailableBalance()
+    {
+        return $this->getAvailableBalanceAttribute();
     }
 
     public function holder(): MorphTo

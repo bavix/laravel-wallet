@@ -18,8 +18,8 @@ use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Services\AtomicServiceInterface;
 use Bavix\Wallet\Services\CastServiceInterface;
-use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
+use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Illuminate\Database\RecordsNotFoundException;
 
 trait CanConfirm
@@ -77,14 +77,9 @@ trait CanConfirm
             }
 
             $wallet = app(CastServiceInterface::class)->getWallet($this);
-            $mathService = app(MathServiceInterface::class);
-            $negativeAmount = $mathService->negative($transaction->amount);
+            app(RegulatorServiceInterface::class)->decrease($wallet, $transaction->amount);
 
-            return $transaction->update(['confirmed' => false]) &&
-                // update balance
-                app(CommonServiceLegacy::class)
-                    ->addBalance($wallet, $negativeAmount)
-                ;
+            return $transaction->update(['confirmed' => false]);
         });
     }
 
@@ -124,11 +119,9 @@ trait CanConfirm
                 );
             }
 
-            return $transaction->update(['confirmed' => true]) &&
-                // update balance
-                app(CommonServiceLegacy::class)
-                    ->addBalance($wallet, $transaction->amount)
-                ;
+            app(RegulatorServiceInterface::class)->increase($wallet, $transaction->amount);
+
+            return $transaction->update(['confirmed' => true]);
         });
     }
 }

@@ -39,7 +39,6 @@ namespace PHPSTORM_META {
     use Bavix\Wallet\Services\CommonServiceLegacy;
     use Bavix\Wallet\Services\MetaServiceLegacy;
     use Bavix\Wallet\Services\TaxServiceInterface;
-    use Bavix\Wallet\Services\WalletServiceLegacy;
 
     override(\app(0), map([
         // internal.assembler
@@ -93,7 +92,6 @@ namespace PHPSTORM_META {
         // lagacy.services
         CommonServiceLegacy::class => CommonServiceLegacy::class,
         MetaServiceLegacy::class => MetaServiceLegacy::class,
-        WalletServiceLegacy::class => WalletServiceLegacy::class,
     ]));
 
 }

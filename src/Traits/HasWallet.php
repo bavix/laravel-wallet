@@ -17,10 +17,10 @@ use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\AtomicServiceInterface;
-use Bavix\Wallet\Services\BookkeeperServiceInterface;
 use Bavix\Wallet\Services\CastServiceInterface;
 use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
+use Bavix\Wallet\Services\RegulatorServiceInterface;
 use function config;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\RecordsNotFoundException;
@@ -83,7 +83,7 @@ trait HasWallet
     public function getBalanceAttribute()
     {
         /** @var Wallet $this */
-        return app(BookkeeperServiceInterface::class)->amount(
+        return app(RegulatorServiceInterface::class)->amount(
             app(CastServiceInterface::class)->getWallet($this)
         );
     }

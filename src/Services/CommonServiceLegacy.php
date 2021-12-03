@@ -15,7 +15,6 @@ use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Models\Wallet as WalletModel;
 use Illuminate\Database\RecordsNotFoundException;
 
 /** @deprecated */
@@ -26,24 +25,24 @@ final class CommonServiceLegacy
     private DatabaseServiceInterface $databaseService;
     private AssistantServiceInterface $assistantService;
     private PrepareServiceInterface $prepareService;
-    private BookkeeperServiceInterface $bookkeeper;
+    private RegulatorServiceInterface $regulatorService;
     private TransferDtoAssemblerInterface $transferDtoAssembler;
 
     public function __construct(
         CastServiceInterface $castService,
-        BookkeeperServiceInterface $bookkeeper,
         AssistantServiceInterface $satisfyService,
         DatabaseServiceInterface $databaseService,
         PrepareServiceInterface $prepareService,
         TransferDtoAssemblerInterface $transferDtoAssembler,
+        RegulatorServiceInterface $regulatorService,
         AtmServiceInterface $atmService
     ) {
         $this->atmService = $atmService;
         $this->castService = $castService;
-        $this->bookkeeper = $bookkeeper;
         $this->assistantService = $satisfyService;
         $this->databaseService = $databaseService;
         $this->prepareService = $prepareService;
+        $this->regulatorService = $regulatorService;
         $this->transferDtoAssembler = $transferDtoAssembler;
     }
 
@@ -117,41 +116,6 @@ final class CommonServiceLegacy
     }
 
     /**
-     * @param int|string $amount
-     *
-     * @deprecated
-     *
-     * @throws LockProviderNotFoundException
-     * @throws RecordsNotFoundException
-     * @throws TransactionFailedException
-     * @throws ExceptionInterface
-     */
-    public function addBalance(Wallet $wallet, $amount): bool
-    {
-        return $this->databaseService->transaction(function () use ($wallet, $amount) {
-            /** @var WalletModel $wallet */
-            $walletObject = $this->castService->getWallet($wallet);
-            $balance = $this->bookkeeper->increase($walletObject, $amount);
-            $result = 0;
-
-            try {
-                $result = $walletObject->newQuery()
-                    ->whereKey($walletObject->getKey())
-                    ->update(['balance' => $balance])
-                ;
-
-                $walletObject->fill(['balance' => $balance])->syncOriginalAttribute('balance');
-            } finally {
-                if ($result === 0) {
-                    $this->bookkeeper->missing($walletObject);
-                }
-            }
-
-            return (bool) $result;
-        });
-    }
-
-    /**
      * @param float|int|string $amount
      *
      * @throws LockProviderNotFoundException
@@ -196,10 +160,7 @@ final class CommonServiceLegacy
             $object = $this->castService->getWallet($wallet);
             assert((int) $object->getKey() === $walletId);
 
-            $balance = $this->bookkeeper->increase($object, $total);
-
-            $object->newQuery()->whereKey($object->getKey())->update(['balance' => $balance]); // ?qN
-            $object->fill(['balance' => $balance])->syncOriginalAttribute('balance');
+            $this->regulatorService->increase($object, $total);
         }
 
         return $transactions;
