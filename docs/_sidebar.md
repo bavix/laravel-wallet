@@ -34,6 +34,11 @@
     - [Transaction](transaction) 
     - [Race condition](race-condition) 
 
+- Events
+    
+    - [BalanceUpdatedEvent](balance-updated-event)
+    - [Event Customize](event-customize)
+
 - Additions
 
     - [Wallet Swap](laravel-wallet-swap)
