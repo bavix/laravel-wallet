@@ -64,6 +64,8 @@ class WalletTest extends TestCase
         $this->expectException(ModelNotFoundException::class);
         $this->expectExceptionCode(ExceptionInterface::MODEL_NOT_FOUND);
 
-        app(WalletServiceInterface::class)->getByUuid('hello-my-uuid');
+        $uuidFactoryService = app(UuidFactoryServiceInterface::class);
+
+        app(WalletServiceInterface::class)->getByUuid($uuidFactoryService->uuid4());
     }
 }
