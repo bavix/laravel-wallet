@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Transaction support.
+- Now, within the transaction, the wallet has its own balance state.
+
+### Updated
+- Due to the state within transactions, I was able to speed up the computation up to 25 times for complex transfers.
+
+### Removed
+- class `WalletServiceLegacy`
+
 ## [7.0.0] - 2021-11-25
 ### Updated
 - Optimization of the `payFreeCart` and `payFree` request. Now the package does not update the repository. But there is no point in updating it, because the client does not pay anything.
