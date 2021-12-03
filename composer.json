@@ -46,7 +46,8 @@
     "vimeo/psalm": "^4.12"
   },
   "suggest": {
-    "bavix/laravel-wallet-swap": "Addition to the laravel-wallet library for quick setting of exchange rates"
+    "bavix/laravel-wallet-swap": "Addition to the laravel-wallet library for quick setting of exchange rates",
+    "bavix/laravel-wallet-warmup": "Addition to the laravel-wallet library for refresh balance wallets"
   },
   "autoload": {
     "psr-4": {
