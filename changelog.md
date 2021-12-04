@@ -10,11 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Transaction support.
 - Now, within the transaction, the wallet has its own balance state.
 
+### Fixed
+- Fixed unit tests with checking for transaction level (mariadb).
+
 ### Updated
 - Due to the state within transactions, I was able to speed up the computation up to 25 times for complex transfers.
 
 ### Removed
 - class `WalletServiceLegacy`
+- method `CommonServiceLegacy::addBalance`
 
 ## [7.0.0] - 2021-11-25
 ### Updated
