@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.1.0] - 2021-12-05
 ### Added
 - Transaction support.
 - Now, within the transaction, the wallet has its own balance state.
@@ -747,7 +748,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/7.0.0...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/7.1.0...develop
+[7.1.0]: https://github.com/bavix/laravel-wallet/compare/7.0.0...7.1.0
 [7.0.0]: https://github.com/bavix/laravel-wallet/compare/6.2.4...7.0.0
 [6.2.4]: https://github.com/bavix/laravel-wallet/compare/6.2.3...6.2.4
 [6.2.3]: https://github.com/bavix/laravel-wallet/compare/6.2.2...6.2.3
