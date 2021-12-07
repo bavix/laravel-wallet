@@ -55,7 +55,7 @@ final class ConsistencyService implements ConsistencyServiceInterface
         $wallet = $this->castService->getWallet($object, false);
         $balance = $this->mathService->add($wallet->getBalanceAttribute(), $wallet->getCreditAttribute());
 
-        if (!$balance && ($this->mathService->compare($amount, 0) !== 0)) {
+        if (($this->mathService->compare($amount, 0) !== 0) && ($this->mathService->compare($balance, 0) === 0)) {
             throw new BalanceIsEmpty(
                 $this->translatorService->get('wallet::errors.wallet_empty'),
                 ExceptionInterface::BALANCE_IS_EMPTY
