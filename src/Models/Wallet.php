@@ -110,7 +110,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     public function refreshBalance(): bool
     {
         return app(AtomicServiceInterface::class)->block($this, function () {
-            $whatIs = $this->balance;
+            $whatIs = $this->getBalanceAttribute();
             $balance = $this->getAvailableBalanceAttribute();
             if (app(MathServiceInterface::class)->compare($whatIs, $balance) === 0) {
                 return true;
