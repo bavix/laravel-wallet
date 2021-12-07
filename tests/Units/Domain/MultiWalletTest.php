@@ -234,6 +234,28 @@ class MultiWalletTest extends TestCase
         $wallet->withdraw(1);
     }
 
+    public function testWalletTransactions(): void
+    {
+        /** @var UserMulti $user */
+        $user = UserMultiFactory::new()->create();
+        $usd = $user->createWallet(['name' => 'USD']);
+        $eur = $user->createWallet(['name' => 'EUR']);
+
+        $usd->deposit(100);
+        $eur->deposit(200);
+        $eur->withdraw(50);
+
+        self::assertSame(3, $user->transactions()->count());
+        self::assertSame(3, $user->wallet->transactions()->count());
+        self::assertSame(3, $usd->transactions()->count());
+        self::assertSame(3, $eur->transactions()->count());
+
+        self::assertSame(0, $user->walletTransactions()->count());
+        self::assertSame(0, $user->wallet->walletTransactions()->count());
+        self::assertSame(1, $usd->walletTransactions()->count());
+        self::assertSame(2, $eur->walletTransactions()->count());
+    }
+
     public function testInvalidWithdraw(): void
     {
         $this->expectException(BalanceIsEmpty::class);

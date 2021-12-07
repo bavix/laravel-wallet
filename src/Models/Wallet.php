@@ -134,8 +134,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
      */
     public function getAvailableBalanceAttribute()
     {
-        return $this->transactions()
-            ->where('wallet_id', $this->getKey())
+        return $this->walletTransactions()
             ->where('confirmed', true)
             ->sum('amount')
         ;

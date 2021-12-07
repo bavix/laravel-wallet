@@ -22,6 +22,7 @@ use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
 use function config;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\RecordsNotFoundException;
 use Illuminate\Support\Collection;
@@ -91,6 +92,17 @@ trait HasWallet
     public function getBalanceIntAttribute(): int
     {
         return (int) $this->getBalanceAttribute();
+    }
+
+    /**
+     * We receive transactions of the selected wallet.
+     */
+    public function walletTransactions(): HasMany
+    {
+        return app(CastServiceInterface::class)
+            ->getWallet($this)
+            ->hasMany(config('wallet.transaction.model', Transaction::class), 'wallet_id')
+        ;
     }
 
     /**
