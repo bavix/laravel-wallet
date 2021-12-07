@@ -53,20 +53,39 @@ final class ConsistencyService implements ConsistencyServiceInterface
     public function checkPotential(Wallet $object, $amount, bool $allowZero = false): void
     {
         $wallet = $this->castService->getWallet($object, false);
+        $balance = $this->mathService->add($wallet->getBalanceAttribute(), $wallet->getCreditAttribute());
 
-        if (($this->mathService->compare($amount, 0) !== 0) && !$wallet->getBalanceAttribute()) {
+        if (!$balance && ($this->mathService->compare($amount, 0) !== 0)) {
             throw new BalanceIsEmpty(
                 $this->translatorService->get('wallet::errors.wallet_empty'),
                 ExceptionInterface::BALANCE_IS_EMPTY
             );
         }
 
-        if (!$wallet->canWithdraw($amount, $allowZero)) {
+        if (!$this->canWithdraw($balance, $amount, $allowZero)) {
             throw new InsufficientFunds(
                 $this->translatorService->get('wallet::errors.insufficient_funds'),
                 ExceptionInterface::INSUFFICIENT_FUNDS
             );
         }
+    }
+
+    /**
+     * @param float|int|string $balance
+     * @param float|int|string $amount
+     */
+    public function canWithdraw($balance, $amount, bool $allowZero = false): bool
+    {
+        $mathService = app(MathServiceInterface::class);
+
+        /**
+         * Allow buying for free with a negative balance.
+         */
+        if ($allowZero && !$mathService->compare($amount, 0)) {
+            return true;
+        }
+
+        return $mathService->compare($balance, $amount) >= 0;
     }
 
     /**

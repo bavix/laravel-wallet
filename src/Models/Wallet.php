@@ -38,6 +38,7 @@ use Illuminate\Support\Str;
  * @property null|array                      $meta
  * @property int                             $decimal_places
  * @property \Bavix\Wallet\Interfaces\Wallet $holder
+ * @property string                          $credit
  * @property string                          $currency
  */
 class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchangeable
@@ -155,6 +156,11 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     public function holder(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function getCreditAttribute(): string
+    {
+        return (string) ($this->meta['credit'] ?? '0');
     }
 
     public function getCurrencyAttribute(): string
