@@ -12,6 +12,7 @@ use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\RecordsNotFoundException;
 
@@ -90,6 +91,8 @@ interface Wallet
     public function getBalanceAttribute();
 
     public function getBalanceIntAttribute(): int;
+
+    public function walletTransactions(): HasMany;
 
     public function transactions(): MorphMany;
 
