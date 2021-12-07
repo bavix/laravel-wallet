@@ -34,6 +34,7 @@ To perform the migration, you will be [helped by the instruction](https://bavix.
 | Extension | Description | 
 | ----- | ----- | 
 | [Swap](https://github.com/bavix/laravel-wallet-swap) | Addition to the laravel-wallet library for quick setting of exchange rates | 
+| [Warm Up](https://github.com/bavix/laravel-wallet-warmup) | Addition to the laravel-wallet library for refresh balance wallets | 
 
 ### Usage
 Add the `HasWallet` trait and `Wallet` interface to model.
