@@ -181,7 +181,7 @@ trait HasWallet
     {
         $mathService = app(MathServiceInterface::class);
         $wallet = app(CastServiceInterface::class)->getWallet($this);
-        $balance = $mathService->add($this->balance, $wallet->credit);
+        $balance = $mathService->add($this->getBalanceAttribute(), $wallet->getCreditAttribute());
 
         return app(ConsistencyServiceInterface::class)->canWithdraw($balance, $amount, $allowZero);
     }
