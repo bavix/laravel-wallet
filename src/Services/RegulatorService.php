@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
+use Bavix\Wallet\Internal\Service\DispatcherServiceInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Internal\Service\StorageServiceInterface;
 use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
@@ -12,7 +14,9 @@ use Bavix\Wallet\Models\Wallet;
 
 final class RegulatorService implements RegulatorServiceInterface
 {
+    private BalanceUpdatedEventAssemblerInterface $balanceUpdatedEventAssembler;
     private BookkeeperServiceInterface $bookkeeperService;
+    private DispatcherServiceInterface $dispatcherService;
     private StorageServiceInterface $storageService;
     private MathServiceInterface $mathService;
     private string $idempotentKey;
@@ -21,13 +25,17 @@ final class RegulatorService implements RegulatorServiceInterface
     private array $wallets = [];
 
     public function __construct(
+        BalanceUpdatedEventAssemblerInterface $balanceUpdatedEventAssembler,
         UuidFactoryServiceInterface $uuidFactoryService,
         BookkeeperServiceInterface $bookkeeperService,
+        DispatcherServiceInterface $dispatcherService,
         StorageServiceInterface $storageService,
         MathServiceInterface $mathService
     ) {
+        $this->balanceUpdatedEventAssembler = $balanceUpdatedEventAssembler;
         $this->idempotentKey = $uuidFactoryService->uuid4();
         $this->bookkeeperService = $bookkeeperService;
+        $this->dispatcherService = $dispatcherService;
         $this->storageService = $storageService;
         $this->mathService = $mathService;
     }
@@ -100,8 +108,12 @@ final class RegulatorService implements RegulatorServiceInterface
             $balance = $this->bookkeeperService->increase($wallet, $diffValue);
             $wallet->newQuery()->whereKey($wallet->getKey())->update(['balance' => $balance]); // ?qN
             $wallet->fill(['balance' => $balance])->syncOriginalAttribute('balance');
+
+            $event = $this->balanceUpdatedEventAssembler->create($wallet);
+            $this->dispatcherService->dispatch($event);
         }
 
+        $this->dispatcherService->flush();
         $this->purge();
     }
 
@@ -110,6 +122,8 @@ final class RegulatorService implements RegulatorServiceInterface
         foreach ($this->wallets as $wallet) {
             $this->missing($wallet);
         }
+
+        $this->dispatcherService->forgot();
     }
 
     private function persist(Wallet $wallet): void
