@@ -28,6 +28,12 @@ interface ConsistencyServiceInterface
     public function checkPotential(Wallet $object, $amount, bool $allowZero = false): void;
 
     /**
+     * @param float|int|string $balance
+     * @param float|int|string $amount
+     */
+    public function canWithdraw($balance, $amount, bool $allowZero = false): bool;
+
+    /**
      * @param TransferLazyDtoInterface[] $objects
      *
      * @throws BalanceIsEmpty

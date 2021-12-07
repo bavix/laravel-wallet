@@ -179,16 +179,11 @@ trait HasWallet
      */
     public function canWithdraw($amount, bool $allowZero = false): bool
     {
-        $math = app(MathServiceInterface::class);
+        $mathService = app(MathServiceInterface::class);
+        $wallet = app(CastServiceInterface::class)->getWallet($this);
+        $balance = $mathService->add($this->getBalanceAttribute(), $wallet->getCreditAttribute());
 
-        /**
-         * Allow buying for free with a negative balance.
-         */
-        if ($allowZero && !$math->compare($amount, 0)) {
-            return true;
-        }
-
-        return $math->compare($this->balance, $amount) >= 0;
+        return app(ConsistencyServiceInterface::class)->canWithdraw($balance, $amount, $allowZero);
     }
 
     /**
