@@ -245,13 +245,15 @@ class MultiWalletTest extends TestCase
         $eur->deposit(200);
         $eur->withdraw(50);
 
-        self::assertCount(3, $user->transactions()->get());
-        self::assertCount(3, $usd->transactions()->get());
-        self::assertCount(3, $eur->transactions()->get());
+        self::assertSame(3, $user->transactions()->count());
+        self::assertSame(3, $user->wallet->transactions()->count());
+        self::assertSame(3, $usd->transactions()->count());
+        self::assertSame(3, $eur->transactions()->count());
 
-        self::assertCount(0, $user->walletTransactions()->get());
-        self::assertCount(1, $usd->walletTransactions()->get());
-        self::assertCount(2, $eur->walletTransactions()->get());
+        self::assertSame(0, $user->walletTransactions()->count());
+        self::assertSame(0, $user->wallet->walletTransactions()->count());
+        self::assertSame(1, $usd->walletTransactions()->count());
+        self::assertSame(2, $eur->walletTransactions()->count());
     }
 
     public function testInvalidWithdraw(): void
