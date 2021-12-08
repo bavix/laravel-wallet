@@ -43,7 +43,7 @@
     "phpunit/phpunit": "^9.5",
     "psalm/plugin-laravel": "^1.5",
     "rector/rector": "^0.12.3",
-    "symplify/easy-coding-standard": "^9.4",
+    "symplify/easy-coding-standard": "^10.0",
     "vimeo/psalm": "^4.12"
   },
   "suggest": {
