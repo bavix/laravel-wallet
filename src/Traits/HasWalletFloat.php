@@ -161,6 +161,6 @@ trait HasWalletFloat
         $decimalPlacesValue = $wallet->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);
 
-        return $math->div($wallet->balance, $decimalPlaces, $decimalPlacesValue);
+        return $math->div($wallet->getBalanceAttribute(), $decimalPlaces, $decimalPlacesValue);
     }
 }

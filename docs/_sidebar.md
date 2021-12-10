@@ -15,11 +15,13 @@
     - [Confirm](confirm)
     - [Exchange](exchange)
     - [Withdraw taxing](taxing)
+    - [Credit Limits](credit-limits)
 
 - Multi Wallets
 
     - [New Wallet](new-wallet)
     - [Transfer](wallet-transfer)
+    - [Transaction Filter](transaction-filter)
 
 - Purchases
 
@@ -37,6 +39,7 @@
 - Events
     
     - [BalanceUpdatedEvent](balance-updated-event)
+    - [WalletCreatedEvent](wallet-created-event)
     - [Event Customize](event-customize)
 
 - Additions

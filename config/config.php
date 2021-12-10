@@ -10,8 +10,10 @@ use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferQueryAssembler;
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEvent;
+use Bavix\Wallet\Internal\Events\WalletCreatedEvent;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
+use Bavix\Wallet\Internal\Repository\WalletRepository;
 use Bavix\Wallet\Internal\Service\ClockService;
 use Bavix\Wallet\Internal\Service\DatabaseService;
 use Bavix\Wallet\Internal\Service\DispatcherService;
@@ -39,6 +41,7 @@ use Bavix\Wallet\Services\PrepareService;
 use Bavix\Wallet\Services\PurchaseService;
 use Bavix\Wallet\Services\RegulatorService;
 use Bavix\Wallet\Services\TaxService;
+use Bavix\Wallet\Services\WalletService;
 
 return [
     /**
@@ -93,6 +96,7 @@ return [
         'prepare' => PrepareService::class,
         'purchase' => PurchaseService::class,
         'tax' => TaxService::class,
+        'wallet' => WalletService::class,
     ],
 
     /**
@@ -101,6 +105,7 @@ return [
     'repositories' => [
         'transaction' => TransactionRepository::class,
         'transfer' => TransferRepository::class,
+        'wallet' => WalletRepository::class,
     ],
 
     /**
@@ -129,6 +134,7 @@ return [
      */
     'events' => [
         'balance_updated' => BalanceUpdatedEvent::class,
+        'wallet_created' => WalletCreatedEvent::class,
     ],
 
     /**
