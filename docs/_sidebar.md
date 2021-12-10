@@ -15,11 +15,13 @@
     - [Confirm](confirm)
     - [Exchange](exchange)
     - [Withdraw taxing](taxing)
+    - [Credit Limits](credit-limits)
 
 - Multi Wallets
 
     - [New Wallet](new-wallet)
     - [Transfer](wallet-transfer)
+    - [Transaction Filter](transaction-filter)
 
 - Purchases
 

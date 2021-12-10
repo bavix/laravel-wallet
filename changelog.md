@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.3.0]
+### Added
+- Credit Limits
+- WalletCreatedEvent
+
+### Updated
+- Optimization of check for withdrawals;
+
 ## [7.2.0] - 2021-12-07
 ### Added
 - Added balance update event
@@ -752,7 +760,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/7.2.0...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/7.3.0...develop
+[7.3.0]: https://github.com/bavix/laravel-wallet/compare/7.2.0...7.3.0
 [7.2.0]: https://github.com/bavix/laravel-wallet/compare/7.1.0...7.2.0
 [7.1.0]: https://github.com/bavix/laravel-wallet/compare/7.0.0...7.1.0
 [7.0.0]: https://github.com/bavix/laravel-wallet/compare/6.2.4...7.0.0
