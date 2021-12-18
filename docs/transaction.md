@@ -10,7 +10,7 @@ use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 /** @var object $businessLogicService */
 /** @var \Bavix\Wallet\Models\Wallet $payer */
 $payer->balanceInt; // 9999
-app(DatabaseServiceInterface::class)->transaction(statuc function () use ($payer) {
+app(DatabaseServiceInterface::class)->transaction(static function () use ($payer) {
     $payer->withdraw(1000); // 8999
     $businessLogicService->doingMagic($payer); // throws an exception
 }); // rollback payer balance
@@ -26,7 +26,7 @@ use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 /** @var object $businessLogicService */
 /** @var \Bavix\Wallet\Models\Wallet $payer */
 $payer->balanceInt; // 9999
-app(DatabaseServiceInterface::class)->transaction(statuc function () use ($payer) {
+app(DatabaseServiceInterface::class)->transaction(static function () use ($payer) {
     $payer->withdraw(1000); // 8999
     $businessLogicService->doingMagic($payer); // successfully
 }); // commit payer balance
