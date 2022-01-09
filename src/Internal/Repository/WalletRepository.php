@@ -44,7 +44,7 @@ final class WalletRepository implements WalletRepositoryInterface
         }
     }
 
-    public function findBySlug(string $holderType, int $holderId, string $slug): ?Wallet
+    public function findBySlug(string $holderType, int|string $holderId, string $slug): ?Wallet
     {
         try {
             return $this->getBySlug($holderType, $holderId, $slug);
@@ -66,7 +66,7 @@ final class WalletRepository implements WalletRepositoryInterface
     }
 
     /** @throws ModelNotFoundException */
-    public function getBySlug(string $holderType, int $holderId, string $slug): Wallet
+    public function getBySlug(string $holderType, int|string $holderId, string $slug): Wallet
     {
         return $this->getBy([
             'holder_type' => $holderType,
