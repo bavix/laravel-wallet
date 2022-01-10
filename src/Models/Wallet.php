@@ -137,7 +137,8 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     {
         return $this->walletTransactions()
             ->where('confirmed', true)
-            ->sum('amount');
+            ->sum('amount')
+        ;
     }
 
     /**
