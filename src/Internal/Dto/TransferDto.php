@@ -17,10 +17,10 @@ final class TransferDto implements TransferDtoInterface
     private string $status;
 
     private string $fromType;
-    private int $fromId;
+    private int|string $fromId;
 
     private string $toType;
-    private int $toId;
+    private int|string $toId;
 
     private int $discount;
     private string $fee;
@@ -34,9 +34,9 @@ final class TransferDto implements TransferDtoInterface
         int $withdrawId,
         string $status,
         string $fromType,
-        int $fromId,
+        int|string $fromId,
         string $toType,
-        int $toId,
+        int|string $toId,
         int $discount,
         string $fee
     ) {
@@ -79,7 +79,7 @@ final class TransferDto implements TransferDtoInterface
         return $this->fromType;
     }
 
-    public function getFromId(): int
+    public function getFromId(): int|string
     {
         return $this->fromId;
     }
@@ -89,7 +89,7 @@ final class TransferDto implements TransferDtoInterface
         return $this->toType;
     }
 
-    public function getToId(): int
+    public function getToId(): int|string
     {
         return $this->toId;
     }
