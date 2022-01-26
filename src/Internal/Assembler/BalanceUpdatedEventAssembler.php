@@ -21,7 +21,7 @@ final class BalanceUpdatedEventAssembler implements BalanceUpdatedEventAssembler
     public function create(Wallet $wallet): BalanceUpdatedEventInterface
     {
         return new BalanceUpdatedEvent(
-            (int) $wallet->getKey(),
+            $wallet->getKey(),
             $wallet->uuid,
             $wallet->getOriginalBalanceAttribute(),
             $this->clockService->now()

@@ -29,14 +29,15 @@ final class CommonServiceLegacy
     private TransferDtoAssemblerInterface $transferDtoAssembler;
 
     public function __construct(
-        CastServiceInterface $castService,
-        AssistantServiceInterface $satisfyService,
-        DatabaseServiceInterface $databaseService,
-        PrepareServiceInterface $prepareService,
+        CastServiceInterface          $castService,
+        AssistantServiceInterface     $satisfyService,
+        DatabaseServiceInterface      $databaseService,
+        PrepareServiceInterface       $prepareService,
         TransferDtoAssemblerInterface $transferDtoAssembler,
-        RegulatorServiceInterface $regulatorService,
-        AtmServiceInterface $atmService
-    ) {
+        RegulatorServiceInterface     $regulatorService,
+        AtmServiceInterface           $atmService
+    )
+    {
         $this->atmService = $atmService;
         $this->castService = $castService;
         $this->assistantService = $satisfyService;
@@ -66,13 +67,13 @@ final class CommonServiceLegacy
     /**
      * @param non-empty-array<TransferLazyDtoInterface> $objects
      *
-     * @throws LockProviderNotFoundException
+     * @return non-empty-array<Transfer>
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      *
-     * @return non-empty-array<Transfer>
+     * @throws LockProviderNotFoundException
      */
     public function applyTransfers(array $objects): array
     {
@@ -126,9 +127,9 @@ final class CommonServiceLegacy
         assert(in_array($type, [Transaction::TYPE_DEPOSIT, Transaction::TYPE_WITHDRAW], true));
 
         if ($type === Transaction::TYPE_DEPOSIT) {
-            $dto = $this->prepareService->deposit($wallet, (string) $amount, $meta, $confirmed);
+            $dto = $this->prepareService->deposit($wallet, (string)$amount, $meta, $confirmed);
         } else {
-            $dto = $this->prepareService->withdraw($wallet, (string) $amount, $meta, $confirmed);
+            $dto = $this->prepareService->withdraw($wallet, (string)$amount, $meta, $confirmed);
         }
 
         $transactions = $this->applyTransactions(
@@ -140,13 +141,13 @@ final class CommonServiceLegacy
     }
 
     /**
-     * @param non-empty-array<int|string, Wallet>           $wallets
+     * @param non-empty-array<int|string, Wallet> $wallets
      * @param non-empty-array<int, TransactionDtoInterface> $objects
      *
-     * @throws LockProviderNotFoundException
+     * @return non-empty-array<string, Transaction>
      * @throws RecordNotFoundException
      *
-     * @return non-empty-array<string, Transaction>
+     * @throws LockProviderNotFoundException
      */
     public function applyTransactions(array $wallets, array $objects): array
     {
@@ -158,7 +159,7 @@ final class CommonServiceLegacy
             assert($wallet !== null);
 
             $object = $this->castService->getWallet($wallet);
-            assert((int) $object->getKey() === $walletId);
+            assert($object->getKey() === $walletId);
 
             $this->regulatorService->increase($object, $total);
         }

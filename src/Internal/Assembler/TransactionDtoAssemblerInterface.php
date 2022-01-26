@@ -11,7 +11,7 @@ interface TransactionDtoAssemblerInterface
 {
     public function create(
         Model $payable,
-        int $walletId,
+        int|string $walletId,
         string $type,
         string $amount,
         bool $confirmed,

@@ -53,7 +53,7 @@ final class WalletService implements WalletServiceInterface
     {
         return $this->walletRepository->findBySlug(
             $model->getMorphClass(),
-            (int) $model->getKey(),
+            $model->getKey(),
             $slug
         );
     }
@@ -73,7 +73,7 @@ final class WalletService implements WalletServiceInterface
     {
         return $this->walletRepository->getBySlug(
             $model->getMorphClass(),
-            (int) $model->getKey(),
+            $model->getKey(),
             $slug
         );
     }

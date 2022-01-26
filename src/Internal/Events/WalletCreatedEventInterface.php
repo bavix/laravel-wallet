@@ -10,9 +10,9 @@ interface WalletCreatedEventInterface extends EventInterface
 {
     public function getHolderType(): string;
 
-    public function getHolderId(): int;
+    public function getHolderId(): int|string;
 
-    public function getWalletId(): int;
+    public function getWalletId(): int|string;
 
     public function getWalletUuid(): string;
 

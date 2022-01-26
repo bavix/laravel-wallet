@@ -11,18 +11,18 @@ interface WalletRepositoryInterface
 {
     public function create(array $attributes): Wallet;
 
-    public function findById(int $id): ?Wallet;
+    public function findById(int|string $id): ?Wallet;
 
     public function findByUuid(string $uuid): ?Wallet;
 
-    public function findBySlug(string $holderType, int $holderId, string $slug): ?Wallet;
+    public function findBySlug(string $holderType, int|string $holderId, string $slug): ?Wallet;
 
     /** @throws ModelNotFoundException */
-    public function getById(int $id): Wallet;
+    public function getById(int|string $id): Wallet;
 
     /** @throws ModelNotFoundException */
     public function getByUuid(string $uuid): Wallet;
 
     /** @throws ModelNotFoundException */
-    public function getBySlug(string $holderType, int $holderId, string $slug): Wallet;
+    public function getBySlug(string $holderType, int|string $holderId, string $slug): Wallet;
 }

@@ -8,7 +8,7 @@ use DateTimeImmutable;
 
 interface BalanceUpdatedEventInterface extends EventInterface
 {
-    public function getWalletId(): int;
+    public function getWalletId(): int|string;
 
     public function getWalletUuid(): string;
 

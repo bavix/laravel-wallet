@@ -12,9 +12,9 @@ final class TransactionDto implements TransactionDtoInterface
     private string $uuid;
 
     private string $payableType;
-    private int $payableId;
+    private int|string $payableId;
 
-    private int $walletId;
+    private int|string $walletId;
 
     private string $type;
 
@@ -30,8 +30,8 @@ final class TransactionDto implements TransactionDtoInterface
     public function __construct(
         string $uuid,
         string $payableType,
-        int $payableId,
-        int $walletId,
+        int|string $payableId,
+        int|string $walletId,
         string $type,
         string $amount,
         bool $confirmed,
@@ -59,12 +59,12 @@ final class TransactionDto implements TransactionDtoInterface
         return $this->payableType;
     }
 
-    public function getPayableId(): int
+    public function getPayableId(): int|string
     {
         return $this->payableId;
     }
 
-    public function getWalletId(): int
+    public function getWalletId(): int|string
     {
         return $this->walletId;
     }
