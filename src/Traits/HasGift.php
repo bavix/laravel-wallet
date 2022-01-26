@@ -27,6 +27,8 @@ use Illuminate\Database\RecordsNotFoundException;
 
 /**
  * Trait HasGift.
+ *
+ * @psalm-require-extends \Illuminate\Database\Eloquent\Model
  */
 trait HasGift
 {

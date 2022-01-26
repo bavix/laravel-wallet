@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
  * To use a trait, you must add HasWallet trait.
  *
  * @property Collection|WalletModel[] $wallets
+ * @psalm-require-extends \Illuminate\Database\Eloquent\Model
  */
 trait HasWallets
 {

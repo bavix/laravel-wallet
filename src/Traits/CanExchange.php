@@ -23,6 +23,9 @@ use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\TaxServiceInterface;
 use Illuminate\Database\RecordsNotFoundException;
 
+/**
+ * @psalm-require-extends \Illuminate\Database\Eloquent\Model
+ */
 trait CanExchange
 {
     /**

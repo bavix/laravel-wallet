@@ -18,6 +18,10 @@ use Bavix\Wallet\Objects\Cart;
 use function current;
 use Illuminate\Database\RecordsNotFoundException;
 
+/**
+ * @psalm-require-extends \Illuminate\Database\Eloquent\Model
+ * @psalm-require-implements \Bavix\Wallet\Interfaces\Customer
+ */
 trait CanPay
 {
     use CartPay;

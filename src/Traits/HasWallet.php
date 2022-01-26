@@ -33,6 +33,8 @@ use Illuminate\Support\Collection;
  * @property Collection|WalletModel[] $wallets
  * @property string                   $balance
  * @property int                      $balanceInt
+ * @psalm-require-extends \Illuminate\Database\Eloquent\Model
+ * @psalm-require-implements \Bavix\Wallet\Interfaces\Wallet
  */
 trait HasWallet
 {

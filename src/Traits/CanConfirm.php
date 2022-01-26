@@ -22,6 +22,9 @@ use Bavix\Wallet\Services\ConsistencyServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Illuminate\Database\RecordsNotFoundException;
 
+/**
+ * @psalm-require-extends \Illuminate\Database\Eloquent\Model
+ */
 trait CanConfirm
 {
     /**

@@ -29,6 +29,10 @@ use Bavix\Wallet\Services\PurchaseServiceInterface;
 use function count;
 use Illuminate\Database\RecordsNotFoundException;
 
+/**
+ * @psalm-require-extends \Illuminate\Database\Eloquent\Model
+ * @psalm-require-implements \Bavix\Wallet\Interfaces\Customer
+ */
 trait CartPay
 {
     use HasWallet;
