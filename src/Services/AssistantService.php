@@ -10,11 +10,8 @@ use Bavix\Wallet\Internal\Service\MathServiceInterface;
 
 final class AssistantService implements AssistantServiceInterface
 {
-    private MathServiceInterface $mathService;
-
-    public function __construct(MathServiceInterface $mathService)
+    public function __construct(private MathServiceInterface $mathService)
     {
-        $this->mathService = $mathService;
     }
 
     /**

@@ -81,7 +81,7 @@ trait CartPay
     {
         try {
             return $this->payCart($cart, $force);
-        } catch (ExceptionInterface $throwable) {
+        } catch (ExceptionInterface) {
             return [];
         }
     }
@@ -150,7 +150,7 @@ trait CartPay
     {
         try {
             return $this->refundCart($cart, $force, $gifts);
-        } catch (ExceptionInterface $throwable) {
+        } catch (ExceptionInterface) {
             return false;
         }
     }
@@ -232,7 +232,7 @@ trait CartPay
     {
         try {
             return $this->refundGiftCart($cart, $force);
-        } catch (ExceptionInterface $throwable) {
+        } catch (ExceptionInterface) {
             return false;
         }
     }

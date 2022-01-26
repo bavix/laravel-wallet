@@ -15,15 +15,13 @@ use Throwable;
 
 final class DatabaseService implements DatabaseServiceInterface
 {
-    private RegulatorServiceInterface $regulatorService;
     private ConnectionInterface $connection;
 
     public function __construct(
         ConnectionResolverInterface $connectionResolver,
-        RegulatorServiceInterface $regulatorService,
+        private RegulatorServiceInterface $regulatorService,
         ConfigRepository $config
     ) {
-        $this->regulatorService = $regulatorService;
         $this->connection = $connectionResolver->connection(
             $config->get('wallet.database.connection')
         );

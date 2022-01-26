@@ -14,30 +14,20 @@ use Bavix\Wallet\Models\Wallet;
 
 final class RegulatorService implements RegulatorServiceInterface
 {
-    private BalanceUpdatedEventAssemblerInterface $balanceUpdatedEventAssembler;
-    private BookkeeperServiceInterface $bookkeeperService;
-    private DispatcherServiceInterface $dispatcherService;
-    private StorageServiceInterface $storageService;
-    private MathServiceInterface $mathService;
     private string $idempotentKey;
 
     /** @var Wallet[] */
     private array $wallets = [];
 
     public function __construct(
-        BalanceUpdatedEventAssemblerInterface $balanceUpdatedEventAssembler,
+        private BalanceUpdatedEventAssemblerInterface $balanceUpdatedEventAssembler,
         UuidFactoryServiceInterface $uuidFactoryService,
-        BookkeeperServiceInterface $bookkeeperService,
-        DispatcherServiceInterface $dispatcherService,
-        StorageServiceInterface $storageService,
-        MathServiceInterface $mathService
+        private BookkeeperServiceInterface $bookkeeperService,
+        private DispatcherServiceInterface $dispatcherService,
+        private StorageServiceInterface $storageService,
+        private MathServiceInterface $mathService
     ) {
-        $this->balanceUpdatedEventAssembler = $balanceUpdatedEventAssembler;
         $this->idempotentKey = $uuidFactoryService->uuid4();
-        $this->bookkeeperService = $bookkeeperService;
-        $this->dispatcherService = $dispatcherService;
-        $this->storageService = $storageService;
-        $this->mathService = $mathService;
     }
 
     public function missing(Wallet $wallet): bool
@@ -51,7 +41,7 @@ final class RegulatorService implements RegulatorServiceInterface
     {
         try {
             return $this->mathService->round($this->storageService->get($this->getKey($wallet->uuid)));
-        } catch (RecordNotFoundException $exception) {
+        } catch (RecordNotFoundException) {
             return '0';
         }
     }
@@ -83,7 +73,7 @@ final class RegulatorService implements RegulatorServiceInterface
 
         try {
             $this->storageService->increase($this->getKey($wallet->uuid), $value);
-        } catch (RecordNotFoundException $exception) {
+        } catch (RecordNotFoundException) {
             $value = $this->mathService->round($value);
             $this->storageService->sync($this->getKey($wallet->uuid), $value);
         }

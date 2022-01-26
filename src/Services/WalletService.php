@@ -14,21 +14,8 @@ use Illuminate\Database\Eloquent\Model;
 
 final class WalletService implements WalletServiceInterface
 {
-    private WalletCreatedEventAssemblerInterface $walletCreatedEventAssembler;
-    private UuidFactoryServiceInterface $uuidFactoryService;
-    private DispatcherServiceInterface $dispatcherService;
-    private WalletRepositoryInterface $walletRepository;
-
-    public function __construct(
-        WalletCreatedEventAssemblerInterface $walletCreatedEventAssembler,
-        UuidFactoryServiceInterface $uuidFactoryService,
-        DispatcherServiceInterface $dispatcherService,
-        WalletRepositoryInterface $walletRepository
-    ) {
-        $this->walletCreatedEventAssembler = $walletCreatedEventAssembler;
-        $this->uuidFactoryService = $uuidFactoryService;
-        $this->dispatcherService = $dispatcherService;
-        $this->walletRepository = $walletRepository;
+    public function __construct(private WalletCreatedEventAssemblerInterface $walletCreatedEventAssembler, private UuidFactoryServiceInterface $uuidFactoryService, private DispatcherServiceInterface $dispatcherService, private WalletRepositoryInterface $walletRepository)
+    {
     }
 
     public function create(Model $model, array $data): Wallet

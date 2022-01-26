@@ -11,18 +11,8 @@ use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 final class StorageService implements StorageServiceInterface
 {
-    private LockServiceInterface $lockService;
-    private MathServiceInterface $mathService;
-    private CacheRepository $cacheRepository;
-
-    public function __construct(
-        LockServiceInterface $lockService,
-        MathServiceInterface $mathService,
-        CacheRepository $cacheRepository
-    ) {
-        $this->cacheRepository = $cacheRepository;
-        $this->mathService = $mathService;
-        $this->lockService = $lockService;
+    public function __construct(private LockServiceInterface $lockService, private MathServiceInterface $mathService, private CacheRepository $cacheRepository)
+    {
     }
 
     public function flush(): bool

@@ -12,15 +12,8 @@ use Bavix\Wallet\Models\Wallet;
 
 final class BookkeeperService implements BookkeeperServiceInterface
 {
-    private StorageServiceInterface $storageService;
-    private LockServiceInterface $lockService;
-
-    public function __construct(
-        StorageServiceInterface $storageService,
-        LockServiceInterface $lockService
-    ) {
-        $this->storageService = $storageService;
-        $this->lockService = $lockService;
+    public function __construct(private StorageServiceInterface $storageService, private LockServiceInterface $lockService)
+    {
     }
 
     public function missing(Wallet $wallet): bool
@@ -36,7 +29,7 @@ final class BookkeeperService implements BookkeeperServiceInterface
     {
         try {
             return $this->storageService->get($this->getKey($wallet));
-        } catch (RecordNotFoundException $recordNotFoundException) {
+        } catch (RecordNotFoundException) {
             $this->lockService->block(
                 $this->getKey($wallet),
                 fn () => $this->sync($wallet, $wallet->getOriginalBalanceAttribute()),
@@ -61,7 +54,7 @@ final class BookkeeperService implements BookkeeperServiceInterface
     {
         try {
             return $this->storageService->increase($this->getKey($wallet), $value);
-        } catch (RecordNotFoundException $recordNotFoundException) {
+        } catch (RecordNotFoundException) {
             $this->amount($wallet);
         }
 

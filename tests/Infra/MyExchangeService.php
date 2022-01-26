@@ -9,8 +9,6 @@ use Bavix\Wallet\Services\ExchangeServiceInterface;
 
 class MyExchangeService implements ExchangeServiceInterface
 {
-    private MathServiceInterface $mathService;
-
     private array $rates = [
         'USD' => [
             'RUB' => 67.61,
@@ -20,10 +18,8 @@ class MyExchangeService implements ExchangeServiceInterface
     /**
      * Rate constructor.
      */
-    public function __construct(MathServiceInterface $mathService)
+    public function __construct(private MathServiceInterface $mathService)
     {
-        $this->mathService = $mathService;
-
         foreach ($this->rates as $from => $rates) {
             foreach ($rates as $to => $rate) {
                 if (empty($this->rates[$to][$from])) {

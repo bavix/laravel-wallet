@@ -51,7 +51,7 @@ trait CanConfirm
     {
         try {
             return $this->confirm($transaction);
-        } catch (ExceptionInterface $throwable) {
+        } catch (ExceptionInterface) {
             return false;
         }
     }
@@ -87,7 +87,7 @@ trait CanConfirm
     {
         try {
             return $this->resetConfirm($transaction);
-        } catch (ExceptionInterface $throwable) {
+        } catch (ExceptionInterface) {
             return false;
         }
     }

@@ -45,7 +45,7 @@ trait HasWallets
     {
         try {
             return $this->getWalletOrFail($slug);
-        } catch (ModelNotFoundException $modelNotFoundException) {
+        } catch (ModelNotFoundException) {
             return null;
         }
     }

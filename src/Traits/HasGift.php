@@ -35,7 +35,7 @@ trait HasGift
     {
         try {
             return $this->gift($to, $product, $force);
-        } catch (ExceptionInterface $throwable) {
+        } catch (ExceptionInterface) {
             return null;
         }
     }

@@ -18,7 +18,6 @@ use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Services\CastServiceInterface;
 use function count;
 use Countable;
-use function get_class;
 
 final class Cart implements Countable, CartInterface
 {
@@ -32,16 +31,8 @@ final class Cart implements Countable, CartInterface
 
     private array $meta = [];
 
-    private CastServiceInterface $castService;
-
-    private MathServiceInterface $math;
-
-    public function __construct(
-        CastServiceInterface $castService,
-        MathServiceInterface $math
-    ) {
-        $this->castService = $castService;
-        $this->math = $math;
+    public function __construct(private CastServiceInterface $castService, private MathServiceInterface $math)
+    {
     }
 
     public function getMeta(): array
@@ -109,7 +100,7 @@ final class Cart implements Countable, CartInterface
     {
         $model = $this->castService->getModel($product);
 
-        return (int) ($this->quantity[get_class($product).':'.$model->getKey()] ?? 0);
+        return (int) ($this->quantity[$product::class.':'.$model->getKey()] ?? 0);
     }
 
     /**
@@ -136,7 +127,7 @@ final class Cart implements Countable, CartInterface
     {
         $model = $this->castService->getModel($product);
 
-        $this->quantity[get_class($product).':'.$model->getKey()] = $this->math
+        $this->quantity[$product::class.':'.$model->getKey()] = $this->math
             ->add($this->getQuantity($product), $quantity)
         ;
     }

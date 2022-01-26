@@ -52,7 +52,7 @@ trait CanExchange
     {
         try {
             return $this->exchange($to, $amount, $meta);
-        } catch (ExceptionInterface $throwable) {
+        } catch (ExceptionInterface) {
             return null;
         }
     }

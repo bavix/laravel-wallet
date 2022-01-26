@@ -9,35 +9,8 @@ use Bavix\Wallet\Interfaces\Wallet;
 /** @psalm-immutable */
 final class TransferLazyDto implements TransferLazyDtoInterface
 {
-    private Wallet $fromWallet;
-    private Wallet $toWallet;
-
-    private int $discount;
-    private string $fee;
-
-    private TransactionDtoInterface $depositDto;
-    private TransactionDtoInterface $withdrawDto;
-
-    private string $status;
-
-    public function __construct(
-        Wallet $fromWallet,
-        Wallet $toWallet,
-        int $discount,
-        string $fee,
-        TransactionDtoInterface $withdrawDto,
-        TransactionDtoInterface $depositDto,
-        string $status
-    ) {
-        $this->fromWallet = $fromWallet;
-        $this->toWallet = $toWallet;
-        $this->discount = $discount;
-        $this->fee = $fee;
-
-        $this->withdrawDto = $withdrawDto;
-        $this->depositDto = $depositDto;
-
-        $this->status = $status;
+    public function __construct(private Wallet $fromWallet, private Wallet $toWallet, private int $discount, private string $fee, private TransactionDtoInterface $withdrawDto, private TransactionDtoInterface $depositDto, private string $status)
+    {
     }
 
     public function getFromWallet(): Wallet

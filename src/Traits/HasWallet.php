@@ -125,7 +125,7 @@ trait HasWallet
     {
         try {
             return $this->transfer($wallet, $amount, $meta);
-        } catch (ExceptionInterface $throwable) {
+        } catch (ExceptionInterface) {
             return null;
         }
     }

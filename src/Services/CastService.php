@@ -15,18 +15,8 @@ use Illuminate\Database\Eloquent\Model;
 /** @psalm-internal */
 final class CastService implements CastServiceInterface
 {
-    private WalletCreatedEventAssemblerInterface $walletCreatedEventAssembler;
-    private DispatcherServiceInterface $dispatcherService;
-    private DatabaseServiceInterface $databaseService;
-
-    public function __construct(
-        WalletCreatedEventAssemblerInterface $walletCreatedEventAssembler,
-        DispatcherServiceInterface $dispatcherService,
-        DatabaseServiceInterface $databaseService
-    ) {
-        $this->walletCreatedEventAssembler = $walletCreatedEventAssembler;
-        $this->dispatcherService = $dispatcherService;
-        $this->databaseService = $databaseService;
+    public function __construct(private WalletCreatedEventAssemblerInterface $walletCreatedEventAssembler, private DispatcherServiceInterface $dispatcherService, private DatabaseServiceInterface $databaseService)
+    {
     }
 
     /** @throws ExceptionInterface */

@@ -7,13 +7,9 @@ namespace Bavix\Wallet\Internal\Query;
 /** @psalm-immutable */
 final class TransferQuery implements TransferQueryInterface
 {
-    /** @var non-empty-array<int|string, string> */
-    private array $uuids;
-
     /** @param non-empty-array<int|string, string> $uuids */
-    public function __construct(array $uuids)
+    public function __construct(private array $uuids)
     {
-        $this->uuids = $uuids;
     }
 
     /** @return non-empty-array<int|string, string> */
