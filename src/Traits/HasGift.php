@@ -27,6 +27,8 @@ use Illuminate\Database\RecordsNotFoundException;
 
 /**
  * Trait HasGift.
+ *
+ * @psalm-require-extends \Illuminate\Database\Eloquent\Model
  */
 trait HasGift
 {
@@ -35,7 +37,7 @@ trait HasGift
     {
         try {
             return $this->gift($to, $product, $force);
-        } catch (ExceptionInterface $throwable) {
+        } catch (ExceptionInterface) {
             return null;
         }
     }

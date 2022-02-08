@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.0.0] - 2022-02-08
+### Added
+- Add support laravel ^9.0
+- Added support for owner string identifiers #423 @adesege
+
+### Removed
+- Removed php 7.4 support
+
 ## [7.3.0] - 2021-12-10
 ### Added
 - Credit Limits
@@ -760,7 +768,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/7.3.0...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/8.0.0...develop
+[8.0.0]: https://github.com/bavix/laravel-wallet/compare/7.3.0...8.0.0
 [7.3.0]: https://github.com/bavix/laravel-wallet/compare/7.2.0...7.3.0
 [7.2.0]: https://github.com/bavix/laravel-wallet/compare/7.1.0...7.2.0
 [7.1.0]: https://github.com/bavix/laravel-wallet/compare/7.0.0...7.1.0

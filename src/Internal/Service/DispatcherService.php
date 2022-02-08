@@ -13,14 +13,11 @@ use Illuminate\Events\Dispatcher;
 
 final class DispatcherService implements DispatcherServiceInterface
 {
-    private Dispatcher $dispatcher;
-
     /** @var string[] */
     private array $events = [];
 
-    public function __construct(Dispatcher $dispatcher)
+    public function __construct(private Dispatcher $dispatcher)
     {
-        $this->dispatcher = $dispatcher;
     }
 
     public function dispatch(EventInterface $event): void
@@ -56,7 +53,7 @@ final class DispatcherService implements DispatcherServiceInterface
         }
 
         throw new UnknownEventException(
-            'Unknown event '.get_class($event),
+            'Unknown event '.$event::class,
             ExceptionInterface::UNKNOWN_EVENT
         );
     }

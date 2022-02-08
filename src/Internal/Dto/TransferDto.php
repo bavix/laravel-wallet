@@ -9,47 +9,21 @@ use DateTimeImmutable;
 /** @psalm-immutable */
 final class TransferDto implements TransferDtoInterface
 {
-    private string $uuid;
-
-    private int $depositId;
-    private int $withdrawId;
-
-    private string $status;
-
-    private string $fromType;
-    private int $fromId;
-
-    private string $toType;
-    private int $toId;
-
-    private int $discount;
-    private string $fee;
-
     private DateTimeImmutable $createdAt;
     private DateTimeImmutable $updatedAt;
 
     public function __construct(
-        string $uuid,
-        int $depositId,
-        int $withdrawId,
-        string $status,
-        string $fromType,
-        int $fromId,
-        string $toType,
-        int $toId,
-        int $discount,
-        string $fee
+        private string $uuid,
+        private int $depositId,
+        private int $withdrawId,
+        private string $status,
+        private string $fromType,
+        private int|string $fromId,
+        private string $toType,
+        private int|string $toId,
+        private int $discount,
+        private string $fee
     ) {
-        $this->uuid = $uuid;
-        $this->depositId = $depositId;
-        $this->withdrawId = $withdrawId;
-        $this->status = $status;
-        $this->fromType = $fromType;
-        $this->fromId = $fromId;
-        $this->toType = $toType;
-        $this->toId = $toId;
-        $this->discount = $discount;
-        $this->fee = $fee;
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
     }
@@ -79,7 +53,7 @@ final class TransferDto implements TransferDtoInterface
         return $this->fromType;
     }
 
-    public function getFromId(): int
+    public function getFromId(): int|string
     {
         return $this->fromId;
     }
@@ -89,7 +63,7 @@ final class TransferDto implements TransferDtoInterface
         return $this->toType;
     }
 
-    public function getToId(): int
+    public function getToId(): int|string
     {
         return $this->toId;
     }

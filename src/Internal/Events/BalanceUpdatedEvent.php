@@ -8,21 +8,8 @@ use DateTimeImmutable;
 
 final class BalanceUpdatedEvent implements BalanceUpdatedEventInterface
 {
-    private int $walletId;
-    private string $walletUuid;
-    private string $balance;
-    private DateTimeImmutable $updatedAt;
-
-    public function __construct(
-        int $walletId,
-        string $walletUuid,
-        string $balance,
-        DateTimeImmutable $updatedAt
-    ) {
-        $this->walletId = $walletId;
-        $this->walletUuid = $walletUuid;
-        $this->balance = $balance;
-        $this->updatedAt = $updatedAt;
+    public function __construct(private int $walletId, private string $walletUuid, private string $balance, private DateTimeImmutable $updatedAt)
+    {
     }
 
     public function getWalletId(): int

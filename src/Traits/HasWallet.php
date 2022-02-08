@@ -33,6 +33,8 @@ use Illuminate\Support\Collection;
  * @property Collection|WalletModel[] $wallets
  * @property string                   $balance
  * @property int                      $balanceInt
+ * @psalm-require-extends \Illuminate\Database\Eloquent\Model
+ * @psalm-require-implements \Bavix\Wallet\Interfaces\Wallet
  */
 trait HasWallet
 {
@@ -125,7 +127,7 @@ trait HasWallet
     {
         try {
             return $this->transfer($wallet, $amount, $meta);
-        } catch (ExceptionInterface $throwable) {
+        } catch (ExceptionInterface) {
             return null;
         }
     }

@@ -20,30 +20,8 @@ use Illuminate\Database\RecordsNotFoundException;
 /** @deprecated */
 final class CommonServiceLegacy
 {
-    private AtmServiceInterface $atmService;
-    private CastServiceInterface $castService;
-    private DatabaseServiceInterface $databaseService;
-    private AssistantServiceInterface $assistantService;
-    private PrepareServiceInterface $prepareService;
-    private RegulatorServiceInterface $regulatorService;
-    private TransferDtoAssemblerInterface $transferDtoAssembler;
-
-    public function __construct(
-        CastServiceInterface $castService,
-        AssistantServiceInterface $satisfyService,
-        DatabaseServiceInterface $databaseService,
-        PrepareServiceInterface $prepareService,
-        TransferDtoAssemblerInterface $transferDtoAssembler,
-        RegulatorServiceInterface $regulatorService,
-        AtmServiceInterface $atmService
-    ) {
-        $this->atmService = $atmService;
-        $this->castService = $castService;
-        $this->assistantService = $satisfyService;
-        $this->databaseService = $databaseService;
-        $this->prepareService = $prepareService;
-        $this->regulatorService = $regulatorService;
-        $this->transferDtoAssembler = $transferDtoAssembler;
+    public function __construct(private CastServiceInterface $castService, private AssistantServiceInterface $assistantService, private DatabaseServiceInterface $databaseService, private PrepareServiceInterface $prepareService, private TransferDtoAssemblerInterface $transferDtoAssembler, private RegulatorServiceInterface $regulatorService, private AtmServiceInterface $atmService)
+    {
     }
 
     /**

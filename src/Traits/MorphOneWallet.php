@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
  * Trait MorphOneWallet.
  *
  * @property WalletModel $wallet
+ * @psalm-require-extends \Illuminate\Database\Eloquent\Model
  */
 trait MorphOneWallet
 {

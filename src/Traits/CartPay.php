@@ -29,6 +29,10 @@ use Bavix\Wallet\Services\PurchaseServiceInterface;
 use function count;
 use Illuminate\Database\RecordsNotFoundException;
 
+/**
+ * @psalm-require-extends \Illuminate\Database\Eloquent\Model
+ * @psalm-require-implements \Bavix\Wallet\Interfaces\Customer
+ */
 trait CartPay
 {
     use HasWallet;
@@ -81,7 +85,7 @@ trait CartPay
     {
         try {
             return $this->payCart($cart, $force);
-        } catch (ExceptionInterface $throwable) {
+        } catch (ExceptionInterface) {
             return [];
         }
     }
@@ -150,7 +154,7 @@ trait CartPay
     {
         try {
             return $this->refundCart($cart, $force, $gifts);
-        } catch (ExceptionInterface $throwable) {
+        } catch (ExceptionInterface) {
             return false;
         }
     }
@@ -232,7 +236,7 @@ trait CartPay
     {
         try {
             return $this->refundGiftCart($cart, $force);
-        } catch (ExceptionInterface $throwable) {
+        } catch (ExceptionInterface) {
             return false;
         }
     }

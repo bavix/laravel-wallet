@@ -9,42 +9,19 @@ use DateTimeImmutable;
 /** @psalm-immutable */
 final class TransactionDto implements TransactionDtoInterface
 {
-    private string $uuid;
-
-    private string $payableType;
-    private int $payableId;
-
-    private int $walletId;
-
-    private string $type;
-
-    private string $amount;
-
-    private bool $confirmed;
-
-    private ?array $meta;
-
     private DateTimeImmutable $createdAt;
     private DateTimeImmutable $updatedAt;
 
     public function __construct(
-        string $uuid,
-        string $payableType,
-        int $payableId,
-        int $walletId,
-        string $type,
-        string $amount,
-        bool $confirmed,
-        ?array $meta
+        private string $uuid,
+        private string $payableType,
+        private int|string $payableId,
+        private int $walletId,
+        private string $type,
+        private string $amount,
+        private bool $confirmed,
+        private ?array $meta
     ) {
-        $this->uuid = $uuid;
-        $this->payableType = $payableType;
-        $this->payableId = $payableId;
-        $this->walletId = $walletId;
-        $this->type = $type;
-        $this->amount = $amount;
-        $this->confirmed = $confirmed;
-        $this->meta = $meta;
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
     }
@@ -59,7 +36,7 @@ final class TransactionDto implements TransactionDtoInterface
         return $this->payableType;
     }
 
-    public function getPayableId(): int
+    public function getPayableId(): int|string
     {
         return $this->payableId;
     }

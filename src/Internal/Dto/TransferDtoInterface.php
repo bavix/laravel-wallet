@@ -18,11 +18,11 @@ interface TransferDtoInterface
 
     public function getFromType(): string;
 
-    public function getFromId(): int;
+    public function getFromId(): int|string;
 
     public function getToType(): string;
 
-    public function getToId(): int;
+    public function getToId(): int|string;
 
     public function getDiscount(): int;
 

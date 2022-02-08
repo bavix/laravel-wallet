@@ -15,30 +15,8 @@ use Bavix\Wallet\Models\Transaction;
 
 final class PrepareService implements PrepareServiceInterface
 {
-    private TransferLazyDtoAssemblerInterface $transferLazyDtoAssembler;
-    private TransactionDtoAssemblerInterface $transactionDtoAssembler;
-    private DiscountServiceInterface $personalDiscountService;
-    private ConsistencyServiceInterface $consistencyService;
-    private CastServiceInterface $castService;
-    private MathServiceInterface $mathService;
-    private TaxServiceInterface $taxService;
-
-    public function __construct(
-        TransferLazyDtoAssemblerInterface $transferLazyDtoAssembler,
-        TransactionDtoAssemblerInterface $transactionDtoAssembler,
-        DiscountServiceInterface $personalDiscountService,
-        ConsistencyServiceInterface $consistencyService,
-        CastServiceInterface $castService,
-        MathServiceInterface $mathService,
-        TaxServiceInterface $taxService
-    ) {
-        $this->transferLazyDtoAssembler = $transferLazyDtoAssembler;
-        $this->transactionDtoAssembler = $transactionDtoAssembler;
-        $this->personalDiscountService = $personalDiscountService;
-        $this->consistencyService = $consistencyService;
-        $this->castService = $castService;
-        $this->mathService = $mathService;
-        $this->taxService = $taxService;
+    public function __construct(private TransferLazyDtoAssemblerInterface $transferLazyDtoAssembler, private TransactionDtoAssemblerInterface $transactionDtoAssembler, private DiscountServiceInterface $personalDiscountService, private ConsistencyServiceInterface $consistencyService, private CastServiceInterface $castService, private MathServiceInterface $mathService, private TaxServiceInterface $taxService)
+    {
     }
 
     /**

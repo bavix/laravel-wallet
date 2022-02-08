@@ -159,12 +159,12 @@ class BalanceTest extends TestCase
         self::assertTrue($wallet->exists);
 
         /** @var MockObject|Wallet $mockQuery */
-        $mockQuery = $this->createMock(\get_class($wallet->newQuery()));
+        $mockQuery = $this->createMock($wallet->newQuery()::class);
         $mockQuery->method('whereKey')->willReturn($mockQuery);
         $mockQuery->method('update')->willThrowException(new PDOException());
 
         /** @var MockObject|Wallet $mockWallet */
-        $mockWallet = $this->createMock(\get_class($wallet));
+        $mockWallet = $this->createMock($wallet::class);
         $mockWallet->method('getBalanceAttribute')->willReturn('125');
         $mockWallet->method('newQuery')->willReturn($mockQuery);
         $mockWallet->method('getKey')->willReturn($wallet->getKey());

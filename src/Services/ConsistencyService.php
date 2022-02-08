@@ -15,18 +15,8 @@ use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
 
 final class ConsistencyService implements ConsistencyServiceInterface
 {
-    private CastServiceInterface $castService;
-    private MathServiceInterface $mathService;
-    private TranslatorServiceInterface $translatorService;
-
-    public function __construct(
-        TranslatorServiceInterface $translatorService,
-        MathServiceInterface $mathService,
-        CastServiceInterface $castService
-    ) {
-        $this->translatorService = $translatorService;
-        $this->mathService = $mathService;
-        $this->castService = $castService;
+    public function __construct(private TranslatorServiceInterface $translatorService, private MathServiceInterface $mathService, private CastServiceInterface $castService)
+    {
     }
 
     /**

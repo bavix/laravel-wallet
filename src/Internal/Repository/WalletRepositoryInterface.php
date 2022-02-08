@@ -15,7 +15,7 @@ interface WalletRepositoryInterface
 
     public function findByUuid(string $uuid): ?Wallet;
 
-    public function findBySlug(string $holderType, int $holderId, string $slug): ?Wallet;
+    public function findBySlug(string $holderType, int|string $holderId, string $slug): ?Wallet;
 
     /** @throws ModelNotFoundException */
     public function getById(int $id): Wallet;
@@ -24,5 +24,5 @@ interface WalletRepositoryInterface
     public function getByUuid(string $uuid): Wallet;
 
     /** @throws ModelNotFoundException */
-    public function getBySlug(string $holderType, int $holderId, string $slug): Wallet;
+    public function getBySlug(string $holderType, int|string $holderId, string $slug): Wallet;
 }

@@ -12,7 +12,7 @@ interface TransactionDtoInterface
 
     public function getPayableType(): string;
 
-    public function getPayableId(): int;
+    public function getPayableId(): int|string;
 
     public function getWalletId(): int;
 

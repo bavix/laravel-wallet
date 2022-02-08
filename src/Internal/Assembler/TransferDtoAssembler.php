@@ -11,11 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 
 final class TransferDtoAssembler implements TransferDtoAssemblerInterface
 {
-    private UuidFactoryServiceInterface $uuidService;
-
-    public function __construct(UuidFactoryServiceInterface $uuidService)
+    public function __construct(private UuidFactoryServiceInterface $uuidService)
     {
-        $this->uuidService = $uuidService;
     }
 
     public function create(

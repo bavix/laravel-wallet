@@ -30,7 +30,7 @@ use Illuminate\Support\Str;
  * Class Wallet.
  *
  * @property string                          $holder_type
- * @property int                             $holder_id
+ * @property int|string                      $holder_id
  * @property string                          $name
  * @property string                          $slug
  * @property string                          $uuid

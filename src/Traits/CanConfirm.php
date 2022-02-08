@@ -22,6 +22,9 @@ use Bavix\Wallet\Services\ConsistencyServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Illuminate\Database\RecordsNotFoundException;
 
+/**
+ * @psalm-require-extends \Illuminate\Database\Eloquent\Model
+ */
 trait CanConfirm
 {
     /**
@@ -51,7 +54,7 @@ trait CanConfirm
     {
         try {
             return $this->confirm($transaction);
-        } catch (ExceptionInterface $throwable) {
+        } catch (ExceptionInterface) {
             return false;
         }
     }
@@ -87,7 +90,7 @@ trait CanConfirm
     {
         try {
             return $this->resetConfirm($transaction);
-        } catch (ExceptionInterface $throwable) {
+        } catch (ExceptionInterface) {
             return false;
         }
     }

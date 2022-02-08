@@ -11,16 +11,8 @@ use Bavix\Wallet\Models\Transfer;
 
 final class TransferRepository implements TransferRepositoryInterface
 {
-    private TransferDtoTransformerInterface $transformer;
-
-    private Transfer $transfer;
-
-    public function __construct(
-        TransferDtoTransformerInterface $transformer,
-        Transfer $transfer
-    ) {
-        $this->transformer = $transformer;
-        $this->transfer = $transfer;
+    public function __construct(private TransferDtoTransformerInterface $transformer, private Transfer $transfer)
+    {
     }
 
     /**

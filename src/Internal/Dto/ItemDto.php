@@ -9,13 +9,8 @@ use Bavix\Wallet\Interfaces\Product;
 /** @psalm-immutable */
 final class ItemDto implements ItemDtoInterface
 {
-    private Product $product;
-    private int $quantity;
-
-    public function __construct(Product $product, int $quantity)
+    public function __construct(private Product $product, private int $quantity)
     {
-        $this->product = $product;
-        $this->quantity = $quantity;
     }
 
     /**

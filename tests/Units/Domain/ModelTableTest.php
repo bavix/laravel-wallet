@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
+use Bavix\Wallet\Test\Infra\Factories\ManagerFactory;
 use Bavix\Wallet\Test\Infra\Factories\UserFactory;
+use Bavix\Wallet\Test\Infra\Models\Manager;
 use Bavix\Wallet\Test\Infra\Models\User;
 use Bavix\Wallet\Test\Infra\TestCase;
 
@@ -38,5 +40,10 @@ class ModelTableTest extends TestCase
         $user1->deposit(1000);
         $transfer = $user1->transfer($user2, 1000);
         self::assertSame('transfer', $transfer->getTable());
+
+        /** @var Manager $manager */
+        $manager = ManagerFactory::new()->create();
+        $user2->transfer($manager, 1000);
+        self::assertSame(1000, $manager->balanceInt);
     }
 }
