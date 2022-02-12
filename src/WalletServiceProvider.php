@@ -223,7 +223,7 @@ final class WalletServiceProvider extends ServiceProvider
                     StorageServiceInterface::class,
                     [
                         'cacheRepository' => $this->app->make(CacheManager::class)
-                            ->driver('array'),
+                            ->driver($cache['driver'] ?? 'array'),
                     ],
                 ),
             ]
