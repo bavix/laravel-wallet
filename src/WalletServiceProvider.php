@@ -212,7 +212,7 @@ final class WalletServiceProvider extends ServiceProvider
                         $this->app->make(CacheManager::class)
                             ->driver($cache['driver'] ?? 'array'),
                     ],
-                )
+                ),
             ]
         ));
 
@@ -225,7 +225,7 @@ final class WalletServiceProvider extends ServiceProvider
                         $this->app->make(CacheManager::class)
                             ->driver('array'),
                     ],
-                )
+                ),
             ]
         ));
     }
