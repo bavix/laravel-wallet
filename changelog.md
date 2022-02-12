@@ -22,6 +22,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Removed php 7.4 support
 
+## [7.3.2] - 2022-02-12
+### Fixed
+- Added keys to service provider
+
+## [7.3.1] - 2022-02-12
+### Fixed
+- Fixed bug preventing redis from being used #429 @mattvb91
+
 ## [7.3.0] - 2021-12-10
 ### Added
 - Credit Limits
@@ -779,7 +787,9 @@ The operation is now executed in the transaction and updates the new `refund` fi
 [Unreleased]: https://github.com/bavix/laravel-wallet/compare/8.0.2...develop
 [8.0.2]: https://github.com/bavix/laravel-wallet/compare/8.0.1...8.0.2
 [8.0.1]: https://github.com/bavix/laravel-wallet/compare/8.0.0...8.0.1
-[8.0.0]: https://github.com/bavix/laravel-wallet/compare/7.3.0...8.0.0
+[8.0.0]: https://github.com/bavix/laravel-wallet/compare/7.3.2...8.0.0
+[7.3.2]: https://github.com/bavix/laravel-wallet/compare/7.3.1...7.3.2
+[7.3.1]: https://github.com/bavix/laravel-wallet/compare/7.3.0...7.3.1
 [7.3.0]: https://github.com/bavix/laravel-wallet/compare/7.2.0...7.3.0
 [7.2.0]: https://github.com/bavix/laravel-wallet/compare/7.1.0...7.2.0
 [7.1.0]: https://github.com/bavix/laravel-wallet/compare/7.0.0...7.1.0
