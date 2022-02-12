@@ -206,10 +206,10 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(BookkeeperServiceInterface::class, fn () => $this->app->make(
             $configure['bookkeeper'] ?? BookkeeperService::class,
             [
-                $this->app->make(
+                'storageService' => $this->app->make(
                     StorageServiceInterface::class,
                     [
-                        $this->app->make(CacheManager::class)
+                        'cacheRepository' => $this->app->make(CacheManager::class)
                             ->driver($cache['driver'] ?? 'array'),
                     ],
                 ),
@@ -219,10 +219,10 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(RegulatorServiceInterface::class, fn () => $this->app->make(
             $configure['regulator'] ?? RegulatorService::class,
             [
-                $this->app->make(
+                'storageService' => $this->app->make(
                     StorageServiceInterface::class,
                     [
-                        $this->app->make(CacheManager::class)
+                        'cacheRepository' => $this->app->make(CacheManager::class)
                             ->driver('array'),
                     ],
                 ),
