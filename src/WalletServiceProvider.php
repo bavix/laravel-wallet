@@ -136,10 +136,8 @@ final class WalletServiceProvider extends ServiceProvider
 
         $configure = config('wallet', []);
 
-        $this->contextBinding($configure['cache'] ?? []);
-
         $this->internal($configure['internal'] ?? []);
-        $this->services($configure['services'] ?? []);
+        $this->services($configure['services'] ?? [], $configure['cache'] ?? []);
         $this->legacySingleton(); // without configuration
 
         $this->repositories($configure['repositories'] ?? []);
@@ -176,32 +174,6 @@ final class WalletServiceProvider extends ServiceProvider
         return WalletConfigure::isRunsMigrations();
     }
 
-    /** @codeCoverageIgnore */
-    private function contextBinding(array $bookkeeperStore): void
-    {
-        $this->app->when(BookkeeperServiceInterface::class)
-            ->needs(StorageServiceInterface::class)
-            ->give(fn () => $this->app->make(
-                StorageServiceInterface::class,
-                [
-                    'cacheRepository' => $this->app->make(CacheManager::class)
-                        ->driver($bookkeeperStore['driver'] ?? 'array'),
-                ],
-            ))
-        ;
-
-        $this->app->when(RegulatorServiceInterface::class)
-            ->needs(StorageServiceInterface::class)
-            ->give(fn () => $this->app->make(
-                StorageServiceInterface::class,
-                [
-                    'cacheRepository' => $this->app->make(CacheManager::class)
-                        ->driver('array'),
-                ],
-            ))
-        ;
-    }
-
     private function internal(array $configure): void
     {
         $this->app->bind(StorageServiceInterface::class, $configure['storage'] ?? StorageService::class);
@@ -216,14 +188,12 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(UuidFactoryServiceInterface::class, $configure['uuid'] ?? UuidFactoryService::class);
     }
 
-    private function services(array $configure): void
+    private function services(array $configure, array $cache): void
     {
         $this->app->singleton(AssistantServiceInterface::class, $configure['assistant'] ?? AssistantService::class);
         $this->app->singleton(AtmServiceInterface::class, $configure['atm'] ?? AtmService::class);
         $this->app->singleton(AtomicServiceInterface::class, $configure['atomic'] ?? AtomicService::class);
         $this->app->singleton(BasketServiceInterface::class, $configure['basket'] ?? BasketService::class);
-        $this->app->singleton(BookkeeperServiceInterface::class, $configure['bookkeeper'] ?? BookkeeperService::class);
-        $this->app->singleton(RegulatorServiceInterface::class, $configure['regulator'] ?? RegulatorService::class);
         $this->app->singleton(CastServiceInterface::class, $configure['cast'] ?? CastService::class);
         $this->app->singleton(ConsistencyServiceInterface::class, $configure['consistency'] ?? ConsistencyService::class);
         $this->app->singleton(DiscountServiceInterface::class, $configure['discount'] ?? DiscountService::class);
@@ -232,6 +202,32 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(PurchaseServiceInterface::class, $configure['purchase'] ?? PurchaseService::class);
         $this->app->singleton(TaxServiceInterface::class, $configure['tax'] ?? TaxService::class);
         $this->app->singleton(WalletServiceInterface::class, $configure['wallet'] ?? WalletService::class);
+
+        $this->app->singleton(BookkeeperServiceInterface::class, fn () => $this->app->make(
+            $configure['bookkeeper'] ?? BookkeeperService::class,
+            [
+                $this->app->make(
+                    StorageServiceInterface::class,
+                    [
+                        $this->app->make(CacheManager::class)
+                            ->driver($cache['driver'] ?? 'array'),
+                    ],
+                ),
+            ]
+        ));
+
+        $this->app->singleton(RegulatorServiceInterface::class, fn () => $this->app->make(
+            $configure['regulator'] ?? RegulatorService::class,
+            [
+                $this->app->make(
+                    StorageServiceInterface::class,
+                    [
+                        $this->app->make(CacheManager::class)
+                            ->driver('array'),
+                    ],
+                ),
+            ]
+        ));
     }
 
     private function assemblers(array $configure): void
