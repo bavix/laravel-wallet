@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.0.2] - 2022-02-12
+### Fixed
+- Added keys to service provider
+
 ## [8.0.1] - 2022-02-12
 ### Fixed
 - Fixed bug preventing redis from being used #429 @mattvb91
@@ -772,7 +776,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/8.0.1...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/8.0.2...develop
+[8.0.2]: https://github.com/bavix/laravel-wallet/compare/8.0.1...8.0.2
 [8.0.1]: https://github.com/bavix/laravel-wallet/compare/8.0.0...8.0.1
 [8.0.0]: https://github.com/bavix/laravel-wallet/compare/7.3.0...8.0.0
 [7.3.0]: https://github.com/bavix/laravel-wallet/compare/7.2.0...7.3.0
