@@ -20,7 +20,8 @@ class EagerLoadingTest extends TestCase
         /** @var Buyer[] $buyers */
         $buyers = Buyer::with('wallet')
             ->whereIn('id', $buyerTimes->pluck('id')->toArray())
-            ->paginate(10);
+            ->paginate(10)
+        ;
 
         $uuids = [];
         $balances = [];
