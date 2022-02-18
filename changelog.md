@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.0.3] - 2022-02-19
+### Fixed
+- Fixed "UUID Duplicate entry" bug on eager loading. #438 @DanielSpravtsev
+- Use predefined PHP float epsilon (phpunit) sebastianbergmann/phpunit#4874
+
 ## [8.0.2] - 2022-02-12
 ### Fixed
 - Added keys to service provider
@@ -784,7 +789,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/8.0.2...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/8.0.3...develop
+[8.0.3]: https://github.com/bavix/laravel-wallet/compare/8.0.2...8.0.3
 [8.0.2]: https://github.com/bavix/laravel-wallet/compare/8.0.1...8.0.2
 [8.0.1]: https://github.com/bavix/laravel-wallet/compare/8.0.0...8.0.1
 [8.0.0]: https://github.com/bavix/laravel-wallet/compare/7.3.2...8.0.0

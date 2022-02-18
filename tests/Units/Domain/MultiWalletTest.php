@@ -415,15 +415,20 @@ class MultiWalletTest extends TestCase
         $secondWallet = $user->getWallet('test');
         self::assertSame($secondWallet->getKey(), $firstWallet->getKey());
 
+        $uuid = app(UuidFactoryServiceInterface::class)->uuid4();
         $test2 = $user->wallets()->create([
             'name' => 'Test2',
-            'uuid' => app(UuidFactoryServiceInterface::class)->uuid4(),
+            'uuid' => $uuid,
         ]);
 
+        self::assertNotNull($test2->refresh());
+        self::assertSame($uuid, $test2->uuid);
         self::assertSame(
             $test2->getKey(),
             $user->getWallet('test2')->getKey()
         );
+
+        self::assertNotNull($user->wallets()->where('uuid', $uuid)->first());
 
         // check default wallet
         self::assertSame(
@@ -443,9 +448,17 @@ class MultiWalletTest extends TestCase
 
         $user->load('wallets'); // optimize
 
+        $ids = [];
+        $uuids = [];
         foreach ($names as $name) {
-            self::assertSame($name, $user->getWallet($name)->name);
+            $wallet = $user->getWallet($name);
+            self::assertSame($name, $wallet->name);
+            $uuids[] = $wallet->uuid;
+            $ids[] = $wallet->getKey();
         }
+
+        self::assertCount(count($names), array_unique($uuids));
+        self::assertCount(count($names), array_unique($ids));
     }
 
     public function testPay(): void

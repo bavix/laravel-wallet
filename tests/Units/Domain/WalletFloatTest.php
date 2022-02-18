@@ -196,7 +196,7 @@ class WalletFloatTest extends TestCase
         self::assertSame($transaction->type, Transaction::TYPE_WITHDRAW);
 
         self::assertSame($user->balanceInt, 1_000_000 - 255672);
-        self::assertSame((float) $user->balanceFloat, 10000.00 - 2556.72);
+        self::assertSame((float) $user->balanceFloat, 7443.28);
 
         $transaction = $user->depositFloat(2556.72 * 2);
         self::assertSame($transaction->amountInt, 255672 * 2);

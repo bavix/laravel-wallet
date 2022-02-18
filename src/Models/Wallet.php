@@ -14,6 +14,7 @@ use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
+use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Bavix\Wallet\Services\AtomicServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Traits\CanConfirm;
@@ -166,5 +167,10 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     public function getCurrencyAttribute(): string
     {
         return $this->meta['currency'] ?? Str::upper($this->slug);
+    }
+
+    protected function initializeMorphOneWallet(): void
+    {
+        $this->uuid = app(UuidFactoryServiceInterface::class)->uuid4();
     }
 }
