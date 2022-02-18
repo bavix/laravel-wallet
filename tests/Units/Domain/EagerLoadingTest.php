@@ -15,10 +15,12 @@ class EagerLoadingTest extends TestCase
 {
     public function testUuidDuplicate(): void
     {
-        BuyerFactory::times(10)->create();
+        $buyerTimes = BuyerFactory::times(10)->create();
 
         /** @var Buyer[] $buyers */
-        $buyers = Buyer::with('wallet')->paginate(10);
+        $buyers = Buyer::with('wallet')
+            ->whereIn('id', $buyerTimes->pluck('id')->toArray())
+            ->paginate(10);
 
         $uuids = [];
         $balances = [];
