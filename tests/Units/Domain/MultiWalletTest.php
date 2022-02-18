@@ -457,8 +457,8 @@ class MultiWalletTest extends TestCase
             $ids[] = $wallet->getKey();
         }
 
-        self::assertCount(count($names), $uuids);
-        self::assertCount(count($names), $ids);
+        self::assertCount(count($names), array_unique($uuids));
+        self::assertCount(count($names), array_unique($ids));
     }
 
     public function testPay(): void
