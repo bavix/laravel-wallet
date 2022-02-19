@@ -8,11 +8,14 @@ use Bavix\Wallet\Exceptions\ConfirmedInvalid;
 use Bavix\Wallet\Exceptions\UnconfirmedInvalid;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Services\BookkeeperServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Factories\UserConfirmFactory;
+use Bavix\Wallet\Test\Infra\Factories\UserFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
+use Bavix\Wallet\Test\Infra\Models\User;
 use Bavix\Wallet\Test\Infra\Models\UserConfirm;
 use Bavix\Wallet\Test\Infra\TestCase;
 
@@ -250,5 +253,46 @@ class ConfirmTest extends TestCase
         self::assertFalse($transaction->confirmed);
         self::assertTrue($userConfirm->wallet->confirm($transaction));
         self::assertTrue($transaction->confirmed);
+    }
+
+    public function testTransactionResetConfirmWalletOwnerInvalid(): void
+    {
+        $this->expectException(WalletOwnerInvalid::class);
+        $this->expectExceptionCode(ExceptionInterface::WALLET_OWNER_INVALID);
+        $this->expectExceptionMessageStrict(trans('wallet::errors.owner_invalid'));
+
+        /**
+         * @var User $user1
+         * @var User $user2
+         */
+        [$user1, $user2] = UserFactory::times(2)->create();
+        $user1->deposit(1000);
+
+        self::assertSame(1000, $user1->balanceInt);
+
+        $transfer = $user1->transfer($user2, 500);
+        $user1->wallet->resetConfirm($transfer->deposit);
+    }
+
+    public function testTransactionResetConfirmSuccess(): void
+    {
+        /**
+         * @var User $user1
+         * @var User $user2
+         */
+        [$user1, $user2] = UserFactory::times(2)->create();
+        $user1->deposit(1000);
+
+        self::assertSame(1000, $user1->balanceInt);
+        app(DatabaseServiceInterface::class)->transaction(static function () use ($user1, $user2) {
+            $transfer = $user1->transfer($user2, 500);
+            self::assertTrue($user2->wallet->resetConfirm($transfer->deposit)); // confirm => false
+        });
+
+        self::assertSame(500, (int) $user1->transactions()->sum('amount'));
+        self::assertSame(500, (int) $user2->transactions()->sum('amount'));
+
+        self::assertSame(500, $user1->balanceInt);
+        self::assertSame(0, $user2->balanceInt);
     }
 }
