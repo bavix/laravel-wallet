@@ -63,6 +63,7 @@ trait CanConfirm
      * Removal of confirmation (forced), use at your own peril and risk.
      *
      * @throws UnconfirmedInvalid
+     * @throws WalletOwnerInvalid
      * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
@@ -80,6 +81,13 @@ trait CanConfirm
             }
 
             $wallet = app(CastServiceInterface::class)->getWallet($this);
+            if ($wallet->getKey() !== $transaction->wallet_id) {
+                throw new WalletOwnerInvalid(
+                    app(TranslatorServiceInterface::class)->get('wallet::errors.owner_invalid'),
+                    ExceptionInterface::WALLET_OWNER_INVALID
+                );
+            }
+
             app(RegulatorServiceInterface::class)->decrease($wallet, $transaction->amount);
 
             return $transaction->update(['confirmed' => false]);
