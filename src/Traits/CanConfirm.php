@@ -79,7 +79,12 @@ trait CanConfirm
                 );
             }
 
-            $wallet = app(CastServiceInterface::class)->getWallet($this);
+            $castService = app(CastServiceInterface::class);
+            $wallet = $castService->getWallet($this);
+            if ($wallet->getKey() !== $transaction->wallet_id) {
+                $wallet = $transaction->wallet;
+            }
+
             app(RegulatorServiceInterface::class)->decrease($wallet, $transaction->amount);
 
             return $transaction->update(['confirmed' => false]);

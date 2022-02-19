@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.1.0] - 2022-02-19
+### Fixed
+- Fixed bug in resetConfirm methods
+
 ## [8.0.3] - 2022-02-19
 ### Fixed
 - Fixed "UUID Duplicate entry" bug on eager loading. #438 @DanielSpravtsev
@@ -789,7 +793,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/8.0.3...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/8.1.0...develop
+[8.1.0]: https://github.com/bavix/laravel-wallet/compare/8.0.3...8.1.0
 [8.0.3]: https://github.com/bavix/laravel-wallet/compare/8.0.2...8.0.3
 [8.0.2]: https://github.com/bavix/laravel-wallet/compare/8.0.1...8.0.2
 [8.0.1]: https://github.com/bavix/laravel-wallet/compare/8.0.0...8.0.1
