@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.0.5] - 2022-02-21
+### Added
+- Spanish language #443 @EdX9
+
 ## [8.0.4] - 2022-02-19
 ### Added
 - Added validation when resetting confirmation. Caused unexpected system behavior.
@@ -793,7 +797,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/8.0.4...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/8.0.5...develop
+[8.0.5]: https://github.com/bavix/laravel-wallet/compare/8.0.4...8.0.5
 [8.0.4]: https://github.com/bavix/laravel-wallet/compare/8.0.3...8.0.4
 [8.0.3]: https://github.com/bavix/laravel-wallet/compare/8.0.2...8.0.3
 [8.0.2]: https://github.com/bavix/laravel-wallet/compare/8.0.1...8.0.2
