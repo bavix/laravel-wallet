@@ -24,6 +24,7 @@
   "require": {
     "ext-pdo": "*",
     "php": "^7.4|^8.0",
+    "illuminate/contracts": "^6.0|^7.0|^8.0",
     "illuminate/database": "^6.0|^7.0|^8.0",
     "illuminate/events": "^6.0|^7.0|^8.0",
     "doctrine/dbal": "^2.8|^3.0",

@@ -9,7 +9,7 @@ use Bavix\Wallet\Internal\Events\EventInterface;
 use Bavix\Wallet\Internal\Events\WalletCreatedEventInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\UnknownEventException;
-use Illuminate\Events\Dispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 
 final class DispatcherService implements DispatcherServiceInterface
 {
