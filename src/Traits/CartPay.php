@@ -274,7 +274,7 @@ trait CartPay
      */
     public function paid(Product $product, bool $gifts = false): ?Transfer
     {
-        $cart = app(Cart::class)->addItem($product);
+        $cart = app(Cart::class)->withItem($product);
         $purchases = app(PurchaseServiceInterface::class)
             ->already($this, $cart->getBasketDto(), $gifts)
         ;
