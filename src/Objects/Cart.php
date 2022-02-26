@@ -40,6 +40,19 @@ final class Cart implements Countable, CartInterface
         return $this->meta;
     }
 
+    /** @codeCoverageIgnore */
+    public function withMeta(array $meta): self
+    {
+        $self = clone $this;
+        $self->meta = $meta;
+
+        return $this;
+    }
+
+    /**
+     * @deprecated
+     * @see withMeta
+     */
     public function setMeta(array $meta): self
     {
         $this->meta = $meta;
@@ -47,6 +60,16 @@ final class Cart implements Countable, CartInterface
         return $this;
     }
 
+    /** @codeCoverageIgnore */
+    public function withAddItem(Product $product, int $quantity = 1): self
+    {
+        return (clone $this)->addItem($product, $quantity);
+    }
+
+    /**
+     * @deprecated
+     * @see withAddItem
+     */
     public function addItem(Product $product, int $quantity = 1): self
     {
         $this->addQuantity($product, $quantity);
@@ -56,6 +79,21 @@ final class Cart implements Countable, CartInterface
         return $this;
     }
 
+    /** @codeCoverageIgnore */
+    public function withAddItems(iterable $products): self
+    {
+        $self = clone $this;
+        foreach ($products as $product) {
+            $self = $self->withAddItem($product);
+        }
+
+        return $self;
+    }
+
+    /**
+     * @deprecated
+     * @see withAddItems
+     */
     public function addItems(iterable $products): self
     {
         foreach ($products as $product) {
