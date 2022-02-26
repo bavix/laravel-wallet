@@ -50,6 +50,7 @@ final class Cart implements Countable, CartInterface
 
     /**
      * @codeCoverageIgnore
+     *
      * @deprecated
      * @see withMeta
      */
@@ -67,6 +68,7 @@ final class Cart implements Countable, CartInterface
 
     /**
      * @codeCoverageIgnore
+     *
      * @deprecated
      * @see withItem
      */
@@ -91,6 +93,7 @@ final class Cart implements Countable, CartInterface
 
     /**
      * @codeCoverageIgnore
+     *
      * @deprecated
      * @see withItems
      */
