@@ -121,18 +121,13 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         });
     }
 
-    /** @codeCoverageIgnore */
     public function getOriginalBalanceAttribute(): string
     {
-        if (method_exists($this, 'getRawOriginal')) {
-            return (string) $this->getRawOriginal('balance', 0);
-        }
-
-        return (string) $this->getOriginal('balance', 0);
+        return (string) $this->getRawOriginal('balance', 0);
     }
 
     /**
-     * @return float|int
+     * @return float|int|string
      */
     public function getAvailableBalanceAttribute()
     {
@@ -140,18 +135,6 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
             ->where('confirmed', true)
             ->sum('amount')
         ;
-    }
-
-    /**
-     * @deprecated
-     * @see getAvailableBalanceAttribute
-     * @codeCoverageIgnore
-     *
-     * @return float|int
-     */
-    public function getAvailableBalance()
-    {
-        return $this->getAvailableBalanceAttribute();
     }
 
     public function holder(): MorphTo
