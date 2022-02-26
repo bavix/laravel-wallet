@@ -36,7 +36,7 @@ final class TransactionRepository implements TransactionRepositoryInterface
     {
         $attributes = $this->transformer->extract($dto);
         $instance = $this->transaction->newInstance($attributes);
-        $instance::withoutEvents(static fn () => $instance->save());
+        $instance->saveQuietly();
 
         return $instance;
     }
