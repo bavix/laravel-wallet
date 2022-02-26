@@ -18,7 +18,7 @@ final class WalletRepository implements WalletRepositoryInterface
     public function create(array $attributes): Wallet
     {
         $instance = $this->wallet->newInstance($attributes);
-        $instance::withoutEvents(static fn () => $instance->save());
+        $instance->saveQuietly();
 
         return $instance;
     }

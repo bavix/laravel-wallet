@@ -30,7 +30,7 @@ final class CastService implements CastServiceInterface
 
         if ($save && !$wallet->exists) {
             $this->databaseService->transaction(function () use ($wallet) {
-                $result = $wallet::withoutEvents(fn () => $wallet->save());
+                $result = $wallet->saveQuietly();
                 $this->dispatcherService->dispatch($this->walletCreatedEventAssembler->create($wallet));
 
                 return $result;
