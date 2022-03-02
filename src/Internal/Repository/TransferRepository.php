@@ -37,7 +37,9 @@ final class TransferRepository implements TransferRepositoryInterface
         return $instance;
     }
 
-    /** @return Transfer[] */
+    /**
+     * @return Transfer[]
+     */
     public function findBy(TransferQueryInterface $query): array
     {
         return $this->transfer->newQuery()

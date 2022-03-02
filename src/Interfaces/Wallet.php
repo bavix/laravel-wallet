@@ -31,7 +31,9 @@ interface Wallet
      */
     public function transfer(self $wallet, $amount, ?array $meta = null): Transfer;
 
-    /** @param int|string $amount */
+    /**
+     * @param int|string $amount
+     */
     public function safeTransfer(self $wallet, $amount, ?array $meta = null): ?Transfer;
 
     /**

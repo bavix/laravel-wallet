@@ -17,6 +17,8 @@ interface TransferRepositoryInterface
 
     public function insertOne(TransferDtoInterface $dto): Transfer;
 
-    /** @return Transfer[] */
+    /**
+     * @return Transfer[]
+     */
     public function findBy(TransferQueryInterface $query): array;
 }

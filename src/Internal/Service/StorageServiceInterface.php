@@ -12,7 +12,9 @@ interface StorageServiceInterface
 
     public function get(string $key): string;
 
-    /** @param float|int|string $value */
+    /**
+     * @param float|int|string $value
+     */
     public function sync(string $key, $value): bool;
 
     /**
