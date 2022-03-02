@@ -15,11 +15,16 @@ use Illuminate\Database\Eloquent\Model;
 /** @psalm-internal */
 final class CastService implements CastServiceInterface
 {
-    public function __construct(private WalletCreatedEventAssemblerInterface $walletCreatedEventAssembler, private DispatcherServiceInterface $dispatcherService, private DatabaseServiceInterface $databaseService)
-    {
+    public function __construct(
+        private WalletCreatedEventAssemblerInterface $walletCreatedEventAssembler,
+        private DispatcherServiceInterface $dispatcherService,
+        private DatabaseServiceInterface $databaseService
+    ) {
     }
 
-    /** @throws ExceptionInterface */
+    /**
+     * @throws ExceptionInterface
+     */
     public function getWallet(Wallet $object, bool $save = true): WalletModel
     {
         $wallet = $this->getModel($object);
@@ -40,7 +45,9 @@ final class CastService implements CastServiceInterface
         return $wallet;
     }
 
-    /** @param Model|Wallet $object */
+    /**
+     * @param Model|Wallet $object
+     */
     public function getHolder($object): Model
     {
         return $this->getModel($object instanceof WalletModel ? $object->holder : $object);

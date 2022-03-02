@@ -90,7 +90,9 @@ trait CanConfirm
 
             app(RegulatorServiceInterface::class)->decrease($wallet, $transaction->amount);
 
-            return $transaction->update(['confirmed' => false]);
+            return $transaction->update([
+                'confirmed' => false,
+            ]);
         });
     }
 
@@ -132,7 +134,9 @@ trait CanConfirm
 
             app(RegulatorServiceInterface::class)->increase($wallet, $transaction->amount);
 
-            return $transaction->update(['confirmed' => true]);
+            return $transaction->update([
+                'confirmed' => true,
+            ]);
         });
     }
 }

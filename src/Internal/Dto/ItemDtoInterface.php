@@ -9,7 +9,9 @@ use Countable;
 
 interface ItemDtoInterface extends Countable
 {
-    /** @return Product[] */
+    /**
+     * @return Product[]
+     */
     public function items(): array;
 
     public function count(): int;

@@ -21,7 +21,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-class ProductTest extends TestCase
+final class ProductTest extends TestCase
 {
     public function testPay(): void
     {
@@ -279,7 +279,9 @@ class ProductTest extends TestCase
         $buyer->deposit($product->getAmountProduct($buyer));
         self::assertSame((string) $product->getAmountProduct($buyer), $buyer->balance);
 
-        $product->createWallet(['name' => 'testing']);
+        $product->createWallet([
+            'name' => 'testing',
+        ]);
         app(DatabaseServiceInterface::class)->transaction(function () use ($product, $buyer) {
             $transfer = $buyer->pay($product);
             $product->transfer($product->getWallet('testing'), $transfer->deposit->amount, $transfer->toArray());

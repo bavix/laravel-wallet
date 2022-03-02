@@ -13,11 +13,14 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 final class DispatcherService implements DispatcherServiceInterface
 {
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     private array $events = [];
 
-    public function __construct(private Dispatcher $dispatcher)
-    {
+    public function __construct(
+        private Dispatcher $dispatcher
+    ) {
     }
 
     public function dispatch(EventInterface $event): void
@@ -41,7 +44,9 @@ final class DispatcherService implements DispatcherServiceInterface
         }
     }
 
-    /** @throws UnknownEventException */
+    /**
+     * @throws UnknownEventException
+     */
     private function getEventName(EventInterface $event): string
     {
         if ($event instanceof BalanceUpdatedEventInterface) {
@@ -52,9 +57,6 @@ final class DispatcherService implements DispatcherServiceInterface
             return WalletCreatedEventInterface::class;
         }
 
-        throw new UnknownEventException(
-            'Unknown event '.$event::class,
-            ExceptionInterface::UNKNOWN_EVENT
-        );
+        throw new UnknownEventException('Unknown event '.$event::class, ExceptionInterface::UNKNOWN_EVENT);
     }
 }

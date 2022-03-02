@@ -13,10 +13,14 @@ interface StorageServiceInterface
 
     public function missing(string $key): bool;
 
-    /** @throws RecordNotFoundException */
+    /**
+     * @throws RecordNotFoundException
+     */
     public function get(string $key): string;
 
-    /** @param float|int|string $value */
+    /**
+     * @param float|int|string $value
+     */
     public function sync(string $key, $value): bool;
 
     /**

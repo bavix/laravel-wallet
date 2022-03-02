@@ -13,6 +13,9 @@ class ItemMeta extends Item
 
     public function getMetaProduct(): ?array
     {
-        return ['name' => $this->name, 'price' => $this->price];
+        return [
+            'name' => $this->name,
+            'price' => $this->price,
+        ];
     }
 }

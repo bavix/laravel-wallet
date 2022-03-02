@@ -14,17 +14,33 @@ interface PrepareServiceInterface
     /**
      * @throws AmountInvalid
      */
-    public function deposit(Wallet $wallet, string $amount, ?array $meta, bool $confirmed = true): TransactionDtoInterface;
+    public function deposit(
+        Wallet $wallet,
+        string $amount,
+        ?array $meta,
+        bool $confirmed = true
+    ): TransactionDtoInterface;
 
     /**
      * @throws AmountInvalid
      */
-    public function withdraw(Wallet $wallet, string $amount, ?array $meta, bool $confirmed = true): TransactionDtoInterface;
+    public function withdraw(
+        Wallet $wallet,
+        string $amount,
+        ?array $meta,
+        bool $confirmed = true
+    ): TransactionDtoInterface;
 
     /**
      * @param float|int|string $amount
      *
      * @throws AmountInvalid
      */
-    public function transferLazy(Wallet $from, Wallet $to, string $status, $amount, ?array $meta = null): TransferLazyDtoInterface;
+    public function transferLazy(
+        Wallet $from,
+        Wallet $to,
+        string $status,
+        $amount,
+        ?array $meta = null
+    ): TransferLazyDtoInterface;
 }

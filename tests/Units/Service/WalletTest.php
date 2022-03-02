@@ -15,7 +15,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-class WalletTest extends TestCase
+final class WalletTest extends TestCase
 {
     public function testFindBy(): void
     {

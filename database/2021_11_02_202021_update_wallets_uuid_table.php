@@ -34,7 +34,9 @@ class UpdateWalletsUuidTable extends Migration
         });
 
         Schema::table($this->table(), static function (Blueprint $table) {
-            $table->uuid('uuid')->change();
+            $table->uuid('uuid')
+                ->change()
+            ;
         });
     }
 

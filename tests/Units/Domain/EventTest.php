@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Event;
 /**
  * @internal
  */
-class EventTest extends TestCase
+final class EventTest extends TestCase
 {
     public function testBalanceUpdatedThrowUuidListener(): void
     {

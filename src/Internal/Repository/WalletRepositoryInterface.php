@@ -17,12 +17,18 @@ interface WalletRepositoryInterface
 
     public function findBySlug(string $holderType, int|string $holderId, string $slug): ?Wallet;
 
-    /** @throws ModelNotFoundException */
+    /**
+     * @throws ModelNotFoundException
+     */
     public function getById(int $id): Wallet;
 
-    /** @throws ModelNotFoundException */
+    /**
+     * @throws ModelNotFoundException
+     */
     public function getByUuid(string $uuid): Wallet;
 
-    /** @throws ModelNotFoundException */
+    /**
+     * @throws ModelNotFoundException
+     */
     public function getBySlug(string $holderType, int|string $holderId, string $slug): Wallet;
 }

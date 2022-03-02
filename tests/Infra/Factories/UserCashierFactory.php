@@ -25,7 +25,8 @@ class UserCashierFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'email' => $this->faker->unique()->safeEmail,
+            'email' => $this->faker->unique()
+                ->safeEmail,
         ];
     }
 }

@@ -47,14 +47,18 @@ return [
     /**
      * Arbitrary Precision Calculator.
      *
-     *  'scale' - length of the mantissa
+     * 'scale' - length of the mantissa
      */
-    'math' => ['scale' => 64],
+    'math' => [
+        'scale' => 64,
+    ],
 
     /**
      * Storage of the state of the balance of wallets.
      */
-    'cache' => ['driver' => 'array'],
+    'cache' => [
+        'driver' => 'array',
+    ],
 
     /**
      * A system for dealing with race conditions.

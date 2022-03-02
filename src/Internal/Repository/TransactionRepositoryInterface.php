@@ -17,6 +17,8 @@ interface TransactionRepositoryInterface
 
     public function insertOne(TransactionDtoInterface $dto): Transaction;
 
-    /** @return Transaction[] */
+    /**
+     * @return Transaction[]
+     */
     public function findBy(TransactionQueryInterface $query): array;
 }
