@@ -11,6 +11,9 @@ final class BalanceUpdatedThrowIdListener
 {
     public function handle(BalanceUpdatedEventInterface $balanceChangedEvent): void
     {
-        throw new UnknownEventException((string) $balanceChangedEvent->getWalletId(), (int) $balanceChangedEvent->getBalance());
+        throw new UnknownEventException(
+            (string) $balanceChangedEvent->getWalletId(),
+            (int) $balanceChangedEvent->getBalance()
+        );
     }
 }

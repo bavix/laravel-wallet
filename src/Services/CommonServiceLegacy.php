@@ -8,33 +8,34 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
-use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
-use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
-use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
-use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
-use Illuminate\Database\RecordsNotFoundException;
 
 /** @deprecated */
 final class CommonServiceLegacy
 {
-    public function __construct(private CastServiceInterface $castService, private AssistantServiceInterface $assistantService, private DatabaseServiceInterface $databaseService, private PrepareServiceInterface $prepareService, private TransferDtoAssemblerInterface $transferDtoAssembler, private RegulatorServiceInterface $regulatorService, private AtmServiceInterface $atmService)
-    {
+    public function __construct(
+        private CastServiceInterface $castService,
+        private AssistantServiceInterface $assistantService,
+        private DatabaseServiceInterface $databaseService,
+        private PrepareServiceInterface $prepareService,
+        private TransferDtoAssemblerInterface $transferDtoAssembler,
+        private RegulatorServiceInterface $regulatorService,
+        private AtmServiceInterface $atmService
+    ) {
     }
 
     /**
      * @param int|string $amount
-     *
-     * @throws LockProviderNotFoundException
-     * @throws RecordNotFoundException
-     * @throws RecordsNotFoundException
-     * @throws TransactionFailedException
-     * @throws ExceptionInterface
      */
-    public function forceTransfer(Wallet $from, Wallet $to, $amount, ?array $meta = null, string $status = Transfer::STATUS_TRANSFER): Transfer
-    {
+    public function forceTransfer(
+        Wallet $from,
+        Wallet $to,
+        $amount,
+        ?array $meta = null,
+        string $status = Transfer::STATUS_TRANSFER
+    ): Transfer {
         $transferLazyDto = $this->prepareService->transferLazy($from, $to, $status, $amount, $meta);
         $transfers = $this->applyTransfers([$transferLazyDto]);
 
@@ -43,12 +44,6 @@ final class CommonServiceLegacy
 
     /**
      * @param non-empty-array<TransferLazyDtoInterface> $objects
-     *
-     * @throws LockProviderNotFoundException
-     * @throws RecordNotFoundException
-     * @throws RecordsNotFoundException
-     * @throws TransactionFailedException
-     * @throws ExceptionInterface
      *
      * @return non-empty-array<Transfer>
      */
@@ -95,12 +90,14 @@ final class CommonServiceLegacy
 
     /**
      * @param float|int|string $amount
-     *
-     * @throws LockProviderNotFoundException
-     * @throws RecordNotFoundException
      */
-    public function makeTransaction(Wallet $wallet, string $type, $amount, ?array $meta, bool $confirmed = true): Transaction
-    {
+    public function makeTransaction(
+        Wallet $wallet,
+        string $type,
+        $amount,
+        ?array $meta,
+        bool $confirmed = true
+    ): Transaction {
         assert(in_array($type, [Transaction::TYPE_DEPOSIT, Transaction::TYPE_WITHDRAW], true));
 
         if ($type === Transaction::TYPE_DEPOSIT) {
@@ -109,10 +106,9 @@ final class CommonServiceLegacy
             $dto = $this->prepareService->withdraw($wallet, (string) $amount, $meta, $confirmed);
         }
 
-        $transactions = $this->applyTransactions(
-            [$dto->getWalletId() => $wallet],
-            [$dto],
-        );
+        $transactions = $this->applyTransactions([
+            $dto->getWalletId() => $wallet,
+        ], [$dto],);
 
         return current($transactions);
     }
@@ -120,9 +116,6 @@ final class CommonServiceLegacy
     /**
      * @param non-empty-array<int|string, Wallet>           $wallets
      * @param non-empty-array<int, TransactionDtoInterface> $objects
-     *
-     * @throws LockProviderNotFoundException
-     * @throws RecordNotFoundException
      *
      * @return non-empty-array<string, Transaction>
      */

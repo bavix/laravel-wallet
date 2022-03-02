@@ -14,7 +14,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-class GiftDiscountTest extends TestCase
+final class GiftDiscountTest extends TestCase
 {
     public function testGift(): void
     {

@@ -31,8 +31,10 @@ final class Cart implements Countable, CartInterface
 
     private array $meta = [];
 
-    public function __construct(private CastServiceInterface $castService, private MathServiceInterface $math)
-    {
+    public function __construct(
+        private CastServiceInterface $castService,
+        private MathServiceInterface $math
+    ) {
     }
 
     public function getMeta(): array
@@ -144,9 +146,6 @@ final class Cart implements Countable, CartInterface
         return (int) ($this->quantity[$product::class.':'.$model->getKey()] ?? 0);
     }
 
-    /**
-     * @throws CartEmptyException
-     */
     public function getBasketDto(): BasketDtoInterface
     {
         $items = array_map(
@@ -155,10 +154,7 @@ final class Cart implements Countable, CartInterface
         );
 
         if (count($items) === 0) {
-            throw new CartEmptyException(
-                'Cart is empty',
-                ExceptionInterface::CART_EMPTY
-            );
+            throw new CartEmptyException('Cart is empty', ExceptionInterface::CART_EMPTY);
         }
 
         return new BasketDto($items, $this->getMeta());

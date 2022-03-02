@@ -15,7 +15,9 @@ class AlterColumnTransactionTable extends Migration
     public function up()
     {
         Schema::table((new Transaction())->getTable(), function (Blueprint $table) {
-            $table->string('bank_method')->nullable();
+            $table->string('bank_method')
+                ->nullable()
+            ;
         });
     }
 

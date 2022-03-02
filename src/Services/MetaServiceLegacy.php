@@ -12,7 +12,9 @@ final class MetaServiceLegacy
 {
     public function getMeta(CartInterface $cart, Product $product): ?array
     {
-        $metaCart = $cart->getBasketDto()->meta();
+        $metaCart = $cart->getBasketDto()
+            ->meta()
+        ;
         $metaProduct = $product->getMetaProduct();
 
         if ($metaProduct !== null) {

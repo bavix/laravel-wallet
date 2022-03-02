@@ -8,8 +8,9 @@ namespace Bavix\Wallet\Internal\Query;
 final class TransactionQuery implements TransactionQueryInterface
 {
     /** @param non-empty-array<int|string, string> $uuids */
-    public function __construct(private array $uuids)
-    {
+    public function __construct(
+        private array $uuids
+    ) {
     }
 
     /** @return non-empty-array<int|string, string> */

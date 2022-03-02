@@ -15,7 +15,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-class GiftDiscountTaxTest extends TestCase
+final class GiftDiscountTaxTest extends TestCase
 {
     public function testGift(): void
     {
@@ -38,10 +38,7 @@ class GiftDiscountTaxTest extends TestCase
         );
 
         $first->deposit($product->getAmountProduct($first) + $fee);
-        self::assertSame(
-            $first->balanceInt,
-            (int) ($product->getAmountProduct($first) + $fee)
-        );
+        self::assertSame($first->balanceInt, (int) ($product->getAmountProduct($first) + $fee));
 
         $transfer = $first->wallet->gift($second, $product);
         self::assertSame($first->balanceInt, (int) $product->getPersonalDiscount($first));

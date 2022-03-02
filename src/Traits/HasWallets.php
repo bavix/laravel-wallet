@@ -13,8 +13,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
 
 /**
- * Trait HasWallets
- * To use a trait, you must add HasWallet trait.
+ * Trait HasWallets To use a trait, you must add HasWallet trait.
  *
  * @property Collection|WalletModel[] $wallets
  * @psalm-require-extends \Illuminate\Database\Eloquent\Model
@@ -22,9 +21,8 @@ use Illuminate\Support\Collection;
 trait HasWallets
 {
     /**
-     * The variable is used for the cache, so as not to request wallets many times.
-     * WalletProxy keeps the money wallets in the memory to avoid errors when you
-     * purchase/transfer, etc.
+     * The variable is used for the cache, so as not to request wallets many times. WalletProxy keeps the money wallets
+     * in the memory to avoid errors when you purchase/transfer, etc.
      */
     private array $_wallets = [];
 
@@ -33,14 +31,11 @@ trait HasWallets
     /**
      * Get wallet by slug.
      *
-     *  $user->wallet->balance // 200
-     *  or short recording $user->balance; // 200
+     * $user->wallet->balance // 200 or short recording $user->balance; // 200
      *
-     *  $defaultSlug = config('wallet.wallet.default.slug');
-     *  $user->getWallet($defaultSlug)->balance; // 200
+     * $defaultSlug = config('wallet.wallet.default.slug'); $user->getWallet($defaultSlug)->balance; // 200
      *
-     *  $user->getWallet('usd')->balance; // 50
-     *  $user->getWallet('rub')->balance; // 100
+     * $user->getWallet('usd')->balance; // 50 $user->getWallet('rub')->balance; // 100
      */
     public function getWallet(string $slug): ?WalletModel
     {
@@ -54,16 +49,11 @@ trait HasWallets
     /**
      * Get wallet by slug.
      *
-     *  $user->wallet->balance // 200
-     *  or short recording $user->balance; // 200
+     * $user->wallet->balance // 200 or short recording $user->balance; // 200
      *
-     *  $defaultSlug = config('wallet.wallet.default.slug');
-     *  $user->getWallet($defaultSlug)->balance; // 200
+     * $defaultSlug = config('wallet.wallet.default.slug'); $user->getWallet($defaultSlug)->balance; // 200
      *
-     *  $user->getWallet('usd')->balance; // 50
-     *  $user->getWallet('rub')->balance; // 100
-     *
-     * @throws ModelNotFoundException
+     * $user->getWallet('usd')->balance; // 50 $user->getWallet('rub')->balance; // 100
      */
     public function getWalletOrFail(string $slug): WalletModel
     {

@@ -15,7 +15,7 @@ use Bavix\Wallet\Test\Infra\Transform\TransactionDtoTransformerCustom;
 /**
  * @internal
  */
-class WalletExtensionTest extends TestCase
+final class WalletExtensionTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -28,7 +28,9 @@ class WalletExtensionTest extends TestCase
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
-        $transaction = $buyer->deposit(1000, ['bank_method' => 'VietComBank']);
+        $transaction = $buyer->deposit(1000, [
+            'bank_method' => 'VietComBank',
+        ]);
 
         self::assertTrue($transaction->getKey() > 0);
         self::assertSame($transaction->amountInt, $buyer->balanceInt);
@@ -46,7 +48,9 @@ class WalletExtensionTest extends TestCase
          */
         $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
-        $transaction = $buyer->deposit(1000, ['currency' => 'EUR']);
+        $transaction = $buyer->deposit(1000, [
+            'currency' => 'EUR',
+        ]);
 
         self::assertTrue($transaction->getKey() > 0);
         self::assertSame($transaction->amountInt, $buyer->balanceInt);

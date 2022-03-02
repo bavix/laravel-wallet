@@ -18,8 +18,6 @@ class ItemMinTaxFactory extends Factory
 
     /**
      * Define the model's default state.
-     *
-     * @throws
      */
     public function definition(): array
     {

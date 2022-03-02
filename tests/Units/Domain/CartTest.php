@@ -24,7 +24,7 @@ use function count;
 /**
  * @internal
  */
-class CartTest extends TestCase
+final class CartTest extends TestCase
 {
     public function testCartMeta(): void
     {
@@ -41,7 +41,9 @@ class CartTest extends TestCase
 
         $cart = app(Cart::class)
             ->withItems([$product])
-            ->withMeta(['type' => $expected])
+            ->withMeta([
+                'type' => $expected,
+            ])
         ;
 
         self::assertSame(0, $buyer->balanceInt);
@@ -83,7 +85,9 @@ class CartTest extends TestCase
 
         $cart = app(Cart::class)
             ->withItems([$product])
-            ->withMeta(['type' => $expected])
+            ->withMeta([
+                'type' => $expected,
+            ])
         ;
 
         self::assertSame(0, $buyer->balanceInt);
@@ -142,9 +146,6 @@ class CartTest extends TestCase
         }
     }
 
-    /**
-     * @throws
-     */
     public function testCartQuantity(): void
     {
         /**
@@ -179,9 +180,6 @@ class CartTest extends TestCase
         }
     }
 
-    /**
-     * @throws
-     */
     public function testModelNotFoundException(): void
     {
         $this->expectException(ModelNotFoundException::class);
@@ -215,9 +213,6 @@ class CartTest extends TestCase
         $buyer->refundCart($refundCart);
     }
 
-    /**
-     * @throws
-     */
     public function testBoughtGoods(): void
     {
         /**
@@ -264,7 +259,9 @@ class CartTest extends TestCase
          * @var Item  $product
          */
         $buyer = BuyerFactory::new()->create();
-        $product = ItemFactory::new()->create(['quantity' => 1]);
+        $product = ItemFactory::new()->create([
+            'quantity' => 1,
+        ]);
 
         $cart = app(Cart::class)->withItem($product, 1);
 
