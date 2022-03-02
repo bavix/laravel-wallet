@@ -10,10 +10,8 @@ use Generator;
 final class BasketDto implements BasketDtoInterface
 {
     /** @param non-empty-array<int|string, ItemDtoInterface> $items */
-    public function __construct(
-        private array $items,
-        private array $meta
-    ) {
+    public function __construct(private array $items, private array $meta)
+    {
     }
 
     public function meta(): array

@@ -12,7 +12,7 @@ use function now;
 /**
  * @internal
  */
-final class TransactionsFilterTest extends TestCase
+class TransactionsFilterTest extends TestCase
 {
     public function testMetaAccount(): void
     {
@@ -21,34 +21,16 @@ final class TransactionsFilterTest extends TestCase
         self::assertFalse($buyer->relationLoaded('wallet'));
         $buyer->deposit(1000); // without meta
 
-        $buyer->withdraw(100, [
-            'account' => 'customers',
-        ]);
-        $buyer->withdraw(150, [
-            'account' => 'expenses',
-        ]);
-        $buyer->deposit(500, [
-            'account' => 'vendors',
-        ]);
+        $buyer->withdraw(100, ['account' => 'customers']);
+        $buyer->withdraw(150, ['account' => 'expenses']);
+        $buyer->deposit(500, ['account' => 'vendors']);
 
         self::assertSame(4, $buyer->transactions()->count());
 
-        $nullable = $buyer->transactions()
-            ->whereNull('meta')
-            ->count()
-        ;
-        $customers = $buyer->transactions()
-            ->where('meta->account', 'customers')
-            ->count()
-        ;
-        $expenses = $buyer->transactions()
-            ->where('meta->account', 'expenses')
-            ->count()
-        ;
-        $vendors = $buyer->transactions()
-            ->where('meta->account', 'vendors')
-            ->count()
-        ;
+        $nullable = $buyer->transactions()->whereNull('meta')->count();
+        $customers = $buyer->transactions()->where('meta->account', 'customers')->count();
+        $expenses = $buyer->transactions()->where('meta->account', 'expenses')->count();
+        $vendors = $buyer->transactions()->where('meta->account', 'vendors')->count();
 
         self::assertSame(1, $nullable);
         self::assertSame(1, $customers);

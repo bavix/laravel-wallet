@@ -12,7 +12,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-final class StorageTest extends TestCase
+class StorageTest extends TestCase
 {
     public function testFlush(): void
     {

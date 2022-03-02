@@ -12,7 +12,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-final class BookkeeperTest extends TestCase
+class BookkeeperTest extends TestCase
 {
     public function testSync(): void
     {

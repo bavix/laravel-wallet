@@ -22,7 +22,7 @@ use Throwable;
 /**
  * @internal
  */
-final class WalletTest extends TestCase
+class WalletTest extends TestCase
 {
     public function testDeposit(): void
     {
@@ -44,13 +44,19 @@ final class WalletTest extends TestCase
         $user->withdraw($user->balanceInt);
         self::assertSame(0, $user->balanceInt);
 
-        self::assertSame(3, $user->transactions()->where([
-            'type' => Transaction::TYPE_DEPOSIT,
-        ])->count());
+        self::assertSame(
+            3,
+            $user->transactions()
+                ->where(['type' => Transaction::TYPE_DEPOSIT])
+                ->count()
+        );
 
-        self::assertSame(1, $user->transactions()->where([
-            'type' => Transaction::TYPE_WITHDRAW,
-        ])->count());
+        self::assertSame(
+            1,
+            $user->transactions()
+                ->where(['type' => Transaction::TYPE_WITHDRAW])
+                ->count()
+        );
 
         self::assertSame(4, $user->transactions()->count());
     }
@@ -97,9 +103,21 @@ final class WalletTest extends TestCase
             }
         }
 
-        self::assertCount(1, User::query()->has('wallet')->whereIn('id', $ids)->get());
+        self::assertCount(
+            1,
+            User::query()
+                ->has('wallet')
+                ->whereIn('id', $ids)
+                ->get()
+        );
 
-        self::assertCount(9, User::query()->has('wallet', '<')->whereIn('id', $ids)->get());
+        self::assertCount(
+            9,
+            User::query()
+                ->has('wallet', '<')
+                ->whereIn('id', $ids)
+                ->get()
+        );
     }
 
     public function testWithdraw(): void
@@ -266,11 +284,7 @@ final class WalletTest extends TestCase
         $user->deposit(100, null, false);
         self::assertSame(0, $user->balanceInt);
 
-        $user->transactions()
-            ->update([
-                'confirmed' => true,
-            ])
-        ;
+        $user->transactions()->update(['confirmed' => true]);
         self::assertSame(0, $user->balanceInt);
 
         $user->wallet->refreshBalance();

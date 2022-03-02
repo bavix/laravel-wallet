@@ -5,16 +5,14 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Internal\Service;
 
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 final class StorageService implements StorageServiceInterface
 {
-    public function __construct(
-        private LockServiceInterface $lockService,
-        private MathServiceInterface $mathService,
-        private CacheRepository $cacheRepository
-    ) {
+    public function __construct(private LockServiceInterface $lockService, private MathServiceInterface $mathService, private CacheRepository $cacheRepository)
+    {
     }
 
     public function flush(): bool
@@ -27,6 +25,7 @@ final class StorageService implements StorageServiceInterface
         return $this->cacheRepository->forget($key);
     }
 
+    /** @throws RecordNotFoundException */
     public function get(string $key): string
     {
         $value = $this->cacheRepository->get($key);
@@ -48,6 +47,9 @@ final class StorageService implements StorageServiceInterface
 
     /**
      * @param float|int|string $value
+     *
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
      */
     public function increase(string $key, $value): string
     {

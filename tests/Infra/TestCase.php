@@ -17,7 +17,7 @@ use Orchestra\Testbench\TestCase as OrchestraTestCase;
 /**
  * @internal
  */
-abstract class TestCase extends OrchestraTestCase
+class TestCase extends OrchestraTestCase
 {
     use RefreshDatabase;
 
@@ -45,7 +45,10 @@ abstract class TestCase extends OrchestraTestCase
         $app['config']->set('wallet.transfer.model', Transfer::class);
         $app['config']->set('wallet.wallet.model', Wallet::class);
 
-        return [WalletServiceProvider::class, TestServiceProvider::class];
+        return [
+            WalletServiceProvider::class,
+            TestServiceProvider::class,
+        ];
     }
 
     /**
@@ -62,9 +65,7 @@ abstract class TestCase extends OrchestraTestCase
         $config->set('database.connections.mysql.prefix', 'tests');
 
         $mysql = $config->get('database.connections.mysql');
-        $config->set('database.connections.mariadb', array_merge($mysql, [
-            'port' => 3307,
-        ]));
+        $config->set('database.connections.mariadb', array_merge($mysql, ['port' => 3307]));
 
         // new table name's
         $config->set('wallet.transaction.table', 'transaction');

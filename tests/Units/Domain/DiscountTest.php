@@ -19,7 +19,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-final class DiscountTest extends TestCase
+class DiscountTest extends TestCase
 {
     public function testPay(): void
     {
@@ -38,9 +38,15 @@ final class DiscountTest extends TestCase
         self::assertNotNull($transfer);
         self::assertSame(Transfer::STATUS_PAID, $transfer->status);
 
-        self::assertSame($buyer->balanceInt, $product->getPersonalDiscount($buyer));
+        self::assertSame(
+            $buyer->balanceInt,
+            $product->getPersonalDiscount($buyer)
+        );
 
-        self::assertSame((int) $transfer->discount, $product->getPersonalDiscount($buyer));
+        self::assertSame(
+            (int) $transfer->discount,
+            $product->getPersonalDiscount($buyer)
+        );
 
         /**
          * @var Transaction $withdraw
@@ -85,9 +91,15 @@ final class DiscountTest extends TestCase
         self::assertNotNull($transfer);
         self::assertSame(Transfer::STATUS_PAID, $transfer->status);
 
-        self::assertSame($buyer->balanceInt, $product->getPersonalDiscount($buyer));
+        self::assertSame(
+            $buyer->balanceInt,
+            $product->getPersonalDiscount($buyer)
+        );
 
-        self::assertSame((int) $transfer->discount, $product->getPersonalDiscount($buyer));
+        self::assertSame(
+            (int) $transfer->discount,
+            $product->getPersonalDiscount($buyer)
+        );
 
         /**
          * @var Transaction $withdraw
@@ -128,7 +140,10 @@ final class DiscountTest extends TestCase
         self::assertNotNull($transfer);
         self::assertSame(Transfer::STATUS_PAID, $transfer->status);
 
-        self::assertSame((int) $transfer->discount, $product->getPersonalDiscount($buyer));
+        self::assertSame(
+            (int) $transfer->discount,
+            $product->getPersonalDiscount($buyer)
+        );
 
         self::assertTrue($buyer->refund($product));
         self::assertSame($buyer->balanceInt, (int) $product->getAmountProduct($buyer));
@@ -182,7 +197,10 @@ final class DiscountTest extends TestCase
             (int) ($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer))
         );
 
-        self::assertSame((int) $transfer->discount, $product->getPersonalDiscount($buyer));
+        self::assertSame(
+            (int) $transfer->discount,
+            $product->getPersonalDiscount($buyer)
+        );
 
         $product->withdraw($product->balance);
         self::assertSame(0, $product->balanceInt);

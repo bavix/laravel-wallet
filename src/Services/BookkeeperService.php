@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Service\LockServiceInterface;
 use Bavix\Wallet\Internal\Service\StorageServiceInterface;
@@ -11,10 +12,8 @@ use Bavix\Wallet\Models\Wallet;
 
 final class BookkeeperService implements BookkeeperServiceInterface
 {
-    public function __construct(
-        private StorageServiceInterface $storageService,
-        private LockServiceInterface $lockService
-    ) {
+    public function __construct(private StorageServiceInterface $storageService, private LockServiceInterface $lockService)
+    {
     }
 
     public function missing(Wallet $wallet): bool
@@ -22,6 +21,10 @@ final class BookkeeperService implements BookkeeperServiceInterface
         return $this->storageService->missing($this->getKey($wallet));
     }
 
+    /**
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     */
     public function amount(Wallet $wallet): string
     {
         try {
@@ -43,6 +46,9 @@ final class BookkeeperService implements BookkeeperServiceInterface
 
     /**
      * @param float|int|string $value
+     *
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
      */
     public function increase(Wallet $wallet, $value): string
     {

@@ -9,11 +9,8 @@ use Bavix\Wallet\Interfaces\Customer;
 /** @psalm-immutable */
 final class AvailabilityDto implements AvailabilityDtoInterface
 {
-    public function __construct(
-        private Customer $customer,
-        private BasketDtoInterface $basketDto,
-        private bool $force
-    ) {
+    public function __construct(private Customer $customer, private BasketDtoInterface $basketDto, private bool $force)
+    {
     }
 
     public function getBasketDto(): BasketDtoInterface

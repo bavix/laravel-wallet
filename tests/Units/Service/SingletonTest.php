@@ -16,7 +16,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-final class SingletonTest extends TestCase
+class SingletonTest extends TestCase
 {
     public function testCart(): void
     {
@@ -50,10 +50,7 @@ final class SingletonTest extends TestCase
 
     public function testDatabaseService(): void
     {
-        self::assertSame(
-            $this->getRefId(DatabaseServiceInterface::class),
-            $this->getRefId(DatabaseServiceInterface::class)
-        );
+        self::assertSame($this->getRefId(DatabaseServiceInterface::class), $this->getRefId(DatabaseServiceInterface::class));
     }
 
     protected function getRefId(string $object): string

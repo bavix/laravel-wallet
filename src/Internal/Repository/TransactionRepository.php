@@ -12,11 +12,8 @@ use Bavix\Wallet\Models\Transaction;
 
 final class TransactionRepository implements TransactionRepositoryInterface
 {
-    public function __construct(
-        private TransactionDtoTransformerInterface $transformer,
-        private JsonServiceInterface $jsonService,
-        private Transaction $transaction
-    ) {
+    public function __construct(private TransactionDtoTransformerInterface $transformer, private JsonServiceInterface $jsonService, private Transaction $transaction)
+    {
     }
 
     /**
@@ -32,9 +29,7 @@ final class TransactionRepository implements TransactionRepositoryInterface
             );
         }
 
-        $this->transaction->newQuery()
-            ->insert($values)
-        ;
+        $this->transaction->newQuery()->insert($values);
     }
 
     public function insertOne(TransactionDtoInterface $dto): Transaction

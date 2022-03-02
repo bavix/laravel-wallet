@@ -13,7 +13,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-final class ModelTableTest extends TestCase
+class ModelTableTest extends TestCase
 {
     public function testWalletTableName(): void
     {

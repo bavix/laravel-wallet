@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Test\Units\Domain;
 
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEventInterface;
 use Bavix\Wallet\Internal\Events\WalletCreatedEventInterface;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\UnknownEventException;
 use Bavix\Wallet\Internal\Service\ClockServiceInterface;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\Event;
 /**
  * @internal
  */
-final class EventTest extends TestCase
+class EventTest extends TestCase
 {
     public function testBalanceUpdatedThrowUuidListener(): void
     {
@@ -101,6 +102,9 @@ final class EventTest extends TestCase
         $buyer->getBalanceIntAttribute();
     }
 
+    /**
+     * @throws ExceptionInterface
+     */
     public function testBalanceNotChanged(): void
     {
         Event::listen(BalanceUpdatedEventInterface::class, BalanceUpdatedThrowIdListener::class);

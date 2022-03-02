@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\AtomicServiceInterface;
@@ -16,6 +21,7 @@ use Bavix\Wallet\Services\ConsistencyServiceInterface;
 use Bavix\Wallet\Services\ExchangeServiceInterface;
 use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\TaxServiceInterface;
+use Illuminate\Database\RecordsNotFoundException;
 
 /**
  * @psalm-require-extends \Illuminate\Database\Eloquent\Model
@@ -24,6 +30,14 @@ trait CanExchange
 {
     /**
      * @param int|string $amount
+     *
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function exchange(Wallet $to, $amount, ?array $meta = null): Transfer
     {
@@ -48,6 +62,12 @@ trait CanExchange
 
     /**
      * @param int|string $amount
+     *
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function forceExchange(Wallet $to, $amount, ?array $meta = null): Transfer
     {
@@ -58,19 +78,13 @@ trait CanExchange
             $taxService = app(TaxServiceInterface::class);
             $fee = $taxService->getFee($to, $amount);
             $rate = app(ExchangeServiceInterface::class)->convertTo(
-                $castService->getWallet($this)
-                    ->currency,
-                $castService->getWallet($to)
-                    ->currency,
+                $castService->getWallet($this)->currency,
+                $castService->getWallet($to)->currency,
                 1
             );
 
             $withdrawDto = $prepareService->withdraw($this, $mathService->add($amount, $fee), $meta);
-            $depositDto = $prepareService->deposit(
-                $to,
-                $mathService->floor($mathService->mul($amount, $rate, 1)),
-                $meta
-            );
+            $depositDto = $prepareService->deposit($to, $mathService->floor($mathService->mul($amount, $rate, 1)), $meta);
             $transferLazyDto = app(TransferLazyDtoAssemblerInterface::class)->create(
                 $this,
                 $to,

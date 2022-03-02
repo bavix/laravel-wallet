@@ -11,10 +11,8 @@ use Bavix\Wallet\Internal\Service\MathServiceInterface;
 
 final class TaxService implements TaxServiceInterface
 {
-    public function __construct(
-        private MathServiceInterface $mathService,
-        private CastServiceInterface $castService
-    ) {
+    public function __construct(private MathServiceInterface $mathService, private CastServiceInterface $castService)
+    {
     }
 
     /**
@@ -28,8 +26,7 @@ final class TaxService implements TaxServiceInterface
                 $this->mathService->div(
                     $this->mathService->mul($amount, $wallet->getFeePercent(), 0),
                     100,
-                    $this->castService->getWallet($wallet)
-                        ->decimal_places
+                    $this->castService->getWallet($wallet)->decimal_places
                 )
             );
         }

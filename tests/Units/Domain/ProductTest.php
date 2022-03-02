@@ -21,7 +21,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-final class ProductTest extends TestCase
+class ProductTest extends TestCase
 {
     public function testPay(): void
     {
@@ -261,6 +261,8 @@ final class ProductTest extends TestCase
 
     /**
      * @see https://github.com/bavix/laravel-wallet/issues/237
+     *
+     * @throws
      */
     public function testProductMultiWallet(): void
     {
@@ -277,9 +279,7 @@ final class ProductTest extends TestCase
         $buyer->deposit($product->getAmountProduct($buyer));
         self::assertSame((string) $product->getAmountProduct($buyer), $buyer->balance);
 
-        $product->createWallet([
-            'name' => 'testing',
-        ]);
+        $product->createWallet(['name' => 'testing']);
         app(DatabaseServiceInterface::class)->transaction(function () use ($product, $buyer) {
             $transfer = $buyer->pay($product);
             $product->transfer($product->getWallet('testing'), $transfer->deposit->amount, $transfer->toArray());

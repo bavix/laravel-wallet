@@ -13,7 +13,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-final class DispatcherTest extends TestCase
+class DispatcherTest extends TestCase
 {
     public function testUnknownEventException(): void
     {

@@ -16,7 +16,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-final class TaxTest extends TestCase
+class TaxTest extends TestCase
 {
     public function testPay(): void
     {

@@ -17,7 +17,8 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 trait MorphOneWallet
 {
     /**
-     * Get default Wallet this method is used for Eager Loading.
+     * Get default Wallet
+     * this method is used for Eager Loading.
      */
     public function wallet(): MorphOne
     {

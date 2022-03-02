@@ -5,8 +5,13 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Traits;
 
 use function app;
+use Bavix\Wallet\Exceptions\AmountInvalid;
+use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
@@ -19,6 +24,7 @@ use Bavix\Wallet\Services\RegulatorServiceInterface;
 use function config;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\RecordsNotFoundException;
 use Illuminate\Support\Collection;
 
 /**
@@ -38,6 +44,12 @@ trait HasWallet
      * The input means in the system.
      *
      * @param int|string $amount
+     *
+     * @throws AmountInvalid
+     * @throws LockProviderNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function deposit($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
@@ -49,22 +61,34 @@ trait HasWallet
     }
 
     /**
-     * Magic laravel framework method, makes it possible to call property balance.
+     * Magic laravel framework method, makes it
+     *  possible to call property balance.
      *
-     * Example: $user1 = User::first()->load('wallet'); $user2 = User::first()->load('wallet');
+     * Example:
+     *  $user1 = User::first()->load('wallet');
+     *  $user2 = User::first()->load('wallet');
      *
-     * Without static: var_dump($user1->balance, $user2->balance); // 100 100 $user1->deposit(100);
-     * $user2->deposit(100); var_dump($user1->balance, $user2->balance); // 200 200
+     * Without static:
+     *  var_dump($user1->balance, $user2->balance); // 100 100
+     *  $user1->deposit(100);
+     *  $user2->deposit(100);
+     *  var_dump($user1->balance, $user2->balance); // 200 200
      *
-     * With static: var_dump($user1->balance, $user2->balance); // 100 100 $user1->deposit(100);
-     * var_dump($user1->balance); // 200 $user2->deposit(100); var_dump($user2->balance); // 300
+     * With static:
+     *  var_dump($user1->balance, $user2->balance); // 100 100
+     *  $user1->deposit(100);
+     *  var_dump($user1->balance); // 200
+     *  $user2->deposit(100);
+     *  var_dump($user2->balance); // 300
      *
      * @return float|int|string
      */
     public function getBalanceAttribute()
     {
         /** @var Wallet $this */
-        return app(RegulatorServiceInterface::class)->amount(app(CastServiceInterface::class)->getWallet($this));
+        return app(RegulatorServiceInterface::class)->amount(
+            app(CastServiceInterface::class)->getWallet($this)
+        );
     }
 
     public function getBalanceIntAttribute(): int
@@ -112,6 +136,14 @@ trait HasWallet
      * A method that transfers funds from host to host.
      *
      * @param int|string $amount
+     *
+     * @throws AmountInvalid
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws LockProviderNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function transfer(Wallet $wallet, $amount, ?array $meta = null): Transfer
     {
@@ -125,6 +157,14 @@ trait HasWallet
      * Withdrawals from the system.
      *
      * @param int|string $amount
+     *
+     * @throws AmountInvalid
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws LockProviderNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function withdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
@@ -152,6 +192,12 @@ trait HasWallet
      * Forced to withdraw funds from system.
      *
      * @param int|string $amount
+     *
+     * @throws AmountInvalid
+     * @throws LockProviderNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function forceWithdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
@@ -163,10 +209,16 @@ trait HasWallet
     }
 
     /**
-     * the forced transfer is needed when the user does not have the money and we drive it. Sometimes you do. Depends on
-     * business logic.
+     * the forced transfer is needed when the user does not have the money and we drive it.
+     * Sometimes you do. Depends on business logic.
      *
      * @param int|string $amount
+     *
+     * @throws AmountInvalid
+     * @throws LockProviderNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function forceTransfer(Wallet $wallet, $amount, ?array $meta = null): Transfer
     {
@@ -178,7 +230,8 @@ trait HasWallet
     }
 
     /**
-     * the transfer table is used to confirm the payment this method receives all transfers.
+     * the transfer table is used to confirm the payment
+     * this method receives all transfers.
      */
     public function transfers(): MorphMany
     {
