@@ -10,7 +10,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-final class LockServiceTest extends TestCase
+class LockServiceTest extends TestCase
 {
     public function testBlock(): void
     {

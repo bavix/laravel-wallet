@@ -5,12 +5,17 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Traits;
 
 use function array_unique;
+use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Interfaces\CartInterface;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
@@ -22,6 +27,7 @@ use Bavix\Wallet\Services\MetaServiceLegacy;
 use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\PurchaseServiceInterface;
 use function count;
+use Illuminate\Database\RecordsNotFoundException;
 
 /**
  * @psalm-require-extends \Illuminate\Database\Eloquent\Model
@@ -32,6 +38,15 @@ trait CartPay
     use HasWallet;
 
     /**
+     * @throws ProductEnded
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
+     *
      * @return non-empty-array<Transfer>
      */
     public function payFreeCart(CartInterface $cart): array
@@ -76,6 +91,15 @@ trait CartPay
     }
 
     /**
+     * @throws ProductEnded
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
+     *
      * @return non-empty-array<Transfer>
      */
     public function payCart(CartInterface $cart, bool $force = false): array
@@ -112,6 +136,13 @@ trait CartPay
     }
 
     /**
+     * @throws ProductEnded
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
+     *
      * @return non-empty-array<Transfer>
      */
     public function forcePayCart(CartInterface $cart): array
@@ -128,6 +159,16 @@ trait CartPay
         }
     }
 
+    /**
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
+     */
     public function refundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool
     {
         return app(AtomicServiceInterface::class)->block($this, function () use ($cart, $force, $gifts) {
@@ -135,8 +176,7 @@ trait CartPay
             $transfers = app(PurchaseServiceInterface::class)->already($this, $cart->getBasketDto(), $gifts);
             if (count($transfers) !== $cart->getBasketDto()->total()) {
                 throw new ModelNotFoundException(
-                    "No query results for model [{$this->transfers()
-                        ->getMorphClass()}]",
+                    "No query results for model [{$this->transfers()->getMorphClass()}]",
                     ExceptionInterface::MODEL_NOT_FOUND
                 );
             }
@@ -147,8 +187,8 @@ trait CartPay
                 $transfer = current($transfers);
                 next($transfers);
                 /**
-                 * the code is extremely poorly written, a complete refactoring is required. for version 6.x we will
-                 * leave it as it is.
+                 * the code is extremely poorly written, a complete refactoring is required.
+                 * for version 6.x we will leave it as it is.
                  */
                 $transfer->load('withdraw.wallet'); // fixme: need optimize
 
@@ -179,6 +219,14 @@ trait CartPay
         });
     }
 
+    /**
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
+     */
     public function forceRefundCart(CartInterface $cart, bool $gifts = false): bool
     {
         return $this->refundCart($cart, true, $gifts);
@@ -193,11 +241,29 @@ trait CartPay
         }
     }
 
+    /**
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
+     */
     public function refundGiftCart(CartInterface $cart, bool $force = false): bool
     {
         return $this->refundCart($cart, $force, true);
     }
 
+    /**
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
+     */
     public function forceRefundGiftCart(CartInterface $cart): bool
     {
         return $this->refundGiftCart($cart, true);

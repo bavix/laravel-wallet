@@ -22,7 +22,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-final class ConfirmTest extends TestCase
+class ConfirmTest extends TestCase
 {
     public function testSimple(): void
     {
@@ -32,9 +32,7 @@ final class ConfirmTest extends TestCase
 
         self::assertSame(0, $wallet->balanceInt);
 
-        $transaction = $wallet->deposit(1000, [
-            'desc' => 'unconfirmed',
-        ], false);
+        $transaction = $wallet->deposit(1000, ['desc' => 'unconfirmed'], false);
         self::assertTrue($transaction->getKey() > 0);
         self::assertSame(0, $wallet->balanceInt);
         self::assertFalse($transaction->confirmed);
@@ -55,9 +53,7 @@ final class ConfirmTest extends TestCase
 
         self::assertSame(0, $wallet->balanceInt);
 
-        $transaction = $wallet->forceWithdraw(1000, [
-            'desc' => 'unconfirmed',
-        ], false);
+        $transaction = $wallet->forceWithdraw(1000, ['desc' => 'unconfirmed'], false);
         self::assertSame(0, $wallet->balanceInt);
         self::assertFalse($transaction->confirmed);
         self::assertTrue($transaction->getKey() > 0);
@@ -75,9 +71,7 @@ final class ConfirmTest extends TestCase
 
         self::assertSame(0, $wallet->balanceInt);
 
-        $transaction = $wallet->forceWithdraw(1000, [
-            'desc' => 'confirmed',
-        ]);
+        $transaction = $wallet->forceWithdraw(1000, ['desc' => 'confirmed']);
         self::assertSame(-1000, $wallet->balanceInt);
         self::assertTrue($transaction->confirmed);
 
@@ -101,9 +95,7 @@ final class ConfirmTest extends TestCase
 
         self::assertSame(100, $wallet->balanceInt);
 
-        $transaction = $wallet->withdraw(50, [
-            'desc' => 'unconfirmed',
-        ], false);
+        $transaction = $wallet->withdraw(50, ['desc' => 'unconfirmed'], false);
         self::assertSame(100, $wallet->balanceInt);
         self::assertFalse($transaction->confirmed);
     }
@@ -116,9 +108,7 @@ final class ConfirmTest extends TestCase
 
         self::assertSame(0, $wallet->balanceInt);
 
-        $transaction = $wallet->forceWithdraw(1000, [
-            'desc' => 'unconfirmed',
-        ], false);
+        $transaction = $wallet->forceWithdraw(1000, ['desc' => 'unconfirmed'], false);
         self::assertSame(0, $wallet->balanceInt);
         self::assertFalse($transaction->confirmed);
 
@@ -135,9 +125,7 @@ final class ConfirmTest extends TestCase
 
         self::assertSame(0, $wallet->balanceInt);
 
-        $transaction = $wallet->forceWithdraw(1000, [
-            'desc' => 'confirmed',
-        ]);
+        $transaction = $wallet->forceWithdraw(1000, ['desc' => 'confirmed']);
         self::assertSame(-1000, $wallet->balanceInt);
         self::assertTrue($transaction->confirmed);
 
@@ -214,9 +202,7 @@ final class ConfirmTest extends TestCase
 
         self::assertSame(0, $firstWallet->balanceInt);
 
-        $transaction = $firstWallet->deposit(1000, [
-            'desc' => 'unconfirmed',
-        ], false);
+        $transaction = $firstWallet->deposit(1000, ['desc' => 'unconfirmed'], false);
         self::assertSame(0, $firstWallet->balanceInt);
         self::assertFalse($transaction->confirmed);
 

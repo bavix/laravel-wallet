@@ -15,15 +15,14 @@ use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
 
 final class ConsistencyService implements ConsistencyServiceInterface
 {
-    public function __construct(
-        private TranslatorServiceInterface $translatorService,
-        private MathServiceInterface $mathService,
-        private CastServiceInterface $castService
-    ) {
+    public function __construct(private TranslatorServiceInterface $translatorService, private MathServiceInterface $mathService, private CastServiceInterface $castService)
+    {
     }
 
     /**
      * @param float|int|string $amount
+     *
+     * @throws AmountInvalid
      */
     public function checkPositive($amount): void
     {
@@ -37,6 +36,9 @@ final class ConsistencyService implements ConsistencyServiceInterface
 
     /**
      * @param float|int|string $amount
+     *
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
      */
     public function checkPotential(Wallet $object, $amount, bool $allowZero = false): void
     {
@@ -78,6 +80,9 @@ final class ConsistencyService implements ConsistencyServiceInterface
 
     /**
      * @param TransferLazyDtoInterface[] $objects
+     *
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
      */
     public function checkTransfer(array $objects): void
     {

@@ -15,9 +15,11 @@ class MyExchangeService implements ExchangeServiceInterface
         ],
     ];
 
-    public function __construct(
-        private MathServiceInterface $mathService
-    ) {
+    /**
+     * Rate constructor.
+     */
+    public function __construct(private MathServiceInterface $mathService)
+    {
         foreach ($this->rates as $from => $rates) {
             foreach ($rates as $to => $rate) {
                 if (empty($this->rates[$to][$from])) {

@@ -13,8 +13,7 @@ final class BalanceUpdatedThrowDateListener
     public function handle(BalanceUpdatedEventInterface $balanceChangedEvent): void
     {
         throw new UnknownEventException(
-            $balanceChangedEvent->getUpdatedAt()
-                ->format(DateTimeInterface::ATOM),
+            $balanceChangedEvent->getUpdatedAt()->format(DateTimeInterface::ATOM),
             (int) $balanceChangedEvent->getBalance()
         );
     }

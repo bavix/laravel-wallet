@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\ConfirmedInvalid;
+use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Exceptions\UnconfirmedInvalid;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
+use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
 use Bavix\Wallet\Models\Transaction;
@@ -15,12 +20,24 @@ use Bavix\Wallet\Services\AtomicServiceInterface;
 use Bavix\Wallet\Services\CastServiceInterface;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
+use Illuminate\Database\RecordsNotFoundException;
 
 /**
  * @psalm-require-extends \Illuminate\Database\Eloquent\Model
  */
 trait CanConfirm
 {
+    /**
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws ConfirmedInvalid
+     * @throws WalletOwnerInvalid
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
+     */
     public function confirm(Transaction $transaction): bool
     {
         if ($transaction->type === Transaction::TYPE_WITHDRAW) {
@@ -44,6 +61,14 @@ trait CanConfirm
 
     /**
      * Removal of confirmation (forced), use at your own peril and risk.
+     *
+     * @throws UnconfirmedInvalid
+     * @throws WalletOwnerInvalid
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function resetConfirm(Transaction $transaction): bool
     {
@@ -65,9 +90,7 @@ trait CanConfirm
 
             app(RegulatorServiceInterface::class)->decrease($wallet, $transaction->amount);
 
-            return $transaction->update([
-                'confirmed' => false,
-            ]);
+            return $transaction->update(['confirmed' => false]);
         });
     }
 
@@ -80,6 +103,15 @@ trait CanConfirm
         }
     }
 
+    /**
+     * @throws ConfirmedInvalid
+     * @throws WalletOwnerInvalid
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
+     */
     public function forceConfirm(Transaction $transaction): bool
     {
         return app(AtomicServiceInterface::class)->block($this, function () use ($transaction) {
@@ -100,9 +132,7 @@ trait CanConfirm
 
             app(RegulatorServiceInterface::class)->increase($wallet, $transaction->amount);
 
-            return $transaction->update([
-                'confirmed' => true,
-            ]);
+            return $transaction->update(['confirmed' => true]);
         });
     }
 }

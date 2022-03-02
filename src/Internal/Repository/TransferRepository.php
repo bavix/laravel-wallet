@@ -11,10 +11,8 @@ use Bavix\Wallet\Models\Transfer;
 
 final class TransferRepository implements TransferRepositoryInterface
 {
-    public function __construct(
-        private TransferDtoTransformerInterface $transformer,
-        private Transfer $transfer
-    ) {
+    public function __construct(private TransferDtoTransformerInterface $transformer, private Transfer $transfer)
+    {
     }
 
     /**
@@ -23,9 +21,7 @@ final class TransferRepository implements TransferRepositoryInterface
     public function insert(array $objects): void
     {
         $values = array_map(fn (TransferDtoInterface $dto): array => $this->transformer->extract($dto), $objects);
-        $this->transfer->newQuery()
-            ->insert($values)
-        ;
+        $this->transfer->newQuery()->insert($values);
     }
 
     public function insertOne(TransferDtoInterface $dto): Transfer

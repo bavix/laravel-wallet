@@ -15,7 +15,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-final class MultiWalletGiftTest extends TestCase
+class MultiWalletGiftTest extends TestCase
 {
     public function testGiftWalletToUser(): void
     {
@@ -29,10 +29,7 @@ final class MultiWalletGiftTest extends TestCase
         $first->deposit(1);
         $second->deposit(2);
 
-        $wallet = $first->createWallet([
-            'name' => 'Gift',
-            'slug' => 'gifter',
-        ]);
+        $wallet = $first->createWallet(['name' => 'Gift', 'slug' => 'gifter']);
         self::assertNotNull($wallet);
         self::assertNotNull($first->wallet);
         self::assertNotSame((int) $first->wallet->id, (int) $wallet->id);

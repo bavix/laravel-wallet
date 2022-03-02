@@ -18,13 +18,14 @@ class UserFactory extends Factory
 
     /**
      * Define the model's default state.
+     *
+     * @throws
      */
     public function definition(): array
     {
         return [
             'name' => $this->faker->name,
-            'email' => $this->faker->unique()
-                ->safeEmail,
+            'email' => $this->faker->unique()->safeEmail,
         ];
     }
 }

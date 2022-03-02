@@ -11,9 +11,8 @@ use Bavix\Wallet\Models\Wallet;
 
 final class WalletCreatedEventAssembler implements WalletCreatedEventAssemblerInterface
 {
-    public function __construct(
-        private ClockServiceInterface $clockService
-    ) {
+    public function __construct(private ClockServiceInterface $clockService)
+    {
     }
 
     public function create(Wallet $wallet): WalletCreatedEventInterface

@@ -16,7 +16,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-final class StateTest extends TestCase
+class StateTest extends TestCase
 {
     /**
      * @see https://github.com/bavix/laravel-wallet/issues/49
@@ -34,14 +34,14 @@ final class StateTest extends TestCase
         self::assertSame(0, (int) app(RegulatorServiceInterface::class)->diff($wallet));
 
         Wallet::whereKey($buyer->wallet->getKey())
-            ->update([
-                'balance' => 10,
-            ])
+            ->update(['balance' => 10])
         ;
 
         /**
-         * Create a state when the cache is empty. For example, something went wrong and your database has incorrect
-         * data. Unfortunately, the library will work with what is. But there is an opportunity to recount the balance.
+         * Create a state when the cache is empty.
+         * For example, something went wrong and your database has incorrect data.
+         * Unfortunately, the library will work with what is.
+         * But there is an opportunity to recount the balance.
          *
          * Here is an example:
          */

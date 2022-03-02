@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Repository;
 
+use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Models\Wallet;
 
 interface WalletRepositoryInterface
@@ -16,9 +17,12 @@ interface WalletRepositoryInterface
 
     public function findBySlug(string $holderType, int|string $holderId, string $slug): ?Wallet;
 
+    /** @throws ModelNotFoundException */
     public function getById(int $id): Wallet;
 
+    /** @throws ModelNotFoundException */
     public function getByUuid(string $uuid): Wallet;
 
+    /** @throws ModelNotFoundException */
     public function getBySlug(string $holderType, int|string $holderId, string $slug): Wallet;
 }

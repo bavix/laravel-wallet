@@ -18,12 +18,8 @@ class CreateTransactionsTable extends Migration
             $table->enum('type', ['deposit', 'withdraw'])->index();
             $table->decimal('amount', 64, 0);
             $table->boolean('confirmed');
-            $table->json('meta')
-                ->nullable()
-            ;
-            $table->uuid('uuid')
-                ->unique()
-            ;
+            $table->json('meta')->nullable();
+            $table->uuid('uuid')->unique();
             $table->timestamps();
 
             $table->index(['payable_type', 'payable_id'], 'payable_type_payable_id_ind');

@@ -14,9 +14,7 @@ final class WalletCreatedThrowListener
     {
         $holderType = $walletCreatedEvent->getHolderType();
         $uuid = $walletCreatedEvent->getWalletUuid();
-        $createdAt = $walletCreatedEvent->getCreatedAt()
-            ->format(DateTimeInterface::ATOM)
-        ;
+        $createdAt = $walletCreatedEvent->getCreatedAt()->format(DateTimeInterface::ATOM);
 
         $message = hash('sha256', $holderType.$uuid.$createdAt);
         $code = $walletCreatedEvent->getWalletId() + $walletCreatedEvent->getHolderId();
