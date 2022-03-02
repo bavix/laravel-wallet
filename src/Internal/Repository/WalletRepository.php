@@ -74,7 +74,9 @@ final class WalletRepository implements WalletRepositoryInterface
         ]);
     }
 
-    /** @param array<string, int|string> $attributes */
+    /**
+     * @param array<string, int|string> $attributes
+     */
     private function getBy(array $attributes): Wallet
     {
         try {

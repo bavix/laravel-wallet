@@ -33,7 +33,9 @@ interface Customer extends Wallet
      */
     public function payFreeCart(CartInterface $cart): array;
 
-    /** @return Transfer[] */
+    /**
+     * @return Transfer[]
+     */
     public function safePayCart(CartInterface $cart, bool $force = false): array;
 
     /**

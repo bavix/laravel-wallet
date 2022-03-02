@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use PhpCsFixer\Fixer\ArrayNotation\ArraySyntaxFixer;
+use PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitTestClassRequiresCoversFixer;
 use PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer;
@@ -33,11 +34,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set(Option::SKIP, [
         PhpdocToCommentFixer::class,
+        NotOperatorWithSuccessorSpaceFixer::class,
         PhpUnitTestClassRequiresCoversFixer::class,
     ]);
 
     $containerConfigurator->import(SetList::CLEAN_CODE);
     $containerConfigurator->import(SetList::SYMPLIFY);
+    $containerConfigurator->import(SetList::COMMON);
     $containerConfigurator->import(SetList::PSR_12);
     $containerConfigurator->import(SetList::PHP_CS_FIXER);
     $containerConfigurator->import(SetList::CONTROL_STRUCTURES);

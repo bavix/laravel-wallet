@@ -26,7 +26,9 @@ final class Cart implements Countable, CartInterface
      */
     private array $items = [];
 
-    /** @var array<string, string> */
+    /**
+     * @var array<string, string>
+     */
     private array $quantity = [];
 
     private array $meta = [];

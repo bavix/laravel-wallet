@@ -40,7 +40,9 @@ final class StorageService implements StorageServiceInterface
         return $this->mathService->round($value);
     }
 
-    /** @param float|int|string $value */
+    /**
+     * @param float|int|string $value
+     */
     public function sync(string $key, $value): bool
     {
         return $this->cacheRepository->set($key, $value);

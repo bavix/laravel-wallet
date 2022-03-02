@@ -14,9 +14,13 @@ interface BasketDtoInterface extends Countable
 
     public function meta(): array;
 
-    /** @return non-empty-array<int|string, ItemDtoInterface> */
+    /**
+     * @return non-empty-array<int|string, ItemDtoInterface>
+     */
     public function items(): array;
 
-    /** @return Generator<array-key, Product, mixed, void> */
+    /**
+     * @return Generator<array-key, Product, mixed, void>
+     */
     public function cursor(): Generator;
 }
