@@ -10,8 +10,9 @@ use Bavix\Wallet\Internal\Service\MathServiceInterface;
 
 final class AssistantService implements AssistantServiceInterface
 {
-    public function __construct(private MathServiceInterface $mathService)
-    {
+    public function __construct(
+        private MathServiceInterface $mathService
+    ) {
     }
 
     /**
@@ -41,9 +42,6 @@ final class AssistantService implements AssistantServiceInterface
             }
         }
 
-        return array_filter(
-            $amounts,
-            fn (string $amount): bool => $this->mathService->compare($amount, 0) !== 0
-        );
+        return array_filter($amounts, fn (string $amount): bool => $this->mathService->compare($amount, 0) !== 0);
     }
 }

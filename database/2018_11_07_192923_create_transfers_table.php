@@ -17,18 +17,12 @@ class CreateTransfersTable extends Migration
             $table->morphs('from');
             $table->morphs('to');
             $table
-                ->enum(
-                    'status',
-                    ['exchange', 'transfer', 'paid', 'refund', 'gift']
-                )
+                ->enum('status', ['exchange', 'transfer', 'paid', 'refund', 'gift'])
                 ->default('transfer')
             ;
 
             $table
-                ->enum(
-                    'status_last',
-                    ['exchange', 'transfer', 'paid', 'refund', 'gift']
-                )
+                ->enum('status_last', ['exchange', 'transfer', 'paid', 'refund', 'gift'])
                 ->nullable()
             ;
 
@@ -43,7 +37,9 @@ class CreateTransfersTable extends Migration
                 ->default(0)
             ;
 
-            $table->uuid('uuid')->unique();
+            $table->uuid('uuid')
+                ->unique()
+            ;
             $table->timestamps();
 
             $table->foreign('deposit_id')

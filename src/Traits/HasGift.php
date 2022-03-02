@@ -5,14 +5,10 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Traits;
 
 use function app;
-use Bavix\Wallet\Exceptions\BalanceIsEmpty;
-use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
-use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
-use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
@@ -23,7 +19,6 @@ use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
 use Bavix\Wallet\Services\DiscountServiceInterface;
 use Bavix\Wallet\Services\TaxServiceInterface;
-use Illuminate\Database\RecordsNotFoundException;
 
 /**
  * Trait HasGift.
@@ -32,7 +27,9 @@ use Illuminate\Database\RecordsNotFoundException;
  */
 trait HasGift
 {
-    /** Give the goods safely. */
+    /**
+     * Give the goods safely.
+     */
     public function safeGift(Wallet $to, Product $product, bool $force = false): ?Transfer
     {
         try {
@@ -43,16 +40,8 @@ trait HasGift
     }
 
     /**
-     * From this moment on, each user (wallet) can give
-     * the goods to another user (wallet).
-     * This functionality can be organized for gifts.
-     *
-     * @throws BalanceIsEmpty
-     * @throws InsufficientFunds
-     * @throws LockProviderNotFoundException
-     * @throws RecordsNotFoundException
-     * @throws TransactionFailedException
-     * @throws ExceptionInterface
+     * From this moment on, each user (wallet) can give the goods to another user (wallet). This functionality can be
+     * organized for gifts.
      */
     public function gift(Wallet $to, Product $product, bool $force = false): Transfer
     {
@@ -68,7 +57,12 @@ trait HasGift
 
             $commonService = app(CommonServiceLegacy::class);
             $metaProduct = $product->getMetaProduct();
-            $withdraw = $commonService->makeTransaction($this, Transaction::TYPE_WITHDRAW, $mathService->add($amount, $fee), $metaProduct);
+            $withdraw = $commonService->makeTransaction(
+                $this,
+                Transaction::TYPE_WITHDRAW,
+                $mathService->add($amount, $fee),
+                $metaProduct
+            );
             $deposit = $commonService->makeTransaction($product, Transaction::TYPE_DEPOSIT, $amount, $metaProduct);
 
             $castService = app(CastServiceInterface::class);
@@ -91,11 +85,6 @@ trait HasGift
 
     /**
      * Santa without money gives a gift.
-     *
-     * @throws LockProviderNotFoundException
-     * @throws RecordsNotFoundException
-     * @throws TransactionFailedException
-     * @throws ExceptionInterface
      */
     public function forceGift(Wallet $to, Product $product): Transfer
     {

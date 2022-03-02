@@ -7,6 +7,7 @@ use PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitTestClassRequiresCoversFixer;
 use PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer;
 use Symplify\EasyCodingStandard\ValueObject\Option;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
@@ -18,6 +19,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]]);
 
     $services->set(DeclareStrictTypesFixer::class);
+    $services->set(LineLengthFixer::class);
 
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::PARALLEL, true);
@@ -35,6 +37,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     $containerConfigurator->import(SetList::CLEAN_CODE);
+    $containerConfigurator->import(SetList::SYMPLIFY);
     $containerConfigurator->import(SetList::PSR_12);
     $containerConfigurator->import(SetList::PHP_CS_FIXER);
     $containerConfigurator->import(SetList::CONTROL_STRUCTURES);

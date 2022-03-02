@@ -96,8 +96,15 @@ final class RegulatorService implements RegulatorServiceInterface
             }
 
             $balance = $this->bookkeeperService->increase($wallet, $diffValue);
-            $wallet->newQuery()->whereKey($wallet->getKey())->update(['balance' => $balance]); // ?qN
-            $wallet->fill(['balance' => $balance])->syncOriginalAttribute('balance');
+            $wallet->newQuery()
+                ->whereKey($wallet->getKey())
+                ->update([
+                    'balance' => $balance,
+                ]) // ?qN
+            ;
+            $wallet->fill([
+                'balance' => $balance,
+            ])->syncOriginalAttribute('balance');
 
             $event = $this->balanceUpdatedEventAssembler->create($wallet);
             $this->dispatcherService->dispatch($event);

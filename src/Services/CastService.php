@@ -6,7 +6,6 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\WalletCreatedEventAssemblerInterface;
-use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Internal\Service\DispatcherServiceInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
@@ -15,11 +14,13 @@ use Illuminate\Database\Eloquent\Model;
 /** @psalm-internal */
 final class CastService implements CastServiceInterface
 {
-    public function __construct(private WalletCreatedEventAssemblerInterface $walletCreatedEventAssembler, private DispatcherServiceInterface $dispatcherService, private DatabaseServiceInterface $databaseService)
-    {
+    public function __construct(
+        private WalletCreatedEventAssemblerInterface $walletCreatedEventAssembler,
+        private DispatcherServiceInterface $dispatcherService,
+        private DatabaseServiceInterface $databaseService
+    ) {
     }
 
-    /** @throws ExceptionInterface */
     public function getWallet(Wallet $object, bool $save = true): WalletModel
     {
         $wallet = $this->getModel($object);

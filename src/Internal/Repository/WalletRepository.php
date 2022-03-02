@@ -11,8 +11,9 @@ use Illuminate\Database\Eloquent\ModelNotFoundException as EloquentModelNotFound
 
 final class WalletRepository implements WalletRepositoryInterface
 {
-    public function __construct(private Wallet $wallet)
-    {
+    public function __construct(
+        private Wallet $wallet
+    ) {
     }
 
     public function create(array $attributes): Wallet
@@ -50,19 +51,20 @@ final class WalletRepository implements WalletRepositoryInterface
         }
     }
 
-    /** @throws ModelNotFoundException */
     public function getById(int $id): Wallet
     {
-        return $this->getBy(['id' => $id]);
+        return $this->getBy([
+            'id' => $id,
+        ]);
     }
 
-    /** @throws ModelNotFoundException */
     public function getByUuid(string $uuid): Wallet
     {
-        return $this->getBy(['uuid' => $uuid]);
+        return $this->getBy([
+            'uuid' => $uuid,
+        ]);
     }
 
-    /** @throws ModelNotFoundException */
     public function getBySlug(string $holderType, int|string $holderId, string $slug): Wallet
     {
         return $this->getBy([
@@ -76,7 +78,10 @@ final class WalletRepository implements WalletRepositoryInterface
     private function getBy(array $attributes): Wallet
     {
         try {
-            $wallet = $this->wallet->newQuery()->where($attributes)->firstOrFail();
+            $wallet = $this->wallet->newQuery()
+                ->where($attributes)
+                ->firstOrFail()
+            ;
             assert($wallet instanceof Wallet);
 
             return $wallet;

@@ -12,7 +12,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-class BasketTest extends TestCase
+final class BasketTest extends TestCase
 {
     public function testCount(): void
     {
@@ -38,8 +38,12 @@ class BasketTest extends TestCase
         $basket1 = new BasketDto([], []);
         self::assertEmpty($basket1->meta());
 
-        $basket2 = new BasketDto([], ['hello' => 'world']);
-        self::assertSame(['hello' => 'world'], $basket2->meta());
+        $basket2 = new BasketDto([], [
+            'hello' => 'world',
+        ]);
+        self::assertSame([
+            'hello' => 'world',
+        ], $basket2->meta());
     }
 
     public function testEmpty(): void

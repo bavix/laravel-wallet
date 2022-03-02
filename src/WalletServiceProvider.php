@@ -100,10 +100,7 @@ final class WalletServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->loadTranslationsFrom(
-            dirname(__DIR__).'/resources/lang',
-            'wallet'
-        );
+        $this->loadTranslationsFrom(dirname(__DIR__).'/resources/lang', 'wallet');
 
         if (!$this->app->runningInConsole()) {
             return;
@@ -129,10 +126,7 @@ final class WalletServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->mergeConfigFrom(
-            dirname(__DIR__).'/config/config.php',
-            'wallet'
-        );
+        $this->mergeConfigFrom(dirname(__DIR__).'/config/config.php', 'wallet');
 
         $configure = config('wallet', []);
 
@@ -160,10 +154,7 @@ final class WalletServiceProvider extends ServiceProvider
             $configure['transfer'] ?? TransferRepository::class
         );
 
-        $this->app->singleton(
-            WalletRepositoryInterface::class,
-            $configure['wallet'] ?? WalletRepository::class
-        );
+        $this->app->singleton(WalletRepositoryInterface::class, $configure['wallet'] ?? WalletRepository::class);
     }
 
     /**
@@ -195,7 +186,10 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(AtomicServiceInterface::class, $configure['atomic'] ?? AtomicService::class);
         $this->app->singleton(BasketServiceInterface::class, $configure['basket'] ?? BasketService::class);
         $this->app->singleton(CastServiceInterface::class, $configure['cast'] ?? CastService::class);
-        $this->app->singleton(ConsistencyServiceInterface::class, $configure['consistency'] ?? ConsistencyService::class);
+        $this->app->singleton(
+            ConsistencyServiceInterface::class,
+            $configure['consistency'] ?? ConsistencyService::class
+        );
         $this->app->singleton(DiscountServiceInterface::class, $configure['discount'] ?? DiscountService::class);
         $this->app->singleton(ExchangeServiceInterface::class, $configure['exchange'] ?? ExchangeService::class);
         $this->app->singleton(PrepareServiceInterface::class, $configure['prepare'] ?? PrepareService::class);

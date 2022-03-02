@@ -22,16 +22,10 @@ final class DatabaseService implements DatabaseServiceInterface
         private RegulatorServiceInterface $regulatorService,
         ConfigRepository $config
     ) {
-        $this->connection = $connectionResolver->connection(
-            $config->get('wallet.database.connection')
-        );
+        $this->connection = $connectionResolver->connection($config->get('wallet.database.connection'));
     }
 
     /**
-     * @throws RecordsNotFoundException
-     * @throws TransactionFailedException
-     * @throws ExceptionInterface
-     *
      * @return mixed
      */
     public function transaction(callable $callback)

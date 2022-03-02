@@ -16,12 +16,24 @@ class CreateWalletsTable extends Migration
             $table->bigIncrements('id');
             $table->morphs('holder');
             $table->string('name');
-            $table->string('slug')->index();
-            $table->uuid('uuid')->unique();
-            $table->string('description')->nullable();
-            $table->json('meta')->nullable();
-            $table->decimal('balance', 64, 0)->default(0);
-            $table->unsignedSmallInteger('decimal_places')->default(2);
+            $table->string('slug')
+                ->index()
+            ;
+            $table->uuid('uuid')
+                ->unique()
+            ;
+            $table->string('description')
+                ->nullable()
+            ;
+            $table->json('meta')
+                ->nullable()
+            ;
+            $table->decimal('balance', 64, 0)
+                ->default(0)
+            ;
+            $table->unsignedSmallInteger('decimal_places')
+                ->default(2)
+            ;
             $table->timestamps();
 
             $table->unique(['holder_type', 'holder_id', 'slug']);
