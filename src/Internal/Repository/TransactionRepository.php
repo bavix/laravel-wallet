@@ -46,9 +46,7 @@ final class TransactionRepository implements TransactionRepositoryInterface
         return $instance;
     }
 
-    /**
-     * @return Transaction[]
-     */
+    /** @return Transaction[] */
     public function findBy(TransactionQueryInterface $query): array
     {
         return $this->transaction->newQuery()

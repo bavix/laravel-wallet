@@ -65,9 +65,7 @@ trait CartPay
         });
     }
 
-    /**
-     * @return Transfer[]
-     */
+    /** @return Transfer[] */
     public function safePayCart(CartInterface $cart, bool $force = false): array
     {
         try {

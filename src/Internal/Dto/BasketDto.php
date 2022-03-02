@@ -9,9 +9,7 @@ use Generator;
 
 final class BasketDto implements BasketDtoInterface
 {
-    /**
-     * @param non-empty-array<int|string, ItemDtoInterface> $items
-     */
+    /** @param non-empty-array<int|string, ItemDtoInterface> $items */
     public function __construct(
         private array $items,
         private array $meta
@@ -33,9 +31,7 @@ final class BasketDto implements BasketDtoInterface
         return iterator_count($this->cursor());
     }
 
-    /**
-     * @return Generator<array-key, Product, mixed, void>
-     */
+    /** @return Generator<array-key, Product, mixed, void> */
     public function cursor(): Generator
     {
         foreach ($this->items as $item) {
@@ -43,9 +39,7 @@ final class BasketDto implements BasketDtoInterface
         }
     }
 
-    /**
-     * @return non-empty-array<int|string, ItemDtoInterface>
-     */
+    /** @return non-empty-array<int|string, ItemDtoInterface> */
     public function items(): array
     {
         return $this->items;
