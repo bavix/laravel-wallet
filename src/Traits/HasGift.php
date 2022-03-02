@@ -32,7 +32,9 @@ use Illuminate\Database\RecordsNotFoundException;
  */
 trait HasGift
 {
-    /** Give the goods safely. */
+    /**
+     * Give the goods safely.
+     */
     public function safeGift(Wallet $to, Product $product, bool $force = false): ?Transfer
     {
         try {
@@ -43,9 +45,8 @@ trait HasGift
     }
 
     /**
-     * From this moment on, each user (wallet) can give
-     * the goods to another user (wallet).
-     * This functionality can be organized for gifts.
+     * From this moment on, each user (wallet) can give the goods to another user (wallet). This functionality can be
+     * organized for gifts.
      *
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
@@ -68,7 +69,12 @@ trait HasGift
 
             $commonService = app(CommonServiceLegacy::class);
             $metaProduct = $product->getMetaProduct();
-            $withdraw = $commonService->makeTransaction($this, Transaction::TYPE_WITHDRAW, $mathService->add($amount, $fee), $metaProduct);
+            $withdraw = $commonService->makeTransaction(
+                $this,
+                Transaction::TYPE_WITHDRAW,
+                $mathService->add($amount, $fee),
+                $metaProduct
+            );
             $deposit = $commonService->makeTransaction($product, Transaction::TYPE_DEPOSIT, $amount, $metaProduct);
 
             $castService = app(CastServiceInterface::class);

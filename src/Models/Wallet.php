@@ -91,8 +91,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         $this->attributes['name'] = $name;
 
         /**
-         * Must be updated only if the model does not exist
-         *  or the slug is empty.
+         * Must be updated only if the model does not exist or the slug is empty.
          */
         if (!$this->exists && !array_key_exists('slug', $this->attributes)) {
             $this->attributes['slug'] = Str::slug($name);
@@ -100,8 +99,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     }
 
     /**
-     * Under ideal conditions, you will never need a method.
-     * Needed to deal with out-of-sync.
+     * Under ideal conditions, you will never need a method. Needed to deal with out-of-sync.
      *
      * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException

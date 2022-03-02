@@ -9,8 +9,15 @@ use Bavix\Wallet\Interfaces\Wallet;
 /** @psalm-immutable */
 final class TransferLazyDto implements TransferLazyDtoInterface
 {
-    public function __construct(private Wallet $fromWallet, private Wallet $toWallet, private int $discount, private string $fee, private TransactionDtoInterface $withdrawDto, private TransactionDtoInterface $depositDto, private string $status)
-    {
+    public function __construct(
+        private Wallet $fromWallet,
+        private Wallet $toWallet,
+        private int $discount,
+        private string $fee,
+        private TransactionDtoInterface $withdrawDto,
+        private TransactionDtoInterface $depositDto,
+        private string $status
+    ) {
     }
 
     public function getFromWallet(): Wallet

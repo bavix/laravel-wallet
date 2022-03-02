@@ -11,8 +11,9 @@ use Illuminate\Database\Eloquent\Model;
 
 final class TransactionDtoAssembler implements TransactionDtoAssemblerInterface
 {
-    public function __construct(private UuidFactoryServiceInterface $uuidService)
-    {
+    public function __construct(
+        private UuidFactoryServiceInterface $uuidService
+    ) {
     }
 
     public function create(

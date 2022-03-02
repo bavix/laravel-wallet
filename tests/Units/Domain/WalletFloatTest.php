@@ -17,7 +17,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-class WalletFloatTest extends TestCase
+final class WalletFloatTest extends TestCase
 {
     public function testDeposit(): void
     {

@@ -11,7 +11,9 @@ final class CreateManagersTable extends Migration
     public function up(): void
     {
         Schema::create('managers', static function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('id')
+                ->primary()
+            ;
             $table->string('name');
             $table->string('email');
             $table->timestamps();

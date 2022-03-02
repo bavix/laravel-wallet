@@ -16,8 +16,11 @@ final class AtomicService implements AtomicServiceInterface
 {
     private const PREFIX = 'wallet_atomic::';
 
-    public function __construct(private DatabaseServiceInterface $databaseService, private LockServiceInterface $lockService, private CastServiceInterface $castService)
-    {
+    public function __construct(
+        private DatabaseServiceInterface $databaseService,
+        private LockServiceInterface $lockService,
+        private CastServiceInterface $castService
+    ) {
     }
 
     /**

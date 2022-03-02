@@ -36,7 +36,9 @@ interface MathServiceInterface
      */
     public function pow($first, $second, ?int $scale = null): string;
 
-    /** @param float|int|string $number */
+    /**
+     * @param float|int|string $number
+     */
     public function powTen($number): string;
 
     /**

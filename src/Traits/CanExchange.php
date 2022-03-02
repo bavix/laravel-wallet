@@ -78,13 +78,19 @@ trait CanExchange
             $taxService = app(TaxServiceInterface::class);
             $fee = $taxService->getFee($to, $amount);
             $rate = app(ExchangeServiceInterface::class)->convertTo(
-                $castService->getWallet($this)->currency,
-                $castService->getWallet($to)->currency,
+                $castService->getWallet($this)
+                    ->currency,
+                $castService->getWallet($to)
+                    ->currency,
                 1
             );
 
             $withdrawDto = $prepareService->withdraw($this, $mathService->add($amount, $fee), $meta);
-            $depositDto = $prepareService->deposit($to, $mathService->floor($mathService->mul($amount, $rate, 1)), $meta);
+            $depositDto = $prepareService->deposit(
+                $to,
+                $mathService->floor($mathService->mul($amount, $rate, 1)),
+                $meta
+            );
             $transferLazyDto = app(TransferLazyDtoAssemblerInterface::class)->create(
                 $this,
                 $to,

@@ -11,7 +11,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-class EagerLoadingTest extends TestCase
+final class EagerLoadingTest extends TestCase
 {
     public function testUuidDuplicate(): void
     {

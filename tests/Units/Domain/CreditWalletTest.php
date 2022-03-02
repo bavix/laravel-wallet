@@ -11,7 +11,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
 /**
  * @internal
  */
-class CreditWalletTest extends TestCase
+final class CreditWalletTest extends TestCase
 {
     public function testCreditLimit(): void
     {
@@ -20,7 +20,10 @@ class CreditWalletTest extends TestCase
         $wallet = $user->createWallet([
             'name' => 'Credit USD',
             'slug' => 'credit-usd',
-            'meta' => ['credit' => 10000, 'currency' => 'USD'],
+            'meta' => [
+                'credit' => 10000,
+                'currency' => 'USD',
+            ],
         ]);
 
         $transaction = $wallet->deposit(1000);
@@ -41,7 +44,10 @@ class CreditWalletTest extends TestCase
         $wallet = $user->createWallet([
             'name' => 'Credit USD',
             'slug' => 'credit-usd',
-            'meta' => ['credit' => 10000, 'currency' => 'USD'],
+            'meta' => [
+                'credit' => 10000,
+                'currency' => 'USD',
+            ],
         ]);
 
         self::assertSame(0, $wallet->balanceInt);

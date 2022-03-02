@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 /**
  * @internal
  */
-class ExchangeTest extends TestCase
+final class ExchangeTest extends TestCase
 {
     public function testSimple(): void
     {
@@ -86,19 +86,29 @@ class ExchangeTest extends TestCase
     {
         /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
-        $usd = $user->createWallet(['name' => 'Dollar USA', 'slug' => 'my-usd', 'meta' => ['currency' => 'USD']]);
+        $usd = $user->createWallet([
+            'name' => 'Dollar USA',
+            'slug' => 'my-usd',
+            'meta' => [
+                'currency' => 'USD',
+            ],
+        ]);
         self::assertSame($usd->slug, 'my-usd');
         self::assertSame($usd->currency, 'USD');
         self::assertSame($usd->holder_id, $user->id);
         self::assertInstanceOf($usd->holder_type, $user);
 
-        $rub = $user->createWallet(['name' => 'RUB']);
+        $rub = $user->createWallet([
+            'name' => 'RUB',
+        ]);
         self::assertSame($rub->slug, 'rub');
         self::assertSame($rub->currency, 'RUB');
         self::assertSame($rub->holder_id, $user->id);
         self::assertInstanceOf($rub->holder_type, $user);
 
-        $superWallet = $user->createWallet(['name' => 'Super Wallet']);
+        $superWallet = $user->createWallet([
+            'name' => 'Super Wallet',
+        ]);
         self::assertSame($superWallet->slug, Str::slug('Super Wallet'));
         self::assertSame($superWallet->currency, Str::upper(Str::slug('Super Wallet')));
         self::assertSame($superWallet->holder_id, $user->id);

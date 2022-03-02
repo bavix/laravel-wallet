@@ -11,8 +11,11 @@ use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 final class StorageService implements StorageServiceInterface
 {
-    public function __construct(private LockServiceInterface $lockService, private MathServiceInterface $mathService, private CacheRepository $cacheRepository)
-    {
+    public function __construct(
+        private LockServiceInterface $lockService,
+        private MathServiceInterface $mathService,
+        private CacheRepository $cacheRepository
+    ) {
     }
 
     public function flush(): bool
@@ -25,7 +28,9 @@ final class StorageService implements StorageServiceInterface
         return $this->cacheRepository->forget($key);
     }
 
-    /** @throws RecordNotFoundException */
+    /**
+     * @throws RecordNotFoundException
+     */
     public function get(string $key): string
     {
         $value = $this->cacheRepository->get($key);
@@ -39,7 +44,9 @@ final class StorageService implements StorageServiceInterface
         return $this->mathService->round($value);
     }
 
-    /** @param float|int|string $value */
+    /**
+     * @param float|int|string $value
+     */
     public function sync(string $key, $value): bool
     {
         return $this->cacheRepository->set($key, $value);

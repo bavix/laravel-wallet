@@ -17,7 +17,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * @internal
  */
-class BalanceTest extends TestCase
+final class BalanceTest extends TestCase
 {
     public function testDepositWalletExists(): void
     {
@@ -111,7 +111,10 @@ class BalanceTest extends TestCase
         $result = app(RegulatorServiceInterface::class)->increase($wallet, 100);
 
         // databases that do not support fk will not delete data... need to help them
-        $wallet->transactions()->where('wallet_id', $key)->delete();
+        $wallet->transactions()
+            ->where('wallet_id', $key)
+            ->delete()
+        ;
 
         self::assertFalse($wallet->exists);
         self::assertSame(1100, (int) $result);
@@ -160,16 +163,31 @@ class BalanceTest extends TestCase
 
         /** @var MockObject|Wallet $mockQuery */
         $mockQuery = $this->createMock($wallet->newQuery()::class);
-        $mockQuery->method('whereKey')->willReturn($mockQuery);
-        $mockQuery->method('update')->willThrowException(new PDOException());
+        $mockQuery->method('whereKey')
+            ->willReturn($mockQuery)
+        ;
+        $mockQuery->method('update')
+            ->willThrowException(new PDOException())
+        ;
 
         /** @var MockObject|Wallet $mockWallet */
         $mockWallet = $this->createMock($wallet::class);
-        $mockWallet->method('getBalanceAttribute')->willReturn('125');
-        $mockWallet->method('newQuery')->willReturn($mockQuery);
-        $mockWallet->method('getKey')->willReturn($wallet->getKey());
+        $mockWallet->method('getBalanceAttribute')
+            ->willReturn('125')
+        ;
+        $mockWallet->method('newQuery')
+            ->willReturn($mockQuery)
+        ;
+        $mockWallet->method('getKey')
+            ->willReturn($wallet->getKey())
+        ;
 
-        $mockWallet->newQuery()->whereKey($wallet->getKey())->update(['balance' => 100]);
+        $mockWallet->newQuery()
+            ->whereKey($wallet->getKey())
+            ->update([
+                'balance' => 100,
+            ])
+        ;
     }
 
     public function testEqualWallet(): void

@@ -80,7 +80,9 @@ trait CartPay
         });
     }
 
-    /** @return Transfer[] */
+    /**
+     * @return Transfer[]
+     */
     public function safePayCart(CartInterface $cart, bool $force = false): array
     {
         try {
@@ -176,7 +178,8 @@ trait CartPay
             $transfers = app(PurchaseServiceInterface::class)->already($this, $cart->getBasketDto(), $gifts);
             if (count($transfers) !== $cart->getBasketDto()->total()) {
                 throw new ModelNotFoundException(
-                    "No query results for model [{$this->transfers()->getMorphClass()}]",
+                    "No query results for model [{$this->transfers()
+                        ->getMorphClass()}]",
                     ExceptionInterface::MODEL_NOT_FOUND
                 );
             }
@@ -187,8 +190,8 @@ trait CartPay
                 $transfer = current($transfers);
                 next($transfers);
                 /**
-                 * the code is extremely poorly written, a complete refactoring is required.
-                 * for version 6.x we will leave it as it is.
+                 * the code is extremely poorly written, a complete refactoring is required. for version 6.x we will
+                 * leave it as it is.
                  */
                 $transfer->load('withdraw.wallet'); // fixme: need optimize
 
