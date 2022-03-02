@@ -16,9 +16,7 @@ final class RegulatorService implements RegulatorServiceInterface
 {
     private string $idempotentKey;
 
-    /**
-     * @var Wallet[]
-     */
+    /** @var Wallet[] */
     private array $wallets = [];
 
     public function __construct(
@@ -55,9 +53,7 @@ final class RegulatorService implements RegulatorServiceInterface
         );
     }
 
-    /**
-     * @param float|int|string $value
-     */
+    /** @param float|int|string $value */
     public function sync(Wallet $wallet, $value): bool
     {
         $this->persist($wallet);
@@ -70,9 +66,7 @@ final class RegulatorService implements RegulatorServiceInterface
         );
     }
 
-    /**
-     * @param float|int|string $value
-     */
+    /** @param float|int|string $value */
     public function increase(Wallet $wallet, $value): string
     {
         $this->persist($wallet);
@@ -87,9 +81,7 @@ final class RegulatorService implements RegulatorServiceInterface
         return $this->amount($wallet);
     }
 
-    /**
-     * @param float|int|string $value
-     */
+    /** @param float|int|string $value */
     public function decrease(Wallet $wallet, $value): string
     {
         return $this->increase($wallet, $this->mathService->negative($value));

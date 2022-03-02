@@ -13,9 +13,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 final class DispatcherService implements DispatcherServiceInterface
 {
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private array $events = [];
 
     public function __construct(
