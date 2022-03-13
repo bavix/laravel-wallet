@@ -194,3 +194,33 @@ On a basket of 150 products, the acceleration is a whopping 24x.
 All changes can be found in the [pull request](https://github.com/bavix/laravel-wallet/pull/407/files). 
 The kernel has changed globally, I would not recommend switching to version 7.0.0 at the very beginning, there may be bugs. 
 I advise you should at least 7.0.1.
+
+## 7.x.x → 8.0.x
+
+Nothing needs to be done.
+
+## 8.0.x → 8.1.x
+
+Replace `getAvailableBalance` to `getAvailableBalanceAttribute` (method) or `available_balance` (property).
+
+---
+
+Cart methods now support fluent-dto. It is necessary to replace the old code with a new one, for example:
+
+```php
+// old
+$cart = app(\Bavix\Wallet\Objects\Cart::class)
+    ->addItems($products)
+    ->addItem($product)
+    ->setMeta(['hello' => 'world']);
+    
+$cart->addItem($product);
+
+// new. fluent
+$cart = app(\Bavix\Wallet\Objects\Cart::class)
+    ->withItems($products)
+    ->withItem($product)
+    ->withMeta(['hello' => 'world']);
+
+$cart = $cart->withItem($product);
+```
