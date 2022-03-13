@@ -63,14 +63,6 @@ trait HasWallet
     /**
      * Magic laravel framework method, makes it possible to call property balance.
      *
-     * Example: $user1 = User::first()->load('wallet'); $user2 = User::first()->load('wallet');
-     *
-     * Without static: var_dump($user1->balance, $user2->balance); // 100 100 $user1->deposit(100);
-     * $user2->deposit(100); var_dump($user1->balance, $user2->balance); // 200 200
-     *
-     * With static: var_dump($user1->balance, $user2->balance); // 100 100 $user1->deposit(100);
-     * var_dump($user1->balance); // 200 $user2->deposit(100); var_dump($user2->balance); // 300
-     *
      * @return float|int|string
      */
     public function getBalanceAttribute()
@@ -197,8 +189,8 @@ trait HasWallet
     }
 
     /**
-     * the forced transfer is needed when the user does not have the money and we drive it. Sometimes you do. Depends on
-     * business logic.
+     * the forced transfer is needed when the user does not have the money, and we drive it. Sometimes you do. Depends
+     * on business logic.
      *
      * @param int|string $amount
      *
