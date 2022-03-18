@@ -59,7 +59,7 @@ final class DatabaseService implements DatabaseServiceInterface
             $this->regulatorService->purge();
 
             throw new TransactionFailedException(
-                'Transaction failed',
+                'Transaction failed. Message: ' . $throwable->getMessage(),
                 ExceptionInterface::TRANSACTION_FAILED,
                 $throwable
             );
