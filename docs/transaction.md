@@ -1,5 +1,7 @@
 ## Transaction
 
+> Is it possible to use laravel's inline transactions? No, It is Immpossible. This limitation is due to the internal architecture of the package. To achieve the maximum speed of work, work with an internal state of balance was needed. Starting with version 8.2, a special error has appeared that will inform you about incorrect work with the `TransactionStartException` package.
+
 Sometimes you need to execute many simple queries. You want to keep the data atomic. To do this, you need `laravel-wallet` v7.1+.
 
 It is necessary to write off the amount from the balance and raise the ad in the search. What happens if the service for raising an ad fails? We wrote off the money, but did not raise the ad. Received reputational losses. We can imagine the opposite situation, we first raise the ad in the search, but it does not work to write off the money. There are not enough funds. This functionality will help to solve all this. We monitor ONLY the state of the wallet, the rest falls on the developer. Let's take an unsuccessful lift, for example.
