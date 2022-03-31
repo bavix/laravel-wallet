@@ -21,4 +21,5 @@ interface ExceptionInterface extends Throwable
     public const TRANSACTION_FAILED = 1 << 10;
     public const MODEL_NOT_FOUND = 1 << 11;
     public const UNKNOWN_EVENT = 1 << 12;
+    public const TRANSACTION_START = 1 << 13;
 }

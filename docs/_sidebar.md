@@ -23,6 +23,10 @@
     - [Transfer](wallet-transfer)
     - [Transaction Filter](transaction-filter)
 
+- Nova
+
+    - [Change of balance](nova-action)
+
 - Purchases
 
     - [Payment](payment)
