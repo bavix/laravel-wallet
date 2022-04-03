@@ -65,7 +65,7 @@
     "unit":"@php vendor/bin/phpunit --coverage-xml=build/coverage-xml --log-junit=build/junit.xml",
     "paraunit":"@php vendor/bin/paratest --coverage-xml=build/coverage-xml --log-junit=build/junit.xml",
     "parabench":"@php ./vendor/bin/testbench package:test --parallel --coverage-xml=build/coverage-xml --log-junit=build/junit.xml",
-    "infect": "@php vendor/bin/infection --coverage=build --min-msi=50 -j$(nproc)",
+    "infect": "@php vendor/bin/infection --coverage=build --min-msi=50 -j$(nproc) --only-covering-test-cases",
     "phpstan": "@php vendor/bin/phpstan analyse -vvv --debug --memory-limit 2G -l 7 src/",
     "phpstan-baseline": "@php vendor/bin/phpstan analyse -vvv --debug --memory-limit 2G -l 7 src/ --generate-baseline",
     "ecs": "@php vendor/bin/ecs check",
