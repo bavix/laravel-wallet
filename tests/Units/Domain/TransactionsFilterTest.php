@@ -63,4 +63,39 @@ final class TransactionsFilterTest extends TestCase
 
         self::assertSame(3, $countByPeriods);
     }
+
+    public function testTransferMeta(): void
+    {
+        /**
+         * @var Buyer $buyer1
+         * @var Buyer $buyer2
+         */
+        [$buyer1, $buyer2] = BuyerFactory::times(2)->create();
+        $buyer1->deposit(1000);
+
+        self::assertSame(1000, $buyer1->balanceInt);
+
+        $buyer1->transfer($buyer2, 500, [
+            'type' => 'credit',
+        ]);
+
+        self::assertSame(500, $buyer1->balanceInt);
+        self::assertSame(500, $buyer2->balanceInt);
+
+        self::assertSame(2, $buyer1->transactions()->count());
+        self::assertSame(1, $buyer2->transactions()->count());
+
+        $credits1 = $buyer1->transactions()
+            ->where('meta->type', 'credit')
+            ->count()
+        ;
+
+        $credits2 = $buyer2->transactions()
+            ->where('meta->type', 'credit')
+            ->count()
+        ;
+
+        self::assertSame(1, $credits1);
+        self::assertSame(1, $credits2);
+    }
 }
