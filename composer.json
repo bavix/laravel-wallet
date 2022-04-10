@@ -34,17 +34,17 @@
   },
   "require-dev": {
     "brianium/paratest": "^6.4",
-    "cknow/laravel-money": "dev-master",
+    "cknow/laravel-money": "^6.3",
     "ergebnis/phpstan-rules": "^1.0",
     "infection/infection": "~0.26",
     "laravel/cashier": "^13.6",
     "nunomaduro/collision": "^6.0",
     "orchestra/testbench": "^7.0",
-    "phpstan/phpstan": "^1.3",
+    "phpstan/phpstan": "^1.5",
     "phpunit/phpunit": "^9.5",
     "rector/rector": "^0.12",
     "symplify/easy-coding-standard": "^10.0",
-    "vimeo/psalm": "^4.18"
+    "vimeo/psalm": "^4.22"
   },
   "suggest": {
     "bavix/laravel-wallet-swap": "Addition to the laravel-wallet library for quick setting of exchange rates",
@@ -64,7 +64,7 @@
     "docs": "@php -S localhost:3000 -t ./docs",
     "unit":"@php vendor/bin/phpunit --coverage-xml=build/coverage-xml --log-junit=build/junit.xml",
     "paraunit":"@php vendor/bin/paratest --coverage-xml=build/coverage-xml --log-junit=build/junit.xml",
-    "parabench":"@php ./vendor/bin/testbench package:test --parallel --coverage-xml=build/coverage-xml --log-junit=build/junit.xml",
+    "parabench":"@php ./vendor/bin/testbench package:test --coverage-xml=build/coverage-xml --log-junit=build/junit.xml",
     "infect": "@php vendor/bin/infection --coverage=build --min-msi=50 -j$(nproc) --only-covering-test-cases",
     "phpstan": "@php vendor/bin/phpstan analyse -vvv --debug --memory-limit 2G -l 7 src/",
     "phpstan-baseline": "@php vendor/bin/phpstan analyse -vvv --debug --memory-limit 2G -l 7 src/ --generate-baseline",
