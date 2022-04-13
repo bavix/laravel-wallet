@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Service;
 
-use Bavix\Wallet\Internal\Events\BalanceUpdatedEventInterface;
 use Bavix\Wallet\Internal\Events\EventInterface;
-use Bavix\Wallet\Internal\Events\WalletCreatedEventInterface;
-use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
-use Bavix\Wallet\Internal\Exceptions\UnknownEventException;
 use Illuminate\Contracts\Events\Dispatcher;
 
 final class DispatcherService implements DispatcherServiceInterface
@@ -25,9 +21,8 @@ final class DispatcherService implements DispatcherServiceInterface
 
     public function dispatch(EventInterface $event): void
     {
-        $name = $this->getEventName($event);
-        $this->events[] = $name;
-        $this->dispatcher->push($name, [$event]);
+        $this->events[] = $event::class;
+        $this->dispatcher->push($event::class, [$event]);
     }
 
     public function flush(): void
@@ -42,21 +37,5 @@ final class DispatcherService implements DispatcherServiceInterface
         foreach ($this->events as $event) {
             $this->dispatcher->forget($event);
         }
-    }
-
-    /**
-     * @throws UnknownEventException
-     */
-    private function getEventName(EventInterface $event): string
-    {
-        if ($event instanceof BalanceUpdatedEventInterface) {
-            return BalanceUpdatedEventInterface::class;
-        }
-
-        if ($event instanceof WalletCreatedEventInterface) {
-            return WalletCreatedEventInterface::class;
-        }
-
-        throw new UnknownEventException('Unknown event '.$event::class, ExceptionInterface::UNKNOWN_EVENT);
     }
 }
