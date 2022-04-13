@@ -36,7 +36,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set(Option::SKIP, [
         PhpdocToCommentFixer::class,
-        NoUnusedImportsFixer::class,
         GeneralPhpdocAnnotationRemoveFixer::class,
         NotOperatorWithSuccessorSpaceFixer::class,
         PhpUnitTestClassRequiresCoversFixer::class,
