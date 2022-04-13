@@ -27,7 +27,7 @@ final class Cart implements Countable, CartInterface
     private array $items = [];
 
     /**
-     * @var array<string, string>
+     * @var array<string, int>
      */
     private array $quantity = [];
 
@@ -67,7 +67,14 @@ final class Cart implements Countable, CartInterface
 
     public function withItem(Product $product, int $quantity = 1): self
     {
-        return (clone $this)->addItem($product, $quantity);
+        $self = clone $this;
+
+        $productId = $self->productId($product);
+
+        $self->quantity[$productId] = $self->getQuantity($product) + $quantity;
+        $self->items[$productId] = $product;
+
+        return $self;
     }
 
     /**
@@ -78,9 +85,10 @@ final class Cart implements Countable, CartInterface
      */
     public function addItem(Product $product, int $quantity = 1): self
     {
-        $this->addQuantity($product, $quantity);
-        $products = array_fill(0, $quantity, $product);
-        $this->items = array_merge($this->items, $products);
+        $productId = $this->productId($product);
+
+        $this->quantity[$productId] = $this->getQuantity($product) + $quantity;
+        $this->items[$productId] = $product;
 
         return $this;
     }
@@ -115,7 +123,15 @@ final class Cart implements Countable, CartInterface
      */
     public function getItems(): array
     {
-        return $this->items;
+        $items = [];
+        foreach ($this->items as $item) {
+            $count = $this->getQuantity($item);
+            for ($i = 0; $i < $count; ++$i) {
+                $items[] = $item;
+            }
+        }
+
+        return $items;
     }
 
     /**
@@ -123,14 +139,15 @@ final class Cart implements Countable, CartInterface
      */
     public function getUniqueItems(): array
     {
-        return array_unique($this->items);
+        return $this->items;
     }
 
     public function getTotal(Customer $customer): string
     {
         $result = 0;
         foreach ($this->items as $item) {
-            $result = $this->math->add($result, $item->getAmountProduct($customer));
+            $price = $this->math->mul($this->getQuantity($item), $item->getAmountProduct($customer));
+            $result = $this->math->add($result, $price);
         }
 
         return (string) $result;
@@ -143,9 +160,7 @@ final class Cart implements Countable, CartInterface
 
     public function getQuantity(Product $product): int
     {
-        $model = $this->castService->getModel($product);
-
-        return (int) ($this->quantity[$product::class.':'.$model->getKey()] ?? 0);
+        return $this->quantity[$this->productId($product)] ?? 0;
     }
 
     /**
@@ -165,12 +180,8 @@ final class Cart implements Countable, CartInterface
         return new BasketDto($items, $this->getMeta());
     }
 
-    private function addQuantity(Product $product, int $quantity): void
+    private function productId(Product $product): string
     {
-        $model = $this->castService->getModel($product);
-
-        $this->quantity[$product::class.':'.$model->getKey()] = $this->math
-            ->add($this->getQuantity($product), $quantity)
-        ;
+        return $product::class.':'.$this->castService->getModel($product)->getKey();
     }
 }
