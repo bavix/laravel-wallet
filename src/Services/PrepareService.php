@@ -83,10 +83,11 @@ final class PrepareService implements PrepareServiceInterface
         ?array $meta = null
     ): TransferLazyDtoInterface {
         $discount = $this->personalDiscountService->getDiscount($from, $to);
+        $toWallet = $this->castService->getWallet($to);
         $from = $this->castService->getWallet($from);
         $fee = $this->taxService->getFee($to, $amount);
 
-        $amountWithoutDiscount = $this->mathService->sub($amount, $discount);
+        $amountWithoutDiscount = $this->mathService->sub($amount, $discount, $toWallet->decimal_places);
         $depositAmount = $this->mathService->compare($amountWithoutDiscount, 0) === -1 ? '0' : $amountWithoutDiscount;
         $withdrawAmount = $this->mathService->add($depositAmount, $fee, $from->decimal_places);
 
