@@ -305,6 +305,29 @@ final class WalletFloatTest extends TestCase
     }
 
     /**
+     * Case from @EdX9.
+     *
+     * @see https://github.com/bavix/laravel-wallet/issues/469
+     *
+     * @throws ExceptionInterface
+     */
+    public function testBigFloat(): void
+    {
+        /** @var User[] $users */
+        $users = UserFloatFactory::times(2)->create();
+
+        [$first, $second] = $users;
+
+        self::assertSame(0, $first->balanceInt);
+        self::assertSame(0, $second->balanceInt);
+
+        $first->forceTransferFloat($second, 6629944401);
+
+        self::assertSame(-662994440100, $first->balanceInt);
+        self::assertSame(662994440100, $second->balanceInt);
+    }
+
+    /**
      * Case from @ucanbehack.
      *
      * @see https://github.com/bavix/laravel-wallet/issues/149
