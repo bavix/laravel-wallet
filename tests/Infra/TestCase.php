@@ -65,6 +65,9 @@ abstract class TestCase extends OrchestraTestCase
         $config->set('database.connections.mariadb', array_merge($mysql, [
             'port' => 3307,
         ]));
+        $config->set('database.connections.mysql57', array_merge($mysql, [
+            'port' => 3308,
+        ]));
 
         // new table name's
         $config->set('wallet.transaction.table', 'transaction');
