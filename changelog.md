@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.2.1] - 2022-04-14
+### Fixed
+- Error in force transaction float #469 @EdX9
+
 ## [8.2.0] - 2022-04-03
 ### Added
 - Add exception `TransactionStartException`
@@ -819,7 +823,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/8.2.0...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/8.2.1...develop
+[8.2.1]: https://github.com/bavix/laravel-wallet/compare/8.2.0...8.2.1
 [8.2.0]: https://github.com/bavix/laravel-wallet/compare/8.1.1...8.2.0
 [8.1.1]: https://github.com/bavix/laravel-wallet/compare/8.1.0...8.1.1
 [8.1.0]: https://github.com/bavix/laravel-wallet/compare/8.0.6...8.1.0
