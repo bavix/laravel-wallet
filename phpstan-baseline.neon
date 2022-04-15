@@ -6,7 +6,7 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\:\\:where\\(\\)\\.$#"
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\:\\:with\\(\\)\\.$#"
 			count: 1
 			path: src/Services/PurchaseService.php
 

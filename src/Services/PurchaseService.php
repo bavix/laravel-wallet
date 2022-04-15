@@ -22,7 +22,14 @@ final class PurchaseService implements PurchaseServiceInterface
         foreach ($basketDto->items() as $itemDto) {
             /** @var Model $product */
             $product = $itemDto->product();
+
+            /**
+             * As part of my work, "with" was added, it gives a 50x boost for a huge number of returns. In this case,
+             * it's a crutch. It is necessary to come up with a more correct implementation of the internal and external
+             * interface for "purchases".
+             */
             $arrays[] = (clone $query)
+                ->with(['deposit', 'withdraw.wallet'])
                 ->where('to_type', $product->getMorphClass())
                 ->where('to_id', $product->getKey())
                 ->whereIn('status', $status)
