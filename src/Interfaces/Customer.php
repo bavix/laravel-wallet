@@ -194,5 +194,10 @@ interface Customer extends Wallet
      */
     public function forceRefundGiftCart(CartInterface $cart): bool;
 
+    /**
+     * Checks acquired product your wallet.
+     *
+     * @deprecated The method is slow and will be removed in the future
+     */
     public function paid(Product $product, bool $gifts = false): ?Transfer;
 }

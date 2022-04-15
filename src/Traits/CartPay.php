@@ -184,24 +184,20 @@ trait CartPay
                 );
             }
 
+            $index = 0;
             $objects = [];
+            $transfers = array_values($transfers);
             $prepareService = app(PrepareServiceInterface::class);
             foreach ($cart->getBasketDto()->cursor() as $product) {
-                $transfer = current($transfers);
-                next($transfers);
-                /**
-                 * the code is extremely poorly written, a complete refactoring is required. for version 6.x we will
-                 * leave it as it is.
-                 */
-                $transfer->load('withdraw.wallet'); // fixme: need optimize
-
                 $objects[] = $prepareService->transferLazy(
                     $product,
-                    $transfer->withdraw->wallet,
+                    $transfers[$index]->withdraw->wallet,
                     Transfer::STATUS_TRANSFER,
-                    $transfer->deposit->amount, // fixme: need optimize
+                    $transfers[$index]->deposit->amount,
                     app(MetaServiceLegacy::class)->getMeta($cart, $product)
                 );
+
+                ++$index;
             }
 
             if ($force === false) {
@@ -274,6 +270,8 @@ trait CartPay
 
     /**
      * Checks acquired product your wallet.
+     *
+     * @deprecated The method is slow and will be removed in the future
      */
     public function paid(Product $product, bool $gifts = false): ?Transfer
     {
