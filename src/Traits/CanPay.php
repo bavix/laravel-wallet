@@ -7,7 +7,7 @@ namespace Bavix\Wallet\Traits;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Exceptions\ProductEnded;
-use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Interfaces\ProductInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
@@ -36,12 +36,12 @@ trait CanPay
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function payFree(Product $product): Transfer
+    public function payFree(ProductInterface $product): Transfer
     {
         return current($this->payFreeCart(app(Cart::class)->withItem($product)));
     }
 
-    public function safePay(Product $product, bool $force = false): ?Transfer
+    public function safePay(ProductInterface $product, bool $force = false): ?Transfer
     {
         return current($this->safePayCart(app(Cart::class)->withItem($product), $force)) ?: null;
     }
@@ -56,7 +56,7 @@ trait CanPay
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function pay(Product $product, bool $force = false): Transfer
+    public function pay(ProductInterface $product, bool $force = false): Transfer
     {
         return current($this->payCart(app(Cart::class)->withItem($product), $force));
     }
@@ -69,12 +69,12 @@ trait CanPay
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function forcePay(Product $product): Transfer
+    public function forcePay(ProductInterface $product): Transfer
     {
         return current($this->forcePayCart(app(Cart::class)->withItem($product)));
     }
 
-    public function safeRefund(Product $product, bool $force = false, bool $gifts = false): bool
+    public function safeRefund(ProductInterface $product, bool $force = false, bool $gifts = false): bool
     {
         return $this->safeRefundCart(app(Cart::class)->withItem($product), $force, $gifts);
     }
@@ -89,7 +89,7 @@ trait CanPay
      * @throws ModelNotFoundException
      * @throws ExceptionInterface
      */
-    public function refund(Product $product, bool $force = false, bool $gifts = false): bool
+    public function refund(ProductInterface $product, bool $force = false, bool $gifts = false): bool
     {
         return $this->refundCart(app(Cart::class)->withItem($product), $force, $gifts);
     }
@@ -102,12 +102,12 @@ trait CanPay
      * @throws ModelNotFoundException
      * @throws ExceptionInterface
      */
-    public function forceRefund(Product $product, bool $gifts = false): bool
+    public function forceRefund(ProductInterface $product, bool $gifts = false): bool
     {
         return $this->forceRefundCart(app(Cart::class)->withItem($product), $gifts);
     }
 
-    public function safeRefundGift(Product $product, bool $force = false): bool
+    public function safeRefundGift(ProductInterface $product, bool $force = false): bool
     {
         return $this->safeRefundGiftCart(app(Cart::class)->withItem($product), $force);
     }
@@ -122,7 +122,7 @@ trait CanPay
      * @throws ModelNotFoundException
      * @throws ExceptionInterface
      */
-    public function refundGift(Product $product, bool $force = false): bool
+    public function refundGift(ProductInterface $product, bool $force = false): bool
     {
         return $this->refundGiftCart(app(Cart::class)->withItem($product), $force);
     }
@@ -135,7 +135,7 @@ trait CanPay
      * @throws ModelNotFoundException
      * @throws ExceptionInterface
      */
-    public function forceRefundGift(Product $product): bool
+    public function forceRefundGift(ProductInterface $product): bool
     {
         return $this->forceRefundGiftCart(app(Cart::class)->withItem($product));
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Interfaces\ProductLimitedInterface;
 use Bavix\Wallet\Internal\Dto\AvailabilityDtoInterface;
 
 final class BasketService implements BasketServiceInterface
@@ -13,7 +14,12 @@ final class BasketService implements BasketServiceInterface
         $basketDto = $availabilityDto->getBasketDto();
         $customer = $availabilityDto->getCustomer();
         foreach ($basketDto->items() as $itemDto) {
-            if (!$itemDto->product()->canBuy($customer, $itemDto->count(), $availabilityDto->isForce())) {
+            $product = $itemDto->product();
+            if ($product instanceof ProductLimitedInterface && !$product->canBuy(
+                $customer,
+                $itemDto->count(),
+                $availabilityDto->isForce()
+            )) {
                 return false;
             }
         }

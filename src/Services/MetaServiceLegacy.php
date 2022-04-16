@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Interfaces\CartInterface;
-use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Interfaces\ProductInterface;
 
 /** @deprecated */
 final class MetaServiceLegacy
 {
-    public function getMeta(CartInterface $cart, Product $product): ?array
+    public function getMeta(CartInterface $cart, ProductInterface $product): ?array
     {
         $metaCart = $cart->getBasketDto()
             ->meta()
