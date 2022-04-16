@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test\Infra\Models;
 
 use Bavix\Wallet\Interfaces\Customer;
-use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Interfaces\ProductLimitedInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CastService;
@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property int    $quantity
  * @property int    $price
  */
-class Item extends Model implements Product
+class Item extends Model implements ProductLimitedInterface
 {
     use HasWallet;
 
