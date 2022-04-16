@@ -16,9 +16,9 @@ final class AssistantService implements AssistantServiceInterface
     }
 
     /**
-     * @param non-empty-array<TransactionDtoInterface|TransferDtoInterface> $objects
+     * @param non-empty-array<array-key, TransactionDtoInterface|TransferDtoInterface> $objects
      *
-     * @return non-empty-array<int|string, string>
+     * @return non-empty-array<array-key, string>
      */
     public function getUuids(array $objects): array
     {
@@ -26,7 +26,7 @@ final class AssistantService implements AssistantServiceInterface
     }
 
     /**
-     * @param non-empty-array<TransactionDtoInterface> $transactions
+     * @param non-empty-array<array-key, TransactionDtoInterface> $transactions
      *
      * @return array<int, string>
      */

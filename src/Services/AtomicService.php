@@ -28,10 +28,8 @@ final class AtomicService implements AtomicServiceInterface
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
-     *
-     * @return mixed
      */
-    public function block(Wallet $object, callable $callback)
+    public function block(Wallet $object, callable $callback): mixed
     {
         return $this->lockService->block(
             $this->key($object),

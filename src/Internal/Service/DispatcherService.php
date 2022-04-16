@@ -10,7 +10,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 final class DispatcherService implements DispatcherServiceInterface
 {
     /**
-     * @var string[]
+     * @var array<string, bool>
      */
     private array $events = [];
 
@@ -21,20 +21,20 @@ final class DispatcherService implements DispatcherServiceInterface
 
     public function dispatch(EventInterface $event): void
     {
-        $this->events[] = $event::class;
+        $this->events[$event::class] = true;
         $this->dispatcher->push($event::class, [$event]);
     }
 
     public function flush(): void
     {
-        foreach ($this->events as $event) {
+        foreach ($this->events as $event => $value) {
             $this->dispatcher->flush($event);
         }
     }
 
     public function forgot(): void
     {
-        foreach ($this->events as $event) {
+        foreach ($this->events as $event => $value) {
             $this->dispatcher->forget($event);
         }
     }

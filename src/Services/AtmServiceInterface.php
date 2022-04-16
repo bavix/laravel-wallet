@@ -12,14 +12,14 @@ use Bavix\Wallet\Models\Transfer;
 interface AtmServiceInterface
 {
     /**
-     * @param non-empty-array<int|string, TransactionDtoInterface> $objects
+     * @param non-empty-array<array-key, TransactionDtoInterface> $objects
      *
      * @return non-empty-array<string, Transaction>
      */
     public function makeTransactions(array $objects): array;
 
     /**
-     * @param non-empty-array<int|string, TransferDtoInterface> $objects
+     * @param non-empty-array<array-key, TransferDtoInterface> $objects
      *
      * @return non-empty-array<string, Transfer>
      */

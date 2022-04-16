@@ -13,7 +13,7 @@ use Bavix\Wallet\Internal\Repository\TransferRepositoryInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 
-/** @psalm-internal */
+/** @internal */
 final class AtmService implements AtmServiceInterface
 {
     public function __construct(
@@ -26,7 +26,7 @@ final class AtmService implements AtmServiceInterface
     }
 
     /**
-     * @param non-empty-array<int|string, TransactionDtoInterface> $objects
+     * @param non-empty-array<array-key, TransactionDtoInterface> $objects
      *
      * @return non-empty-array<string, Transaction>
      */
@@ -52,7 +52,7 @@ final class AtmService implements AtmServiceInterface
     }
 
     /**
-     * @param non-empty-array<int|string, TransferDtoInterface> $objects
+     * @param non-empty-array<array-key, TransferDtoInterface> $objects
      *
      * @return non-empty-array<string, Transfer>
      */

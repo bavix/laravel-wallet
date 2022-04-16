@@ -10,9 +10,9 @@ use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
 interface AssistantServiceInterface
 {
     /**
-     * @param non-empty-array<TransactionDtoInterface|TransferDtoInterface> $objects
+     * @param non-empty-array<array-key, TransactionDtoInterface|TransferDtoInterface> $objects
      *
-     * @return non-empty-array<int|string, string>
+     * @return non-empty-array<array-key, string>
      */
     public function getUuids(array $objects): array;
 
