@@ -9,7 +9,7 @@ use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Interfaces\CartInterface;
-use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Interfaces\ProductInterface;
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
@@ -273,7 +273,7 @@ trait CartPay
      *
      * @deprecated The method is slow and will be removed in the future
      */
-    public function paid(Product $product, bool $gifts = false): ?Transfer
+    public function paid(ProductInterface $product, bool $gifts = false): ?Transfer
     {
         $cart = app(Cart::class)->withItem($product);
         $purchases = app(PurchaseServiceInterface::class)
