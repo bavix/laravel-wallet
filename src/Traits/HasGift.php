@@ -7,7 +7,7 @@ namespace Bavix\Wallet\Traits;
 use function app;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
-use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Interfaces\ProductInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
@@ -35,7 +35,7 @@ trait HasGift
     /**
      * Give the goods safely.
      */
-    public function safeGift(Wallet $to, Product $product, bool $force = false): ?Transfer
+    public function safeGift(Wallet $to, ProductInterface $product, bool $force = false): ?Transfer
     {
         try {
             return $this->gift($to, $product, $force);
@@ -55,7 +55,7 @@ trait HasGift
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function gift(Wallet $to, Product $product, bool $force = false): Transfer
+    public function gift(Wallet $to, ProductInterface $product, bool $force = false): Transfer
     {
         return app(AtomicServiceInterface::class)->block($this, function () use ($to, $product, $force): Transfer {
             $mathService = app(MathServiceInterface::class);
@@ -103,7 +103,7 @@ trait HasGift
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function forceGift(Wallet $to, Product $product): Transfer
+    public function forceGift(Wallet $to, ProductInterface $product): Transfer
     {
         return $this->gift($to, $product, true);
     }
