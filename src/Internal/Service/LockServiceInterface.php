@@ -10,8 +10,6 @@ interface LockServiceInterface
 {
     /**
      * @throws LockProviderNotFoundException
-     *
-     * @return mixed
      */
-    public function block(string $key, callable $callback);
+    public function block(string $key, callable $callback): mixed;
 }

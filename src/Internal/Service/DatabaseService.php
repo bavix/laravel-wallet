@@ -32,10 +32,8 @@ final class DatabaseService implements DatabaseServiceInterface
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
-     *
-     * @return mixed
      */
-    public function transaction(callable $callback)
+    public function transaction(callable $callback): mixed
     {
         $level = $this->connection->transactionLevel();
         if ($level > 0 && !$this->init) {
