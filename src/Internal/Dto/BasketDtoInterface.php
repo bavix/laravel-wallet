@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Dto;
 
-use Bavix\Wallet\Interfaces\Product;
+use Bavix\Wallet\Interfaces\ProductInterface;
 use Countable;
 use Generator;
 
@@ -20,7 +20,7 @@ interface BasketDtoInterface extends Countable
     public function items(): array;
 
     /**
-     * @return Generator<array-key, Product, mixed, void>
+     * @return Generator<array-key, ProductInterface, mixed, void>
      */
     public function cursor(): Generator;
 }
