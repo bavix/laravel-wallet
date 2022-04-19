@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Bavix\Wallet\Objects;
+namespace Bavix\Wallet\External\Dto;
 
-use Bavix\Wallet\External\ExtraDtoInterface;
-use Bavix\Wallet\External\OptionDtoInterface;
+use Bavix\Wallet\External\Contracts\ExtraDtoInterface;
+use Bavix\Wallet\External\Contracts\OptionDtoInterface;
 
 final class Extra implements ExtraDtoInterface
 {
@@ -18,12 +18,12 @@ final class Extra implements ExtraDtoInterface
         $this->withdraw = $withdraw instanceof OptionDtoInterface ? $withdraw : new Option($withdraw);
     }
 
-    public function getDepositExtra(): OptionDtoInterface
+    public function getDepositOption(): OptionDtoInterface
     {
         return $this->deposit;
     }
 
-    public function getWithdrawExtra(): OptionDtoInterface
+    public function getWithdrawOption(): OptionDtoInterface
     {
         return $this->withdraw;
     }

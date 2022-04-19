@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
-use Bavix\Wallet\External\ExtraDtoInterface;
+use Bavix\Wallet\External\Contracts\ExtraDtoInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\ExtraDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssemblerInterface;
@@ -94,14 +94,16 @@ final class PrepareService implements PrepareServiceInterface
         $depositAmount = $this->mathService->compare($amountWithoutDiscount, 0) === -1 ? '0' : $amountWithoutDiscount;
         $withdrawAmount = $this->mathService->add($depositAmount, $fee, $from->decimal_places);
         $extra = $this->extraDtoAssembler->create($meta);
+        $withdrawOption = $extra->getWithdrawOption();
+        $depositOption = $extra->getDepositOption();
 
         return $this->transferLazyDtoAssembler->create(
             $from,
             $to,
             $discount,
             $fee,
-            $this->withdraw($from, $withdrawAmount, $extra->getWithdrawExtra()->getMeta()),
-            $this->deposit($to, $depositAmount, $extra->getDepositExtra()->getMeta()),
+            $this->withdraw($from, $withdrawAmount, $withdrawOption->getMeta(), $withdrawOption->isConfirmed()),
+            $this->deposit($to, $depositAmount, $depositOption->getMeta(), $depositOption->isConfirmed()),
             $status
         );
     }
