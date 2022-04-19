@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Traits;
 
-use function app;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
+use Bavix\Wallet\External\ExtraDtoInterface;
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Internal\Dto\ExtraDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
@@ -22,11 +21,12 @@ use Bavix\Wallet\Services\CastServiceInterface;
 use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
-use function config;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\RecordsNotFoundException;
 use Illuminate\Support\Collection;
+use function app;
+use function config;
 
 /**
  * Trait HasWallet.

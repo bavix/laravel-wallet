@@ -6,10 +6,10 @@ namespace Bavix\Wallet\Traits;
 
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
+use Bavix\Wallet\External\ExtraDtoInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\ExtraDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
-use Bavix\Wallet\Internal\Dto\ExtraDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
