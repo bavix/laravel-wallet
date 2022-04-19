@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Objects;
 
-use Bavix\Wallet\Internal\Dto\OptionDtoInterface;
+use Bavix\Wallet\External\OptionDtoInterface;
 
 final class Option implements OptionDtoInterface
 {
