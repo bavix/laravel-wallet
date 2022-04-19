@@ -1,6 +1,11 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Constructor in Bavix\\\\Wallet\\\\External\\\\Dto\\\\Option has parameter \\$confirmed with default value\\.$#"
+			count: 1
+			path: src/External/Dto/Option.php
+
+		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:where\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Wallet.php

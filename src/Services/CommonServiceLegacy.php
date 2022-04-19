@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
-use Bavix\Wallet\External\ExtraDtoInterface;
+use Bavix\Wallet\External\Contracts\ExtraDtoInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
