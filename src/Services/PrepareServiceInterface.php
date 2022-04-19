@@ -42,6 +42,6 @@ interface PrepareServiceInterface
         Wallet $to,
         string $status,
         $amount,
-        array|null|ExtraDtoInterface $meta = null
+        ExtraDtoInterface|array|null $meta = null
     ): TransferLazyDtoInterface;
 }
