@@ -45,7 +45,7 @@ final class CommonServiceLegacy
         Wallet $from,
         Wallet $to,
         $amount,
-        array|null|ExtraDtoInterface $meta = null,
+        ExtraDtoInterface|array|null $meta = null,
         string $status = Transfer::STATUS_TRANSFER
     ): Transfer {
         $transferLazyDto = $this->prepareService->transferLazy($from, $to, $status, $amount, $meta);
