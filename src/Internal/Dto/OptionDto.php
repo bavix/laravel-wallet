@@ -10,7 +10,7 @@ use Bavix\Wallet\External\OptionDtoInterface;
 final class OptionDto implements OptionDtoInterface
 {
     public function __construct(
-        private ?array $meta = null
+        private ?array $meta
     ) {
     }
 
