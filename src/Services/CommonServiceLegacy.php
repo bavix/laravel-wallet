@@ -92,10 +92,7 @@ final class CommonServiceLegacy
                 $deposit = $transactions[$object->getDepositDto()->getUuid()] ?? null;
                 assert($deposit !== null);
 
-                $links[$deposit->getKey()] = $deposit;
-                $links[$withdraw->getKey()] = $withdraw;
-
-                $transfers[] = $this->transferDtoAssembler->create(
+                $transfer = $this->transferDtoAssembler->create(
                     $deposit->getKey(),
                     $withdraw->getKey(),
                     $object->getStatus(),
@@ -104,14 +101,17 @@ final class CommonServiceLegacy
                     $object->getDiscount(),
                     $object->getFee()
                 );
+
+                $transfers[] = $transfer;
+                $links[$transfer->getUuid()] = [
+                    'deposit' => $deposit,
+                    'withdraw' => $withdraw,
+                ];
             }
 
             $models = $this->atmService->makeTransfers($transfers);
             foreach ($models as $model) {
-                if (isset($links[$model->deposit_id], $links[$model->withdraw_id])) {
-                    $model->setRelation('withdraw', $links[$model->withdraw_id]);
-                    $model->setRelation('deposit', $links[$model->deposit_id]);
-                }
+                $model->setRelations($links[$model->uuid] ?? []);
             }
 
             return $models;
@@ -128,7 +128,7 @@ final class CommonServiceLegacy
         Wallet $wallet,
         string $type,
         $amount,
-        array|null|ExtraDtoInterface $meta,
+        ?array $meta,
         bool $confirmed = true
     ): Transaction {
         assert(in_array($type, [Transaction::TYPE_DEPOSIT, Transaction::TYPE_WITHDRAW], true));
@@ -141,7 +141,7 @@ final class CommonServiceLegacy
 
         $transactions = $this->applyTransactions([
             $dto->getWalletId() => $wallet,
-        ], [$dto],);
+        ], [$dto]);
 
         return current($transactions);
     }
