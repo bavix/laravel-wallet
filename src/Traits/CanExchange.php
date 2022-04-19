@@ -7,7 +7,9 @@ namespace Bavix\Wallet\Traits;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\Assembler\ExtraDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
+use Bavix\Wallet\Internal\Dto\ExtraDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
@@ -39,7 +41,7 @@ trait CanExchange
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function exchange(Wallet $to, $amount, ?array $meta = null): Transfer
+    public function exchange(Wallet $to, $amount, array|ExtraDtoInterface|null $meta = null): Transfer
     {
         $wallet = app(CastServiceInterface::class)->getWallet($this);
 
@@ -51,7 +53,7 @@ trait CanExchange
     /**
      * @param int|string $amount
      */
-    public function safeExchange(Wallet $to, $amount, ?array $meta = null): ?Transfer
+    public function safeExchange(Wallet $to, $amount, array|ExtraDtoInterface|null $meta = null): ?Transfer
     {
         try {
             return $this->exchange($to, $amount, $meta);
@@ -69,9 +71,10 @@ trait CanExchange
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function forceExchange(Wallet $to, $amount, ?array $meta = null): Transfer
+    public function forceExchange(Wallet $to, $amount, array|ExtraDtoInterface|null $meta = null): Transfer
     {
         return app(AtomicServiceInterface::class)->block($this, function () use ($to, $amount, $meta) {
+            $extraAssembler = app(ExtraDtoAssemblerInterface::class);
             $prepareService = app(PrepareServiceInterface::class);
             $mathService = app(MathServiceInterface::class);
             $castService = app(CastServiceInterface::class);
@@ -85,11 +88,18 @@ trait CanExchange
                 1
             );
 
-            $withdrawDto = $prepareService->withdraw($this, $mathService->add($amount, $fee), $meta);
+            $extraDto = $extraAssembler->create($meta);
+            $withdrawDto = $prepareService->withdraw(
+                $this,
+                $mathService->add($amount, $fee),
+                $extraDto->getWithdrawExtra()
+                    ->getMeta()
+            );
             $depositDto = $prepareService->deposit(
                 $to,
                 $mathService->floor($mathService->mul($amount, $rate, 1)),
-                $meta
+                $extraDto->getDepositExtra()
+                    ->getMeta()
             );
             $transferLazyDto = app(TransferLazyDtoAssemblerInterface::class)->create(
                 $this,
