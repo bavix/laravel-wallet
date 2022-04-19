@@ -112,7 +112,7 @@ trait HasWalletFloat
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function transferFloat(Wallet $wallet, $amount, array|ExtraDtoInterface|null $meta = null): Transfer
+    public function transferFloat(Wallet $wallet, $amount, ExtraDtoInterface|array|null $meta = null): Transfer
     {
         $math = app(MathServiceInterface::class);
         $decimalPlacesValue = app(CastServiceInterface::class)->getWallet($this)->decimal_places;
@@ -125,7 +125,7 @@ trait HasWalletFloat
     /**
      * @param float|string $amount
      */
-    public function safeTransferFloat(Wallet $wallet, $amount, array|ExtraDtoInterface|null $meta = null): ?Transfer
+    public function safeTransferFloat(Wallet $wallet, $amount, ExtraDtoInterface|array|null $meta = null): ?Transfer
     {
         $math = app(MathServiceInterface::class);
         $decimalPlacesValue = app(CastServiceInterface::class)->getWallet($this)->decimal_places;
@@ -144,7 +144,7 @@ trait HasWalletFloat
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function forceTransferFloat(Wallet $wallet, $amount, array|ExtraDtoInterface|null $meta = null): Transfer
+    public function forceTransferFloat(Wallet $wallet, $amount, ExtraDtoInterface|array|null $meta = null): Transfer
     {
         $math = app(MathServiceInterface::class);
         $decimalPlacesValue = app(CastServiceInterface::class)->getWallet($this)->decimal_places;
