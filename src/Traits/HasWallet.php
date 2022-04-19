@@ -104,7 +104,7 @@ trait HasWallet
      *
      * @param int|string $amount
      */
-    public function safeTransfer(Wallet $wallet, $amount, array|null|ExtraDtoInterface $meta = null): ?Transfer
+    public function safeTransfer(Wallet $wallet, $amount, ExtraDtoInterface|array|null $meta = null): ?Transfer
     {
         try {
             return $this->transfer($wallet, $amount, $meta);
@@ -126,7 +126,7 @@ trait HasWallet
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function transfer(Wallet $wallet, $amount, array|null|ExtraDtoInterface $meta = null): Transfer
+    public function transfer(Wallet $wallet, $amount, ExtraDtoInterface|array|null $meta = null): Transfer
     {
         /** @var Wallet $this */
         app(ConsistencyServiceInterface::class)->checkPotential($this, $amount);
@@ -182,7 +182,7 @@ trait HasWallet
      */
     public function forceWithdraw(
         $amount,
-        array|null|ExtraDtoInterface $meta = null,
+        ExtraDtoInterface|array|null $meta = null,
         bool $confirmed = true
     ): Transaction {
         return app(AtomicServiceInterface::class)->block(
@@ -204,7 +204,7 @@ trait HasWallet
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function forceTransfer(Wallet $wallet, $amount, array|null|ExtraDtoInterface $meta = null): Transfer
+    public function forceTransfer(Wallet $wallet, $amount, ExtraDtoInterface|array|null $meta = null): Transfer
     {
         return app(AtomicServiceInterface::class)->block(
             $this,

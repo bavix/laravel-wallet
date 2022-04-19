@@ -65,12 +65,12 @@ interface Wallet
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function transfer(self $wallet, $amount, array|null|ExtraDtoInterface $meta = null): Transfer;
+    public function transfer(self $wallet, $amount, ExtraDtoInterface|array|null $meta = null): Transfer;
 
     /**
      * @param int|string $amount
      */
-    public function safeTransfer(self $wallet, $amount, array|null|ExtraDtoInterface $meta = null): ?Transfer;
+    public function safeTransfer(self $wallet, $amount, ExtraDtoInterface|array|null $meta = null): ?Transfer;
 
     /**
      * @param int|string $amount
@@ -81,7 +81,7 @@ interface Wallet
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function forceTransfer(self $wallet, $amount, array|null|ExtraDtoInterface $meta = null): Transfer;
+    public function forceTransfer(self $wallet, $amount, ExtraDtoInterface|array|null $meta = null): Transfer;
 
     /**
      * @param int|string $amount
