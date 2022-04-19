@@ -9,6 +9,7 @@ use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\Dto\ExtraDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
@@ -103,7 +104,7 @@ trait HasWallet
      *
      * @param int|string $amount
      */
-    public function safeTransfer(Wallet $wallet, $amount, ?array $meta = null): ?Transfer
+    public function safeTransfer(Wallet $wallet, $amount, array|null|ExtraDtoInterface $meta = null): ?Transfer
     {
         try {
             return $this->transfer($wallet, $amount, $meta);
@@ -125,7 +126,7 @@ trait HasWallet
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function transfer(Wallet $wallet, $amount, ?array $meta = null): Transfer
+    public function transfer(Wallet $wallet, $amount, array|null|ExtraDtoInterface $meta = null): Transfer
     {
         /** @var Wallet $this */
         app(ConsistencyServiceInterface::class)->checkPotential($this, $amount);
@@ -179,8 +180,11 @@ trait HasWallet
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function forceWithdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction
-    {
+    public function forceWithdraw(
+        $amount,
+        array|null|ExtraDtoInterface $meta = null,
+        bool $confirmed = true
+    ): Transaction {
         return app(AtomicServiceInterface::class)->block(
             $this,
             fn () => app(CommonServiceLegacy::class)
@@ -200,7 +204,7 @@ trait HasWallet
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function forceTransfer(Wallet $wallet, $amount, ?array $meta = null): Transfer
+    public function forceTransfer(Wallet $wallet, $amount, array|null|ExtraDtoInterface $meta = null): Transfer
     {
         return app(AtomicServiceInterface::class)->block(
             $this,

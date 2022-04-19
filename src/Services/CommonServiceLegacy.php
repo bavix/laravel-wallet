@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
+use Bavix\Wallet\Internal\Dto\ExtraDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
@@ -44,7 +45,7 @@ final class CommonServiceLegacy
         Wallet $from,
         Wallet $to,
         $amount,
-        ?array $meta = null,
+        array|null|ExtraDtoInterface $meta = null,
         string $status = Transfer::STATUS_TRANSFER
     ): Transfer {
         $transferLazyDto = $this->prepareService->transferLazy($from, $to, $status, $amount, $meta);
@@ -82,6 +83,7 @@ final class CommonServiceLegacy
 
             $transactions = $this->applyTransactions($wallets, $operations);
 
+            $links = [];
             $transfers = [];
             foreach ($objects as $object) {
                 $withdraw = $transactions[$object->getWithdrawDto()->getUuid()] ?? null;
@@ -89,6 +91,9 @@ final class CommonServiceLegacy
 
                 $deposit = $transactions[$object->getDepositDto()->getUuid()] ?? null;
                 assert($deposit !== null);
+
+                $links[$deposit->getKey()] = $deposit;
+                $links[$withdraw->getKey()] = $withdraw;
 
                 $transfers[] = $this->transferDtoAssembler->create(
                     $deposit->getKey(),
@@ -101,7 +106,15 @@ final class CommonServiceLegacy
                 );
             }
 
-            return $this->atmService->makeTransfers($transfers);
+            $models = $this->atmService->makeTransfers($transfers);
+            foreach ($models as $model) {
+                if (isset($links[$model->deposit_id], $links[$model->withdraw_id])) {
+                    $model->setRelation('withdraw', $links[$model->withdraw_id]);
+                    $model->setRelation('deposit', $links[$model->deposit_id]);
+                }
+            }
+
+            return $models;
         });
     }
 
@@ -115,7 +128,7 @@ final class CommonServiceLegacy
         Wallet $wallet,
         string $type,
         $amount,
-        ?array $meta,
+        array|null|ExtraDtoInterface $meta,
         bool $confirmed = true
     ): Transaction {
         assert(in_array($type, [Transaction::TYPE_DEPOSIT, Transaction::TYPE_WITHDRAW], true));

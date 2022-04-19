@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssembler;
+use Bavix\Wallet\Internal\Assembler\ExtraDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\OptionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionQueryAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
@@ -126,6 +128,8 @@ return [
     'assemblers' => [
         'availability' => AvailabilityDtoAssembler::class,
         'balance_updated_event' => BalanceUpdatedEventAssembler::class,
+        'extra' => ExtraDtoAssembler::class,
+        'option' => OptionDtoAssembler::class,
         'transaction' => TransactionDtoAssembler::class,
         'transfer_lazy' => TransferLazyDtoAssembler::class,
         'transfer' => TransferDtoAssembler::class,

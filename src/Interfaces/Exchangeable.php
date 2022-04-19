@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Interfaces;
 
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
+use Bavix\Wallet\Internal\Dto\ExtraDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
@@ -26,12 +27,12 @@ interface Exchangeable
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function exchange(Wallet $to, $amount, ?array $meta = null): Transfer;
+    public function exchange(Wallet $to, $amount, array|ExtraDtoInterface|null $meta = null): Transfer;
 
     /**
      * @param int|string $amount
      */
-    public function safeExchange(Wallet $to, $amount, ?array $meta = null): ?Transfer;
+    public function safeExchange(Wallet $to, $amount, array|ExtraDtoInterface|null $meta = null): ?Transfer;
 
     /**
      * @param int|string $amount
@@ -42,5 +43,5 @@ interface Exchangeable
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function forceExchange(Wallet $to, $amount, ?array $meta = null): Transfer;
+    public function forceExchange(Wallet $to, $amount, array|ExtraDtoInterface|null $meta = null): Transfer;
 }
