@@ -13,6 +13,8 @@ layers:
     collectors:
       - type: className
         regex: ^Bavix\\Wallet\\Interfaces\\.*
+      - type: className
+        regex: ^Bavix\\Wallet\\External\\.*
 
   - name: UI
     collectors:

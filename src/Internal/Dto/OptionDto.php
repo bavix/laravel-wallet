@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Dto;
 
+use Bavix\Wallet\External\OptionDtoInterface;
+
 /** @internal */
 final class OptionDto implements OptionDtoInterface
 {
