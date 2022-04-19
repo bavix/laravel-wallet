@@ -9,7 +9,7 @@ use Bavix\Wallet\External\OptionDtoInterface;
 final class Option implements OptionDtoInterface
 {
     public function __construct(
-        private ?array $meta = null
+        private ?array $meta
     ) {
     }
 
