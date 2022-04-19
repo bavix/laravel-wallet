@@ -8,5 +8,5 @@ use Bavix\Wallet\External\Contracts\ExtraDtoInterface;
 
 interface ExtraDtoAssemblerInterface
 {
-    public function create(array|ExtraDtoInterface|null $data): ExtraDtoInterface;
+    public function create(ExtraDtoInterface|array|null $data): ExtraDtoInterface;
 }

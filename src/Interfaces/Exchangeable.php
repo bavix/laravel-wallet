@@ -27,12 +27,12 @@ interface Exchangeable
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function exchange(Wallet $to, $amount, array|ExtraDtoInterface|null $meta = null): Transfer;
+    public function exchange(Wallet $to, $amount, ExtraDtoInterface|array|null $meta = null): Transfer;
 
     /**
      * @param int|string $amount
      */
-    public function safeExchange(Wallet $to, $amount, array|ExtraDtoInterface|null $meta = null): ?Transfer;
+    public function safeExchange(Wallet $to, $amount, ExtraDtoInterface|array|null $meta = null): ?Transfer;
 
     /**
      * @param int|string $amount
@@ -43,5 +43,5 @@ interface Exchangeable
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function forceExchange(Wallet $to, $amount, array|ExtraDtoInterface|null $meta = null): Transfer;
+    public function forceExchange(Wallet $to, $amount, ExtraDtoInterface|array|null $meta = null): Transfer;
 }
