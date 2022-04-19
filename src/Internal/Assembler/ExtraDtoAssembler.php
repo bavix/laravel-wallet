@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Assembler;
 
-use Bavix\Wallet\External\ExtraDtoInterface;
-use Bavix\Wallet\Internal\Dto\ExtraDto;
+use Bavix\Wallet\External\Contracts\ExtraDtoInterface;
+use Bavix\Wallet\External\Dto\Extra;
 
 final class ExtraDtoAssembler implements ExtraDtoAssemblerInterface
 {
@@ -21,6 +21,6 @@ final class ExtraDtoAssembler implements ExtraDtoAssemblerInterface
 
         $option = $this->optionDtoAssembler->create($data);
 
-        return new ExtraDto($option, $option);
+        return new Extra($option, $option);
     }
 }

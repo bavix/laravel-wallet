@@ -6,7 +6,7 @@ namespace Bavix\Wallet\Traits;
 
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
-use Bavix\Wallet\External\ExtraDtoInterface;
+use Bavix\Wallet\External\Contracts\ExtraDtoInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\ExtraDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
@@ -89,17 +89,19 @@ trait CanExchange
             );
 
             $extraDto = $extraAssembler->create($meta);
+            $withdrawOption = $extraDto->getWithdrawOption();
+            $depositOption = $extraDto->getDepositOption();
             $withdrawDto = $prepareService->withdraw(
                 $this,
                 $mathService->add($amount, $fee),
-                $extraDto->getWithdrawExtra()
-                    ->getMeta()
+                $withdrawOption->getMeta(),
+                $withdrawOption->isConfirmed(),
             );
             $depositDto = $prepareService->deposit(
                 $to,
                 $mathService->floor($mathService->mul($amount, $rate, 1)),
-                $extraDto->getDepositExtra()
-                    ->getMeta()
+                $depositOption->getMeta(),
+                $depositOption->isConfirmed(),
             );
             $transferLazyDto = app(TransferLazyDtoAssemblerInterface::class)->create(
                 $this,
