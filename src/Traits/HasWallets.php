@@ -23,10 +23,10 @@ trait HasWallets
     /**
      * The variable is used for the cache, so as not to request wallets many times. WalletProxy keeps the money wallets
      * in the memory to avoid errors when you purchase/transfer, etc.
+     *
+     * @var WalletModel[]
      */
     private array $_wallets = [];
-
-    private bool $_loadedWallets = false;
 
     /**
      * Get wallet by slug.
@@ -59,16 +59,19 @@ trait HasWallets
      */
     public function getWalletOrFail(string $slug): WalletModel
     {
-        if (!$this->_loadedWallets && $this->relationLoaded('wallets')) {
-            $this->_loadedWallets = true;
-            $wallets = $this->getRelation('wallets');
-            foreach ($wallets as $wallet) {
+        if ($this->_wallets === [] && $this->relationLoaded('wallets')) {
+            /** @var WalletModel $wallet */
+            foreach ($this->getRelation('wallets') as $wallet) {
+                $wallet->setRelation('holder', $this);
                 $this->_wallets[$wallet->slug] = $wallet;
             }
         }
 
         if (!array_key_exists($slug, $this->_wallets)) {
-            $this->_wallets[$slug] = app(WalletServiceInterface::class)->getBySlug($this, $slug);
+            $wallet = app(WalletServiceInterface::class)->getBySlug($this, $slug);
+            $wallet->setRelation('holder', $this);
+
+            $this->_wallets[$slug] = $wallet;
         }
 
         return $this->_wallets[$slug];
@@ -86,6 +89,7 @@ trait HasWallets
     {
         $wallet = app(WalletServiceInterface::class)->create($this, $data);
         $this->_wallets[$wallet->slug] = $wallet;
+        $wallet->setRelation('holder', $this);
 
         return $wallet;
     }
