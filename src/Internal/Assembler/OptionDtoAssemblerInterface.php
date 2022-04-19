@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Assembler;
 
-use Bavix\Wallet\External\OptionDtoInterface;
+use Bavix\Wallet\External\Contracts\OptionDtoInterface;
 
 interface OptionDtoAssemblerInterface
 {
