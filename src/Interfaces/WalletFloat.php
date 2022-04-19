@@ -63,12 +63,12 @@ interface WalletFloat
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function transferFloat(Wallet $wallet, $amount, array|ExtraDtoInterface|null $meta = null): Transfer;
+    public function transferFloat(Wallet $wallet, $amount, ExtraDtoInterface|array|null $meta = null): Transfer;
 
     /**
      * @param float|string $amount
      */
-    public function safeTransferFloat(Wallet $wallet, $amount, array|ExtraDtoInterface|null $meta = null): ?Transfer;
+    public function safeTransferFloat(Wallet $wallet, $amount, ExtraDtoInterface|array|null $meta = null): ?Transfer;
 
     /**
      * @param float|string $amount
@@ -79,7 +79,7 @@ interface WalletFloat
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function forceTransferFloat(Wallet $wallet, $amount, array|ExtraDtoInterface|null $meta = null): Transfer;
+    public function forceTransferFloat(Wallet $wallet, $amount, ExtraDtoInterface|array|null $meta = null): Transfer;
 
     /**
      * @param float|string $amount

@@ -83,7 +83,7 @@ final class PrepareService implements PrepareServiceInterface
         Wallet $to,
         string $status,
         $amount,
-        array|ExtraDtoInterface|null $meta = null
+        ExtraDtoInterface|array|null $meta = null
     ): TransferLazyDtoInterface {
         $discount = $this->personalDiscountService->getDiscount($from, $to);
         $toWallet = $this->castService->getWallet($to);
