@@ -6,8 +6,10 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\Assembler\ExtraDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
+use Bavix\Wallet\Internal\Dto\ExtraDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
@@ -20,6 +22,7 @@ final class PrepareService implements PrepareServiceInterface
         private TransactionDtoAssemblerInterface $transactionDtoAssembler,
         private DiscountServiceInterface $personalDiscountService,
         private ConsistencyServiceInterface $consistencyService,
+        private ExtraDtoAssemblerInterface $extraDtoAssembler,
         private CastServiceInterface $castService,
         private MathServiceInterface $mathService,
         private TaxServiceInterface $taxService
@@ -80,7 +83,7 @@ final class PrepareService implements PrepareServiceInterface
         Wallet $to,
         string $status,
         $amount,
-        ?array $meta = null
+        array|ExtraDtoInterface|null $meta = null
     ): TransferLazyDtoInterface {
         $discount = $this->personalDiscountService->getDiscount($from, $to);
         $toWallet = $this->castService->getWallet($to);
@@ -90,14 +93,15 @@ final class PrepareService implements PrepareServiceInterface
         $amountWithoutDiscount = $this->mathService->sub($amount, $discount, $toWallet->decimal_places);
         $depositAmount = $this->mathService->compare($amountWithoutDiscount, 0) === -1 ? '0' : $amountWithoutDiscount;
         $withdrawAmount = $this->mathService->add($depositAmount, $fee, $from->decimal_places);
+        $extra = $this->extraDtoAssembler->create($meta);
 
         return $this->transferLazyDtoAssembler->create(
             $from,
             $to,
             $discount,
             $fee,
-            $this->withdraw($from, $withdrawAmount, $meta),
-            $this->deposit($to, $depositAmount, $meta),
+            $this->withdraw($from, $withdrawAmount, $extra->getWithdrawExtra()->getMeta()),
+            $this->deposit($to, $depositAmount, $extra->getDepositExtra()->getMeta()),
             $status
         );
     }

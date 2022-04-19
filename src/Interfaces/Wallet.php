@@ -7,6 +7,7 @@ namespace Bavix\Wallet\Interfaces;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
+use Bavix\Wallet\Internal\Dto\ExtraDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
@@ -64,12 +65,12 @@ interface Wallet
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function transfer(self $wallet, $amount, ?array $meta = null): Transfer;
+    public function transfer(self $wallet, $amount, array|null|ExtraDtoInterface $meta = null): Transfer;
 
     /**
      * @param int|string $amount
      */
-    public function safeTransfer(self $wallet, $amount, ?array $meta = null): ?Transfer;
+    public function safeTransfer(self $wallet, $amount, array|null|ExtraDtoInterface $meta = null): ?Transfer;
 
     /**
      * @param int|string $amount
@@ -80,7 +81,7 @@ interface Wallet
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function forceTransfer(self $wallet, $amount, ?array $meta = null): Transfer;
+    public function forceTransfer(self $wallet, $amount, array|null|ExtraDtoInterface $meta = null): Transfer;
 
     /**
      * @param int|string $amount
