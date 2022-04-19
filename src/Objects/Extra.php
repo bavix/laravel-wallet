@@ -14,8 +14,8 @@ final class Extra implements ExtraDtoInterface
 
     public function __construct(array|OptionDtoInterface|null $deposit, array|OptionDtoInterface|null $withdraw)
     {
-        $this->deposit = new Option($deposit);
-        $this->withdraw = new Option($withdraw);
+        $this->deposit = $deposit instanceof OptionDtoInterface ? $deposit : new Option($deposit);
+        $this->withdraw = $withdraw instanceof OptionDtoInterface ? $withdraw : new Option($withdraw);
     }
 
     public function getDepositExtra(): OptionDtoInterface
