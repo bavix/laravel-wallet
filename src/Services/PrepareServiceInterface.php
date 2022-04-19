@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\Dto\ExtraDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 
@@ -41,6 +42,6 @@ interface PrepareServiceInterface
         Wallet $to,
         string $status,
         $amount,
-        ?array $meta = null
+        array|null|ExtraDtoInterface $meta = null
     ): TransferLazyDtoInterface;
 }

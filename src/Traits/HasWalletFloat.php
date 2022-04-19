@@ -8,6 +8,7 @@ use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\Dto\ExtraDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
@@ -111,7 +112,7 @@ trait HasWalletFloat
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function transferFloat(Wallet $wallet, $amount, ?array $meta = null): Transfer
+    public function transferFloat(Wallet $wallet, $amount, array|ExtraDtoInterface|null $meta = null): Transfer
     {
         $math = app(MathServiceInterface::class);
         $decimalPlacesValue = app(CastServiceInterface::class)->getWallet($this)->decimal_places;
@@ -124,7 +125,7 @@ trait HasWalletFloat
     /**
      * @param float|string $amount
      */
-    public function safeTransferFloat(Wallet $wallet, $amount, ?array $meta = null): ?Transfer
+    public function safeTransferFloat(Wallet $wallet, $amount, array|ExtraDtoInterface|null $meta = null): ?Transfer
     {
         $math = app(MathServiceInterface::class);
         $decimalPlacesValue = app(CastServiceInterface::class)->getWallet($this)->decimal_places;
@@ -143,7 +144,7 @@ trait HasWalletFloat
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function forceTransferFloat(Wallet $wallet, $amount, ?array $meta = null): Transfer
+    public function forceTransferFloat(Wallet $wallet, $amount, array|ExtraDtoInterface|null $meta = null): Transfer
     {
         $math = app(MathServiceInterface::class);
         $decimalPlacesValue = app(CastServiceInterface::class)->getWallet($this)->decimal_places;
