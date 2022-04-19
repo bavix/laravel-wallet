@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test\Units\Domain;
 
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Infra\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
+use Bavix\Wallet\Test\Infra\Models\UserMulti;
 use Bavix\Wallet\Test\Infra\TestCase;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -53,5 +55,24 @@ final class EagerLoadingTest extends TestCase
         $transfer = $user1->transfer($user2, 500);
         self::assertTrue($transfer->relationLoaded('withdraw'));
         self::assertTrue($transfer->relationLoaded('deposit'));
+    }
+
+    public function testMultiWallets(): void
+    {
+        /** @var UserMulti $multi */
+        $multi = UserMultiFactory::new()->create();
+        $multi->createWallet([
+            'name' => 'Hello',
+        ]);
+
+        $multi->createWallet([
+            'name' => 'World',
+        ]);
+
+        /** @var UserMulti $user */
+        $user = UserMulti::with('wallets')->find($multi->getKey());
+        self::assertTrue($user->relationLoaded('wallets'));
+        self::assertNotNull($user->getWallet('hello'));
+        self::assertNotNull($user->getWallet('world'));
     }
 }
