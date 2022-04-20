@@ -18,19 +18,15 @@ use Illuminate\Database\RecordsNotFoundException;
 interface WalletFloat
 {
     /**
-     * @param float|string $amount
-     *
      * @throws AmountInvalid
      * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function depositFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction;
+    public function depositFloat(float|int|string $amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
-     * @param float|string $amount
-     *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
@@ -39,22 +35,22 @@ interface WalletFloat
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function withdrawFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction;
+    public function withdrawFloat(float|int|string $amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
-     * @param float|string $amount
-     *
      * @throws AmountInvalid
      * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function forceWithdrawFloat($amount, ?array $meta = null, bool $confirmed = true): Transaction;
+    public function forceWithdrawFloat(
+        float|int|string $amount,
+        ?array $meta = null,
+        bool $confirmed = true
+    ): Transaction;
 
     /**
-     * @param float|string $amount
-     *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
@@ -63,31 +59,35 @@ interface WalletFloat
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function transferFloat(Wallet $wallet, $amount, ExtraDtoInterface|array|null $meta = null): Transfer;
+    public function transferFloat(
+        Wallet $wallet,
+        float|int|string $amount,
+        ExtraDtoInterface|array|null $meta = null
+    ): Transfer;
+
+    public function safeTransferFloat(
+        Wallet $wallet,
+        float|int|string $amount,
+        ExtraDtoInterface|array|null $meta = null
+    ): ?Transfer;
 
     /**
-     * @param float|string $amount
-     */
-    public function safeTransferFloat(Wallet $wallet, $amount, ExtraDtoInterface|array|null $meta = null): ?Transfer;
-
-    /**
-     * @param float|string $amount
-     *
      * @throws AmountInvalid
      * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function forceTransferFloat(Wallet $wallet, $amount, ExtraDtoInterface|array|null $meta = null): Transfer;
+    public function forceTransferFloat(
+        Wallet $wallet,
+        float|int|string $amount,
+        ExtraDtoInterface|array|null $meta = null
+    ): Transfer;
+
+    public function canWithdrawFloat(float|int|string $amount): bool;
 
     /**
-     * @param float|string $amount
-     */
-    public function canWithdrawFloat($amount): bool;
-
-    /**
-     * @return float|int|string
+     * @return string
      */
     public function getBalanceFloatAttribute();
 }

@@ -124,10 +124,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         return (string) $this->getRawOriginal('balance', 0);
     }
 
-    /**
-     * @return float|int|string
-     */
-    public function getAvailableBalanceAttribute()
+    public function getAvailableBalanceAttribute(): float|int|string
     {
         return $this->walletTransactions()
             ->where('confirmed', true)
