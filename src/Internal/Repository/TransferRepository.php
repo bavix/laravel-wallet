@@ -8,6 +8,7 @@ use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
 use Bavix\Wallet\Internal\Query\TransferQueryInterface;
 use Bavix\Wallet\Internal\Transform\TransferDtoTransformerInterface;
 use Bavix\Wallet\Models\Transfer;
+use Illuminate\Support\Facades\DB;
 
 final class TransferRepository implements TransferRepositoryInterface
 {
@@ -46,6 +47,20 @@ final class TransferRepository implements TransferRepositoryInterface
             ->whereIn('uuid', $query->getUuids())
             ->get()
             ->all()
+        ;
+    }
+
+    /**
+     * @param non-empty-array<int> $ids
+     */
+    public function updateStatusByIds(string $status, array $ids): int
+    {
+        return $this->transfer->newQuery()
+            ->whereKey($ids)
+            ->update([
+                'status' => $status,
+                'status_last' => DB::raw('status'),
+            ])
         ;
     }
 }

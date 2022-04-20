@@ -43,6 +43,7 @@ use Bavix\Wallet\Services\PrepareService;
 use Bavix\Wallet\Services\PurchaseService;
 use Bavix\Wallet\Services\RegulatorService;
 use Bavix\Wallet\Services\TaxService;
+use Bavix\Wallet\Services\TransferService;
 use Bavix\Wallet\Services\WalletService;
 
 return [
@@ -102,6 +103,7 @@ return [
         'prepare' => PrepareService::class,
         'purchase' => PurchaseService::class,
         'tax' => TaxService::class,
+        'transfer' => TransferService::class,
         'wallet' => WalletService::class,
     ],
 

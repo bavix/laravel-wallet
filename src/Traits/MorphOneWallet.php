@@ -25,12 +25,18 @@ trait MorphOneWallet
             ->getHolder($this)
             ->morphOne(config('wallet.wallet.model', WalletModel::class), 'holder')
             ->where('slug', config('wallet.wallet.default.slug', 'default'))
-            ->withDefault(array_merge(config('wallet.wallet.creating', []), [
-                'name' => config('wallet.wallet.default.name', 'Default Wallet'),
-                'slug' => config('wallet.wallet.default.slug', 'default'),
-                'meta' => config('wallet.wallet.default.meta', []),
-                'balance' => 0,
-            ]))
+            ->withDefault(static function (WalletModel $wallet, object $holder) {
+                $wallet->forceFill(array_merge(config('wallet.wallet.creating', []), [
+                    'name' => config('wallet.wallet.default.name', 'Default Wallet'),
+                    'slug' => config('wallet.wallet.default.slug', 'default'),
+                    'meta' => config('wallet.wallet.default.meta', []),
+                    'balance' => 0,
+                ]));
+
+                if (property_exists($holder, 'exists') && $holder->exists) {
+                    $wallet->setRelation('holder', $holder);
+                }
+            })
         ;
     }
 }

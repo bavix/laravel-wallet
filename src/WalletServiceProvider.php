@@ -87,6 +87,8 @@ use Bavix\Wallet\Services\RegulatorService;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Services\TaxService;
 use Bavix\Wallet\Services\TaxServiceInterface;
+use Bavix\Wallet\Services\TransferService;
+use Bavix\Wallet\Services\TransferServiceInterface;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Services\WalletServiceInterface;
 use function config;
@@ -199,6 +201,7 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(PrepareServiceInterface::class, $configure['prepare'] ?? PrepareService::class);
         $this->app->singleton(PurchaseServiceInterface::class, $configure['purchase'] ?? PurchaseService::class);
         $this->app->singleton(TaxServiceInterface::class, $configure['tax'] ?? TaxService::class);
+        $this->app->singleton(TransferServiceInterface::class, $configure['transfer'] ?? TransferService::class);
         $this->app->singleton(WalletServiceInterface::class, $configure['wallet'] ?? WalletService::class);
 
         $this->app->singleton(BookkeeperServiceInterface::class, fn () => $this->app->make(
