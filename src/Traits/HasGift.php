@@ -19,10 +19,10 @@ use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\AtmServiceInterface;
 use Bavix\Wallet\Services\AtomicServiceInterface;
 use Bavix\Wallet\Services\CastServiceInterface;
-use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
 use Bavix\Wallet\Services\DiscountServiceInterface;
 use Bavix\Wallet\Services\TaxServiceInterface;
+use Bavix\Wallet\Services\TransactionServiceInterface;
 use Illuminate\Database\RecordsNotFoundException;
 
 /**
@@ -67,15 +67,15 @@ trait HasGift
                 app(ConsistencyServiceInterface::class)->checkPotential($this, $mathService->add($amount, $fee));
             }
 
-            $commonService = app(CommonServiceLegacy::class);
+            $transactionService = app(TransactionServiceInterface::class);
             $metaProduct = $product->getMetaProduct();
-            $withdraw = $commonService->makeTransaction(
+            $withdraw = $transactionService->makeOne(
                 $this,
                 Transaction::TYPE_WITHDRAW,
                 $mathService->add($amount, $fee),
                 $metaProduct
             );
-            $deposit = $commonService->makeTransaction($product, Transaction::TYPE_DEPOSIT, $amount, $metaProduct);
+            $deposit = $transactionService->makeOne($product, Transaction::TYPE_DEPOSIT, $amount, $metaProduct);
 
             $castService = app(CastServiceInterface::class);
 

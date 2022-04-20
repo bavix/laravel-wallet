@@ -7,7 +7,6 @@ namespace Bavix\Wallet\Test\Units\Service;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Objects\Cart;
-use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Test\Infra\PackageModels\Transaction;
 use Bavix\Wallet\Test\Infra\PackageModels\Transfer;
 use Bavix\Wallet\Test\Infra\PackageModels\Wallet;
@@ -41,11 +40,6 @@ final class SingletonTest extends TestCase
     public function testWallet(): void
     {
         self::assertNotSame($this->getRefId(Wallet::class), $this->getRefId(Wallet::class));
-    }
-
-    public function testCommonService(): void
-    {
-        self::assertSame($this->getRefId(CommonServiceLegacy::class), $this->getRefId(CommonServiceLegacy::class));
     }
 
     public function testDatabaseService(): void

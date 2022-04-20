@@ -21,7 +21,6 @@ use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\AssistantServiceInterface;
 use Bavix\Wallet\Services\AtomicServiceInterface;
 use Bavix\Wallet\Services\BasketServiceInterface;
-use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
 use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\PurchaseServiceInterface;
@@ -76,7 +75,7 @@ trait CartPay
                 );
             }
 
-            return app(CommonServiceLegacy::class)->applyTransfers($transfers);
+            return app(TransferServiceInterface::class)->apply($transfers);
         });
     }
 
@@ -133,7 +132,7 @@ trait CartPay
                 app(ConsistencyServiceInterface::class)->checkTransfer($transfers);
             }
 
-            return app(CommonServiceLegacy::class)->applyTransfers($transfers);
+            return app(TransferServiceInterface::class)->apply($transfers);
         });
     }
 
@@ -206,9 +205,11 @@ trait CartPay
                 app(ConsistencyServiceInterface::class)->checkTransfer($objects);
             }
 
-            app(CommonServiceLegacy::class)->applyTransfers($objects);
+            $transferService = app(TransferServiceInterface::class);
 
-            return app(TransferServiceInterface::class)
+            $transferService->apply($objects);
+
+            return $transferService
                 ->updateStatusByIds(Transfer::STATUS_REFUND, $transferIds)
             ;
         });

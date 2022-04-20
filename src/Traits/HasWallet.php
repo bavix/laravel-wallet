@@ -19,9 +19,11 @@ use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\AtomicServiceInterface;
 use Bavix\Wallet\Services\CastServiceInterface;
-use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
+use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
+use Bavix\Wallet\Services\TransactionServiceInterface;
+use Bavix\Wallet\Services\TransferServiceInterface;
 use function config;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -54,8 +56,8 @@ trait HasWallet
     {
         return app(AtomicServiceInterface::class)->block(
             $this,
-            fn () => app(CommonServiceLegacy::class)
-                ->makeTransaction($this, Transaction::TYPE_DEPOSIT, $amount, $meta, $confirmed)
+            fn () => app(TransactionServiceInterface::class)
+                ->makeOne($this, Transaction::TYPE_DEPOSIT, $amount, $meta, $confirmed)
         );
     }
 
@@ -176,8 +178,8 @@ trait HasWallet
     ): Transaction {
         return app(AtomicServiceInterface::class)->block(
             $this,
-            fn () => app(CommonServiceLegacy::class)
-                ->makeTransaction($this, Transaction::TYPE_WITHDRAW, $amount, $meta, $confirmed)
+            fn () => app(TransactionServiceInterface::class)
+                ->makeOne($this, Transaction::TYPE_WITHDRAW, $amount, $meta, $confirmed)
         );
     }
 
@@ -196,11 +198,15 @@ trait HasWallet
         int|string $amount,
         ExtraDtoInterface|array|null $meta = null
     ): Transfer {
-        return app(AtomicServiceInterface::class)->block(
-            $this,
-            fn () => app(CommonServiceLegacy::class)
-                ->forceTransfer($this, $wallet, $amount, $meta)
-        );
+        return app(AtomicServiceInterface::class)->block($this, function () use ($wallet, $amount, $meta) {
+            $transferLazyDto = app(PrepareServiceInterface::class)
+                ->transferLazy($this, $wallet, Transfer::STATUS_TRANSFER, $amount, $meta)
+            ;
+
+            $transfers = app(TransferServiceInterface::class)->apply([$transferLazyDto]);
+
+            return current($transfers);
+        });
     }
 
     /**
