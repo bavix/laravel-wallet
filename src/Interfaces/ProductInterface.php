@@ -6,7 +6,7 @@ namespace Bavix\Wallet\Interfaces;
 
 interface ProductInterface extends Wallet
 {
-    public function getAmountProduct(Customer $customer): float|int|string;
+    public function getAmountProduct(Customer $customer): int|string;
 
     public function getMetaProduct(): ?array;
 }
