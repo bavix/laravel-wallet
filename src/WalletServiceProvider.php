@@ -78,7 +78,6 @@ use Bavix\Wallet\Services\DiscountService;
 use Bavix\Wallet\Services\DiscountServiceInterface;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\ExchangeServiceInterface;
-use Bavix\Wallet\Services\MetaServiceLegacy;
 use Bavix\Wallet\Services\PrepareService;
 use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\PurchaseService;
@@ -310,7 +309,6 @@ final class WalletServiceProvider extends ServiceProvider
     private function legacySingleton(): void
     {
         $this->app->singleton(CommonServiceLegacy::class);
-        $this->app->singleton(MetaServiceLegacy::class);
     }
 
     private function bindObjects(array $configure): void
