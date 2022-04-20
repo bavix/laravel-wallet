@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Traits;
 
-use function array_unique;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Exceptions\ProductEnded;
@@ -26,6 +25,7 @@ use Bavix\Wallet\Services\ConsistencyServiceInterface;
 use Bavix\Wallet\Services\MetaServiceLegacy;
 use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\PurchaseServiceInterface;
+use Bavix\Wallet\Services\TransferServiceInterface;
 use function count;
 use Illuminate\Database\RecordsNotFoundException;
 
@@ -174,7 +174,6 @@ trait CartPay
     public function refundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool
     {
         return app(AtomicServiceInterface::class)->block($this, function () use ($cart, $force, $gifts) {
-            $results = [];
             $transfers = app(PurchaseServiceInterface::class)->already($this, $cart->getBasketDto(), $gifts);
             if (count($transfers) !== $cart->getBasketDto()->total()) {
                 throw new ModelNotFoundException(
@@ -186,9 +185,11 @@ trait CartPay
 
             $index = 0;
             $objects = [];
+            $transferIds = [];
             $transfers = array_values($transfers);
             $prepareService = app(PrepareServiceInterface::class);
             foreach ($cart->getBasketDto()->cursor() as $product) {
+                $transferIds[] = $transfers[$index]->getKey();
                 $objects[] = $prepareService->transferLazy(
                     $product,
                     $transfers[$index]->withdraw->wallet,
@@ -206,15 +207,9 @@ trait CartPay
 
             app(CommonServiceLegacy::class)->applyTransfers($objects);
 
-            // fixme: one query update for
-            foreach ($transfers as $transfer) {
-                $results[] = $transfer->update([
-                    'status' => Transfer::STATUS_REFUND,
-                    'status_last' => $transfer->status,
-                ]);
-            }
-
-            return count(array_unique($results)) === 1;
+            return app(TransferServiceInterface::class)
+                ->updateStatusByIds(Transfer::STATUS_REFUND, $transferIds)
+            ;
         });
     }
 
