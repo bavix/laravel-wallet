@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.4.0] - 2022-04-20
+### Added
+- MaximalTaxable
+- Added strictness in internal classes
+
 ## [8.3.0] - 2022-04-15
 ### Added
 - Added the ability to create custom events
@@ -834,7 +839,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/8.3.0...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/8.4.0...develop
+[8.4.0]: https://github.com/bavix/laravel-wallet/compare/8.3.0...8.4.0
 [8.3.0]: https://github.com/bavix/laravel-wallet/compare/8.2.1...8.3.0
 [8.2.1]: https://github.com/bavix/laravel-wallet/compare/8.2.0...8.2.1
 [8.2.0]: https://github.com/bavix/laravel-wallet/compare/8.1.1...8.2.0
