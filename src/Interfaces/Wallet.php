@@ -20,19 +20,15 @@ use Illuminate\Database\RecordsNotFoundException;
 interface Wallet
 {
     /**
-     * @param int|string $amount
-     *
      * @throws AmountInvalid
      * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function deposit($amount, ?array $meta = null, bool $confirmed = true): Transaction;
+    public function deposit(int|string $amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
-     * @param int|string $amount
-     *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
@@ -41,22 +37,18 @@ interface Wallet
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function withdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction;
+    public function withdraw(int|string $amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
-     * @param int|string $amount
-     *
      * @throws AmountInvalid
      * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function forceWithdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction;
+    public function forceWithdraw(int|string $amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
-     * @param int|string $amount
-     *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
@@ -65,33 +57,30 @@ interface Wallet
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function transfer(self $wallet, $amount, ExtraDtoInterface|array|null $meta = null): Transfer;
+    public function transfer(self $wallet, int|string $amount, ExtraDtoInterface|array|null $meta = null): Transfer;
+
+    public function safeTransfer(
+        self $wallet,
+        int|string $amount,
+        ExtraDtoInterface|array|null $meta = null
+    ): ?Transfer;
 
     /**
-     * @param int|string $amount
-     */
-    public function safeTransfer(self $wallet, $amount, ExtraDtoInterface|array|null $meta = null): ?Transfer;
-
-    /**
-     * @param int|string $amount
-     *
      * @throws AmountInvalid
      * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function forceTransfer(self $wallet, $amount, ExtraDtoInterface|array|null $meta = null): Transfer;
+    public function forceTransfer(
+        self $wallet,
+        int|string $amount,
+        ExtraDtoInterface|array|null $meta = null
+    ): Transfer;
 
-    /**
-     * @param int|string $amount
-     */
-    public function canWithdraw($amount, bool $allowZero = false): bool;
+    public function canWithdraw(int|string $amount, bool $allowZero = false): bool;
 
-    /**
-     * @return float|int
-     */
-    public function getBalanceAttribute();
+    public function getBalanceAttribute(): string;
 
     public function getBalanceIntAttribute(): int;
 

@@ -18,10 +18,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/tests',
     ]);
 
-    $parameters->set(Option::SKIP, [
-        UnionTypesRector::class
-    ]);
-
     // Define what rule sets will be applied
     $containerConfigurator->import(PHPUnitSetList::PHPUNIT_91);
     $containerConfigurator->import(LaravelSetList::LARAVEL_80);

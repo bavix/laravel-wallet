@@ -92,10 +92,7 @@ class Transaction extends Model
         return $math->div($this->amount, $decimalPlaces);
     }
 
-    /**
-     * @param float|int|string $amount
-     */
-    public function setAmountFloatAttribute($amount): void
+    public function setAmountFloatAttribute(float|int|string $amount): void
     {
         $math = app(MathServiceInterface::class);
         $decimalPlacesValue = app(CastServiceInterface::class)

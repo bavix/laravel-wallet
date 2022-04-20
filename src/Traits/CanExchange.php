@@ -31,8 +31,6 @@ use Illuminate\Database\RecordsNotFoundException;
 trait CanExchange
 {
     /**
-     * @param int|string $amount
-     *
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      * @throws LockProviderNotFoundException
@@ -41,7 +39,7 @@ trait CanExchange
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function exchange(Wallet $to, $amount, ExtraDtoInterface|array|null $meta = null): Transfer
+    public function exchange(Wallet $to, int|string $amount, ExtraDtoInterface|array|null $meta = null): Transfer
     {
         $wallet = app(CastServiceInterface::class)->getWallet($this);
 
@@ -50,10 +48,7 @@ trait CanExchange
         return $this->forceExchange($to, $amount, $meta);
     }
 
-    /**
-     * @param int|string $amount
-     */
-    public function safeExchange(Wallet $to, $amount, ExtraDtoInterface|array|null $meta = null): ?Transfer
+    public function safeExchange(Wallet $to, int|string $amount, ExtraDtoInterface|array|null $meta = null): ?Transfer
     {
         try {
             return $this->exchange($to, $amount, $meta);
@@ -63,15 +58,13 @@ trait CanExchange
     }
 
     /**
-     * @param int|string $amount
-     *
      * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function forceExchange(Wallet $to, $amount, ExtraDtoInterface|array|null $meta = null): Transfer
+    public function forceExchange(Wallet $to, int|string $amount, ExtraDtoInterface|array|null $meta = null): Transfer
     {
         return app(AtomicServiceInterface::class)->block($this, function () use ($to, $amount, $meta) {
             $extraAssembler = app(ExtraDtoAssemblerInterface::class);
