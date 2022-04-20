@@ -37,7 +37,7 @@ class Item extends Model implements ProductLimitedInterface
         return $result && !$customer->paid($this);
     }
 
-    public function getAmountProduct(Customer $customer): float|int|string
+    public function getAmountProduct(Customer $customer): int|string
     {
         /** @var Wallet $wallet */
         $wallet = app(CastService::class)->getWallet($customer);
