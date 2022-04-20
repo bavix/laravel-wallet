@@ -13,25 +13,17 @@ use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 interface ConsistencyServiceInterface
 {
     /**
-     * @param float|int|string $amount
-     *
      * @throws AmountInvalid
      */
-    public function checkPositive($amount): void;
+    public function checkPositive(float|int|string $amount): void;
 
     /**
-     * @param float|int|string $amount
-     *
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      */
-    public function checkPotential(Wallet $object, $amount, bool $allowZero = false): void;
+    public function checkPotential(Wallet $object, float|int|string $amount, bool $allowZero = false): void;
 
-    /**
-     * @param float|int|string $balance
-     * @param float|int|string $amount
-     */
-    public function canWithdraw($balance, $amount, bool $allowZero = false): bool;
+    public function canWithdraw(int|string $balance, int|string $amount, bool $allowZero = false): bool;
 
     /**
      * @param TransferLazyDtoInterface[] $objects
