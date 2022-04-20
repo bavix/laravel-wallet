@@ -150,10 +150,7 @@ trait HasWalletFloat
         return $this->forceTransfer($wallet, $result, $meta);
     }
 
-    /**
-     * @return string
-     */
-    public function getBalanceFloatAttribute()
+    public function getBalanceFloatAttribute(): string
     {
         $math = app(MathServiceInterface::class);
         $wallet = app(CastServiceInterface::class)->getWallet($this);
