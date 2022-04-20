@@ -6,8 +6,5 @@ namespace Bavix\Wallet\Interfaces;
 
 interface MaximalTaxable extends Taxable
 {
-    /**
-     * @return float|int
-     */
-    public function getMaximalFee();
+    public function getMaximalFee(): float|int;
 }
