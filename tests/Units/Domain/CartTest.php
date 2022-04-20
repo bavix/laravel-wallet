@@ -133,6 +133,7 @@ final class CartTest extends TestCase
 
         foreach ($transfers as $transfer) {
             self::assertSame(Transfer::STATUS_PAID, $transfer->status);
+            self::assertNull($transfer->status_last);
         }
 
         foreach ($cart->getItems() as $product) {
@@ -143,6 +144,7 @@ final class CartTest extends TestCase
         foreach ($transfers as $transfer) {
             $transfer->refresh();
             self::assertSame(Transfer::STATUS_REFUND, $transfer->status);
+            self::assertSame(Transfer::STATUS_PAID, $transfer->status_last);
         }
     }
 
