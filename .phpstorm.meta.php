@@ -37,7 +37,6 @@ namespace PHPSTORM_META {
     use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
     use Bavix\Wallet\Objects\Cart;
     use Bavix\Wallet\Services\CommonServiceLegacy;
-    use Bavix\Wallet\Services\MetaServiceLegacy;
     use Bavix\Wallet\Services\TaxServiceInterface;
 
     override(\app(0), map([
@@ -91,7 +90,6 @@ namespace PHPSTORM_META {
 
         // lagacy.services
         CommonServiceLegacy::class => CommonServiceLegacy::class,
-        MetaServiceLegacy::class => MetaServiceLegacy::class,
     ]));
 
 }
