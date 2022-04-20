@@ -44,15 +44,13 @@ trait HasWallet
     /**
      * The input means in the system.
      *
-     * @param int|string $amount
-     *
      * @throws AmountInvalid
      * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function deposit($amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function deposit(int|string $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         return app(AtomicServiceInterface::class)->block(
             $this,
@@ -63,10 +61,8 @@ trait HasWallet
 
     /**
      * Magic laravel framework method, makes it possible to call property balance.
-     *
-     * @return float|int|string
      */
-    public function getBalanceAttribute()
+    public function getBalanceAttribute(): string
     {
         /** @var Wallet $this */
         return app(RegulatorServiceInterface::class)->amount(app(CastServiceInterface::class)->getWallet($this));
@@ -101,11 +97,12 @@ trait HasWallet
 
     /**
      * This method ignores errors that occur when transferring funds.
-     *
-     * @param int|string $amount
      */
-    public function safeTransfer(Wallet $wallet, $amount, ExtraDtoInterface|array|null $meta = null): ?Transfer
-    {
+    public function safeTransfer(
+        Wallet $wallet,
+        int|string $amount,
+        ExtraDtoInterface|array|null $meta = null
+    ): ?Transfer {
         try {
             return $this->transfer($wallet, $amount, $meta);
         } catch (ExceptionInterface) {
@@ -116,8 +113,6 @@ trait HasWallet
     /**
      * A method that transfers funds from host to host.
      *
-     * @param int|string $amount
-     *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
@@ -126,7 +121,7 @@ trait HasWallet
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function transfer(Wallet $wallet, $amount, ExtraDtoInterface|array|null $meta = null): Transfer
+    public function transfer(Wallet $wallet, int|string $amount, ExtraDtoInterface|array|null $meta = null): Transfer
     {
         /** @var Wallet $this */
         app(ConsistencyServiceInterface::class)->checkPotential($this, $amount);
@@ -137,8 +132,6 @@ trait HasWallet
     /**
      * Withdrawals from the system.
      *
-     * @param int|string $amount
-     *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
@@ -147,7 +140,7 @@ trait HasWallet
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function withdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction
+    public function withdraw(int|string $amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         /** @var Wallet $this */
         app(ConsistencyServiceInterface::class)->checkPotential($this, $amount);
@@ -157,10 +150,8 @@ trait HasWallet
 
     /**
      * Checks if you can withdraw funds.
-     *
-     * @param float|int|string $amount
      */
-    public function canWithdraw($amount, bool $allowZero = false): bool
+    public function canWithdraw(int|string $amount, bool $allowZero = false): bool
     {
         $mathService = app(MathServiceInterface::class);
         $wallet = app(CastServiceInterface::class)->getWallet($this);
@@ -172,8 +163,6 @@ trait HasWallet
     /**
      * Forced to withdraw funds from system.
      *
-     * @param int|string $amount
-     *
      * @throws AmountInvalid
      * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
@@ -181,7 +170,7 @@ trait HasWallet
      * @throws ExceptionInterface
      */
     public function forceWithdraw(
-        $amount,
+        int|string $amount,
         ExtraDtoInterface|array|null $meta = null,
         bool $confirmed = true
     ): Transaction {
@@ -196,16 +185,17 @@ trait HasWallet
      * the forced transfer is needed when the user does not have the money, and we drive it. Sometimes you do. Depends
      * on business logic.
      *
-     * @param int|string $amount
-     *
      * @throws AmountInvalid
      * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      */
-    public function forceTransfer(Wallet $wallet, $amount, ExtraDtoInterface|array|null $meta = null): Transfer
-    {
+    public function forceTransfer(
+        Wallet $wallet,
+        int|string $amount,
+        ExtraDtoInterface|array|null $meta = null
+    ): Transfer {
         return app(AtomicServiceInterface::class)->block(
             $this,
             fn () => app(CommonServiceLegacy::class)

@@ -33,8 +33,6 @@ final class CommonServiceLegacy
     }
 
     /**
-     * @param int|string $amount
-     *
      * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
@@ -44,7 +42,7 @@ final class CommonServiceLegacy
     public function forceTransfer(
         Wallet $from,
         Wallet $to,
-        $amount,
+        int|string $amount,
         ExtraDtoInterface|array|null $meta = null,
         string $status = Transfer::STATUS_TRANSFER
     ): Transfer {
@@ -119,15 +117,13 @@ final class CommonServiceLegacy
     }
 
     /**
-     * @param float|int|string $amount
-     *
      * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      */
     public function makeTransaction(
         Wallet $wallet,
         string $type,
-        $amount,
+        float|int|string $amount,
         ?array $meta,
         bool $confirmed = true
     ): Transaction {
