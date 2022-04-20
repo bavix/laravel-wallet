@@ -56,10 +56,11 @@ final class TransferRepository implements TransferRepositoryInterface
     public function updateStatusByIds(string $status, array $ids): int
     {
         return $this->transfer->newQuery()
-            ->whereKey($ids)
+            ->toBase()
+            ->whereIn($this->transfer->getKeyName(), $ids)
             ->update([
-                'status' => $status,
                 'status_last' => DB::raw('status'),
+                'status' => $status,
             ])
         ;
     }
