@@ -18,11 +18,11 @@ use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
+use Bavix\Wallet\Services\AssistantServiceInterface;
 use Bavix\Wallet\Services\AtomicServiceInterface;
 use Bavix\Wallet\Services\BasketServiceInterface;
 use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
-use Bavix\Wallet\Services\MetaServiceLegacy;
 use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\PurchaseServiceInterface;
 use Bavix\Wallet\Services\TransferServiceInterface;
@@ -65,14 +65,14 @@ trait CartPay
 
             $transfers = [];
             $prepareService = app(PrepareServiceInterface::class);
-            $metaService = app(MetaServiceLegacy::class);
+            $assistantService = app(AssistantServiceInterface::class);
             foreach ($cart->getBasketDto()->cursor() as $product) {
                 $transfers[] = $prepareService->transferLazy(
                     $this,
                     $product,
                     Transfer::STATUS_PAID,
                     0,
-                    $metaService->getMeta($cart, $product)
+                    $assistantService->getMeta($cart, $product)
                 );
             }
 
@@ -118,14 +118,14 @@ trait CartPay
 
             $transfers = [];
             $prepareService = app(PrepareServiceInterface::class);
-            $metaService = app(MetaServiceLegacy::class);
+            $assistantService = app(AssistantServiceInterface::class);
             foreach ($cart->getBasketDto()->cursor() as $product) {
                 $transfers[] = $prepareService->transferLazy(
                     $this,
                     $product,
                     Transfer::STATUS_PAID,
                     $product->getAmountProduct($this),
-                    $metaService->getMeta($cart, $product)
+                    $assistantService->getMeta($cart, $product)
                 );
             }
 
@@ -188,6 +188,7 @@ trait CartPay
             $transferIds = [];
             $transfers = array_values($transfers);
             $prepareService = app(PrepareServiceInterface::class);
+            $assistantService = app(AssistantServiceInterface::class);
             foreach ($cart->getBasketDto()->cursor() as $product) {
                 $transferIds[] = $transfers[$index]->getKey();
                 $objects[] = $prepareService->transferLazy(
@@ -195,7 +196,7 @@ trait CartPay
                     $transfers[$index]->withdraw->wallet,
                     Transfer::STATUS_TRANSFER,
                     $transfers[$index]->deposit->amount,
-                    app(MetaServiceLegacy::class)->getMeta($cart, $product)
+                    $assistantService->getMeta($cart, $product)
                 );
 
                 ++$index;
