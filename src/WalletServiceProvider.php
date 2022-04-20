@@ -71,7 +71,6 @@ use Bavix\Wallet\Services\BookkeeperService;
 use Bavix\Wallet\Services\BookkeeperServiceInterface;
 use Bavix\Wallet\Services\CastService;
 use Bavix\Wallet\Services\CastServiceInterface;
-use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\ConsistencyService;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
 use Bavix\Wallet\Services\DiscountService;
@@ -86,6 +85,8 @@ use Bavix\Wallet\Services\RegulatorService;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Services\TaxService;
 use Bavix\Wallet\Services\TaxServiceInterface;
+use Bavix\Wallet\Services\TransactionService;
+use Bavix\Wallet\Services\TransactionServiceInterface;
 use Bavix\Wallet\Services\TransferService;
 use Bavix\Wallet\Services\TransferServiceInterface;
 use Bavix\Wallet\Services\WalletService;
@@ -137,7 +138,6 @@ final class WalletServiceProvider extends ServiceProvider
 
         $this->internal($configure['internal'] ?? []);
         $this->services($configure['services'] ?? [], $configure['cache'] ?? []);
-        $this->legacySingleton(); // without configuration
 
         $this->repositories($configure['repositories'] ?? []);
         $this->transformers($configure['transformers'] ?? []);
@@ -200,6 +200,10 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(PrepareServiceInterface::class, $configure['prepare'] ?? PrepareService::class);
         $this->app->singleton(PurchaseServiceInterface::class, $configure['purchase'] ?? PurchaseService::class);
         $this->app->singleton(TaxServiceInterface::class, $configure['tax'] ?? TaxService::class);
+        $this->app->singleton(
+            TransactionServiceInterface::class,
+            $configure['transaction'] ?? TransactionService::class
+        );
         $this->app->singleton(TransferServiceInterface::class, $configure['transfer'] ?? TransferService::class);
         $this->app->singleton(WalletServiceInterface::class, $configure['wallet'] ?? WalletService::class);
 
@@ -304,11 +308,6 @@ final class WalletServiceProvider extends ServiceProvider
             WalletCreatedEventInterface::class,
             $configure['wallet_created'] ?? WalletCreatedEvent::class
         );
-    }
-
-    private function legacySingleton(): void
-    {
-        $this->app->singleton(CommonServiceLegacy::class);
     }
 
     private function bindObjects(array $configure): void

@@ -18,11 +18,11 @@ use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\AtomicServiceInterface;
 use Bavix\Wallet\Services\CastServiceInterface;
-use Bavix\Wallet\Services\CommonServiceLegacy;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
 use Bavix\Wallet\Services\ExchangeServiceInterface;
 use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\TaxServiceInterface;
+use Bavix\Wallet\Services\TransferServiceInterface;
 use Illuminate\Database\RecordsNotFoundException;
 
 /**
@@ -106,7 +106,7 @@ trait CanExchange
                 Transfer::STATUS_EXCHANGE,
             );
 
-            $transfers = app(CommonServiceLegacy::class)->applyTransfers([$transferLazyDto]);
+            $transfers = app(TransferServiceInterface::class)->apply([$transferLazyDto]);
 
             return current($transfers);
         });

@@ -87,9 +87,6 @@ namespace PHPSTORM_META {
         PrepareServiceInterface::class => PrepareServiceInterface::class,
         PurchaseServiceInterface::class => PurchaseServiceInterface::class,
         TaxServiceInterface::class => TaxServiceInterface::class,
-
-        // lagacy.services
-        CommonServiceLegacy::class => CommonServiceLegacy::class,
     ]));
 
 }
