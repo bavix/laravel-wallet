@@ -21,4 +21,9 @@ interface TransferRepositoryInterface
      * @return Transfer[]
      */
     public function findBy(TransferQueryInterface $query): array;
+
+    /**
+     * @param non-empty-array<int> $ids
+     */
+    public function updateStatusByIds(string $status, array $ids): int;
 }

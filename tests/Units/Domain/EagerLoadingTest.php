@@ -21,6 +21,7 @@ final class EagerLoadingTest extends TestCase
         /** @var Buyer[]|Collection $buyerTimes */
         $buyerTimes = BuyerFactory::times(10)->create();
         foreach ($buyerTimes as $buyerTime) {
+            self::assertTrue($buyerTime->wallet->relationLoaded('holder'));
             $buyerTime->deposit(100);
         }
 
@@ -34,6 +35,8 @@ final class EagerLoadingTest extends TestCase
         $balances = [];
         foreach ($buyers as $buyer) {
             self::assertTrue($buyer->relationLoaded('wallet'));
+            // self::assertTrue($buyer->wallet->relationLoaded('holder'));
+            // fixme: I did not find a way to load the buyer, maybe someday I will get there.
 
             $uuids[] = $buyer->wallet->uuid;
             $balances[] = $buyer->wallet->balanceInt;
@@ -74,5 +77,7 @@ final class EagerLoadingTest extends TestCase
         self::assertTrue($user->relationLoaded('wallets'));
         self::assertNotNull($user->getWallet('hello'));
         self::assertNotNull($user->getWallet('world'));
+        self::assertTrue($user->getWallet('hello')->relationLoaded('holder'));
+        self::assertSame($user, $user->getWallet('hello')->holder);
     }
 }
