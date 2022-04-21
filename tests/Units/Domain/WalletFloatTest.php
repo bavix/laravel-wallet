@@ -47,6 +47,7 @@ final class WalletFloatTest extends TestCase
         $user->withdraw($user->balance);
         self::assertSame(0, $user->balanceInt);
         self::assertSame(0., (float) $user->balanceFloat);
+        self::assertSame(0., $user->getBalanceFloatNumAttribute());
     }
 
     public function testInvalidDeposit(): void
