@@ -7,4 +7,6 @@ namespace Bavix\Wallet\Internal\Service;
 interface UuidFactoryServiceInterface
 {
     public function uuid4(): string;
+
+    public function cast(string $uuid): string;
 }

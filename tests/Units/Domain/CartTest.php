@@ -165,7 +165,8 @@ final class CartTest extends TestCase
         $cart = app(Cart::class);
         $amount = 0;
         $price = 0;
-        for ($i = 0; $i < count($products) - 1; ++$i) {
+        $productsCount = count($products);
+        for ($i = 0; $i < $productsCount - 1; ++$i) {
             $rnd = random_int(1, 5);
             $cart = $cart->withItem($products[$i], $rnd);
             $price += $products[$i]->getAmountProduct($buyer) * $rnd;
@@ -199,7 +200,8 @@ final class CartTest extends TestCase
 
         $cart = app(Cart::class);
         $total = 0;
-        for ($i = 0; $i < count($products) - 1; ++$i) {
+        $productsCount = count($products);
+        for ($i = 0; $i < $productsCount - 1; ++$i) {
             $rnd = random_int(1, 5);
             $cart = $cart->withItem($products[$i], $rnd);
             $buyer->deposit($products[$i]->getAmountProduct($buyer) * $rnd);

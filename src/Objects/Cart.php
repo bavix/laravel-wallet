@@ -128,7 +128,7 @@ final class Cart implements Countable, CartInterface
             $this->getUniqueItems()
         );
 
-        if (count($items) === 0) {
+        if ($items === []) {
             throw new CartEmptyException('Cart is empty', ExceptionInterface::CART_EMPTY);
         }
 

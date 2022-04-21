@@ -23,7 +23,6 @@ use Bavix\Wallet\Test\Infra\Models\UserCashier;
 use Bavix\Wallet\Test\Infra\Models\UserMulti;
 use Bavix\Wallet\Test\Infra\PackageModels\Wallet;
 use Bavix\Wallet\Test\Infra\TestCase;
-use function compact;
 use Illuminate\Database\QueryException;
 use function range;
 use Throwable;
@@ -447,7 +446,9 @@ final class MultiWalletTest extends TestCase
         $user = UserMultiFactory::new()->create();
         $names = range('a', 'z');
         foreach ($names as $name) {
-            $user->createWallet(compact('name'));
+            $user->createWallet([
+                'name' => $name,
+            ]);
         }
 
         $user->load('wallets'); // optimize

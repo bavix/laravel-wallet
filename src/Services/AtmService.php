@@ -41,7 +41,7 @@ final class AtmService implements AtmServiceInterface
             $items = $this->transactionRepository->findBy($query);
         }
 
-        assert(count($items) > 0);
+        assert($items !== []);
 
         $results = [];
         foreach ($items as $item) {
@@ -67,7 +67,7 @@ final class AtmService implements AtmServiceInterface
             $items = $this->transferRepository->findBy($query);
         }
 
-        assert(count($items) > 0);
+        assert($items !== []);
 
         $results = [];
         foreach ($items as $item) {
