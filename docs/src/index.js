@@ -1,6 +1,7 @@
 import 'docsify'
-import 'docsify/lib/plugins/ga'
+// import 'docsify/lib/plugins/ga'
 import './cozy'
+import './gtag'
 import 'docsify/lib/plugins/emoji'
 import 'docsify/lib/plugins/search'
 import 'prismjs/components/prism-php'
