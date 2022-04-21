@@ -63,7 +63,7 @@ trait HasGift
             $amount = $mathService->sub($product->getAmountProduct($this), $discount);
             $fee = app(TaxServiceInterface::class)->getFee($product, $amount);
 
-            if ($force === false) {
+            if (!$force) {
                 app(ConsistencyServiceInterface::class)->checkPotential($this, $mathService->add($amount, $fee));
             }
 

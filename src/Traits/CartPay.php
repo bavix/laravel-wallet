@@ -128,7 +128,7 @@ trait CartPay
                 );
             }
 
-            if ($force === false) {
+            if (!$force) {
                 app(ConsistencyServiceInterface::class)->checkTransfer($transfers);
             }
 
@@ -201,7 +201,7 @@ trait CartPay
                 ++$index;
             }
 
-            if ($force === false) {
+            if (!$force) {
                 app(ConsistencyServiceInterface::class)->checkTransfer($objects);
             }
 

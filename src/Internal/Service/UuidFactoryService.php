@@ -19,4 +19,9 @@ final class UuidFactoryService implements UuidFactoryServiceInterface
             ->toString()
         ;
     }
+
+    public function cast(string $uuid): string
+    {
+        return $uuid;
+    }
 }

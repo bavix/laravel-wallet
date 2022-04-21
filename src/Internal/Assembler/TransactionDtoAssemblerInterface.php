@@ -13,7 +13,7 @@ interface TransactionDtoAssemblerInterface
         Model $payable,
         int $walletId,
         string $type,
-        string $amount,
+        float|int|string $amount,
         bool $confirmed,
         ?array $meta
     ): TransactionDtoInterface;

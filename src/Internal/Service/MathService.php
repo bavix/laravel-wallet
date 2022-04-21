@@ -17,10 +17,7 @@ final class MathService implements MathServiceInterface
         $this->scale = (int) $config->get('wallet.math.scale', 64);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function add($first, $second, ?int $scale = null): string
+    public function add(float|int|string $first, float|int|string $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($first)
             ->plus(BigDecimal::of($second))
@@ -28,10 +25,7 @@ final class MathService implements MathServiceInterface
             ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function sub($first, $second, ?int $scale = null): string
+    public function sub(float|int|string $first, float|int|string $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($first)
             ->minus(BigDecimal::of($second))
@@ -39,20 +33,14 @@ final class MathService implements MathServiceInterface
             ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function div($first, $second, ?int $scale = null): string
+    public function div(float|int|string $first, float|int|string $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($first)
             ->dividedBy(BigDecimal::of($second), $scale ?? $this->scale, RoundingMode::DOWN)
             ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function mul($first, $second, ?int $scale = null): string
+    public function mul(float|int|string $first, float|int|string $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($first)
             ->multipliedBy(BigDecimal::of($second))
@@ -60,10 +48,7 @@ final class MathService implements MathServiceInterface
             ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function pow($first, $second, ?int $scale = null): string
+    public function pow(float|int|string $first, float|int|string $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($first)
             ->power((int) $second)
@@ -71,64 +56,43 @@ final class MathService implements MathServiceInterface
             ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function powTen($number): string
+    public function powTen(float|int|string $number): string
     {
         return $this->pow(10, $number);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function ceil($number): string
+    public function ceil(float|int|string $number): string
     {
         return (string) BigDecimal::of($number)
             ->dividedBy(BigDecimal::one(), 0, RoundingMode::CEILING)
             ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function floor($number): string
+    public function floor(float|int|string $number): string
     {
         return (string) BigDecimal::of($number)
             ->dividedBy(BigDecimal::one(), 0, RoundingMode::FLOOR)
             ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function round($number, int $precision = 0): string
+    public function round(float|int|string $number, int $precision = 0): string
     {
         return (string) BigDecimal::of($number)
             ->dividedBy(BigDecimal::one(), $precision, RoundingMode::HALF_UP)
             ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function abs($number): string
+    public function abs(float|int|string $number): string
     {
         return (string) BigDecimal::of($number)->abs();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function negative($number): string
+    public function negative(float|int|string $number): string
     {
         return (string) BigDecimal::of($number)->negated();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function compare($first, $second): int
+    public function compare(float|int|string $first, float|int|string $second): int
     {
         return BigDecimal::of($first)->compareTo(BigDecimal::of($second));
     }
