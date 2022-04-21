@@ -32,7 +32,7 @@ final class TransferService implements TransferServiceInterface
      */
     public function updateStatusByIds(string $status, array $ids): bool
     {
-        return count($ids) !== 0 && count($ids) === $this->transferRepository->updateStatusByIds($status, $ids);
+        return $ids !== [] && count($ids) === $this->transferRepository->updateStatusByIds($status, $ids);
     }
 
     /**

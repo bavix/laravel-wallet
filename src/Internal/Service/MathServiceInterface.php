@@ -6,69 +6,27 @@ namespace Bavix\Wallet\Internal\Service;
 
 interface MathServiceInterface
 {
-    /**
-     * @param float|int|string $first
-     * @param float|int|string $second
-     */
-    public function add($first, $second, ?int $scale = null): string;
+    public function add(float|int|string $first, float|int|string $second, ?int $scale = null): string;
 
-    /**
-     * @param float|int|string $first
-     * @param float|int|string $second
-     */
-    public function sub($first, $second, ?int $scale = null): string;
+    public function sub(float|int|string $first, float|int|string $second, ?int $scale = null): string;
 
-    /**
-     * @param float|int|string $first
-     * @param float|int|string $second
-     */
-    public function div($first, $second, ?int $scale = null): string;
+    public function div(float|int|string $first, float|int|string $second, ?int $scale = null): string;
 
-    /**
-     * @param float|int|string $first
-     * @param float|int|string $second
-     */
-    public function mul($first, $second, ?int $scale = null): string;
+    public function mul(float|int|string $first, float|int|string $second, ?int $scale = null): string;
 
-    /**
-     * @param float|int|string $first
-     * @param float|int|string $second
-     */
-    public function pow($first, $second, ?int $scale = null): string;
+    public function pow(float|int|string $first, float|int|string $second, ?int $scale = null): string;
 
-    /**
-     * @param float|int|string $number
-     */
-    public function powTen($number): string;
+    public function powTen(float|int|string $number): string;
 
-    /**
-     * @param float|int|string $number
-     */
-    public function round($number, int $precision = 0): string;
+    public function round(float|int|string $number, int $precision = 0): string;
 
-    /**
-     * @param float|int|string $number
-     */
-    public function floor($number): string;
+    public function floor(float|int|string $number): string;
 
-    /**
-     * @param float|int|string $number
-     */
-    public function ceil($number): string;
+    public function ceil(float|int|string $number): string;
 
-    /**
-     * @param float|int|string $number
-     */
-    public function abs($number): string;
+    public function abs(float|int|string $number): string;
 
-    /**
-     * @param float|int|string $number
-     */
-    public function negative($number): string;
+    public function negative(float|int|string $number): string;
 
-    /**
-     * @param float|int|string $first
-     * @param float|int|string $second
-     */
-    public function compare($first, $second): int;
+    public function compare(float|int|string $first, float|int|string $second): int;
 }

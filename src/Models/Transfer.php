@@ -60,7 +60,7 @@ class Transfer extends Model
 
     public function getTable(): string
     {
-        if (!$this->table) {
+        if ((string) $this->table === '') {
             $this->table = config('wallet.transfer.table', 'transfers');
         }
 

@@ -27,14 +27,14 @@ final class DispatcherService implements DispatcherServiceInterface
 
     public function flush(): void
     {
-        foreach ($this->events as $event => $value) {
+        foreach (array_keys($this->events) as $event) {
             $this->dispatcher->flush($event);
         }
     }
 
     public function forgot(): void
     {
-        foreach ($this->events as $event => $value) {
+        foreach (array_keys($this->events) as $event) {
             $this->dispatcher->forget($event);
         }
     }
