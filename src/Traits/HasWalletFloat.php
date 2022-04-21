@@ -22,6 +22,7 @@ use Illuminate\Database\RecordsNotFoundException;
  * Trait HasWalletFloat.
  *
  * @property string $balanceFloat
+ * @property float  $balanceFloatNum
  * @psalm-require-extends \Illuminate\Database\Eloquent\Model
  * @psalm-require-implements \Bavix\Wallet\Interfaces\WalletFloat
  */
@@ -158,5 +159,10 @@ trait HasWalletFloat
         $decimalPlaces = $math->powTen($decimalPlacesValue);
 
         return $math->div($wallet->getBalanceAttribute(), $decimalPlaces, $decimalPlacesValue);
+    }
+
+    public function getBalanceFloatNumAttribute(): float
+    {
+        return (float) $this->getBalanceFloatAttribute();
     }
 }
