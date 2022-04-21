@@ -87,4 +87,6 @@ interface WalletFloat
     public function canWithdrawFloat(float|int|string $amount): bool;
 
     public function getBalanceFloatAttribute(): string;
+
+    public function getBalanceFloatNumAttribute(): float;
 }

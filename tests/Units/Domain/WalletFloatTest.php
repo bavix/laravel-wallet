@@ -25,18 +25,22 @@ final class WalletFloatTest extends TestCase
         $user = UserFloatFactory::new()->create();
         self::assertSame(0, $user->balanceInt);
         self::assertSame(0., (float) $user->balanceFloat);
+        self::assertSame(0., $user->balanceFloatNum);
 
         $user->depositFloat(.1);
         self::assertSame(10, $user->balanceInt);
         self::assertSame(.1, (float) $user->balanceFloat);
+        self::assertSame(.1, $user->balanceFloatNum);
 
         $user->depositFloat(1.25);
         self::assertSame(135, $user->balanceInt);
         self::assertSame(1.35, (float) $user->balanceFloat);
+        self::assertSame(1.35, $user->balanceFloatNum);
 
         $user->deposit(865);
         self::assertSame(1000, $user->balanceInt);
         self::assertSame(10., (float) $user->balanceFloat);
+        self::assertSame(10., $user->balanceFloatNum);
 
         self::assertSame(3, $user->transactions()->count());
 
