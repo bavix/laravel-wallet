@@ -33,7 +33,6 @@ laravel-wallet - Easy work with virtual wallet.
 | 7.x        | ^6.0,^7.0,^8.0 | ^7.4,^8.0 | 6 Sep 2022 |
 | 8.x        | ^9.0           | ^8.0      | 1 Jun 2022 |
 | 9.x [LTS]  | ^9.0           | ^8.0      | 8 Aug 2023 |
-| 10.x [LTS] | ^10.0          | ^8.1      | 7 Aug 2024 |
 
 ### Upgrade Guide
 
