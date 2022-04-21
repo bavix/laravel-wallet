@@ -51,9 +51,10 @@ trait CartPay
     public function payFreeCart(CartInterface $cart): array
     {
         return app(AtomicServiceInterface::class)->block($this, function () use ($cart) {
+            $basketDto = $cart->getBasketDto();
             $basketService = app(BasketServiceInterface::class);
             $availabilityAssembler = app(AvailabilityDtoAssemblerInterface::class);
-            if (!$basketService->availability($availabilityAssembler->create($this, $cart->getBasketDto(), false))) {
+            if (!$basketService->availability($availabilityAssembler->create($this, $basketDto, false))) {
                 throw new ProductEnded(
                     app(TranslatorServiceInterface::class)->get('wallet::errors.product_stock'),
                     ExceptionInterface::PRODUCT_ENDED
@@ -65,13 +66,13 @@ trait CartPay
             $transfers = [];
             $prepareService = app(PrepareServiceInterface::class);
             $assistantService = app(AssistantServiceInterface::class);
-            foreach ($cart->getBasketDto()->cursor() as $product) {
+            foreach ($basketDto->cursor() as $product) {
                 $transfers[] = $prepareService->transferLazy(
                     $this,
                     $product,
                     Transfer::STATUS_PAID,
                     0,
-                    $assistantService->getMeta($cart, $product)
+                    $assistantService->getMeta($basketDto, $product)
                 );
             }
 
@@ -116,6 +117,7 @@ trait CartPay
             }
 
             $transfers = [];
+            $basketDto = $cart->getBasketDto();
             $prepareService = app(PrepareServiceInterface::class);
             $assistantService = app(AssistantServiceInterface::class);
             foreach ($cart->getBasketDto()->cursor() as $product) {
@@ -124,7 +126,7 @@ trait CartPay
                     $product,
                     Transfer::STATUS_PAID,
                     $product->getAmountProduct($this),
-                    $assistantService->getMeta($cart, $product)
+                    $assistantService->getMeta($basketDto, $product)
                 );
             }
 
@@ -173,8 +175,9 @@ trait CartPay
     public function refundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool
     {
         return app(AtomicServiceInterface::class)->block($this, function () use ($cart, $force, $gifts) {
-            $transfers = app(PurchaseServiceInterface::class)->already($this, $cart->getBasketDto(), $gifts);
-            if (count($transfers) !== $cart->getBasketDto()->total()) {
+            $basketDto = $cart->getBasketDto();
+            $transfers = app(PurchaseServiceInterface::class)->already($this, $basketDto, $gifts);
+            if (count($transfers) !== $basketDto->total()) {
                 throw new ModelNotFoundException(
                     "No query results for model [{$this->transfers()
                         ->getMorphClass()}]",
@@ -188,14 +191,14 @@ trait CartPay
             $transfers = array_values($transfers);
             $prepareService = app(PrepareServiceInterface::class);
             $assistantService = app(AssistantServiceInterface::class);
-            foreach ($cart->getBasketDto()->cursor() as $product) {
+            foreach ($basketDto->cursor() as $product) {
                 $transferIds[] = $transfers[$index]->getKey();
                 $objects[] = $prepareService->transferLazy(
                     $product,
                     $transfers[$index]->withdraw->wallet,
                     Transfer::STATUS_TRANSFER,
                     $transfers[$index]->deposit->amount,
-                    $assistantService->getMeta($cart, $product)
+                    $assistantService->getMeta($basketDto, $product)
                 );
 
                 ++$index;

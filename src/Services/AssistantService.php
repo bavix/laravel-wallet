@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
-use Bavix\Wallet\Interfaces\CartInterface;
 use Bavix\Wallet\Interfaces\ProductInterface;
+use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
@@ -47,19 +47,17 @@ final class AssistantService implements AssistantServiceInterface
         return array_filter($amounts, fn (string $amount): bool => $this->mathService->compare($amount, 0) !== 0);
     }
 
-    public function getMeta(CartInterface $cart, ProductInterface $product): ?array
+    public function getMeta(BasketDtoInterface $basketDto, ProductInterface $product): ?array
     {
-        $metaCart = $cart->getBasketDto()
-            ->meta()
-        ;
+        $metaBasket = $basketDto->meta();
         $metaProduct = $product->getMetaProduct();
 
         if ($metaProduct !== null) {
-            return array_merge($metaCart, $metaProduct);
+            return array_merge($metaBasket, $metaProduct);
         }
 
-        if ($metaCart !== []) {
-            return $metaCart;
+        if ($metaBasket !== []) {
+            return $metaBasket;
         }
 
         return null;
