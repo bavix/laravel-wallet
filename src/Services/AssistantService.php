@@ -58,7 +58,7 @@ final class AssistantService implements AssistantServiceInterface
             return array_merge($metaCart, $metaProduct);
         }
 
-        if (count($metaCart) > 0) {
+        if ($metaCart !== []) {
             return $metaCart;
         }
 
