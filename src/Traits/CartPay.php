@@ -269,6 +269,7 @@ trait CartPay
      * Checks acquired product your wallet.
      *
      * @deprecated The method is slow and will be removed in the future
+     * @see PurchaseServiceInterface
      */
     public function paid(ProductInterface $product, bool $gifts = false): ?Transfer
     {
