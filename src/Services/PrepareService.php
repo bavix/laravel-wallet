@@ -34,7 +34,7 @@ final class PrepareService implements PrepareServiceInterface
      */
     public function deposit(
         Wallet $wallet,
-        string $amount,
+        float|int|string $amount,
         ?array $meta,
         bool $confirmed = true
     ): TransactionDtoInterface {
@@ -56,7 +56,7 @@ final class PrepareService implements PrepareServiceInterface
      */
     public function withdraw(
         Wallet $wallet,
-        string $amount,
+        float|int|string $amount,
         ?array $meta,
         bool $confirmed = true
     ): TransactionDtoInterface {
@@ -74,15 +74,13 @@ final class PrepareService implements PrepareServiceInterface
     }
 
     /**
-     * @param float|int|string $amount
-     *
      * @throws AmountInvalid
      */
     public function transferLazy(
         Wallet $from,
         Wallet $to,
         string $status,
-        $amount,
+        float|int|string $amount,
         ExtraDtoInterface|array|null $meta = null
     ): TransferLazyDtoInterface {
         $discount = $this->personalDiscountService->getDiscount($from, $to);

@@ -18,7 +18,7 @@ final class TransactionDto implements TransactionDtoInterface
         private int|string $payableId,
         private int $walletId,
         private string $type,
-        private string $amount,
+        private float|int|string $amount,
         private bool $confirmed,
         private ?array $meta
     ) {
@@ -51,7 +51,7 @@ final class TransactionDto implements TransactionDtoInterface
         return $this->type;
     }
 
-    public function getAmount(): string
+    public function getAmount(): float|int|string
     {
         return $this->amount;
     }
