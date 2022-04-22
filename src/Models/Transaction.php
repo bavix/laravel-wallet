@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * Class Transaction.
  *
  * @property string      $payable_type
- * @property int         $payable_id
+ * @property int|string  $payable_id
  * @property int         $wallet_id
  * @property string      $uuid
  * @property string      $type
