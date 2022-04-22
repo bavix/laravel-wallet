@@ -9,6 +9,7 @@ use Bavix\Wallet\Interfaces\ProductLimitedInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CastService;
+use Bavix\Wallet\Services\CastServiceInterface;
 use Bavix\Wallet\Traits\HasWallet;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -55,7 +56,8 @@ class Item extends Model implements ProductLimitedInterface
      */
     public function boughtGoods(array $walletIds): MorphMany
     {
-        return $this
+        return app(CastServiceInterface::class)
+            ->getWallet($this)
             ->morphMany(config('wallet.transfer.model', Transfer::class), 'to')
             ->where('status', Transfer::STATUS_PAID)
             ->where('from_type', config('wallet.wallet.model', Wallet::class))

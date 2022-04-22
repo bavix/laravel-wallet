@@ -84,7 +84,7 @@ trait HasGift
                 $withdraw->getKey(),
                 Transfer::STATUS_GIFT,
                 $castService->getWallet($to),
-                $castService->getModel($product),
+                $castService->getWallet($product),
                 $discount,
                 $fee
             );

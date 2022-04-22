@@ -97,11 +97,11 @@ final class PrepareService implements PrepareServiceInterface
 
         return $this->transferLazyDtoAssembler->create(
             $from,
-            $to,
+            $toWallet,
             $discount,
             $fee,
             $this->withdraw($from, $withdrawAmount, $withdrawOption->getMeta(), $withdrawOption->isConfirmed()),
-            $this->deposit($to, $depositAmount, $depositOption->getMeta(), $depositOption->isConfirmed()),
+            $this->deposit($toWallet, $depositAmount, $depositOption->getMeta(), $depositOption->isConfirmed()),
             $status
         );
     }
