@@ -60,12 +60,13 @@ final class DiscountTest extends TestCase
 
         self::assertInstanceOf(Buyer::class, $transfer->from->holder);
         self::assertInstanceOf(Wallet::class, $transfer->from);
-        self::assertInstanceOf(Item::class, $transfer->to);
+        self::assertInstanceOf(Item::class, $transfer->to->holder);
         self::assertInstanceOf(Wallet::class, $transfer->to->wallet);
 
         self::assertSame($buyer->wallet->getKey(), $transfer->from->getKey());
         self::assertSame($buyer->getKey(), $transfer->from->holder->getKey());
-        self::assertSame($product->getKey(), $transfer->to->getKey());
+        self::assertSame($product->wallet->getKey(), $transfer->to->getKey());
+        self::assertSame($product->getKey(), $transfer->to->holder->getKey());
     }
 
     public function testItemTransactions(): void
