@@ -11,6 +11,10 @@ use Illuminate\Database\Eloquent\Model;
 
 final class PurchaseService implements PurchaseServiceInterface
 {
+    public function __construct(private CastServiceInterface $castService)
+    {
+    }
+
     public function already(Customer $customer, BasketDtoInterface $basketDto, bool $gifts = false): array
     {
         $status = $gifts
@@ -20,8 +24,7 @@ final class PurchaseService implements PurchaseServiceInterface
         $arrays = [];
         $query = $customer->transfers();
         foreach ($basketDto->items() as $itemDto) {
-            /** @var Model $product */
-            $product = $itemDto->product();
+            $wallet = $this->castService->getWallet($itemDto->product());
 
             /**
              * As part of my work, "with" was added, it gives a 50x boost for a huge number of returns. In this case,
@@ -30,8 +33,8 @@ final class PurchaseService implements PurchaseServiceInterface
              */
             $arrays[] = (clone $query)
                 ->with(['deposit', 'withdraw.wallet'])
-                ->where('to_type', $product->getMorphClass())
-                ->where('to_id', $product->getKey())
+                ->where('to_type', $wallet->getMorphClass())
+                ->where('to_id', $wallet->getKey())
                 ->whereIn('status', $status)
                 ->orderBy('id', 'desc')
                 ->limit(count($itemDto))
