@@ -28,11 +28,11 @@ laravel-wallet - Easy work with virtual wallet.
 
 ### Support Policy
 
-| Version    | Laravel        | PHP       | Fixes      |
-|------------|----------------|-----------|------------|
-| 7.x        | ^6.0,^7.0,^8.0 | ^7.4,^8.0 | 6 Sep 2022 |
-| 8.x        | ^9.0           | ^8.0      | 1 Jun 2022 |
-| 9.x [LTS]  | ^9.0           | ^8.0      | 8 Aug 2023 |
+| Version    | Laravel        | PHP         | End of improvements | End of support |
+|------------|----------------|-------------|---------------------|----------------|
+| 7.x        | ^6.0,^7.0,^8.0 | 7.4,8.0,8.1 | 1 Mar 2022          | 6 Sep 2022     |
+| 8.x        | ^9.0           | 8.0,8.1     | 1 May 2022          | 1 Jun 2022     |
+| 9.x [LTS]  | ^9.0           | 8.0,8.1     | 1 Feb 2023          | 6 Nov 2023     |
 
 ### Upgrade Guide
 
@@ -40,10 +40,10 @@ To perform the migration, you will be [helped by the instruction](https://bavix.
 
 ### Extensions
 
-| Extension | Description | 
-| ----- | ----- | 
-| [Swap](https://github.com/bavix/laravel-wallet-swap) | Addition to the laravel-wallet library for quick setting of exchange rates | 
-| [Warm Up](https://github.com/bavix/laravel-wallet-warmup) | Addition to the laravel-wallet library for refresh balance wallets | 
+| Extension                                                 | Description                                                                |
+|-----------------------------------------------------------|----------------------------------------------------------------------------|
+| [Swap](https://github.com/bavix/laravel-wallet-swap)      | Addition to the laravel-wallet library for quick setting of exchange rates |
+| [Warm Up](https://github.com/bavix/laravel-wallet-warmup) | Addition to the laravel-wallet library for refresh balance wallets         | 
 
 ### Usage
 Add the `HasWallet` trait and `Wallet` interface to model.
@@ -87,19 +87,52 @@ class User extends Model implements Customer
 }
 ```
 
-Add the `HasWallet` trait and `Product` interface to `Item` model.
+Add the `HasWallet` trait and interface to `Item` model.
+
+Starting from version 9.x there are two product interfaces:
+- For an unlimited number of products (`ProductLimitedInterface`);
+- For a limited number of products (`ProductInterface`);
+
+An example with an unlimited number of products:
 ```php
 use Bavix\Wallet\Traits\HasWallet;
-use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Interfaces\Customer;
+use Bavix\Wallet\Interfaces\ProductInterface;
 
-class Item extends Model implements Product
+class Item extends Model implements ProductInterface
+{
+    use HasWallet;
+
+    public function getAmountProduct(Customer $customer)
+    {
+        return 100;
+    }
+
+    public function getMetaProduct(): ?array
+    {
+        return [
+            'title' => $this->title, 
+            'description' => 'Purchase of Product #' . $this->id,
+        ];
+    }
+}
+```
+
+Example with a limited number of products:
+```php
+use Bavix\Wallet\Traits\HasWallet;
+use Bavix\Wallet\Interfaces\Customer;
+use Bavix\Wallet\Interfaces\ProductLimitedInterface;
+
+class Item extends Model implements ProductLimitedInterface
 {
     use HasWallet;
 
     public function canBuy(Customer $customer, int $quantity = 1, bool $force = false): bool
     {
         /**
+         * This is where you implement the constraint logic. 
+         * 
          * If the service can be purchased once, then
          *  return !$customer->paid($this);
          */
@@ -121,6 +154,10 @@ class Item extends Model implements Product
 }
 ```
 
+I do not recommend using the limited interface when working with a shopping cart. 
+If you are working with a shopping cart, then you should override the `PurchaseServiceInterface` interface. 
+With it, you can check the availability of all products with one request, there will be no N-queries in the database.
+
 Proceed to purchase.
 
 ```php
@@ -132,7 +169,7 @@ $user->pay($item); // If you do not have enough money, throw an exception
 var_dump($user->balance); // 0
 
 if ($user->safePay($item)) {
-  // try to buy again )
+  // try to buy again
 }
 
 var_dump((bool)$user->paid($item)); // bool(true)
@@ -144,7 +181,11 @@ var_dump((bool)$user->paid($item)); // bool(false)
 ### Eager Loading
 
 ```php
+// When working with one wallet
 User::with('wallet');
+
+// When using the multi-wallet functionality
+User::with('wallets');
 ```
 
 ### How to work with fractional numbers?

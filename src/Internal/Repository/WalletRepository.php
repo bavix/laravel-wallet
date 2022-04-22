@@ -6,14 +6,12 @@ namespace Bavix\Wallet\Internal\Repository;
 
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
-use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Bavix\Wallet\Models\Wallet;
 use Illuminate\Database\Eloquent\ModelNotFoundException as EloquentModelNotFoundException;
 
 final class WalletRepository implements WalletRepositoryInterface
 {
     public function __construct(
-        private UuidFactoryServiceInterface $uuidFactoryService,
         private Wallet $wallet
     ) {
     }
@@ -69,7 +67,7 @@ final class WalletRepository implements WalletRepositoryInterface
     public function getByUuid(string $uuid): Wallet
     {
         return $this->getBy([
-            'uuid' => $this->uuidFactoryService->cast($uuid),
+            'uuid' => $uuid,
         ]);
     }
 

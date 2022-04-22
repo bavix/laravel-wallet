@@ -9,8 +9,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateWalletsUuidTable extends Migration
-{
+return new class() extends Migration {
     public function up(): void
     {
         if (Schema::hasColumn($this->table(), 'uuid')) {
@@ -18,7 +17,7 @@ class UpdateWalletsUuidTable extends Migration
         }
 
         // upgrade from 6.x
-        Schema::table($this->table(), function (Blueprint $table) {
+        Schema::table($this->table(), static function (Blueprint $table) {
             $table->uuid('uuid')
                 ->after('slug')
                 ->nullable()
@@ -49,4 +48,4 @@ class UpdateWalletsUuidTable extends Migration
     {
         return (new Wallet())->getTable();
     }
-}
+};

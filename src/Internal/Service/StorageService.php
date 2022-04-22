@@ -44,21 +44,16 @@ final class StorageService implements StorageServiceInterface
         return $this->mathService->round($value);
     }
 
-    /**
-     * @param float|int|string $value
-     */
-    public function sync(string $key, $value): bool
+    public function sync(string $key, float|int|string $value): bool
     {
         return $this->cacheRepository->set($key, $value);
     }
 
     /**
-     * @param float|int|string $value
-     *
      * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      */
-    public function increase(string $key, $value): string
+    public function increase(string $key, float|int|string $value): string
     {
         return $this->lockService->block(
             $key.'::increase',
