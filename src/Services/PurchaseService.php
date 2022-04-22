@@ -7,7 +7,6 @@ namespace Bavix\Wallet\Services;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
 use Bavix\Wallet\Models\Transfer;
-use Illuminate\Database\Eloquent\Model;
 
 final class PurchaseService implements PurchaseServiceInterface
 {
