@@ -18,16 +18,11 @@ interface StorageServiceInterface
      */
     public function get(string $key): string;
 
-    /**
-     * @param float|int|string $value
-     */
-    public function sync(string $key, $value): bool;
+    public function sync(string $key, float|int|string $value): bool;
 
     /**
-     * @param float|int|string $value
-     *
      * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      */
-    public function increase(string $key, $value): string;
+    public function increase(string $key, float|int|string $value): string;
 }
