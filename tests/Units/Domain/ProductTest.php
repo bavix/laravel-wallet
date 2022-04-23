@@ -10,6 +10,7 @@ use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
+use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Factories\ItemFactory;
 use Bavix\Wallet\Test\Infra\Factories\ItemWalletFactory;
@@ -258,6 +259,28 @@ final class ProductTest extends TestCase
 
         self::assertNotNull($buyer->payFree($product));
         $buyer->payFree($product);
+    }
+
+    public function testPayCustomPrice(): void
+    {
+        /**
+         * @var Buyer $buyer
+         * @var Item  $product
+         */
+        $buyer = BuyerFactory::new()->create();
+        $product = ItemFactory::new()->create([
+            'quantity' => 1,
+            'price' => 5_000,
+        ]);
+
+        $buyer->deposit(1_000);
+        self::assertSame(1_000, $buyer->balanceInt);
+
+        $cart = app(Cart::class)
+            ->withItem($product, price: 1_000);
+
+        $transfers = $buyer->payCart($cart);
+        self::assertCount(1, $transfers);
     }
 
     /**

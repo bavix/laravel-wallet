@@ -21,14 +21,9 @@ use Countable;
 final class Cart implements Countable, CartInterface
 {
     /**
-     * @var ProductInterface[]
+     * @var array<string, ItemDtoInterface[]>
      */
     private array $items = [];
-
-    /**
-     * @var array<string, int>
-     */
-    private array $quantity = [];
 
     private array $meta = [];
 
@@ -51,14 +46,16 @@ final class Cart implements Countable, CartInterface
         return $self;
     }
 
-    public function withItem(ProductInterface $product, int $quantity = 1): self
+    public function withItem(ProductInterface $product, int $quantity = 1, int|string|null $price = null): self
     {
         $self = clone $this;
 
         $productId = $self->productId($product);
+        if (!isset($self->items[$productId])) {
+            $self->items[$productId] = [];
+        }
 
-        $self->quantity[$productId] = $self->getQuantity($product) + $quantity;
-        $self->items[$productId] = $product;
+        $self->items[$productId][] = new ItemDto($product, $quantity, $price);
 
         return $self;
     }
@@ -80,29 +77,28 @@ final class Cart implements Countable, CartInterface
     {
         $items = [];
         foreach ($this->items as $item) {
-            $count = $this->getQuantity($item);
-            for ($i = 0; $i < $count; ++$i) {
-                $items[] = $item;
+            foreach ($item as $datum) {
+                $items[] = $datum->items();
             }
         }
 
-        return $items;
-    }
-
-    /**
-     * @return ProductInterface[]
-     */
-    public function getUniqueItems(): array
-    {
-        return $this->items;
+        return array_merge(...$items);
     }
 
     public function getTotal(Customer $customer): string
     {
         $result = 0;
-        foreach ($this->items as $item) {
-            $price = $this->math->mul($this->getQuantity($item), $item->getAmountProduct($customer));
-            $result = $this->math->add($result, $price);
+        $prices = [];
+        foreach ($this->items as $productId => $_items) {
+            foreach ($_items as $item) {
+                $product = $item->product();
+                $prices[$productId] = $item->getPrice()
+                    ?? $prices[$productId]
+                    ?? $item->product()->getAmountProduct($customer);
+
+                $price = $this->math->mul($this->getQuantity($product), $prices[$productId]);
+                $result = $this->math->add($result, $price);
+            }
         }
 
         return (string) $result;
@@ -115,7 +111,14 @@ final class Cart implements Countable, CartInterface
 
     public function getQuantity(ProductInterface $product): int
     {
-        return $this->quantity[$this->productId($product)] ?? 0;
+        /** @var ItemDtoInterface[] $items */
+        $quantity = 0;
+        $items = $this->items[$this->productId($product)] ?? [];
+        foreach ($items as $item) {
+            $quantity += $item->count();
+        }
+
+        return $quantity;
     }
 
     /**
@@ -123,16 +126,11 @@ final class Cart implements Countable, CartInterface
      */
     public function getBasketDto(): BasketDtoInterface
     {
-        $items = array_map(
-            fn (ProductInterface $product): ItemDtoInterface => new ItemDto($product, $this->getQuantity($product)),
-            $this->getUniqueItems()
-        );
-
-        if ($items === []) {
+        if ($this->items === []) {
             throw new CartEmptyException('Cart is empty', ExceptionInterface::CART_EMPTY);
         }
 
-        return new BasketDto($items, $this->getMeta());
+        return new BasketDto(array_merge(...array_values($this->items)), $this->getMeta());
     }
 
     private function productId(ProductInterface $product): string

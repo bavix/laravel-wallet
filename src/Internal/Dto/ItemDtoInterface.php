@@ -16,5 +16,7 @@ interface ItemDtoInterface extends Countable
 
     public function count(): int;
 
+    public function getPrice(): int|string|null;
+
     public function product(): ProductInterface;
 }
