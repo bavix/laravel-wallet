@@ -11,7 +11,8 @@ final class ItemDto implements ItemDtoInterface
 {
     public function __construct(
         private ProductInterface $product,
-        private int $quantity
+        private int $quantity,
+        private int|string|null $price,
     ) {
     }
 
@@ -21,6 +22,11 @@ final class ItemDto implements ItemDtoInterface
     public function items(): array
     {
         return array_fill(0, $this->quantity, $this->product);
+    }
+
+    public function getPrice(): int|string|null
+    {
+        return $this->price;
     }
 
     public function product(): ProductInterface
