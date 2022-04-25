@@ -269,19 +269,25 @@ final class ProductTest extends TestCase
          */
         $buyer = BuyerFactory::new()->create();
         $product = ItemFactory::new()->create([
-            'quantity' => 1,
+            'quantity' => 2,
             'price' => 5_000,
         ]);
 
-        $buyer->deposit(1_000);
-        self::assertSame(1_000, $buyer->balanceInt);
+        self::assertSame(0, $buyer->balanceInt);
+
+        $buyer->deposit(6_000 + (int) $buyer->wallet->getKey());
+        self::assertSame(6_000 + (int) $buyer->wallet->getKey(), $buyer->balanceInt);
 
         $cart = app(Cart::class)
             ->withItem($product, pricePerItem: 1_000)
+            ->withItem($product)
         ;
 
+        self::assertSame(6000 + (int) $buyer->wallet->getKey(), (int) $cart->getTotal($buyer));
+
         $transfers = $buyer->payCart($cart);
-        self::assertCount(1, $transfers);
+        self::assertSame(0, $buyer->balanceInt);
+        self::assertCount(2, $transfers);
     }
 
     /**
