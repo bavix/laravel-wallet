@@ -121,13 +121,13 @@ trait CartPay
             $prepareService = app(PrepareServiceInterface::class);
             $assistantService = app(AssistantServiceInterface::class);
             foreach ($cart->getBasketDto()->items() as $item) {
-                foreach ($item->items() as $_item) {
-                    $product = $item->product();
+                foreach ($item->getItems() as $_item) {
+                    $product = $item->getProduct();
                     $transfers[] = $prepareService->transferLazy(
                         $this,
                         $product,
                         Transfer::STATUS_PAID,
-                        $item->getPrice() ?? $product->getAmountProduct($this),
+                        $item->getPricePerItem() ?? $product->getAmountProduct($this),
                         $assistantService->getMeta($basketDto, $product)
                     );
                 }

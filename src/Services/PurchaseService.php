@@ -23,7 +23,7 @@ final class PurchaseService implements PurchaseServiceInterface
         $arrays = [];
         $query = $customer->transfers();
         foreach ($basketDto->items() as $itemDto) {
-            $wallet = $this->castService->getWallet($itemDto->product());
+            $wallet = $this->castService->getWallet($itemDto->getProduct());
 
             /**
              * As part of my work, "with" was added, it gives a 50x boost for a huge number of returns. In this case,
