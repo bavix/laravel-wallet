@@ -90,12 +90,13 @@ final class Cart implements Countable, CartInterface
         foreach ($this->items as $productId => $_items) {
             foreach ($_items as $item) {
                 $product = $item->getProduct();
-                $prices[$productId] = $item->getPricePerItem()
-                    ?? $prices[$productId]
-                    ?? $product->getAmountProduct($customer)
-                ;
+                $pricePerItem = $item->getPricePerItem();
+                if ($pricePerItem === null) {
+                    $prices[$productId] ??= $product->getAmountProduct($customer);
+                    $pricePerItem = $prices[$productId];
+                }
 
-                $price = $this->math->mul($this->getQuantity($product), $prices[$productId]);
+                $price = $this->math->mul(count($item), $pricePerItem);
                 $result = $this->math->add($result, $price);
             }
         }

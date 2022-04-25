@@ -126,14 +126,17 @@ trait CartPay
             foreach ($cart->getBasketDto()->items() as $item) {
                 foreach ($item->getItems() as $product) {
                     $productId = $product::class.':'.$castService->getModel($product)->getKey();
-                    $prices[$productId] = $item->getPricePerItem()
-                        ?? $prices[$productId]
-                        ?? $product->getAmountProduct($this);
+                    $pricePerItem = $item->getPricePerItem();
+                    if ($pricePerItem === null) {
+                        $prices[$productId] ??= $product->getAmountProduct($this);
+                        $pricePerItem = $prices[$productId];
+                    }
+
                     $transfers[] = $prepareService->transferLazy(
                         $this,
                         $product,
                         Transfer::STATUS_PAID,
-                        $prices[$productId],
+                        $pricePerItem,
                         $assistantService->getMeta($basketDto, $product)
                     );
                 }
