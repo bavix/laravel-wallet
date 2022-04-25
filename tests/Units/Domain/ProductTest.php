@@ -277,7 +277,8 @@ final class ProductTest extends TestCase
         self::assertSame(1_000, $buyer->balanceInt);
 
         $cart = app(Cart::class)
-            ->withItem($product, price: 1_000);
+            ->withItem($product, pricePerItem: 1_000)
+        ;
 
         $transfers = $buyer->payCart($cart);
         self::assertCount(1, $transfers);

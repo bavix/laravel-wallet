@@ -12,24 +12,24 @@ final class ItemDto implements ItemDtoInterface
     public function __construct(
         private ProductInterface $product,
         private int $quantity,
-        private int|string|null $price,
+        private int|string|null $pricePerItem,
     ) {
     }
 
     /**
      * @return ProductInterface[]
      */
-    public function items(): array
+    public function getItems(): array
     {
         return array_fill(0, $this->quantity, $this->product);
     }
 
-    public function getPrice(): int|string|null
+    public function getPricePerItem(): int|string|null
     {
-        return $this->price;
+        return $this->pricePerItem;
     }
 
-    public function product(): ProductInterface
+    public function getProduct(): ProductInterface
     {
         return $this->product;
     }
