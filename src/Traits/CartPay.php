@@ -21,6 +21,7 @@ use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\AssistantServiceInterface;
 use Bavix\Wallet\Services\AtomicServiceInterface;
 use Bavix\Wallet\Services\BasketServiceInterface;
+use Bavix\Wallet\Services\CastServiceInterface;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
 use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\PurchaseServiceInterface;
@@ -107,27 +108,32 @@ trait CartPay
     public function payCart(CartInterface $cart, bool $force = false): array
     {
         return app(AtomicServiceInterface::class)->block($this, function () use ($cart, $force) {
+            $basketDto = $cart->getBasketDto();
             $basketService = app(BasketServiceInterface::class);
             $availabilityAssembler = app(AvailabilityDtoAssemblerInterface::class);
-            if (!$basketService->availability($availabilityAssembler->create($this, $cart->getBasketDto(), $force))) {
+            if (!$basketService->availability($availabilityAssembler->create($this, $basketDto, $force))) {
                 throw new ProductEnded(
                     app(TranslatorServiceInterface::class)->get('wallet::errors.product_stock'),
                     ExceptionInterface::PRODUCT_ENDED
                 );
             }
 
+            $prices = [];
             $transfers = [];
-            $basketDto = $cart->getBasketDto();
+            $castService = app(CastServiceInterface::class);
             $prepareService = app(PrepareServiceInterface::class);
             $assistantService = app(AssistantServiceInterface::class);
             foreach ($cart->getBasketDto()->items() as $item) {
-                foreach ($item->getItems() as $_item) {
-                    $product = $item->getProduct();
+                foreach ($item->getItems() as $product) {
+                    $productId = $product::class.':'.$castService->getModel($product)->getKey();
+                    $prices[$productId] = $item->getPricePerItem()
+                        ?? $prices[$productId]
+                        ?? $product->getAmountProduct($this);
                     $transfers[] = $prepareService->transferLazy(
                         $this,
                         $product,
                         Transfer::STATUS_PAID,
-                        $item->getPricePerItem() ?? $product->getAmountProduct($this),
+                        $prices[$productId],
                         $assistantService->getMeta($basketDto, $product)
                     );
                 }
