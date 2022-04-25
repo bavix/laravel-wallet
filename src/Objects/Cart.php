@@ -92,9 +92,8 @@ final class Cart implements Countable, CartInterface
                 $product = $item->getProduct();
                 $prices[$productId] = $item->getPricePerItem()
                     ?? $prices[$productId]
-                    ?? $item->getProduct()
-                        ->getAmountProduct($customer)
-                    ;
+                    ?? $product->getAmountProduct($customer)
+                ;
 
                 $price = $this->math->mul($this->getQuantity($product), $prices[$productId]);
                 $result = $this->math->add($result, $price);
