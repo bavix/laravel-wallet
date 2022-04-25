@@ -265,10 +265,10 @@ final class ProductTest extends TestCase
     {
         /**
          * @var Buyer $buyer
-         * @var Item  $product
+         * @var Item  $productIn
          */
         $buyer = BuyerFactory::new()->create();
-        $product = ItemFactory::new()->create([
+        [$productIn, $productOutside] = ItemFactory::times(2)->create([
             'quantity' => 2,
             'price' => 5_000,
         ]);
@@ -279,13 +279,15 @@ final class ProductTest extends TestCase
         self::assertSame(6_000 + (int) $buyer->getKey(), $buyer->balanceInt);
 
         $cart = app(Cart::class)
-            ->withItem($product, pricePerItem: 1_000)
-            ->withItem($product)
+            ->withItem($productIn, pricePerItem: 1_000)
+            ->withItem($productIn)
         ;
 
         self::assertSame(6_000 + (int) $buyer->getKey(), (int) $cart->getTotal($buyer));
 
         $transfers = $buyer->payCart($cart);
+        self::assertSame(0, $cart->getQuantity($productOutside));
+        self::assertSame(2, $cart->getQuantity($productIn));
         self::assertSame(0, $buyer->balanceInt);
         self::assertCount(2, $transfers);
     }
