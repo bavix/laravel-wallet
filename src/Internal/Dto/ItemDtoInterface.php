@@ -12,11 +12,11 @@ interface ItemDtoInterface extends Countable
     /**
      * @return ProductInterface[]
      */
-    public function items(): array;
+    public function getItems(): array;
 
     public function count(): int;
 
-    public function getPrice(): int|string|null;
+    public function getPricePerItem(): int|string|null;
 
-    public function product(): ProductInterface;
+    public function getProduct(): ProductInterface;
 }
