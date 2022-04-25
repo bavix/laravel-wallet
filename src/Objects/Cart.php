@@ -46,16 +46,14 @@ final class Cart implements Countable, CartInterface
         return $self;
     }
 
-    public function withItem(ProductInterface $product, int $quantity = 1, int|string|null $price = null): self
+    public function withItem(ProductInterface $product, int $quantity = 1, int|string|null $pricePerItem = null): self
     {
         $self = clone $this;
 
         $productId = $self->productId($product);
-        if (!isset($self->items[$productId])) {
-            $self->items[$productId] = [];
-        }
 
-        $self->items[$productId][] = new ItemDto($product, $quantity, $price);
+        $self->items[$productId] ??= [];
+        $self->items[$productId][] = new ItemDto($product, $quantity, $pricePerItem);
 
         return $self;
     }
@@ -78,7 +76,7 @@ final class Cart implements Countable, CartInterface
         $items = [];
         foreach ($this->items as $item) {
             foreach ($item as $datum) {
-                $items[] = $datum->items();
+                $items[] = $datum->getItems();
             }
         }
 
@@ -91,10 +89,12 @@ final class Cart implements Countable, CartInterface
         $prices = [];
         foreach ($this->items as $productId => $_items) {
             foreach ($_items as $item) {
-                $product = $item->product();
-                $prices[$productId] = $item->getPrice()
+                $product = $item->getProduct();
+                $prices[$productId] = $item->getPricePerItem()
                     ?? $prices[$productId]
-                    ?? $item->product()->getAmountProduct($customer);
+                    ?? $item->getProduct()
+                        ->getAmountProduct($customer)
+                    ;
 
                 $price = $this->math->mul($this->getQuantity($product), $prices[$productId]);
                 $result = $this->math->add($result, $price);
@@ -111,7 +111,6 @@ final class Cart implements Countable, CartInterface
 
     public function getQuantity(ProductInterface $product): int
     {
-        /** @var ItemDtoInterface[] $items */
         $quantity = 0;
         $items = $this->items[$this->productId($product)] ?? [];
         foreach ($items as $item) {
@@ -126,11 +125,13 @@ final class Cart implements Countable, CartInterface
      */
     public function getBasketDto(): BasketDtoInterface
     {
-        if ($this->items === []) {
+        $items = array_merge(...array_values($this->items));
+
+        if ($items === []) {
             throw new CartEmptyException('Cart is empty', ExceptionInterface::CART_EMPTY);
         }
 
-        return new BasketDto(array_merge(...array_values($this->items)), $this->getMeta());
+        return new BasketDto($items, $this->getMeta());
     }
 
     private function productId(ProductInterface $product): string
