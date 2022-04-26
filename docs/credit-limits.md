@@ -11,7 +11,7 @@ An example of working with a credit limit:
 /**
  * @var \Bavix\Wallet\Interfaces\Customer $customer
  * @var \Bavix\Wallet\Models\Wallet $wallet
- * @var \Bavix\Wallet\Interfaces\Product $product
+ * @var \Bavix\Wallet\Interfaces\ProductInterface $product
  */
 $wallet = $customer->wallet; // get default wallet
 $wallet->meta['credit'] = 10000; // credit limit
