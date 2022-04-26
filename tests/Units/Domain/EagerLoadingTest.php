@@ -58,6 +58,12 @@ final class EagerLoadingTest extends TestCase
         $transfer = $user1->transfer($user2, 500);
         self::assertTrue($transfer->relationLoaded('withdraw'));
         self::assertTrue($transfer->relationLoaded('deposit'));
+
+        self::assertTrue($transfer->relationLoaded('from'));
+        self::assertTrue($transfer->relationLoaded('to'));
+
+        self::assertSame($user1->wallet, $transfer->from);
+        self::assertSame($user2->wallet, $transfer->to);
     }
 
     public function testMultiWallets(): void
