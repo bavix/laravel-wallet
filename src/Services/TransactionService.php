@@ -34,11 +34,9 @@ final class TransactionService implements TransactionServiceInterface
     ): Transaction {
         assert(in_array($type, [Transaction::TYPE_DEPOSIT, Transaction::TYPE_WITHDRAW], true));
 
-        if ($type === Transaction::TYPE_DEPOSIT) {
-            $dto = $this->prepareService->deposit($wallet, (string) $amount, $meta, $confirmed);
-        } else {
-            $dto = $this->prepareService->withdraw($wallet, (string) $amount, $meta, $confirmed);
-        }
+        $dto = $type === Transaction::TYPE_DEPOSIT
+            ? $this->prepareService->deposit($wallet, (string) $amount, $meta, $confirmed)
+            : $this->prepareService->withdraw($wallet, (string) $amount, $meta, $confirmed);
 
         $transactions = $this->apply([
             $dto->getWalletId() => $wallet,
