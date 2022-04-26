@@ -224,3 +224,32 @@ $cart = app(\Bavix\Wallet\Objects\Cart::class)
 
 $cart = $cart->withItem($product);
 ```
+
+## 8.1.x+ → 9.0.x
+
+> The logic of storing transfers between accounts has changed.
+> Previously, money could be credited to the user directly, but starting from version nine, all transactions go strictly between wallets. 
+> Thanks to this approach, finally, there will be full-fledged work with uuid identifiers in the project.
+
+To migrate to the correct structure, you need to run the command:
+```
+artisan bx:transfer:fix
+```
+
+If the command fails, then the command must be restarted. 
+Continue until the command starts executing immediately (no bad entries left).
+
+---
+
+The product has been divided into two interfaces:
+- `ProductLimitedInterface`. Needed to create limited goods;
+- `ProductInterface`. Needed for an infinite number of products;
+
+The old Product interface should be replaced with one of these.
+
+Replace `Bavix\Wallet\Interfaces\Product` to `Bavix\Wallet\Interfaces\ProductLimitedInterface`. 
+
+
+---
+
+

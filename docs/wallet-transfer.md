@@ -69,4 +69,37 @@ $firstWallet->balance; // -400
 $lastWallet->balance; // 500
 ```
 
+It worked!
+
+## Change the meta and confirmation.
+
+Check the user's balance.
+
+```php
+$firstWallet->balanceInt; // 1_000
+$secondWallet->balanceInt; // 0
+```
+
+We will execute the transfer, but without confirmation of the withdrawal of funds.
+
+```php
+use Bavix\Wallet\External\Dto\Extra;
+use Bavix\Wallet\External\Dto\Option;
+
+/** @var $firstWallet \Bavix\Wallet\Interfaces\Wallet */
+$transfer = $firstWallet->transfer($secondWallet, 500, new Extra(
+    deposit: ['message' => 'Hello, secondWallet!'],
+    withdraw: new Option(meta: ['something' => 'anything'], confirmed: false)
+));
+
+$transfer->withdraw->meta; // ['something' => 'anything']
+$transfer->withdraw->confirmed; // false
+
+$transfer->deposit->meta; // ['message' => 'Hello, secondWallet!']
+$transfer->deposit->confirmed; // true
+
+$firstWallet->balanceInt; // 1_000
+$secondWallet->balanceInt; // 500
+```
+
 It worked! 
