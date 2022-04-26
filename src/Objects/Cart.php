@@ -135,6 +135,9 @@ final class Cart implements Countable, CartInterface
 
     /**
      * @return Product[]
+     *
+     * @deprecated Will be removed in 9.x
+     * @see getItems
      */
     public function getUniqueItems(): array
     {
