@@ -16,15 +16,15 @@ class User extends Model implements Customer
 
 ## Item Model
 
-Add the `HasWallet` trait and `Product` interface to Item model.
+Add the `HasWallet` trait and `ProductInterface` (or `ProductLimitedInterface`) interface to Item model.
 
 ```php
 use Bavix\Wallet\Traits\HasWallet;
-use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Taxable;
+use Bavix\Wallet\Interfaces\ProductLimitedInterface;
 
-class Item extends Model implements Product, Taxable
+class Item extends Model implements ProductLimitedInterface, Taxable
 {
     use HasWallet;
 
@@ -82,26 +82,17 @@ $user->balance; // 0
 
 ## Minimal Taxing
 
-Add trait `MinimalTaxable` in class `Item`.
+Add interface `MinimalTaxable` (or `MaximalTaxable`) in class `Item`.
 
 ```php
 use Bavix\Wallet\Traits\HasWallet;
-use Bavix\Wallet\Interfaces\Product;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\MinimalTaxable;
+use Bavix\Wallet\Interfaces\ProductInterface;
 
-class Item extends Model implements Product, MinimalTaxable
+class Item extends Model implements ProductInterface, MinimalTaxable
 {
     use HasWallet;
-
-    public function canBuy(Customer $customer, int $quantity = 1, bool $force = false): bool
-    {
-        /**
-         * If the service can be purchased once, then
-         *  return !$customer->paid($this);
-         */
-        return true; 
-    }
 
     public function getAmountProduct(Customer $customer)
     {
