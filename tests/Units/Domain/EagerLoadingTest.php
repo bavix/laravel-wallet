@@ -62,10 +62,8 @@ final class EagerLoadingTest extends TestCase
         self::assertTrue($transfer->relationLoaded('from'));
         self::assertTrue($transfer->relationLoaded('to'));
 
-        self::assertSame($user1->wallet->getMorphClass(), $transfer->from->getMorphClass());
-        self::assertSame($user1->wallet->getKey(), $transfer->from->getKey());
-        self::assertSame($user2->wallet->getMorphClass(), $transfer->to->getMorphClass());
-        self::assertSame($user2->wallet->getKey(), $transfer->to->getKey());
+        self::assertTrue($user1->wallet->is($transfer->from));
+        self::assertTrue($user2->wallet->is($transfer->to));
     }
 
     public function testMultiWallets(): void
@@ -86,6 +84,6 @@ final class EagerLoadingTest extends TestCase
         self::assertNotNull($user->getWallet('hello'));
         self::assertNotNull($user->getWallet('world'));
         self::assertTrue($user->getWallet('hello')->relationLoaded('holder'));
-        self::assertSame($user, $user->getWallet('hello')->holder);
+        self::assertTrue($user->is($user->getWallet('hello')->holder));
     }
 }

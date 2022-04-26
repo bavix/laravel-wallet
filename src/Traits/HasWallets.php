@@ -62,14 +62,14 @@ trait HasWallets
         if ($this->_wallets === [] && $this->relationLoaded('wallets')) {
             /** @var WalletModel $wallet */
             foreach ($this->getRelation('wallets') as $wallet) {
-                $wallet->setRelation('holder', $this);
+                $wallet->setRelation('holder', $this->withoutRelations());
                 $this->_wallets[$wallet->slug] = $wallet;
             }
         }
 
         if (!array_key_exists($slug, $this->_wallets)) {
             $wallet = app(WalletServiceInterface::class)->getBySlug($this, $slug);
-            $wallet->setRelation('holder', $this);
+            $wallet->setRelation('holder', $this->withoutRelations());
 
             $this->_wallets[$slug] = $wallet;
         }
@@ -89,7 +89,7 @@ trait HasWallets
     {
         $wallet = app(WalletServiceInterface::class)->create($this, $data);
         $this->_wallets[$wallet->slug] = $wallet;
-        $wallet->setRelation('holder', $this);
+        $wallet->setRelation('holder', $this->withoutRelations());
 
         return $wallet;
     }
