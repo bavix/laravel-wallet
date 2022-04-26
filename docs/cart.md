@@ -34,7 +34,7 @@ class Item extends Model implements ProductInterface
 
     public function getAmountProduct(Customer $customer)
     {
-        return 100;
+        return round($this->price * 100);
     }
 
     public function getMetaProduct(): ?array
@@ -70,7 +70,7 @@ class Item extends Model implements ProductLimitedInterface
     
     public function getAmountProduct(Customer $customer)
     {
-        return 100;
+        return round($this->price * 100);
     }
 
     public function getMetaProduct(): ?array
@@ -112,13 +112,18 @@ $products = Item::query()
 
 $cart = app(Cart::class);
 foreach ($products as $product) {
-    // add product's
-    $cart->addItem($product, $list[$product->slug]);
+    $cart = $cart->withItem($product, quantity: $list[$product->slug]);
 }
 
-$user->deposit($cart->getTotal());
+$cartTotal = $cart->getTotal($user); // 15127
+$user->deposit($cartTotal); 
 $user->balanceInt; // 15127
 $user->balanceFloat; // 151.27
+
+$cart = $cart->withItem(current($products), pricePerItem: 500); // 15127+500
+$user->deposit(500);
+$user->balanceInt; // 15627
+$user->balanceFloat; // 156.27
 
 (bool)$user->payCart($cart); // true
 $user->balanceFloat; // 0

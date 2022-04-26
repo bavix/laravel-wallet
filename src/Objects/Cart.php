@@ -46,6 +46,9 @@ final class Cart implements Countable, CartInterface
         return $self;
     }
 
+    /**
+     * @param positive-int $quantity
+     */
     public function withItem(ProductInterface $product, int $quantity = 1, int|string|null $pricePerItem = null): self
     {
         $self = clone $this;

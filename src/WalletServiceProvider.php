@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet;
 
+use Bavix\Wallet\Commands\TransferFixCommand;
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssembler;
@@ -133,6 +134,7 @@ final class WalletServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(dirname(__DIR__).'/config/config.php', 'wallet');
+        $this->commands([TransferFixCommand::class]);
 
         $configure = config('wallet', []);
 
