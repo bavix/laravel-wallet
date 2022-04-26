@@ -21,11 +21,14 @@ trait MorphOneWallet
      */
     public function wallet(): MorphOne
     {
-        return app(CastServiceInterface::class)
+        $castService = app(CastServiceInterface::class);
+
+        return $castService
             ->getHolder($this)
             ->morphOne(config('wallet.wallet.model', WalletModel::class), 'holder')
             ->where('slug', config('wallet.wallet.default.slug', 'default'))
-            ->withDefault(static function (WalletModel $wallet, object $holder) {
+            ->withDefault(static function (WalletModel $wallet, object $holder) use ($castService) {
+                $model = $castService->getModel($holder);
                 $wallet->forceFill(array_merge(config('wallet.wallet.creating', []), [
                     'name' => config('wallet.wallet.default.name', 'Default Wallet'),
                     'slug' => config('wallet.wallet.default.slug', 'default'),
@@ -33,13 +36,8 @@ trait MorphOneWallet
                     'balance' => 0,
                 ]));
 
-                if (property_exists($holder, 'exists') && $holder->exists) {
-                    $wallet->setRelation(
-                        'holder',
-                        method_exists($holder, 'withoutRelations')
-                            ? $holder->withoutRelations()
-                            : $holder
-                    );
+                if ($model->exists) {
+                    $wallet->setRelation('holder', $model->withoutRelations());
                 }
             })
         ;
