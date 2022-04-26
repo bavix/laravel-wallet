@@ -73,8 +73,8 @@ final class TransferService implements TransferServiceInterface
                 $deposit = $transactions[$object->getDepositDto()->getUuid()] ?? null;
                 assert($deposit !== null);
 
-                $fromWallet = $this->castService->getModel($object->getFromWallet());
-                $toWallet = $this->castService->getModel($object->getToWallet());
+                $fromWallet = $this->castService->getWallet($object->getFromWallet());
+                $toWallet = $this->castService->getWallet($object->getToWallet());
 
                 $transfer = $this->transferDtoAssembler->create(
                     $deposit->getKey(),
@@ -90,8 +90,8 @@ final class TransferService implements TransferServiceInterface
                 $links[$transfer->getUuid()] = [
                     'deposit' => $deposit,
                     'withdraw' => $withdraw,
-                    'from' => $fromWallet,
-                    'to' => $toWallet,
+                    'from' => $fromWallet->withoutRelations(),
+                    'to' => $toWallet->withoutRelations(),
                 ];
             }
 
