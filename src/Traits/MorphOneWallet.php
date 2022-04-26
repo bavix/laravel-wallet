@@ -34,7 +34,12 @@ trait MorphOneWallet
                 ]));
 
                 if (property_exists($holder, 'exists') && $holder->exists) {
-                    $wallet->setRelation('holder', $holder);
+                    $wallet->setRelation(
+                        'holder',
+                        method_exists($holder, 'withoutRelations')
+                            ? $holder->withoutRelations()
+                            : $holder
+                    );
                 }
             })
         ;
