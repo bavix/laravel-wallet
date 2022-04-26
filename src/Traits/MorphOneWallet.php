@@ -42,4 +42,21 @@ trait MorphOneWallet
             })
         ;
     }
+
+    public function getWalletAttribute(): ?WalletModel
+    {
+        $wallet = $this->getRelationValue('wallet');
+        if ($wallet === null) {
+            return null;
+        }
+
+        assert($wallet instanceof WalletModel);
+
+        if (!$wallet->relationLoaded('holder')) {
+            $holder = app(CastServiceInterface::class)->getHolder($this);
+            $wallet->setRelation('holder', $holder);
+        }
+
+        return $wallet;
+    }
 }

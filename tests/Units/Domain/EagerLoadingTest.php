@@ -35,8 +35,7 @@ final class EagerLoadingTest extends TestCase
         $balances = [];
         foreach ($buyers as $buyer) {
             self::assertTrue($buyer->relationLoaded('wallet'));
-            // self::assertTrue($buyer->wallet->relationLoaded('holder'));
-            // fixme: I did not find a way to load the buyer, maybe someday I will get there.
+            self::assertTrue($buyer->wallet->relationLoaded('holder'));
 
             $uuids[] = $buyer->wallet->uuid;
             $balances[] = $buyer->wallet->balanceInt;
