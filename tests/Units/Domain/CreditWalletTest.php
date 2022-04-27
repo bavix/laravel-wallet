@@ -13,6 +13,9 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class CreditWalletTest extends TestCase
 {
+    /**
+     * @see https://github.com/bavix/laravel-wallet/issues/397
+     */
     public function testCreditLimit(): void
     {
         /** @var UserMulti $user */
