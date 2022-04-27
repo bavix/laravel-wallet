@@ -18,10 +18,7 @@ final class TaxService implements TaxServiceInterface
     ) {
     }
 
-    /**
-     * @param float|int|string $amount
-     */
-    public function getFee(Wallet $wallet, $amount): string
+    public function getFee(Wallet $wallet, float|int|string $amount): string
     {
         $fee = 0;
         if ($wallet instanceof Taxable) {

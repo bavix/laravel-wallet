@@ -23,11 +23,9 @@ final class ConsistencyService implements ConsistencyServiceInterface
     }
 
     /**
-     * @param float|int|string $amount
-     *
      * @throws AmountInvalid
      */
-    public function checkPositive($amount): void
+    public function checkPositive(float|int|string $amount): void
     {
         if ($this->mathService->compare($amount, 0) === -1) {
             throw new AmountInvalid(
@@ -38,12 +36,10 @@ final class ConsistencyService implements ConsistencyServiceInterface
     }
 
     /**
-     * @param float|int|string $amount
-     *
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      */
-    public function checkPotential(Wallet $object, $amount, bool $allowZero = false): void
+    public function checkPotential(Wallet $object, float|int|string $amount, bool $allowZero = false): void
     {
         $wallet = $this->castService->getWallet($object, false);
         $balance = $this->mathService->add($wallet->getBalanceAttribute(), $wallet->getCreditAttribute());
@@ -63,11 +59,7 @@ final class ConsistencyService implements ConsistencyServiceInterface
         }
     }
 
-    /**
-     * @param float|int|string $balance
-     * @param float|int|string $amount
-     */
-    public function canWithdraw($balance, $amount, bool $allowZero = false): bool
+    public function canWithdraw(float|int|string $balance, float|int|string $amount, bool $allowZero = false): bool
     {
         $mathService = app(MathServiceInterface::class);
 

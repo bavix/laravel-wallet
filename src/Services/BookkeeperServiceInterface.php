@@ -15,18 +15,14 @@ interface BookkeeperServiceInterface
     public function amount(Wallet $wallet): string;
 
     /**
-     * @param float|int|string $value
-     *
      * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      */
-    public function sync(Wallet $wallet, $value): bool;
+    public function sync(Wallet $wallet, float|int|string $value): bool;
 
     /**
-     * @param float|int|string $value
-     *
      * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      */
-    public function increase(Wallet $wallet, $value): string;
+    public function increase(Wallet $wallet, float|int|string $value): string;
 }
