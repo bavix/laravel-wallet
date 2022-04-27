@@ -41,18 +41,16 @@ final class BookkeeperService implements BookkeeperServiceInterface
         return $this->storageService->get($this->getKey($wallet));
     }
 
-    public function sync(Wallet $wallet, $value): bool
+    public function sync(Wallet $wallet, float|int|string $value): bool
     {
         return $this->storageService->sync($this->getKey($wallet), $value);
     }
 
     /**
-     * @param float|int|string $value
-     *
      * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      */
-    public function increase(Wallet $wallet, $value): string
+    public function increase(Wallet $wallet, float|int|string $value): string
     {
         try {
             return $this->storageService->increase($this->getKey($wallet), $value);

@@ -14,20 +14,11 @@ interface RegulatorServiceInterface
 
     public function amount(Wallet $wallet): string;
 
-    /**
-     * @param float|int|string $value
-     */
-    public function sync(Wallet $wallet, $value): bool;
+    public function sync(Wallet $wallet, float|int|string $value): bool;
 
-    /**
-     * @param float|int|string $value
-     */
-    public function increase(Wallet $wallet, $value): string;
+    public function increase(Wallet $wallet, float|int|string $value): string;
 
-    /**
-     * @param float|int|string $value
-     */
-    public function decrease(Wallet $wallet, $value): string;
+    public function decrease(Wallet $wallet, float|int|string $value): string;
 
     public function approve(): void;
 

@@ -45,10 +45,7 @@ final class CastService implements CastServiceInterface
         return $wallet;
     }
 
-    /**
-     * @param Model|Wallet $object
-     */
-    public function getHolder($object): Model
+    public function getHolder(Model|Wallet $object): Model
     {
         return $this->getModel($object instanceof WalletModel ? $object->holder : $object);
     }

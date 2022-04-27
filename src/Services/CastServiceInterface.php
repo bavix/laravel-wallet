@@ -12,10 +12,7 @@ interface CastServiceInterface
 {
     public function getWallet(Wallet $object, bool $save = true): WalletModel;
 
-    /**
-     * @param Model|Wallet $object
-     */
-    public function getHolder($object): Model;
+    public function getHolder(Model|Wallet $object): Model;
 
     public function getModel(object $object): Model;
 }
