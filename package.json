@@ -15,7 +15,7 @@
   "dependencies": {
     "@bavix/cozy-house-kit": "^1.0.5",
     "axios": "^0.27.1",
-    "css-loader": "^5.0.0",
+    "css-loader": "^6.7.1",
     "docsify": "^4.11.4",
     "lodash": "^4.17.20",
     "mini-css-extract-plugin": "^2.6.0",
