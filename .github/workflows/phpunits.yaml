@@ -156,9 +156,13 @@ jobs:
 
       - name: Send coverage
         id: codeclimate-send
-        run: |
-          ./cc-test-reporter after-build --coverage-input-type clover --exit-code 0
-          bash <(curl -s https://codecov.io/bash)
+        uses: nick-fields/retry@v2
+        with:
+          timeout_seconds: 15
+          max_attempts: 3
+          command: >-
+            ./cc-test-reporter after-build --coverage-input-type clover --exit-code 0
+            bash <(curl -s https://codecov.io/bash)
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
