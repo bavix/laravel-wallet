@@ -14,13 +14,13 @@
   "homepage": "https://bavix.github.io/laravel-wallet/",
   "dependencies": {
     "@bavix/cozy-house-kit": "^1.0.5",
-    "axios": "^0.21.2",
-    "css-loader": "^5.0.0",
+    "axios": "^0.27.1",
+    "css-loader": "^6.7.1",
     "docsify": "^4.11.4",
     "lodash": "^4.17.20",
-    "mini-css-extract-plugin": "^1.2.1",
-    "prismjs": "^1.27.0",
-    "size-limit": "^4.7.0",
+    "mini-css-extract-plugin": "^2.6.0",
+    "prismjs": "^1.28.0",
+    "size-limit": "^7.0.8",
     "uuid": "^8.3.1",
     "webpack": "^5.4.0"
   },
