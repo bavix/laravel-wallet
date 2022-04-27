@@ -12,7 +12,7 @@ use Illuminate\Console\Command;
 final class TransferFixCommand extends Command
 {
     protected $signature = 'bx:transfer:fix';
-    protected $description = 'Brings transfers to the correct form.';
+    protected $description = 'Brings transfers to the correct form/to.';
 
     public function handle(Wallet $wallet, Transfer $transfer, CastServiceInterface $castService): void
     {
