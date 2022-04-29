@@ -84,6 +84,22 @@ final class WalletRepository implements WalletRepositoryInterface
     }
 
     /**
+     * @param array<int|string> $holderIds
+     *
+     * @return Wallet[]
+     */
+    public function findDefaultAll(string $holderType, array $holderIds): array
+    {
+        return $this->wallet->newQuery()
+            ->where('slug', config('wallet.wallet.default.slug', 'default'))
+            ->where('holder_type', $holderType)
+            ->whereIn('holder_id', $holderIds)
+            ->get()
+            ->all()
+        ;
+    }
+
+    /**
      * @param array<string, int|string> $attributes
      */
     private function getBy(array $attributes): Wallet

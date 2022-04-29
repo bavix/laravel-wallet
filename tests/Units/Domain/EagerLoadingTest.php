@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
+use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Infra\Factories\ItemFactory;
 use Bavix\Wallet\Test\Infra\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
+use Bavix\Wallet\Test\Infra\Models\Item;
 use Bavix\Wallet\Test\Infra\Models\UserMulti;
 use Bavix\Wallet\Test\Infra\TestCase;
 use Illuminate\Database\Eloquent\Collection;
@@ -84,5 +87,32 @@ final class EagerLoadingTest extends TestCase
         self::assertNotNull($user->getWallet('world'));
         self::assertTrue($user->getWallet('hello')->relationLoaded('holder'));
         self::assertTrue($user->is($user->getWallet('hello')->holder));
+    }
+
+    public function testEagerLoaderPay(): void
+    {
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        /** @var Item[] $products */
+        $products = ItemFactory::times(50)->create([
+            'quantity' => 10,
+            'price' => 1,
+        ]);
+        $productIds = [];
+        foreach ($products as $product) {
+            $productIds[] = $product->getKey();
+            self::assertSame(0, $product->balanceInt);
+        }
+
+        $products = Item::query()->whereKey($productIds)->get()->all();
+
+        $cart = app(Cart::class);
+        foreach ($products as $product) {
+            $cart = $cart->withItem($product, 10);
+        }
+
+        $transfers = $buyer->forcePayCart($cart);
+        self::assertSame((int) -$cart->getTotal($buyer), $buyer->balanceInt);
+        self::assertCount(500, $transfers);
     }
 }

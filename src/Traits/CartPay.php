@@ -23,6 +23,7 @@ use Bavix\Wallet\Services\AtomicServiceInterface;
 use Bavix\Wallet\Services\BasketServiceInterface;
 use Bavix\Wallet\Services\CastServiceInterface;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
+use Bavix\Wallet\Services\EagerLoaderServiceInterface;
 use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\PurchaseServiceInterface;
 use Bavix\Wallet\Services\TransferServiceInterface;
@@ -55,6 +56,7 @@ trait CartPay
             $basketDto = $cart->getBasketDto();
             $basketService = app(BasketServiceInterface::class);
             $availabilityAssembler = app(AvailabilityDtoAssemblerInterface::class);
+            app(EagerLoaderServiceInterface::class)->loadWalletsByBasket($basketDto);
             if (!$basketService->availability($availabilityAssembler->create($this, $basketDto, false))) {
                 throw new ProductEnded(
                     app(TranslatorServiceInterface::class)->get('wallet::errors.product_stock'),
@@ -111,6 +113,7 @@ trait CartPay
             $basketDto = $cart->getBasketDto();
             $basketService = app(BasketServiceInterface::class);
             $availabilityAssembler = app(AvailabilityDtoAssemblerInterface::class);
+            app(EagerLoaderServiceInterface::class)->loadWalletsByBasket($basketDto);
             if (!$basketService->availability($availabilityAssembler->create($this, $basketDto, $force))) {
                 throw new ProductEnded(
                     app(TranslatorServiceInterface::class)->get('wallet::errors.product_stock'),
@@ -188,6 +191,7 @@ trait CartPay
     {
         return app(AtomicServiceInterface::class)->block($this, function () use ($cart, $force, $gifts) {
             $basketDto = $cart->getBasketDto();
+            app(EagerLoaderServiceInterface::class)->loadWalletsByBasket($basketDto);
             $transfers = app(PurchaseServiceInterface::class)->already($this, $basketDto, $gifts);
             if (count($transfers) !== $basketDto->total()) {
                 throw new ModelNotFoundException(
