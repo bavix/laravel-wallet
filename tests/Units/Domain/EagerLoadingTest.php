@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
+use Bavix\Wallet\Interfaces\ProductInterface;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Factories\ItemFactory;
@@ -95,7 +96,7 @@ final class EagerLoadingTest extends TestCase
         $buyer = BuyerFactory::new()->create();
         /** @var Item[] $products */
         $products = ItemFactory::times(50)->create([
-            'quantity' => 10,
+            'quantity' => 5,
             'price' => 1,
         ]);
         $productIds = [];
@@ -104,15 +105,16 @@ final class EagerLoadingTest extends TestCase
             self::assertSame(0, $product->balanceInt);
         }
 
+        /** @var ProductInterface[] $products */
         $products = Item::query()->whereKey($productIds)->get()->all();
 
         $cart = app(Cart::class);
         foreach ($products as $product) {
-            $cart = $cart->withItem($product, 10);
+            $cart = $cart->withItem($product, 5);
         }
 
         $transfers = $buyer->forcePayCart($cart);
         self::assertSame((int) -$cart->getTotal($buyer), $buyer->balanceInt);
-        self::assertCount(500, $transfers);
+        self::assertCount(250, $transfers);
     }
 }
