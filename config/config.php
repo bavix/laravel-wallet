@@ -38,6 +38,7 @@ use Bavix\Wallet\Services\BookkeeperService;
 use Bavix\Wallet\Services\CastService;
 use Bavix\Wallet\Services\ConsistencyService;
 use Bavix\Wallet\Services\DiscountService;
+use Bavix\Wallet\Services\EagerLoaderService;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\PrepareService;
 use Bavix\Wallet\Services\PurchaseService;
@@ -100,6 +101,7 @@ return [
         'cast' => CastService::class,
         'consistency' => ConsistencyService::class,
         'discount' => DiscountService::class,
+        'eager_loader' => EagerLoaderService::class,
         'exchange' => ExchangeService::class,
         'prepare' => PrepareService::class,
         'purchase' => PurchaseService::class,

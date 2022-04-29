@@ -76,6 +76,8 @@ use Bavix\Wallet\Services\ConsistencyService;
 use Bavix\Wallet\Services\ConsistencyServiceInterface;
 use Bavix\Wallet\Services\DiscountService;
 use Bavix\Wallet\Services\DiscountServiceInterface;
+use Bavix\Wallet\Services\EagerLoaderService;
+use Bavix\Wallet\Services\EagerLoaderServiceInterface;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\ExchangeServiceInterface;
 use Bavix\Wallet\Services\PrepareService;
@@ -198,6 +200,10 @@ final class WalletServiceProvider extends ServiceProvider
             $configure['consistency'] ?? ConsistencyService::class
         );
         $this->app->singleton(DiscountServiceInterface::class, $configure['discount'] ?? DiscountService::class);
+        $this->app->singleton(
+            EagerLoaderServiceInterface::class,
+            $configure['eager_loader'] ?? EagerLoaderService::class
+        );
         $this->app->singleton(ExchangeServiceInterface::class, $configure['exchange'] ?? ExchangeService::class);
         $this->app->singleton(PrepareServiceInterface::class, $configure['prepare'] ?? PrepareService::class);
         $this->app->singleton(PurchaseServiceInterface::class, $configure['purchase'] ?? PurchaseService::class);

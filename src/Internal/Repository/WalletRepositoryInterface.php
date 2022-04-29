@@ -18,6 +18,13 @@ interface WalletRepositoryInterface
     public function findBySlug(string $holderType, int|string $holderId, string $slug): ?Wallet;
 
     /**
+     * @param array<int|string> $holderIds
+     *
+     * @return Wallet[]
+     */
+    public function findDefaultAll(string $holderType, array $holderIds): array;
+
+    /**
      * @throws ModelNotFoundException
      */
     public function getById(int $id): Wallet;
