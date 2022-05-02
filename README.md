@@ -43,6 +43,7 @@ To perform the migration, you will be [helped by the instruction](https://bavix.
 | Extension                                                 | Description                                                                |
 |-----------------------------------------------------------|----------------------------------------------------------------------------|
 | [Swap](https://github.com/bavix/laravel-wallet-swap)      | Addition to the laravel-wallet library for quick setting of exchange rates |
+| [uuid](https://github.com/bavix/laravel-wallet-uuid)      | Addition to laravel-wallet to support model uuid keys                      | 
 | [Warm Up](https://github.com/bavix/laravel-wallet-warmup) | Addition to the laravel-wallet library for refresh balance wallets         | 
 
 ### Usage
@@ -103,7 +104,7 @@ class Item extends Model implements ProductInterface
 {
     use HasWallet;
 
-    public function getAmountProduct(Customer $customer)
+    public function getAmountProduct(Customer $customer): int|string
     {
         return 100;
     }
@@ -139,7 +140,7 @@ class Item extends Model implements ProductLimitedInterface
         return true; 
     }
     
-    public function getAmountProduct(Customer $customer)
+    public function getAmountProduct(Customer $customer): int|string
     {
         return 100;
     }
