@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [9.0.0] - 2022-05-02 #481
+## [9.0.0] - 2022-05-02 [#481](https://github.com/bavix/laravel-wallet/pull/481)
 ### Added
 - ExtraDtoInterface #479
 - Product custom price #485
