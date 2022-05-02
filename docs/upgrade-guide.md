@@ -248,8 +248,3 @@ The product has been divided into two interfaces:
 The old Product interface should be replaced with one of these.
 
 Replace `Bavix\Wallet\Interfaces\Product` to `Bavix\Wallet\Interfaces\ProductLimitedInterface`. 
-
-
----
-
-

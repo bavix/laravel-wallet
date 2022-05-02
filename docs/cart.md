@@ -32,7 +32,7 @@ class Item extends Model implements ProductInterface
 {
     use HasWallet;
 
-    public function getAmountProduct(Customer $customer)
+    public function getAmountProduct(Customer $customer): int|string
     {
         return round($this->price * 100);
     }
@@ -68,7 +68,7 @@ class Item extends Model implements ProductLimitedInterface
         return true; 
     }
     
-    public function getAmountProduct(Customer $customer)
+    public function getAmountProduct(Customer $customer): int|string
     {
         return round($this->price * 100);
     }
