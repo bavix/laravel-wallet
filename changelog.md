@@ -6,6 +6,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.0.0] - 2022-05-02 #481
+### Added
+- ExtraDtoInterface #479
+- Product custom price #485
+
+### Changed
+- Changing the logic of funds transfers #483
+- Split Product interface #474
+- PHP 8+ Union types #482
+- Eager loading #480
+
+### Removed
+- method `Cart::addItems`
+- method `Cart::addItem`
+- method `Cart::setMeta`
+
+### Updated
+- Performance just got a little better
+- Public contracts have become stricter
+- Inside is now strongly typed
+
+### Deprecated
+- interface `Product`
+- method `CartPay::paid`
+
 ## [8.4.1] - 2022-04-26
 ### Deprecated
 - Cart::getUniqueItems
@@ -843,7 +868,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/8.4.1...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/9.0.0...develop
+[9.0.0]: https://github.com/bavix/laravel-wallet/compare/8.4.1...9.0.0
 [8.4.1]: https://github.com/bavix/laravel-wallet/compare/8.4.0...8.4.1
 [8.4.0]: https://github.com/bavix/laravel-wallet/compare/8.3.0...8.4.0
 [8.3.0]: https://github.com/bavix/laravel-wallet/compare/8.2.1...8.3.0
