@@ -214,6 +214,23 @@ $user->balance; // 237
 $user->balanceFloat; // 2.37
 ```
 
+### Performance Comparison
+
+|          Name          |    6.x.x    |    7.x.x    |    8.x.x    |    9.x.x    |
+|------------------------|-------------|-------------|-------------|-------------|
+| Cart:EagerLoaderPay    | 58.949697s  | 49.58581s   | 1.466579s   | 1.032154s   |
+| Cart:Pay               | 4.08699296s | 2.50341516s | 1.03995896s | 721.67092ms |
+| Cart:PayFree           | 4.15599512s | 2.36554972s | 1.01579044s | 631.9784ms  |
+| Cart:PayOneItemXPieces | 2.0559186s  | 1.01231272s | 252.7258ms  | 83.73056ms  |
+| Solo:Deposit           | 38.18582ms  | 36.67559ms  | 37.35399ms  | 35.68319ms  |
+| Solo:EagerLoading      | 2.13623892s | 8.82851804s | 2.30754092s | 2.14806152s |
+| Solo:ForceWithdraw     | 38.39115ms  | 36.87102ms  | 37.52448ms  | 35.47786ms  |
+| Solo:GetBalance        | 23.543576ms | 24.199633ms | 23.38236ms  | 23.888203ms |
+| Solo:Transfer          | 78.80488ms  | 72.01921ms  | 72.81176ms  | 59.42262ms  |
+| State:InTransaction    | 1.82724428s | 766.2884ms  | 771.08604ms | 767.08376ms |
+
+Table generated using [benchmark](https://github.com/bavix/laravel-wallet-benchmark/).
+
 ---
 Supported by
 
