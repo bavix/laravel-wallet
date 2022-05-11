@@ -30,6 +30,39 @@ final class BalanceTest extends TestCase
         self::assertTrue($buyer->wallet->exists);
     }
 
+    public function testDecimalPlaces(): void
+    {
+        config([
+            'wallet.wallet.creating' => [
+                'decimal_places' => 3,
+            ],
+        ]);
+
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        self::assertFalse($buyer->relationLoaded('wallet'));
+        $buyer->deposit(1);
+
+        self::assertSame(3, $buyer->wallet->decimal_places);
+    }
+
+    /**
+     * @see https://github.com/bavix/laravel-wallet/issues/498
+     */
+    public function testMetaModify(): void
+    {
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        $transaction = $buyer->deposit(1000);
+        self::assertNotNull($transaction);
+
+        $transaction->meta = array_merge($transaction->meta ?? [], [
+            'description' => 'Your transaction has been approved',
+        ]);
+
+        self::assertTrue($transaction->save());
+    }
+
     public function testCheckType(): void
     {
         /** @var Buyer $buyer */
