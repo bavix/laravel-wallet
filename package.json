@@ -22,7 +22,7 @@
     "prismjs": "^1.28.0",
     "size-limit": "^7.0.8",
     "uuid": "^8.3.1",
-    "webpack": "^5.4.0"
+    "webpack": "^5.72.1"
   },
   "devDependencies": {
     "webpack-cli": "^4.1.0"
