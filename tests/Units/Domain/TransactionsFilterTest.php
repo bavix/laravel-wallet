@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
+use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
+use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\TestCase;
@@ -97,5 +99,36 @@ final class TransactionsFilterTest extends TestCase
 
         self::assertSame(1, $credits1);
         self::assertSame(1, $credits2);
+    }
+
+    public function testPagination(): void
+    {
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        $db = app(DatabaseServiceInterface::class);
+        $db->transaction(function () use ($buyer): void {
+            foreach (range(1, 21) as $item) {
+                $buyer->deposit($item);
+            }
+        });
+
+        self::assertSame(21, $buyer->transactions()->count());
+
+        $query = Transaction::with('wallet')
+            ->where('payable_id', $buyer->getKey())
+            ->orderBy('created_at', 'desc')
+        ;
+
+        $page1 = (clone $query)->paginate(10, page: 1);
+        self::assertCount(10, $page1->items());
+        self::assertTrue($page1->hasMorePages());
+
+        $page2 = (clone $query)->paginate(10, page: 2);
+        self::assertCount(10, $page2->items());
+        self::assertTrue($page2->hasMorePages());
+
+        $page3 = (clone $query)->paginate(10, page: 3);
+        self::assertCount(1, $page3->items());
+        self::assertFalse($page3->hasMorePages());
     }
 }
