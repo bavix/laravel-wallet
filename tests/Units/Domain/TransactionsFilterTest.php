@@ -8,6 +8,7 @@ use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
+use Bavix\Wallet\Test\Infra\PackageModels\Wallet;
 use Bavix\Wallet\Test\Infra\TestCase;
 use function now;
 
@@ -116,6 +117,49 @@ final class TransactionsFilterTest extends TestCase
 
         $query = Transaction::with('wallet')
             ->where('payable_id', $buyer->getKey())
+            ->orderBy('created_at', 'desc')
+        ;
+
+        $page1 = (clone $query)->paginate(10, page: 1);
+        self::assertCount(10, $page1->items());
+        self::assertTrue($page1->hasMorePages());
+
+        $page2 = (clone $query)->paginate(10, page: 2);
+        self::assertCount(10, $page2->items());
+        self::assertTrue($page2->hasMorePages());
+
+        $page3 = (clone $query)->paginate(10, page: 3);
+        self::assertCount(1, $page3->items());
+        self::assertFalse($page3->hasMorePages());
+    }
+
+    /**
+     * @see https://github.com/bavix/laravel-wallet/issues/501
+     */
+    public function testPagination2(): void
+    {
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        $db = app(DatabaseServiceInterface::class);
+        $db->transaction(function () use ($buyer): void {
+            foreach (range(1, 21) as $item) {
+                $buyer->deposit($item);
+            }
+        });
+
+        self::assertSame(21, $buyer->transactions()->count());
+
+        $walletTableName = (new Wallet())->getTable();
+        $transactionTableName = (new Transaction())->getTable();
+
+        $query = Transaction::query()
+            ->where(function ($query) use ($buyer, $walletTableName, $transactionTableName) {
+                $query->where('payable_id', '=', $buyer->getKey())
+                    ->join($walletTableName, $transactionTableName.'.wallet_id', '=', $walletTableName.'.id')
+                    ->select($transactionTableName.'.*', $walletTableName.'.name')
+                    ->get()
+                ;
+            })
             ->orderBy('created_at', 'desc')
         ;
 
