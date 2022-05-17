@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\External\Contracts\CostDtoInterface;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\Assembler\CostDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\WalletCreatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
@@ -19,9 +21,15 @@ final class CastService implements CastServiceInterface
 {
     public function __construct(
         private WalletCreatedEventAssemblerInterface $walletCreatedEventAssembler,
+        private CostDtoAssemblerInterface $costDtoAssembler,
         private DispatcherServiceInterface $dispatcherService,
         private DatabaseServiceInterface $databaseService
     ) {
+    }
+
+    public function getCost(CostDtoInterface|float|int|string $dto): CostDtoInterface
+    {
+        return $this->costDtoAssembler->create($dto);
     }
 
     /**

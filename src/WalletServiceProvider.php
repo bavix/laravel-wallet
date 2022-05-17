@@ -9,6 +9,8 @@ use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssemblerInterface;
+use Bavix\Wallet\Internal\Assembler\CostDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\CostDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\ExtraDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\ExtraDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\OptionDtoAssembler;
@@ -289,6 +291,7 @@ final class WalletServiceProvider extends ServiceProvider
             $configure['balance_updated_event'] ?? BalanceUpdatedEventAssembler::class
         );
 
+        $this->app->singleton(CostDtoAssemblerInterface::class, $configure['cost'] ?? CostDtoAssembler::class);
         $this->app->singleton(ExtraDtoAssemblerInterface::class, $configure['extra'] ?? ExtraDtoAssembler::class);
 
         $this->app->singleton(

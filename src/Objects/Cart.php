@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Objects;
 
+use Bavix\Wallet\External\Contracts\CostDtoInterface;
 use Bavix\Wallet\Interfaces\CartInterface;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\ProductInterface;
@@ -111,7 +112,10 @@ final class Cart implements Countable, CartInterface
                     $pricePerItem = $prices[$productId];
                 }
 
-                $price = $this->math->mul(count($item), $pricePerItem);
+                $price = $this->math->mul(
+                    count($item),
+                    $pricePerItem instanceof CostDtoInterface ? $pricePerItem->getValue() : $pricePerItem
+                );
                 $result = $this->math->add($result, $price);
             }
         }
