@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Infra\Models;
 
+use Bavix\Wallet\External\Contracts\CostDtoInterface;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\ProductLimitedInterface;
 use Bavix\Wallet\Models\Transfer;
@@ -38,7 +39,7 @@ class Item extends Model implements ProductLimitedInterface
         return $result && ! $customer->paid($this);
     }
 
-    public function getAmountProduct(Customer $customer): int|string
+    public function getAmountProduct(Customer $customer): CostDtoInterface|int|string
     {
         /** @var Wallet $wallet */
         $wallet = app(CastService::class)->getWallet($customer);

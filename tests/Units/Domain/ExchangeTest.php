@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
+use Bavix\Wallet\External\Dto\Cost;
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\ExchangeServiceInterface;
+use Bavix\Wallet\Test\Infra\Factories\ItemUsdFactory;
 use Bavix\Wallet\Test\Infra\Factories\UserMultiFactory;
+use Bavix\Wallet\Test\Infra\Models\ItemUsd;
 use Bavix\Wallet\Test\Infra\Models\UserMulti;
 use Bavix\Wallet\Test\Infra\TestCase;
 use Illuminate\Support\Str;
@@ -134,5 +138,52 @@ final class ExchangeTest extends TestCase
         ;
 
         self::assertSame(1 / 67.61, (float) $rate);
+    }
+
+    public function testPayItemUsd(): void
+    {
+        /**
+         * @var UserMulti $user
+         * @var ItemUsd   $product
+         */
+        $user = UserMultiFactory::new()->create();
+        $product = ItemUsdFactory::new()->create([
+            'price' => 42,
+        ]);
+
+        $cart = app(Cart::class)
+            ->withItem($product) // $42
+            ->withItem($product, pricePerItem: new Cost(1, 'USD'))
+        ;
+
+        $usdWallet = $user->createWallet([
+            'name' => 'dollar bill',
+            'meta' => [
+                'currency' => 'USD',
+            ],
+        ]);
+        $rubWallet = $user->createWallet([
+            'name' => 'ruble bill',
+            'meta' => [
+                'currency' => 'RUB',
+            ],
+        ]);
+
+        self::assertSame(43, (int) $cart->getTotal($usdWallet));
+        self::assertSame(2906, (int) $cart->getTotal($rubWallet));
+
+        $usdWallet->deposit(43);
+        self::assertSame(43, $usdWallet->balanceInt);
+        self::assertSame('USD', $usdWallet->currency);
+
+        $rubWallet->deposit(2906);
+        self::assertSame(2906, $rubWallet->balanceInt);
+        self::assertSame('RUB', $rubWallet->currency);
+
+        self::assertNotNull($usdWallet->payCart($cart));
+        self::assertNotNull($rubWallet->payCart($cart));
+
+        self::assertSame(0, $usdWallet->balanceInt);
+        self::assertSame(0, $rubWallet->balanceInt);
     }
 }

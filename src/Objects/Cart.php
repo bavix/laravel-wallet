@@ -16,6 +16,7 @@ use Bavix\Wallet\Internal\Exceptions\CartEmptyException;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Services\CastServiceInterface;
+use Bavix\Wallet\Services\ExchangeServiceInterface;
 use function count;
 use Countable;
 
@@ -32,6 +33,7 @@ final class Cart implements Countable, CartInterface
     private array $meta = [];
 
     public function __construct(
+        private ExchangeServiceInterface $exchangeService,
         private CastServiceInterface $castService,
         private MathServiceInterface $math
     ) {
@@ -59,8 +61,11 @@ final class Cart implements Countable, CartInterface
     /**
      * @param positive-int $quantity
      */
-    public function withItem(ProductInterface $product, int $quantity = 1, int|string|null $pricePerItem = null): self
-    {
+    public function withItem(
+        ProductInterface $product,
+        int $quantity = 1,
+        CostDtoInterface|int|string|null $pricePerItem = null
+    ): self {
         $self = clone $this;
 
         $productId = $self->productId($product);
@@ -103,6 +108,7 @@ final class Cart implements Countable, CartInterface
     {
         $result = 0;
         $prices = [];
+        $wallet = $this->castService->getWallet($customer);
         foreach ($this->items as $productId => $_items) {
             foreach ($_items as $item) {
                 $product = $item->getProduct();
@@ -112,11 +118,13 @@ final class Cart implements Countable, CartInterface
                     $pricePerItem = $prices[$productId];
                 }
 
-                $price = $this->math->mul(
-                    count($item),
-                    $pricePerItem instanceof CostDtoInterface ? $pricePerItem->getValue() : $pricePerItem
-                );
-                $result = $this->math->add($result, $price);
+                $cost = $this->castService->getCost($pricePerItem);
+                $curVal = $cost->getCurrency() === null
+                    ? $cost->getValue()
+                    : $this->exchangeService->convertTo($cost->getCurrency(), $wallet->currency, $cost->getValue());
+
+                $price = $this->math->floor($curVal);
+                $result = $this->math->add($result, $this->math->mul(count($item), $price));
             }
         }
 
