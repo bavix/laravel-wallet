@@ -9,8 +9,10 @@ use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\ExchangeServiceInterface;
+use Bavix\Wallet\Test\Infra\Factories\ItemRubFactory;
 use Bavix\Wallet\Test\Infra\Factories\ItemUsdFactory;
 use Bavix\Wallet\Test\Infra\Factories\UserMultiFactory;
+use Bavix\Wallet\Test\Infra\Models\ItemRub;
 use Bavix\Wallet\Test\Infra\Models\ItemUsd;
 use Bavix\Wallet\Test\Infra\Models\UserMulti;
 use Bavix\Wallet\Test\Infra\TestCase;
@@ -185,5 +187,47 @@ final class ExchangeTest extends TestCase
 
         self::assertSame(0, $usdWallet->balanceInt);
         self::assertSame(0, $rubWallet->balanceInt);
+
+        self::assertTrue($usdWallet->refundCart($cart));
+        self::assertTrue($rubWallet->refundCart($cart));
+    }
+
+    public function testPayItemRub(): void
+    {
+        /**
+         * @var UserMulti $user
+         * @var ItemRub   $product
+         *
+         * 100₽=$1.47
+         */
+        $user = UserMultiFactory::new()->create();
+        $product = ItemRubFactory::new()->create([
+            'price' => 10000,
+        ]);
+
+        $usdWallet = $user->createWallet([
+            'name' => 'dollar bill',
+            'meta' => [
+                'currency' => 'USD',
+            ],
+        ]);
+
+        $productCost = $product->getAmountProduct($usdWallet);
+
+        self::assertSame(10000, (int) $productCost->getValue());
+        self::assertSame('RUB', $productCost->getCurrency());
+
+        $usdWallet->deposit(147); // $1.47
+        self::assertSame(147, $usdWallet->balanceInt);
+        self::assertSame(1.47, $usdWallet->balanceFloatNum);
+
+        self::assertNotNull($usdWallet->safePay($product));
+
+        self::assertSame(0, $usdWallet->balanceInt);
+        self::assertSame(0., $usdWallet->balanceFloatNum);
+
+        self::assertTrue($usdWallet->refund($product));
+
+        self::assertSame(1.47, $usdWallet->balanceFloatNum);
     }
 }
