@@ -97,14 +97,27 @@ final class PrepareService implements PrepareServiceInterface
         $amountWithoutDiscount = $this->mathService->sub($cost->getValue(), $discount, $toWallet->decimal_places);
         $depositAmount = $this->mathService->compare($amountWithoutDiscount, 0) === -1 ? '0' : $amountWithoutDiscount;
         $withdrawAmount = $this->mathService->add($depositAmount, $fee, $from->decimal_places);
-        $withdrawCost = $cost->getCurrency() === null
-            ? $withdrawAmount
-            : $this->exchangeService->convertTo($cost->getCurrency(), $from->currency, $withdrawAmount);
+        $currencyRate = $cost->getCurrency() === null
+            ? 1
+            : $this->exchangeService->convertTo($cost->getCurrency(), $from->currency, 1);
 
+        $withdrawCost = $this->mathService->mul($currencyRate ?? 1, $withdrawAmount);
         $withdrawCostFloor = $this->mathService->floor($withdrawCost);
+        $depositCost = $this->mathService->mul($currencyRate ?? 1, $depositAmount);
+        $depositCostFloor = $this->mathService->floor($depositCost);
         $extra = $this->extraDtoAssembler->create($meta);
         $withdrawOption = $extra->getWithdrawOption();
         $depositOption = $extra->getDepositOption();
+        $depositMeta = $cost->getCurrency() === null
+            ? $depositOption->getMeta()
+            : array_merge(
+                $depositOption->getMeta() ?? [],
+                [
+                    'cost' => $depositCostFloor,
+                    'currency' => $cost->getCurrency(),
+                ]
+            )
+        ;
 
         return $this->transferLazyDtoAssembler->create(
             $from,
@@ -112,7 +125,7 @@ final class PrepareService implements PrepareServiceInterface
             $discount,
             $fee,
             $this->withdraw($from, $withdrawCostFloor, $withdrawOption->getMeta(), $withdrawOption->isConfirmed()),
-            $this->deposit($toWallet, $depositAmount, $depositOption->getMeta(), $depositOption->isConfirmed()),
+            $this->deposit($toWallet, $depositAmount, $depositMeta, $depositOption->isConfirmed()),
             $status
         );
     }
