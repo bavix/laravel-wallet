@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.0.1] - 2022-05-19
+### Fixed
+- Fixed a bug that prevented items from being returned via `Cart::withItem`
+
 ## [9.0.0] - 2022-05-02 [#481](https://github.com/bavix/laravel-wallet/pull/481)
 ### Added
 - ExtraDtoInterface #479
@@ -868,7 +872,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/9.0.0...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/9.0.1...develop
+[9.0.1]: https://github.com/bavix/laravel-wallet/compare/9.0.0...9.0.1
 [9.0.0]: https://github.com/bavix/laravel-wallet/compare/8.4.1...9.0.0
 [8.4.1]: https://github.com/bavix/laravel-wallet/compare/8.4.0...8.4.1
 [8.4.0]: https://github.com/bavix/laravel-wallet/compare/8.3.0...8.4.0
