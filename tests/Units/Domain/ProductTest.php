@@ -290,6 +290,8 @@ final class ProductTest extends TestCase
         self::assertSame(2, $cart->getQuantity($productIn));
         self::assertSame(0, $buyer->balanceInt);
         self::assertCount(2, $transfers);
+
+        self::assertTrue($buyer->refundCart($cart));
     }
 
     /**

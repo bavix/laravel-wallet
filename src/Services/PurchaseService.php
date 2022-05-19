@@ -21,10 +21,17 @@ final class PurchaseService implements PurchaseServiceInterface
             : [Transfer::STATUS_PAID];
 
         $arrays = [];
+        $wallets = [];
+        $productCounts = [];
         $query = $customer->transfers();
         foreach ($basketDto->items() as $itemDto) {
             $wallet = $this->castService->getWallet($itemDto->getProduct());
+            $wallets[$wallet->uuid] = $wallet;
 
+            $productCounts[$wallet->uuid] = ($productCounts[$wallet->uuid] ?? 0) + count($itemDto);
+        }
+
+        foreach ($wallets as $wallet) {
             /**
              * As part of my work, "with" was added, it gives a 50x boost for a huge number of returns. In this case,
              * it's a crutch. It is necessary to come up with a more correct implementation of the internal and external
@@ -36,7 +43,7 @@ final class PurchaseService implements PurchaseServiceInterface
                 ->where('to_id', $wallet->getKey())
                 ->whereIn('status', $status)
                 ->orderBy('id', 'desc')
-                ->limit(count($itemDto))
+                ->limit($productCounts[$wallet->uuid])
                 ->get()
                 ->all()
             ;
