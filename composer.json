@@ -33,17 +33,17 @@
   },
   "require-dev": {
     "brianium/paratest": "^6.4",
-    "cknow/laravel-money": "^6.3",
+    "cknow/laravel-money": "^6.5",
     "ergebnis/phpstan-rules": "^1.0",
     "infection/infection": "~0.26",
-    "laravel/cashier": "^13.8",
+    "laravel/cashier": "^13.11",
     "nunomaduro/collision": "^6.2",
-    "orchestra/testbench": "^7.4",
-    "phpstan/phpstan": "^1.6",
+    "orchestra/testbench": "^7.5",
+    "phpstan/phpstan": "^1.7",
     "phpunit/phpunit": "^9.5",
     "rector/rector": "^0.13",
     "symplify/easy-coding-standard": "^10.2",
-    "vimeo/psalm": "^4.22"
+    "vimeo/psalm": "^4.23"
   },
   "suggest": {
     "bavix/laravel-wallet-swap": "Addition to the laravel-wallet library for quick setting of exchange rates",
