@@ -85,8 +85,8 @@ class User extends Model implements Customer
 Add the `HasWallet` trait and interface to `Item` model.
 
 Starting from version 9.x there are two product interfaces:
-- For an unlimited number of products (`ProductLimitedInterface`);
-- For a limited number of products (`ProductInterface`);
+- For an unlimited number of products (`ProductInterface`);
+- For a limited number of products (`ProductLimitedInterface`);
 
 An example with an unlimited number of products:
 ```php
