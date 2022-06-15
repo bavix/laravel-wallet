@@ -10,6 +10,7 @@ use DateTimeImmutable;
 final class TransferDto implements TransferDtoInterface
 {
     private DateTimeImmutable $createdAt;
+
     private DateTimeImmutable $updatedAt;
 
     public function __construct(

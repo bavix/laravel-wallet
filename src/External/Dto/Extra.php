@@ -10,6 +10,7 @@ use Bavix\Wallet\External\Contracts\OptionDtoInterface;
 final class Extra implements ExtraDtoInterface
 {
     private OptionDtoInterface $deposit;
+
     private OptionDtoInterface $withdraw;
 
     public function __construct(OptionDtoInterface|array|null $deposit, OptionDtoInterface|array|null $withdraw)

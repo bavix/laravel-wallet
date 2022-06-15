@@ -128,7 +128,7 @@ trait CartPay
             $assistantService = app(AssistantServiceInterface::class);
             foreach ($cart->getBasketDto()->items() as $item) {
                 foreach ($item->getItems() as $product) {
-                    $productId = $product::class.':'.$castService->getModel($product)->getKey();
+                    $productId = $product::class . ':' . $castService->getModel($product)->getKey();
                     $pricePerItem = $item->getPricePerItem();
                     if ($pricePerItem === null) {
                         $prices[$productId] ??= $product->getAmountProduct($this);

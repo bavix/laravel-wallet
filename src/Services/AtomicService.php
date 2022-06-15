@@ -41,6 +41,6 @@ final class AtomicService implements AtomicServiceInterface
     {
         $wallet = $this->castService->getWallet($object);
 
-        return self::PREFIX.'::'.$wallet::class.'::'.$wallet->uuid;
+        return self::PREFIX . '::' . $wallet::class . '::' . $wallet->uuid;
     }
 }

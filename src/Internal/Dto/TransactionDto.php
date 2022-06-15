@@ -10,6 +10,7 @@ use DateTimeImmutable;
 final class TransactionDto implements TransactionDtoInterface
 {
     private DateTimeImmutable $createdAt;
+
     private DateTimeImmutable $updatedAt;
 
     public function __construct(

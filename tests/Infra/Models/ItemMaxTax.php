@@ -8,17 +8,12 @@ use Bavix\Wallet\Interfaces\MaximalTaxable;
 
 class ItemMaxTax extends Item implements MaximalTaxable
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getTable(): string
     {
         return 'items';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+
     public function getFeePercent(): float
     {
         return 3;

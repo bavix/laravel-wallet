@@ -32,6 +32,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class Transaction extends Model
 {
     public const TYPE_DEPOSIT = 'deposit';
+
     public const TYPE_WITHDRAW = 'withdraw';
 
     /**

@@ -587,7 +587,7 @@ final class MultiWalletTest extends TestCase
         $wallets = [];
         foreach (range(1, 10) as $item) {
             $wallets[] = $user->createWallet([
-                'name' => 'index'.$item,
+                'name' => 'index' . $item,
             ]);
         }
 

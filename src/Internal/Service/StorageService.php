@@ -56,7 +56,7 @@ final class StorageService implements StorageServiceInterface
     public function increase(string $key, float|int|string $value): string
     {
         return $this->lockService->block(
-            $key.'::increase',
+            $key . '::increase',
             function () use ($key, $value): string {
                 $result = $this->mathService->add($this->get($key), $value);
                 $this->sync($key, $result);

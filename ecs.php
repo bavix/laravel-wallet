@@ -44,7 +44,6 @@ return static function (ECSConfig $containerConfigurator): void {
     $containerConfigurator->import(SetList::SYMPLIFY);
     $containerConfigurator->import(SetList::COMMON);
     $containerConfigurator->import(SetList::PSR_12);
-    $containerConfigurator->import(SetList::PHP_CS_FIXER);
     $containerConfigurator->import(SetList::CONTROL_STRUCTURES);
     $containerConfigurator->import(SetList::NAMESPACES);
     $containerConfigurator->import(SetList::STRICT);
