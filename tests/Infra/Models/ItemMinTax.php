@@ -13,7 +13,6 @@ class ItemMinTax extends Item implements MinimalTaxable
         return 'items';
     }
 
-
     public function getFeePercent(): float
     {
         return 3;

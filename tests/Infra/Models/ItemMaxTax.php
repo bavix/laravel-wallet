@@ -13,7 +13,6 @@ class ItemMaxTax extends Item implements MaximalTaxable
         return 'items';
     }
 
-
     public function getFeePercent(): float
     {
         return 3;
