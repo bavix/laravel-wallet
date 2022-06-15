@@ -297,11 +297,11 @@ final class WalletFloatTest extends TestCase
             }
         });
 
-        self::assertSame($user->balance, '256'.str_repeat('0', 32 - 8));
+        self::assertSame($user->balance, '256' . str_repeat('0', 32 - 8));
         self::assertSame(0, $math->compare($user->balanceFloat, '0.00000256'));
 
-        $user->deposit(256 .str_repeat('0', 32));
-        $user->depositFloat('0.'.str_repeat('0', 31).'1');
+        $user->deposit(256 . str_repeat('0', 32));
+        $user->depositFloat('0.' . str_repeat('0', 31) . '1');
 
         [$q, $r] = explode('.', $user->balanceFloat, 2);
         self::assertSame(strlen($r), $user->wallet->decimal_places);

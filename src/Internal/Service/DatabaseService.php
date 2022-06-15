@@ -74,7 +74,7 @@ final class DatabaseService implements DatabaseServiceInterface
             $this->init = false;
 
             throw new TransactionFailedException(
-                'Transaction failed. Message: '.$throwable->getMessage(),
+                'Transaction failed. Message: ' . $throwable->getMessage(),
                 ExceptionInterface::TRANSACTION_FAILED,
                 $throwable
             );

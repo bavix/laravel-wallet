@@ -93,7 +93,7 @@ final class EventTest extends TestCase
         $uuid = $buyer->wallet->uuid;
         $createdAt = app(ClockServiceInterface::class)->now()->format(DateTimeInterface::ATOM);
 
-        $message = hash('sha256', $holderType.$uuid.$createdAt);
+        $message = hash('sha256', $holderType . $uuid . $createdAt);
 
         // unit
         $this->expectException(UnknownEventException::class);

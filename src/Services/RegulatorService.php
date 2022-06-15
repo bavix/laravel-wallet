@@ -129,6 +129,6 @@ final class RegulatorService implements RegulatorServiceInterface
 
     private function getKey(string $uuid): string
     {
-        return $this->idempotentKey.'::'.$uuid;
+        return $this->idempotentKey . '::' . $uuid;
     }
 }

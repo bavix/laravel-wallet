@@ -139,6 +139,6 @@ final class Cart implements Countable, CartInterface
 
     private function productId(ProductInterface $product): string
     {
-        return $product::class.':'.$this->castService->getModel($product)->getKey();
+        return $product::class . ':' . $this->castService->getModel($product)->getKey();
     }
 }

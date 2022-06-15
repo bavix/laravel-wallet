@@ -155,8 +155,8 @@ final class TransactionsFilterTest extends TestCase
         $query = Transaction::query()
             ->where(function ($query) use ($buyer, $walletTableName, $transactionTableName) {
                 $query->where('payable_id', '=', $buyer->getKey())
-                    ->join($walletTableName, $transactionTableName.'.wallet_id', '=', $walletTableName.'.id')
-                    ->select($transactionTableName.'.*', $walletTableName.'.name')
+                    ->join($walletTableName, $transactionTableName . '.wallet_id', '=', $walletTableName . '.id')
+                    ->select($transactionTableName . '.*', $walletTableName . '.name')
                     ->get()
                 ;
             })

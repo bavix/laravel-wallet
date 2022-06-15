@@ -109,24 +109,24 @@ final class WalletServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->loadTranslationsFrom(dirname(__DIR__).'/resources/lang', 'wallet');
+        $this->loadTranslationsFrom(dirname(__DIR__) . '/resources/lang', 'wallet');
 
         if (!$this->app->runningInConsole()) {
             return;
         }
 
         if ($this->shouldMigrate()) {
-            $this->loadMigrationsFrom([dirname(__DIR__).'/database']);
+            $this->loadMigrationsFrom([dirname(__DIR__) . '/database']);
         }
 
         if (function_exists('config_path')) {
             $this->publishes([
-                dirname(__DIR__).'/config/config.php' => config_path('wallet.php'),
+                dirname(__DIR__) . '/config/config.php' => config_path('wallet.php'),
             ], 'laravel-wallet-config');
         }
 
         $this->publishes([
-            dirname(__DIR__).'/database/' => database_path('migrations'),
+            dirname(__DIR__) . '/database/' => database_path('migrations'),
         ], 'laravel-wallet-migrations');
     }
 
@@ -135,7 +135,7 @@ final class WalletServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->mergeConfigFrom(dirname(__DIR__).'/config/config.php', 'wallet');
+        $this->mergeConfigFrom(dirname(__DIR__) . '/config/config.php', 'wallet');
         $this->commands([TransferFixCommand::class]);
 
         $configure = config('wallet', []);
