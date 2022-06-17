@@ -81,7 +81,7 @@ trait HasWallet
     public function walletTransactions(): HasMany
     {
         return app(CastServiceInterface::class)
-            ->getWallet($this)
+            ->getWallet($this, !is_null($this->id))
             ->hasMany(config('wallet.transaction.model', Transaction::class), 'wallet_id')
         ;
     }
