@@ -6,8 +6,8 @@ namespace Bavix\Wallet\Internal\Service;
 
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
-use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Config\Repository as ConfigRepository;
+use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
