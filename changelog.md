@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.0.4] - 2022-07-28
+### Fixed
+- Add allow plugin infection by @rez1dent3 in #528
+- Fix transaction amount_float mutator by @keatliang2005 in #533 #534
+
+### Updated
+- Bump terser from 5.13.0 to 5.14.2 by @dependabot in #527
+- Bump webpack from 5.73.0 to 5.74.0 by @dependabot in #529
+
 ## [9.0.3] - 2022-06-22
 ### Fixed
 - Fixed lumen. Change CacheManager to CacheFactory for compatibility. #520 #521 @Beagon 
@@ -880,7 +889,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/9.0.3...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/9.0.4...develop
+[9.0.4]: https://github.com/bavix/laravel-wallet/compare/9.0.3...9.0.4
 [9.0.3]: https://github.com/bavix/laravel-wallet/compare/9.0.2...9.0.3
 [9.0.2]: https://github.com/bavix/laravel-wallet/compare/9.0.1...9.0.2
 [9.0.1]: https://github.com/bavix/laravel-wallet/compare/9.0.0...9.0.1
