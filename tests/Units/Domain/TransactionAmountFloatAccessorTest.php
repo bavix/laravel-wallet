@@ -32,7 +32,11 @@ final class TransactionAmountFloatAccessorTest extends TestCase
         $twoDecimalTransaction = $twoDecimalWallet->depositFloat($amountTwoDecimal);
 
         self::assertNotNull($twoDecimalTransaction);
-        self::assertSame($amountTwoDecimal, (float) $twoDecimalTransaction->amountFloat, 'amount float is same decimal places');
+        self::assertSame(
+            $amountTwoDecimal,
+            (float) $twoDecimalTransaction->amountFloat,
+            'amount float is same decimal places'
+        );
 
         // four decimal
         $fourDecimalWallet = $user->createWallet([
@@ -45,6 +49,10 @@ final class TransactionAmountFloatAccessorTest extends TestCase
         $fourDecimalTransaction = $fourDecimalWallet->depositFloat($amountFourDecimal);
 
         self::assertNotNull($fourDecimalTransaction);
-        self::assertSame($amountFourDecimal, (float) $fourDecimalTransaction->amountFloat, 'amount float is same decimal places');
+        self::assertSame(
+            $amountFourDecimal,
+            (float) $fourDecimalTransaction->amountFloat,
+            'amount float is same decimal places'
+        );
     }
 }
