@@ -33,8 +33,8 @@ final class TransactionAmountFloatAccessorTest extends TestCase
 
         self::assertNotNull($twoDecimalTransaction);
         self::assertSame(
-            $amountTwoDecimal,
-            (float) $twoDecimalTransaction->amountFloat,
+            (string) $amountTwoDecimal,
+            $twoDecimalTransaction->amountFloat,
             'amount float is same decimal places'
         );
 
@@ -50,8 +50,8 @@ final class TransactionAmountFloatAccessorTest extends TestCase
 
         self::assertNotNull($fourDecimalTransaction);
         self::assertSame(
-            $amountFourDecimal,
-            (float) $fourDecimalTransaction->amountFloat,
+            (string) $amountFourDecimal,
+            $fourDecimalTransaction->amountFloat,
             'amount float is same decimal places'
         );
     }
