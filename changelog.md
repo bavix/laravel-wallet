@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.0.3] - 2022-06-22
+### Fixed
+- Fixed lumen. Change CacheManager to CacheFactory for compatibility. #520 #521 @Beagon 
+
+## [9.0.2] - 2022-06-18
+### Fixed
+- Fix laravel-ide-helper generate:model #517 @keatliang2005 
+
 ## [9.0.1] - 2022-05-19
 ### Fixed
 - Fixed a bug that prevented items from being returned via `Cart::withItem`
@@ -872,7 +880,9 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/9.0.1...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/9.0.3...develop
+[9.0.3]: https://github.com/bavix/laravel-wallet/compare/9.0.2...9.0.3
+[9.0.2]: https://github.com/bavix/laravel-wallet/compare/9.0.1...9.0.2
 [9.0.1]: https://github.com/bavix/laravel-wallet/compare/9.0.0...9.0.1
 [9.0.0]: https://github.com/bavix/laravel-wallet/compare/8.4.1...9.0.0
 [8.4.1]: https://github.com/bavix/laravel-wallet/compare/8.4.0...8.4.1

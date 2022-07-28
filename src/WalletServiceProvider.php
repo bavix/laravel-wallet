@@ -97,7 +97,7 @@ use Bavix\Wallet\Services\WalletServiceInterface;
 use function config;
 use function dirname;
 use function function_exists;
-use Illuminate\Cache\CacheManager;
+use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Support\ServiceProvider;
 
 final class WalletServiceProvider extends ServiceProvider
@@ -221,8 +221,8 @@ final class WalletServiceProvider extends ServiceProvider
                 'storageService' => $this->app->make(
                     StorageServiceInterface::class,
                     [
-                        'cacheRepository' => $this->app->make(CacheManager::class)
-                            ->driver($cache['driver'] ?? 'array'),
+                        'cacheRepository' => $this->app->make(CacheFactory::class)
+                            ->store($cache['driver'] ?? 'array'),
                     ],
                 ),
             ]
@@ -234,8 +234,8 @@ final class WalletServiceProvider extends ServiceProvider
                 'storageService' => $this->app->make(
                     StorageServiceInterface::class,
                     [
-                        'cacheRepository' => $this->app->make(CacheManager::class)
-                            ->driver('array'),
+                        'cacheRepository' => $this->app->make(CacheFactory::class)
+                            ->store('array'),
                     ],
                 ),
             ]

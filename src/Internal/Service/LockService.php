@@ -6,8 +6,8 @@ namespace Bavix\Wallet\Internal\Service;
 
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
-use Illuminate\Cache\CacheManager;
 use Illuminate\Config\Repository as ConfigRepository;
+use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
@@ -17,10 +17,10 @@ final class LockService implements LockServiceInterface
 
     private int $seconds;
 
-    public function __construct(CacheManager $cacheManager, ConfigRepository $config)
+    public function __construct(CacheFactory $cacheFactory, ConfigRepository $config)
     {
         $this->seconds = (int) $config->get('wallet.lock.seconds', 1);
-        $this->cache = $cacheManager->driver($config->get('wallet.lock.driver', 'array'));
+        $this->cache = $cacheFactory->store($config->get('wallet.lock.driver', 'array'));
     }
 
     /**
