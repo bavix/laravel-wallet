@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\Assembler\TransactionCreatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
+use Bavix\Wallet\Internal\Service\DispatcherServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 
 final class TransactionService implements TransactionServiceInterface
 {
     public function __construct(
+        private TransactionCreatedEventAssemblerInterface $transactionCreatedEventAssembler,
+        private DispatcherServiceInterface $dispatcherService,
         private AssistantServiceInterface $assistantService,
         private RegulatorServiceInterface $regulatorService,
         private PrepareServiceInterface $prepareService,
@@ -67,6 +71,10 @@ final class TransactionService implements TransactionServiceInterface
             assert((int) $object->getKey() === $walletId);
 
             $this->regulatorService->increase($object, $total);
+        }
+
+        foreach ($transactions as $transaction) {
+            $this->dispatcherService->dispatch($this->transactionCreatedEventAssembler->create($transaction));
         }
 
         return $transactions;
