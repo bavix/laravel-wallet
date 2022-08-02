@@ -13,6 +13,8 @@ use Bavix\Wallet\Internal\Assembler\ExtraDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\ExtraDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\OptionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\OptionDtoAssemblerInterface;
+use Bavix\Wallet\Internal\Assembler\TransactionCreatedEventAssembler;
+use Bavix\Wallet\Internal\Assembler\TransactionCreatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionQueryAssembler;
@@ -27,6 +29,8 @@ use Bavix\Wallet\Internal\Assembler\WalletCreatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\WalletCreatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEvent;
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEventInterface;
+use Bavix\Wallet\Internal\Events\TransactionCreatedEvent;
+use Bavix\Wallet\Internal\Events\TransactionCreatedEventInterface;
 use Bavix\Wallet\Internal\Events\WalletCreatedEvent;
 use Bavix\Wallet\Internal\Events\WalletCreatedEventInterface;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
@@ -290,6 +294,11 @@ final class WalletServiceProvider extends ServiceProvider
             WalletCreatedEventAssemblerInterface::class,
             $configure['wallet_created_event'] ?? WalletCreatedEventAssembler::class
         );
+
+        $this->app->singleton(
+            TransactionCreatedEventAssemblerInterface::class,
+            $configure['transaction_created_event'] ?? TransactionCreatedEventAssembler::class
+        );
     }
 
     private function transformers(array $configure): void
@@ -315,6 +324,11 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->bind(
             WalletCreatedEventInterface::class,
             $configure['wallet_created'] ?? WalletCreatedEvent::class
+        );
+
+        $this->app->bind(
+            TransactionCreatedEventInterface::class,
+            $configure['transaction_created'] ?? TransactionCreatedEvent::class
         );
     }
 
