@@ -62,6 +62,7 @@ final class TransactionService implements TransactionServiceInterface
     {
         $transactions = $this->atmService->makeTransactions($objects); // q1
         $totals = $this->assistantService->getSums($objects);
+        assert(count($objects) === count($transactions));
 
         foreach ($totals as $walletId => $total) {
             $wallet = $wallets[$walletId] ?? null;

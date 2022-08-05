@@ -12,8 +12,11 @@ use Bavix\Wallet\Internal\Service\ClockServiceInterface;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Objects\Cart;
+use Bavix\Wallet\Services\PurchaseServiceInterface;
 use Bavix\Wallet\Test\Infra\Exceptions\UnknownEventException;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Infra\Factories\ItemFactory;
 use Bavix\Wallet\Test\Infra\Listeners\BalanceUpdatedThrowDateListener;
 use Bavix\Wallet\Test\Infra\Listeners\BalanceUpdatedThrowIdListener;
 use Bavix\Wallet\Test\Infra\Listeners\BalanceUpdatedThrowUuidListener;
@@ -161,5 +164,68 @@ final class EventTest extends TestCase
         $this->expectExceptionMessage($message);
 
         $buyer->deposit(100);
+    }
+
+    /**
+     * @throws ExceptionInterface
+     */
+    public function testTransactionCreatedMultiListener(): void
+    {
+        /** @var array<array<int, int>> $transactionIds */
+        /** @var array<array<int, int>> $transactionCounts */
+        $transactionIds = [];
+        $transactionCounts = [];
+        Event::listen(
+            TransactionCreatedEventInterface::class,
+            static function (TransactionCreatedEventInterface $event) use (
+                &$transactionIds,
+                &$transactionCounts
+            ): void {
+                $transactionCounts[$event->getWalletId()] = ($transactionCounts[$event->getWalletId()] ?? 0) + 1;
+                $transactionIds[$event->getWalletId()][] = $event->getId();
+            },
+        );
+
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        self::assertSame(0, $buyer->wallet->balanceInt);
+
+        $products = ItemFactory::times(10)->create([
+            'quantity' => 1,
+        ]);
+
+        $cart = app(Cart::class)->withItems($products);
+        foreach ($cart->getItems() as $product) {
+            self::assertSame(0, $product->getBalanceIntAttribute());
+        }
+
+        self::assertSame($buyer->balance, $buyer->wallet->balance);
+
+        $depositTransaction = $buyer->deposit($cart->getTotal($buyer));
+        self::assertNotNull($depositTransaction); // +1
+
+        self::assertSame($buyer->balance, $buyer->wallet->balance);
+
+        $transfers = $buyer->payCart($cart); // +10
+        self::assertCount(count($cart), $transfers);
+        self::assertTrue((bool) app(PurchaseServiceInterface::class)->already($buyer, $cart->getBasketDto()));
+        self::assertSame(0, $buyer->balanceInt);
+
+        $resultIds = [(int) $depositTransaction->getKey()];
+        $valueIds = $transactionIds[$buyer->wallet->getKey()] ?? [];
+        foreach ($transfers as $transfer) {
+            $resultIds[] = (int) $transfer->withdraw->getKey();
+            self::assertSame(1, $transactionCounts[$transfer->deposit->wallet_id] ?? 0);
+        }
+
+        sort($valueIds);
+        sort($resultIds);
+
+        self::assertSame(1 + 10, $transactionCounts[$buyer->wallet->getKey()] ?? 0);
+
+        self::assertCount(1 + 10, $resultIds);
+        self::assertCount(1 + 10, $valueIds);
+
+        self::assertSame($valueIds, $resultIds);
     }
 }
