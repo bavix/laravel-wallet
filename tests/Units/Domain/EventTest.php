@@ -5,16 +5,19 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test\Units\Domain;
 
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEventInterface;
+use Bavix\Wallet\Internal\Events\TransactionCreatedEventInterface;
 use Bavix\Wallet\Internal\Events\WalletCreatedEventInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Service\ClockServiceInterface;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
+use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Test\Infra\Exceptions\UnknownEventException;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Listeners\BalanceUpdatedThrowDateListener;
 use Bavix\Wallet\Test\Infra\Listeners\BalanceUpdatedThrowIdListener;
 use Bavix\Wallet\Test\Infra\Listeners\BalanceUpdatedThrowUuidListener;
+use Bavix\Wallet\Test\Infra\Listeners\TransactionCreatedThrowListener;
 use Bavix\Wallet\Test\Infra\Listeners\WalletCreatedThrowListener;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\Services\ClockFakeService;
@@ -131,5 +134,32 @@ final class EventTest extends TestCase
          */
         self::assertSame(0, $buyer->balanceInt);
         self::assertCount(4, $buyer->transactions()->get());
+    }
+
+    /**
+     * @throws ExceptionInterface
+     */
+    public function testTransactionCreatedThrowListener(): void
+    {
+        $this->app->bind(ClockServiceInterface::class, ClockFakeService::class);
+
+        Event::listen(TransactionCreatedEventInterface::class, TransactionCreatedThrowListener::class,);
+
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        self::assertSame(0, $buyer->wallet->balanceInt);
+
+        $createdAt = app(ClockServiceInterface::class)
+            ->now()
+            ->format(DateTimeInterface::ATOM)
+        ;
+
+        $message = hash('sha256', Transaction::TYPE_DEPOSIT . $buyer->wallet->getKey() . $createdAt);
+
+        // unit
+        $this->expectException(UnknownEventException::class);
+        $this->expectExceptionMessage($message);
+
+        $buyer->deposit(100);
     }
 }
