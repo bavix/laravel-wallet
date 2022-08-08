@@ -44,6 +44,7 @@
     
     - [BalanceUpdatedEvent](balance-updated-event)
     - [WalletCreatedEvent](wallet-created-event)
+    - [TransactionCreatedEvent](transaction-created-event)
     - [Event Customize](event-customize)
 
 - Additions

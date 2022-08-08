@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.1.0] - 2022-08-08
+### Added
+- TransactionCreatedEvent #538
+
+### Fixed
+- Fixed a bug with sending multiple events inside the queue. Extra events were sent.
+
 ## [9.0.4] - 2022-07-28
 ### Fixed
 - Add allow plugin infection by @rez1dent3 in #528
@@ -889,7 +896,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/9.0.4...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/9.1.0...develop
+[9.1.0]: https://github.com/bavix/laravel-wallet/compare/9.0.4...9.1.0
 [9.0.4]: https://github.com/bavix/laravel-wallet/compare/9.0.3...9.0.4
 [9.0.3]: https://github.com/bavix/laravel-wallet/compare/9.0.2...9.0.3
 [9.0.2]: https://github.com/bavix/laravel-wallet/compare/9.0.1...9.0.2
