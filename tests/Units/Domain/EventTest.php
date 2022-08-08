@@ -221,6 +221,7 @@ final class EventTest extends TestCase
         sort($valueIds);
         sort($resultIds);
 
+        self::assertSame(1 + 20, array_sum($transactionCounts)); // deposit+withdraw
         self::assertSame(1 + 10, $transactionCounts[$buyer->wallet->getKey()] ?? 0);
 
         self::assertCount(1 + 10, $resultIds);
