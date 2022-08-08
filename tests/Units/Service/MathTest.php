@@ -143,8 +143,8 @@ class MathTest extends TestCase
         self::assertSame(-0.2, (float) $provider->div(-1, 5));
 
         // float
-        self::assertSame(0.24223602484472, (float) $provider->div(1.17, 4.83));
-        self::assertSame(-0.26519337016574, (float) $provider->div(-1.44, 5.43));
+        self::assertSame(0.24223602484472, (float) $provider->div(1.17, 4.83, 14));
+        self::assertSame(-0.26519337016574, (float) $provider->div(-1.44, 5.43, 14));
 
         self::assertSame(
             0,

@@ -35,6 +35,9 @@ final class DispatcherService implements DispatcherServiceInterface
         foreach ($this->events as $event) {
             $this->dispatcher->flush($event);
         }
+
+        $this->dispatcher->forgetPushed();
+        $this->events = [];
     }
 
     public function forgot(): void
@@ -42,6 +45,8 @@ final class DispatcherService implements DispatcherServiceInterface
         foreach ($this->events as $event) {
             $this->dispatcher->forget($event);
         }
+
+        $this->events = [];
     }
 
     /** @throws UnknownEventException */
