@@ -7,6 +7,7 @@ namespace Bavix\Wallet\Test\Units\Domain;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\TestCase;
+use Illuminate\Support\Facades\DB;
 use Spatie\Fork\Fork;
 
 /**
@@ -25,6 +26,7 @@ final class RaceCondTest extends TestCase
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         $callback = static function () use ($buyer): void {
+            $buyer->getConnection()->reconnect();
             $buyer->deposit(10);
         };
 
