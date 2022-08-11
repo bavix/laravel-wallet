@@ -16,6 +16,8 @@ final class RaceCondTest extends TestCase
 {
     public function testSimple(): void
     {
+        $this->app->get('config')->set('wallet.lock.seconds', 30);
+
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         $callback = static function () use ($buyer): void {
