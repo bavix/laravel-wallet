@@ -16,6 +16,10 @@ final class RaceCondTest extends TestCase
 {
     public function testSimple(): void
     {
+        if (env('CACHE_DRIVER') !== 'redis') {
+            $this->markTestSkipped();
+        }
+
         $this->app->get('config')->set('wallet.lock.seconds', 30);
 
         /** @var Buyer $buyer */
