@@ -19,7 +19,7 @@ final class RaceCondTest extends TestCase
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         $callback = static function () use ($buyer): void {
-            $buyer->deposit(1);
+            $buyer->deposit(10);
         };
 
         Fork::new()
