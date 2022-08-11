@@ -23,7 +23,7 @@ final class RaceCondTest extends TestCase
         };
 
         Fork::new()
-            ->concurrent(100)
+            ->concurrent(4)
             ->run(...array_fill(1, 100, $callback));
 
         self::assertSame(1_000, $buyer->balanceInt);
