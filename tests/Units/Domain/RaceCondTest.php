@@ -26,8 +26,16 @@ final class RaceCondTest extends TestCase
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         $callback = static function () use ($buyer): void {
-            $buyer->getConnection()->reconnect();
-            $buyer->deposit(10);
+            while (true) {
+                try {
+                    $buyer->getConnection()->reconnect();
+                    $buyer->deposit(10);
+                } catch (\Throwable $throwable) {
+                    usleep(10_000);
+                    continue;
+                }
+                break;
+            }
         };
 
         Fork::new()
