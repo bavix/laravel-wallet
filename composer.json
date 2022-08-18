@@ -41,7 +41,7 @@
     "orchestra/testbench": "^7.5",
     "phpstan/phpstan": "^1.7",
     "phpunit/phpunit": "^9.5",
-    "rector/rector": "^0.13",
+    "rector/rector": "^0.14",
     "symplify/easy-coding-standard": "^11.0",
     "vimeo/psalm": "^4.23"
   },
