@@ -3,9 +3,7 @@
 declare(strict_types=1);
 
 use PhpCsFixer\Fixer\ArrayNotation\ArraySyntaxFixer;
-use PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
-use PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitTestClassRequiresCoversFixer;
 use PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer;
 use Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer;
@@ -25,7 +23,8 @@ return static function (ECSConfig $containerConfigurator): void {
 
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::PARALLEL, true);
-    $parameters->set(Option::PATHS, [
+
+    $containerConfigurator->paths([
         __DIR__ . '/config',
         __DIR__ . '/database',
         __DIR__ . '/resources/lang',
@@ -33,10 +32,8 @@ return static function (ECSConfig $containerConfigurator): void {
         __DIR__ . '/tests',
     ]);
 
-    $parameters->set(Option::SKIP, [
-        PhpdocToCommentFixer::class,
+    $containerConfigurator->skip([
         GeneralPhpdocAnnotationRemoveFixer::class,
-        NotOperatorWithSuccessorSpaceFixer::class,
         PhpUnitTestClassRequiresCoversFixer::class,
     ]);
 

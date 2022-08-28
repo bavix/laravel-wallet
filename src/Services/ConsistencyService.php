@@ -54,7 +54,7 @@ final class ConsistencyService implements ConsistencyServiceInterface
             );
         }
 
-        if (!$this->canWithdraw($balance, $amount, $allowZero)) {
+        if (! $this->canWithdraw($balance, $amount, $allowZero)) {
             throw new InsufficientFunds(
                 $this->translatorService->get('wallet::errors.insufficient_funds'),
                 ExceptionInterface::INSUFFICIENT_FUNDS
@@ -69,7 +69,7 @@ final class ConsistencyService implements ConsistencyServiceInterface
         /**
          * Allow buying for free with a negative balance.
          */
-        if ($allowZero && !$mathService->compare($amount, 0)) {
+        if ($allowZero && ! $mathService->compare($amount, 0)) {
             return true;
         }
 

@@ -42,7 +42,7 @@ final class MathTest extends TestCase
         self::assertSame(123.11, (float) $provider->abs(-123.11));
 
         // string
-        if (!method_exists(BigInteger::class, 'parse')) {
+        if (! method_exists(BigInteger::class, 'parse')) {
             // brick/math 0.9+
             self::assertSame(123, (int) $provider->abs('123.'));
             self::assertSame(.11, (float) $provider->abs('.11'));

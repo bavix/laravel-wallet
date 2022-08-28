@@ -67,7 +67,7 @@ trait HasWallets
             }
         }
 
-        if (!array_key_exists($slug, $this->_wallets)) {
+        if (! array_key_exists($slug, $this->_wallets)) {
             $wallet = app(WalletServiceInterface::class)->getBySlug($this, $slug);
             $wallet->setRelation('holder', $this->withoutRelations());
 

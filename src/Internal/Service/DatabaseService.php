@@ -36,7 +36,7 @@ final class DatabaseService implements DatabaseServiceInterface
     public function transaction(callable $callback): mixed
     {
         $level = $this->connection->transactionLevel();
-        if ($level > 0 && !$this->init) {
+        if ($level > 0 && ! $this->init) {
             throw new TransactionStartException(
                 'Working inside an embedded transaction is not possible. https://bavix.github.io/laravel-wallet/#/transaction',
                 ExceptionInterface::TRANSACTION_START,

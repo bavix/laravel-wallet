@@ -30,12 +30,12 @@ final class CastService implements CastServiceInterface
     public function getWallet(Wallet $object, bool $save = true): WalletModel
     {
         $wallet = $this->getModel($object);
-        if (!($wallet instanceof WalletModel)) {
+        if (! ($wallet instanceof WalletModel)) {
             $wallet = $wallet->getAttribute('wallet');
             assert($wallet instanceof WalletModel);
         }
 
-        if ($save && !$wallet->exists) {
+        if ($save && ! $wallet->exists) {
             $this->databaseService->transaction(function () use ($wallet) {
                 $result = $wallet->saveQuietly();
                 $this->dispatcherService->dispatch($this->walletCreatedEventAssembler->create($wallet));
