@@ -13,6 +13,10 @@ final class Extra implements ExtraDtoInterface
 
     private OptionDtoInterface $withdraw;
 
+    /**
+     * @param OptionDtoInterface|array<mixed>|null $deposit
+     * @param OptionDtoInterface|array<mixed>|null $withdraw
+     */
     public function __construct(OptionDtoInterface|array|null $deposit, OptionDtoInterface|array|null $withdraw)
     {
         $this->deposit = $deposit instanceof OptionDtoInterface ? $deposit : new Option($deposit);

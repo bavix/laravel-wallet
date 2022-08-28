@@ -13,6 +13,9 @@ use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
 
+/**
+ * @internal
+ */
 final class ConsistencyService implements ConsistencyServiceInterface
 {
     public function __construct(

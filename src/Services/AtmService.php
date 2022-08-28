@@ -13,7 +13,9 @@ use Bavix\Wallet\Internal\Repository\TransferRepositoryInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 
-/** @internal */
+/**
+ * @internal
+ */
 final class AtmService implements AtmServiceInterface
 {
     public function __construct(

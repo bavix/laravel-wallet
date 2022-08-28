@@ -10,6 +10,9 @@ use Bavix\Wallet\Internal\Service\LockServiceInterface;
 use Bavix\Wallet\Internal\Service\StorageServiceInterface;
 use Bavix\Wallet\Models\Wallet;
 
+/**
+ * @internal
+ */
 final class BookkeeperService implements BookkeeperServiceInterface
 {
     public function __construct(

@@ -7,6 +7,9 @@ namespace Bavix\Wallet\Services;
 use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
 use Bavix\Wallet\Internal\Repository\WalletRepositoryInterface;
 
+/**
+ * @internal
+ */
 final class EagerLoaderService implements EagerLoaderServiceInterface
 {
     public function __construct(

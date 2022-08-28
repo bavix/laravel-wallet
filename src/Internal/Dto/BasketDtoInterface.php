@@ -12,6 +12,9 @@ interface BasketDtoInterface extends Countable
 {
     public function total(): int;
 
+    /**
+     * @return array<mixed>
+     */
     public function meta(): array;
 
     /**

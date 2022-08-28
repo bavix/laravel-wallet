@@ -25,6 +25,9 @@ final class Cart implements Countable, CartInterface
      */
     private array $items = [];
 
+    /**
+     * @var array<mixed>
+     */
     private array $meta = [];
 
     public function __construct(
@@ -33,11 +36,17 @@ final class Cart implements Countable, CartInterface
     ) {
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getMeta(): array
     {
         return $this->meta;
     }
 
+    /**
+     * @param array<mixed> $meta
+     */
     public function withMeta(array $meta): self
     {
         $self = clone $this;
@@ -61,6 +70,9 @@ final class Cart implements Countable, CartInterface
         return $self;
     }
 
+    /**
+     * @param iterable<ProductInterface> $products
+     */
     public function withItems(iterable $products): self
     {
         $self = clone $this;

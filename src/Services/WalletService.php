@@ -12,6 +12,9 @@ use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Bavix\Wallet\Models\Wallet;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @internal
+ */
 final class WalletService implements WalletServiceInterface
 {
     public function __construct(

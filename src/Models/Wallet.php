@@ -65,13 +65,16 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'decimal_places' => 'int',
         'meta' => 'json',
     ];
 
+    /**
+     * @var array<string, int|string>
+     */
     protected $attributes = [
         'balance' => 0,
         'decimal_places' => 2,

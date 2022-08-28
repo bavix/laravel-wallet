@@ -50,7 +50,7 @@ class Transaction extends Model
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'wallet_id' => 'int',

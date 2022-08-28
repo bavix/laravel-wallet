@@ -9,6 +9,19 @@ use Bavix\Wallet\Models\Wallet;
 
 interface WalletRepositoryInterface
 {
+    /**
+     * @param array{
+     *     holder_type: string,
+     *     holder_id: string|int,
+     *     name: string,
+     *     slug?: string,
+     *     uuid: string,
+     *     description?: string,
+     *     meta: array<mixed>|null,
+     *     balance?: int,
+     *     decimal_places?: int,
+     * } $attributes
+     */
     public function create(array $attributes): Wallet;
 
     public function findById(int $id): ?Wallet;

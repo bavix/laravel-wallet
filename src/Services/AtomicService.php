@@ -12,6 +12,9 @@ use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Internal\Service\LockServiceInterface;
 use Illuminate\Database\RecordsNotFoundException;
 
+/**
+ * @internal
+ */
 final class AtomicService implements AtomicServiceInterface
 {
     private const PREFIX = 'wallet_atomic::';

@@ -12,7 +12,9 @@ use Bavix\Wallet\Internal\Service\DispatcherServiceInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Illuminate\Database\Eloquent\Model;
 
-/** @internal */
+/**
+ * @internal
+ */
 final class CastService implements CastServiceInterface
 {
     public function __construct(

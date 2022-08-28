@@ -13,6 +13,8 @@ use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 interface PrepareServiceInterface
 {
     /**
+     * @param null|array<mixed> $meta
+     *
      * @throws AmountInvalid
      */
     public function deposit(
@@ -23,6 +25,8 @@ interface PrepareServiceInterface
     ): TransactionDtoInterface;
 
     /**
+     * @param null|array<mixed> $meta
+     *
      * @throws AmountInvalid
      */
     public function withdraw(
@@ -33,6 +37,8 @@ interface PrepareServiceInterface
     ): TransactionDtoInterface;
 
     /**
+     * @param ExtraDtoInterface|array<mixed>|null $meta
+     *
      * @throws AmountInvalid
      */
     public function transferLazy(

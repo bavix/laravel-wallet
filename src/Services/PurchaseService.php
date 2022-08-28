@@ -8,6 +8,9 @@ use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
 use Bavix\Wallet\Models\Transfer;
 
+/**
+ * @internal
+ */
 final class PurchaseService implements PurchaseServiceInterface
 {
     public function __construct(private CastServiceInterface $castService)
