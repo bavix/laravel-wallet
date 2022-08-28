@@ -27,6 +27,24 @@ final class AtomicService implements AtomicServiceInterface
     }
 
     /**
+     * @param non-empty-array<Wallet> $objects
+     *
+     * @throws LockProviderNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
+     */
+    public function blocks(array $objects, callable $callback): mixed
+    {
+        $callable = fn () => $this->databaseService->transaction($callback);
+        foreach ($objects as $object) {
+            $callable = fn () => $this->lockService->block($this->key($object), $callable);
+        }
+
+        return $callable();
+    }
+
+    /**
      * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -34,10 +52,7 @@ final class AtomicService implements AtomicServiceInterface
      */
     public function block(Wallet $object, callable $callback): mixed
     {
-        return $this->lockService->block(
-            $this->key($object),
-            fn () => $this->databaseService->transaction($callback)
-        );
+        return $this->blocks([$object], $callback);
     }
 
     private function key(Wallet $object): string

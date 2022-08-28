@@ -50,7 +50,7 @@ final class SingletonTest extends TestCase
         );
     }
 
-    protected function getRefId(string $object): string
+    private function getRefId(string $object): string
     {
         return spl_object_hash(app($object));
     }
