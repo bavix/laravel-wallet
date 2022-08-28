@@ -12,6 +12,11 @@ use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 final class LockService implements LockServiceInterface
 {
+    /**
+     * @var array<string, bool>
+     */
+    private array $lockedKeys = [];
+
     private CacheRepository $cache;
 
     private int $seconds;
@@ -27,10 +32,20 @@ final class LockService implements LockServiceInterface
      */
     public function block(string $key, callable $callback): mixed
     {
-        return $this->getLockProvider()
-            ->lock($key)
-            ->block($this->seconds, $callback)
-        ;
+        if (array_key_exists($key, $this->lockedKeys)) {
+            return $callback();
+        }
+
+        $this->lockedKeys[$key] = true;
+
+        try {
+            return $this->getLockProvider()
+                ->lock($key)
+                ->block($this->seconds, $callback)
+            ;
+        } finally {
+            unset($this->lockedKeys[$key]);
+        }
     }
 
     /**

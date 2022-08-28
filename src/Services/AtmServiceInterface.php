@@ -12,6 +12,8 @@ use Bavix\Wallet\Models\Transfer;
 interface AtmServiceInterface
 {
     /**
+     * Helps to get to create a bunch of transaction objects.
+     *
      * @param non-empty-array<array-key, TransactionDtoInterface> $objects
      *
      * @return non-empty-array<string, Transaction>
@@ -19,6 +21,8 @@ interface AtmServiceInterface
     public function makeTransactions(array $objects): array;
 
     /**
+     * Helps to get to create a bunch of transfer objects.
+     *
      * @param non-empty-array<array-key, TransferDtoInterface> $objects
      *
      * @return non-empty-array<string, Transfer>
