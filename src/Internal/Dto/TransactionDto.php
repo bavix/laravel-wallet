@@ -13,6 +13,9 @@ final class TransactionDto implements TransactionDtoInterface
 
     private DateTimeImmutable $updatedAt;
 
+    /**
+     * @param array<mixed>|null $meta
+     */
     public function __construct(
         private string $uuid,
         private string $payableType,

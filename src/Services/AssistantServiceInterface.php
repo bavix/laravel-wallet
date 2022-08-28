@@ -25,5 +25,8 @@ interface AssistantServiceInterface
      */
     public function getSums(array $transactions): array;
 
+    /**
+     * @return array<mixed>|null
+     */
     public function getMeta(BasketDtoInterface $basketDto, ProductInterface $product): ?array;
 }

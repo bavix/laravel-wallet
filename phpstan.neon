@@ -2,7 +2,7 @@ includes:
 	- phpstan-baseline.neon
 
 parameters:
-    checkMissingIterableValueType: false
+    level: 8
     fileExtensions:
         - php
     ergebnis:

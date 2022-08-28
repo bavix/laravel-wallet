@@ -13,6 +13,8 @@ use Bavix\Wallet\Models\Transaction;
 interface TransactionServiceInterface
 {
     /**
+     * @param null|array<mixed> $meta
+     *
      * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      */

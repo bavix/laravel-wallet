@@ -57,7 +57,7 @@ class Transfer extends Model
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'deposit_id' => 'int',

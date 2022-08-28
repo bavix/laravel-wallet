@@ -12,6 +12,9 @@ use Bavix\Wallet\Internal\Service\StorageServiceInterface;
 use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Bavix\Wallet\Models\Wallet;
 
+/**
+ * @internal
+ */
 final class RegulatorService implements RegulatorServiceInterface
 {
     private string $idempotentKey;

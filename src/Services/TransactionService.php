@@ -12,6 +12,9 @@ use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Service\DispatcherServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 
+/**
+ * @internal
+ */
 final class TransactionService implements TransactionServiceInterface
 {
     public function __construct(

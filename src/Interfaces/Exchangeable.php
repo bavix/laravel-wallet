@@ -17,6 +17,8 @@ use Illuminate\Database\RecordsNotFoundException;
 interface Exchangeable
 {
     /**
+     * @param ExtraDtoInterface|array<mixed>|null $meta
+     *
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
      * @throws LockProviderNotFoundException
@@ -27,9 +29,14 @@ interface Exchangeable
      */
     public function exchange(Wallet $to, int|string $amount, ExtraDtoInterface|array|null $meta = null): Transfer;
 
+    /**
+     * @param ExtraDtoInterface|array<mixed>|null $meta
+     */
     public function safeExchange(Wallet $to, int|string $amount, ExtraDtoInterface|array|null $meta = null): ?Transfer;
 
     /**
+     * @param ExtraDtoInterface|array<mixed>|null $meta
+     *
      * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException

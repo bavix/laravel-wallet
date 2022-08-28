@@ -15,3 +15,8 @@ parameters:
 			count: 1
 			path: src/Services/PurchaseService.php
 
+		-
+			message: "#^Parameter \\#1 \\$attributes of method Bavix\\\\Wallet\\\\Internal\\\\Repository\\\\WalletRepositoryInterface\\:\\:create\\(\\) expects array\\{holder_type\\: string, holder_id\\: int\\|string, name\\: string, slug\\?\\: string, uuid\\: string, description\\?\\: string, meta\\: array\\|null, balance\\?\\: int, \\.\\.\\.\\}, non\\-empty\\-array given\\.$#"
+			count: 1
+			path: src/Services/WalletService.php
+

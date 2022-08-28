@@ -8,6 +8,9 @@ use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Discount;
 use Bavix\Wallet\Interfaces\Wallet;
 
+/**
+ * @internal
+ */
 final class DiscountService implements DiscountServiceInterface
 {
     public function getDiscount(Wallet $customer, Wallet $product): int

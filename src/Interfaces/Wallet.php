@@ -20,6 +20,8 @@ use Illuminate\Database\RecordsNotFoundException;
 interface Wallet
 {
     /**
+     * @param array<mixed>|null $meta
+     *
      * @throws AmountInvalid
      * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
@@ -29,6 +31,8 @@ interface Wallet
     public function deposit(int|string $amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
+     * @param array<mixed>|null $meta
+     *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
@@ -40,6 +44,8 @@ interface Wallet
     public function withdraw(int|string $amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
+     * @param array<mixed>|null $meta
+     *
      * @throws AmountInvalid
      * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
@@ -49,6 +55,8 @@ interface Wallet
     public function forceWithdraw(int|string $amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
+     * @param ExtraDtoInterface|array<mixed>|null $meta
+     *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
@@ -59,6 +67,9 @@ interface Wallet
      */
     public function transfer(self $wallet, int|string $amount, ExtraDtoInterface|array|null $meta = null): Transfer;
 
+    /**
+     * @param ExtraDtoInterface|array<mixed>|null $meta
+     */
     public function safeTransfer(
         self $wallet,
         int|string $amount,
@@ -66,6 +77,8 @@ interface Wallet
     ): ?Transfer;
 
     /**
+     * @param ExtraDtoInterface|array<mixed>|null $meta
+     *
      * @throws AmountInvalid
      * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException

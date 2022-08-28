@@ -18,6 +18,8 @@ use Illuminate\Database\RecordsNotFoundException;
 interface WalletFloat
 {
     /**
+     * @param null|array<mixed> $meta
+     *
      * @throws AmountInvalid
      * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
@@ -27,6 +29,8 @@ interface WalletFloat
     public function depositFloat(float|int|string $amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
+     * @param null|array<mixed> $meta
+     *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
@@ -38,6 +42,8 @@ interface WalletFloat
     public function withdrawFloat(float|int|string $amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
+     * @param null|array<mixed> $meta
+     *
      * @throws AmountInvalid
      * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
@@ -51,6 +57,8 @@ interface WalletFloat
     ): Transaction;
 
     /**
+     * @param null|array<mixed> $meta
+     *
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
@@ -65,6 +73,9 @@ interface WalletFloat
         ExtraDtoInterface|array|null $meta = null
     ): Transfer;
 
+    /**
+     * @param ExtraDtoInterface|array<mixed>|null $meta
+     */
     public function safeTransferFloat(
         Wallet $wallet,
         float|int|string $amount,
@@ -72,6 +83,8 @@ interface WalletFloat
     ): ?Transfer;
 
     /**
+     * @param ExtraDtoInterface|array<mixed>|null $meta
+     *
      * @throws AmountInvalid
      * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException

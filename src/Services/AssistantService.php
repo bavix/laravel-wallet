@@ -10,6 +10,9 @@ use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 
+/**
+ * @internal
+ */
 final class AssistantService implements AssistantServiceInterface
 {
     public function __construct(

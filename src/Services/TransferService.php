@@ -15,6 +15,9 @@ use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\RecordsNotFoundException;
 
+/**
+ * @internal
+ */
 final class TransferService implements TransferServiceInterface
 {
     public function __construct(

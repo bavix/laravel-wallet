@@ -155,6 +155,9 @@ final class WalletServiceProvider extends ServiceProvider
         $this->bindObjects($configure);
     }
 
+    /**
+     * @param array<class-string|null> $configure
+     */
     private function repositories(array $configure): void
     {
         $this->app->singleton(
@@ -178,6 +181,9 @@ final class WalletServiceProvider extends ServiceProvider
         return WalletConfigure::isRunsMigrations();
     }
 
+    /**
+     * @param array<class-string|null> $configure
+     */
     private function internal(array $configure): void
     {
         $this->app->bind(StorageServiceInterface::class, $configure['storage'] ?? StorageService::class);
@@ -192,6 +198,10 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(UuidFactoryServiceInterface::class, $configure['uuid'] ?? UuidFactoryService::class);
     }
 
+    /**
+     * @param array<class-string|null> $configure
+     * @param array{driver: string|null} $cache
+     */
     private function services(array $configure, array $cache): void
     {
         $this->app->singleton(AssistantServiceInterface::class, $configure['assistant'] ?? AssistantService::class);
@@ -246,6 +256,9 @@ final class WalletServiceProvider extends ServiceProvider
         ));
     }
 
+    /**
+     * @param array<class-string|null> $configure
+     */
     private function assemblers(array $configure): void
     {
         $this->app->singleton(
@@ -301,6 +314,9 @@ final class WalletServiceProvider extends ServiceProvider
         );
     }
 
+    /**
+     * @param array<class-string|null> $configure
+     */
     private function transformers(array $configure): void
     {
         $this->app->singleton(
@@ -314,6 +330,9 @@ final class WalletServiceProvider extends ServiceProvider
         );
     }
 
+    /**
+     * @param array<class-string|null> $configure
+     */
     private function events(array $configure): void
     {
         $this->app->bind(
@@ -332,6 +351,9 @@ final class WalletServiceProvider extends ServiceProvider
         );
     }
 
+    /**
+     * @param array<array<class-string|null>> $configure
+     */
     private function bindObjects(array $configure): void
     {
         $this->app->bind(Transaction::class, $configure['transaction']['model'] ?? null);

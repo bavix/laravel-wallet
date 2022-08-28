@@ -11,6 +11,7 @@ final class BasketDto implements BasketDtoInterface
 {
     /**
      * @param non-empty-array<int|string, ItemDtoInterface> $items
+     * @param array<mixed> $meta
      */
     public function __construct(
         private array $items,

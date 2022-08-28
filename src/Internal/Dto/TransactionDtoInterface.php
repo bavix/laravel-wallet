@@ -22,6 +22,9 @@ interface TransactionDtoInterface
 
     public function isConfirmed(): bool;
 
+    /**
+     * @return null|array<mixed>
+     */
     public function getMeta(): ?array;
 
     public function getCreatedAt(): DateTimeImmutable;

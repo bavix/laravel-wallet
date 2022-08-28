@@ -15,6 +15,9 @@ use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 
+/**
+ * @internal
+ */
 final class PrepareService implements PrepareServiceInterface
 {
     public function __construct(
