@@ -35,7 +35,7 @@ class Item extends Model implements ProductLimitedInterface
             return $result;
         }
 
-        return $result && !$customer->paid($this);
+        return $result && ! $customer->paid($this);
     }
 
     public function getAmountProduct(Customer $customer): int|string

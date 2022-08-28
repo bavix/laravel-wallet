@@ -96,7 +96,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         /**
          * Must be updated only if the model does not exist or the slug is empty.
          */
-        if (!$this->exists && !array_key_exists('slug', $this->attributes)) {
+        if (! $this->exists && ! array_key_exists('slug', $this->attributes)) {
             $this->attributes['slug'] = Str::slug($name);
         }
     }

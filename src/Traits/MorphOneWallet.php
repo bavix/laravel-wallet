@@ -48,7 +48,7 @@ trait MorphOneWallet
         /** @var WalletModel $wallet */
         $wallet = $this->getRelationValue('wallet');
 
-        if (!$wallet->relationLoaded('holder')) {
+        if (! $wallet->relationLoaded('holder')) {
             $holder = app(CastServiceInterface::class)->getHolder($this);
             $wallet->setRelation('holder', $holder->withoutRelations());
         }

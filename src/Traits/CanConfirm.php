@@ -73,7 +73,7 @@ trait CanConfirm
     public function resetConfirm(Transaction $transaction): bool
     {
         return app(AtomicServiceInterface::class)->block($this, function () use ($transaction) {
-            if (!$transaction->confirmed) {
+            if (! $transaction->confirmed) {
                 throw new UnconfirmedInvalid(
                     app(TranslatorServiceInterface::class)->get('wallet::errors.unconfirmed_invalid'),
                     ExceptionInterface::UNCONFIRMED_INVALID

@@ -57,7 +57,7 @@ trait CartPay
             $basketService = app(BasketServiceInterface::class);
             $availabilityAssembler = app(AvailabilityDtoAssemblerInterface::class);
             app(EagerLoaderServiceInterface::class)->loadWalletsByBasket($basketDto);
-            if (!$basketService->availability($availabilityAssembler->create($this, $basketDto, false))) {
+            if (! $basketService->availability($availabilityAssembler->create($this, $basketDto, false))) {
                 throw new ProductEnded(
                     app(TranslatorServiceInterface::class)->get('wallet::errors.product_stock'),
                     ExceptionInterface::PRODUCT_ENDED
@@ -114,7 +114,7 @@ trait CartPay
             $basketService = app(BasketServiceInterface::class);
             $availabilityAssembler = app(AvailabilityDtoAssemblerInterface::class);
             app(EagerLoaderServiceInterface::class)->loadWalletsByBasket($basketDto);
-            if (!$basketService->availability($availabilityAssembler->create($this, $basketDto, $force))) {
+            if (! $basketService->availability($availabilityAssembler->create($this, $basketDto, $force))) {
                 throw new ProductEnded(
                     app(TranslatorServiceInterface::class)->get('wallet::errors.product_stock'),
                     ExceptionInterface::PRODUCT_ENDED
@@ -145,7 +145,7 @@ trait CartPay
                 }
             }
 
-            if (!$force) {
+            if (! $force) {
                 app(ConsistencyServiceInterface::class)->checkTransfer($transfers);
             }
 
@@ -220,7 +220,7 @@ trait CartPay
                 ++$index;
             }
 
-            if (!$force) {
+            if (! $force) {
                 app(ConsistencyServiceInterface::class)->checkTransfer($objects);
             }
 

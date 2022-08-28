@@ -115,7 +115,7 @@ final class WalletServiceProvider extends ServiceProvider
     {
         $this->loadTranslationsFrom(dirname(__DIR__) . '/resources/lang', 'wallet');
 
-        if (!$this->app->runningInConsole()) {
+        if (! $this->app->runningInConsole()) {
             return;
         }
 

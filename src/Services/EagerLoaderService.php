@@ -25,7 +25,7 @@ final class EagerLoaderService implements EagerLoaderServiceInterface
         $productGroupIds = [];
         foreach ($basketDto->items() as $index => $item) {
             $model = $this->castService->getModel($item->getProduct());
-            if (!$model->relationLoaded('wallet')) {
+            if (! $model->relationLoaded('wallet')) {
                 $products[$index] = $item->getProduct();
                 $productGroupIds[$model->getMorphClass()][$index] = $model->getKey();
             }
