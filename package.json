@@ -19,7 +19,7 @@
     "docsify": "^4.11.4",
     "lodash": "^4.17.20",
     "mini-css-extract-plugin": "^2.6.1",
-    "prismjs": "^1.28.0",
+    "prismjs": "^1.29.0",
     "size-limit": "^8.0.1",
     "uuid": "^8.3.1",
     "webpack": "^5.74.0"
