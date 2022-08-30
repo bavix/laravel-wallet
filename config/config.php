@@ -36,6 +36,7 @@ use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\AssistantService;
+use Bavix\Wallet\Services\AsyncPrepareService;
 use Bavix\Wallet\Services\AtmService;
 use Bavix\Wallet\Services\AtomicService;
 use Bavix\Wallet\Services\BasketService;
@@ -99,6 +100,7 @@ return [
      */
     'services' => [
         'assistant' => AssistantService::class,
+        'async_prepare' => AsyncPrepareService::class,
         'atm' => AtmService::class,
         'atomic' => AtomicService::class,
         'basket' => BasketService::class,

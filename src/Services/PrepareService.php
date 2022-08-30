@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
-use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\External\Contracts\ExtraDtoInterface;
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Internal\Assembler\AsyncTransactionDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\ExtraDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
-use Bavix\Wallet\Models\Transaction;
 
 /**
  * @internal
@@ -22,10 +19,9 @@ use Bavix\Wallet\Models\Transaction;
 final class PrepareService implements PrepareServiceInterface
 {
     public function __construct(
-        private AsyncTransactionDtoAssemblerInterface $asyncTransactionDtoAssembler,
         private TransferLazyDtoAssemblerInterface $transferLazyDtoAssembler,
         private DiscountServiceInterface $personalDiscountService,
-        private ConsistencyServiceInterface $consistencyService,
+        private AsyncPrepareServiceInterface $asyncPrepareService,
         private UuidFactoryServiceInterface $uuidFactoryService,
         private ExtraDtoAssemblerInterface $extraDtoAssembler,
         private CastServiceInterface $castService,
@@ -34,55 +30,36 @@ final class PrepareService implements PrepareServiceInterface
     ) {
     }
 
-    /**
-     * @throws AmountInvalid
-     */
     public function deposit(
         Wallet $wallet,
         float|int|string $amount,
         ?array $meta,
         bool $confirmed = true
     ): TransactionDtoInterface {
-        $this->consistencyService->checkPositive($amount);
-
-        return $this->asyncTransactionDtoAssembler->create(
+        return $this->asyncPrepareService->deposit(
             $this->uuidFactoryService->uuid4(),
-            $this->castService->getHolder($wallet),
-            $this->castService->getWallet($wallet)
-                ->getKey(),
-            Transaction::TYPE_DEPOSIT,
+            $wallet,
             $amount,
-            $confirmed,
-            $meta
+            $meta,
+            $confirmed
         );
     }
 
-    /**
-     * @throws AmountInvalid
-     */
     public function withdraw(
         Wallet $wallet,
         float|int|string $amount,
         ?array $meta,
         bool $confirmed = true
     ): TransactionDtoInterface {
-        $this->consistencyService->checkPositive($amount);
-
-        return $this->asyncTransactionDtoAssembler->create(
+        return $this->asyncPrepareService->withdraw(
             $this->uuidFactoryService->uuid4(),
-            $this->castService->getHolder($wallet),
-            $this->castService->getWallet($wallet)
-                ->getKey(),
-            Transaction::TYPE_WITHDRAW,
-            $this->mathService->negative($amount),
-            $confirmed,
-            $meta
+            $wallet,
+            $amount,
+            $meta,
+            $confirmed
         );
     }
 
-    /**
-     * @throws AmountInvalid
-     */
     public function transferLazy(
         Wallet $from,
         Wallet $to,

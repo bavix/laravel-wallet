@@ -73,6 +73,8 @@ use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\AssistantService;
 use Bavix\Wallet\Services\AssistantServiceInterface;
+use Bavix\Wallet\Services\AsyncPrepareService;
+use Bavix\Wallet\Services\AsyncPrepareServiceInterface;
 use Bavix\Wallet\Services\AtmService;
 use Bavix\Wallet\Services\AtmServiceInterface;
 use Bavix\Wallet\Services\AtomicService;
@@ -227,6 +229,10 @@ final class WalletServiceProvider extends ServiceProvider
     private function services(array $configure, array $cache): void
     {
         $this->app->singleton(AssistantServiceInterface::class, $configure['assistant'] ?? AssistantService::class);
+        $this->app->singleton(
+            AsyncPrepareServiceInterface::class,
+            $configure['async_prepare'] ?? AsyncPrepareService::class
+        );
         $this->app->singleton(AtmServiceInterface::class, $configure['atm'] ?? AtmService::class);
         $this->app->singleton(AtomicServiceInterface::class, $configure['atomic'] ?? AtomicService::class);
         $this->app->singleton(BasketServiceInterface::class, $configure['basket'] ?? BasketService::class);
