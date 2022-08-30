@@ -23,7 +23,7 @@ interface BasketDtoInterface extends Countable
     public function items(): array;
 
     /**
-     * @return Generator<array-key, ProductInterface, mixed, void>
+     * @return Generator<ProductInterface>
      */
     public function cursor(): Generator;
 }
