@@ -7,12 +7,13 @@ namespace Bavix\Wallet\Services;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\External\Contracts\ExtraDtoInterface;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\Assembler\AsyncTransactionDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\ExtraDtoAssemblerInterface;
-use Bavix\Wallet\Internal\Assembler\TransactionDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
+use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 
 /**
@@ -21,10 +22,11 @@ use Bavix\Wallet\Models\Transaction;
 final class PrepareService implements PrepareServiceInterface
 {
     public function __construct(
+        private AsyncTransactionDtoAssemblerInterface $asyncTransactionDtoAssembler,
         private TransferLazyDtoAssemblerInterface $transferLazyDtoAssembler,
-        private TransactionDtoAssemblerInterface $transactionDtoAssembler,
         private DiscountServiceInterface $personalDiscountService,
         private ConsistencyServiceInterface $consistencyService,
+        private UuidFactoryServiceInterface $uuidFactoryService,
         private ExtraDtoAssemblerInterface $extraDtoAssembler,
         private CastServiceInterface $castService,
         private MathServiceInterface $mathService,
@@ -43,7 +45,8 @@ final class PrepareService implements PrepareServiceInterface
     ): TransactionDtoInterface {
         $this->consistencyService->checkPositive($amount);
 
-        return $this->transactionDtoAssembler->create(
+        return $this->asyncTransactionDtoAssembler->create(
+            $this->uuidFactoryService->uuid4(),
             $this->castService->getHolder($wallet),
             $this->castService->getWallet($wallet)
                 ->getKey(),
@@ -65,7 +68,8 @@ final class PrepareService implements PrepareServiceInterface
     ): TransactionDtoInterface {
         $this->consistencyService->checkPositive($amount);
 
-        return $this->transactionDtoAssembler->create(
+        return $this->asyncTransactionDtoAssembler->create(
+            $this->uuidFactoryService->uuid4(),
             $this->castService->getHolder($wallet),
             $this->castService->getWallet($wallet)
                 ->getKey(),

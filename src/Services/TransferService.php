@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
-use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
+use Bavix\Wallet\Internal\Assembler\AsyncTransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
@@ -12,6 +12,7 @@ use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Repository\TransferRepositoryInterface;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
+use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\RecordsNotFoundException;
 
@@ -21,9 +22,10 @@ use Illuminate\Database\RecordsNotFoundException;
 final class TransferService implements TransferServiceInterface
 {
     public function __construct(
-        private TransferDtoAssemblerInterface $transferDtoAssembler,
+        private AsyncTransferDtoAssemblerInterface $asyncTransferDtoAssembler,
         private TransferRepositoryInterface $transferRepository,
         private TransactionServiceInterface $transactionService,
+        private UuidFactoryServiceInterface $uuidFactoryService,
         private DatabaseServiceInterface $databaseService,
         private CastServiceInterface $castService,
         private AtmServiceInterface $atmService,
@@ -79,7 +81,8 @@ final class TransferService implements TransferServiceInterface
                 $fromWallet = $this->castService->getWallet($object->getFromWallet());
                 $toWallet = $this->castService->getWallet($object->getToWallet());
 
-                $transfer = $this->transferDtoAssembler->create(
+                $transfer = $this->asyncTransferDtoAssembler->create(
+                    $this->uuidFactoryService->uuid4(),
                     $deposit->getKey(),
                     $withdraw->getKey(),
                     $object->getStatus(),

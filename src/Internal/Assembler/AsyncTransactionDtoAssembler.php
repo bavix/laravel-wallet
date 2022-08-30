@@ -4,19 +4,14 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Assembler;
 
+use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
-use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 
-final class TransactionDtoAssembler implements TransactionDtoAssemblerInterface
+final class AsyncTransactionDtoAssembler implements AsyncTransactionDtoAssemblerInterface
 {
-    public function __construct(
-        private AsyncTransactionDtoAssemblerInterface $asyncTransactionDtoAssembler,
-        private UuidFactoryServiceInterface $uuidService
-    ) {
-    }
-
     public function create(
+        string $uuid,
         Model $payable,
         int $walletId,
         string $type,
@@ -24,9 +19,10 @@ final class TransactionDtoAssembler implements TransactionDtoAssemblerInterface
         bool $confirmed,
         ?array $meta
     ): TransactionDtoInterface {
-        return $this->asyncTransactionDtoAssembler->create(
-            $this->uuidService->uuid4(),
-            $payable,
+        return new TransactionDto(
+            $uuid,
+            $payable->getMorphClass(),
+            $payable->getKey(),
             $walletId,
             $type,
             $amount,

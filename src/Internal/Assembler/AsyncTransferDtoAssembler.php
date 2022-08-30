@@ -4,19 +4,14 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Assembler;
 
+use Bavix\Wallet\Internal\Dto\TransferDto;
 use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
-use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 
-final class TransferDtoAssembler implements TransferDtoAssemblerInterface
+final class AsyncTransferDtoAssembler implements AsyncTransferDtoAssemblerInterface
 {
-    public function __construct(
-        private AsyncTransferDtoAssemblerInterface $asyncTransferDtoAssembler,
-        private UuidFactoryServiceInterface $uuidService
-    ) {
-    }
-
     public function create(
+        string $uuid,
         int $depositId,
         int $withdrawId,
         string $status,
@@ -25,13 +20,15 @@ final class TransferDtoAssembler implements TransferDtoAssemblerInterface
         int $discount,
         string $fee
     ): TransferDtoInterface {
-        return $this->asyncTransferDtoAssembler->create(
-            $this->uuidService->uuid4(),
+        return new TransferDto(
+            $uuid,
             $depositId,
             $withdrawId,
             $status,
-            $fromModel,
-            $toModel,
+            $fromModel->getMorphClass(),
+            $fromModel->getKey(),
+            $toModel->getMorphClass(),
+            $toModel->getKey(),
             $discount,
             $fee
         );

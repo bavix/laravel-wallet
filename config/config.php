@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Bavix\Wallet\Internal\Assembler\AsyncTransactionDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\AsyncTransferDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\ExtraDtoAssembler;
@@ -136,6 +138,8 @@ return [
      * Builder class, needed to create DTO.
      */
     'assemblers' => [
+        'async_transaction' => AsyncTransactionDtoAssembler::class,
+        'async_transfer' => AsyncTransferDtoAssembler::class,
         'availability' => AvailabilityDtoAssembler::class,
         'balance_updated_event' => BalanceUpdatedEventAssembler::class,
         'extra' => ExtraDtoAssembler::class,

@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Bavix\Wallet;
 
 use Bavix\Wallet\Commands\TransferFixCommand;
+use Bavix\Wallet\Internal\Assembler\AsyncTransactionDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\AsyncTransactionDtoAssemblerInterface;
+use Bavix\Wallet\Internal\Assembler\AsyncTransferDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\AsyncTransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssembler;
@@ -279,6 +283,16 @@ final class WalletServiceProvider extends ServiceProvider
      */
     private function assemblers(array $configure): void
     {
+        $this->app->singleton(
+            AsyncTransactionDtoAssemblerInterface::class,
+            $configure['async_transaction'] ?? AsyncTransactionDtoAssembler::class
+        );
+
+        $this->app->singleton(
+            AsyncTransferDtoAssemblerInterface::class,
+            $configure['async_transfer'] ?? AsyncTransferDtoAssembler::class
+        );
+
         $this->app->singleton(
             AvailabilityDtoAssemblerInterface::class,
             $configure['availability'] ?? AvailabilityDtoAssembler::class

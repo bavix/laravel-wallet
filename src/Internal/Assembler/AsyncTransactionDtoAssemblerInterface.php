@@ -7,16 +7,13 @@ namespace Bavix\Wallet\Internal\Assembler;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * @deprecated
- * @see AsyncTransactionDtoAssemblerInterface
- */
-interface TransactionDtoAssemblerInterface
+interface AsyncTransactionDtoAssemblerInterface
 {
     /**
      * @param null|array<mixed> $meta
      */
     public function create(
+        string $uuid,
         Model $payable,
         int $walletId,
         string $type,

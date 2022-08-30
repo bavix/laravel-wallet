@@ -7,13 +7,10 @@ namespace Bavix\Wallet\Internal\Assembler;
 use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * @deprecated
- * @see AsyncTransferDtoAssemblerInterface
- */
-interface TransferDtoAssemblerInterface
+interface AsyncTransferDtoAssemblerInterface
 {
     public function create(
+        string $uuid,
         int $depositId,
         int $withdrawId,
         string $status,
