@@ -29,9 +29,11 @@ final class WalletService implements WalletServiceInterface
     {
         $wallet = $this->walletRepository->create(array_merge(
             config('wallet.wallet.creating', []),
-            $data,
             [
                 'uuid' => $this->uuidFactoryService->uuid4(),
+            ],
+            $data,
+            [
                 'holder_type' => $model->getMorphClass(),
                 'holder_id' => $model->getKey(),
             ]
