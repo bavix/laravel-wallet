@@ -19,7 +19,6 @@ laravel-wallet - Easy work with virtual wallet.
 * **Laravel Version**: `9.x`
 * **[Composer](https://getcomposer.org/):** `composer require bavix/laravel-wallet`
 
-
 ### Support Policy
 
 | Version    | Laravel        | PHP         | End of improvements | End of support |
@@ -31,6 +30,12 @@ laravel-wallet - Easy work with virtual wallet.
 ### Upgrade Guide
 
 To perform the migration, you will be [helped by the instruction](https://bavix.github.io/laravel-wallet/#/upgrade-guide).
+
+### Community
+
+I want to create a cozy place for developers using the wallet package. This will help you find bugs faster, get feedback and discuss ideas.
+
+Telegram: [@laravel_wallet](https://t.me/laravel_wallet)
 
 ### Extensions
 
