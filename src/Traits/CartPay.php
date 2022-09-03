@@ -79,6 +79,8 @@ trait CartPay
                 );
             }
 
+            assert(count($transfers) > 0);
+
             return app(TransferServiceInterface::class)->apply($transfers);
         });
     }
@@ -148,6 +150,8 @@ trait CartPay
             if (! $force) {
                 app(ConsistencyServiceInterface::class)->checkTransfer($transfers);
             }
+
+            assert(count($transfers) > 0);
 
             return app(TransferServiceInterface::class)->apply($transfers);
         });
@@ -223,6 +227,8 @@ trait CartPay
             if (! $force) {
                 app(ConsistencyServiceInterface::class)->checkTransfer($objects);
             }
+
+            assert(count($objects) > 0);
 
             $transferService = app(TransferServiceInterface::class);
 
