@@ -75,7 +75,7 @@ trait CanExchange
             $fee = $taxService->getFee($to, $amount);
             $rate = app(ExchangeServiceInterface::class)->convertTo(
                 $castService->getWallet($this)
-                    ->currency,
+                    ->getCurrencyAttribute(),
                 $castService->getWallet($to)
                     ->currency,
                 1
