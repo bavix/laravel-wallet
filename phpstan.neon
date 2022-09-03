@@ -20,6 +20,9 @@ parameters:
             - UnexpectedValueException
             - InvalidArgumentException
 
+            # phpstan
+            - Bavix\Wallet\Test\Infra\TestCase
+
         classesNotRequiredToBeAbstractOrFinal:
             - Bavix\Wallet\Models\Wallet
             - Bavix\Wallet\Models\Transfer
