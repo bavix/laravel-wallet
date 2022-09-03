@@ -23,9 +23,10 @@ final class DatabaseTest extends TestCase
     {
         $this->expectException(TransactionFailedException::class);
         $this->expectExceptionCode(ExceptionInterface::TRANSACTION_FAILED);
+        $this->expectExceptionMessage('Transaction failed. Message: hello');
 
         app(DatabaseServiceInterface::class)->transaction(static function () {
-            throw new \RuntimeException();
+            throw new \RuntimeException('hello');
         });
     }
 
@@ -39,5 +40,17 @@ final class DatabaseTest extends TestCase
 
         DB::beginTransaction();
         app(DatabaseServiceInterface::class)->transaction(static fn (): int => 42);
+    }
+
+    public function testInterceptionErrorStartTransaction(): void
+    {
+        try {
+            DB::beginTransaction();
+            app(DatabaseServiceInterface::class)->transaction(static fn (): int => 42);
+        } catch (TransactionStartException) {
+            DB::rollBack(0); // for success
+            $result = app(DatabaseServiceInterface::class)->transaction(static fn (): int => 42);
+            self::assertSame(42, $result);
+        }
     }
 }

@@ -228,7 +228,8 @@ final class WalletFloatTest extends TestCase
         self::assertSame(Transaction::TYPE_WITHDRAW, $transaction->type);
 
         $transaction->type = Transaction::TYPE_DEPOSIT;
-        $transaction->amountFloat = 2556.72;
+        $transaction->setAmountFloatAttribute(2556.72);
+
         self::assertTrue($transaction->save());
         self::assertTrue($user->wallet->refreshBalance());
 
