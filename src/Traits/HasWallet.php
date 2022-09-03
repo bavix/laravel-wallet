@@ -13,6 +13,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
+use Bavix\Wallet\Internal\Service\ConfigServiceInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
@@ -24,7 +25,6 @@ use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Services\TransactionServiceInterface;
 use Bavix\Wallet\Services\TransferServiceInterface;
-use function config;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\RecordsNotFoundException;
@@ -82,7 +82,10 @@ trait HasWallet
     {
         return app(CastServiceInterface::class)
             ->getWallet($this, false)
-            ->hasMany(config('wallet.transaction.model', Transaction::class), 'wallet_id')
+            ->hasMany(
+                app(ConfigServiceInterface::class)->getClass('wallet.transaction.model', Transaction::class),
+                'wallet_id'
+            )
         ;
     }
 
@@ -93,7 +96,10 @@ trait HasWallet
     {
         return app(CastServiceInterface::class)
             ->getHolder($this)
-            ->morphMany(config('wallet.transaction.model', Transaction::class), 'payable')
+            ->morphMany(
+                app(ConfigServiceInterface::class)->getClass('wallet.transaction.model', Transaction::class),
+                'payable'
+            )
         ;
     }
 
@@ -217,7 +223,7 @@ trait HasWallet
         /** @var Wallet $this */
         return app(CastServiceInterface::class)
             ->getWallet($this, false)
-            ->morphMany(config('wallet.transfer.model', Transfer::class), 'from')
+            ->morphMany(app(ConfigServiceInterface::class)->getClass('wallet.transfer.model', Transfer::class), 'from')
         ;
     }
 }

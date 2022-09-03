@@ -19,6 +19,7 @@ use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
 use Bavix\Wallet\Internal\Repository\WalletRepository;
 use Bavix\Wallet\Internal\Service\ClockService;
+use Bavix\Wallet\Internal\Service\ConfigService;
 use Bavix\Wallet\Internal\Service\DatabaseService;
 use Bavix\Wallet\Internal\Service\DispatcherService;
 use Bavix\Wallet\Internal\Service\JsonService;
@@ -80,6 +81,7 @@ return [
      */
     'internal' => [
         'clock' => ClockService::class,
+        'config' => ConfigService::class,
         'database' => DatabaseService::class,
         'dispatcher' => DispatcherService::class,
         'json' => JsonService::class,

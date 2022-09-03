@@ -6,12 +6,14 @@ namespace Bavix\Wallet\Internal\Repository;
 
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
+use Bavix\Wallet\Internal\Service\ConfigServiceInterface;
 use Bavix\Wallet\Models\Wallet;
 use Illuminate\Database\Eloquent\ModelNotFoundException as EloquentModelNotFoundException;
 
 final class WalletRepository implements WalletRepositoryInterface
 {
     public function __construct(
+        private ConfigServiceInterface $configService,
         private Wallet $wallet
     ) {
     }
@@ -91,7 +93,7 @@ final class WalletRepository implements WalletRepositoryInterface
     public function findDefaultAll(string $holderType, array $holderIds): array
     {
         return $this->wallet->newQuery()
-            ->where('slug', config('wallet.wallet.default.slug', 'default'))
+            ->where('slug', $this->configService->getString('wallet.wallet.default.slug', 'default'))
             ->where('holder_type', $holderType)
             ->whereIn('holder_id', $holderIds)
             ->get()

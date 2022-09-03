@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Traits;
 
 use function array_key_exists;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
+use Bavix\Wallet\Internal\Service\ConfigServiceInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\WalletServiceInterface;
 use function config;
@@ -82,7 +83,10 @@ trait HasWallets
      */
     public function wallets(): MorphMany
     {
-        return $this->morphMany(config('wallet.wallet.model', WalletModel::class), 'holder');
+        return $this->morphMany(
+            app(ConfigServiceInterface::class)->getClass('wallet.wallet.model', WalletModel::class),
+            'holder'
+        );
     }
 
     public function createWallet(array $data): WalletModel
