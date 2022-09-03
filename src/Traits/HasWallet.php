@@ -173,7 +173,7 @@ trait HasWallet
      */
     public function forceWithdraw(
         int|string $amount,
-        ExtraDtoInterface|array|null $meta = null,
+        array|null $meta = null,
         bool $confirmed = true
     ): Transaction {
         return app(AtomicServiceInterface::class)->block(

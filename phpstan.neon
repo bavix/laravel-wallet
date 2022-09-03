@@ -2,6 +2,8 @@ includes:
 	- phpstan-baseline.neon
 
 parameters:
+    stubFiles:
+        - analyze/phpstan/stubs/helpers.stub
     level: 8
     fileExtensions:
         - php

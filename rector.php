@@ -4,21 +4,18 @@ declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\PropertyFetch\ExplicitMethodCallOverMagicGetSetRector;
 use Rector\Config\RectorConfig;
-use Rector\Core\Configuration\Option;
 use Rector\Laravel\Set\LaravelSetList;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
 
 return static function (RectorConfig $containerConfigurator): void {
-    // get parameters
-    $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::PATHS, [
+    $containerConfigurator->paths([
         __DIR__ . '/src',
         __DIR__ . '/tests',
     ]);
 
-    $parameters->set(Option::SKIP, [ExplicitMethodCallOverMagicGetSetRector::class]);
+    $containerConfigurator->skip([ExplicitMethodCallOverMagicGetSetRector::class]);
 
     // Define what rule sets will be applied
     $containerConfigurator->import(PHPUnitSetList::PHPUNIT_91);
