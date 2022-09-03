@@ -47,6 +47,7 @@ final class DatabaseTest extends TestCase
         try {
             DB::beginTransaction();
             app(DatabaseServiceInterface::class)->transaction(static fn (): int => 42);
+            self::fail(__METHOD__);
         } catch (TransactionStartException) {
             DB::rollBack(0); // for success
             $result = app(DatabaseServiceInterface::class)->transaction(static fn (): int => 42);
