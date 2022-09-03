@@ -29,7 +29,7 @@ trait MorphOneWallet
             ->where('slug', config('wallet.wallet.default.slug', 'default'))
             ->withDefault(static function (WalletModel $wallet, object $holder) use ($castService) {
                 $model = $castService->getModel($holder);
-                $wallet->forceFill(array_merge((array) config('wallet.wallet.creating', []), [
+                $wallet->forceFill(array_merge(config('wallet.wallet.creating', []), [
                     'name' => config('wallet.wallet.default.name', 'Default Wallet'),
                     'slug' => config('wallet.wallet.default.slug', 'default'),
                     'meta' => config('wallet.wallet.default.meta', []),
