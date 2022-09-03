@@ -7,6 +7,7 @@ namespace Bavix\Wallet\Services;
 use Bavix\Wallet\Internal\Assembler\WalletCreatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Internal\Repository\WalletRepositoryInterface;
+use Bavix\Wallet\Internal\Service\ConfigServiceInterface;
 use Bavix\Wallet\Internal\Service\DispatcherServiceInterface;
 use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Bavix\Wallet\Models\Wallet;
@@ -21,14 +22,15 @@ final class WalletService implements WalletServiceInterface
         private WalletCreatedEventAssemblerInterface $walletCreatedEventAssembler,
         private UuidFactoryServiceInterface $uuidFactoryService,
         private DispatcherServiceInterface $dispatcherService,
-        private WalletRepositoryInterface $walletRepository
+        private WalletRepositoryInterface $walletRepository,
+        private ConfigServiceInterface $configService
     ) {
     }
 
     public function create(Model $model, array $data): Wallet
     {
         $wallet = $this->walletRepository->create(array_merge(
-            config('wallet.wallet.creating', []),
+            $this->configService->getArray('wallet.wallet.creating'),
             [
                 'uuid' => $this->uuidFactoryService->uuid4(),
             ],

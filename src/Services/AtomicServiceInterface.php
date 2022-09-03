@@ -14,7 +14,6 @@ interface AtomicServiceInterface
 {
     /**
      * @template T
-     * @param Wallet $object
      * @param callable(): T $callback
      * @return T
      *
