@@ -13,6 +13,11 @@ use Illuminate\Database\RecordsNotFoundException;
 interface AtomicServiceInterface
 {
     /**
+     * @template T
+     * @param Wallet $object
+     * @param callable(): T $callback
+     * @return T
+     *
      * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
