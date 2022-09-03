@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Traits;
 
-use Bavix\Wallet\Internal\Service\ConfigServiceInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\CastServiceInterface;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -22,21 +21,24 @@ trait MorphOneWallet
      */
     public function wallet(): MorphOne
     {
-        $configService = app(ConfigServiceInterface::class);
         $castService = app(CastServiceInterface::class);
-        $related = $configService->getClass('wallet.wallet.model', WalletModel::class);
-        $slug = $configService->getString('wallet.wallet.default.slug', 'default');
+        /** @var class-string $related */
+        $related = config('wallet.wallet.model', WalletModel::class);
+        assert(is_string($related));
+
+        $slug = config('wallet.wallet.default.slug', 'default');
+        assert(is_string($slug));
 
         return $castService
             ->getHolder($this)
             ->morphOne($related, 'holder')
             ->where('slug', $slug)
-            ->withDefault(static function (WalletModel $wallet, object $holder) use ($configService, $castService) {
+            ->withDefault(static function (WalletModel $wallet, object $holder) use ($castService) {
                 $model = $castService->getModel($holder);
-                $wallet->forceFill(array_merge($configService->getArray('wallet.wallet.creating'), [
-                    'name' => $configService->getString('wallet.wallet.default.name', 'Default Wallet'),
-                    'slug' => $configService->getString('wallet.wallet.default.slug', 'default'),
-                    'meta' => $configService->getArray('wallet.wallet.default.meta'),
+                $wallet->forceFill(array_merge((array) config('wallet.wallet.creating', []), [
+                    'name' => config('wallet.wallet.default.name', 'Default Wallet'),
+                    'slug' => config('wallet.wallet.default.slug', 'default'),
+                    'meta' => config('wallet.wallet.default.meta', []),
                     'balance' => 0,
                 ]));
 

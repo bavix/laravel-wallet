@@ -41,8 +41,6 @@ use Bavix\Wallet\Internal\Repository\WalletRepository;
 use Bavix\Wallet\Internal\Repository\WalletRepositoryInterface;
 use Bavix\Wallet\Internal\Service\ClockService;
 use Bavix\Wallet\Internal\Service\ClockServiceInterface;
-use Bavix\Wallet\Internal\Service\ConfigService;
-use Bavix\Wallet\Internal\Service\ConfigServiceInterface;
 use Bavix\Wallet\Internal\Service\DatabaseService;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Internal\Service\DispatcherService;
@@ -205,7 +203,6 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->bind(StorageServiceInterface::class, $configure['storage'] ?? StorageService::class);
 
         $this->app->singleton(ClockServiceInterface::class, $configure['clock'] ?? ClockService::class);
-        $this->app->singleton(ConfigServiceInterface::class, $configure['config'] ?? ConfigService::class);
         $this->app->singleton(DatabaseServiceInterface::class, $configure['database'] ?? DatabaseService::class);
         $this->app->singleton(DispatcherServiceInterface::class, $configure['dispatcher'] ?? DispatcherService::class);
         $this->app->singleton(JsonServiceInterface::class, $configure['json'] ?? JsonService::class);

@@ -13,7 +13,6 @@ use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
-use Bavix\Wallet\Internal\Service\ConfigServiceInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Bavix\Wallet\Services\AtomicServiceInterface;
@@ -22,6 +21,7 @@ use Bavix\Wallet\Traits\CanConfirm;
 use Bavix\Wallet\Traits\CanExchange;
 use Bavix\Wallet\Traits\CanPayFloat;
 use Bavix\Wallet\Traits\HasGift;
+use function config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\RecordsNotFoundException;
@@ -83,7 +83,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     public function getTable(): string
     {
         if ((string) $this->table === '') {
-            $this->table = app(ConfigServiceInterface::class)->getString('wallet.wallet.table', 'wallets');
+            $this->table = config('wallet.wallet.table', 'wallets');
         }
 
         return parent::getTable();

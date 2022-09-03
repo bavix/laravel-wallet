@@ -201,7 +201,7 @@ parameters:
       - RepositoryInterface
       - TransformInterface
       - InternalException
-      - ServiceInterface # json&config service only
+      - ServiceInterface # json service only
       - QueryInterface
       - DtoInterface
       - UIException
