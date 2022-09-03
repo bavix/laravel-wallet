@@ -11,6 +11,11 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphOne\\:\\:where\\(\\)\\.$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\:\\:with\\(\\)\\.$#"
 			count: 1
 			path: src/Services/PurchaseService.php
@@ -19,4 +24,3 @@ parameters:
 			message: "#^Parameter \\#1 \\$attributes of method Bavix\\\\Wallet\\\\Internal\\\\Repository\\\\WalletRepositoryInterface\\:\\:create\\(\\) expects array\\{holder_type\\: string, holder_id\\: int\\|string, name\\: string, slug\\?\\: string, uuid\\: string, description\\?\\: string, meta\\: array\\|null, balance\\?\\: int, \\.\\.\\.\\}, non\\-empty\\-array given\\.$#"
 			count: 1
 			path: src/Services/WalletService.php
-
