@@ -211,10 +211,10 @@ final class EventTest extends TestCase
         self::assertTrue((bool) app(PurchaseServiceInterface::class)->already($buyer, $cart->getBasketDto()));
         self::assertSame(0, $buyer->balanceInt);
 
-        $resultIds = [(int) $depositTransaction->getKey()];
+        $resultIds = [$depositTransaction->getKey()];
         $valueIds = $transactionIds[$buyer->wallet->getKey()] ?? [];
         foreach ($transfers as $transfer) {
-            $resultIds[] = (int) $transfer->withdraw->getKey();
+            $resultIds[] = $transfer->withdraw->getKey();
             self::assertSame(1, $transactionCounts[$transfer->deposit->wallet_id] ?? 0);
         }
 

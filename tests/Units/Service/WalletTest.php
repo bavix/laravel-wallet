@@ -38,7 +38,7 @@ final class WalletTest extends TestCase
 
         self::assertNotNull($walletService->findBySlug($buyer, 'default'));
         self::assertNotNull($walletService->findByUuid($uuid));
-        self::assertNotNull($walletService->findById((int) $buyer->wallet->getKey()));
+        self::assertNotNull($walletService->findById($buyer->wallet->getKey()));
     }
 
     public function testGetBySlug(): void
