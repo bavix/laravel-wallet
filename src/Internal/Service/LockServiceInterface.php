@@ -9,6 +9,11 @@ use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 interface LockServiceInterface
 {
     /**
+     * @template T
+     * @param callable(): T $callback
+     *
+     * @return T
+     *
      * @throws LockProviderNotFoundException
      */
     public function block(string $key, callable $callback): mixed;

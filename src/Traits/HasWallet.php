@@ -198,7 +198,7 @@ trait HasWallet
         int|string $amount,
         ExtraDtoInterface|array|null $meta = null
     ): Transfer {
-        return app(AtomicServiceInterface::class)->block($this, function () use ($wallet, $amount, $meta) {
+        return app(AtomicServiceInterface::class)->block($this, function () use ($wallet, $amount, $meta): Transfer {
             $transferLazyDto = app(PrepareServiceInterface::class)
                 ->transferLazy($this, $wallet, Transfer::STATUS_TRANSFER, $amount, $meta)
             ;

@@ -6,6 +6,41 @@ parameters:
 			path: src/External/Dto/Option.php
 
 		-
+			message: "#^Parameter \\#3 \\$payableId of class Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransactionDto constructor expects int\\|string, mixed given\\.$#"
+			count: 1
+			path: src/Internal/Assembler/TransactionDtoAssembler.php
+
+		-
+			message: "#^Parameter \\#6 \\$fromId of class Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransferDto constructor expects int\\|string, mixed given\\.$#"
+			count: 1
+			path: src/Internal/Assembler/TransferDtoAssembler.php
+
+		-
+			message: "#^Parameter \\#8 \\$toId of class Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransferDto constructor expects int\\|string, mixed given\\.$#"
+			count: 1
+			path: src/Internal/Assembler/TransferDtoAssembler.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Repository\\\\TransactionRepository\\:\\:findBy\\(\\) should return array\\<Bavix\\\\Wallet\\\\Models\\\\Transaction\\> but returns array\\.$#"
+			count: 1
+			path: src/Internal/Repository/TransactionRepository.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Repository\\\\TransferRepository\\:\\:findBy\\(\\) should return array\\<Bavix\\\\Wallet\\\\Models\\\\Transfer\\> but returns array\\.$#"
+			count: 1
+			path: src/Internal/Repository/TransferRepository.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Repository\\\\WalletRepository\\:\\:findDefaultAll\\(\\) should return array\\<Bavix\\\\Wallet\\\\Models\\\\Wallet\\> but returns array\\.$#"
+			count: 1
+			path: src/Internal/Repository/WalletRepository.php
+
+		-
+			message: "#^Parameter \\#1 \\$number of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:round\\(\\) expects float\\|int\\|string, mixed given\\.$#"
+			count: 1
+			path: src/Internal/Service/StorageService.php
+
+		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:where\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Wallet.php
@@ -16,11 +51,26 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
+			message: "#^Cannot cast mixed to string\\.$#"
+			count: 1
+			path: src/Models/Wallet.php
+
+		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\:\\:with\\(\\)\\.$#"
 			count: 1
 			path: src/Services/PurchaseService.php
 
 		-
-			message: "#^Parameter \\#1 \\$attributes of method Bavix\\\\Wallet\\\\Internal\\\\Repository\\\\WalletRepositoryInterface\\:\\:create\\(\\) expects array\\{holder_type\\: string, holder_id\\: int\\|string, name\\: string, slug\\?\\: string, uuid\\: string, description\\?\\: string, meta\\: array\\|null, balance\\?\\: int, \\.\\.\\.\\}, non\\-empty\\-array given\\.$#"
+			message: "#^Parameter \\#1 \\$attributes of method Bavix\\\\Wallet\\\\Internal\\\\Repository\\\\WalletRepositoryInterface\\:\\:create\\(\\) expects array\\{holder_type\\: string, holder_id\\: int\\|string, name\\: string, slug\\?\\: string, uuid\\: string, description\\?\\: string, meta\\: array\\|null, balance\\?\\: int, \\.\\.\\.\\}, array\\{uuid\\: string, name\\: string, slug\\?\\: string, description\\?\\: string, meta\\?\\: array\\|null, decimal_places\\?\\: int\\<1, max\\>, holder_type\\: string, holder_id\\: mixed\\} given\\.$#"
+			count: 1
+			path: src/Services/WalletService.php
+
+		-
+			message: "#^Parameter \\#2 \\$holderId of method Bavix\\\\Wallet\\\\Internal\\\\Repository\\\\WalletRepositoryInterface\\:\\:findBySlug\\(\\) expects int\\|string, mixed given\\.$#"
+			count: 1
+			path: src/Services/WalletService.php
+
+		-
+			message: "#^Parameter \\#2 \\$holderId of method Bavix\\\\Wallet\\\\Internal\\\\Repository\\\\WalletRepositoryInterface\\:\\:getBySlug\\(\\) expects int\\|string, mixed given\\.$#"
 			count: 1
 			path: src/Services/WalletService.php

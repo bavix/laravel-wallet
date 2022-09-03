@@ -66,7 +66,7 @@ trait CanExchange
      */
     public function forceExchange(Wallet $to, int|string $amount, ExtraDtoInterface|array|null $meta = null): Transfer
     {
-        return app(AtomicServiceInterface::class)->block($this, function () use ($to, $amount, $meta) {
+        return app(AtomicServiceInterface::class)->block($this, function () use ($to, $amount, $meta): Transfer {
             $extraAssembler = app(ExtraDtoAssemblerInterface::class);
             $prepareService = app(PrepareServiceInterface::class);
             $mathService = app(MathServiceInterface::class);

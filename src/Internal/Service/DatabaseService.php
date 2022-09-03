@@ -8,7 +8,6 @@ use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Exceptions\TransactionStartException;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
-use Illuminate\Config\Repository as ConfigRepository;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\RecordsNotFoundException;
@@ -22,10 +21,9 @@ final class DatabaseService implements DatabaseServiceInterface
 
     public function __construct(
         ConnectionResolverInterface $connectionResolver,
-        private RegulatorServiceInterface $regulatorService,
-        ConfigRepository $config
+        private RegulatorServiceInterface $regulatorService
     ) {
-        $this->connection = $connectionResolver->connection($config->get('wallet.database.connection'));
+        $this->connection = $connectionResolver->connection(config('wallet.database.connection'));
     }
 
     /**

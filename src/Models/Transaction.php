@@ -28,6 +28,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property array       $meta
  * @property Wallet      $payable
  * @property WalletModel $wallet
+ *
+ * @method int getKey()
  */
 class Transaction extends Model
 {

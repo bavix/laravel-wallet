@@ -29,8 +29,8 @@ interface Container extends ContainerInterface
     /**
      * Assign a set of tags to a given binding.
      *
-     * @param  array|string  $abstracts
-     * @param  array|mixed  ...$tags
+     * @param  array<string>|string  $abstracts
+     * @param  array<mixed>|mixed  ...$tags
      * @return void
      */
     public function tag($abstracts, $tags);
@@ -39,7 +39,7 @@ interface Container extends ContainerInterface
      * Resolve all of the bindings for a given tag.
      *
      * @param  string  $tag
-     * @return iterable
+     * @return iterable<mixed>
      */
     public function tagged($tag);
 
@@ -132,8 +132,9 @@ interface Container extends ContainerInterface
     /**
      * Define a contextual binding.
      *
-     * @param  string|array  $concrete
-     * @return \Illuminate\Contracts\Container\ContextualBindingBuilder
+     * @param  string|array<string>  $concrete
+     *
+     * @return mixed
      */
     public function when($concrete);
 
@@ -156,11 +157,9 @@ interface Container extends ContainerInterface
      * Resolve the given type from the container.
      *
      * @template T
-     * @param  class-string<T>  $abstract
-     * @param  array  $parameters
+     * @param  class-string<T> $abstract
+     * @param  array<mixed> $parameters
      * @return T
-     *
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function make($abstract, array $parameters = []);
 
@@ -168,7 +167,7 @@ interface Container extends ContainerInterface
      * Call the given Closure / class@method and inject its dependencies.
      *
      * @param  callable|string  $callback
-     * @param  array  $parameters
+     * @param  array<mixed>  $parameters
      * @param  string|null  $defaultMethod
      * @return mixed
      */
