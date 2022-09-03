@@ -26,6 +26,29 @@ use function count;
  */
 final class CartTest extends TestCase
 {
+    public function testCartClone(): void
+    {
+        /** @var ItemMeta $product */
+        $product = ItemMetaFactory::new()->create([
+            'quantity' => 1,
+        ]);
+
+        $cart = app(Cart::class);
+
+        $cartWithItems = $cart->withItems([$product]);
+        $cartWithMeta = $cart->withMeta([
+            'product_id' => $product->getKey(),
+        ]);
+
+        self::assertCount(0, $cart->getItems());
+        self::assertCount(1, $cartWithItems->getItems());
+
+        self::assertSame([], $cart->getMeta());
+        self::assertSame([
+            'product_id' => $product->getKey(),
+        ], $cartWithMeta->getMeta());
+    }
+
     public function testCartMeta(): void
     {
         /**
