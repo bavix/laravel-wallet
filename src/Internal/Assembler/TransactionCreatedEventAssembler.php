@@ -19,7 +19,7 @@ final class TransactionCreatedEventAssembler implements TransactionCreatedEventA
     public function create(Transaction $transaction): TransactionCreatedEventInterface
     {
         return new TransactionCreatedEvent(
-            (int) $transaction->getKey(),
+            $transaction->getKey(),
             $transaction->type,
             $transaction->wallet_id,
             $this->clockService->now(),

@@ -72,7 +72,7 @@ final class TransactionService implements TransactionServiceInterface
             assert($wallet !== null);
 
             $object = $this->castService->getWallet($wallet);
-            assert((int) $object->getKey() === $walletId);
+            assert($object->getKey() === $walletId);
 
             $this->regulatorService->increase($object, $total);
         }
