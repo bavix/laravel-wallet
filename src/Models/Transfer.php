@@ -27,6 +27,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property string      $fee
  * @property Transaction $deposit
  * @property Transaction $withdraw
+ *
+ * @method int getKey()
  */
 class Transfer extends Model
 {

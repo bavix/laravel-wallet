@@ -7,7 +7,7 @@ namespace Bavix\Wallet\Internal\Service;
 use Throwable;
 
 /**
- * @psalm-internal
+ * @internal
  */
 final class JsonService implements JsonServiceInterface
 {

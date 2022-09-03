@@ -12,6 +12,10 @@ use Illuminate\Database\RecordsNotFoundException;
 interface DatabaseServiceInterface
 {
     /**
+     * @template T
+     * @param callable(): T $callback
+     * @return T
+     *
      * @throws RecordsNotFoundException
      * @throws TransactionStartException
      * @throws TransactionFailedException

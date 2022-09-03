@@ -41,6 +41,8 @@ use Illuminate\Support\Str;
  * @property \Bavix\Wallet\Interfaces\Wallet $holder
  * @property string                          $credit
  * @property string                          $currency
+ *
+ * @method int getKey()
  */
 class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchangeable
 {

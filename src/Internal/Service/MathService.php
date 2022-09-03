@@ -6,15 +6,14 @@ namespace Bavix\Wallet\Internal\Service;
 
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
-use Illuminate\Config\Repository as ConfigRepository;
 
 final class MathService implements MathServiceInterface
 {
     private int $scale;
 
-    public function __construct(ConfigRepository $config)
+    public function __construct()
     {
-        $this->scale = (int) $config->get('wallet.math.scale', 64);
+        $this->scale = (int) config('wallet.math.scale', 64);
     }
 
     public function add(float|int|string $first, float|int|string $second, ?int $scale = null): string
