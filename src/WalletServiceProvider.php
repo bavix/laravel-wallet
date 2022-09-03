@@ -142,6 +142,20 @@ final class WalletServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(dirname(__DIR__) . '/config/config.php', 'wallet');
         $this->commands([TransferFixCommand::class]);
 
+        /**
+         * @var array{
+         *     internal?: array<class-string|null>,
+         *     services?: array<class-string|null>,
+         *     cache?: array{driver: string|null},
+         *     repositories?: array<class-string|null>,
+         *     transformers?: array<class-string|null>,
+         *     assemblers?: array<class-string|null>,
+         *     events?: array<class-string|null>,
+         *     transaction?: array{model?: class-string|null},
+         *     transfer?: array{model?: class-string|null},
+         *     wallet?: array{model?: class-string|null},
+         * } $configure
+         */
         $configure = config('wallet', []);
 
         $this->internal($configure['internal'] ?? []);
@@ -200,7 +214,7 @@ final class WalletServiceProvider extends ServiceProvider
 
     /**
      * @param array<class-string|null> $configure
-     * @param array{driver: string|null} $cache
+     * @param array{driver?: string|null} $cache
      */
     private function services(array $configure, array $cache): void
     {
@@ -352,7 +366,11 @@ final class WalletServiceProvider extends ServiceProvider
     }
 
     /**
-     * @param array<array<class-string|null>> $configure
+     * @param array{
+     *     transaction?: array{model?: class-string|null},
+     *     transfer?: array{model?: class-string|null},
+     *     wallet?: array{model?: class-string|null},
+     * } $configure
      */
     private function bindObjects(array $configure): void
     {

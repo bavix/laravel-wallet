@@ -22,14 +22,20 @@ trait MorphOneWallet
     public function wallet(): MorphOne
     {
         $castService = app(CastServiceInterface::class);
+        /** @var class-string $related */
+        $related = config('wallet.wallet.model', WalletModel::class);
+        assert(is_string($related));
+
+        $slug = config('wallet.wallet.default.slug', 'default');
+        assert(is_string($slug));
 
         return $castService
             ->getHolder($this)
-            ->morphOne(config('wallet.wallet.model', WalletModel::class), 'holder')
-            ->where('slug', config('wallet.wallet.default.slug', 'default'))
+            ->morphOne($related, 'holder')
+            ->where('slug', $slug)
             ->withDefault(static function (WalletModel $wallet, object $holder) use ($castService) {
                 $model = $castService->getModel($holder);
-                $wallet->forceFill(array_merge(config('wallet.wallet.creating', []), [
+                $wallet->forceFill(array_merge((array) config('wallet.wallet.creating', []), [
                     'name' => config('wallet.wallet.default.name', 'Default Wallet'),
                     'slug' => config('wallet.wallet.default.slug', 'default'),
                     'meta' => config('wallet.wallet.default.meta', []),
