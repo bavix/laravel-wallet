@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Models;
 
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Internal\Service\ConfigServiceInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\CastServiceInterface;
+use function config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -61,7 +61,7 @@ class Transaction extends Model
     public function getTable(): string
     {
         if ((string) $this->table === '') {
-            $this->table = app(ConfigServiceInterface::class)->getString('wallet.transaction.table', 'transactions');
+            $this->table = config('wallet.transaction.table', 'transactions');
         }
 
         return parent::getTable();
@@ -74,9 +74,7 @@ class Transaction extends Model
 
     public function wallet(): BelongsTo
     {
-        return $this->belongsTo(
-            app(ConfigServiceInterface::class)->getClass('wallet.wallet.model', WalletModel::class)
-        );
+        return $this->belongsTo(config('wallet.wallet.model', WalletModel::class));
     }
 
     public function getAmountIntAttribute(): int
