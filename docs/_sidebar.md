@@ -47,6 +47,10 @@
     - [TransactionCreatedEvent](transaction-created-event)
     - [Event Customize](event-customize)
 
+- CQRS
+
+    - [Create Wallet](command-create-wallet)
+
 - Additions
 
     - [Wallet Swap](laravel-wallet-swap)
