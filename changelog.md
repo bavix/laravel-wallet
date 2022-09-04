@@ -6,6 +6,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.2.0] - 2022-09-04
+### Updated
+- upgrade actions by @rez1dent3 in #541
+- Bump size-limit from 8.0.0 to 8.0.1 by @dependabot in #543
+- Update rector/rector requirement from ^0.13 to ^0.14 by @dependabot in #544
+- Update laravel/cashier requirement from ^13.11 to ^14.0 by @dependabot in #545
+- Update linters and rules by @rez1dent3 in #547
+- Bump prismjs from 1.28.0 to 1.29.0 by @dependabot in #549
+
+### Fixed
+- Contract phpdoc fix by @rez1dent3 in #551
+- fix TestCase by @rez1dent3 in #555
+
+### Added
+- Add telegram link by @rez1dent3 in #553
+- Ability to dynamically create a wallet by @rez1dent3 in #550
+- Quality tests by @rez1dent3 in #554
+- Allow to use atomic service by @rez1dent3 in #548
+- docs by @rez1dent3 in #557
+
+### Changed
+- refactoring with new phpstan by @rez1dent3 in #556
+
 ## [9.1.0] - 2022-08-08
 ### Added
 - TransactionCreatedEvent #538
@@ -896,7 +919,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/9.1.0...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/9.2.0...develop
+[9.2.0]: https://github.com/bavix/laravel-wallet/compare/9.1.0...9.2.0
 [9.1.0]: https://github.com/bavix/laravel-wallet/compare/9.0.4...9.1.0
 [9.0.4]: https://github.com/bavix/laravel-wallet/compare/9.0.3...9.0.4
 [9.0.3]: https://github.com/bavix/laravel-wallet/compare/9.0.2...9.0.3
