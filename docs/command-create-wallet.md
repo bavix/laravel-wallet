@@ -1,5 +1,7 @@
 # Asynchronous wallet creation
 
+> You need wallet version 9.2 or higher
+
 The idea is based on the division into teams for creating wallets, transactions, etc. The creation of a wallet can be accelerated if the client "generates a wallet himself".
 
 ---
