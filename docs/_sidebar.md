@@ -39,6 +39,7 @@
 
     - [Transaction](transaction) 
     - [Race condition](race-condition) 
+    - [Atomic Service](atomic-service) 
 
 - Events
     
