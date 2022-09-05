@@ -52,6 +52,8 @@ use Bavix\Wallet\Internal\Service\LockService;
 use Bavix\Wallet\Internal\Service\LockServiceInterface;
 use Bavix\Wallet\Internal\Service\MathService;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
+use Bavix\Wallet\Internal\Service\StateService;
+use Bavix\Wallet\Internal\Service\StateServiceInterface;
 use Bavix\Wallet\Internal\Service\StorageService;
 use Bavix\Wallet\Internal\Service\StorageServiceInterface;
 use Bavix\Wallet\Internal\Service\TranslatorService;
@@ -209,6 +211,7 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(JsonServiceInterface::class, $configure['json'] ?? JsonService::class);
         $this->app->singleton(LockServiceInterface::class, $configure['lock'] ?? LockService::class);
         $this->app->singleton(MathServiceInterface::class, $configure['math'] ?? MathService::class);
+        $this->app->singleton(StateServiceInterface::class, $configure['state'] ?? StateService::class);
         $this->app->singleton(TranslatorServiceInterface::class, $configure['translator'] ?? TranslatorService::class);
         $this->app->singleton(UuidFactoryServiceInterface::class, $configure['uuid'] ?? UuidFactoryService::class);
     }
