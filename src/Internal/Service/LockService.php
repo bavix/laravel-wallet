@@ -34,22 +34,25 @@ final class LockService implements LockServiceInterface
      */
     public function block(string $key, callable $callback): mixed
     {
-        $lockKey = self::PREFIX . $key;
-
-        if (array_key_exists($lockKey, $this->lockedKeys)) {
+        if ($this->isBlocked($key)) {
             return $callback();
         }
 
-        $this->lockedKeys[$lockKey] = true;
+        $this->lockedKeys[$key] = true;
 
         try {
             return $this->getLockProvider()
-                ->lock($lockKey)
+                ->lock(self::PREFIX . $key)
                 ->block($this->seconds, $callback)
             ;
         } finally {
-            unset($this->lockedKeys[$lockKey]);
+            unset($this->lockedKeys[$key]);
         }
+    }
+
+    public function isBlocked(string $key): bool
+    {
+        return $this->lockedKeys[$key] ?? false;
     }
 
     /**

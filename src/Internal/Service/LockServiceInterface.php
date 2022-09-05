@@ -17,4 +17,6 @@ interface LockServiceInterface
      * @throws LockProviderNotFoundException
      */
     public function block(string $key, callable $callback): mixed;
+
+    public function isBlocked(string $key): bool;
 }

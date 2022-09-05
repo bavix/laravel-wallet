@@ -19,6 +19,7 @@ use Illuminate\Database\RecordsNotFoundException;
 final class AtomicService implements AtomicServiceInterface
 {
     public function __construct(
+        private BookkeeperServiceInterface $bookkeeperService,
         private DatabaseServiceInterface $databaseService,
         private StateServiceInterface $stateService,
         private LockServiceInterface $lockService,
@@ -36,23 +37,35 @@ final class AtomicService implements AtomicServiceInterface
      */
     public function blocks(array $objects, callable $callback): mixed
     {
-        $callable = fn () => $this->databaseService->transaction($callback);
+        $blockObjects = [];
         foreach ($objects as $object) {
             $wallet = $this->castService->getWallet($object);
-            $callable = fn () => $this->lockService->block(
-                $wallet->uuid,
-                function () use ($wallet, $callable) {
-                    try {
-                        $this->stateService->fork($wallet->uuid, $wallet->balance);
-                        return $callable();
-                    } finally {
-                        $this->stateService->drop($wallet->uuid);
-                    }
-                }
-            );
+            if (! $this->lockService->isBlocked($wallet->uuid)) {
+                $blockObjects[] = $object;
+            }
         }
 
-        return $callable();
+        $callable = function () use ($blockObjects, $callback) {
+            foreach ($blockObjects as $object) {
+                $wallet = $this->castService->getWallet($object);
+                $this->stateService->fork($wallet->uuid, $this->bookkeeperService->amount($wallet));
+            }
+            return $this->databaseService->transaction($callback);
+        };
+
+        foreach ($blockObjects as $object) {
+            $wallet = $this->castService->getWallet($object);
+            $callable = fn () => $this->lockService->block($wallet->uuid, $callable);
+        }
+
+        try {
+            return $callable();
+        } finally {
+            foreach ($blockObjects as $object) {
+                $wallet = $this->castService->getWallet($object);
+                $this->stateService->drop($wallet->uuid);
+            }
+        }
     }
 
     /**
