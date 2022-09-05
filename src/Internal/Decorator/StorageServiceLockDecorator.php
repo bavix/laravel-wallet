@@ -43,9 +43,6 @@ final class StorageServiceLockDecorator implements StorageServiceInterface
      */
     public function increase(string $uuid, float|int|string $value): string
     {
-        return $this->lockService->block(
-            $uuid . '::increase',
-            fn () => $this->storageService->increase($uuid, $value)
-        );
+        return $this->lockService->block($uuid, fn () => $this->storageService->increase($uuid, $value));
     }
 }
