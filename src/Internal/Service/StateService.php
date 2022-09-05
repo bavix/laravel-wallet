@@ -13,7 +13,7 @@ final class StateService implements StateServiceInterface
 
     public function fork(string $uuid, string $value): void
     {
-        $this->forks[$uuid] = $value;
+        $this->forks[$uuid] ??= $value;
     }
 
     public function get(string $uuid): ?string

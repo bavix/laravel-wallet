@@ -40,14 +40,16 @@ trait CanConfirm
      */
     public function confirm(Transaction $transaction): bool
     {
-        if ($transaction->type === Transaction::TYPE_WITHDRAW) {
-            app(ConsistencyServiceInterface::class)->checkPotential(
-                app(CastServiceInterface::class)->getWallet($this),
-                app(MathServiceInterface::class)->negative($transaction->amount)
-            );
-        }
+        return app(AtomicServiceInterface::class)->block($this, function () use ($transaction): bool {
+            if ($transaction->type === Transaction::TYPE_WITHDRAW) {
+                app(ConsistencyServiceInterface::class)->checkPotential(
+                    app(CastServiceInterface::class)->getWallet($this),
+                    app(MathServiceInterface::class)->negative($transaction->amount)
+                );
+            }
 
-        return $this->forceConfirm($transaction);
+            return $this->forceConfirm($transaction);
+        });
     }
 
     public function safeConfirm(Transaction $transaction): bool

@@ -41,11 +41,11 @@ trait CanExchange
      */
     public function exchange(Wallet $to, int|string $amount, ExtraDtoInterface|array|null $meta = null): Transfer
     {
-        $wallet = app(CastServiceInterface::class)->getWallet($this);
+        return app(AtomicServiceInterface::class)->block($this, function () use ($to, $amount, $meta): Transfer {
+            app(ConsistencyServiceInterface::class)->checkPotential($this, $amount);
 
-        app(ConsistencyServiceInterface::class)->checkPotential($wallet, $amount);
-
-        return $this->forceExchange($to, $amount, $meta);
+            return $this->forceExchange($to, $amount, $meta);
+        });
     }
 
     public function safeExchange(Wallet $to, int|string $amount, ExtraDtoInterface|array|null $meta = null): ?Transfer
