@@ -27,6 +27,7 @@ use Bavix\Wallet\Internal\Assembler\TransferQueryAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferQueryAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\WalletCreatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\WalletCreatedEventAssemblerInterface;
+use Bavix\Wallet\Internal\Decorator\StorageServiceLockDecorator;
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEvent;
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEventInterface;
 use Bavix\Wallet\Internal\Events\TransactionCreatedEvent;
@@ -247,7 +248,7 @@ final class WalletServiceProvider extends ServiceProvider
             $configure['bookkeeper'] ?? BookkeeperService::class,
             [
                 'storageService' => $this->app->make(
-                    StorageServiceInterface::class,
+                    StorageServiceLockDecorator::class,
                     [
                         'cacheRepository' => $this->app->make(CacheFactory::class)
                             ->store($cache['driver'] ?? 'array'),
@@ -262,7 +263,7 @@ final class WalletServiceProvider extends ServiceProvider
                 'storageService' => $this->app->make(
                     StorageServiceInterface::class,
                     [
-                        'cacheRepository' => $this->app->make(CacheFactory::class)
+                        'cacheRepository' => clone $this->app->make(CacheFactory::class)
                             ->store('array'),
                     ],
                 ),

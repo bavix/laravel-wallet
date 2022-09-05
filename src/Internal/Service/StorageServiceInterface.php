@@ -11,18 +11,18 @@ interface StorageServiceInterface
 {
     public function flush(): bool;
 
-    public function missing(string $key): bool;
+    public function missing(string $uuid): bool;
 
     /**
      * @throws RecordNotFoundException
      */
-    public function get(string $key): string;
+    public function get(string $uuid): string;
 
-    public function sync(string $key, float|int|string $value): bool;
+    public function sync(string $uuid, float|int|string $value): bool;
 
     /**
      * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      */
-    public function increase(string $key, float|int|string $value): string;
+    public function increase(string $uuid, float|int|string $value): string;
 }
