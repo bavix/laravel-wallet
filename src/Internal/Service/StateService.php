@@ -11,18 +11,30 @@ final class StateService implements StateServiceInterface
      */
     private array $forks = [];
 
-    public function fork(string $uuid, string $value): void
+    /**
+     * @var array<string, callable>
+     */
+    private array $forkCallables = [];
+
+    public function fork(string $uuid, callable $value): void
     {
-        $this->forks[$uuid] ??= $value;
+        $this->forkCallables[$uuid] ??= $value;
     }
 
     public function get(string $uuid): ?string
     {
+        if ($this->forkCallables[$uuid] ?? null) {
+            $callable = $this->forkCallables[$uuid];
+            unset($this->forkCallables[$uuid]);
+
+            $this->forks[$uuid] = $callable();
+        }
+
         return $this->forks[$uuid] ?? null;
     }
 
     public function drop(string $uuid): void
     {
-        unset($this->forks[$uuid]);
+        unset($this->forks[$uuid], $this->forkCallables[$uuid]);
     }
 }
