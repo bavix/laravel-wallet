@@ -37,33 +37,35 @@ final class AtomicService implements AtomicServiceInterface
      */
     public function blocks(array $objects, callable $callback): mixed
     {
+        /** @var array<string, \Bavix\Wallet\Models\Wallet> $blockObjects */
         $blockObjects = [];
         foreach ($objects as $object) {
             $wallet = $this->castService->getWallet($object);
             if (! $this->lockService->isBlocked($wallet->uuid)) {
-                $blockObjects[] = $object;
+                $blockObjects[$wallet->uuid] = $wallet;
             }
         }
 
+        if ($blockObjects === []) {
+            return $callback();
+        }
+
         $callable = function () use ($blockObjects, $callback) {
-            foreach ($blockObjects as $object) {
-                $wallet = $this->castService->getWallet($object);
-                $this->stateService->fork($wallet->uuid, $this->bookkeeperService->amount($wallet));
+            foreach ($blockObjects as $uuid => $wallet) {
+                $this->stateService->fork($uuid, $this->bookkeeperService->amount($wallet));
             }
             return $this->databaseService->transaction($callback);
         };
 
-        foreach ($blockObjects as $object) {
-            $wallet = $this->castService->getWallet($object);
-            $callable = fn () => $this->lockService->block($wallet->uuid, $callable);
+        foreach (array_keys($blockObjects) as $uuid) {
+            $callable = fn () => $this->lockService->block($uuid, $callable);
         }
 
         try {
             return $callable();
         } finally {
-            foreach ($blockObjects as $object) {
-                $wallet = $this->castService->getWallet($object);
-                $this->stateService->drop($wallet->uuid);
+            foreach (array_keys($blockObjects) as $uuid) {
+                $this->stateService->drop($uuid);
             }
         }
     }
