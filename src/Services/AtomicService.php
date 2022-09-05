@@ -17,8 +17,6 @@ use Illuminate\Database\RecordsNotFoundException;
  */
 final class AtomicService implements AtomicServiceInterface
 {
-    private const PREFIX = 'wallet_atomic::';
-
     public function __construct(
         private DatabaseServiceInterface $databaseService,
         private LockServiceInterface $lockService,
@@ -38,7 +36,8 @@ final class AtomicService implements AtomicServiceInterface
     {
         $callable = fn () => $this->databaseService->transaction($callback);
         foreach ($objects as $object) {
-            $callable = fn () => $this->lockService->block($this->key($object), $callable);
+            $wallet = $this->castService->getWallet($object);
+            $callable = fn () => $this->lockService->block($wallet->uuid, $callable);
         }
 
         return $callable();
@@ -53,12 +52,5 @@ final class AtomicService implements AtomicServiceInterface
     public function block(Wallet $object, callable $callback): mixed
     {
         return $this->blocks([$object], $callback);
-    }
-
-    private function key(Wallet $object): string
-    {
-        $wallet = $this->castService->getWallet($object);
-
-        return self::PREFIX . '::' . $wallet::class . '::' . $wallet->uuid;
     }
 }

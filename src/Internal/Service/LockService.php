@@ -12,6 +12,8 @@ use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 final class LockService implements LockServiceInterface
 {
+    private const PREFIX = 'wallet_lock::';
+
     /**
      * @var array<string, bool>
      */
@@ -32,19 +34,21 @@ final class LockService implements LockServiceInterface
      */
     public function block(string $key, callable $callback): mixed
     {
-        if (array_key_exists($key, $this->lockedKeys)) {
+        $lockKey = self::PREFIX . $key;
+
+        if (array_key_exists($lockKey, $this->lockedKeys)) {
             return $callback();
         }
 
-        $this->lockedKeys[$key] = true;
+        $this->lockedKeys[$lockKey] = true;
 
         try {
             return $this->getLockProvider()
-                ->lock($key)
+                ->lock($lockKey)
                 ->block($this->seconds, $callback)
             ;
         } finally {
-            unset($this->lockedKeys[$key]);
+            unset($this->lockedKeys[$lockKey]);
         }
     }
 
