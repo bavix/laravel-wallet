@@ -14,7 +14,6 @@ use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
-use Bavix\Wallet\Internal\Service\StateServiceInterface;
 use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Bavix\Wallet\Services\AtomicServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
@@ -115,8 +114,6 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     public function refreshBalance(): bool
     {
         return app(AtomicServiceInterface::class)->block($this, function () {
-            app(StateServiceInterface::class)->drop($this->uuid);
-
             $whatIs = $this->getBalanceAttribute();
             $balance = $this->getAvailableBalanceAttribute();
             if (app(MathServiceInterface::class)->compare($whatIs, $balance) === 0) {
