@@ -52,7 +52,7 @@ final class AtomicService implements AtomicServiceInterface
 
         $callable = function () use ($blockObjects, $callback) {
             foreach ($blockObjects as $uuid => $wallet) {
-                $this->stateService->fork($uuid, $this->bookkeeperService->amount($wallet));
+                $this->stateService->fork($uuid, fn () => $this->bookkeeperService->amount($wallet));
             }
             return $this->databaseService->transaction($callback);
         };

@@ -6,7 +6,10 @@ namespace Bavix\Wallet\Internal\Service;
 
 interface StateServiceInterface
 {
-    public function fork(string $uuid, string $value): void;
+    /**
+     * @param callable(): string $value
+     */
+    public function fork(string $uuid, callable $value): void;
 
     public function get(string $uuid): ?string;
 
