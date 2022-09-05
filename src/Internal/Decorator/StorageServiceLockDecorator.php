@@ -33,11 +33,7 @@ final class StorageServiceLockDecorator implements StorageServiceInterface
 
     public function get(string $uuid): string
     {
-        if ($this->lockService->isBlocked($uuid)) {
-            return $this->stateService->get($uuid) ?? $this->storageService->get($uuid);
-        }
-
-        return $this->storageService->get($uuid);
+        return $this->stateService->get($uuid) ?? $this->storageService->get($uuid);
     }
 
     public function sync(string $uuid, float|int|string $value): bool
