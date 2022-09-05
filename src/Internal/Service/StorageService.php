@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Internal\Service;
 
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
-use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 final class StorageService implements StorageServiceInterface
 {
     public function __construct(
-        private LockServiceInterface $lockService,
         private MathServiceInterface $mathService,
         private CacheRepository $cacheRepository
     ) {
@@ -23,17 +21,17 @@ final class StorageService implements StorageServiceInterface
         return $this->cacheRepository->clear();
     }
 
-    public function missing(string $key): bool
+    public function missing(string $uuid): bool
     {
-        return $this->cacheRepository->forget($key);
+        return $this->cacheRepository->forget($uuid);
     }
 
     /**
      * @throws RecordNotFoundException
      */
-    public function get(string $key): string
+    public function get(string $uuid): string
     {
-        $value = $this->cacheRepository->get($key);
+        $value = $this->cacheRepository->get($uuid);
         if ($value === null) {
             throw new RecordNotFoundException(
                 'The repository did not find the object',
@@ -44,25 +42,19 @@ final class StorageService implements StorageServiceInterface
         return $this->mathService->round($value);
     }
 
-    public function sync(string $key, float|int|string $value): bool
+    public function sync(string $uuid, float|int|string $value): bool
     {
-        return $this->cacheRepository->set($key, $value);
+        return $this->cacheRepository->set($uuid, $value);
     }
 
     /**
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      */
-    public function increase(string $key, float|int|string $value): string
+    public function increase(string $uuid, float|int|string $value): string
     {
-        return $this->lockService->block(
-            $key . '::increase',
-            function () use ($key, $value): string {
-                $result = $this->mathService->add($this->get($key), $value);
-                $this->sync($key, $result);
+        $result = $this->mathService->add($this->get($uuid), $value);
+        $this->sync($uuid, $result);
 
-                return $this->mathService->round($result);
-            }
-        );
+        return $this->mathService->round($result);
     }
 }

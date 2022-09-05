@@ -1,5 +1,7 @@
 ## Transaction
 
+> Since version 9.2 it is safer to use AtomicServiceInterface.
+
 > Is it possible to use laravel's inline transactions? No, It is Immpossible. This limitation is due to the internal architecture of the package. To achieve the maximum speed of work, work with an internal state of balance was needed. Starting with version 8.2, a special error has appeared that will inform you about incorrect work with the `TransactionStartException` package.
 
 Sometimes you need to execute many simple queries. You want to keep the data atomic. To do this, you need `laravel-wallet` v7.1+.
