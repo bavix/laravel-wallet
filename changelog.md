@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.3.0] - 2022-09-06
+### Added
+* StorageServiceLockDecorator by @rez1dent3 in #563
+* StateServiceInterface  by @rez1dent3 in #564
+* Add atomic-service.md by @rez1dent3 in #561
+
+### Updated
+* Bump uuid from 8.3.2 to 9.0.0 by @dependabot in #566
+
 ## [9.2.0] - 2022-09-04
 ### Updated
 - upgrade actions by @rez1dent3 in #541
@@ -919,7 +928,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/9.2.0...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/9.3.0...develop
+[9.3.0]: https://github.com/bavix/laravel-wallet/compare/9.2.0...9.3.0
 [9.2.0]: https://github.com/bavix/laravel-wallet/compare/9.1.0...9.2.0
 [9.1.0]: https://github.com/bavix/laravel-wallet/compare/9.0.4...9.1.0
 [9.0.4]: https://github.com/bavix/laravel-wallet/compare/9.0.3...9.0.4
