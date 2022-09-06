@@ -35,6 +35,8 @@ To perform the migration, you will be [helped by the instruction](https://bavix.
 
 I want to create a cozy place for developers using the wallet package. This will help you find bugs faster, get feedback and discuss ideas.
 
+![telegram](https://user-images.githubusercontent.com/5111255/188698261-1306c729-de56-4cff-8190-fb5fbcb1b266.jpg)
+
 Telegram: [@laravel_wallet](https://t.me/laravel_wallet)
 
 ### Extensions
