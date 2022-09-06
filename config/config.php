@@ -24,6 +24,7 @@ use Bavix\Wallet\Internal\Service\DispatcherService;
 use Bavix\Wallet\Internal\Service\JsonService;
 use Bavix\Wallet\Internal\Service\LockService;
 use Bavix\Wallet\Internal\Service\MathService;
+use Bavix\Wallet\Internal\Service\StateService;
 use Bavix\Wallet\Internal\Service\StorageService;
 use Bavix\Wallet\Internal\Service\TranslatorService;
 use Bavix\Wallet\Internal\Service\UuidFactoryService;
@@ -85,6 +86,7 @@ return [
         'json' => JsonService::class,
         'lock' => LockService::class,
         'math' => MathService::class,
+        'state' => StateService::class,
         'storage' => StorageService::class,
         'translator' => TranslatorService::class,
         'uuid' => UuidFactoryService::class,
