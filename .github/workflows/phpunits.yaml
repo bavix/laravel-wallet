@@ -115,6 +115,12 @@ jobs:
       - name: Install dependencies
         id: composer-dependencies
         run: composer install --prefer-dist --no-progress
+        if: ${{ matrix.php-versions != '8.2' }}
+
+      - name: Install dependencies (ignore)
+        id: composer-dependencies
+        run: composer install --prefer-dist --no-progress --ignore-platform-reqs
+        if: ${{ matrix.php-versions == '8.2' }}
 
       - name: Check codeclimate
         id: codeclimate-check
