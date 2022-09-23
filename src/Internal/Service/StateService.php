@@ -4,37 +4,43 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Service;
 
+use Illuminate\Contracts\Cache\Factory as CacheFactory;
+use Illuminate\Contracts\Cache\Repository as CacheRepository;
+
 final class StateService implements StateServiceInterface
 {
-    /**
-     * @var array<string, string>
-     */
-    private array $forks = [];
+    private const PREFIX_FORKS = 'wallet_forks::';
 
-    /**
-     * @var array<string, callable>
-     */
-    private array $forkCallables = [];
+    private const PREFIX_FORK_CALL = 'wallet_fork_call::';
+
+    private CacheRepository $forks;
+
+    private CacheRepository $forkCallables;
+
+    public function __construct(CacheFactory $cacheFactory)
+    {
+        $this->forks = $cacheFactory->store('array');
+        $this->forkCallables = $cacheFactory->store('array');
+    }
 
     public function fork(string $uuid, callable $value): void
     {
-        $this->forkCallables[$uuid] ??= $value;
+        $this->forkCallables->add(self::PREFIX_FORK_CALL . $uuid, $value);
     }
 
     public function get(string $uuid): ?string
     {
-        if ($this->forkCallables[$uuid] ?? null) {
-            $callable = $this->forkCallables[$uuid];
-            unset($this->forkCallables[$uuid]);
-
-            $this->forks[$uuid] = $callable();
+        $callable = $this->forkCallables->pull(self::PREFIX_FORK_CALL . $uuid);
+        if ($callable !== null) {
+            $this->forks->put(self::PREFIX_FORKS . $uuid, (string) $callable());
         }
 
-        return $this->forks[$uuid] ?? null;
+        return $this->forks->get(self::PREFIX_FORKS . $uuid);
     }
 
     public function drop(string $uuid): void
     {
-        unset($this->forks[$uuid], $this->forkCallables[$uuid]);
+        $this->forkCallables->delete(self::PREFIX_FORK_CALL . $uuid);
+        $this->forks->delete(self::PREFIX_FORKS . $uuid);
     }
 }

@@ -203,7 +203,7 @@ final class WalletServiceProvider extends ServiceProvider
      */
     private function internal(array $configure): void
     {
-        $this->app->bind(StorageServiceInterface::class, $configure['storage'] ?? StorageService::class);
+        $this->app->alias($configure['storage'] ?? StorageService::class, 'wallet.internal.storage');
 
         $this->app->singleton(ClockServiceInterface::class, $configure['clock'] ?? ClockService::class);
         $this->app->singleton(DatabaseServiceInterface::class, $configure['database'] ?? DatabaseService::class);
@@ -247,31 +247,39 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(TransferServiceInterface::class, $configure['transfer'] ?? TransferService::class);
         $this->app->singleton(WalletServiceInterface::class, $configure['wallet'] ?? WalletService::class);
 
-        $this->app->singleton(BookkeeperServiceInterface::class, fn () => $this->app->make(
-            $configure['bookkeeper'] ?? BookkeeperService::class,
-            [
-                'storageService' => $this->app->make(
-                    StorageServiceLockDecorator::class,
+        // bookkeepper service
+        $this->app->when(StorageServiceLockDecorator::class)
+            ->needs(StorageServiceInterface::class)
+            ->give(function () use ($cache) {
+                return $this->app->make(
+                    'wallet.internal.storage',
                     [
-                        'cacheRepository' => $this->app->make(CacheFactory::class)
+                        'cacheRepository' => $this->app->get(CacheFactory::class)
                             ->store($cache['driver'] ?? 'array'),
                     ],
-                ),
-            ]
-        ));
+                );
+            });
 
-        $this->app->singleton(RegulatorServiceInterface::class, fn () => $this->app->make(
-            $configure['regulator'] ?? RegulatorService::class,
-            [
-                'storageService' => $this->app->make(
-                    StorageServiceInterface::class,
+        $this->app->when($configure['bookkeeper'] ?? BookkeeperService::class)
+            ->needs(StorageServiceInterface::class)
+            ->give(StorageServiceLockDecorator::class);
+
+        $this->app->singleton(BookkeeperServiceInterface::class, $configure['bookkeeper'] ?? BookkeeperService::class);
+
+        // regulator service
+        $this->app->when($configure['regulator'] ?? RegulatorService::class)
+            ->needs(StorageServiceInterface::class)
+            ->give(function () {
+                return $this->app->make(
+                    'wallet.internal.storage',
                     [
                         'cacheRepository' => clone $this->app->make(CacheFactory::class)
                             ->store('array'),
                     ],
-                ),
-            ]
-        ));
+                );
+            });
+
+        $this->app->singleton(RegulatorServiceInterface::class, $configure['regulator'] ?? RegulatorService::class);
     }
 
     /**

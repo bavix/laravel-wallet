@@ -12,12 +12,13 @@ use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 final class LockService implements LockServiceInterface
 {
-    private const PREFIX = 'wallet_lock::';
+    private const LOCK_KEY = 'wallet_lock::';
 
-    /**
-     * @var array<string, bool>
-     */
-    private array $lockedKeys = [];
+    private const INNER_KEYS = 'inner_keys::';
+
+    private ?LockProvider $lockProvider = null;
+
+    private CacheRepository $lockedKeys;
 
     private CacheRepository $cache;
 
@@ -25,8 +26,9 @@ final class LockService implements LockServiceInterface
 
     public function __construct(CacheFactory $cacheFactory)
     {
-        $this->seconds = (int) config('wallet.lock.seconds', 1);
         $this->cache = $cacheFactory->store(config('wallet.lock.driver', 'array'));
+        $this->seconds = (int) config('wallet.lock.seconds', 1);
+        $this->lockedKeys = $cacheFactory->store('array');
     }
 
     /**
@@ -38,21 +40,20 @@ final class LockService implements LockServiceInterface
             return $callback();
         }
 
-        $this->lockedKeys[$key] = true;
+        $lock = $this->getLockProvider()
+            ->lock(self::LOCK_KEY . $key, $this->seconds);
+        $this->lockedKeys->put(self::INNER_KEYS . $key, true, $this->seconds);
 
         try {
-            return $this->getLockProvider()
-                ->lock(self::PREFIX . $key)
-                ->block($this->seconds, $callback)
-            ;
+            return $callback();
         } finally {
-            unset($this->lockedKeys[$key]);
+            $this->lockedKeys->delete(self::INNER_KEYS . $key);
         }
     }
 
     public function isBlocked(string $key): bool
     {
-        return $this->lockedKeys[$key] ?? false;
+        return $this->lockedKeys->get(self::INNER_KEYS . $key) === true;
     }
 
     /**
@@ -61,14 +62,18 @@ final class LockService implements LockServiceInterface
      */
     private function getLockProvider(): LockProvider
     {
-        $store = $this->cache->getStore();
-        if ($store instanceof LockProvider) {
-            return $store;
+        if ($this->lockProvider === null) {
+            $store = $this->cache->getStore();
+            if (! ($store instanceof LockProvider)) {
+                throw new LockProviderNotFoundException(
+                    'Lockable cache not found',
+                    ExceptionInterface::LOCK_PROVIDER_NOT_FOUND
+                );
+            }
+
+            $this->lockProvider = $store;
         }
 
-        throw new LockProviderNotFoundException(
-            'Lockable cache not found',
-            ExceptionInterface::LOCK_PROVIDER_NOT_FOUND
-        );
+        return $this->lockProvider;
     }
 }
