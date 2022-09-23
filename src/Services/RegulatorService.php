@@ -86,29 +86,32 @@ final class RegulatorService implements RegulatorServiceInterface
 
     public function approve(): void
     {
-        foreach ($this->wallets as $wallet) {
-            $diffValue = $this->diff($wallet);
-            if ($this->mathService->compare($diffValue, 0) === 0) {
-                continue;
-            }
+        try {
+            foreach ($this->wallets as $wallet) {
+                $diffValue = $this->diff($wallet);
+                if ($this->mathService->compare($diffValue, 0) === 0) {
+                    continue;
+                }
 
-            $balance = $this->bookkeeperService->increase($wallet, $diffValue);
-            $wallet->newQuery()
-                ->whereKey($wallet->getKey())
-                ->update([
+                $before = $this->bookkeeperService->amount($wallet);
+                $balance = $this->bookkeeperService->increase($wallet, $diffValue);
+                $wallet->newQuery()
+                    ->whereKey($wallet->getKey())
+                    ->update([
+                        'balance' => $balance,
+                    ]) // ?qN
+                ;
+                $wallet->fill([
                     'balance' => $balance,
-                ]) // ?qN
-            ;
-            $wallet->fill([
-                'balance' => $balance,
-            ])->syncOriginalAttribute('balance');
+                ])->syncOriginalAttribute('balance');
 
-            $event = $this->balanceUpdatedEventAssembler->create($wallet);
-            $this->dispatcherService->dispatch($event);
+                $event = $this->balanceUpdatedEventAssembler->create($wallet);
+                $this->dispatcherService->dispatch($event);
+            }
+        } finally {
+            $this->dispatcherService->flush();
+            $this->purge();
         }
-
-        $this->dispatcherService->flush();
-        $this->purge();
     }
 
     public function purge(): void
