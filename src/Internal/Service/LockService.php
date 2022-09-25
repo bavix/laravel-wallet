@@ -45,7 +45,7 @@ final class LockService implements LockServiceInterface
         $this->lockedKeys->put(self::INNER_KEYS . $key, true, $this->seconds);
 
         try {
-            return $callback();
+            return $lock->block($this->seconds, $callback);
         } finally {
             $this->lockedKeys->delete(self::INNER_KEYS . $key);
         }

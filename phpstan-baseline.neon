@@ -36,6 +36,16 @@ parameters:
 			path: src/Internal/Repository/WalletRepository.php
 
 		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StateService\\:\\:get\\(\\) should return string\\|null but returns mixed\\.$#"
+			count: 1
+			path: src/Internal/Service/StateService.php
+
+		-
+			message: "#^Trying to invoke mixed but it's not a callable\\.$#"
+			count: 1
+			path: src/Internal/Service/StateService.php
+
+		-
 			message: "#^Parameter \\#1 \\$number of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:round\\(\\) expects float\\|int\\|string, mixed given\\.$#"
 			count: 1
 			path: src/Internal/Service/StorageService.php
@@ -74,3 +84,13 @@ parameters:
 			message: "#^Parameter \\#2 \\$holderId of method Bavix\\\\Wallet\\\\Internal\\\\Repository\\\\WalletRepositoryInterface\\:\\:getBySlug\\(\\) expects int\\|string, mixed given\\.$#"
 			count: 1
 			path: src/Services/WalletService.php
+
+		-
+			message: "#^Cannot call method needs\\(\\) on mixed\\.$#"
+			count: 3
+			path: src/WalletServiceProvider.php
+
+		-
+			message: "#^Parameter \\#1 \\$abstract of method Illuminate\\\\Contracts\\\\Container\\\\Container\\:\\:make\\(\\) expects class\\-string\\<wallet\\.internal\\.storage\\>, string given\\.$#"
+			count: 2
+			path: src/WalletServiceProvider.php
