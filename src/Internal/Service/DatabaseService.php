@@ -41,41 +41,42 @@ final class DatabaseService implements DatabaseServiceInterface
             );
         }
 
+        if ($level > 0) {
+            return $callback();
+        }
+
         $this->init = true;
 
         try {
-            if ($level > 0) {
-                return $callback();
-            }
-
             $this->regulatorService->purge();
 
             return $this->connection->transaction(function () use ($callback) {
                 $result = $callback();
                 $this->init = false;
 
-                if ($result === false || (is_countable($result) && count($result) === 0)) {
-                    $this->regulatorService->purge();
-                } else {
-                    $this->regulatorService->approve();
+                if ($result === false) {
+                    return false;
                 }
+
+                if (is_countable($result) && count($result) === 0) {
+                    return $result;
+                }
+
+                $this->regulatorService->approve();
 
                 return $result;
             });
         } catch (RecordsNotFoundException|ExceptionInterface $exception) {
-            $this->regulatorService->purge();
-            $this->init = false;
-
             throw $exception;
         } catch (Throwable $throwable) {
-            $this->regulatorService->purge();
-            $this->init = false;
-
             throw new TransactionFailedException(
                 'Transaction failed. Message: ' . $throwable->getMessage(),
                 ExceptionInterface::TRANSACTION_FAILED,
                 $throwable
             );
+        } finally {
+            $this->regulatorService->purge();
+            $this->init = false;
         }
     }
 }

@@ -107,8 +107,8 @@ final class RegulatorService implements RegulatorServiceInterface
                 $event = $this->balanceUpdatedEventAssembler->create($wallet);
                 $this->dispatcherService->dispatch($event);
             }
-        } finally {
             $this->dispatcherService->flush();
+        } finally {
             $this->purge();
         }
     }

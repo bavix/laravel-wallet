@@ -10,7 +10,7 @@ use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 final class StorageService implements StorageServiceInterface
 {
-    private const PREFIX = 'wallet_strg::';
+    private const PREFIX = 'wallet_sg::';
 
     public function __construct(
         private MathServiceInterface $mathService,
