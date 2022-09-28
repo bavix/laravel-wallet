@@ -56,6 +56,8 @@ class Transfer extends Model
         'to_id',
         'uuid',
         'fee',
+        'created_at',
+        'updated_at',
     ];
 
     /**

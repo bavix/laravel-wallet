@@ -49,6 +49,8 @@ class Transaction extends Model
         'amount',
         'confirmed',
         'meta',
+        'created_at',
+        'updated_at',
     ];
 
     /**

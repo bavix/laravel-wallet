@@ -64,6 +64,8 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         'meta',
         'balance',
         'decimal_places',
+        'created_at',
+        'updated_at',
     ];
 
     /**
