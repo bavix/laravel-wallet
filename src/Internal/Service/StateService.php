@@ -25,14 +25,16 @@ final class StateService implements StateServiceInterface
 
     public function fork(string $uuid, callable $value): void
     {
-        $this->forkCallables->add(self::PREFIX_FORK_CALL . $uuid, $value);
+        if (! $this->forks->has(self::PREFIX_FORKS . $uuid)) {
+            $this->forkCallables->put(self::PREFIX_FORK_CALL . $uuid, $value);
+        }
     }
 
     public function get(string $uuid): ?string
     {
         $callable = $this->forkCallables->pull(self::PREFIX_FORK_CALL . $uuid);
         if ($callable !== null) {
-            $this->forks->put(self::PREFIX_FORKS . $uuid, (string) $callable());
+            return $this->forks->rememberForever(self::PREFIX_FORKS . $uuid, $callable);
         }
 
         return $this->forks->get(self::PREFIX_FORKS . $uuid);
@@ -40,7 +42,7 @@ final class StateService implements StateServiceInterface
 
     public function drop(string $uuid): void
     {
-        $this->forkCallables->delete(self::PREFIX_FORK_CALL . $uuid);
-        $this->forks->delete(self::PREFIX_FORKS . $uuid);
+        $this->forkCallables->forget(self::PREFIX_FORK_CALL . $uuid);
+        $this->forks->forget(self::PREFIX_FORKS . $uuid);
     }
 }
