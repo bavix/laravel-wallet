@@ -26,6 +26,12 @@ final class SilentlyDiscardingTest extends TestCase
         Model::preventSilentlyDiscardingAttributes();
     }
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        Model::preventSilentlyDiscardingAttributes(false);
+    }
+
     public function testDepositSilentlyDiscarding(): void
     {
         /** @var Buyer $buyer */
