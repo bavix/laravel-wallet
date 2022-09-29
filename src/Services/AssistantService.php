@@ -25,14 +25,14 @@ final class AssistantService implements AssistantServiceInterface
     /**
      * @param non-empty-array<Wallet> $objects
      *
-     * @return non-empty-array<string, Wallet>
+     * @return non-empty-array<int, Wallet>
      */
-    public function getUniqueWallets(array $objects): array
+    public function getWallets(array $objects): array
     {
         $wallets = [];
         foreach ($objects as $object) {
             $wallet = $this->castService->getWallet($object);
-            $wallets[$wallet->uuid] = $wallet;
+            $wallets[$wallet->getKey()] = $wallet;
         }
 
         return $wallets;

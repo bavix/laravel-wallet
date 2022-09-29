@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Bavix\Wallet\External\Api;
 
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Services\AssistantServiceInterface;
 use Bavix\Wallet\Services\AtomicServiceInterface;
 use Bavix\Wallet\Services\PrepareServiceInterface;
@@ -14,7 +13,7 @@ use Bavix\Wallet\Services\TransactionServiceInterface;
 /**
  * @internal
  */
-final class TransactionHandler implements TransactionHandlerInterface
+final class TransactionQueryHandler implements TransactionQueryHandlerInterface
 {
     public function __construct(
         private TransactionServiceInterface $transactionService,
@@ -26,23 +25,23 @@ final class TransactionHandler implements TransactionHandlerInterface
 
     public function apply(array $objects): array
     {
-        $wallets = $this->assistantService->getUniqueWallets(
-            array_map(static fn (array $object): Wallet => $object['wallet'], $objects),
+        $wallets = $this->assistantService->getWallets(
+            array_map(static fn (TransactionQuery $query): Wallet => $query->getWallet(), $objects),
         );
 
         $values = array_map(
-            fn (array $object) => match ($object['type']) {
-                Transaction::TYPE_DEPOSIT => $this->prepareService->deposit(
-                    $object['wallet'],
-                    $object['amount'],
-                    $object['meta'] ?? null,
-                    $object['confirmed'] ?? true,
+            fn (TransactionQuery $query) => match ($query->getType()) {
+                TransactionQuery::TYPE_DEPOSIT => $this->prepareService->deposit(
+                    $query->getWallet(),
+                    $query->getAmount(),
+                    $query->getMeta(),
+                    $query->isConfirmed(),
                 ),
-                Transaction::TYPE_WITHDRAW => $this->prepareService->withdraw(
-                    $object['wallet'],
-                    $object['amount'],
-                    $object['meta'] ?? null,
-                    $object['confirmed'] ?? true,
+                TransactionQuery::TYPE_WITHDRAW => $this->prepareService->withdraw(
+                    $query->getWallet(),
+                    $query->getAmount(),
+                    $query->getMeta(),
+                    $query->isConfirmed(),
                 )
             },
             $objects

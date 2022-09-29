@@ -22,6 +22,11 @@ parameters:
         - type: className
           regex: ^Bavix\\Wallet\\External\\Api\\.*Interface$
 
+    - name: ApiQuery
+      collectors:
+        - type: className
+          regex: ^Bavix\\Wallet\\External\\Api\\.*Query$
+
     - name: ApiHandler
       collectors:
         - type: className
@@ -160,17 +165,22 @@ parameters:
       - UIException
       - Model
 
-    Api:
-      - InternalException
-      - Contract
+    ApiQuery:
       - Model
+      - Contract
+
+    Api:
+      - Model
+      - ApiQuery
+      - InternalException
 
     ApiHandler:
-      - InternalException
-      - ServiceInterface
-      - Contract
-      - Model
       - Api
+      - Model
+      - ApiQuery
+      - Contract
+      - ServiceInterface
+      - InternalException
 
     UI:
       - AssemblerDtoInterface # delete as soon as possible

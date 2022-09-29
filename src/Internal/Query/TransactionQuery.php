@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Query;
 
-/** @psalm-immutable */
+/**
+ * @psalm-immutable
+ * @internal
+ */
 final class TransactionQuery implements TransactionQueryInterface
 {
     /**

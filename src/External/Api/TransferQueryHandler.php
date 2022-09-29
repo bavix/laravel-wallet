@@ -14,7 +14,7 @@ use Bavix\Wallet\Services\TransferServiceInterface;
 /**
  * @internal
  */
-final class TransferHandler implements TransferHandlerInterface
+final class TransferQueryHandler implements TransferQueryHandlerInterface
 {
     public function __construct(
         private AssistantServiceInterface $assistantService,
@@ -26,17 +26,17 @@ final class TransferHandler implements TransferHandlerInterface
 
     public function apply(array $objects): array
     {
-        $wallets = $this->assistantService->getUniqueWallets(
-            array_map(static fn (array $object): Wallet => $object['from'], $objects),
+        $wallets = $this->assistantService->getWallets(
+            array_map(static fn (TransferQuery $query): Wallet => $query->getFrom(), $objects),
         );
 
         $values = array_map(
-            fn (array $object) => $this->prepareService->transferLazy(
-                $object['from'],
-                $object['to'],
+            fn (TransferQuery $query) => $this->prepareService->transferLazy(
+                $query->getFrom(),
+                $query->getTo(),
                 Transfer::STATUS_TRANSFER,
-                $object['amount'],
-                $object['meta'] ?? null,
+                $query->getAmount(),
+                $query->getMeta(),
             ),
             $objects
         );

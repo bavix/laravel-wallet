@@ -15,9 +15,9 @@ interface AssistantServiceInterface
     /**
      * @param non-empty-array<Wallet> $objects
      *
-     * @return non-empty-array<string, Wallet>
+     * @return non-empty-array<int, Wallet>
      */
-    public function getUniqueWallets(array $objects): array;
+    public function getWallets(array $objects): array;
 
     /**
      * Helps to quickly extract the uuid from an object.
