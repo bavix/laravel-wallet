@@ -42,4 +42,26 @@ final class AtomicServiceTest extends TestCase
         self::assertSame(500, $user1->balanceInt);
         self::assertSame(500, $user2->balanceInt);
     }
+
+    public function testBlockIter3(): void
+    {
+        $atomicService = app(AtomicServiceInterface::class);
+
+        /** @var Buyer $user */
+        $user = BuyerFactory::new()->create();
+        $iterations = 3;
+
+        self::assertSame(0, $user->balanceInt);
+
+        for ($i = 1; $i <= $iterations; $i++) {
+            $atomicService->block($user, function () use ($user) {
+                $user->forceWithdraw(1000);
+                $user->forceWithdraw(1000);
+                $user->forceWithdraw(1000);
+                $user->deposit(5000);
+            });
+        }
+
+        self::assertSame($iterations * 2000, $user->balanceInt);
+    }
 }
