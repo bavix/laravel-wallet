@@ -24,6 +24,11 @@ interface WalletRepositoryInterface
      */
     public function create(array $attributes): Wallet;
 
+    /**
+     * @param array<int, string|float|int> $data
+     */
+    public function updateBalances(array $data): int;
+
     public function findById(int $id): ?Wallet;
 
     public function findByUuid(string $uuid): ?Wallet;

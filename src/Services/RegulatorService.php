@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
+use Bavix\Wallet\Internal\Repository\WalletRepositoryInterface;
 use Bavix\Wallet\Internal\Service\DispatcherServiceInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Internal\Service\StorageServiceInterface;
@@ -26,7 +27,8 @@ final class RegulatorService implements RegulatorServiceInterface
         private BookkeeperServiceInterface $bookkeeperService,
         private DispatcherServiceInterface $dispatcherService,
         private StorageServiceInterface $storageService,
-        private MathServiceInterface $mathService
+        private MathServiceInterface $mathService,
+        private WalletRepositoryInterface $walletRepository
     ) {
     }
 
@@ -87,6 +89,7 @@ final class RegulatorService implements RegulatorServiceInterface
     public function approve(): void
     {
         try {
+            $balances = [];
             foreach ($this->wallets as $wallet) {
                 $diffValue = $this->diff($wallet);
                 if ($this->mathService->compare($diffValue, 0) === 0) {
@@ -94,21 +97,27 @@ final class RegulatorService implements RegulatorServiceInterface
                 }
 
                 $balance = $this->bookkeeperService->increase($wallet, $diffValue);
-                $wallet->newQuery()
-                    ->whereKey($wallet->getKey())
-                    ->update([
-                        'balance' => $balance,
-                    ]) // ?qN
-                ;
-                $wallet->fill([
-                    'balance' => $balance,
-                ])->syncOriginalAttribute('balance');
-
-                $event = $this->balanceUpdatedEventAssembler->create($wallet);
-                $this->dispatcherService->dispatch($event);
+                $balances[$wallet->getKey()] = $balance;
             }
-            $this->dispatcherService->flush();
+
+            if (count($balances) === 0) {
+                return;
+            }
+
+            $this->walletRepository->updateBalances($balances);
+
+            foreach ($this->wallets as $wallet) {
+                if ($balances[$wallet->getKey()] ?? false) {
+                    $wallet->fill([
+                        'balance' => $balances[$wallet->getKey()],
+                    ])->syncOriginalAttribute('balance');
+
+                    $event = $this->balanceUpdatedEventAssembler->create($wallet);
+                    $this->dispatcherService->dispatch($event);
+                }
+            }
         } finally {
+            $this->dispatcherService->flush();
             $this->purge();
         }
     }
