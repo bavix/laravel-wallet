@@ -28,7 +28,7 @@ interface TransferServiceInterface
      * @throws TransactionFailedException
      * @throws ExceptionInterface
      *
-     * @return non-empty-array<Transfer>
+     * @return non-empty-array<string, Transfer>
      */
     public function apply(array $objects): array;
 }
