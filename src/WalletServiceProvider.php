@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Bavix\Wallet;
 
 use Bavix\Wallet\Commands\TransferFixCommand;
+use Bavix\Wallet\External\Api\TransactionHandler;
+use Bavix\Wallet\External\Api\TransactionHandlerInterface;
+use Bavix\Wallet\External\Api\TransferHandler;
+use Bavix\Wallet\External\Api\TransferHandlerInterface;
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssembler;
@@ -389,5 +393,9 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->bind(Transaction::class, $configure['transaction']['model'] ?? null);
         $this->app->bind(Transfer::class, $configure['transfer']['model'] ?? null);
         $this->app->bind(Wallet::class, $configure['wallet']['model'] ?? null);
+
+        // api
+        $this->app->bind(TransactionHandlerInterface::class, TransactionHandler::class);
+        $this->app->bind(TransferHandlerInterface::class, TransferHandler::class);
     }
 }

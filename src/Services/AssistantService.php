@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Interfaces\ProductInterface;
+use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
@@ -16,8 +17,25 @@ use Bavix\Wallet\Internal\Service\MathServiceInterface;
 final class AssistantService implements AssistantServiceInterface
 {
     public function __construct(
+        private CastServiceInterface $castService,
         private MathServiceInterface $mathService
     ) {
+    }
+
+    /**
+     * @param non-empty-array<Wallet> $objects
+     *
+     * @return non-empty-array<string, Wallet>
+     */
+    public function getUniqueWallets(array $objects): array
+    {
+        $wallets = [];
+        foreach ($objects as $object) {
+            $wallet = $this->castService->getWallet($object);
+            $wallets[$wallet->uuid] = $wallet;
+        }
+
+        return $wallets;
     }
 
     /**
