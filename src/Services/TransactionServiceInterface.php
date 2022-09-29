@@ -27,7 +27,7 @@ interface TransactionServiceInterface
     ): Transaction;
 
     /**
-     * @param non-empty-array<int|string, Wallet>           $wallets
+     * @param non-empty-array<int, Wallet> $wallets
      * @param non-empty-array<int, TransactionDtoInterface> $objects
      *
      * @throws LockProviderNotFoundException
