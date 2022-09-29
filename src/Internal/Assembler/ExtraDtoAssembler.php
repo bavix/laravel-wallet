@@ -9,8 +9,9 @@ use Bavix\Wallet\External\Dto\Extra;
 
 final class ExtraDtoAssembler implements ExtraDtoAssemblerInterface
 {
-    public function __construct(private OptionDtoAssemblerInterface $optionDtoAssembler)
-    {
+    public function __construct(
+        private OptionDtoAssemblerInterface $optionDtoAssembler
+    ) {
     }
 
     public function create(ExtraDtoInterface|array|null $data): ExtraDtoInterface
