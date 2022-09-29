@@ -6,6 +6,7 @@ use PhpCsFixer\Fixer\ArrayNotation\ArraySyntaxFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitTestClassRequiresCoversFixer;
 use PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer;
+use Symplify\CodingStandard\Fixer\LineLength\DocBlockLineLengthFixer;
 use Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Option;
@@ -33,6 +34,7 @@ return static function (ECSConfig $containerConfigurator): void {
     ]);
 
     $containerConfigurator->skip([
+        DocBlockLineLengthFixer::class,
         GeneralPhpdocAnnotationRemoveFixer::class,
         PhpUnitTestClassRequiresCoversFixer::class,
     ]);

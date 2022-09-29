@@ -13,7 +13,19 @@ parameters:
         - type: className
           regex: ^Bavix\\Wallet\\Interfaces\\.*
         - type: className
-          regex: ^Bavix\\Wallet\\External\\.*
+          regex: ^Bavix\\Wallet\\External\\Contracts\\.*
+        - type: className
+          regex: ^Bavix\\Wallet\\External\\Dto\\.*
+
+    - name: Api
+      collectors:
+        - type: className
+          regex: ^Bavix\\Wallet\\External\\Api\\.*Interface$
+
+    - name: ApiHandler
+      collectors:
+        - type: className
+          regex: ^Bavix\\Wallet\\External\\Api\\.*Handler$
 
     - name: UI
       collectors:
@@ -147,6 +159,18 @@ parameters:
       - DtoInterface
       - UIException
       - Model
+
+    Api:
+      - InternalException
+      - Contract
+      - Model
+
+    ApiHandler:
+      - InternalException
+      - ServiceInterface
+      - Contract
+      - Model
+      - Api
 
     UI:
       - AssemblerDtoInterface # delete as soon as possible

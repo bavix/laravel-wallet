@@ -5,12 +5,20 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Interfaces\ProductInterface;
+use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
 
 interface AssistantServiceInterface
 {
+    /**
+     * @param non-empty-array<Wallet> $objects
+     *
+     * @return non-empty-array<string, Wallet>
+     */
+    public function getUniqueWallets(array $objects): array;
+
     /**
      * Helps to quickly extract the uuid from an object.
      *
