@@ -96,7 +96,7 @@ final class RegulatorService implements RegulatorServiceInterface
                     continue;
                 }
 
-                $balance = $this->bookkeeperService->increase($wallet, $diffValue);
+                $balance = $this->bookkeeperService->increase($wallet, $diffValue); // ?qN
                 $balances[$wallet->getKey()] = $balance;
             }
 
