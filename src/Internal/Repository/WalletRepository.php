@@ -25,14 +25,10 @@ final class WalletRepository implements WalletRepositoryInterface
     }
 
     /**
-     * @param array<int, string|float|int> $data
+     * @param non-empty-array<int, string|float|int> $data
      */
     public function updateBalances(array $data): int
     {
-        if ($data === []) {
-            return 0;
-        }
-
         $cases = [];
         foreach ($data as $walletId => $balance) {
             $cases[] = 'WHEN id = ' . $walletId . ' THEN ' . $balance;

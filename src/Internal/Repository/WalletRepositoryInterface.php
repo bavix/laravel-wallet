@@ -25,7 +25,7 @@ interface WalletRepositoryInterface
     public function create(array $attributes): Wallet;
 
     /**
-     * @param array<int, string|float|int> $data
+     * @param non-empty-array<int, string|float|int> $data
      */
     public function updateBalances(array $data): int;
 
