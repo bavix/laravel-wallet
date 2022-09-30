@@ -46,11 +46,6 @@ parameters:
 			path: src/Internal/Service/StateService.php
 
 		-
-			message: "#^Parameter \\#1 \\$number of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:round\\(\\) expects float\\|int\\|string, mixed given\\.$#"
-			count: 1
-			path: src/Internal/Service/StorageService.php
-
-		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:where\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Wallet.php

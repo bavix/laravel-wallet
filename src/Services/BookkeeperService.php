@@ -23,7 +23,7 @@ final class BookkeeperService implements BookkeeperServiceInterface
 
     public function missing(Wallet $wallet): bool
     {
-        return $this->storageService->missing($this->getKey($wallet));
+        return $this->storageService->missing($wallet->uuid);
     }
 
     /**
@@ -32,21 +32,16 @@ final class BookkeeperService implements BookkeeperServiceInterface
      */
     public function amount(Wallet $wallet): string
     {
-        try {
-            return $this->storageService->get($this->getKey($wallet));
-        } catch (RecordNotFoundException) {
-            $this->lockService->block(
-                $this->getKey($wallet),
-                fn () => $this->sync($wallet, $wallet->getOriginalBalanceAttribute()),
-            );
-        }
-
-        return $this->storageService->get($this->getKey($wallet));
+        return current($this->multiAmount([
+            $wallet->uuid => $wallet,
+        ]));
     }
 
     public function sync(Wallet $wallet, float|int|string $value): bool
     {
-        return $this->storageService->sync($this->getKey($wallet), $value);
+        return $this->multiSync([
+            $wallet->uuid => $value,
+        ]);
     }
 
     /**
@@ -55,17 +50,74 @@ final class BookkeeperService implements BookkeeperServiceInterface
      */
     public function increase(Wallet $wallet, float|int|string $value): string
     {
-        try {
-            return $this->storageService->increase($this->getKey($wallet), $value);
-        } catch (RecordNotFoundException) {
-            $this->amount($wallet);
-        }
-
-        return $this->storageService->increase($this->getKey($wallet), $value);
+        return current($this->multiIncrease([
+            $wallet->uuid => $wallet,
+        ], [
+            $wallet->uuid => $value,
+        ]));
     }
 
-    private function getKey(Wallet $wallet): string
+    /**
+     * @param non-empty-array<string, Wallet> $wallets
+     *
+     * @return non-empty-array<string, string>
+     */
+    public function multiAmount(array $wallets): array
     {
-        return $wallet->uuid;
+        try {
+            return $this->storageService->multiGet(array_keys($wallets));
+        } catch (RecordNotFoundException $recordNotFoundException) {
+            $this->lockService->blocks(
+                $recordNotFoundException->getMissingKeys(),
+                function () use ($wallets, $recordNotFoundException) {
+                    $balances = [];
+                    foreach ($recordNotFoundException->getMissingKeys() as $uuid) {
+                        $balances[$uuid] = $wallets[$uuid]->getOriginalBalanceAttribute();
+                    }
+
+                    if ($balances !== []) {
+                        $this->multiSync($balances);
+                    }
+                }
+            );
+        }
+
+        return $this->storageService->multiGet(array_keys($wallets));
+    }
+
+    /**
+     * @param non-empty-array<string, float|int|string> $balances
+     *
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     */
+    public function multiSync(array $balances): bool
+    {
+        return $this->storageService->multiSync($balances);
+    }
+
+    /**
+     * @param non-empty-array<string, Wallet> $wallets
+     * @param non-empty-array<string, float|int|string> $incrementValues
+     *
+     * @return  non-empty-array<string, string>
+     *
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     */
+    public function multiIncrease(array $wallets, array $incrementValues): array
+    {
+        try {
+            return $this->storageService->multiIncrease($incrementValues);
+        } catch (RecordNotFoundException $recordNotFoundException) {
+            $objects = [];
+            foreach ($recordNotFoundException->getMissingKeys() as $uuid) {
+                $objects[$uuid] = $wallets[$uuid];
+            }
+
+            $this->multiAmount($objects);
+        }
+
+        return $this->storageService->multiIncrease($incrementValues);
     }
 }
