@@ -46,4 +46,24 @@ final class BookkeeperTest extends TestCase
         self::assertTrue($booker->missing($buyer->wallet));
         self::assertSame('0', $booker->amount($buyer->wallet));
     }
+
+    public function testMultiIncrease(): void
+    {
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+
+        $booker = app(BookkeeperService::class);
+        self::assertSame(
+            [
+                $buyer->wallet->uuid => '5',
+            ],
+            $booker->multiIncrease([
+                $buyer->wallet->uuid => $buyer->wallet,
+            ], [
+                $buyer->wallet->uuid => 5,
+            ]),
+        );
+        self::assertTrue($booker->missing($buyer->wallet));
+        self::assertSame('0', $booker->amount($buyer->wallet));
+    }
 }

@@ -18,7 +18,7 @@ use Bavix\Wallet\Models\Wallet;
 final class RegulatorService implements RegulatorServiceInterface
 {
     /**
-     * @var Wallet[]
+     * @var array<string, Wallet>
      */
     private array $wallets = [];
 
@@ -89,32 +89,36 @@ final class RegulatorService implements RegulatorServiceInterface
     public function approve(): void
     {
         try {
-            $balances = [];
+            $incrementValues = [];
             foreach ($this->wallets as $wallet) {
                 $diffValue = $this->diff($wallet);
                 if ($this->mathService->compare($diffValue, 0) === 0) {
                     continue;
                 }
 
-                $balance = $this->bookkeeperService->increase($wallet, $diffValue); // ?qN
-                $balances[$wallet->getKey()] = $balance;
+                $incrementValues[$wallet->uuid] = $diffValue;
             }
 
-            if ($balances === []) {
+            if ($incrementValues === [] || $this->wallets === []) {
                 return;
             }
 
+            $balances = [];
+            $balanceByUuids = $this->bookkeeperService->multiIncrease($this->wallets, $incrementValues);
+            foreach ($balanceByUuids as $uuid => $balance) {
+                $balances[$this->wallets[$uuid]->getKey()] = $balance;
+            }
+
             $this->walletRepository->updateBalances($balances);
+            foreach ($balanceByUuids as $uuid => $balance) {
+                $wallet = $this->wallets[$uuid];
 
-            foreach ($this->wallets as $wallet) {
-                if ($balances[$wallet->getKey()] ?? false) {
-                    $wallet->fill([
-                        'balance' => $balances[$wallet->getKey()],
-                    ])->syncOriginalAttribute('balance');
+                $wallet->fill([
+                    'balance' => $balance,
+                ])->syncOriginalAttribute('balance');
 
-                    $event = $this->balanceUpdatedEventAssembler->create($wallet);
-                    $this->dispatcherService->dispatch($event);
-                }
+                $event = $this->balanceUpdatedEventAssembler->create($wallet);
+                $this->dispatcherService->dispatch($event);
             }
         } finally {
             $this->dispatcherService->flush();

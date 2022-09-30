@@ -33,12 +33,14 @@ final class StorageServiceLockDecorator implements StorageServiceInterface
 
     public function get(string $uuid): string
     {
-        return $this->stateService->get($uuid) ?? $this->storageService->get($uuid);
+        return current($this->multiGet([$uuid]));
     }
 
     public function sync(string $uuid, float|int|string $value): bool
     {
-        return $this->storageService->sync($uuid, $value);
+        return $this->multiSync([
+            $uuid => $value,
+        ]);
     }
 
     /**
@@ -47,11 +49,51 @@ final class StorageServiceLockDecorator implements StorageServiceInterface
      */
     public function increase(string $uuid, float|int|string $value): string
     {
-        return $this->lockService->block($uuid, function () use ($uuid, $value): string {
-            $result = $this->mathService->add($this->get($uuid), $value);
-            $this->sync($uuid, $result);
+        return current($this->multiIncrease([
+            $uuid => $value,
+        ]));
+    }
 
-            return $this->mathService->round($result);
+    public function multiGet(array $uuids): array
+    {
+        $missingKeys = [];
+        $results = [];
+        foreach ($uuids as $uuid) {
+            $item = $this->stateService->get($uuid);
+            if ($item === null) {
+                $missingKeys[] = $uuid;
+                continue;
+            }
+
+            $results[$uuid] = $item;
+        }
+
+        if ($missingKeys !== []) {
+            $results = array_merge($results, $this->storageService->multiGet($missingKeys));
+        }
+
+        assert($results !== []);
+
+        return $results;
+    }
+
+    public function multiSync(array $inputs): bool
+    {
+        return $this->storageService->multiSync($inputs);
+    }
+
+    public function multiIncrease(array $inputs): array
+    {
+        return $this->lockService->blocks(array_keys($inputs), function () use ($inputs): array {
+            $newInputs = [];
+            $values = $this->multiGet(array_keys($inputs));
+            foreach ($values as $uuid => $value) {
+                $newInputs[$uuid] = $this->mathService->round($this->mathService->add($value, $inputs[$uuid]));
+            }
+
+            assert($this->multiSync($newInputs));
+
+            return $newInputs;
         });
     }
 }

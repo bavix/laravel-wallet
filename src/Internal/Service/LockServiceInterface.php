@@ -18,5 +18,16 @@ interface LockServiceInterface
      */
     public function block(string $key, callable $callback): mixed;
 
+    /**
+     * @template T
+     * @param string[] $keys
+     * @param callable(): T $callback
+     *
+     * @return T
+     *
+     * @throws LockProviderNotFoundException
+     */
+    public function blocks(array $keys, callable $callback): mixed;
+
     public function isBlocked(string $key): bool;
 }

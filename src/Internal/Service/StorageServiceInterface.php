@@ -25,4 +25,31 @@ interface StorageServiceInterface
      * @throws RecordNotFoundException
      */
     public function increase(string $uuid, float|int|string $value): string;
+
+    /**
+     * @param non-empty-array<string> $uuids
+     *
+     * @return non-empty-array<string, string>
+     *
+     * @throws RecordNotFoundException
+     */
+    public function multiGet(array $uuids): array;
+
+    /**
+     * @param non-empty-array<string, float|int|string> $inputs
+     *
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     */
+    public function multiSync(array $inputs): bool;
+
+    /**
+     * @param non-empty-array<string, float|int|string> $inputs
+     *
+     * @return non-empty-array<string, string>
+     *
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     */
+    public function multiIncrease(array $inputs): array;
 }
