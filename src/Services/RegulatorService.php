@@ -100,7 +100,7 @@ final class RegulatorService implements RegulatorServiceInterface
                 $balances[$wallet->getKey()] = $balance;
             }
 
-            if (count($balances) === 0) {
+            if ($balances === []) {
                 return;
             }
 
