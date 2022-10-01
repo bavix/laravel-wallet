@@ -83,11 +83,7 @@ final class BookkeeperService implements BookkeeperServiceInterface
 
     public function multiSync(array $balances): bool
     {
-        foreach ($balances as $uuid => $balance) {
-            $this->storageService->sync($uuid, $balance);
-        }
-
-        return true;
+        return $this->storageService->multiSync($balances);
     }
 
     public function multiIncrease(array $wallets, array $incrementValues): array
