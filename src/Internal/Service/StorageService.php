@@ -68,7 +68,14 @@ final class StorageService implements StorageServiceInterface
 
         $results = [];
         $missingKeys = [];
-        $values = $this->cacheRepository->getMultiple(array_keys($keys));
+        if (count($keys) === 1) {
+            $values = [
+                key($keys) => $this->cacheRepository->get(key($keys)),
+            ];
+        } else {
+            $values = $this->cacheRepository->getMultiple(array_keys($keys));
+        }
+
         foreach ($values as $key => $value) {
             $uuid = $keys[$key];
             if ($value === null) {
