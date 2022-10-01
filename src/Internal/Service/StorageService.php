@@ -39,7 +39,7 @@ final class StorageService implements StorageServiceInterface
 
     public function sync(string $uuid, float|int|string $value): bool
     {
-        return $this->cacheRepository->forever(self::PREFIX . $uuid, $this->mathService->round($value));
+        return $this->multiSync([$uuid => $value]);
     }
 
     /**
