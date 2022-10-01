@@ -120,18 +120,21 @@ final class StorageService implements StorageServiceInterface
      *
      * @param T $inputs
      *
-     * @return non-empty-array<value-of<T>, string>
+     * @return non-empty-array<key-of<T>, string>
      *
      * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      */
     public function multiIncrease(array $inputs): array
     {
-        $results = [];
-        foreach ($inputs as $uuid => $value) {
-            $results[$uuid] = $this->increase($uuid, $value);
+        $newInputs = [];
+        $multiGet = $this->multiGet(array_keys($inputs));
+        foreach ($multiGet as $uuid => $value) {
+            $newInputs[$uuid] = $this->mathService->round($this->mathService->add($value, $inputs[$uuid]));
         }
 
-        return $results;
+        $this->multiSync($newInputs);
+
+        return $newInputs;
     }
 }
