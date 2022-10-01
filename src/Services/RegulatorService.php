@@ -89,37 +89,50 @@ final class RegulatorService implements RegulatorServiceInterface
     public function approve(): void
     {
         try {
-            $incrementValues = [];
+            $balances = [];
+//            $incrementValues = [];
             foreach ($this->wallets as $wallet) {
                 $diffValue = $this->diff($wallet);
                 if ($this->mathService->compare($diffValue, 0) === 0) {
                     continue;
                 }
 
-                $incrementValues[$wallet->uuid] = $diffValue;
+//                $incrementValues[$wallet->uuid] = $diffValue;
+                $balance = $this->bookkeeperService->increase($wallet, $diffValue); // ?qN
+                $balances[$wallet->getKey()] = $balance;
+            }
+            foreach ($this->wallets as $wallet) {
+                if ($balances[$wallet->getKey()] ?? false) {
+                    $wallet->fill([
+                        'balance' => $balances[$wallet->getKey()],
+                    ])->syncOriginalAttribute('balance');
+
+                    $event = $this->balanceUpdatedEventAssembler->create($wallet);
+                    $this->dispatcherService->dispatch($event);
+                }
             }
 
-            if ($incrementValues === [] || $this->wallets === []) {
-                return;
-            }
-
-            $balances = [];
-            $balanceByUuids = $this->bookkeeperService->multiIncrease($this->wallets, $incrementValues);
-            foreach ($balanceByUuids as $uuid => $balance) {
-                $balances[$this->wallets[$uuid]->getKey()] = $balance;
-            }
-
-            $this->walletRepository->updateBalances($balances);
-            foreach ($balanceByUuids as $uuid => $balance) {
-                $wallet = $this->wallets[$uuid];
-
-                $wallet->fill([
-                    'balance' => $balance,
-                ])->syncOriginalAttribute('balance');
-
-                $event = $this->balanceUpdatedEventAssembler->create($wallet);
-                $this->dispatcherService->dispatch($event);
-            }
+//            if ($incrementValues === [] || $this->wallets === []) {
+//                return;
+//            }
+//
+//            $balances = [];
+//            $balanceByUuids = $this->bookkeeperService->multiIncrease($this->wallets, $incrementValues);
+//            foreach ($balanceByUuids as $uuid => $balance) {
+//                $balances[$this->wallets[$uuid]->getKey()] = $balance;
+//            }
+//
+//            $this->walletRepository->updateBalances($balances);
+//            foreach ($balanceByUuids as $uuid => $balance) {
+//                $wallet = $this->wallets[$uuid];
+//
+//                $wallet->fill([
+//                    'balance' => $balance,
+//                ])->syncOriginalAttribute('balance');
+//
+//                $event = $this->balanceUpdatedEventAssembler->create($wallet);
+//                $this->dispatcherService->dispatch($event);
+//            }
         } finally {
             $this->dispatcherService->flush();
             $this->purge();
