@@ -32,16 +32,7 @@ final class BookkeeperService implements BookkeeperServiceInterface
      */
     public function amount(Wallet $wallet): string
     {
-        try {
-            return $this->storageService->get($wallet->uuid);
-        } catch (RecordNotFoundException) {
-            $this->lockService->block(
-                $wallet->uuid,
-                fn () => $this->sync($wallet, $wallet->getOriginalBalanceAttribute()),
-            );
-        }
-
-        return $this->storageService->get($wallet->uuid);
+        return current($this->multiAmount([$wallet->uuid => $wallet]));
     }
 
     public function sync(Wallet $wallet, float|int|string $value): bool
