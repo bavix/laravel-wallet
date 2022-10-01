@@ -69,7 +69,10 @@ final class StorageServiceLockDecorator implements StorageServiceInterface
         }
 
         if ($missingKeys !== []) {
-            $results = array_merge($results, $this->storageService->multiGet($missingKeys));
+            $foundValues = $this->storageService->multiGet($missingKeys);
+            foreach ($foundValues as $key => $value) {
+                $results[$key] = $value;
+            }
         }
 
         assert($results !== []);
