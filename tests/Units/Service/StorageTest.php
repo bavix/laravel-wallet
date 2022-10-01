@@ -44,4 +44,16 @@ final class StorageTest extends TestCase
 
         $storage->get('hello'); // record not found
     }
+
+    public function testIncreaseDecorator(): void
+    {
+        $storage = app(StorageServiceLockDecorator::class);
+
+        $storage->multiSync([
+            'hello' => 34,
+        ]);
+
+        self::assertSame('34', $storage->get('hello'));
+        self::assertSame('42', $storage->increase('hello', 8));
+    }
 }
