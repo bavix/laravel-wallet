@@ -115,11 +115,14 @@ final class StorageService implements StorageServiceInterface
             $values[self::PREFIX . $uuid] = $this->mathService->round($value);
         }
 
+        /** @var int $ttl */
+        $ttl = config('wallet.cache.ttl');
+
         if (count($values) === 1) {
-            return $this->cacheRepository->forever(key($values), current($values));
+            return $this->cacheRepository->set(key($values), current($values), $ttl);
         }
 
-        return $this->cacheRepository->setMultiple($values, 60 * 60);
+        return $this->cacheRepository->setMultiple($values, $ttl);
     }
 
     /**

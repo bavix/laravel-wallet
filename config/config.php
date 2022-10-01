@@ -66,6 +66,7 @@ return [
      */
     'cache' => [
         'driver' => 'array',
+        'ttl' => 24 * 3600,
     ],
 
     /**
