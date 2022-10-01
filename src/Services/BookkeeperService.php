@@ -92,11 +92,17 @@ final class BookkeeperService implements BookkeeperServiceInterface
 
     public function multiIncrease(array $wallets, array $incrementValues): array
     {
-        $result = [];
-        foreach ($incrementValues as $uuid => $incrementValue) {
-            $result[$uuid] = $this->increase($wallets[$uuid], $incrementValue);
+        try {
+            return $this->storageService->multiIncrease($incrementValues);
+        } catch (RecordNotFoundException $recordNotFoundException) {
+            $objects = [];
+            foreach ($recordNotFoundException->getMissingKeys() as $uuid) {
+                $objects[$uuid] = $wallets[$uuid];
+            }
+
+            $this->multiAmount($objects);
         }
 
-        return $result;
+        return $this->storageService->multiIncrease($incrementValues);
     }
 }
