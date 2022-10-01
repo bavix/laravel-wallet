@@ -47,12 +47,9 @@ final class StorageServiceLockDecorator implements StorageServiceInterface
      */
     public function increase(string $uuid, float|int|string $value): string
     {
-        return $this->lockService->block($uuid, function () use ($uuid, $value): string {
-            $result = $this->mathService->add($this->get($uuid), $value);
-            $this->sync($uuid, $result);
-
-            return $this->mathService->round($result);
-        });
+        return current($this->multiIncrease([
+            $uuid => $value,
+        ]));
     }
 
     public function multiGet(array $uuids): array
