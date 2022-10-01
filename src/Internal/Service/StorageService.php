@@ -39,7 +39,9 @@ final class StorageService implements StorageServiceInterface
 
     public function sync(string $uuid, float|int|string $value): bool
     {
-        return $this->multiSync([$uuid => $value]);
+        return $this->multiSync([
+            $uuid => $value,
+        ]);
     }
 
     /**
@@ -47,7 +49,9 @@ final class StorageService implements StorageServiceInterface
      */
     public function increase(string $uuid, float|int|string $value): string
     {
-        return current($this->multiIncrease([$uuid => $value]));
+        return current($this->multiIncrease([
+            $uuid => $value,
+        ]));
     }
 
     /**
@@ -63,10 +67,9 @@ final class StorageService implements StorageServiceInterface
     {
         $keys = [];
         foreach ($uuids as $uuid) {
-            $keys[self::PREFIX.$uuid] = $uuid;
+            $keys[self::PREFIX . $uuid] = $uuid;
         }
 
-        $results = [];
         $missingKeys = [];
         if (count($keys) === 1) {
             $values = [
@@ -76,6 +79,7 @@ final class StorageService implements StorageServiceInterface
             $values = $this->cacheRepository->getMultiple(array_keys($keys));
         }
 
+        $results = [];
         foreach ($values as $key => $value) {
             $uuid = $keys[$key];
             if ($value === null) {
@@ -104,7 +108,7 @@ final class StorageService implements StorageServiceInterface
     {
         $values = [];
         foreach ($inputs as $uuid => $value) {
-            $values[self::PREFIX.$uuid] = $this->mathService->round($value);
+            $values[self::PREFIX . $uuid] = $this->mathService->round($value);
         }
 
         if (count($values) === 1) {

@@ -32,12 +32,16 @@ final class BookkeeperService implements BookkeeperServiceInterface
      */
     public function amount(Wallet $wallet): string
     {
-        return current($this->multiAmount([$wallet->uuid => $wallet]));
+        return current($this->multiAmount([
+            $wallet->uuid => $wallet,
+        ]));
     }
 
     public function sync(Wallet $wallet, float|int|string $value): bool
     {
-        return $this->multiSync([$wallet->uuid => $value]);
+        return $this->multiSync([
+            $wallet->uuid => $value,
+        ]);
     }
 
     /**
@@ -46,7 +50,11 @@ final class BookkeeperService implements BookkeeperServiceInterface
      */
     public function increase(Wallet $wallet, float|int|string $value): string
     {
-        return current($this->multiIncrease([$wallet->uuid => $wallet], [$wallet->uuid => $value]));
+        return current($this->multiIncrease([
+            $wallet->uuid => $wallet,
+        ], [
+            $wallet->uuid => $value,
+        ]));
     }
 
     public function multiAmount(array $wallets): array

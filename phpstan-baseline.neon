@@ -46,6 +46,11 @@ parameters:
 			path: src/Internal/Service/StateService.php
 
 		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageService\\:\\:multiGet\\(\\) should return non\\-empty\\-array\\<string, string\\> but returns array\\<string, string\\>\\.$#"
+			count: 1
+			path: src/Internal/Service/StorageService.php
+
+		-
 			message: "#^Parameter \\#1 \\$number of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:round\\(\\) expects float\\|int\\|string, mixed given\\.$#"
 			count: 1
 			path: src/Internal/Service/StorageService.php
