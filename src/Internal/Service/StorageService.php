@@ -47,10 +47,7 @@ final class StorageService implements StorageServiceInterface
      */
     public function increase(string $uuid, float|int|string $value): string
     {
-        $result = $this->mathService->add($this->get($uuid), $value);
-        $this->sync($uuid, $this->mathService->round($result));
-
-        return $this->mathService->round($result);
+        return current($this->multiIncrease([$uuid => $value]));
     }
 
     /**
