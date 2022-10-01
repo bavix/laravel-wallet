@@ -37,9 +37,6 @@ interface StorageServiceInterface
 
     /**
      * @param non-empty-array<string, float|int|string> $inputs
-     *
-     * @throws LockProviderNotFoundException
-     * @throws RecordNotFoundException
      */
     public function multiSync(array $inputs): bool;
 
