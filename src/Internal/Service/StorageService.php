@@ -119,7 +119,7 @@ final class StorageService implements StorageServiceInterface
             return $this->cacheRepository->forever(key($values), current($values));
         }
 
-        return $this->cacheRepository->setMultiple($values, 60*60);
+        return $this->cacheRepository->setMultiple($values, 60 * 60);
     }
 
     /**

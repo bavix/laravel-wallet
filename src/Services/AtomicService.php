@@ -57,12 +57,8 @@ final class AtomicService implements AtomicServiceInterface
             return $this->databaseService->transaction($callback);
         };
 
-        foreach (array_keys($blockObjects) as $uuid) {
-            $callable = fn () => $this->lockService->block($uuid, $callable);
-        }
-
         try {
-            return $callable();
+            return $this->lockService->blocks(array_keys($blockObjects), $callable);
         } finally {
             foreach (array_keys($blockObjects) as $uuid) {
                 $this->stateService->drop($uuid);
