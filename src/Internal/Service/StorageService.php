@@ -73,9 +73,30 @@ final class StorageService implements StorageServiceInterface
      */
     public function multiGet(array $uuids): array
     {
-        $results = [];
+        $keys = [];
         foreach ($uuids as $uuid) {
-            $results[$uuid] = $this->get($uuid);
+            $keys[self::PREFIX.$uuid] = $uuid;
+        }
+
+        $results = [];
+        $missingKeys = [];
+        $values = $this->cacheRepository->getMultiple(array_keys($keys));
+        foreach ($values as $key => $value) {
+            $uuid = $keys[$key];
+            if ($value === null) {
+                $missingKeys[] = $uuid;
+                continue;
+            }
+
+            $results[$uuid] = $this->mathService->round($value);
+        }
+
+        if ($missingKeys !== []) {
+            throw new RecordNotFoundException(
+                'The repository did not find the object',
+                ExceptionInterface::RECORD_NOT_FOUND,
+                $missingKeys
+            );
         }
 
         return $results;
