@@ -107,6 +107,10 @@ final class StorageService implements StorageServiceInterface
             $values[self::PREFIX.$uuid] = $this->mathService->round($value);
         }
 
+        if (count($values) === 1) {
+            return $this->cacheRepository->forever(key($values), current($values));
+        }
+
         return $this->cacheRepository->setMultiple($values);
     }
 
