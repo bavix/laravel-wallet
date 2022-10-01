@@ -64,13 +64,6 @@ final class BookkeeperService implements BookkeeperServiceInterface
         return $this->storageService->increase($wallet->uuid, $value);
     }
 
-    /**
-     * @template T of non-empty-array<string, Wallet>
-     *
-     * @param T $wallets
-     *
-     * @return non-empty-array<key-of<T>, string>
-     */
     public function multiAmount(array $wallets): array
     {
         try {
