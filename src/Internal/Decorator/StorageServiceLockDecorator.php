@@ -38,7 +38,9 @@ final class StorageServiceLockDecorator implements StorageServiceInterface
 
     public function sync(string $uuid, float|int|string $value): bool
     {
-        return $this->storageService->sync($uuid, $value);
+        return $this->multiSync([
+            $uuid => $value,
+        ]);
     }
 
     /**
