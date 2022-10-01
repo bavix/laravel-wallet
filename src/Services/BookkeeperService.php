@@ -75,9 +75,7 @@ final class BookkeeperService implements BookkeeperServiceInterface
                         $balances[$uuid] = $wallets[$uuid]->getOriginalBalanceAttribute();
                     }
 
-                    if ($balances !== []) {
-                        $this->multiSync($balances);
-                    }
+                    $this->multiSync($balances);
                 }
             );
         }
