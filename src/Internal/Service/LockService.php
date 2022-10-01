@@ -51,6 +51,27 @@ final class LockService implements LockServiceInterface
         }
     }
 
+    /**
+     * @template T
+     * @param string[] $keys
+     * @param callable(): T $callback
+     *
+     * @return T
+     *
+     * @throws LockProviderNotFoundException
+     */
+    public function blocks(array $keys, callable $callback): mixed
+    {
+        $callable = $callback;
+        foreach ($keys as $key) {
+            if (!$this->isBlocked($key)) {
+                $callable = fn () => $this->block($key, $callable);
+            }
+        }
+
+        return $callable();
+    }
+
     public function isBlocked(string $key): bool
     {
         return $this->lockedKeys->get(self::INNER_KEYS . $key) === true;

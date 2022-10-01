@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Internal\Service;
 
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
@@ -58,5 +59,56 @@ final class StorageService implements StorageServiceInterface
         $this->sync($uuid, $this->mathService->round($result));
 
         return $this->mathService->round($result);
+    }
+
+    /**
+     * @template T of non-empty-array<string>
+     *
+     * @param T $uuids
+     *
+     * @return non-empty-array<value-of<T>, string>
+     *
+     * @throws RecordNotFoundException
+     */
+    public function multiGet(array $uuids): array
+    {
+        $results = [];
+        foreach ($uuids as $uuid) {
+            $results[$uuid] = $this->get($uuid);
+        }
+
+        return $results;
+    }
+
+    /**
+     * @param non-empty-array<string, float|int|string> $inputs
+     */
+    public function multiSync(array $inputs): bool
+    {
+        foreach ($inputs as $uuid => $value) {
+            $this->sync($uuid, $value);
+        }
+
+        return true;
+    }
+
+    /**
+     * @template T of non-empty-array<string, float|int|string>
+     *
+     * @param T $inputs
+     *
+     * @return non-empty-array<value-of<T>, string>
+     *
+     * @throws LockProviderNotFoundException
+     * @throws RecordNotFoundException
+     */
+    public function multiIncrease(array $inputs): array
+    {
+        $results = [];
+        foreach ($inputs as $uuid => $value) {
+            $results[$uuid] = $this->increase($uuid, $value);
+        }
+
+        return $results;
     }
 }
