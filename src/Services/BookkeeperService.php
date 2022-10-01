@@ -37,7 +37,7 @@ final class BookkeeperService implements BookkeeperServiceInterface
 
     public function sync(Wallet $wallet, float|int|string $value): bool
     {
-        return $this->storageService->sync($wallet->uuid, $value);
+        return $this->multiSync([$wallet->uuid => $value]);
     }
 
     /**
