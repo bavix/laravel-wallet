@@ -136,9 +136,10 @@ final class StorageService implements StorageServiceInterface
     public function multiIncrease(array $inputs): array
     {
         $newInputs = [];
-        $multiGet = $this->multiGet(array_keys($inputs));
-        foreach ($multiGet as $uuid => $value) {
-            $newInputs[$uuid] = $this->mathService->round($this->mathService->add($value, $inputs[$uuid]));
+        $uuids = array_keys($inputs);
+        $multiGet = $this->multiGet($uuids);
+        foreach ($uuids as $uuid) {
+            $newInputs[$uuid] = $this->mathService->round($this->mathService->add($multiGet[$uuid], $inputs[$uuid]));
         }
 
         $this->multiSync($newInputs);
