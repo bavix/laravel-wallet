@@ -109,7 +109,7 @@ final class StorageService implements StorageServiceInterface
     {
         $values = [];
         foreach ($inputs as $uuid => $value) {
-            $values[self::PREFIX . $uuid] = $value;
+            $values[self::PREFIX . $uuid] = $this->mathService->round($value);
         }
 
         if (count($values) === 1) {
