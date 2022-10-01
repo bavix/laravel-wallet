@@ -47,7 +47,7 @@ interface StorageServiceInterface
      *
      * @param T $inputs
      *
-     * @return non-empty-array<value-of<T>, string>
+     * @return non-empty-array<key-of<T>, string>
      *
      * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
