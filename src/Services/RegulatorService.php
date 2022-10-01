@@ -109,7 +109,7 @@ final class RegulatorService implements RegulatorServiceInterface
                 $balances[$this->wallets[$uuid]->getKey()] = $balance;
             }
 
-            $this->walletRepository->updateBalances($balances);
+            assert($this->walletRepository->updateBalances($balances) === count($balances), 'updateBalances');
             foreach ($balanceByUuids as $uuid => $balance) {
                 $wallet = $this->wallets[$uuid];
 
