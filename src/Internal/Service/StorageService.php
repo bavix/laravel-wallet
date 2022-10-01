@@ -78,7 +78,7 @@ final class StorageService implements StorageServiceInterface
 //        }
 
         $values = [];
-        foreach ($keys as $key) {
+        foreach (array_keys($keys) as $key) {
             $values[$key] = $this->cacheRepository->get($key);
         }
 
