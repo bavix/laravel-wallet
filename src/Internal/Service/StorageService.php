@@ -115,7 +115,7 @@ final class StorageService implements StorageServiceInterface
 //        $values = [];
         foreach ($inputs as $uuid => $value) {
 //            $values[self::PREFIX . $uuid] = $this->mathService->round($value);
-            $this->cacheRepository->forever(self::PREFIX.$uuid, $value);
+            $this->cacheRepository->forever(self::PREFIX.$uuid, $this->mathService->round($value));
         }
 
         return true;
@@ -140,7 +140,7 @@ final class StorageService implements StorageServiceInterface
         $newInputs = [];
         $multiGet = $this->multiGet(array_keys($inputs));
         foreach ($multiGet as $uuid => $value) {
-            $newInputs[$uuid] = $this->mathService->add($value, $inputs[$uuid]);
+            $newInputs[$uuid] = $this->mathService->round($this->mathService->add($value, $inputs[$uuid]));
         }
 
         assert($this->multiSync($newInputs));
