@@ -107,16 +107,19 @@ final class StorageService implements StorageServiceInterface
      */
     public function multiSync(array $inputs): bool
     {
-        $values = [];
+//        $values = [];
         foreach ($inputs as $uuid => $value) {
-            $values[self::PREFIX . $uuid] = $this->mathService->round($value);
+//            $values[self::PREFIX . $uuid] = $this->mathService->round($value);
+            $this->cacheRepository->forever(self::PREFIX.$uuid, $value);
         }
 
-        if (count($values) === 1) {
-            return $this->cacheRepository->forever(key($values), current($values));
-        }
+        return true;
 
-        return $this->cacheRepository->setMultiple($values);
+//        if (count($values) === 1) {
+//            return $this->cacheRepository->forever(key($values), current($values));
+//        }
+//
+//        return $this->cacheRepository->setMultiple($values);
     }
 
     /**
