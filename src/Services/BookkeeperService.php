@@ -73,12 +73,23 @@ final class BookkeeperService implements BookkeeperServiceInterface
      */
     public function multiAmount(array $wallets): array
     {
-        $results = [];
-        foreach ($wallets as $uuid => $wallet) {
-            $results[$uuid] = $this->amount($wallet);
+        try {
+            return $this->storageService->multiGet(array_keys($wallets));
+        } catch (RecordNotFoundException $recordNotFoundException) {
+            $this->lockService->blocks(
+                $recordNotFoundException->getMissingKeys(),
+                function () use ($wallets, $recordNotFoundException) {
+                    $balances = [];
+                    foreach ($recordNotFoundException->getMissingKeys() as $uuid) {
+                        $balances[$uuid] = $wallets[$uuid]->getOriginalBalanceAttribute();
+                    }
+
+                    $this->multiSync($balances);
+                }
+            );
         }
 
-        return $results;
+        return $this->storageService->multiGet(array_keys($wallets));
     }
 
     public function multiSync(array $balances): bool
