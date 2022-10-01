@@ -34,16 +34,7 @@ final class StorageService implements StorageServiceInterface
      */
     public function get(string $uuid): string
     {
-        $value = $this->cacheRepository->get(self::PREFIX . $uuid);
-        if ($value === null) {
-            throw new RecordNotFoundException(
-                'The repository did not find the object',
-                ExceptionInterface::RECORD_NOT_FOUND,
-                [$uuid]
-            );
-        }
-
-        return $this->mathService->round($value);
+        return current($this->multiGet([$uuid]));
     }
 
     public function sync(string $uuid, float|int|string $value): bool
