@@ -34,7 +34,7 @@ final class StorageService implements StorageServiceInterface
      */
     public function get(string $uuid): string
     {
-        return current($this->multiGet([$uuid]));
+        return $this->multiGet([$uuid])[$uuid];
     }
 
     public function sync(string $uuid, float|int|string $value): bool
@@ -49,9 +49,9 @@ final class StorageService implements StorageServiceInterface
      */
     public function increase(string $uuid, float|int|string $value): string
     {
-        return current($this->multiIncrease([
+        return $this->multiIncrease([
             $uuid => $value,
-        ]));
+        ])[$uuid];
     }
 
     /**
