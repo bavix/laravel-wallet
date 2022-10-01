@@ -38,7 +38,8 @@ final class StorageService implements StorageServiceInterface
         if ($value === null) {
             throw new RecordNotFoundException(
                 'The repository did not find the object',
-                ExceptionInterface::RECORD_NOT_FOUND
+                ExceptionInterface::RECORD_NOT_FOUND,
+                [$uuid]
             );
         }
 

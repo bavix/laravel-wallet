@@ -57,10 +57,26 @@ final class StorageServiceLockDecorator implements StorageServiceInterface
 
     public function multiGet(array $uuids): array
     {
+        $missingKeys = [];
         $results = [];
         foreach ($uuids as $uuid) {
-            $results[$uuid] = $this->get($uuid);
+            $item = $this->stateService->get($uuid);
+            if ($item === null) {
+                $missingKeys[] = $uuid;
+                continue;
+            }
+
+            $results[$uuid] = $item;
         }
+
+        if ($missingKeys !== []) {
+            $foundValues = $this->storageService->multiGet($missingKeys);
+            foreach ($foundValues as $key => $value) {
+                $results[$key] = $value;
+            }
+        }
+
+        assert($results !== []);
 
         return $results;
     }
