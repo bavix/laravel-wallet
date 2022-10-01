@@ -80,6 +80,7 @@ final class StorageService implements StorageServiceInterface
         }
 
         $results = [];
+        /** @var array<float|int|string|null> $values */
         foreach ($values as $key => $value) {
             $uuid = $keys[$key];
             if ($value === null) {
@@ -97,6 +98,8 @@ final class StorageService implements StorageServiceInterface
                 $missingKeys
             );
         }
+
+        assert($results !== []);
 
         return $results;
     }
@@ -137,6 +140,8 @@ final class StorageService implements StorageServiceInterface
         }
 
         $this->multiSync($newInputs);
+
+        assert($newInputs !== []);
 
         return $newInputs;
     }

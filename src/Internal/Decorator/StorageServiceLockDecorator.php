@@ -98,6 +98,8 @@ final class StorageServiceLockDecorator implements StorageServiceInterface
 
             $this->multiSync($results);
 
+            assert($results !== []);
+
             return $results;
         });
     }
