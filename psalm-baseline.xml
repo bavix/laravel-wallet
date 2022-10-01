@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="4.27.0@faf106e717c37b8c81721845dba9de3d8deed8ff">
+  <file src="src/Internal/Decorator/StorageServiceLockDecorator.php">
+    <InvalidReturnStatement occurrences="1"/>
+    <InvalidReturnType occurrences="1">
+      <code>array</code>
+    </InvalidReturnType>
+  </file>
+  <file src="src/Internal/Service/StorageService.php">
+    <InvalidArrayOffset occurrences="1"/>
+    <InvalidReturnStatement occurrences="1">
+      <code>$newInputs</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType occurrences="1">
+      <code>non-empty-array&lt;key-of&lt;T&gt;, string&gt;</code>
+    </InvalidReturnType>
+  </file>
+  <file src="src/Services/BookkeeperService.php">
+    <InvalidReturnStatement occurrences="2">
+      <code>$this-&gt;storageService-&gt;multiGet(array_keys($wallets))</code>
+      <code>$this-&gt;storageService-&gt;multiGet(array_keys($wallets))</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType occurrences="1">
+      <code>array</code>
+    </InvalidReturnType>
+  </file>
+</files>

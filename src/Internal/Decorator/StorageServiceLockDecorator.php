@@ -88,7 +88,7 @@ final class StorageServiceLockDecorator implements StorageServiceInterface
 
     public function multiIncrease(array $inputs): array
     {
-        return $this->lockService->blocks(array_keys($inputs), function () use ($inputs) {
+        return $this->lockService->blocks(array_keys($inputs), function () use ($inputs): array {
             $multiGet = $this->multiGet(array_keys($inputs));
             $results = [];
             foreach ($multiGet as $uuid => $item) {
