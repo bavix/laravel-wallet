@@ -89,9 +89,6 @@ jobs:
         id: git-checkout
         uses: actions/checkout@v3
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-
       - name: Setup PHP
         id: php-install
         uses: shivammathur/setup-php@v2
@@ -141,6 +138,9 @@ jobs:
         id: unit-prepare
         run: |
           mkdir build
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
 
       - name: Run test suite
         id: unit-run
