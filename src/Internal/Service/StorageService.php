@@ -72,9 +72,10 @@ final class StorageService implements StorageServiceInterface
 
         $missingKeys = [];
         if (count($keys) === 1) {
-            $values = [
-                key($keys) => $this->cacheRepository->get(key($keys)),
-            ];
+            $values = [];
+            foreach (array_keys($keys) as $key) {
+                $values[$key] = $this->cacheRepository->get($key);
+            }
         } else {
             $values = $this->cacheRepository->getMultiple(array_keys($keys));
         }
@@ -127,6 +128,7 @@ final class StorageService implements StorageServiceInterface
      * @param T $inputs
      *
      * @return non-empty-array<key-of<T>, string>
+     * @psalm-return non-empty-array<string, string>
      *
      * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
