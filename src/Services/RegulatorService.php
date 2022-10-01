@@ -89,6 +89,7 @@ final class RegulatorService implements RegulatorServiceInterface
     public function approve(): void
     {
         try {
+            $balances = [];
             $incrementValues = [];
             foreach ($this->wallets as $wallet) {
                 $diffValue = $this->diff($wallet);
@@ -97,19 +98,15 @@ final class RegulatorService implements RegulatorServiceInterface
                 }
 
                 $incrementValues[$wallet->uuid] = $diffValue;
+                $balances[$wallet->getKey()] = $this->amount($wallet);
             }
 
-            if ($incrementValues === [] || $this->wallets === []) {
+            if ($balances === [] || $incrementValues === [] || $this->wallets === []) {
                 return;
             }
 
-            $balances = [];
-            $multiIncrease = $this->bookkeeperService->multiIncrease($this->wallets, $incrementValues);
-            foreach ($multiIncrease as $uuid => $item) {
-                $balances[$this->wallets[$uuid]->getKey()] = $item;
-            }
-
             $this->walletRepository->updateBalances($balances);
+            $multiIncrease = $this->bookkeeperService->multiIncrease($this->wallets, $incrementValues);
 
             foreach ($multiIncrease as $uuid => $balance) {
                 $wallet = $this->wallets[$uuid];
