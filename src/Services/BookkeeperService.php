@@ -46,13 +46,7 @@ final class BookkeeperService implements BookkeeperServiceInterface
      */
     public function increase(Wallet $wallet, float|int|string $value): string
     {
-        try {
-            return $this->storageService->increase($wallet->uuid, $value);
-        } catch (RecordNotFoundException) {
-            $this->amount($wallet);
-        }
-
-        return $this->storageService->increase($wallet->uuid, $value);
+        return current($this->multiIncrease([$wallet->uuid => $wallet], [$wallet->uuid => $value]));
     }
 
     public function multiAmount(array $wallets): array
