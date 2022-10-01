@@ -64,7 +64,9 @@ final class LockService implements LockServiceInterface
     {
         $callable = $callback;
         foreach ($keys as $key) {
-            $callable = fn () => $this->block($key, $callable);
+            if (!$this->isBlocked($key)) {
+                $callable = fn () => $this->block($key, $callable);
+            }
         }
 
         return $callable();
