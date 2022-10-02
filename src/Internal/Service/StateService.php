@@ -79,7 +79,7 @@ final class StateService implements StateServiceInterface
     public function drop(string $uuid): void
     {
         $this->forkCallables->forget(self::PREFIX_FORK_CALL . $uuid);
-        $this->forks->forget(self::PREFIX_HASHMAP . $uuid);
+        $this->forkCallables->forget(self::PREFIX_HASHMAP . $uuid);
         $this->forks->forget(self::PREFIX_FORKS . $uuid);
     }
 }
