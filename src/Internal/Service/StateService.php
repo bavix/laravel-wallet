@@ -15,14 +15,11 @@ final class StateService implements StateServiceInterface
 
     private const PREFIX_HASHMAP = 'wallet_hm::';
 
-    private CacheRepository $forks;
-
-    private CacheRepository $forkCallables;
+    private CacheRepository $store;
 
     public function __construct(CacheFactory $cacheFactory)
     {
-        $this->forks = $cacheFactory->store('array');
-        $this->forkCallables = $cacheFactory->store('array');
+        $this->store = $cacheFactory->store('array');
     }
 
     /**
@@ -33,44 +30,50 @@ final class StateService implements StateServiceInterface
     {
         $forks = [];
         foreach ($uuids as $uuid) {
-            if (! $this->forks->has(self::PREFIX_FORKS . $uuid)) {
+            if (! $this->store->has(self::PREFIX_FORKS . $uuid)) {
                 $forks[self::PREFIX_FORK_CALL . $uuid] = $value;
                 $forks[self::PREFIX_HASHMAP . $uuid] = $uuids;
             }
         }
 
         if ($forks !== []) {
-            $this->forkCallables->setMultiple($forks);
+            $this->store->setMultiple($forks);
         }
     }
 
     public function get(string $uuid): ?string
     {
-        $value = $this->forks->get(self::PREFIX_FORKS . $uuid);
+        $value = $this->store->get(self::PREFIX_FORKS . $uuid);
         if ($value !== null) {
             return $value;
         }
 
         /** @var null|callable(): array<string, string> $callable */
-        $callable = $this->forkCallables->pull(self::PREFIX_FORK_CALL . $uuid);
+        $callable = $this->store->pull(self::PREFIX_FORK_CALL . $uuid);
         if ($callable !== null) {
             /** @var array<string> $keys */
-            $keys = $this->forkCallables->pull(self::PREFIX_HASHMAP . $uuid, []);
+            $keys = $this->store->pull(self::PREFIX_HASHMAP . $uuid, []);
+            $deleteKeys = [];
             foreach ($keys as $key) {
-                $this->forkCallables->forget(self::PREFIX_FORK_CALL . $key);
-                $this->forkCallables->forget(self::PREFIX_HASHMAP . $key);
+                $deleteKeys[] = self::PREFIX_FORK_CALL . $key;
+                $deleteKeys[] = self::PREFIX_HASHMAP . $key;
             }
 
+            if ($deleteKeys !== []) {
+                $this->store->deleteMultiple($deleteKeys);
+            }
+
+            $results = $callable();
             $values = [];
-            foreach ($callable() as $key => $value) {
+            foreach ($results as $key => $value) {
                 $values[self::PREFIX_FORKS . $key] = $value;
             }
 
-            if ($values !== []) {
-                $this->forks->setMultiple($values);
-
-                return $this->get($uuid);
+            if (($values !== []) && ! $this->store->setMultiple($values)) {
+                return null;
             }
+
+            return $results[$uuid] ?? null;
         }
 
         return null;
@@ -78,8 +81,10 @@ final class StateService implements StateServiceInterface
 
     public function drop(string $uuid): void
     {
-        $this->forkCallables->forget(self::PREFIX_FORK_CALL . $uuid);
-        $this->forkCallables->forget(self::PREFIX_HASHMAP . $uuid);
-        $this->forks->forget(self::PREFIX_FORKS . $uuid);
+        $this->store->deleteMultiple([
+            self::PREFIX_FORK_CALL . $uuid,
+            self::PREFIX_HASHMAP . $uuid,
+            self::PREFIX_FORKS . $uuid,
+        ]);
     }
 }
