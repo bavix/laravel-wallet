@@ -51,9 +51,16 @@ final class StateService implements StateServiceInterface
         /** @var null|callable(): array<string, string> $callable */
         $callable = $this->forkCallables->pull(self::PREFIX_FORK_CALL . $uuid);
         if ($callable !== null) {
-            $this->forks->setMultiple($callable());
+            $values = [];
+            foreach ($callable() as $key => $value) {
+                $values[self::PREFIX_FORKS . $key] = $value;
+            }
 
-            return $this->get($uuid);
+            if ($values !== []) {
+                $this->forks->setMultiple($values);
+
+                return $this->get($uuid);
+            }
         }
 
         return null;
