@@ -23,6 +23,11 @@
     - [Transfer](wallet-transfer)
     - [Transaction Filter](transaction-filter)
 
+- High performance api handles
+
+  - [Batch transactions](batch-transactions)
+  - [Batch transfers](batch-transfers)
+
 - Nova
 
     - [Change of balance](nova-action)
