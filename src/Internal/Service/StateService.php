@@ -55,9 +55,7 @@ final class StateService implements StateServiceInterface
             $values[self::PREFIX_FORK_ID . $uuid] = $forkId;
         }
 
-        if ($values !== []) {
-            $this->store->setMultiple($values);
-        }
+        $this->store->setMultiple($values);
     }
 
     public function get(string $uuid): ?string
