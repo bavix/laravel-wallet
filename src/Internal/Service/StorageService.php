@@ -15,7 +15,8 @@ final class StorageService implements StorageServiceInterface
 
     public function __construct(
         private MathServiceInterface $mathService,
-        private CacheRepository $cacheRepository
+        private CacheRepository $cacheRepository,
+        private ?int $ttl
     ) {
     }
 
@@ -115,14 +116,11 @@ final class StorageService implements StorageServiceInterface
             $values[self::PREFIX . $uuid] = $this->mathService->round($value);
         }
 
-        /** @var int $ttl */
-        $ttl = config('wallet.cache.ttl');
-
         if (count($values) === 1) {
-            return $this->cacheRepository->set(key($values), current($values), $ttl);
+            return $this->cacheRepository->set(key($values), current($values), $this->ttl);
         }
 
-        return $this->cacheRepository->setMultiple($values, $ttl);
+        return $this->cacheRepository->setMultiple($values, $this->ttl);
     }
 
     /**
