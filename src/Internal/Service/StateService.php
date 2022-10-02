@@ -23,21 +23,40 @@ final class StateService implements StateServiceInterface
         $this->forkCallables = $cacheFactory->store('array');
     }
 
-    public function fork(string $uuid, callable $value): void
+    /**
+     * @param string[] $uuids
+     * @param callable(): array<string, string> $value
+     */
+    public function multiFork(array $uuids, callable $value): void
     {
-        if (! $this->forks->has(self::PREFIX_FORKS . $uuid)) {
-            $this->forkCallables->put(self::PREFIX_FORK_CALL . $uuid, $value);
+        $forks = [];
+        foreach ($uuids as $uuid) {
+            if (! $this->forks->has(self::PREFIX_FORKS . $uuid)) {
+                $forks[self::PREFIX_FORK_CALL . $uuid] = $value;
+            }
+        }
+
+        if ($forks !== []) {
+            $this->forkCallables->setMultiple($forks);
         }
     }
 
     public function get(string $uuid): ?string
     {
-        $callable = $this->forkCallables->pull(self::PREFIX_FORK_CALL . $uuid);
-        if ($callable !== null) {
-            return $this->forks->rememberForever(self::PREFIX_FORKS . $uuid, $callable);
+        $value = $this->forks->get(self::PREFIX_FORKS . $uuid);
+        if ($value !== null) {
+            return $value;
         }
 
-        return $this->forks->get(self::PREFIX_FORKS . $uuid);
+        /** @var null|callable(): array<string, string> $callable */
+        $callable = $this->forkCallables->pull(self::PREFIX_FORK_CALL . $uuid);
+        if ($callable !== null) {
+            $this->forks->setMultiple($callable());
+
+            return $this->get($uuid);
+        }
+
+        return null;
     }
 
     public function drop(string $uuid): void
