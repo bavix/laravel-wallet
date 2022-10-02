@@ -208,6 +208,9 @@ final class WalletServiceProvider extends ServiceProvider
     private function internal(array $configure): void
     {
         $this->app->alias($configure['storage'] ?? StorageService::class, 'wallet.internal.storage');
+        $this->app->when($configure['storage'] ?? StorageService::class)
+            ->needs('$ttl')
+            ->giveConfig('wallet.cache.ttl');
 
         $this->app->singleton(ClockServiceInterface::class, $configure['clock'] ?? ClockService::class);
         $this->app->singleton(DatabaseServiceInterface::class, $configure['database'] ?? DatabaseService::class);
