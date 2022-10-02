@@ -69,8 +69,8 @@ final class StateService implements StateServiceInterface
                 $values[self::PREFIX_FORKS . $key] = $value;
             }
 
-            if (($values !== []) && ! $this->store->setMultiple($values)) {
-                return null;
+            if ($values !== []) {
+                $this->store->setMultiple($values);
             }
 
             return $results[$uuid] ?? null;
