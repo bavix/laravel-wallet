@@ -124,6 +124,8 @@ final class WalletRepository implements WalletRepositoryInterface
      */
     private function getBy(array $attributes): Wallet
     {
+        assert($attributes !== []);
+
         try {
             $wallet = $this->wallet->newQuery()
                 ->where($attributes)
