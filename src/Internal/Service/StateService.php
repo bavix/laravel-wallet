@@ -13,6 +13,8 @@ final class StateService implements StateServiceInterface
 
     private const PREFIX_FORK_CALL = 'wallet_fork_call::';
 
+    private const PREFIX_HASHMAP = 'wallet_hm::';
+
     private CacheRepository $forks;
 
     private CacheRepository $forkCallables;
@@ -33,6 +35,7 @@ final class StateService implements StateServiceInterface
         foreach ($uuids as $uuid) {
             if (! $this->forks->has(self::PREFIX_FORKS . $uuid)) {
                 $forks[self::PREFIX_FORK_CALL . $uuid] = $value;
+                $forks[self::PREFIX_HASHMAP . $uuid] = $uuids;
             }
         }
 
@@ -51,6 +54,13 @@ final class StateService implements StateServiceInterface
         /** @var null|callable(): array<string, string> $callable */
         $callable = $this->forkCallables->pull(self::PREFIX_FORK_CALL . $uuid);
         if ($callable !== null) {
+            /** @var array<string> $keys */
+            $keys = $this->forkCallables->pull(self::PREFIX_HASHMAP . $uuid, []);
+            foreach ($keys as $key) {
+                $this->forkCallables->forget(self::PREFIX_FORK_CALL . $key);
+                $this->forkCallables->forget(self::PREFIX_HASHMAP . $key);
+            }
+
             $values = [];
             foreach ($callable() as $key => $value) {
                 $values[self::PREFIX_FORKS . $key] = $value;
@@ -69,6 +79,7 @@ final class StateService implements StateServiceInterface
     public function drop(string $uuid): void
     {
         $this->forkCallables->forget(self::PREFIX_FORK_CALL . $uuid);
+        $this->forks->forget(self::PREFIX_HASHMAP . $uuid);
         $this->forks->forget(self::PREFIX_FORKS . $uuid);
     }
 }
