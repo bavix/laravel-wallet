@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.5.0] - 2022-10-06
+### Added 
+* Improved performance api handles #576
+
+### Changed
+* Cache query optimize. v2 #580
+* Optimize StateServiceInterface #582
+
+### Fixed
+* Memory leak. StateServiceInterface #583
+
 ## [9.4.0] - 2022-09-29
 ### Added
 * Add support Model::preventSilentlyDiscardingAttributes() #574 #572
@@ -933,7 +944,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/9.4.0...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/9.5.0...master
+[9.5.0]: https://github.com/bavix/laravel-wallet/compare/9.4.0...9.5.0
 [9.4.0]: https://github.com/bavix/laravel-wallet/compare/9.3.0...9.4.0
 [9.3.0]: https://github.com/bavix/laravel-wallet/compare/9.2.0...9.3.0
 [9.2.0]: https://github.com/bavix/laravel-wallet/compare/9.1.0...9.2.0
