@@ -12,5 +12,5 @@ jobs:
         stale-issue-message: 'This issue is stale because it has been open 21 days with no activity.'
         days-before-stale: 21
         days-before-close: 3
-        exempt-issue-labels: 'bug,enhancement'
-        exempt-pr-labels: 'bug,enhancement'
+        exempt-issue-labels: 'bug'
+        exempt-pr-labels: 'bug,frozen'
