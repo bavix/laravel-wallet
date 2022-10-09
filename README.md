@@ -240,7 +240,6 @@ All versions:
 Major compare:
 |            Name            |  6.x   |  7.x   |  8.x   |  9.x   |
 |----------------------------|--------|--------|--------|--------|
-| Atomic:Blocks              | -      | -      | -      | -      |
 | Cart:EagerLoaderPay        | 42.7s  | 33.5s  | 1.06s  | 701ms  |
 | Cart:Pay                   | 3.89s  | 2.07s  | 627ms  | 430ms  |
 | Cart:PayFree               | 3.43s  | 1.98s  | 548ms  | 360ms  |
