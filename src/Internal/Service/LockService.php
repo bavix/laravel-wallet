@@ -22,12 +22,11 @@ final class LockService implements LockServiceInterface
 
     private CacheRepository $cache;
 
-    private int $seconds;
-
-    public function __construct(CacheFactory $cacheFactory)
-    {
+    public function __construct(
+        CacheFactory $cacheFactory,
+        private int $seconds
+    ) {
         $this->cache = $cacheFactory->store(config('wallet.lock.driver', 'array'));
-        $this->seconds = (int) config('wallet.lock.seconds', 1);
         $this->lockedKeys = $cacheFactory->store('array');
     }
 

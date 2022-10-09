@@ -216,7 +216,17 @@ final class WalletServiceProvider extends ServiceProvider
         $this->app->singleton(DatabaseServiceInterface::class, $configure['database'] ?? DatabaseService::class);
         $this->app->singleton(DispatcherServiceInterface::class, $configure['dispatcher'] ?? DispatcherService::class);
         $this->app->singleton(JsonServiceInterface::class, $configure['json'] ?? JsonService::class);
+
+        $this->app->when($configure['lock'] ?? LockService::class)
+            ->needs('$seconds')
+            ->giveConfig('wallet.lock.seconds', 1);
+
         $this->app->singleton(LockServiceInterface::class, $configure['lock'] ?? LockService::class);
+
+        $this->app->when($configure['math'] ?? MathService::class)
+            ->needs('$scale')
+            ->giveConfig('wallet.math.scale', 64);
+
         $this->app->singleton(MathServiceInterface::class, $configure['math'] ?? MathService::class);
         $this->app->singleton(StateServiceInterface::class, $configure['state'] ?? StateService::class);
         $this->app->singleton(TranslatorServiceInterface::class, $configure['translator'] ?? TranslatorService::class);

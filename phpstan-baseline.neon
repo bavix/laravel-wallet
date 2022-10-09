@@ -77,7 +77,7 @@ parameters:
 
 		-
 			message: "#^Cannot call method needs\\(\\) on mixed\\.$#"
-			count: 4
+			count: 6
 			path: src/WalletServiceProvider.php
 
 		-

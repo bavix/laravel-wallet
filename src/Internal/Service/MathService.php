@@ -9,11 +9,9 @@ use Brick\Math\RoundingMode;
 
 final class MathService implements MathServiceInterface
 {
-    private int $scale;
-
-    public function __construct()
-    {
-        $this->scale = (int) config('wallet.math.scale', 64);
+    public function __construct(
+        private int $scale
+    ) {
     }
 
     public function add(float|int|string $first, float|int|string $second, ?int $scale = null): string
