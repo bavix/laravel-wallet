@@ -77,7 +77,6 @@ final class EventTest extends TestCase
 
         // unit
         $this->expectException(UnknownEventException::class);
-        $this->expectExceptionMessage(ClockFakeService::FAKE_DATETIME);
         $this->expectExceptionCode(789);
 
         $buyer->deposit(789);

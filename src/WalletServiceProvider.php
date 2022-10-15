@@ -46,6 +46,8 @@ use Bavix\Wallet\Internal\Repository\WalletRepository;
 use Bavix\Wallet\Internal\Repository\WalletRepositoryInterface;
 use Bavix\Wallet\Internal\Service\ClockService;
 use Bavix\Wallet\Internal\Service\ClockServiceInterface;
+use Bavix\Wallet\Internal\Service\ConnectionService;
+use Bavix\Wallet\Internal\Service\ConnectionServiceInterface;
 use Bavix\Wallet\Internal\Service\DatabaseService;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Internal\Service\DispatcherService;
@@ -109,6 +111,11 @@ use function config;
 use function dirname;
 use function function_exists;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
+use Illuminate\Database\Events\TransactionBeginning;
+use Illuminate\Database\Events\TransactionCommitted;
+use Illuminate\Database\Events\TransactionCommitting;
+use Illuminate\Database\Events\TransactionRolledBack;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 final class WalletServiceProvider extends ServiceProvider
@@ -121,6 +128,11 @@ final class WalletServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadTranslationsFrom(dirname(__DIR__) . '/resources/lang', 'wallet');
+
+        Event::listen(TransactionBeginning::class, Internal\Listeners\TransactionBeginningListener::class);
+        Event::listen(TransactionCommitting::class, Internal\Listeners\TransactionCommittingListener::class);
+        Event::listen(TransactionCommitted::class, Internal\Listeners\TransactionCommittedListener::class);
+        Event::listen(TransactionRolledBack::class, Internal\Listeners\TransactionRolledBackListener::class);
 
         if (! $this->app->runningInConsole()) {
             return;
@@ -213,6 +225,7 @@ final class WalletServiceProvider extends ServiceProvider
             ->giveConfig('wallet.cache.ttl');
 
         $this->app->singleton(ClockServiceInterface::class, $configure['clock'] ?? ClockService::class);
+        $this->app->singleton(ConnectionServiceInterface::class, $configure['connection'] ?? ConnectionService::class);
         $this->app->singleton(DatabaseServiceInterface::class, $configure['database'] ?? DatabaseService::class);
         $this->app->singleton(DispatcherServiceInterface::class, $configure['dispatcher'] ?? DispatcherService::class);
         $this->app->singleton(JsonServiceInterface::class, $configure['json'] ?? JsonService::class);

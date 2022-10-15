@@ -20,6 +20,16 @@ interface RegulatorServiceInterface
 
     public function decrease(Wallet $wallet, float|int|string $value): string;
 
+    public function committing(): void;
+
+    public function committed(): void;
+
+    /**
+     * @deprecated
+     *
+     * @see committing
+     * @see committed
+     */
     public function approve(): void;
 
     public function purge(): void;

@@ -23,6 +23,7 @@ final class LockService implements LockServiceInterface
     private CacheRepository $cache;
 
     public function __construct(
+        private ConnectionServiceInterface $connectionService,
         CacheFactory $cacheFactory,
         private int $seconds
     ) {
@@ -42,6 +43,13 @@ final class LockService implements LockServiceInterface
         $lock = $this->getLockProvider()
             ->lock(self::LOCK_KEY . $key, $this->seconds);
         $this->lockedKeys->put(self::INNER_KEYS . $key, true, $this->seconds);
+
+        // let's release the lock after the transaction, the fight against the race
+        if ($this->connectionService->get()->transactionLevel() > 0) {
+            $lock->block($this->seconds);
+
+            return $callback();
+        }
 
         try {
             return $lock->block($this->seconds, $callback);
@@ -69,6 +77,23 @@ final class LockService implements LockServiceInterface
         }
 
         return $callable();
+    }
+
+    public function releases(array $keys): void
+    {
+        $lockProvider = $this->getLockProvider();
+
+        foreach ($keys as $key) {
+            if (! $this->isBlocked($key)) {
+                continue;
+            }
+
+            $lockProvider
+                ->lock(self::LOCK_KEY . $key, $this->seconds)
+                ->forceRelease();
+
+            $this->lockedKeys->delete(self::INNER_KEYS . $key);
+        }
     }
 
     public function isBlocked(string $key): bool

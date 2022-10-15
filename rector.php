@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\PropertyFetch\ExplicitMethodCallOverMagicGetSetRector;
 use Rector\Config\RectorConfig;
+use Rector\Laravel\Rector\Assign\CallOnAppArrayAccessToStandaloneAssignRector;
+use Rector\Laravel\Rector\ClassMethod\AddParentRegisterToEventServiceProviderRector;
 use Rector\Laravel\Set\LaravelSetList;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
 
 return static function (RectorConfig $containerConfigurator): void {
+    $containerConfigurator->parallel();
     $containerConfigurator->paths([
         __DIR__ . '/src',
         __DIR__ . '/tests',
@@ -29,4 +32,6 @@ return static function (RectorConfig $containerConfigurator): void {
 
     // register a single rule
     $services->set(TypedPropertyRector::class);
+    $services->set(CallOnAppArrayAccessToStandaloneAssignRector::class);
+    $services->set(AddParentRegisterToEventServiceProviderRector::class);
 };
