@@ -8,6 +8,7 @@ use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Repository\WalletRepositoryInterface;
 use Bavix\Wallet\Internal\Service\DispatcherServiceInterface;
+use Bavix\Wallet\Internal\Service\LockServiceInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Internal\Service\StorageServiceInterface;
 use Bavix\Wallet\Models\Wallet;
@@ -22,12 +23,18 @@ final class RegulatorService implements RegulatorServiceInterface
      */
     private array $wallets = [];
 
+    /**
+     * @var array<string, string>
+     */
+    private array $multiIncrease = [];
+
     public function __construct(
         private BalanceUpdatedEventAssemblerInterface $balanceUpdatedEventAssembler,
         private BookkeeperServiceInterface $bookkeeperService,
         private DispatcherServiceInterface $dispatcherService,
         private StorageServiceInterface $storageService,
         private MathServiceInterface $mathService,
+        private LockServiceInterface $lockService,
         private WalletRepositoryInterface $walletRepository
     ) {
     }
@@ -86,29 +93,32 @@ final class RegulatorService implements RegulatorServiceInterface
         return $this->increase($wallet, $this->mathService->negative($value));
     }
 
-    public function approve(): void
+    public function committing(): void
+    {
+        $balances = [];
+        $incrementValues = [];
+        foreach ($this->wallets as $wallet) {
+            $diffValue = $this->diff($wallet);
+            if ($this->mathService->compare($diffValue, 0) === 0) {
+                continue;
+            }
+
+            $balances[$wallet->getKey()] = $this->amount($wallet);
+            $incrementValues[$wallet->uuid] = $this->diff($wallet);
+        }
+
+        if ($balances === [] || $incrementValues === [] || $this->wallets === []) {
+            return;
+        }
+
+        $this->walletRepository->updateBalances($balances);
+        $this->multiIncrease = $this->bookkeeperService->multiIncrease($this->wallets, $incrementValues);
+    }
+
+    public function committed(): void
     {
         try {
-            $balances = [];
-            $incrementValues = [];
-            foreach ($this->wallets as $wallet) {
-                $diffValue = $this->diff($wallet);
-                if ($this->mathService->compare($diffValue, 0) === 0) {
-                    continue;
-                }
-
-                $incrementValues[$wallet->uuid] = $diffValue;
-                $balances[$wallet->getKey()] = $this->amount($wallet);
-            }
-
-            if ($balances === [] || $incrementValues === [] || $this->wallets === []) {
-                return;
-            }
-
-            $this->walletRepository->updateBalances($balances);
-            $multiIncrease = $this->bookkeeperService->multiIncrease($this->wallets, $incrementValues);
-
-            foreach ($multiIncrease as $uuid => $balance) {
+            foreach ($this->multiIncrease as $uuid => $balance) {
                 $wallet = $this->wallets[$uuid];
 
                 $wallet->fill([
@@ -124,13 +134,29 @@ final class RegulatorService implements RegulatorServiceInterface
         }
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
+    public function approve(): void
+    {
+        try {
+            $this->committing();
+        } finally {
+            $this->committed();
+        }
+    }
+
     public function purge(): void
     {
-        foreach ($this->wallets as $wallet) {
-            $this->missing($wallet);
+        try {
+            $this->lockService->releases(array_keys($this->wallets));
+            $this->multiIncrease = [];
+            foreach ($this->wallets as $wallet) {
+                $this->missing($wallet);
+            }
+        } finally {
+            $this->dispatcherService->forgot();
         }
-
-        $this->dispatcherService->forgot();
     }
 
     private function persist(Wallet $wallet): void
