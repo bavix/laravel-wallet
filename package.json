@@ -14,7 +14,7 @@
   "homepage": "https://bavix.github.io/laravel-wallet/",
   "dependencies": {
     "@bavix/cozy-house-kit": "^1.0.5",
-    "axios": "^1.1.2",
+    "axios": "^1.1.3",
     "css-loader": "^6.7.1",
     "docsify": "^4.11.4",
     "lodash": "^4.17.20",
