@@ -1,5 +1,7 @@
 ## Nova Action
 
+> Use only if you have a package version below 9.6
+
 As you know, the package works with internal state. You can read more [here](https://github.com/bavix/laravel-wallet/pull/412) and [here](https://github.com/bavix/laravel-wallet/issues/455).
 
 The action runs inside a transaction, which means you need to reset the transaction manually.
