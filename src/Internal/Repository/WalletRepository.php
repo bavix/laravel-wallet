@@ -29,6 +29,15 @@ final class WalletRepository implements WalletRepositoryInterface
      */
     public function updateBalances(array $data): int
     {
+        // One element gives x10 speedup, on some data
+        if (count($data) === 1) {
+            return $this->wallet->newQuery()
+                ->whereKey(key($data))
+                ->update([
+                    'balance' => current($data),
+                ]);
+        }
+
         $cases = [];
         foreach ($data as $walletId => $balance) {
             $cases[] = 'WHEN id = ' . $walletId . ' THEN ' . $balance;

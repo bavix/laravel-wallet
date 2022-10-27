@@ -9,16 +9,10 @@ use Bavix\Wallet\Services\RegulatorServiceInterface;
 
 final class TransactionBeginningListener
 {
-    public function __construct(
-        private ConnectionServiceInterface $connectionService,
-        private RegulatorServiceInterface $regulatorService
-    ) {
-    }
-
     public function __invoke(): void
     {
-        if ($this->connectionService->get()->transactionLevel() === 1) {
-            $this->regulatorService->purge();
+        if (app(ConnectionServiceInterface::class)->get()->transactionLevel() === 1) {
+            app(RegulatorServiceInterface::class)->purge();
         }
     }
 }
