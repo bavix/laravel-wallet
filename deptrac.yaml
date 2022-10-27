@@ -50,6 +50,11 @@ parameters:
         - type: className
           regex: ^Bavix\\.*\\Internal\\Exceptions\\.*
 
+    - name: InternalListener
+      collectors:
+        - type: className
+          regex: ^Bavix\\.*\\Internal\\Listeners\\.*
+
     - name: Event
       collectors:
         - type: className
@@ -249,6 +254,9 @@ parameters:
       - DtoInterface
       - UIException
       - Model
+
+    InternalListener:
+      - ServiceInterface
 
     ServiceInterface:
       - InternalException
