@@ -34,6 +34,7 @@
   "require-dev": {
     "brianium/paratest": "^6.4",
     "cknow/laravel-money": "^7.0",
+    "driftingly/rector-laravel": "^0.14.1",
     "ergebnis/phpstan-rules": "^1.0",
     "infection/infection": "~0.26",
     "laravel/cashier": "^14.0",
