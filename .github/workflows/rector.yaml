@@ -17,7 +17,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.0
+          php-version: 8.1
         env:
           runner: self-hosted
 
@@ -35,6 +35,9 @@ jobs:
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
+
+      - name: Install driftingly/rector-laravel
+        run: composer req --dev driftingly/rector-laravel
 
       - name: Run rector
         run: composer rector

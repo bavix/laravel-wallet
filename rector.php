@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\PropertyFetch\ExplicitMethodCallOverMagicGetSetRector;
 use Rector\Config\RectorConfig;
-use Rector\Laravel\Rector\Assign\CallOnAppArrayAccessToStandaloneAssignRector;
-use Rector\Laravel\Rector\ClassMethod\AddParentRegisterToEventServiceProviderRector;
-use Rector\Laravel\Set\LaravelSetList;
+use RectorLaravel\Rector\Assign\CallOnAppArrayAccessToStandaloneAssignRector;
+use RectorLaravel\Rector\ClassMethod\AddParentRegisterToEventServiceProviderRector;
+use RectorLaravel\Set\LaravelSetList;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
