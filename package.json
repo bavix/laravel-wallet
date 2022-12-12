@@ -18,7 +18,7 @@
     "css-loader": "^6.7.2",
     "docsify": "^4.13.0",
     "lodash": "^4.17.20",
-    "mini-css-extract-plugin": "^2.7.0",
+    "mini-css-extract-plugin": "^2.7.2",
     "prismjs": "^1.29.0",
     "size-limit": "^8.1.0",
     "uuid": "^9.0.0",
