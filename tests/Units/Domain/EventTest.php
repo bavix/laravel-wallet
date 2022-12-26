@@ -145,7 +145,7 @@ final class EventTest extends TestCase
     {
         $this->app->bind(ClockServiceInterface::class, ClockFakeService::class);
 
-        Event::listen(TransactionCreatedEventInterface::class, TransactionCreatedThrowListener::class,);
+        Event::listen(TransactionCreatedEventInterface::class, TransactionCreatedThrowListener::class);
 
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
