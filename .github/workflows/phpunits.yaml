@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: ['8.0', 8.1, 8.2]
+        php-versions: ['8.0', 8.1, 8.2, 8.3]
         databases: [testing, pgsql, mysql, mariadb]
         caches: [array, redis, memcached]
 
@@ -115,12 +115,12 @@ jobs:
       - name: Install dependencies
         id: composer-dependencies
         run: composer install --prefer-dist --no-progress
-        if: ${{ matrix.php-versions != '8.2' }}
+        if: ${{ matrix.php-versions != '8.3' }}
 
       - name: Install dependencies (ignore)
         id: composer-dependencies-ignore
         run: composer install --prefer-dist --no-progress --ignore-platform-reqs
-        if: ${{ matrix.php-versions == '8.2' }}
+        if: ${{ matrix.php-versions == '8.3' }}
 
       - name: Check codeclimate
         id: codeclimate-check
