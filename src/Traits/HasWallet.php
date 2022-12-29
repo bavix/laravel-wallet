@@ -128,9 +128,16 @@ trait HasWallet
     public function transfer(Wallet $wallet, $amount, ?array $meta = null): Transfer
     {
         /** @var Wallet $this */
-        app(ConsistencyServiceInterface::class)->checkPotential($this, $amount);
+        return app(AtomicServiceInterface::class)->block(
+            $this,
+            function () use ($wallet, $amount, $meta) {
+                app(ConsistencyServiceInterface::class)->checkPotential($this, $amount);
 
-        return $this->forceTransfer($wallet, $amount, $meta);
+                return app(CommonServiceLegacy::class)
+                    ->forceTransfer($this, $wallet, $amount, $meta)
+                ;
+            },
+        );
     }
 
     /**
@@ -149,9 +156,16 @@ trait HasWallet
     public function withdraw($amount, ?array $meta = null, bool $confirmed = true): Transaction
     {
         /** @var Wallet $this */
-        app(ConsistencyServiceInterface::class)->checkPotential($this, $amount);
+        return app(AtomicServiceInterface::class)->block(
+            $this,
+            function () use ($amount, $meta, $confirmed) {
+                app(ConsistencyServiceInterface::class)->checkPotential($this, $amount);
 
-        return $this->forceWithdraw($amount, $meta, $confirmed);
+                return app(CommonServiceLegacy::class)
+                    ->makeTransaction($this, Transaction::TYPE_WITHDRAW, $amount, $meta, $confirmed)
+                ;
+            },
+        );
     }
 
     /**
