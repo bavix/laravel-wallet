@@ -9,22 +9,22 @@ use DateTimeImmutable;
 /** @psalm-immutable */
 final class TransactionDto implements TransactionDtoInterface
 {
-    private DateTimeImmutable $createdAt;
+    private readonly DateTimeImmutable $createdAt;
 
-    private DateTimeImmutable $updatedAt;
+    private readonly DateTimeImmutable $updatedAt;
 
     /**
      * @param array<mixed>|null $meta
      */
     public function __construct(
-        private string $uuid,
-        private string $payableType,
-        private int|string $payableId,
-        private int $walletId,
-        private string $type,
-        private float|int|string $amount,
-        private bool $confirmed,
-        private ?array $meta
+        private readonly string $uuid,
+        private readonly string $payableType,
+        private readonly int|string $payableId,
+        private readonly int $walletId,
+        private readonly string $type,
+        private readonly float|int|string $amount,
+        private readonly bool $confirmed,
+        private readonly ?array $meta
     ) {
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();

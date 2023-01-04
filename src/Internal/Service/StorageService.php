@@ -14,9 +14,9 @@ final class StorageService implements StorageServiceInterface
     private const PREFIX = 'wallet_sg::';
 
     public function __construct(
-        private MathServiceInterface $mathService,
-        private CacheRepository $cacheRepository,
-        private ?int $ttl
+        private readonly MathServiceInterface $mathService,
+        private readonly CacheRepository $cacheRepository,
+        private readonly ?int $ttl
     ) {
     }
 

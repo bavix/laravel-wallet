@@ -14,7 +14,7 @@ final class RecordNotFoundException extends UnderflowException implements Underf
     public function __construct(
         string $message,
         int $code,
-        private array $missingKeys
+        private readonly array $missingKeys
     ) {
         parent::__construct($message, $code);
     }

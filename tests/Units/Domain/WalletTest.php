@@ -288,7 +288,7 @@ final class WalletTest extends TestCase
         self::assertSame(10000, $user->balanceInt);
 
         try {
-            app(DatabaseServiceInterface::class)->transaction(static function () use ($user) {
+            app(DatabaseServiceInterface::class)->transaction(static function () use ($user): never {
                 self::assertSame(0, (int) app(RegulatorServiceInterface::class)->diff($user->wallet));
                 $user->withdraw(10000);
                 self::assertSame(-10000, (int) app(RegulatorServiceInterface::class)->diff($user->wallet));
