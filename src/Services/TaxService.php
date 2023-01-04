@@ -16,8 +16,8 @@ use Bavix\Wallet\Internal\Service\MathServiceInterface;
 final class TaxService implements TaxServiceInterface
 {
     public function __construct(
-        private MathServiceInterface $mathService,
-        private CastServiceInterface $castService
+        private readonly MathServiceInterface $mathService,
+        private readonly CastServiceInterface $castService
     ) {
     }
 

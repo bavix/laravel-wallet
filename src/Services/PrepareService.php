@@ -21,14 +21,14 @@ use Bavix\Wallet\Models\Transaction;
 final class PrepareService implements PrepareServiceInterface
 {
     public function __construct(
-        private TransferLazyDtoAssemblerInterface $transferLazyDtoAssembler,
-        private TransactionDtoAssemblerInterface $transactionDtoAssembler,
-        private DiscountServiceInterface $personalDiscountService,
-        private ConsistencyServiceInterface $consistencyService,
-        private ExtraDtoAssemblerInterface $extraDtoAssembler,
-        private CastServiceInterface $castService,
-        private MathServiceInterface $mathService,
-        private TaxServiceInterface $taxService
+        private readonly TransferLazyDtoAssemblerInterface $transferLazyDtoAssembler,
+        private readonly TransactionDtoAssemblerInterface $transactionDtoAssembler,
+        private readonly DiscountServiceInterface $personalDiscountService,
+        private readonly ConsistencyServiceInterface $consistencyService,
+        private readonly ExtraDtoAssemblerInterface $extraDtoAssembler,
+        private readonly CastServiceInterface $castService,
+        private readonly MathServiceInterface $mathService,
+        private readonly TaxServiceInterface $taxService
     ) {
     }
 

@@ -31,7 +31,7 @@ final class StateService implements StateServiceInterface
      */
     private const PREFIX_HASHMAP = 'wallet_hm::';
 
-    private CacheRepository $store;
+    private readonly CacheRepository $store;
 
     public function __construct(CacheFactory $cacheFactory)
     {

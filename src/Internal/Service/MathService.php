@@ -10,7 +10,7 @@ use Brick\Math\RoundingMode;
 final class MathService implements MathServiceInterface
 {
     public function __construct(
-        private int $scale
+        private readonly int $scale
     ) {
     }
 

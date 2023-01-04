@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException as EloquentModelNotFound
 final class WalletRepository implements WalletRepositoryInterface
 {
     public function __construct(
-        private Wallet $wallet
+        private readonly Wallet $wallet
     ) {
     }
 

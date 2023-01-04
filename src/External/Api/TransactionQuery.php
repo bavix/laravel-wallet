@@ -18,11 +18,11 @@ final class TransactionQuery
      * @param array<mixed>|null $meta
      */
     private function __construct(
-        private string $type,
-        private Wallet $wallet,
-        private float|int|string $amount,
-        private ?array $meta,
-        private bool $confirmed
+        private readonly string $type,
+        private readonly Wallet $wallet,
+        private readonly float|int|string $amount,
+        private readonly ?array $meta,
+        private readonly bool $confirmed
     ) {
     }
 

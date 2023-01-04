@@ -10,9 +10,9 @@ use Bavix\Wallet\Interfaces\ProductInterface;
 final class ItemDto implements ItemDtoInterface
 {
     public function __construct(
-        private ProductInterface $product,
-        private int $quantity,
-        private int|string|null $pricePerItem,
+        private readonly ProductInterface $product,
+        private readonly int $quantity,
+        private readonly int|string|null $pricePerItem,
     ) {
     }
 
