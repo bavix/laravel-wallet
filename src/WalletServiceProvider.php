@@ -123,7 +123,6 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     /**
      * Bootstrap services.
      */
-    #[\PHPUnit\Framework\Attributes\CodeCoverageIgnore]
     public function boot(): void
     {
         $this->loadTranslationsFrom(dirname(__DIR__) . '/resources/lang', 'wallet');

@@ -104,7 +104,6 @@ final class LockService implements LockServiceInterface
     /**
      * @throws LockProviderNotFoundException
      */
-    #[\PHPUnit\Framework\Attributes\CodeCoverageIgnore]
     private function getLockProvider(): LockProvider
     {
         if ($this->lockProvider === null) {
