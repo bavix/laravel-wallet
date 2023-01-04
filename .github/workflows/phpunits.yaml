@@ -115,16 +115,10 @@ jobs:
       - name: Install dependencies
         id: composer-dependencies
         run: composer install --prefer-dist --no-progress
-        if: ${{ matrix.php-versions != '8.2' }}
-
-      - name: Install dependencies (ignore)
-        id: composer-dependencies-ignore
-        run: composer install --prefer-dist --no-progress --ignore-platform-reqs
-        if: ${{ matrix.php-versions == '8.2' }}
 
       - name: Check codeclimate
         id: codeclimate-check
-        run: echo "execute=${{ matrix.php-versions == '8.0' && matrix.caches == 'array' && matrix.databases == 'testing' }}" >> $GITHUB_OUTPUT
+        run: echo "execute=${{ matrix.php-versions == '8.2' && matrix.caches == 'array' && matrix.databases == 'testing' }}" >> $GITHUB_OUTPUT
 
       - name: Prepare codeclimate
         id: codeclimate-prepare
