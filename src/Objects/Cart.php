@@ -31,8 +31,8 @@ final class Cart implements Countable, CartInterface
     private array $meta = [];
 
     public function __construct(
-        private CastServiceInterface $castService,
-        private MathServiceInterface $math
+        private readonly CastServiceInterface $castService,
+        private readonly MathServiceInterface $math
     ) {
     }
 

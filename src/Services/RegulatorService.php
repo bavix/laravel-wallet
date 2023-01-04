@@ -29,13 +29,13 @@ final class RegulatorService implements RegulatorServiceInterface
     private array $multiIncrease = [];
 
     public function __construct(
-        private BalanceUpdatedEventAssemblerInterface $balanceUpdatedEventAssembler,
-        private BookkeeperServiceInterface $bookkeeperService,
-        private DispatcherServiceInterface $dispatcherService,
-        private StorageServiceInterface $storageService,
-        private MathServiceInterface $mathService,
-        private LockServiceInterface $lockService,
-        private WalletRepositoryInterface $walletRepository
+        private readonly BalanceUpdatedEventAssemblerInterface $balanceUpdatedEventAssembler,
+        private readonly BookkeeperServiceInterface $bookkeeperService,
+        private readonly DispatcherServiceInterface $dispatcherService,
+        private readonly StorageServiceInterface $storageService,
+        private readonly MathServiceInterface $mathService,
+        private readonly LockServiceInterface $lockService,
+        private readonly WalletRepositoryInterface $walletRepository
     ) {
     }
 

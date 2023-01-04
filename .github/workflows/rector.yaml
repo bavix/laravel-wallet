@@ -37,8 +37,5 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
-      - name: Install driftingly/rector-laravel
-        run: composer req --dev driftingly/rector-laravel
-
       - name: Run rector
         run: composer rector

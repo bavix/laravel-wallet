@@ -21,11 +21,12 @@ return static function (RectorConfig $containerConfigurator): void {
     $containerConfigurator->skip([ExplicitMethodCallOverMagicGetSetRector::class]);
 
     // Define what rule sets will be applied
+    $containerConfigurator->import(PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES);
     $containerConfigurator->import(PHPUnitSetList::PHPUNIT_91);
     $containerConfigurator->import(LaravelSetList::LARAVEL_90);
     $containerConfigurator->import(SetList::CODE_QUALITY);
     $containerConfigurator->import(SetList::DEAD_CODE);
-    $containerConfigurator->import(SetList::PHP_80);
+    $containerConfigurator->import(SetList::PHP_81);
 
     // get services (needed for register a single rule)
     $services = $containerConfigurator->services();

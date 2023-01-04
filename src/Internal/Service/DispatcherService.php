@@ -15,7 +15,7 @@ final class DispatcherService implements DispatcherServiceInterface
     private array $events = [];
 
     public function __construct(
-        private Dispatcher $dispatcher
+        private readonly Dispatcher $dispatcher
     ) {
     }
 

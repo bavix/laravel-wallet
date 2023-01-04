@@ -18,14 +18,14 @@ final class LockService implements LockServiceInterface
 
     private ?LockProvider $lockProvider = null;
 
-    private CacheRepository $lockedKeys;
+    private readonly CacheRepository $lockedKeys;
 
-    private CacheRepository $cache;
+    private readonly CacheRepository $cache;
 
     public function __construct(
-        private ConnectionServiceInterface $connectionService,
+        private readonly ConnectionServiceInterface $connectionService,
         CacheFactory $cacheFactory,
-        private int $seconds
+        private readonly int $seconds
     ) {
         $this->cache = $cacheFactory->store(config('wallet.lock.driver', 'array'));
         $this->lockedKeys = $cacheFactory->store('array');
@@ -103,8 +103,8 @@ final class LockService implements LockServiceInterface
 
     /**
      * @throws LockProviderNotFoundException
-     * @codeCoverageIgnore
      */
+    #[\PHPUnit\Framework\Attributes\CodeCoverageIgnore]
     private function getLockProvider(): LockProvider
     {
         if ($this->lockProvider === null) {

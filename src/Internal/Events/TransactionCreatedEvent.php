@@ -9,10 +9,10 @@ use DateTimeImmutable;
 final class TransactionCreatedEvent implements TransactionCreatedEventInterface
 {
     public function __construct(
-        private int $id,
-        private string $type,
-        private int $walletId,
-        private DateTimeImmutable $createdAt,
+        private readonly int $id,
+        private readonly string $type,
+        private readonly int $walletId,
+        private readonly DateTimeImmutable $createdAt,
     ) {
     }
 

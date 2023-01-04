@@ -9,7 +9,7 @@ use Bavix\Wallet\Test\Infra\Exceptions\UnknownEventException;
 
 final class TransactionCreatedThrowListener
 {
-    public function handle(TransactionCreatedEventInterface $transactionCreatedEvent): void
+    public function handle(TransactionCreatedEventInterface $transactionCreatedEvent): never
     {
         $type = $transactionCreatedEvent->getType();
         $walletId = $transactionCreatedEvent->getWalletId();

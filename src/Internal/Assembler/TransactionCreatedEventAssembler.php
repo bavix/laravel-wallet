@@ -12,7 +12,7 @@ use Bavix\Wallet\Models\Transaction;
 final class TransactionCreatedEventAssembler implements TransactionCreatedEventAssemblerInterface
 {
     public function __construct(
-        private ClockServiceInterface $clockService
+        private readonly ClockServiceInterface $clockService
     ) {
     }
 

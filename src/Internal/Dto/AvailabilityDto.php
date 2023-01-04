@@ -10,9 +10,9 @@ use Bavix\Wallet\Interfaces\Customer;
 final class AvailabilityDto implements AvailabilityDtoInterface
 {
     public function __construct(
-        private Customer $customer,
-        private BasketDtoInterface $basketDto,
-        private bool $force
+        private readonly Customer $customer,
+        private readonly BasketDtoInterface $basketDto,
+        private readonly bool $force
     ) {
     }
 

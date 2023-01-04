@@ -11,7 +11,7 @@ use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
 final class TransactionDtoTransformerCustom implements TransactionDtoTransformerInterface
 {
     public function __construct(
-        private TransactionDtoTransformer $transactionDtoTransformer
+        private readonly TransactionDtoTransformer $transactionDtoTransformer
     ) {
     }
 
