@@ -134,18 +134,6 @@ final class RegulatorService implements RegulatorServiceInterface
         }
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
-    public function approve(): void
-    {
-        try {
-            $this->committing();
-        } finally {
-            $this->committed();
-        }
-    }
-
     public function purge(): void
     {
         try {

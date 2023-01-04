@@ -24,13 +24,5 @@ interface RegulatorServiceInterface
 
     public function committed(): void;
 
-    /**
-     * @deprecated
-     *
-     * @see committing
-     * @see committed
-     */
-    public function approve(): void;
-
     public function purge(): void;
 }
