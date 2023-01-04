@@ -10,7 +10,7 @@ use DateTimeInterface;
 
 final class WalletCreatedThrowListener
 {
-    public function handle(WalletCreatedEventInterface $walletCreatedEvent): void
+    public function handle(WalletCreatedEventInterface $walletCreatedEvent): never
     {
         $holderType = $walletCreatedEvent->getHolderType();
         $uuid = $walletCreatedEvent->getWalletUuid();

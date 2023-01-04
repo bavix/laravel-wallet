@@ -14,7 +14,7 @@ final class TransactionQuery implements TransactionQueryInterface
      * @param non-empty-array<int|string, string> $uuids
      */
     public function __construct(
-        private array $uuids
+        private readonly array $uuids
     ) {
     }
 

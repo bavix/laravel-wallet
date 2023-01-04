@@ -16,8 +16,8 @@ use Bavix\Wallet\Models\Wallet;
 final class BookkeeperService implements BookkeeperServiceInterface
 {
     public function __construct(
-        private StorageServiceInterface $storageService,
-        private LockServiceInterface $lockService
+        private readonly StorageServiceInterface $storageService,
+        private readonly LockServiceInterface $lockService
     ) {
     }
 

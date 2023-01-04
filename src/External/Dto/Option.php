@@ -12,8 +12,8 @@ final class Option implements OptionDtoInterface
      * @param null|array<mixed> $meta
      */
     public function __construct(
-        private ?array $meta,
-        private bool $confirmed = true
+        private readonly ?array $meta,
+        private readonly bool $confirmed = true
     ) {
     }
 

@@ -13,8 +13,8 @@ use Bavix\Wallet\Internal\Repository\WalletRepositoryInterface;
 final class EagerLoaderService implements EagerLoaderServiceInterface
 {
     public function __construct(
-        private CastServiceInterface $castService,
-        private WalletRepositoryInterface $walletRepository
+        private readonly CastServiceInterface $castService,
+        private readonly WalletRepositoryInterface $walletRepository
     ) {
     }
 

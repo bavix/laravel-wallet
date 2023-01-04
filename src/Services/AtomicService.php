@@ -19,11 +19,11 @@ use Illuminate\Database\RecordsNotFoundException;
 final class AtomicService implements AtomicServiceInterface
 {
     public function __construct(
-        private BookkeeperServiceInterface $bookkeeperService,
-        private DatabaseServiceInterface $databaseService,
-        private StateServiceInterface $stateService,
-        private LockServiceInterface $lockService,
-        private CastServiceInterface $castService
+        private readonly BookkeeperServiceInterface $bookkeeperService,
+        private readonly DatabaseServiceInterface $databaseService,
+        private readonly StateServiceInterface $stateService,
+        private readonly LockServiceInterface $lockService,
+        private readonly CastServiceInterface $castService
     ) {
     }
 
