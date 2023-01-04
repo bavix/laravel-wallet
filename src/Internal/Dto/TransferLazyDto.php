@@ -10,13 +10,13 @@ use Bavix\Wallet\Interfaces\Wallet;
 final class TransferLazyDto implements TransferLazyDtoInterface
 {
     public function __construct(
-        private Wallet $fromWallet,
-        private Wallet $toWallet,
-        private int $discount,
-        private string $fee,
-        private TransactionDtoInterface $withdrawDto,
-        private TransactionDtoInterface $depositDto,
-        private string $status
+        private readonly Wallet $fromWallet,
+        private readonly Wallet $toWallet,
+        private readonly int $discount,
+        private readonly string $fee,
+        private readonly TransactionDtoInterface $withdrawDto,
+        private readonly TransactionDtoInterface $depositDto,
+        private readonly string $status
     ) {
     }
 

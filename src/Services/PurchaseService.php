@@ -14,7 +14,7 @@ use Bavix\Wallet\Models\Transfer;
 final class PurchaseService implements PurchaseServiceInterface
 {
     public function __construct(
-        private CastServiceInterface $castService
+        private readonly CastServiceInterface $castService
     ) {
     }
 

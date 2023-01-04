@@ -23,7 +23,7 @@ final class DatabaseTest extends TestCase
         $this->expectExceptionCode(ExceptionInterface::TRANSACTION_FAILED);
         $this->expectExceptionMessage('Transaction failed. Message: hello');
 
-        app(DatabaseServiceInterface::class)->transaction(static function () {
+        app(DatabaseServiceInterface::class)->transaction(static function (): never {
             throw new \RuntimeException('hello');
         });
     }

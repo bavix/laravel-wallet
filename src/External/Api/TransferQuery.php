@@ -13,10 +13,10 @@ final class TransferQuery
      * @param array<mixed>|ExtraDtoInterface|null $meta
      */
     public function __construct(
-        private Wallet $from,
-        private Wallet $to,
-        private float|int|string $amount,
-        private array|ExtraDtoInterface|null $meta
+        private readonly Wallet $from,
+        private readonly Wallet $to,
+        private readonly float|int|string $amount,
+        private readonly array|ExtraDtoInterface|null $meta
     ) {
     }
 

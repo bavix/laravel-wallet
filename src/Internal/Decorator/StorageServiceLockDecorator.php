@@ -14,10 +14,10 @@ use Bavix\Wallet\Internal\Service\StorageServiceInterface;
 final class StorageServiceLockDecorator implements StorageServiceInterface
 {
     public function __construct(
-        private StorageServiceInterface $storageService,
-        private StateServiceInterface $stateService,
-        private LockServiceInterface $lockService,
-        private MathServiceInterface $mathService
+        private readonly StorageServiceInterface $storageService,
+        private readonly StateServiceInterface $stateService,
+        private readonly LockServiceInterface $lockService,
+        private readonly MathServiceInterface $mathService
     ) {
     }
 

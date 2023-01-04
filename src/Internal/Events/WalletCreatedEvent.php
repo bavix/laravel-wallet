@@ -9,11 +9,11 @@ use DateTimeImmutable;
 final class WalletCreatedEvent implements WalletCreatedEventInterface
 {
     public function __construct(
-        private string $holderType,
-        private int|string $holderId,
-        private string $walletUuid,
-        private int $walletId,
-        private DateTimeImmutable $createdAt
+        private readonly string $holderType,
+        private readonly int|string $holderId,
+        private readonly string $walletUuid,
+        private readonly int $walletId,
+        private readonly DateTimeImmutable $createdAt
     ) {
     }
 

@@ -17,8 +17,8 @@ use Bavix\Wallet\Internal\Service\MathServiceInterface;
 final class AssistantService implements AssistantServiceInterface
 {
     public function __construct(
-        private CastServiceInterface $castService,
-        private MathServiceInterface $mathService
+        private readonly CastServiceInterface $castService,
+        private readonly MathServiceInterface $mathService
     ) {
     }
 
