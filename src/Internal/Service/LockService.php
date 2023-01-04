@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Service;
 
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
@@ -29,6 +31,9 @@ final class LockService implements LockServiceInterface
         $this->lockedKeys = $cacheFactory->store('array');
     }
 
+    /**
+     * @throws LockProviderNotFoundException
+     */
     public function block(string $key, callable $callback): mixed
     {
         if ($this->isBlocked($key)) {
@@ -59,6 +64,8 @@ final class LockService implements LockServiceInterface
      * @param callable(): T $callback
      *
      * @return T
+     *
+     * @throws LockProviderNotFoundException
      */
     public function blocks(array $keys, callable $callback): mixed
     {
@@ -94,11 +101,20 @@ final class LockService implements LockServiceInterface
         return $this->lockedKeys->get(self::INNER_KEYS . $key) === true;
     }
 
+    /**
+     * @throws LockProviderNotFoundException
+     */
+    #[\PHPUnit\Framework\Attributes\CodeCoverageIgnore]
     private function getLockProvider(): LockProvider
     {
         if ($this->lockProvider === null) {
             $store = $this->cache->getStore();
-            assert($store instanceof LockProvider);
+            if (! ($store instanceof LockProvider)) {
+                throw new LockProviderNotFoundException(
+                    'Lockable cache not found',
+                    ExceptionInterface::LOCK_PROVIDER_NOT_FOUND
+                );
+            }
 
             $this->lockProvider = $store;
         }
