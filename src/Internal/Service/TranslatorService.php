@@ -9,7 +9,7 @@ use Illuminate\Contracts\Translation\Translator;
 final class TranslatorService implements TranslatorServiceInterface
 {
     public function __construct(
-        private Translator $translator
+        private readonly Translator $translator
     ) {
     }
 

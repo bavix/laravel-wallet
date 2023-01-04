@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 final class TransferDtoAssembler implements TransferDtoAssemblerInterface
 {
     public function __construct(
-        private UuidFactoryServiceInterface $uuidService
+        private readonly UuidFactoryServiceInterface $uuidService
     ) {
     }
 

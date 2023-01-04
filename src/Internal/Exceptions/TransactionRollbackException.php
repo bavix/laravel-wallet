@@ -9,7 +9,7 @@ use InvalidArgumentException;
 final class TransactionRollbackException extends InvalidArgumentException implements ExceptionInterface
 {
     public function __construct(
-        private mixed $result
+        private readonly mixed $result
     ) {
         parent::__construct();
     }

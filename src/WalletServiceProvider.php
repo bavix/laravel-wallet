@@ -122,9 +122,8 @@ final class WalletServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap services.
-     *
-     * @codeCoverageIgnore
      */
+    #[\PHPUnit\Framework\Attributes\CodeCoverageIgnore]
     public function boot(): void
     {
         $this->loadTranslationsFrom(dirname(__DIR__) . '/resources/lang', 'wallet');

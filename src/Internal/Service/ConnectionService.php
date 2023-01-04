@@ -12,7 +12,7 @@ use Illuminate\Database\ConnectionResolverInterface;
  */
 final class ConnectionService implements ConnectionServiceInterface
 {
-    private ConnectionInterface $connection;
+    private readonly ConnectionInterface $connection;
 
     public function __construct(ConnectionResolverInterface $connectionResolver)
     {

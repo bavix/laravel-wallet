@@ -17,10 +17,10 @@ use Bavix\Wallet\Services\TransferServiceInterface;
 final class TransferQueryHandler implements TransferQueryHandlerInterface
 {
     public function __construct(
-        private AssistantServiceInterface $assistantService,
-        private TransferServiceInterface $transferService,
-        private PrepareServiceInterface $prepareService,
-        private AtomicServiceInterface $atomicService
+        private readonly AssistantServiceInterface $assistantService,
+        private readonly TransferServiceInterface $transferService,
+        private readonly PrepareServiceInterface $prepareService,
+        private readonly AtomicServiceInterface $atomicService
     ) {
     }
 
