@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet;
 
-/**
- * Class WalletConfigure.
- *
- * @codeCoverageIgnore
- */
+#[\PHPUnit\Framework\Attributes\CodeCoverageIgnore]
 final class WalletConfigure
 {
     private static bool $runsMigrations = true;

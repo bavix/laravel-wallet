@@ -9,21 +9,21 @@ use DateTimeImmutable;
 /** @psalm-immutable */
 final class TransferDto implements TransferDtoInterface
 {
-    private DateTimeImmutable $createdAt;
+    private readonly DateTimeImmutable $createdAt;
 
-    private DateTimeImmutable $updatedAt;
+    private readonly DateTimeImmutable $updatedAt;
 
     public function __construct(
-        private string $uuid,
-        private int $depositId,
-        private int $withdrawId,
-        private string $status,
-        private string $fromType,
-        private int|string $fromId,
-        private string $toType,
-        private int|string $toId,
-        private int $discount,
-        private string $fee
+        private readonly string $uuid,
+        private readonly int $depositId,
+        private readonly int $withdrawId,
+        private readonly string $status,
+        private readonly string $fromType,
+        private readonly int|string $fromId,
+        private readonly string $toType,
+        private readonly int|string $toId,
+        private readonly int $discount,
+        private readonly string $fee
     ) {
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();

@@ -9,7 +9,7 @@ use Bavix\Wallet\Test\Infra\Exceptions\UnknownEventException;
 
 final class BalanceUpdatedThrowUuidListener
 {
-    public function handle(BalanceUpdatedEventInterface $balanceChangedEvent): void
+    public function handle(BalanceUpdatedEventInterface $balanceChangedEvent): never
     {
         throw new UnknownEventException(
             $balanceChangedEvent->getWalletUuid(),
