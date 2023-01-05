@@ -107,6 +107,7 @@ use Bavix\Wallet\Services\TransferService;
 use Bavix\Wallet\Services\TransferServiceInterface;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Services\WalletServiceInterface;
+use Illuminate\Contracts\Support\DeferrableProvider;
 use function config;
 use function dirname;
 use function function_exists;
@@ -118,7 +119,7 @@ use Illuminate\Database\Events\TransactionRolledBack;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
-final class WalletServiceProvider extends ServiceProvider
+final class WalletServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
      * Bootstrap services.
@@ -131,10 +132,6 @@ final class WalletServiceProvider extends ServiceProvider
         Event::listen(TransactionCommitting::class, Internal\Listeners\TransactionCommittingListener::class);
         Event::listen(TransactionCommitted::class, Internal\Listeners\TransactionCommittedListener::class);
         Event::listen(TransactionRolledBack::class, Internal\Listeners\TransactionRolledBackListener::class);
-
-        if (! $this->app->runningInConsole()) {
-            return;
-        }
 
         if ($this->shouldMigrate()) {
             $this->loadMigrationsFrom([dirname(__DIR__) . '/database']);
@@ -421,5 +418,27 @@ final class WalletServiceProvider extends ServiceProvider
         // api
         $this->app->bind(TransactionQueryHandlerInterface::class, TransactionQueryHandler::class);
         $this->app->bind(TransferQueryHandlerInterface::class, TransferQueryHandler::class);
+    }
+
+    /**
+     * @return class-string[]
+     */
+    public function provides(): array
+    {
+        return [
+            // internal
+            // services
+            // repositories
+            // transformers
+            // assemblers
+            // events
+            BalanceUpdatedEventInterface::class,
+            WalletCreatedEventInterface::class,
+            TransactionCreatedEventInterface::class,
+
+            // bindObjects
+            TransactionQueryHandlerInterface::class,
+            TransferQueryHandlerInterface::class,
+        ];
     }
 }
