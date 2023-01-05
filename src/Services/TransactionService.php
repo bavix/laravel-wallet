@@ -7,7 +7,6 @@ namespace Bavix\Wallet\Services;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransactionCreatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
-use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Service\DispatcherServiceInterface;
 use Bavix\Wallet\Models\Transaction;
@@ -29,7 +28,6 @@ final class TransactionService implements TransactionServiceInterface
     }
 
     /**
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      */
     public function makeOne(
@@ -56,7 +54,6 @@ final class TransactionService implements TransactionServiceInterface
      * @param non-empty-array<int, Wallet> $wallets
      * @param non-empty-array<int, TransactionDtoInterface> $objects
      *
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      *
      * @return non-empty-array<string, Transaction>
