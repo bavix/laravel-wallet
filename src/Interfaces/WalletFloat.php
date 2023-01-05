@@ -9,7 +9,6 @@ use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\External\Contracts\ExtraDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
-use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
@@ -21,7 +20,6 @@ interface WalletFloat
      * @param null|array<mixed> $meta
      *
      * @throws AmountInvalid
-     * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
@@ -34,7 +32,6 @@ interface WalletFloat
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
-     * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
@@ -45,7 +42,6 @@ interface WalletFloat
      * @param null|array<mixed> $meta
      *
      * @throws AmountInvalid
-     * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
@@ -62,7 +58,6 @@ interface WalletFloat
      * @throws AmountInvalid
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
-     * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
@@ -86,7 +81,6 @@ interface WalletFloat
      * @param ExtraDtoInterface|array<mixed>|null $meta
      *
      * @throws AmountInvalid
-     * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
