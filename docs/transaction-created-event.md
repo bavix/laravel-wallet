@@ -2,7 +2,7 @@
 
 The events are similar to the events for updating the balance, only for the creation of a wallet. A frequent case of transferring data via websockets to the front-end.
 
-Version 7.3 introduces an interface to which you can subscribe.
+Version 9.1 introduces an interface to which you can subscribe.
 This is done using standard Laravel methods.
 More information in the [documentation](https://laravel.com/docs/8.x/events).
 
