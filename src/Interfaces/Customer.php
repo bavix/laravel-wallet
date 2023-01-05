@@ -8,7 +8,6 @@ use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
-use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
@@ -21,7 +20,6 @@ interface Customer extends Wallet
      * @throws ProductEnded
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -35,7 +33,6 @@ interface Customer extends Wallet
      * @throws ProductEnded
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -45,7 +42,6 @@ interface Customer extends Wallet
 
     /**
      * @throws ProductEnded
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -58,7 +54,6 @@ interface Customer extends Wallet
     /**
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -68,7 +63,6 @@ interface Customer extends Wallet
     public function refund(ProductInterface $product, bool $force = false, bool $gifts = false): bool;
 
     /**
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -82,7 +76,6 @@ interface Customer extends Wallet
     /**
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -92,7 +85,6 @@ interface Customer extends Wallet
     public function refundGift(ProductInterface $product, bool $force = false): bool;
 
     /**
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -105,7 +97,6 @@ interface Customer extends Wallet
      * @throws ProductEnded
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -124,7 +115,6 @@ interface Customer extends Wallet
      * @throws ProductEnded
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -136,7 +126,6 @@ interface Customer extends Wallet
 
     /**
      * @throws ProductEnded
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -151,7 +140,6 @@ interface Customer extends Wallet
     /**
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -161,7 +149,6 @@ interface Customer extends Wallet
     public function refundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool;
 
     /**
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -175,7 +162,6 @@ interface Customer extends Wallet
     /**
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -185,7 +171,6 @@ interface Customer extends Wallet
     public function refundGiftCart(CartInterface $cart, bool $force = false): bool;
 
     /**
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException

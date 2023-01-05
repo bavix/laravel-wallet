@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Internal\Service;
 
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
-use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
@@ -131,7 +130,6 @@ final class StorageService implements StorageServiceInterface
      * @return non-empty-array<key-of<T>, string>
      * @psalm-return non-empty-array<string, string>
      *
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      */
     public function multiIncrease(array $inputs): array

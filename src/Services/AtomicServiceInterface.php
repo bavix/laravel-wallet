@@ -6,7 +6,6 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
-use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Illuminate\Database\RecordsNotFoundException;
 
@@ -19,7 +18,6 @@ interface AtomicServiceInterface
      * @param callable(): T $callback
      * @return T
      *
-     * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
@@ -35,7 +33,6 @@ interface AtomicServiceInterface
      * @param callable(): T $callback
      * @return T
      *
-     * @throws LockProviderNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
