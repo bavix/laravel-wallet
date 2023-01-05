@@ -11,7 +11,6 @@ use Bavix\Wallet\Interfaces\CartInterface;
 use Bavix\Wallet\Interfaces\ProductInterface;
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
-use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
@@ -42,7 +41,6 @@ trait CartPay
      * @throws ProductEnded
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -101,7 +99,6 @@ trait CartPay
      * @throws ProductEnded
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -159,7 +156,6 @@ trait CartPay
 
     /**
      * @throws ProductEnded
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -184,7 +180,6 @@ trait CartPay
     /**
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -241,7 +236,6 @@ trait CartPay
     }
 
     /**
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -265,7 +259,6 @@ trait CartPay
     /**
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
@@ -278,7 +271,6 @@ trait CartPay
     }
 
     /**
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
