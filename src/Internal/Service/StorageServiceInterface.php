@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Service;
 
-use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 
 interface StorageServiceInterface
@@ -21,7 +20,6 @@ interface StorageServiceInterface
     public function sync(string $uuid, float|int|string $value): bool;
 
     /**
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      */
     public function increase(string $uuid, float|int|string $value): string;
@@ -50,7 +48,6 @@ interface StorageServiceInterface
      * @return non-empty-array<key-of<T>, string>
      * @psalm-return non-empty-array<string, string>
      *
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      */
     public function multiIncrease(array $inputs): array;

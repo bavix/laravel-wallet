@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
-use Bavix\Wallet\Internal\Exceptions\LockProviderNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Models\Wallet;
 
@@ -15,13 +14,11 @@ interface BookkeeperServiceInterface
     public function amount(Wallet $wallet): string;
 
     /**
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      */
     public function sync(Wallet $wallet, float|int|string $value): bool;
 
     /**
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      */
     public function increase(Wallet $wallet, float|int|string $value): string;
@@ -39,7 +36,6 @@ interface BookkeeperServiceInterface
     /**
      * @param non-empty-array<string, float|int|string> $balances
      *
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      */
     public function multiSync(array $balances): bool;
@@ -52,7 +48,6 @@ interface BookkeeperServiceInterface
      *
      * @return non-empty-array<key-of<T>, string>
      *
-     * @throws LockProviderNotFoundException
      * @throws RecordNotFoundException
      */
     public function multiIncrease(array $wallets, array $incrementValues): array;
