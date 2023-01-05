@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test\Units\Service;
 
 use Bavix\Wallet\Test\Infra\TestCase;
-use Bavix\Wallet\WalletConfigure;
 use Bavix\Wallet\WalletServiceProvider;
 
 /**
