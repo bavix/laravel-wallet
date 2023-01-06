@@ -111,6 +111,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - interface `Product`
 - method `CartPay::paid`
 
+## [8.4.2] - 2022-12-29
+### Fixed
+- fix withdraw/transfer
+
 ## [8.4.1] - 2022-04-26
 ### Deprecated
 - Cart::getUniqueItems
@@ -185,6 +189,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - Removed php 7.4 support
+
+## [7.3.5] - 2022-12-29
+### Fixed
+- fix withdraw/transfer
+
+## [7.3.4] - 2022-08-08
+### Fixed
+- Fixed a bug with sending multiple events inside the queue. Extra events were sent.
+
+## [7.3.3] - 2022-02-26
+### Updated
+- Replaced an object with an interface (Events) #444 @ysfkaya
 
 ## [7.3.2] - 2022-02-12
 ### Fixed
@@ -619,7 +635,7 @@ This removes a lot of errors that were sent to my email.
 - Add `Taxable`.
 - New exception's.
 - Add decimal places (replacement ratio).
-​
+
 317
 ### Deprecated
 318
@@ -948,7 +964,7 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/9.6.0...master
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/9.6.0...10.x
 [9.6.0]: https://github.com/bavix/laravel-wallet/compare/9.5.0...9.6.0
 [9.5.0]: https://github.com/bavix/laravel-wallet/compare/9.4.0...9.5.0
 [9.4.0]: https://github.com/bavix/laravel-wallet/compare/9.3.0...9.4.0
@@ -959,7 +975,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 [9.0.3]: https://github.com/bavix/laravel-wallet/compare/9.0.2...9.0.3
 [9.0.2]: https://github.com/bavix/laravel-wallet/compare/9.0.1...9.0.2
 [9.0.1]: https://github.com/bavix/laravel-wallet/compare/9.0.0...9.0.1
-[9.0.0]: https://github.com/bavix/laravel-wallet/compare/8.4.1...9.0.0
+[9.0.0]: https://github.com/bavix/laravel-wallet/compare/8.4.2...9.0.0
+[8.4.2]: https://github.com/bavix/laravel-wallet/compare/8.4.1...8.4.2
 [8.4.1]: https://github.com/bavix/laravel-wallet/compare/8.4.0...8.4.1
 [8.4.0]: https://github.com/bavix/laravel-wallet/compare/8.3.0...8.4.0
 [8.3.0]: https://github.com/bavix/laravel-wallet/compare/8.2.1...8.3.0
@@ -973,7 +990,10 @@ The operation is now executed in the transaction and updates the new `refund` fi
 [8.0.3]: https://github.com/bavix/laravel-wallet/compare/8.0.2...8.0.3
 [8.0.2]: https://github.com/bavix/laravel-wallet/compare/8.0.1...8.0.2
 [8.0.1]: https://github.com/bavix/laravel-wallet/compare/8.0.0...8.0.1
-[8.0.0]: https://github.com/bavix/laravel-wallet/compare/7.3.2...8.0.0
+[8.0.0]: https://github.com/bavix/laravel-wallet/compare/7.3.5...8.0.0
+[7.3.5]: https://github.com/bavix/laravel-wallet/compare/7.3.4...7.3.5
+[7.3.4]: https://github.com/bavix/laravel-wallet/compare/7.3.3...7.3.4
+[7.3.3]: https://github.com/bavix/laravel-wallet/compare/7.3.2...7.3.3
 [7.3.2]: https://github.com/bavix/laravel-wallet/compare/7.3.1...7.3.2
 [7.3.1]: https://github.com/bavix/laravel-wallet/compare/7.3.0...7.3.1
 [7.3.0]: https://github.com/bavix/laravel-wallet/compare/7.2.0...7.3.0
