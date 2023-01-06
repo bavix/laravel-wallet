@@ -111,7 +111,6 @@ use function config;
 use function dirname;
 use function function_exists;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
-use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Database\Events\TransactionBeginning;
 use Illuminate\Database\Events\TransactionCommitted;
 use Illuminate\Database\Events\TransactionCommitting;
@@ -119,7 +118,7 @@ use Illuminate\Database\Events\TransactionRolledBack;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
-final class WalletServiceProvider extends ServiceProvider implements DeferrableProvider
+final class WalletServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap services.
@@ -181,22 +180,6 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         $this->events($configure['events'] ?? []);
 
         $this->bindObjects($configure);
-    }
-
-    /**
-     * @return class-string[]
-     */
-    public function provides(): array
-    {
-        return array_merge(
-            $this->internalProviders(),
-            $this->servicesProviders(),
-            $this->repositoriesProviders(),
-            $this->transformersProviders(),
-            $this->assemblersProviders(),
-            $this->eventsProviders(),
-            $this->bindObjectsProviders(),
-        );
     }
 
     /**
@@ -434,111 +417,5 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         // api
         $this->app->bind(TransactionQueryHandlerInterface::class, TransactionQueryHandler::class);
         $this->app->bind(TransferQueryHandlerInterface::class, TransferQueryHandler::class);
-    }
-
-    /**
-     * @return class-string[]
-     */
-    private function internalProviders(): array
-    {
-        return [
-            ClockServiceInterface::class,
-            ConnectionServiceInterface::class,
-            DatabaseServiceInterface::class,
-            DispatcherServiceInterface::class,
-            JsonServiceInterface::class,
-            LockServiceInterface::class,
-            MathServiceInterface::class,
-            StateServiceInterface::class,
-            TranslatorServiceInterface::class,
-            UuidFactoryServiceInterface::class,
-        ];
-    }
-
-    /**
-     * @return class-string[]
-     */
-    private function servicesProviders(): array
-    {
-        return [
-            AssistantServiceInterface::class,
-            AtmServiceInterface::class,
-            AtomicServiceInterface::class,
-            BasketServiceInterface::class,
-            CastServiceInterface::class,
-            ConsistencyServiceInterface::class,
-            DiscountServiceInterface::class,
-            EagerLoaderServiceInterface::class,
-            ExchangeServiceInterface::class,
-            PrepareServiceInterface::class,
-            PurchaseServiceInterface::class,
-            TaxServiceInterface::class,
-            TransactionServiceInterface::class,
-            TransferServiceInterface::class,
-            WalletServiceInterface::class,
-
-            BookkeeperServiceInterface::class,
-            RegulatorServiceInterface::class,
-        ];
-    }
-
-    /**
-     * @return class-string[]
-     */
-    private function repositoriesProviders(): array
-    {
-        return [
-            TransactionRepositoryInterface::class,
-            TransferRepositoryInterface::class,
-            WalletRepositoryInterface::class,
-        ];
-    }
-
-    /**
-     * @return class-string[]
-     */
-    private function transformersProviders(): array
-    {
-        return [
-            AvailabilityDtoAssemblerInterface::class,
-            BalanceUpdatedEventAssemblerInterface::class,
-            ExtraDtoAssemblerInterface::class,
-            OptionDtoAssemblerInterface::class,
-            TransactionDtoAssemblerInterface::class,
-            TransferLazyDtoAssemblerInterface::class,
-            TransferDtoAssemblerInterface::class,
-            TransactionQueryAssemblerInterface::class,
-            TransferQueryAssemblerInterface::class,
-            WalletCreatedEventAssemblerInterface::class,
-            TransactionCreatedEventAssemblerInterface::class,
-        ];
-    }
-
-    /**
-     * @return class-string[]
-     */
-    private function assemblersProviders(): array
-    {
-        return [TransactionDtoTransformerInterface::class, TransferDtoTransformerInterface::class];
-    }
-
-    /**
-     * @return class-string[]
-     */
-    private function eventsProviders(): array
-    {
-        return [
-            BalanceUpdatedEventInterface::class,
-            WalletCreatedEventInterface::class,
-            TransactionCreatedEventInterface::class,
-        ];
-    }
-
-    /**
-     * @return class-string[]
-     */
-    private function bindObjectsProviders(): array
-    {
-        return [TransactionQueryHandlerInterface::class, TransferQueryHandlerInterface::class];
     }
 }
