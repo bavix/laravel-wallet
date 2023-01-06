@@ -43,7 +43,6 @@ final class PurchaseService implements PurchaseServiceInterface
              */
             $arrays[] = (clone $query)
                 ->with(['deposit', 'withdraw.wallet'])
-                ->where('to_type', $wallet->getMorphClass())
                 ->where('to_id', $wallet->getKey())
                 ->whereIn('status', $status)
                 ->orderBy('id', 'desc')
