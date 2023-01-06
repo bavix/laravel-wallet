@@ -119,7 +119,7 @@ use Illuminate\Database\Events\TransactionRolledBack;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
-final class WalletServiceProvider extends ServiceProvider //implements DeferrableProvider
+final class WalletServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
      * Bootstrap services.
@@ -139,7 +139,7 @@ final class WalletServiceProvider extends ServiceProvider //implements Deferrabl
         }
         /* @codeCoverageIgnoreEnd */
 
-        if ($this->shouldMigrate()) {
+        if (WalletConfigure::isRunsMigrations() || $this->app->runningUnitTests()) {
             $this->loadMigrationsFrom([dirname(__DIR__) . '/database']);
         }
 
@@ -189,21 +189,21 @@ final class WalletServiceProvider extends ServiceProvider //implements Deferrabl
         $this->bindObjects($configure);
     }
 
-//    /**
-//     * @return class-string[]
-//     */
-//    public function provides(): array
-//    {
-//        return array_merge(
-//            $this->internalProviders(),
-//            $this->servicesProviders(),
-//            $this->repositoriesProviders(),
-//            $this->transformersProviders(),
-//            $this->assemblersProviders(),
-//            $this->eventsProviders(),
-//            $this->bindObjectsProviders(),
-//        );
-//    }
+    /**
+     * @return class-string[]
+     */
+    public function provides(): array
+    {
+        return array_merge(
+            $this->internalProviders(),
+            $this->servicesProviders(),
+            $this->repositoriesProviders(),
+            $this->transformersProviders(),
+            $this->assemblersProviders(),
+            $this->eventsProviders(),
+            $this->bindObjectsProviders(),
+        );
+    }
 
     /**
      * @param array<class-string|null> $configure
@@ -221,14 +221,6 @@ final class WalletServiceProvider extends ServiceProvider //implements Deferrabl
         );
 
         $this->app->singleton(WalletRepositoryInterface::class, $configure['wallet'] ?? WalletRepository::class);
-    }
-
-    /**
-     * Determine if we should register the migrations.
-     */
-    private function shouldMigrate(): bool
-    {
-        return WalletConfigure::isRunsMigrations();
     }
 
     /**
