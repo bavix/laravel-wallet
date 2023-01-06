@@ -13,7 +13,7 @@ use Illuminate\Contracts\Support\DeferrableProvider;
  */
 final class DeferrableTest extends TestCase
 {
-    public function testIgnoreMigrations(): void
+    public function testCheckDeferrableProvider(): void
     {
         $walletServiceProvider = app()
             ->resolveProvider(WalletServiceProvider::class)
