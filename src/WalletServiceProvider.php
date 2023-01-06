@@ -139,7 +139,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         }
         // @codeCoverageIgnoreEnd
 
-        if (WalletConfigure::isRunsMigrations() || $this->app->runningUnitTests()) {
+        if (WalletConfigure::isRunsMigrations()) {
             $this->loadMigrationsFrom([dirname(__DIR__) . '/database']);
         }
 

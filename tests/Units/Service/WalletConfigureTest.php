@@ -18,5 +18,8 @@ final class WalletConfigureTest extends TestCase
 
         WalletConfigure::ignoreMigrations();
         self::assertFalse(WalletConfigure::isRunsMigrations());
+
+        WalletConfigure::reset();
+        self::assertTrue(WalletConfigure::isRunsMigrations());
     }
 }
