@@ -6,14 +6,10 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateItemsTable extends Migration
-{
-    /**
-     * Run the migrations.
-     */
-    public function up()
+return new class() extends Migration {
+    public function up(): void
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('items', static function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->integer('price');
@@ -22,11 +18,8 @@ class CreateItemsTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('items');
     }
-}
+};
