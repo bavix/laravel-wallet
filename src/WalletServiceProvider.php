@@ -119,7 +119,7 @@ use Illuminate\Database\Events\TransactionRolledBack;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
-final class WalletServiceProvider extends ServiceProvider implements DeferrableProvider
+final class WalletServiceProvider extends ServiceProvider //implements DeferrableProvider
 {
     /**
      * Bootstrap services.
@@ -133,9 +133,11 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         Event::listen(TransactionCommitted::class, Internal\Listeners\TransactionCommittedListener::class);
         Event::listen(TransactionRolledBack::class, Internal\Listeners\TransactionRolledBackListener::class);
 
+        /* @codeCoverageIgnoreStart */
         if (! $this->app->runningInConsole()) {
             return;
         }
+        /* @codeCoverageIgnoreEnd */
 
         if ($this->shouldMigrate()) {
             $this->loadMigrationsFrom([dirname(__DIR__) . '/database']);
@@ -187,21 +189,21 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         $this->bindObjects($configure);
     }
 
-    /**
-     * @return class-string[]
-     */
-    public function provides(): array
-    {
-        return array_merge(
-            $this->internalProviders(),
-            $this->servicesProviders(),
-            $this->repositoriesProviders(),
-            $this->transformersProviders(),
-            $this->assemblersProviders(),
-            $this->eventsProviders(),
-            $this->bindObjectsProviders(),
-        );
-    }
+//    /**
+//     * @return class-string[]
+//     */
+//    public function provides(): array
+//    {
+//        return array_merge(
+//            $this->internalProviders(),
+//            $this->servicesProviders(),
+//            $this->repositoriesProviders(),
+//            $this->transformersProviders(),
+//            $this->assemblersProviders(),
+//            $this->eventsProviders(),
+//            $this->bindObjectsProviders(),
+//        );
+//    }
 
     /**
      * @param array<class-string|null> $configure
