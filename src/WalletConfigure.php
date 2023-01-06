@@ -9,6 +9,14 @@ final class WalletConfigure
     private static bool $runsMigrations = true;
 
     /**
+     * Needed for class testing.
+     */
+    public static function reset(): void
+    {
+        self::$runsMigrations = true;
+    }
+
+    /**
      * Configure Wallet to not register its migrations.
      */
     public static function ignoreMigrations(): void
