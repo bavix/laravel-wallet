@@ -133,6 +133,10 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         Event::listen(TransactionCommitted::class, Internal\Listeners\TransactionCommittedListener::class);
         Event::listen(TransactionRolledBack::class, Internal\Listeners\TransactionRolledBackListener::class);
 
+        if (! $this->app->runningInConsole()) {
+            return;
+        }
+
         if ($this->shouldMigrate()) {
             $this->loadMigrationsFrom([dirname(__DIR__) . '/database']);
         }
