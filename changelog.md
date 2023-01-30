@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.6.1] - 2023-01-30
+### Added
+* Add support laravel 10.x
+
 ## [9.6.0] - 2022-10-27
 ### Added
 * Full support for standard transactions and laravel nova #589
