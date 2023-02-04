@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet;
 
-use Bavix\Wallet\Commands\TransferFixCommand;
 use Bavix\Wallet\External\Api\TransactionQueryHandler;
 use Bavix\Wallet\External\Api\TransactionQueryHandlerInterface;
 use Bavix\Wallet\External\Api\TransferQueryHandler;
@@ -160,7 +159,6 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     public function register(): void
     {
         $this->mergeConfigFrom(dirname(__DIR__) . '/config/config.php', 'wallet');
-        $this->commands([TransferFixCommand::class]);
 
         /**
          * @var array{
