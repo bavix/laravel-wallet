@@ -214,12 +214,12 @@ trait HasWallet
     /**
      * the transfer table is used to confirm the payment this method receives all transfers.
      */
-    public function transfers(): MorphMany
+    public function transfers(): HasMany
     {
         /** @var Wallet $this */
         return app(CastServiceInterface::class)
             ->getWallet($this, false)
-            ->morphMany(config('wallet.transfer.model', Transfer::class), 'from')
+            ->hasMany(config('wallet.transfer.model', Transfer::class), 'from_id')
         ;
     }
 }
