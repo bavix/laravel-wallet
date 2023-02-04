@@ -195,6 +195,7 @@ trait CartPay
             if (count($transfers) !== $basketDto->total()) {
                 throw new ModelNotFoundException(
                     "No query results for model [{$this->transfers()
+                        ->getModel()
                         ->getMorphClass()}]",
                     ExceptionInterface::MODEL_NOT_FOUND
                 );

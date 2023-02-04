@@ -95,5 +95,5 @@ interface Wallet
 
     public function transactions(): MorphMany;
 
-    public function transfers(): MorphMany;
+    public function transfers(): HasMany;
 }
