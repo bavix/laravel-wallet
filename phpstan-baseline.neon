@@ -41,6 +41,11 @@ parameters:
 			path: src/Internal/Service/StateService.php
 
 		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:getModel\\(\\)\\.$#"
+			count: 1
+			path: src/Models/Wallet.php
+
+		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:where\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Wallet.php
@@ -56,7 +61,7 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\:\\:with\\(\\)\\.$#"
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:with\\(\\)\\.$#"
 			count: 1
 			path: src/Services/PurchaseService.php
 
