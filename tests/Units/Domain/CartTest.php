@@ -243,7 +243,7 @@ final class CartTest extends TestCase
             ->withItems($products) // all goods
         ;
 
-        $buyer->refundCart($refundCart);
+        self::assertTrue($buyer->refundCart($refundCart));
     }
 
     /**
