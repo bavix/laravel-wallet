@@ -29,7 +29,7 @@ final class LockService implements LockServiceInterface
     public function block(string $key, callable $callback): mixed
     {
         return $this->getLockProvider()
-            ->lock($key)
+            ->lock($key, $this->seconds)
             ->block($this->seconds, $callback)
         ;
     }
