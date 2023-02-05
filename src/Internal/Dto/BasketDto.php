@@ -40,7 +40,9 @@ final class BasketDto implements BasketDtoInterface
     public function cursor(): Generator
     {
         foreach ($this->items as $item) {
-            yield from $item->getItems();
+            foreach ($item->getItems() as $product) {
+                yield $product;
+            }
         }
     }
 

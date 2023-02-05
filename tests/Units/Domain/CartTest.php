@@ -233,7 +233,7 @@ final class CartTest extends TestCase
 
         self::assertCount($total, $cart->getItems());
         self::assertCount(count($products) - 1, $cart->getBasketDto()->items());
-        self::assertCount($total, $cart->getBasketDto()->cursor());
+        self::assertCount($total, iterator_to_array($cart->getBasketDto()->cursor()));
         self::assertSame($total, $cart->getBasketDto()->total());
 
         $transfers = $buyer->payCart($cart);
