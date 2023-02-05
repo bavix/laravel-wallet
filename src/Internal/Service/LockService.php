@@ -30,7 +30,7 @@ final class LockService implements LockServiceInterface
     /** @throws LockProviderNotFoundException */
     public function block(string $key, callable $callback)
     {
-        return $this->getLockProvider()->lock($key)
+        return $this->getLockProvider()->lock($key, $this->seconds)
             ->block($this->seconds, $callback)
         ;
     }
