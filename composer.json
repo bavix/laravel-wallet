@@ -49,8 +49,7 @@
     "phpstan/phpstan": "^1.9",
     "phpunit/phpunit": "^9.6",
     "rector/rector": "^0.15",
-    "symplify/easy-coding-standard": "^11.1",
-    "vimeo/psalm": "^4.30"
+    "symplify/easy-coding-standard": "^11.1"
   },
   "suggest": {
     "bavix/laravel-wallet-swap": "Addition to the laravel-wallet library for quick setting of exchange rates",
@@ -77,8 +76,6 @@
     "ecs": "@php vendor/bin/ecs check",
     "ecs-fix": "@php vendor/bin/ecs check --fix",
     "ecs-cc": "@php vendor/bin/ecs --clear-cache",
-    "psalm": "@php vendor/bin/psalm --show-info=true",
-    "psalm-cc": "@php vendor/bin/psalm --clear-cache",
     "rector": "@php vendor/bin/rector process --dry-run",
     "rector-fix": "@php vendor/bin/rector process"
   },
