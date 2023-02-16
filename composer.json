@@ -38,7 +38,7 @@
     "ramsey/uuid": "^4.0"
   },
   "require-dev": {
-    "brianium/paratest": "^6.8",
+    "brianium/paratest": "^7.0",
     "cknow/laravel-money": "dev-l10-compatibility",
     "driftingly/rector-laravel": "^0.15",
     "ergebnis/phpstan-rules": "^1.0",
@@ -47,7 +47,7 @@
     "nunomaduro/collision": "^6.4",
     "orchestra/testbench": "^8.0",
     "phpstan/phpstan": "^1.9",
-    "phpunit/phpunit": "^9.6",
+    "phpunit/phpunit": "^10.0",
     "rector/rector": "^0.15",
     "symplify/easy-coding-standard": "^11.1"
   },
