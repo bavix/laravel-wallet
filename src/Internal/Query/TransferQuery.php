@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Internal\Query;
 
 /**
- * @psalm-immutable
+ * @immutable
  * @internal
  */
 final class TransferQuery implements TransferQueryInterface
