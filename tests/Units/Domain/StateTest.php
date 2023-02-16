@@ -83,7 +83,7 @@ final class StateTest extends TestCase
         self::assertSame(1000, (int) $bookkeeper->amount($wallet));
         self::assertSame(1000, $wallet->balanceInt);
 
-        app(DatabaseServiceInterface::class)->transaction(function () use ($wallet, $regulator, $bookkeeper) {
+        app(DatabaseServiceInterface::class)->transaction(function () use ($wallet, $regulator, $bookkeeper): bool {
             $wallet->deposit(10000);
             self::assertSame(10000, (int) $regulator->diff($wallet));
             self::assertSame(11000, (int) $regulator->amount($wallet));
@@ -110,7 +110,7 @@ final class StateTest extends TestCase
         $bookkeeper->increase($buyer->wallet, 100);
         self::assertSame(10100, $buyer->balanceInt);
 
-        app(DatabaseServiceInterface::class)->transaction(function () use ($bookkeeper, $regulator, $buyer) {
+        app(DatabaseServiceInterface::class)->transaction(function () use ($bookkeeper, $regulator, $buyer): bool {
             self::assertTrue($buyer->wallet->refreshBalance());
             self::assertSame(-100, (int) $regulator->diff($buyer->wallet));
             self::assertSame(10100, (int) $bookkeeper->amount($buyer->wallet));
