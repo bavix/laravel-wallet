@@ -6,7 +6,7 @@ namespace Bavix\Wallet\Internal\Dto;
 
 use Bavix\Wallet\Interfaces\ProductInterface;
 
-/** @psalm-immutable */
+/** @immutable */
 final class ItemDto implements ItemDtoInterface
 {
     public function __construct(

@@ -29,7 +29,6 @@ interface BookkeeperServiceInterface
      * @param T $wallets
      *
      * @return non-empty-array<key-of<T>, string>
-     * @psalm-return non-empty-array<string, string>
      */
     public function multiAmount(array $wallets): array;
 

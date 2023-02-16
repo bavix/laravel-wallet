@@ -8,15 +8,14 @@ use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Test\Infra\TestCase;
 use Brick\Math\BigInteger;
 use Brick\Math\Exception\NumberFormatException;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @internal
  */
 final class MathTest extends TestCase
 {
-    /**
-     * @dataProvider invalidProvider
-     */
+    #[DataProvider('invalidProvider')]
     public function testAbsInvalid(string $value): void
     {
         $this->expectException(NumberFormatException::class);
@@ -340,7 +339,7 @@ final class MathTest extends TestCase
         );
     }
 
-    public function invalidProvider(): array
+    public static function invalidProvider(): array
     {
         return [['.'], ['hello'], ['--121'], ['---121']];
     }
