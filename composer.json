@@ -21,28 +21,34 @@
       "email": "info@babichev.net"
     }
   ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/laravel-shift/laravel-money.git"
+    }
+  ],
   "require": {
     "php": "^8.1",
     "ext-json": "*",
     "ext-pdo": "*",
     "brick/math": "~0.10",
-    "doctrine/dbal": "^2.8|^3.0",
+    "doctrine/dbal": "^3.5",
     "illuminate/contracts": "^10.0",
     "illuminate/database": "^10.0",
     "ramsey/uuid": "^4.0"
   },
   "require-dev": {
     "brianium/paratest": "^6.8",
-    "cknow/laravel-money": "^7.0",
-    "driftingly/rector-laravel": "^0.14",
+    "cknow/laravel-money": "dev-l10-compatibility",
+    "driftingly/rector-laravel": "^0.15",
     "ergebnis/phpstan-rules": "^1.0",
     "infection/infection": "~0.26",
-    "laravel/cashier": "^14.6",
+    "laravel/cashier": "^14.8",
     "nunomaduro/collision": "^6.4",
-    "orchestra/testbench": "^7.18",
+    "orchestra/testbench": "^8.0",
     "phpstan/phpstan": "^1.9",
-    "phpunit/phpunit": "^9.5",
-    "rector/rector": "^0.14",
+    "phpunit/phpunit": "^9.6",
+    "rector/rector": "^0.15",
     "symplify/easy-coding-standard": "^11.1",
     "vimeo/psalm": "^4.30"
   },
