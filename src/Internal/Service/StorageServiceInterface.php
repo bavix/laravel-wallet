@@ -46,7 +46,6 @@ interface StorageServiceInterface
      * @param T $inputs
      *
      * @return non-empty-array<key-of<T>, string>
-     * @psalm-return non-empty-array<string, string>
      *
      * @throws RecordNotFoundException
      */
