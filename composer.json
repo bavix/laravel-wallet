@@ -21,12 +21,6 @@
       "email": "info@babichev.net"
     }
   ],
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/laravel-shift/laravel-money"
-    }
-  ],
   "require": {
     "php": "^8.1",
     "ext-json": "*",
@@ -39,7 +33,7 @@
   },
   "require-dev": {
     "brianium/paratest": "^7.0",
-    "cknow/laravel-money": "dev-l10-compatibility",
+    "cknow/laravel-money": "^7.1",
     "driftingly/rector-laravel": "^0.15",
     "ergebnis/phpstan-rules": "^1.0",
     "infection/infection": "~0.26",
