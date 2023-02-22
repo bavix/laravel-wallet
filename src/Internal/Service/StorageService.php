@@ -24,7 +24,7 @@ final class StorageService implements StorageServiceInterface
         return $this->cacheRepository->clear();
     }
 
-    public function missing(string $uuid): bool
+    public function forget(string $uuid): bool
     {
         return $this->cacheRepository->forget(self::PREFIX . $uuid);
     }

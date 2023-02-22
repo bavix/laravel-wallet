@@ -41,9 +41,14 @@ final class RegulatorService implements RegulatorServiceInterface
 
     public function missing(Wallet $wallet): bool
     {
+        return $this->forget($wallet);
+    }
+
+    public function forget(Wallet $wallet): bool
+    {
         unset($this->wallets[$wallet->uuid]);
 
-        return $this->storageService->missing($wallet->uuid);
+        return $this->storageService->forget($wallet->uuid);
     }
 
     public function diff(Wallet $wallet): string
@@ -140,7 +145,7 @@ final class RegulatorService implements RegulatorServiceInterface
             $this->lockService->releases(array_keys($this->wallets));
             $this->multiIncrease = [];
             foreach ($this->wallets as $wallet) {
-                $this->missing($wallet);
+                $this->forget($wallet);
             }
         } finally {
             $this->dispatcherService->forgot();
