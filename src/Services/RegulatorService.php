@@ -12,6 +12,7 @@ use Bavix\Wallet\Internal\Service\LockServiceInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Internal\Service\StorageServiceInterface;
 use Bavix\Wallet\Models\Wallet;
+use PHPUnit\Framework\Attributes\CodeCoverageIgnore;
 
 /**
  * @internal
@@ -39,6 +40,7 @@ final class RegulatorService implements RegulatorServiceInterface
     ) {
     }
 
+    #[CodeCoverageIgnore]
     public function missing(Wallet $wallet): bool
     {
         return $this->forget($wallet);

@@ -6,7 +6,6 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Models\Wallet;
-use PHPUnit\Framework\Attributes\CodeCoverageIgnore;
 
 interface BookkeeperServiceInterface
 {
@@ -14,7 +13,6 @@ interface BookkeeperServiceInterface
      * @deprecated Fixed naming.
      * @see forget
      */
-    #[CodeCoverageIgnore]
     public function missing(Wallet $wallet): bool;
 
     public function forget(Wallet $wallet): bool;
