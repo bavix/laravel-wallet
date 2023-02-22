@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Models\Wallet;
+use PHPUnit\Framework\Attributes\CodeCoverageIgnore;
 
 interface RegulatorServiceInterface
 {
     /**
-     * @codeCoverageIgnore
      * @deprecated Fixed naming.
      * @see forget
      */
+    #[CodeCoverageIgnore]
     public function missing(Wallet $wallet): bool;
 
     public function forget(Wallet $wallet): bool;
