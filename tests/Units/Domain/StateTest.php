@@ -45,7 +45,7 @@ final class StateTest extends TestCase
          *
          * Here is an example:
          */
-        app(BookkeeperServiceInterface::class)->missing($buyer->wallet);
+        app(BookkeeperServiceInterface::class)->forget($buyer->wallet);
         self::assertSame(1000, (int) $wallet->getRawOriginal('balance'));
 
         /**

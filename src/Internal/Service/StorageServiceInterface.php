@@ -10,7 +10,7 @@ interface StorageServiceInterface
 {
     public function flush(): bool;
 
-    public function missing(string $uuid): bool;
+    public function forget(string $uuid): bool;
 
     /**
      * @throws RecordNotFoundException

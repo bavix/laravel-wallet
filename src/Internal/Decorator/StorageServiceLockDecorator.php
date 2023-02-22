@@ -25,9 +25,9 @@ final class StorageServiceLockDecorator implements StorageServiceInterface
         return $this->storageService->flush();
     }
 
-    public function missing(string $uuid): bool
+    public function forget(string $uuid): bool
     {
-        return $this->storageService->missing($uuid);
+        return $this->storageService->forget($uuid);
     }
 
     public function get(string $uuid): string
