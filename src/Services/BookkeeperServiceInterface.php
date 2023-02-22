@@ -10,6 +10,7 @@ use Bavix\Wallet\Models\Wallet;
 interface BookkeeperServiceInterface
 {
     /**
+     * @codeCoverageIgnore
      * @deprecated Fixed naming.
      * @see forget
      */
