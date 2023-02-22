@@ -22,7 +22,12 @@ final class BookkeeperService implements BookkeeperServiceInterface
 
     public function missing(Wallet $wallet): bool
     {
-        return $this->storageService->missing($wallet->uuid);
+        return $this->forget($wallet);
+    }
+
+    public function forget(Wallet $wallet): bool
+    {
+        return $this->storageService->forget($wallet->uuid);
     }
 
     /**
