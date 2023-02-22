@@ -9,6 +9,7 @@ use Bavix\Wallet\Models\Wallet;
 interface RegulatorServiceInterface
 {
     /**
+     * @codeCoverageIgnore
      * @deprecated Fixed naming.
      * @see forget
      */
