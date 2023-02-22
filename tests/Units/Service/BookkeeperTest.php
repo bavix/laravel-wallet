@@ -43,7 +43,7 @@ final class BookkeeperTest extends TestCase
 
         $booker = app(BookkeeperService::class);
         self::assertSame('5', $booker->increase($buyer->wallet, 5));
-        self::assertTrue($booker->missing($buyer->wallet));
+        self::assertTrue($booker->forget($buyer->wallet));
         self::assertSame('0', $booker->amount($buyer->wallet));
     }
 
@@ -63,7 +63,7 @@ final class BookkeeperTest extends TestCase
                 $buyer->wallet->uuid => 5,
             ]),
         );
-        self::assertTrue($booker->missing($buyer->wallet));
+        self::assertTrue($booker->forget($buyer->wallet));
         self::assertSame('0', $booker->amount($buyer->wallet));
     }
 }
