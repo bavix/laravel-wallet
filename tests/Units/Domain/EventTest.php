@@ -17,12 +17,14 @@ use Bavix\Wallet\Services\PurchaseServiceInterface;
 use Bavix\Wallet\Test\Infra\Exceptions\UnknownEventException;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Factories\ItemFactory;
+use Bavix\Wallet\Test\Infra\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Infra\Listeners\BalanceUpdatedThrowDateListener;
 use Bavix\Wallet\Test\Infra\Listeners\BalanceUpdatedThrowIdListener;
 use Bavix\Wallet\Test\Infra\Listeners\BalanceUpdatedThrowUuidListener;
 use Bavix\Wallet\Test\Infra\Listeners\TransactionCreatedThrowListener;
 use Bavix\Wallet\Test\Infra\Listeners\WalletCreatedThrowListener;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
+use Bavix\Wallet\Test\Infra\Models\UserMulti;
 use Bavix\Wallet\Test\Infra\Services\ClockFakeService;
 use Bavix\Wallet\Test\Infra\TestCase;
 use DateTimeInterface;
@@ -105,6 +107,30 @@ final class EventTest extends TestCase
         $this->expectExceptionMessage($message);
 
         $buyer->getBalanceIntAttribute();
+    }
+
+    public function testMultiWalletCreatedThrowListener(): void
+    {
+        $this->app->bind(ClockServiceInterface::class, ClockFakeService::class);
+
+        Event::listen(WalletCreatedEventInterface::class, WalletCreatedThrowListener::class);
+
+        /** @var UserMulti $user */
+        $user = UserMultiFactory::new()->create();
+
+        $uuidFactoryService = app(UuidFactoryServiceInterface::class);
+        $uuid = $uuidFactoryService->uuid4();
+
+        $holderType = $user->getMorphClass();
+        $createdAt = app(ClockServiceInterface::class)->now()->format(DateTimeInterface::ATOM);
+
+        $message = hash('sha256', $holderType . $uuid . $createdAt);
+
+        // unit
+        $this->expectException(UnknownEventException::class);
+        $this->expectExceptionMessage($message);
+
+        $user->createWallet(['uuid' => $uuid, 'name' => 'test']);
     }
 
     /**
