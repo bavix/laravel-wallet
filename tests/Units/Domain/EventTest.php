@@ -130,7 +130,10 @@ final class EventTest extends TestCase
         $this->expectException(UnknownEventException::class);
         $this->expectExceptionMessage($message);
 
-        $user->createWallet(['uuid' => $uuid, 'name' => 'test']);
+        $user->createWallet([
+            'uuid' => $uuid,
+            'name' => 'test',
+        ]);
     }
 
     /**
