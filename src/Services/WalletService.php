@@ -41,6 +41,7 @@ final class WalletService implements WalletServiceInterface
 
         $event = $this->walletCreatedEventAssembler->create($wallet);
         $this->dispatcherService->dispatch($event);
+        $this->dispatcherService->lazyFlush();
 
         return $wallet;
     }
