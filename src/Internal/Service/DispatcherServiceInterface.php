@@ -13,4 +13,6 @@ interface DispatcherServiceInterface
     public function forgot(): void;
 
     public function flush(): void;
+
+    public function lazyFlush(): void;
 }

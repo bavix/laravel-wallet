@@ -15,7 +15,8 @@ final class DispatcherService implements DispatcherServiceInterface
     private array $events = [];
 
     public function __construct(
-        private Dispatcher $dispatcher
+        private Dispatcher $dispatcher,
+        private ConnectionServiceInterface $connectionService
     ) {
     }
 
@@ -42,5 +43,12 @@ final class DispatcherService implements DispatcherServiceInterface
         }
 
         $this->events = [];
+    }
+
+    public function lazyFlush(): void
+    {
+        if ($this->connectionService->get()->transactionLevel() === 0) {
+            $this->flush();
+        }
     }
 }
