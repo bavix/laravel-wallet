@@ -24,7 +24,7 @@ class ItemDiscountTaxFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->domainName,
+            'name' => fake()->domainName,
             'price' => 250,
             'quantity' => 90,
         ];
