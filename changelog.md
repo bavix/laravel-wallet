@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.6.2] - 2023-03-15
+### Fixed 
+- * Fixed WalletService::create() without db::transaction() 
+
 ## [9.6.1] - 2023-01-30
 ### Added
 * Add support laravel 10.x
@@ -976,7 +980,8 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/9.6.1...10.x
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/9.6.2...10.x
+[9.6.2]: https://github.com/bavix/laravel-wallet/compare/9.6.1...9.6.2
 [9.6.1]: https://github.com/bavix/laravel-wallet/compare/9.6.0...9.6.1
 [9.6.0]: https://github.com/bavix/laravel-wallet/compare/9.5.0...9.6.0
 [9.5.0]: https://github.com/bavix/laravel-wallet/compare/9.4.0...9.5.0
