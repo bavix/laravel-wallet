@@ -72,7 +72,7 @@ final class StateTest extends TestCase
 
         self::assertFalse($wallet->exists);
         self::assertSame(0, $wallet->balanceInt);
-        self::assertTrue($wallet->exists);
+        self::assertFalse($wallet->exists);
 
         $bookkeeper = app(BookkeeperServiceInterface::class);
         $regulator = app(RegulatorServiceInterface::class);

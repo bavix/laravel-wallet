@@ -8,6 +8,8 @@ use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
 
 /**
  * Ad hoc solution... Needed for internal purposes only. Helps to optimize greedy queries inside laravel.
+ *
+ * @api
  */
 interface EagerLoaderServiceInterface
 {

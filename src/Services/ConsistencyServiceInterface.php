@@ -10,6 +10,9 @@ use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 
+/**
+ * @api
+ */
 interface ConsistencyServiceInterface
 {
     /**

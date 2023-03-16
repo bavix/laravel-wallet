@@ -8,6 +8,9 @@ use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
 use Bavix\Wallet\Models\Transfer;
 
+/**
+ * @api
+ */
 interface PurchaseServiceInterface
 {
     /**
