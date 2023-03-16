@@ -118,9 +118,8 @@ final class BalanceTest extends TestCase
 
         self::assertFalse($wallet->exists);
         self::assertSame(0, $wallet->balanceInt);
-        self::assertTrue($wallet->exists);
 
-        $wallet->deposit(1000);
+        $wallet->deposit(1000); // create wallet
         self::assertSame(1000, $wallet->balanceInt);
 
         $regulator = app(RegulatorServiceInterface::class);
@@ -173,7 +172,7 @@ final class BalanceTest extends TestCase
 
         self::assertFalse($wallet->exists);
         self::assertSame($wallet->balanceInt, 0);
-        self::assertTrue($wallet->exists);
+        self::assertFalse($wallet->exists);
 
         self::assertSame('0', app(BookkeeperServiceInterface::class)->amount($wallet));
     }
@@ -192,7 +191,7 @@ final class BalanceTest extends TestCase
 
         self::assertFalse($wallet->exists);
         self::assertSame(0, $wallet->balanceInt);
-        self::assertTrue($wallet->exists);
+        self::assertFalse($wallet->exists);
 
         /** @var MockObject|Wallet $mockQuery */
         $mockQuery = $this->createMock($wallet->newQuery()::class);
@@ -212,11 +211,11 @@ final class BalanceTest extends TestCase
             ->willReturn($mockQuery)
         ;
         $mockWallet->method('getKey')
-            ->willReturn($wallet->getKey())
+            ->willReturn(1)
         ;
 
         $mockWallet->newQuery()
-            ->whereKey($wallet->getKey())
+            ->whereKey(1)
             ->update([
                 'balance' => 100,
             ])

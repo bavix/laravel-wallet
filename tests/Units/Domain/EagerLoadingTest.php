@@ -103,6 +103,8 @@ final class EagerLoadingTest extends TestCase
         foreach ($products as $product) {
             $productIds[] = $product->getKey();
             self::assertSame(0, $product->balanceInt);
+            self::assertFalse($product->wallet->exists);
+            self::assertTrue($product->wallet->saveQuietly());
         }
 
         /** @var ProductInterface[] $products */

@@ -7,6 +7,9 @@ namespace Bavix\Wallet\Services;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Models\Wallet;
 
+/**
+ * @api
+ */
 interface BookkeeperServiceInterface
 {
     /**

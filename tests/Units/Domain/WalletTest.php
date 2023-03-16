@@ -87,7 +87,7 @@ final class WalletTest extends TestCase
         /** @var User $user */
         $user = $users->first();
         self::assertSame(0, $user->balanceInt); // create default wallet
-        self::assertTrue($user->wallet->exists);
+        self::assertFalse($user->wallet->exists);
 
         $ids = [];
         foreach ($users as $other) {
@@ -97,9 +97,9 @@ final class WalletTest extends TestCase
             }
         }
 
-        self::assertCount(1, User::query()->has('wallet')->whereIn('id', $ids)->get());
+        self::assertCount(0, User::query()->has('wallet')->whereIn('id', $ids)->get());
 
-        self::assertCount(9, User::query()->has('wallet', '<')->whereIn('id', $ids)->get());
+        self::assertCount(10, User::query()->has('wallet', '<')->whereIn('id', $ids)->get());
     }
 
     public function testWithdraw(): void

@@ -163,15 +163,39 @@ final class MultiWalletTest extends TestCase
 
     /**
      * @see https://github.com/bavix/laravel-wallet/issues/286#issue-750353538
+     * @see https://github.com/bavix/laravel-wallet/issues/658
      */
-    public function testGetWalletOrFail(): void
+    public function testGetWalletOrFailError(): void
     {
         /** @var UserMulti $userMulti */
         $userMulti = UserMultiFactory::new()->create();
         self::assertSame(0, $userMulti->balanceInt); // createWallet
+
+        $this->expectException(ModelNotFoundException::class);
+
         $userMulti
             ->getWalletOrFail(config('wallet.wallet.default.slug', 'default'))
         ;
+    }
+
+    /**
+     * @see https://github.com/bavix/laravel-wallet/issues/286#issue-750353538
+     * @see https://github.com/bavix/laravel-wallet/issues/658
+     */
+    public function testGetWalletOrFailSuccess(): void
+    {
+        /** @var UserMulti $userMulti */
+        $userMulti = UserMultiFactory::new()->create();
+        self::assertSame(0, $userMulti->balanceInt); // createWallet
+        $uuid = $userMulti->wallet->uuid;
+
+        $userMulti->deposit(1);
+
+        $walletResult = $userMulti
+            ->getWalletOrFail(config('wallet.wallet.default.slug', 'default'))
+        ;
+
+        self::assertSame($uuid, $walletResult->uuid);
     }
 
     /**

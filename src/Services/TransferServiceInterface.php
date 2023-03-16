@@ -11,6 +11,9 @@ use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\RecordsNotFoundException;
 
+/**
+ * @api
+ */
 interface TransferServiceInterface
 {
     /**

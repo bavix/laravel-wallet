@@ -42,11 +42,12 @@ final class EventTest extends TestCase
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         self::assertSame(0, $buyer->wallet->balanceInt);
+        self::assertTrue($buyer->wallet->saveQuietly()); // create without event
 
         // unit
         $this->expectException(UnknownEventException::class);
         $this->expectExceptionMessage($buyer->wallet->uuid);
-        $this->expectExceptionCode(123);
+        $this->expectExceptionCode(123 + $buyer->wallet->getKey());
 
         $buyer->deposit(123);
     }
@@ -57,11 +58,11 @@ final class EventTest extends TestCase
 
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        self::assertSame(0, $buyer->wallet->balanceInt); // auto create wallet
+        self::assertSame(0, $buyer->wallet->balanceInt); // no create wallet
 
         // unit
         $this->expectException(UnknownEventException::class);
-        $this->expectExceptionMessage((string) $buyer->wallet->getKey());
+        $this->expectExceptionMessage($buyer->wallet->uuid);
         $this->expectExceptionCode(456);
 
         $buyer->deposit(456);
@@ -106,7 +107,7 @@ final class EventTest extends TestCase
         $this->expectException(UnknownEventException::class);
         $this->expectExceptionMessage($message);
 
-        $buyer->getBalanceIntAttribute();
+        $buyer->withdraw(0);
     }
 
     public function testMultiWalletCreatedThrowListener(): void
@@ -185,7 +186,7 @@ final class EventTest extends TestCase
             ->format(DateTimeInterface::ATOM)
         ;
 
-        $message = hash('sha256', Transaction::TYPE_DEPOSIT . $buyer->wallet->getKey() . $createdAt);
+        $message = hash('sha256', Transaction::TYPE_DEPOSIT . $createdAt);
 
         // unit
         $this->expectException(UnknownEventException::class);
