@@ -24,7 +24,8 @@ class ItemMinTaxFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->domainName,
+            'name' => fake()
+                ->domainName,
             'price' => random_int(1, 100),
             'quantity' => random_int(0, 10),
         ];
