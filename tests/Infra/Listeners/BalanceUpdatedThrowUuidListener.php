@@ -13,7 +13,7 @@ final class BalanceUpdatedThrowUuidListener
     {
         throw new UnknownEventException(
             $balanceChangedEvent->getWalletUuid(),
-            (int) $balanceChangedEvent->getBalance()
+            ((int) $balanceChangedEvent->getBalance()) + $balanceChangedEvent->getWalletId(),
         );
     }
 }

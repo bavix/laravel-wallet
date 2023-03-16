@@ -10,6 +10,9 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 
+/**
+ * @api
+ */
 interface PrepareServiceInterface
 {
     /**
