@@ -6,6 +6,9 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Models\Wallet;
 
+/**
+ * @api
+ */
 interface RegulatorServiceInterface
 {
     /**

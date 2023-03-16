@@ -8,6 +8,9 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @api
+ */
 interface CastServiceInterface
 {
     public function getWallet(Wallet $object, bool $save = true): WalletModel;

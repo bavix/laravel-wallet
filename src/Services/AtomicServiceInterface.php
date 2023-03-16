@@ -9,6 +9,9 @@ use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Illuminate\Database\RecordsNotFoundException;
 
+/**
+ * @api
+ */
 interface AtomicServiceInterface
 {
     /**

@@ -9,6 +9,9 @@ use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Models\Transaction;
 
+/**
+ * @api
+ */
 interface TransactionServiceInterface
 {
     /**
