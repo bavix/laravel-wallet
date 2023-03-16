@@ -12,5 +12,5 @@ jobs:
         stale-issue-message: 'This issue is stale because it has been open 7 days with no activity.'
         days-before-stale: 7
         days-before-close: 3
-        exempt-issue-labels: 'bug'
+        exempt-issue-labels: 'bug,10.x-dev'
         exempt-pr-labels: 'bug,frozen,10.x-dev'
