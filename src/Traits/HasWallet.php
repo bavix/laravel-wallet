@@ -65,7 +65,7 @@ trait HasWallet
     public function getBalanceAttribute(): string
     {
         /** @var Wallet $this */
-        return app(RegulatorServiceInterface::class)->amount(app(CastServiceInterface::class)->getWallet($this));
+        return app(RegulatorServiceInterface::class)->amount(app(CastServiceInterface::class)->getWallet($this, false));
     }
 
     public function getBalanceIntAttribute(): int

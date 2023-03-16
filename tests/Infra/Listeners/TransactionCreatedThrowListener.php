@@ -12,12 +12,11 @@ final class TransactionCreatedThrowListener
     public function handle(TransactionCreatedEventInterface $transactionCreatedEvent): never
     {
         $type = $transactionCreatedEvent->getType();
-        $walletId = $transactionCreatedEvent->getWalletId();
         $createdAt = $transactionCreatedEvent->getCreatedAt()
             ->format(\DateTimeInterface::ATOM)
         ;
 
-        $message = hash('sha256', $type . $walletId . $createdAt);
+        $message = hash('sha256', $type . $createdAt);
 
         throw new UnknownEventException($message, $transactionCreatedEvent->getId());
     }

@@ -10,6 +10,9 @@ use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
 
+/**
+ * @api
+ */
 interface AssistantServiceInterface
 {
     /**
