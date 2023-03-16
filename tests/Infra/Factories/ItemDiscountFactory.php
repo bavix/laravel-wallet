@@ -24,7 +24,8 @@ class ItemDiscountFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->domainName,
+            'name' => fake()
+                ->domainName,
             'price' => random_int(200, 700),
             'quantity' => random_int(10, 100),
         ];

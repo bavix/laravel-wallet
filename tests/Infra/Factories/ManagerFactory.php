@@ -26,8 +26,10 @@ class ManagerFactory extends Factory
     {
         return [
             'id' => Uuid::uuid4()->toString(),
-            'name' => fake()->name,
-            'email' => fake()->unique()
+            'name' => fake()
+                ->name,
+            'email' => fake()
+                ->unique()
                 ->safeEmail,
         ];
     }
