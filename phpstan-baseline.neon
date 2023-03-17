@@ -6,6 +6,11 @@ parameters:
 			path: src/External/Dto/Option.php
 
 		-
+			message: "#^Constructor in Bavix\\\\Wallet\\\\External\\\\Dto\\\\Option has parameter \\$uuid with default value\\.$#"
+			count: 1
+			path: src/External/Dto/Option.php
+
+		-
 			message: "#^Parameter \\#3 \\$payableId of class Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransactionDto constructor expects int\\|string, mixed given\\.$#"
 			count: 1
 			path: src/Internal/Assembler/TransactionDtoAssembler.php

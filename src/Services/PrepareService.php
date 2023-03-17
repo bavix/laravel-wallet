@@ -39,7 +39,8 @@ final class PrepareService implements PrepareServiceInterface
         Wallet $wallet,
         float|int|string $amount,
         ?array $meta,
-        bool $confirmed = true
+        bool $confirmed = true,
+        ?string $uuid = null
     ): TransactionDtoInterface {
         $this->consistencyService->checkPositive($amount);
 
@@ -50,7 +51,8 @@ final class PrepareService implements PrepareServiceInterface
             Transaction::TYPE_DEPOSIT,
             $amount,
             $confirmed,
-            $meta
+            $meta,
+            $uuid
         );
     }
 
@@ -61,7 +63,8 @@ final class PrepareService implements PrepareServiceInterface
         Wallet $wallet,
         float|int|string $amount,
         ?array $meta,
-        bool $confirmed = true
+        bool $confirmed = true,
+        ?string $uuid = null
     ): TransactionDtoInterface {
         $this->consistencyService->checkPositive($amount);
 
@@ -72,7 +75,8 @@ final class PrepareService implements PrepareServiceInterface
             Transaction::TYPE_WITHDRAW,
             $this->mathService->negative($amount),
             $confirmed,
-            $meta
+            $meta,
+            $uuid
         );
     }
 
@@ -84,7 +88,8 @@ final class PrepareService implements PrepareServiceInterface
         Wallet $to,
         string $status,
         float|int|string $amount,
-        ExtraDtoInterface|array|null $meta = null
+        ExtraDtoInterface|array|null $meta = null,
+        ?string $uuid = null
     ): TransferLazyDtoInterface {
         $discount = $this->personalDiscountService->getDiscount($from, $to);
         $toWallet = $this->castService->getWallet($to);
@@ -98,14 +103,31 @@ final class PrepareService implements PrepareServiceInterface
         $withdrawOption = $extra->getWithdrawOption();
         $depositOption = $extra->getDepositOption();
 
+        $withdraw = $this->withdraw(
+            $from,
+            $withdrawAmount,
+            $withdrawOption->getMeta(),
+            $withdrawOption->isConfirmed(),
+            $withdrawOption->getUuid(),
+        );
+
+        $deposit = $this->deposit(
+            $toWallet,
+            $depositAmount,
+            $depositOption->getMeta(),
+            $depositOption->isConfirmed(),
+            $depositOption->getUuid(),
+        );
+
         return $this->transferLazyDtoAssembler->create(
             $from,
             $toWallet,
             $discount,
             $fee,
-            $this->withdraw($from, $withdrawAmount, $withdrawOption->getMeta(), $withdrawOption->isConfirmed()),
-            $this->deposit($toWallet, $depositAmount, $depositOption->getMeta(), $depositOption->isConfirmed()),
-            $status
+            $withdraw,
+            $deposit,
+            $status,
+            $uuid
         );
     }
 }

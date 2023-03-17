@@ -84,7 +84,8 @@ final class TransferService implements TransferServiceInterface
                     $fromWallet,
                     $toWallet,
                     $object->getDiscount(),
-                    $object->getFee()
+                    $object->getFee(),
+                    $object->getUuid(),
                 );
 
                 $transfers[] = $transfer;

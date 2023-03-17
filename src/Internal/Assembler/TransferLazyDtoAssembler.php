@@ -18,8 +18,9 @@ final class TransferLazyDtoAssembler implements TransferLazyDtoAssemblerInterfac
         string $fee,
         TransactionDtoInterface $withdrawDto,
         TransactionDtoInterface $depositDto,
-        string $status
+        string $status,
+        ?string $uuid
     ): TransferLazyDtoInterface {
-        return new TransferLazyDto($fromWallet, $toWallet, $discount, $fee, $withdrawDto, $depositDto, $status);
+        return new TransferLazyDto($fromWallet, $toWallet, $discount, $fee, $withdrawDto, $depositDto, $status, $uuid);
     }
 }

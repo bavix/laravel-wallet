@@ -13,7 +13,8 @@ final class Option implements OptionDtoInterface
      */
     public function __construct(
         private readonly ?array $meta,
-        private readonly bool $confirmed = true
+        private readonly bool $confirmed = true,
+        private readonly ?string $uuid = null
     ) {
     }
 
@@ -28,5 +29,10 @@ final class Option implements OptionDtoInterface
     public function isConfirmed(): bool
     {
         return $this->confirmed;
+    }
+
+    public function getUuid(): ?string
+    {
+        return $this->uuid;
     }
 }
