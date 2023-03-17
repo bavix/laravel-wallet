@@ -22,10 +22,11 @@ final class TransactionDtoAssembler implements TransactionDtoAssemblerInterface
         string $type,
         float|int|string $amount,
         bool $confirmed,
-        ?array $meta
+        ?array $meta,
+        ?string $uuid
     ): TransactionDtoInterface {
         return new TransactionDto(
-            $this->uuidService->uuid4(),
+            $uuid ?? $this->uuidService->uuid4(),
             $payable->getMorphClass(),
             $payable->getKey(),
             $walletId,

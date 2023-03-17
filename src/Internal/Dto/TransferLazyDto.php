@@ -16,7 +16,8 @@ final class TransferLazyDto implements TransferLazyDtoInterface
         private readonly string $fee,
         private readonly TransactionDtoInterface $withdrawDto,
         private readonly TransactionDtoInterface $depositDto,
-        private readonly string $status
+        private readonly string $status,
+        private readonly ?string $uuid
     ) {
     }
 
@@ -53,5 +54,10 @@ final class TransferLazyDto implements TransferLazyDtoInterface
     public function getStatus(): string
     {
         return $this->status;
+    }
+
+    public function getUuid(): ?string
+    {
+        return $this->uuid;
     }
 }

@@ -23,10 +23,11 @@ final class TransferDtoAssembler implements TransferDtoAssemblerInterface
         Model $fromModel,
         Model $toModel,
         int $discount,
-        string $fee
+        string $fee,
+        ?string $uuid
     ): TransferDtoInterface {
         return new TransferDto(
-            $this->uuidService->uuid4(),
+            $uuid ?? $this->uuidService->uuid4(),
             $depositId,
             $withdrawId,
             $status,

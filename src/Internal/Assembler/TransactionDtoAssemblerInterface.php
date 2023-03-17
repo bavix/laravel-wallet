@@ -18,6 +18,7 @@ interface TransactionDtoAssemblerInterface
         string $type,
         float|int|string $amount,
         bool $confirmed,
-        ?array $meta
+        ?array $meta,
+        ?string $uuid
     ): TransactionDtoInterface;
 }

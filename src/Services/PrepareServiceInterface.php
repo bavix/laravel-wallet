@@ -24,7 +24,8 @@ interface PrepareServiceInterface
         Wallet $wallet,
         float|int|string $amount,
         ?array $meta,
-        bool $confirmed = true
+        bool $confirmed = true,
+        ?string $uuid = null
     ): TransactionDtoInterface;
 
     /**
@@ -36,7 +37,8 @@ interface PrepareServiceInterface
         Wallet $wallet,
         float|int|string $amount,
         ?array $meta,
-        bool $confirmed = true
+        bool $confirmed = true,
+        ?string $uuid = null
     ): TransactionDtoInterface;
 
     /**
@@ -49,6 +51,7 @@ interface PrepareServiceInterface
         Wallet $to,
         string $status,
         float|int|string $amount,
-        ExtraDtoInterface|array|null $meta = null
+        ExtraDtoInterface|array|null $meta = null,
+        ?string $uuid = null
     ): TransferLazyDtoInterface;
 }
