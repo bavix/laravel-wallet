@@ -21,4 +21,6 @@ interface TransferLazyDtoInterface
     public function getDepositDto(): TransactionDtoInterface;
 
     public function getStatus(): string;
+
+    public function getUuid(): ?string;
 }

@@ -12,4 +12,6 @@ interface OptionDtoInterface
     public function getMeta(): ?array;
 
     public function isConfirmed(): bool;
+
+    public function getUuid(): ?string;
 }
