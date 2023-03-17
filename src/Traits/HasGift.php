@@ -84,7 +84,8 @@ trait HasGift
                 $castService->getWallet($to),
                 $castService->getWallet($product),
                 $discount,
-                $fee
+                $fee,
+                null
             );
 
             $transfers = app(AtmServiceInterface::class)->makeTransfers([$transfer]);
