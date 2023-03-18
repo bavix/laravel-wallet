@@ -88,8 +88,7 @@ final class PrepareService implements PrepareServiceInterface
         Wallet $to,
         string $status,
         float|int|string $amount,
-        ExtraDtoInterface|array|null $meta = null,
-        ?string $uuid = null
+        ExtraDtoInterface|array|null $meta = null
     ): TransferLazyDtoInterface {
         $discount = $this->personalDiscountService->getDiscount($from, $to);
         $toWallet = $this->castService->getWallet($to);
@@ -127,7 +126,7 @@ final class PrepareService implements PrepareServiceInterface
             $withdraw,
             $deposit,
             $status,
-            $uuid
+            $extra->getUuid()
         );
     }
 }

@@ -22,6 +22,6 @@ final class ExtraDtoAssembler implements ExtraDtoAssemblerInterface
 
         $option = $this->optionDtoAssembler->create($data);
 
-        return new Extra($option, $option);
+        return new Extra($option, $option, null);
     }
 }
