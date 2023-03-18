@@ -181,8 +181,9 @@ final class ExchangeTest extends TestCase
             ],
         ));
 
-        app(RegulatorServiceInterface::class)->missing($usd);
-        app(RegulatorServiceInterface::class)->missing($btc);
+        $regulatorService = app(RegulatorServiceInterface::class);
+        $regulatorService->forget($usd);
+        $regulatorService->forget($btc);
 
         // get data from database
         $usd->refresh();
