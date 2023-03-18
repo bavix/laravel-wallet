@@ -101,7 +101,7 @@ trait CanExchange
                 $withdrawDto,
                 $depositDto,
                 Transfer::STATUS_EXCHANGE,
-                null
+                $extraDto->getUuid()
             );
 
             $transfers = app(TransferServiceInterface::class)->apply([$transferLazyDto]);
