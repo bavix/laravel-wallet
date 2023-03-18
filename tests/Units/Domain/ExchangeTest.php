@@ -147,7 +147,7 @@ final class ExchangeTest extends TestCase
             ->convertTo('USD', 'BTC', 1)
         ;
 
-        self::assertSame(0.004636, (float) $rate);
+        self::assertSame(0.004636, $rate);
 
         /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
