@@ -86,12 +86,14 @@ trait CanExchange
                 $mathService->add($amount, $fee),
                 $withdrawOption->getMeta(),
                 $withdrawOption->isConfirmed(),
+                $withdrawOption->getUuid(),
             );
             $depositDto = $prepareService->deposit(
                 $to,
                 $mathService->floor($mathService->mul($amount, $rate, 1)),
                 $depositOption->getMeta(),
                 $depositOption->isConfirmed(),
+                $depositOption->getUuid(),
             );
             $transferLazyDto = app(TransferLazyDtoAssemblerInterface::class)->create(
                 $this,
