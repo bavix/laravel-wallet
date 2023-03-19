@@ -55,8 +55,8 @@ final class TaxTest extends TestCase
     public function testGift(): void
     {
         /**
-         * @var Buyer   $santa
-         * @var Buyer   $child
+         * @var Buyer $santa
+         * @var Buyer $child
          */
         [$santa, $child] = BuyerFactory::times(2)->create();
         /** @var ItemTax $product */
@@ -101,8 +101,8 @@ final class TaxTest extends TestCase
         $this->expectExceptionMessageStrict(trans('wallet::errors.insufficient_funds'));
 
         /**
-         * @var Buyer   $santa
-         * @var Buyer   $child
+         * @var Buyer $santa
+         * @var Buyer $child
          */
         [$santa, $child] = BuyerFactory::times(2)->create();
         /** @var ItemTax $product */

@@ -16,7 +16,6 @@ use Bavix\Wallet\Test\Infra\Factories\ItemFactory;
 use Bavix\Wallet\Test\Infra\Factories\ItemWalletFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\Models\Item;
-use Bavix\Wallet\Test\Infra\Models\ItemWallet;
 use Bavix\Wallet\Test\Infra\TestCase;
 
 /**
@@ -26,11 +25,9 @@ final class ProductTest extends TestCase
 {
     public function testPay(): void
     {
-        /**
-         * @var Buyer $buyer
-         * @var Item  $product
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
+        /** @var Item $product */
         $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -43,10 +40,6 @@ final class ProductTest extends TestCase
         self::assertNotNull($transfer);
         self::assertSame($transfer->status, Transfer::STATUS_PAID);
 
-        /**
-         * @var Transaction $withdraw
-         * @var Transaction $deposit
-         */
         $withdraw = $transfer->withdraw;
         $deposit = $transfer->deposit;
 
@@ -75,11 +68,9 @@ final class ProductTest extends TestCase
 
     public function testRefund(): void
     {
-        /**
-         * @var Buyer $buyer
-         * @var Item  $product
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
+        /** @var Item $product */
         $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -118,11 +109,9 @@ final class ProductTest extends TestCase
 
     public function testForceRefund(): void
     {
-        /**
-         * @var Buyer $buyer
-         * @var Item  $product
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
+        /** @var Item $product */
         $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -157,11 +146,9 @@ final class ProductTest extends TestCase
         $this->expectExceptionCode(ExceptionInterface::PRODUCT_ENDED);
         $this->expectExceptionMessageStrict(trans('wallet::errors.product_stock'));
 
-        /**
-         * @var Buyer $buyer
-         * @var Item  $product
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
+        /** @var Item $product */
         $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -173,11 +160,9 @@ final class ProductTest extends TestCase
 
     public function testForcePay(): void
     {
-        /**
-         * @var Buyer $buyer
-         * @var Item  $product
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
+        /** @var Item $product */
         $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -193,11 +178,9 @@ final class ProductTest extends TestCase
 
     public function testPayFree(): void
     {
-        /**
-         * @var Buyer $buyer
-         * @var Item  $product
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
+        /** @var Item $product */
         $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -218,11 +201,9 @@ final class ProductTest extends TestCase
 
     public function testFreePay(): void
     {
-        /**
-         * @var Buyer $buyer
-         * @var Item  $product
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
+        /** @var Item $product */
         $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -248,11 +229,9 @@ final class ProductTest extends TestCase
         $this->expectExceptionCode(ExceptionInterface::PRODUCT_ENDED);
         $this->expectExceptionMessageStrict(trans('wallet::errors.product_stock'));
 
-        /**
-         * @var Buyer $buyer
-         * @var Item  $product
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
+        /** @var Item $product */
         $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -263,11 +242,12 @@ final class ProductTest extends TestCase
 
     public function testPayCustomPrice(): void
     {
-        /**
-         * @var Buyer $buyer
-         * @var Item  $productIn
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
+        /**
+         * @var Item $productIn
+         * @var Item $productOutside
+         */
         [$productIn, $productOutside] = ItemFactory::times(2)->create([
             'quantity' => 2,
             'price' => 5_000,
@@ -299,11 +279,9 @@ final class ProductTest extends TestCase
      */
     public function testProductMultiWallet(): void
     {
-        /**
-         * @var Buyer      $buyer
-         * @var ItemWallet $product
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
+        /** @var Item $product */
         $product = ItemWalletFactory::new()->create([
             'quantity' => 1,
         ]);

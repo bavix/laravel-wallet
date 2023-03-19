@@ -491,7 +491,7 @@ final class MultiWalletTest extends TestCase
     {
         /**
          * @var UserMulti $user
-         * @var Item      $product
+         * @var Item $product
          */
         $user = UserMultiFactory::new()->create();
         $a = $user->createWallet([

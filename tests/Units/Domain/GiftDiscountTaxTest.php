@@ -20,8 +20,8 @@ final class GiftDiscountTaxTest extends TestCase
     public function testGift(): void
     {
         /**
-         * @var Buyer           $first
-         * @var Buyer           $second
+         * @var Buyer $first
+         * @var Buyer $second
          * @var ItemDiscountTax $product
          */
         [$first, $second] = BuyerFactory::times(2)->create();
@@ -53,8 +53,8 @@ final class GiftDiscountTaxTest extends TestCase
     public function testRefund(): void
     {
         /**
-         * @var Buyer           $first
-         * @var Buyer           $second
+         * @var Buyer $first
+         * @var Buyer $second
          * @var ItemDiscountTax $product
          */
         [$first, $second] = BuyerFactory::times(2)->create();

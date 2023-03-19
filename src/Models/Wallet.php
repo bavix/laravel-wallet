@@ -21,6 +21,7 @@ use Bavix\Wallet\Traits\CanExchange;
 use Bavix\Wallet\Traits\CanPayFloat;
 use Bavix\Wallet\Traits\HasGift;
 use function config;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\RecordsNotFoundException;
@@ -29,17 +30,19 @@ use Illuminate\Support\Str;
 /**
  * Class Wallet.
  *
- * @property string                          $holder_type
- * @property int|string                      $holder_id
- * @property string                          $name
- * @property string                          $slug
- * @property string                          $uuid
- * @property string                          $description
- * @property null|array                      $meta
- * @property int                             $decimal_places
- * @property \Bavix\Wallet\Interfaces\Wallet $holder
- * @property string                          $credit
- * @property string                          $currency
+ * @property string $holder_type
+ * @property int|string $holder_id
+ * @property string $name
+ * @property string $slug
+ * @property string $uuid
+ * @property string $description
+ * @property null|array $meta
+ * @property int $decimal_places
+ * @property Model $holder
+ * @property string $credit
+ * @property string $currency
+ * @property DateTimeInterface $created_at
+ * @property DateTimeInterface $updated_at
  *
  * @method int getKey()
  */

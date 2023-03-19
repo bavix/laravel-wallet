@@ -32,8 +32,8 @@ use Illuminate\Database\RecordsNotFoundException;
  * Trait HasWallet.
  *
  * @property WalletModel $wallet
- * @property string      $balance
- * @property int         $balanceInt
+ * @property string $balance
+ * @property int $balanceInt
  * @psalm-require-extends \Illuminate\Database\Eloquent\Model
  * @psalm-require-implements \Bavix\Wallet\Interfaces\Wallet
  */
