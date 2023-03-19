@@ -91,9 +91,18 @@ interface Wallet
 
     public function getBalanceIntAttribute(): int;
 
+    /**
+     * @return HasMany<Transaction>
+     */
     public function walletTransactions(): HasMany;
 
+    /**
+     * @return MorphMany<Transaction>
+     */
     public function transactions(): MorphMany;
 
+    /**
+     * @return HasMany<Transfer>
+     */
     public function transfers(): HasMany;
 }

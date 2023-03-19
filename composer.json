@@ -39,6 +39,7 @@
     "infection/infection": "~0.26",
     "laravel/cashier": "^14.8",
     "nunomaduro/collision": "^7.0",
+    "nunomaduro/larastan": "^2.0",
     "orchestra/testbench": "^8.0",
     "phpstan/phpstan": "^1.9",
     "phpunit/phpunit": "^10.0",

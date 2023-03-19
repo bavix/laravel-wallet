@@ -1,11 +1,8 @@
 includes:
 	- phpstan-baseline.neon
+	- vendor/nunomaduro/larastan/extension.neon
 
 parameters:
-    stubFiles:
-        - analyze/phpstan/stubs/helpers.stub
-        - analyze/phpstan/stubs/Container.stub
-        - analyze/phpstan/stubs/ContainerInterface.stub
     level: 9
     fileExtensions:
         - php
@@ -35,9 +32,6 @@ parameters:
         interfacesImplementedByContainers:
             - Psr\Container\ContainerInterface
     paths:
-        - database/
-        - config/
-        - resources/
         - src/
         - tests/
 
