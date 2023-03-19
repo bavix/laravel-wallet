@@ -27,8 +27,10 @@ abstract class TestCase extends OrchestraTestCase
         DB::transactionLevel() && DB::rollBack();
     }
 
-    public function expectExceptionMessageStrict(string $message): void
+    public function expectExceptionMessageStrict(mixed $message): void
     {
+        assert(is_string($message));
+
         $this->expectExceptionMessageMatches("~^{$message}$~");
     }
 
