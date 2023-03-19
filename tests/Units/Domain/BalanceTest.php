@@ -105,9 +105,6 @@ final class BalanceTest extends TestCase
         self::assertLessThan(0, $buyer->balanceInt);
     }
 
-    /**
-     * @throws
-     */
     public function testSimple(): void
     {
         /** @var Buyer $buyer */
@@ -160,9 +157,6 @@ final class BalanceTest extends TestCase
         self::assertSame(1, $wallet->balanceInt);
     }
 
-    /**
-     * @throws
-     */
     public function testGetBalance(): void
     {
         /** @var Buyer $buyer */
@@ -177,9 +171,6 @@ final class BalanceTest extends TestCase
         self::assertSame('0', app(BookkeeperServiceInterface::class)->amount($wallet));
     }
 
-    /**
-     * @throws
-     */
     public function testThrowUpdate(): void
     {
         $this->expectException(PDOException::class);
@@ -202,8 +193,8 @@ final class BalanceTest extends TestCase
             ->willThrowException(new PDOException())
         ;
 
-        /** @var MockObject|Wallet $mockWallet */
-        $mockWallet = $this->createMock($wallet::class);
+        /** @var MockObject&Wallet $mockWallet */
+        $mockWallet = $this->createMock(Wallet::class);
         $mockWallet->method('getBalanceAttribute')
             ->willReturn('125')
         ;

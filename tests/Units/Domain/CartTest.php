@@ -171,9 +171,6 @@ final class CartTest extends TestCase
         }
     }
 
-    /**
-     * @throws
-     */
     public function testCartQuantity(): void
     {
         /**
@@ -209,9 +206,6 @@ final class CartTest extends TestCase
         }
     }
 
-    /**
-     * @throws
-     */
     public function testModelNotFoundException(): void
     {
         $this->expectException(ModelNotFoundException::class);
@@ -246,9 +240,6 @@ final class CartTest extends TestCase
         $buyer->refundCart($refundCart);
     }
 
-    /**
-     * @throws
-     */
     public function testBoughtGoods(): void
     {
         /**

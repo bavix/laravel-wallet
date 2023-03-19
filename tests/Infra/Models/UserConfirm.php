@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $email
  */
-class UserConfirm extends Model implements Wallet, Confirmable
+final class UserConfirm extends Model implements Wallet, Confirmable
 {
     use HasWallet;
     use CanConfirm;

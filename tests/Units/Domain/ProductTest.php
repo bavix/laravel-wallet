@@ -296,8 +296,6 @@ final class ProductTest extends TestCase
 
     /**
      * @see https://github.com/bavix/laravel-wallet/issues/237
-     *
-     * @throws
      */
     public function testProductMultiWallet(): void
     {
