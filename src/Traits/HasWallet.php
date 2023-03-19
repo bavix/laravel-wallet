@@ -27,14 +27,13 @@ use function config;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\RecordsNotFoundException;
-use Illuminate\Support\Collection;
 
 /**
  * Trait HasWallet.
  *
- * @property Collection|WalletModel[] $wallets
- * @property string                   $balance
- * @property int                      $balanceInt
+ * @property WalletModel $wallet
+ * @property string      $balance
+ * @property int         $balanceInt
  * @psalm-require-extends \Illuminate\Database\Eloquent\Model
  * @psalm-require-implements \Bavix\Wallet\Interfaces\Wallet
  */

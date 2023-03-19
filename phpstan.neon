@@ -34,6 +34,9 @@ parameters:
         interfacesImplementedByContainers:
             - Psr\Container\ContainerInterface
     paths:
+        - database/
+        - config/
+        - resources/
         - src/
         - tests/
 
