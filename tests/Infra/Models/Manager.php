@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $email
  */
-class Manager extends Model implements Wallet
+final class Manager extends Model implements Wallet
 {
     use HasWallet;
 

@@ -14,7 +14,6 @@ use Bavix\Wallet\Services\TaxServiceInterface;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Factories\ItemDiscountTaxFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
-use Bavix\Wallet\Test\Infra\Models\Item;
 use Bavix\Wallet\Test\Infra\Models\ItemDiscountTax;
 use Bavix\Wallet\Test\Infra\TestCase;
 
@@ -58,14 +57,14 @@ final class DiscountTaxTest extends TestCase
         self::assertInstanceOf(Transaction::class, $deposit);
 
         self::assertInstanceOf(Buyer::class, $withdraw->payable);
-        self::assertInstanceOf(Item::class, $deposit->payable);
+        self::assertInstanceOf(ItemDiscountTax::class, $deposit->payable);
 
         self::assertSame($buyer->getKey(), $withdraw->payable->getKey());
         self::assertSame($product->getKey(), $deposit->payable->getKey());
 
         self::assertInstanceOf(Buyer::class, $transfer->from->holder);
         self::assertInstanceOf(Wallet::class, $transfer->from);
-        self::assertInstanceOf(Item::class, $transfer->to->holder);
+        self::assertInstanceOf(ItemDiscountTax::class, $transfer->to->holder);
         self::assertInstanceOf(Wallet::class, $transfer->to->wallet);
 
         self::assertSame($buyer->wallet->getKey(), $transfer->from->getKey());

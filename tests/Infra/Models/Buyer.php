@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $email
  */
-class Buyer extends Model implements Customer
+final class Buyer extends Model implements Customer
 {
     use CanPay;
 

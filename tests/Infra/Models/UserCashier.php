@@ -15,7 +15,7 @@ use Laravel\Cashier\Billable;
  * @property string $name
  * @property string $email
  */
-class UserCashier extends Model
+final class UserCashier extends Model
 {
     use Billable;
     use HasWallets;

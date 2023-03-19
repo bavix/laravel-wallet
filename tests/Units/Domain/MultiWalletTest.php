@@ -415,9 +415,6 @@ final class MultiWalletTest extends TestCase
         self::assertSame($wallet->balanceInt, 0);
     }
 
-    /**
-     * @throws
-     */
     public function testWalletUnique(): void
     {
         $this->expectException(QueryException::class);

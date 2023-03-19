@@ -11,7 +11,7 @@ use Cknow\Money\Money;
  *
  * @property Money $currency
  */
-class TransactionMoney extends \Bavix\Wallet\Models\Transaction
+final class TransactionMoney extends \Bavix\Wallet\Models\Transaction
 {
     protected ?\Cknow\Money\Money $currency = null;
 

@@ -7,20 +7,10 @@ namespace Bavix\Wallet\Test\Infra\Factories;
 use Bavix\Wallet\Test\Infra\Models\ItemMinTax;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ItemMinTaxFactory extends Factory
+final class ItemMinTaxFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = ItemMinTax::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @throws
-     */
     public function definition(): array
     {
         return [
