@@ -16,6 +16,7 @@ parameters:
             - Illuminate\Support\ServiceProvider
             - Illuminate\Database\Eloquent\Model
             - Illuminate\Console\Command
+            - Illuminate\Database\Migrations\Migration
 
             # php exceptions
             - LogicException
