@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Bavix\Wallet\Test\Infra;
+namespace Bavix\Wallet\Test\Infra\Services;
 
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Services\ExchangeServiceInterface;

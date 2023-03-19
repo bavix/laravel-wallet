@@ -7,6 +7,7 @@ namespace Bavix\Wallet\Test\Infra;
 use Bavix\Wallet\Test\Infra\PackageModels\Transaction;
 use Bavix\Wallet\Test\Infra\PackageModels\Transfer;
 use Bavix\Wallet\Test\Infra\PackageModels\Wallet;
+use Bavix\Wallet\Test\Infra\Services\MyExchangeService;
 use Bavix\Wallet\WalletServiceProvider;
 use Illuminate\Config\Repository;
 use Illuminate\Foundation\Application;

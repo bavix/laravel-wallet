@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property int    $quantity
  * @property int    $price
  */
-class Item extends Model implements ProductLimitedInterface
+final class Item extends Model implements ProductLimitedInterface
 {
     use HasWallet;
 

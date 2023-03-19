@@ -14,6 +14,7 @@ parameters:
             - Illuminate\Database\Eloquent\Model
             - Illuminate\Console\Command
             - Illuminate\Database\Migrations\Migration
+            - Illuminate\Database\Eloquent\Factories\Factory
 
             # php exceptions
             - LogicException

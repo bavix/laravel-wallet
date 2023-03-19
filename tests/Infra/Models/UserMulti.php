@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $email
  */
-class UserMulti extends Model implements Wallet, WalletFloat
+final class UserMulti extends Model implements Wallet, WalletFloat
 {
     use HasWalletFloat;
     use HasWallets;

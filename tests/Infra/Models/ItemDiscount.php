@@ -6,13 +6,45 @@ namespace Bavix\Wallet\Test\Infra\Models;
 
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Discount;
+use Bavix\Wallet\Interfaces\ProductLimitedInterface;
+use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CastService;
+use Bavix\Wallet\Traits\HasWallet;
+use Illuminate\Database\Eloquent\Model;
 
-class ItemDiscount extends Item implements Discount
+final class ItemDiscount extends Model implements ProductLimitedInterface, Discount
 {
+    use HasWallet;
+
+    protected $fillable = ['name', 'quantity', 'price'];
+
     public function getTable(): string
     {
         return 'items';
+    }
+
+    public function canBuy(Customer $customer, int $quantity = 1, bool $force = false): bool
+    {
+        $result = $this->quantity >= $quantity;
+
+        if ($force) {
+            return $result;
+        }
+
+        return $result && ! $customer->paid($this);
+    }
+
+    public function getAmountProduct(Customer $customer): int|string
+    {
+        /** @var Wallet $wallet */
+        $wallet = app(CastService::class)->getWallet($customer);
+
+        return $this->price + $wallet->holder_id;
+    }
+
+    public function getMetaProduct(): ?array
+    {
+        return null;
     }
 
     public function getPersonalDiscount(Customer $customer): int

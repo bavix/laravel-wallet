@@ -12,7 +12,6 @@ use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Factories\ItemDiscountFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
-use Bavix\Wallet\Test\Infra\Models\Item;
 use Bavix\Wallet\Test\Infra\Models\ItemDiscount;
 use Bavix\Wallet\Test\Infra\TestCase;
 
@@ -53,14 +52,14 @@ final class DiscountTest extends TestCase
         self::assertInstanceOf(Transaction::class, $deposit);
 
         self::assertInstanceOf(Buyer::class, $withdraw->payable);
-        self::assertInstanceOf(Item::class, $deposit->payable);
+        self::assertInstanceOf(ItemDiscount::class, $deposit->payable);
 
         self::assertSame($buyer->getKey(), $withdraw->payable->getKey());
         self::assertSame($product->getKey(), $deposit->payable->getKey());
 
         self::assertInstanceOf(Buyer::class, $transfer->from->holder);
         self::assertInstanceOf(Wallet::class, $transfer->from);
-        self::assertInstanceOf(Item::class, $transfer->to->holder);
+        self::assertInstanceOf(ItemDiscount::class, $transfer->to->holder);
         self::assertInstanceOf(Wallet::class, $transfer->to->wallet);
 
         self::assertSame($buyer->wallet->getKey(), $transfer->from->getKey());
