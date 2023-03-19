@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Schema;
 return new class() extends Migration {
     public function up(): void
     {
-        Schema::create($this->table(), function (Blueprint $table) {
+        Schema::create($this->table(), static function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->morphs('payable');
             $table->unsignedBigInteger('wallet_id');
