@@ -70,7 +70,7 @@ final class EventTest extends TestCase
 
     public function testBalanceUpdatedThrowDateListener(): void
     {
-        $this->app->bind(ClockServiceInterface::class, ClockFakeService::class);
+        $this->app?->bind(ClockServiceInterface::class, ClockFakeService::class);
 
         Event::listen(BalanceUpdatedEventInterface::class, BalanceUpdatedThrowDateListener::class);
 
@@ -87,7 +87,7 @@ final class EventTest extends TestCase
 
     public function testWalletCreatedThrowListener(): void
     {
-        $this->app->bind(ClockServiceInterface::class, ClockFakeService::class);
+        $this->app?->bind(ClockServiceInterface::class, ClockFakeService::class);
 
         Event::listen(WalletCreatedEventInterface::class, WalletCreatedThrowListener::class);
 
@@ -112,7 +112,7 @@ final class EventTest extends TestCase
 
     public function testMultiWalletCreatedThrowListener(): void
     {
-        $this->app->bind(ClockServiceInterface::class, ClockFakeService::class);
+        $this->app?->bind(ClockServiceInterface::class, ClockFakeService::class);
 
         Event::listen(WalletCreatedEventInterface::class, WalletCreatedThrowListener::class);
 
@@ -173,7 +173,7 @@ final class EventTest extends TestCase
      */
     public function testTransactionCreatedThrowListener(): void
     {
-        $this->app->bind(ClockServiceInterface::class, ClockFakeService::class);
+        $this->app?->bind(ClockServiceInterface::class, ClockFakeService::class);
 
         Event::listen(TransactionCreatedEventInterface::class, TransactionCreatedThrowListener::class);
 

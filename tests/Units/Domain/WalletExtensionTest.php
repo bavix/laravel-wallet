@@ -20,7 +20,7 @@ final class WalletExtensionTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->app->bind(TransactionDtoTransformerInterface::class, TransactionDtoTransformerCustom::class);
+        $this->app?->bind(TransactionDtoTransformerInterface::class, TransactionDtoTransformerCustom::class);
     }
 
     public function testCustomAttribute(): void
@@ -40,7 +40,7 @@ final class WalletExtensionTest extends TestCase
 
     public function testTransactionMoneyAttribute(): void
     {
-        $this->app->bind(\Bavix\Wallet\Models\Transaction::class, TransactionMoney::class);
+        $this->app?->bind(\Bavix\Wallet\Models\Transaction::class, TransactionMoney::class);
 
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();

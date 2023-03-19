@@ -87,6 +87,15 @@ trait HasWallets
         return $this->morphMany(config('wallet.wallet.model', WalletModel::class), 'holder');
     }
 
+    /**
+     * @param array{
+     *     name: string,
+     *     slug?: string,
+     *     description?: string,
+     *     meta?: array<mixed>|null,
+     *     decimal_places?: positive-int,
+     * } $data
+     */
     public function createWallet(array $data): WalletModel
     {
         $wallet = app(WalletServiceInterface::class)->create($this, $data);
