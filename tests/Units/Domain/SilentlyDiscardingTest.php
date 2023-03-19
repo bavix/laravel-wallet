@@ -63,7 +63,7 @@ final class SilentlyDiscardingTest extends TestCase
 
     public function testMultiWalletSilentlyDiscarding(): void
     {
-        $this->app->bind(ClockServiceInterface::class, ClockFakeService::class);
+        $this->app?->bind(ClockServiceInterface::class, ClockFakeService::class);
 
         /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
