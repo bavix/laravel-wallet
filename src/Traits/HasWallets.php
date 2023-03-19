@@ -79,6 +79,8 @@ trait HasWallets
 
     /**
      * method of obtaining all wallets.
+     *
+     * @return MorphMany<WalletModel>
      */
     public function wallets(): MorphMany
     {

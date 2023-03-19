@@ -11,6 +11,9 @@ class ItemMeta extends Item
         return 'items';
     }
 
+    /**
+     * @return array{name: string, price: int}
+     */
     public function getMetaProduct(): ?array
     {
         return [
