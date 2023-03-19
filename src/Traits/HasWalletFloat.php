@@ -21,7 +21,7 @@ use Illuminate\Database\RecordsNotFoundException;
  * Trait HasWalletFloat.
  *
  * @property string $balanceFloat
- * @property float  $balanceFloatNum
+ * @property float $balanceFloatNum
  * @psalm-require-extends \Illuminate\Database\Eloquent\Model
  * @psalm-require-implements \Bavix\Wallet\Interfaces\WalletFloat
  */

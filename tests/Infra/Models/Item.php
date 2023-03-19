@@ -18,8 +18,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * Class Item.
  *
  * @property string $name
- * @property int    $quantity
- * @property int    $price
+ * @property int $quantity
+ * @property int $price
  */
 final class Item extends Model implements ProductLimitedInterface
 {

@@ -52,7 +52,7 @@ final class CartTest extends TestCase
     public function testCartMeta(): void
     {
         /**
-         * @var Buyer    $buyer
+         * @var Buyer $buyer
          * @var ItemMeta $product
          */
         $buyer = BuyerFactory::new()->create();
@@ -97,7 +97,7 @@ final class CartTest extends TestCase
     {
         /**
          * @var Buyer $buyer
-         * @var Item  $product
+         * @var Item $product
          */
         $buyer = BuyerFactory::new()->create();
         $product = ItemFactory::new()->create([
@@ -132,7 +132,7 @@ final class CartTest extends TestCase
     public function testPay(): void
     {
         /**
-         * @var Buyer  $buyer
+         * @var Buyer $buyer
          * @var Item[] $products
          */
         $buyer = BuyerFactory::new()->create();
@@ -174,7 +174,7 @@ final class CartTest extends TestCase
     public function testCartQuantity(): void
     {
         /**
-         * @var Buyer  $buyer
+         * @var Buyer $buyer
          * @var Item[] $products
          */
         $buyer = BuyerFactory::new()->create();
@@ -243,7 +243,7 @@ final class CartTest extends TestCase
     public function testBoughtGoods(): void
     {
         /**
-         * @var Buyer  $buyer
+         * @var Buyer $buyer
          * @var Item[] $products
          */
         $buyer = BuyerFactory::new()->create();
@@ -283,7 +283,7 @@ final class CartTest extends TestCase
 
         /**
          * @var Buyer $buyer
-         * @var Item  $product
+         * @var Item $product
          */
         $buyer = BuyerFactory::new()->create();
         $product = ItemFactory::new()->create([
