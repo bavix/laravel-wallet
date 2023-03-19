@@ -74,6 +74,8 @@ trait HasWallet
 
     /**
      * We receive transactions of the selected wallet.
+     *
+     * @return HasMany<Transaction>
      */
     public function walletTransactions(): HasMany
     {
@@ -85,6 +87,8 @@ trait HasWallet
 
     /**
      * all user actions on wallets will be in this method.
+     *
+     * @return MorphMany<Transaction>
      */
     public function transactions(): MorphMany
     {

@@ -18,14 +18,19 @@ trait MorphOneWallet
 {
     /**
      * Get default Wallet this method is used for Eager Loading.
+     *
+     * @return MorphOne<WalletModel>
      */
     public function wallet(): MorphOne
     {
         $castService = app(CastServiceInterface::class);
 
+        /** @var class-string<WalletModel> $related */
+        $related = config('wallet.wallet.model', WalletModel::class);
+
         return $castService
             ->getHolder($this)
-            ->morphOne(config('wallet.wallet.model', WalletModel::class), 'holder')
+            ->morphOne($related, 'holder')
             ->where('slug', config('wallet.wallet.default.slug', 'default'))
             ->withDefault(static function (WalletModel $wallet, object $holder) use ($castService) {
                 $model = $castService->getModel($holder);
