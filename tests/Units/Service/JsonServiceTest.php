@@ -15,8 +15,8 @@ final class JsonServiceTest extends TestCase
     public function testJsonEncodeSuccess(): void
     {
         $jsonService = app(JsonService::class);
-        self::assertJson($jsonService->encode([1]));
         self::assertNull($jsonService->encode(null));
+        self::assertJson((string) $jsonService->encode([1]));
     }
 
     public function testJsonEncodeFailed(): void
