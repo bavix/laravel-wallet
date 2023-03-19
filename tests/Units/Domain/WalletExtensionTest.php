@@ -42,12 +42,10 @@ final class WalletExtensionTest extends TestCase
     {
         $this->app->bind(\Bavix\Wallet\Models\Transaction::class, TransactionMoney::class);
 
-        /**
-         * @var Buyer            $buyer
-         * @var TransactionMoney $transaction
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
+        /** @var TransactionMoney $transaction */
         $transaction = $buyer->deposit(1000, [
             'currency' => 'EUR',
         ]);

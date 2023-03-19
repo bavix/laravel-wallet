@@ -216,6 +216,8 @@ trait HasWallet
 
     /**
      * the transfer table is used to confirm the payment this method receives all transfers.
+     *
+     * @return HasMany<Transfer>
      */
     public function transfers(): HasMany
     {
