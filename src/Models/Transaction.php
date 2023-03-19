@@ -71,11 +71,17 @@ class Transaction extends Model
         return parent::getTable();
     }
 
+    /**
+     * @return MorphTo<Model, self>
+     */
     public function payable(): MorphTo
     {
         return $this->morphTo();
     }
 
+    /**
+     * @return BelongsTo<WalletModel, self>
+     */
     public function wallet(): BelongsTo
     {
         return $this->belongsTo(config('wallet.wallet.model', WalletModel::class));

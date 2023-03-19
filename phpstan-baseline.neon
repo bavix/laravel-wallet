@@ -31,19 +31,14 @@ parameters:
 			path: src/Internal/Assembler/TransferDtoAssembler.php
 
 		-
-			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Repository\\\\TransactionRepository\\:\\:findBy\\(\\) should return array\\<Bavix\\\\Wallet\\\\Models\\\\Transaction\\> but returns array\\.$#"
+			message: "#^Parameter \\#1 \\$name of method Illuminate\\\\Database\\\\ConnectionResolverInterface\\:\\:connection\\(\\) expects string\\|null, mixed given\\.$#"
 			count: 1
-			path: src/Internal/Repository/TransactionRepository.php
+			path: src/Internal/Service/ConnectionService.php
 
 		-
-			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Repository\\\\TransferRepository\\:\\:findBy\\(\\) should return array\\<Bavix\\\\Wallet\\\\Models\\\\Transfer\\> but returns array\\.$#"
+			message: "#^Parameter \\#1 \\$name of method Illuminate\\\\Contracts\\\\Cache\\\\Factory\\:\\:store\\(\\) expects string\\|null, mixed given\\.$#"
 			count: 1
-			path: src/Internal/Repository/TransferRepository.php
-
-		-
-			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Repository\\\\WalletRepository\\:\\:findDefaultAll\\(\\) should return array\\<Bavix\\\\Wallet\\\\Models\\\\Wallet\\> but returns array\\.$#"
-			count: 1
-			path: src/Internal/Repository/WalletRepository.php
+			path: src/Internal/Service/LockService.php
 
 		-
 			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StateService\\:\\:get\\(\\) should return string\\|null but returns mixed\\.$#"
@@ -51,19 +46,19 @@ parameters:
 			path: src/Internal/Service/StateService.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:getModel\\(\\)\\.$#"
+			message: "#^Parameter \\#1 \\$related of method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:belongsTo\\(\\) expects string, mixed given\\.$#"
 			count: 1
-			path: src/Models/Wallet.php
+			path: src/Models/Transaction.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:where\\(\\)\\.$#"
+			message: "#^Property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$table \\(string\\) does not accept mixed\\.$#"
 			count: 1
-			path: src/Models/Wallet.php
+			path: src/Models/Transaction.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphOne\\:\\:where\\(\\)\\.$#"
-			count: 2
-			path: src/Models/Wallet.php
+			message: "#^Property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$table \\(string\\) does not accept mixed\\.$#"
+			count: 1
+			path: src/Models/Transfer.php
 
 		-
 			message: "#^Cannot cast mixed to string\\.$#"
@@ -71,12 +66,42 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:with\\(\\)\\.$#"
+			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:getAvailableBalanceAttribute\\(\\) should return float\\|int\\|string but returns mixed\\.$#"
 			count: 1
-			path: src/Services/PurchaseService.php
+			path: src/Models/Wallet.php
 
 		-
-			message: "#^Parameter \\#1 \\$attributes of method Bavix\\\\Wallet\\\\Internal\\\\Repository\\\\WalletRepositoryInterface\\:\\:create\\(\\) expects array\\{holder_type\\: string, holder_id\\: int\\|string, name\\: string, slug\\?\\: string, uuid\\: string, description\\?\\: string, meta\\: array\\|null, balance\\?\\: int, \\.\\.\\.\\}, array\\{uuid\\: string, name\\: string, slug\\?\\: string, description\\?\\: string, meta\\?\\: array\\|null, decimal_places\\?\\: int\\<1, max\\>, holder_type\\: string, holder_id\\: mixed\\} given\\.$#"
+			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:wallet\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphOne\\<Bavix\\\\Wallet\\\\Models\\\\Wallet\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphOne\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\.$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Parameter \\#1 \\$related of method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:hasMany\\(\\) expects string, mixed given\\.$#"
+			count: 4
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Parameter \\#1 \\$related of method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:morphMany\\(\\) expects string, mixed given\\.$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Parameter \\#1 \\.\\.\\.\\$arrays of function array_merge expects array, mixed given\\.$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$table \\(string\\) does not accept mixed\\.$#"
+			count: 1
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Parameter \\#1 \\$attributes of method Bavix\\\\Wallet\\\\Internal\\\\Repository\\\\WalletRepositoryInterface\\:\\:create\\(\\) expects array\\{holder_type\\: string, holder_id\\: int\\|string, name\\: string, slug\\?\\: string, uuid\\: string, description\\?\\: string, meta\\: array\\|null, balance\\?\\: int, \\.\\.\\.\\}, non\\-empty\\-array given\\.$#"
+			count: 1
+			path: src/Services/WalletService.php
+
+		-
+			message: "#^Parameter \\#1 \\.\\.\\.\\$arrays of function array_merge expects array, mixed given\\.$#"
 			count: 1
 			path: src/Services/WalletService.php
 
@@ -91,11 +116,6 @@ parameters:
 			path: src/Services/WalletService.php
 
 		-
-			message: "#^Cannot call method needs\\(\\) on mixed\\.$#"
-			count: 6
-			path: src/WalletServiceProvider.php
-
-		-
-			message: "#^Parameter \\#1 \\$abstract of method Illuminate\\\\Contracts\\\\Container\\\\Container\\:\\:make\\(\\) expects class\\-string\\<wallet\\.internal\\.storage\\>, string given\\.$#"
-			count: 2
+			message: "#^Cannot call method store\\(\\) on mixed\\.$#"
+			count: 1
 			path: src/WalletServiceProvider.php

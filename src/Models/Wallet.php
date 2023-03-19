@@ -137,6 +137,9 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         ;
     }
 
+    /**
+     * @return MorphTo<Model, self>
+     */
     public function holder(): MorphTo
     {
         return $this->morphTo();
