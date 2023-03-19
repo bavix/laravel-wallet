@@ -7,7 +7,7 @@ namespace Bavix\Wallet\Test\Infra\Factories;
 use Bavix\Wallet\Test\Infra\Models\ItemMaxTax;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ItemMaxTaxFactory extends Factory
+final class ItemMaxTaxFactory extends Factory
 {
     protected $model = ItemMaxTax::class;
 
