@@ -21,7 +21,7 @@ final class MinTaxTest extends TestCase
     public function testPayMinimalTax(): void
     {
         /**
-         * @var Buyer      $buyer
+         * @var Buyer $buyer
          * @var ItemMinTax $product
          */
         $buyer = BuyerFactory::new()->create();
@@ -66,7 +66,7 @@ final class MinTaxTest extends TestCase
     public function testPayMaximalTax(): void
     {
         /**
-         * @var Buyer      $buyer
+         * @var Buyer $buyer
          * @var ItemMaxTax $product
          */
         $buyer = BuyerFactory::new()->create();

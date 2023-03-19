@@ -11,19 +11,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class Transfer.
  *
- * @property string      $status
- * @property string      $status_last
- * @property string      $discount
- * @property int         $deposit_id
- * @property int         $withdraw_id
- * @property Wallet      $from
- * @property string      $from_type
- * @property int         $from_id
- * @property Wallet      $to
- * @property string      $to_type
- * @property int         $to_id
- * @property string      $uuid
- * @property string      $fee
+ * @property string $status
+ * @property string $status_last
+ * @property string $discount
+ * @property int $deposit_id
+ * @property int $withdraw_id
+ * @property Wallet $from
+ * @property string $from_type
+ * @property int $from_id
+ * @property Wallet $to
+ * @property string $to_type
+ * @property int $to_id
+ * @property string $uuid
+ * @property string $fee
  * @property Transaction $deposit
  * @property Transaction $withdraw
  *

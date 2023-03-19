@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PhpCsFixer\Fixer\ArrayNotation\ArraySyntaxFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
+use PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitTestClassRequiresCoversFixer;
 use PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer;
 use Symplify\CodingStandard\Fixer\LineLength\DocBlockLineLengthFixer;
@@ -21,6 +22,10 @@ return static function (ECSConfig $containerConfigurator): void {
 
     $services->set(DeclareStrictTypesFixer::class);
     $services->set(LineLengthFixer::class);
+    $services->set(PhpdocAlignFixer::class)
+        ->call('configure', [[
+            'align' => 'left',
+        ]]);
 
     $containerConfigurator->paths([
         __DIR__ . '/config',

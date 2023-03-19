@@ -16,17 +16,17 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 /**
  * Class Transaction.
  *
- * @property string      $payable_type
- * @property int|string  $payable_id
- * @property int         $wallet_id
- * @property string      $uuid
- * @property string      $type
- * @property string      $amount
- * @property int         $amountInt
- * @property string      $amountFloat
- * @property bool        $confirmed
- * @property array       $meta
- * @property Wallet      $payable
+ * @property string $payable_type
+ * @property int|string $payable_id
+ * @property int $wallet_id
+ * @property string $uuid
+ * @property string $type
+ * @property string $amount
+ * @property int $amountInt
+ * @property string $amountFloat
+ * @property bool $confirmed
+ * @property array $meta
+ * @property Wallet $payable
  * @property WalletModel $wallet
  *
  * @method int getKey()
