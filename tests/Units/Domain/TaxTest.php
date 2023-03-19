@@ -20,11 +20,9 @@ final class TaxTest extends TestCase
 {
     public function testPay(): void
     {
-        /**
-         * @var Buyer   $buyer
-         * @var ItemTax $product
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
+        /** @var ItemTax $product */
         $product = ItemTaxFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -39,11 +37,9 @@ final class TaxTest extends TestCase
         $transfer = $buyer->pay($product);
         self::assertNotNull($transfer);
 
-        /**
-         * @var Transaction $withdraw
-         * @var Transaction $deposit
-         */
+        /** @var Transaction $withdraw */
         $withdraw = $transfer->withdraw;
+        /** @var Transaction $deposit */
         $deposit = $transfer->deposit;
 
         self::assertSame($withdraw->amountInt, -$balance);
@@ -64,9 +60,9 @@ final class TaxTest extends TestCase
         /**
          * @var Buyer   $santa
          * @var Buyer   $child
-         * @var ItemTax $product
          */
         [$santa, $child] = BuyerFactory::times(2)->create();
+        /** @var ItemTax $product */
         $product = ItemTaxFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -114,9 +110,9 @@ final class TaxTest extends TestCase
         /**
          * @var Buyer   $santa
          * @var Buyer   $child
-         * @var ItemTax $product
          */
         [$santa, $child] = BuyerFactory::times(2)->create();
+        /** @var ItemTax $product */
         $product = ItemTaxFactory::new()->create([
             'price' => 200,
             'quantity' => 1,
