@@ -7,6 +7,9 @@ namespace Bavix\Wallet\Test\Infra\Factories;
 use Bavix\Wallet\Test\Infra\Models\ItemMeta;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<ItemMeta>
+ */
 final class ItemMetaFactory extends Factory
 {
     protected $model = ItemMeta::class;
