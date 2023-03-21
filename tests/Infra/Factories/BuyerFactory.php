@@ -7,6 +7,9 @@ namespace Bavix\Wallet\Test\Infra\Factories;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<Buyer>
+ */
 final class BuyerFactory extends Factory
 {
     protected $model = Buyer::class;

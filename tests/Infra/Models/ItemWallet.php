@@ -12,6 +12,11 @@ use Bavix\Wallet\Traits\HasWallet;
 use Bavix\Wallet\Traits\HasWallets;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property string $name
+ * @property int $quantity
+ * @property int $price
+ */
 final class ItemWallet extends Model implements ProductLimitedInterface
 {
     use HasWallet;

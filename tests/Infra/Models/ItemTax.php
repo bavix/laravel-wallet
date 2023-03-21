@@ -12,6 +12,11 @@ use Bavix\Wallet\Services\CastService;
 use Bavix\Wallet\Traits\HasWallet;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property string $name
+ * @property int $quantity
+ * @property int $price
+ */
 final class ItemTax extends Model implements ProductLimitedInterface, Taxable
 {
     use HasWallet;

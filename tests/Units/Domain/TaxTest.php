@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Test\Units\Domain;
 
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Factories\ItemTaxFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
@@ -26,8 +27,10 @@ final class TaxTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $fee = (int) ($product->getAmountProduct($buyer) * $product->getFeePercent() / 100);
-        $balance = (int) ($product->getAmountProduct($buyer) + $fee);
+        $math = app(MathServiceInterface::class);
+
+        $fee = (int) $math->div($math->mul($product->getAmountProduct($buyer), $product->getFeePercent()), 100);
+        $balance = (int) $math->add($product->getAmountProduct($buyer), $fee);
 
         self::assertSame(0, $buyer->balanceInt);
         $buyer->deposit($balance);
@@ -64,8 +67,10 @@ final class TaxTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $fee = (int) ($product->getAmountProduct($santa) * $product->getFeePercent() / 100);
-        $balance = (int) ($product->getAmountProduct($santa) + $fee);
+        $math = app(MathServiceInterface::class);
+
+        $fee = (int) $math->div($math->mul($product->getAmountProduct($santa), $product->getFeePercent()), 100);
+        $balance = (int) $math->add($product->getAmountProduct($santa), $fee);
 
         self::assertSame($santa->balanceInt, 0);
         self::assertSame($child->balanceInt, 0);

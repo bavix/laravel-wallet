@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Cashier\Billable;
 
 /**
- * Class User.
- *
  * @property string $name
  * @property string $email
  */

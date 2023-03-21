@@ -7,6 +7,9 @@ namespace Bavix\Wallet\Test\Infra\Factories;
 use Bavix\Wallet\Test\Infra\Models\Item;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<Item>
+ */
 final class ItemFactory extends Factory
 {
     protected $model = Item::class;
