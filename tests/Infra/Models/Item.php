@@ -23,6 +23,7 @@ final class Item extends Model implements ProductLimitedInterface
 {
     use HasWallet;
 
+    /** @var string[] */
     protected $fillable = ['name', 'quantity', 'price'];
 
     public function canBuy(Customer $customer, int $quantity = 1, bool $force = false): bool
