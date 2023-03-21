@@ -21,6 +21,7 @@ final class ItemMaxTax extends Model implements ProductLimitedInterface, Maximal
 {
     use HasWallet;
 
+    /** @var string[] */
     protected $fillable = ['name', 'quantity', 'price'];
 
     public function getTable(): string
