@@ -98,7 +98,7 @@ final class ExchangeTest extends TestCase
         ]);
         self::assertSame($usd->slug, 'my-usd');
         self::assertSame($usd->currency, 'USD');
-        self::assertSame($usd->holder_id, $user->id);
+        self::assertSame($usd->holder_id, $user->getKey());
         self::assertInstanceOf($usd->holder_type, $user);
 
         $rub = $user->createWallet([
@@ -106,7 +106,7 @@ final class ExchangeTest extends TestCase
         ]);
         self::assertSame($rub->slug, 'rub');
         self::assertSame($rub->currency, 'RUB');
-        self::assertSame($rub->holder_id, $user->id);
+        self::assertSame($rub->holder_id, $user->getKey());
         self::assertInstanceOf($rub->holder_type, $user);
 
         $superWallet = $user->createWallet([
@@ -114,7 +114,7 @@ final class ExchangeTest extends TestCase
         ]);
         self::assertSame($superWallet->slug, Str::slug('Super Wallet'));
         self::assertSame($superWallet->currency, Str::upper(Str::slug('Super Wallet')));
-        self::assertSame($superWallet->holder_id, $user->id);
+        self::assertSame($superWallet->holder_id, $user->getKey());
         self::assertInstanceOf($superWallet->holder_type, $user);
 
         $rate = app(ExchangeServiceInterface::class)

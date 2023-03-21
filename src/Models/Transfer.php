@@ -17,10 +17,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $deposit_id
  * @property int $withdraw_id
  * @property Wallet $from
- * @property string $from_type
+ * @property class-string $from_type
  * @property int $from_id
  * @property Wallet $to
- * @property string $to_type
+ * @property class-string $to_type
  * @property int $to_id
  * @property string $uuid
  * @property string $fee
