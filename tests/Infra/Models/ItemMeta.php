@@ -39,12 +39,12 @@ final class ItemMeta extends Model implements ProductLimitedInterface
         return $result && ! $customer->paid($this);
     }
 
-    public function getAmountProduct(Customer $customer): int|string
+    public function getAmountProduct(Customer $customer): int
     {
         /** @var Wallet $wallet */
         $wallet = app(CastService::class)->getWallet($customer);
 
-        return $this->price + $wallet->holder_id;
+        return $this->price + (int) $wallet->holder_id;
     }
 
     /**

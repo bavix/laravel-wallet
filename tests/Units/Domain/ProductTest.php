@@ -16,6 +16,7 @@ use Bavix\Wallet\Test\Infra\Factories\ItemFactory;
 use Bavix\Wallet\Test\Infra\Factories\ItemWalletFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\Models\Item;
+use Bavix\Wallet\Test\Infra\Models\ItemWallet;
 use Bavix\Wallet\Test\Infra\TestCase;
 
 /**
@@ -133,7 +134,7 @@ final class ProductTest extends TestCase
 
         self::assertSame((int) -$product->getAmountProduct($buyer), $product->balanceInt);
         self::assertSame((int) $product->getAmountProduct($buyer), $buyer->balanceInt);
-        $product->deposit(-$product->balance);
+        $product->deposit(-$product->balanceInt);
         $buyer->withdraw($buyer->balance);
 
         self::assertSame(0, $product->balanceInt);
@@ -172,7 +173,7 @@ final class ProductTest extends TestCase
 
         self::assertSame((int) -$product->getAmountProduct($buyer), $buyer->balanceInt);
 
-        $buyer->deposit(-$buyer->balance);
+        $buyer->deposit(-$buyer->balanceInt);
         self::assertSame(0, $buyer->balanceInt);
     }
 
@@ -281,7 +282,7 @@ final class ProductTest extends TestCase
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /** @var Item $product */
+        /** @var ItemWallet $product */
         $product = ItemWalletFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -295,11 +296,11 @@ final class ProductTest extends TestCase
         ]);
         app(DatabaseServiceInterface::class)->transaction(function () use ($product, $buyer) {
             $transfer = $buyer->pay($product);
-            $product->transfer($product->getWallet('testing'), $transfer->deposit->amount, $transfer->toArray());
+            $product->transfer($product->getWalletOrFail('testing'), $transfer->deposit->amount, $transfer->toArray());
         });
 
         self::assertSame(0, $product->balanceInt);
         self::assertSame(0, $buyer->balanceInt);
-        self::assertSame((string) $product->getAmountProduct($buyer), $product->getWallet('testing')->balance);
+        self::assertSame((string) $product->getAmountProduct($buyer), $product->getWalletOrFail('testing')->balance);
     }
 }
