@@ -12,7 +12,6 @@ parameters:
             # laravel
             - Illuminate\Support\ServiceProvider
             - Illuminate\Database\Eloquent\Model
-            - Illuminate\Console\Command
 
             # php exceptions
             - LogicException
