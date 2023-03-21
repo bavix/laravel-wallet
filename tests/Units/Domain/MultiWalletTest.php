@@ -47,7 +47,7 @@ final class MultiWalletTest extends TestCase
         ]);
         self::assertNotNull($wallet);
         self::assertNotNull($user->wallet);
-        self::assertSame($user->wallet->id, $wallet->id);
+        self::assertSame($user->wallet->getKey(), $wallet->getKey());
     }
 
     public function testOnlyCreatedWallets(): void
@@ -148,7 +148,7 @@ final class MultiWalletTest extends TestCase
         self::assertSame(0., (float) $wallet->balanceFloat);
 
         // find
-        $userFind = UserMulti::query()->find($userInit->id); // refresh
+        $userFind = UserMulti::query()->find($userInit->getKey()); // refresh
         self::assertTrue($userInit->is($userFind));
         self::assertTrue($userFind->hasWallet((string) $userInit->getKey()));
 
@@ -314,8 +314,8 @@ final class MultiWalletTest extends TestCase
             'name' => 'deposit',
         ]);
 
-        self::assertNotSame($first->id, $second->id);
-        self::assertNotSame($firstWallet->id, $secondWallet->id);
+        self::assertNotSame($first->getKey(), $second->getKey());
+        self::assertNotSame($firstWallet->getKey(), $secondWallet->getKey());
         self::assertSame(0, $firstWallet->balanceInt);
         self::assertSame(0, $secondWallet->balanceInt);
 
@@ -521,8 +521,8 @@ final class MultiWalletTest extends TestCase
         self::assertSame($transfer->getKey(), $paidTransfer->getKey());
         self::assertInstanceOf(UserMulti::class, $paidTransfer->withdraw->payable);
         self::assertSame($user->getKey(), $paidTransfer->withdraw->payable->getKey());
-        self::assertSame($transfer->from->id, $a->id);
-        self::assertSame($transfer->to->id, $product->wallet->id);
+        self::assertSame($transfer->from->getKey(), $a->getKey());
+        self::assertSame($transfer->to->getKey(), $product->wallet->getKey());
         self::assertSame($transfer->status, Transfer::STATUS_PAID);
         self::assertSame($a->balanceInt, 0);
         self::assertSame($product->balanceInt, $product->getAmountProduct($a));
@@ -533,8 +533,8 @@ final class MultiWalletTest extends TestCase
         self::assertSame($transfer->getKey(), $paidTransfer->getKey());
         self::assertInstanceOf(UserMulti::class, $paidTransfer->withdraw->payable);
         self::assertSame($user->getKey(), $paidTransfer->withdraw->payable->getKey());
-        self::assertSame($transfer->from->id, $b->id);
-        self::assertSame($transfer->to->id, $product->wallet->id);
+        self::assertSame($transfer->from->getKey(), $b->getKey());
+        self::assertSame($transfer->to->getKey(), $product->wallet->getKey());
         self::assertSame($transfer->status, Transfer::STATUS_PAID);
         self::assertSame($b->balanceInt, 0);
         self::assertSame($product->balanceInt, $product->getAmountProduct($b) * 2);
@@ -594,7 +594,7 @@ final class MultiWalletTest extends TestCase
         ]);
         self::assertNotNull($wallet);
         self::assertNotNull($user->wallet);
-        self::assertSame($user->wallet->id, $wallet->id);
+        self::assertSame($user->wallet->getKey(), $wallet->getKey());
 
         $user->deposit(1_000_000_000);
         self::assertSame(1000., (float) $wallet->balanceFloat);

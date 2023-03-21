@@ -91,7 +91,7 @@ final class WalletTest extends TestCase
 
         $ids = [];
         foreach ($users as $other) {
-            $ids[] = $other->id;
+            $ids[] = $other->getKey();
             if ($user !== $other) {
                 self::assertFalse($other->wallet->exists);
             }
@@ -157,7 +157,7 @@ final class WalletTest extends TestCase
          * @var User $second
          */
         [$first, $second] = UserFactory::times(2)->create();
-        self::assertNotSame($first->id, $second->id);
+        self::assertNotSame($first->getKey(), $second->getKey());
         self::assertSame(0, $first->balanceInt);
         self::assertSame(0, $second->balanceInt);
 

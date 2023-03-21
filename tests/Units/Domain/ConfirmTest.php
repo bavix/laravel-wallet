@@ -228,8 +228,8 @@ final class ConfirmTest extends TestCase
         /** @var UserConfirm $userConfirm */
         $userConfirm = UserConfirmFactory::new()->create();
         $transaction = $userConfirm->deposit(100, null, false);
-        self::assertSame($transaction->wallet->id, $userConfirm->wallet->id);
-        self::assertSame((int) $transaction->payable_id, (int) $userConfirm->id);
+        self::assertSame($transaction->wallet->getKey(), $userConfirm->wallet->getKey());
+        self::assertSame((int) $transaction->payable_id, (int) $userConfirm->getKey());
         self::assertInstanceOf(UserConfirm::class, $transaction->payable);
         self::assertFalse($transaction->confirmed);
 
@@ -256,8 +256,8 @@ final class ConfirmTest extends TestCase
         /** @var UserConfirm $userConfirm */
         $userConfirm = UserConfirmFactory::new()->create();
         $transaction = $userConfirm->wallet->deposit(100, null, false);
-        self::assertSame($transaction->wallet->id, $userConfirm->wallet->id);
-        self::assertSame((int) $transaction->payable_id, (int) $userConfirm->id);
+        self::assertSame($transaction->wallet->getKey(), $userConfirm->wallet->getKey());
+        self::assertSame((int) $transaction->payable_id, (int) $userConfirm->getKey());
         self::assertInstanceOf(UserConfirm::class, $transaction->payable);
         self::assertFalse($transaction->confirmed);
 
