@@ -1,0 +1,31 @@
+includes:
+	- phpstan.common.neon
+	- phpstan.src.baseline.neon
+
+parameters:
+    level: 9
+    fileExtensions:
+        - php
+    ergebnis:
+        allowAbstractClasses: true
+        classesAllowedToBeExtended:
+            # laravel
+            - Illuminate\Support\ServiceProvider
+            - Illuminate\Database\Eloquent\Model
+            - Illuminate\Console\Command
+
+            # php exceptions
+            - LogicException
+            - RuntimeException
+            - UnderflowException
+            - UnexpectedValueException
+            - InvalidArgumentException
+
+        classesNotRequiredToBeAbstractOrFinal:
+            - Bavix\Wallet\Models\Wallet
+            - Bavix\Wallet\Models\Transfer
+            - Bavix\Wallet\Models\Transaction
+        interfacesImplementedByContainers:
+            - Psr\Container\ContainerInterface
+    paths:
+        - src/
