@@ -10,7 +10,7 @@ parameters:
     ergebnis:
         allowAbstractClasses: false
         classesAllowedToBeExtended:
-#            # laravel
+            # laravel
             - Illuminate\Support\ServiceProvider
             - Illuminate\Database\Eloquent\Model
             - Illuminate\Database\Migrations\Migration
@@ -19,7 +19,8 @@ parameters:
             # php exceptions
             - RuntimeException
 
-            # phpstan
+            # phpunit
+            - Orchestra\Testbench\TestCase
             - Bavix\Wallet\Test\Infra\TestCase
 
         classesNotRequiredToBeAbstractOrFinal:
