@@ -16,6 +16,8 @@ final class User extends Model implements Wallet
 {
     use HasWallet;
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     protected $fillable = ['name', 'email'];
 }
