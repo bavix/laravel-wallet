@@ -184,7 +184,7 @@ final class BalanceTest extends TestCase
         self::assertSame(0, $wallet->balanceInt);
         self::assertFalse($wallet->exists);
 
-        /** @var MockObject|Wallet $mockQuery */
+        /** @var MockObject&Wallet $mockQuery */
         $mockQuery = $this->createMock($wallet->newQuery()::class);
         $mockQuery->method('whereKey')
             ->willReturn($mockQuery)

@@ -60,8 +60,9 @@ trait HasWallets
     public function getWalletOrFail(string $slug): WalletModel
     {
         if ($this->_wallets === [] && $this->relationLoaded('wallets')) {
-            /** @var WalletModel $wallet */
-            foreach ($this->getRelation('wallets') as $wallet) {
+            /** @var Collection<WalletModel> $wallets */
+            $wallets = $this->getRelation('wallets');
+            foreach ($wallets as $wallet) {
                 $wallet->setRelation('holder', $this->withoutRelations());
                 $this->_wallets[$wallet->slug] = $wallet;
             }

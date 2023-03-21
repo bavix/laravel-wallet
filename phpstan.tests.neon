@@ -1,0 +1,30 @@
+includes:
+	- phpstan.common.neon
+
+parameters:
+    level: 9
+    fileExtensions:
+        - php
+    ergebnis:
+        allowAbstractClasses: false
+        classesAllowedToBeExtended:
+#            # laravel
+            - Illuminate\Support\ServiceProvider
+            - Illuminate\Database\Eloquent\Model
+            - Illuminate\Database\Migrations\Migration
+            - Illuminate\Database\Eloquent\Factories\Factory
+
+            # php exceptions
+            - RuntimeException
+
+            # phpstan
+            - Bavix\Wallet\Test\Infra\TestCase
+
+        classesNotRequiredToBeAbstractOrFinal:
+            - Bavix\Wallet\Models\Wallet
+            - Bavix\Wallet\Models\Transfer
+            - Bavix\Wallet\Models\Transaction
+        interfacesImplementedByContainers:
+            - Psr\Container\ContainerInterface
+    paths:
+        - tests/
