@@ -40,7 +40,7 @@ abstract class TestCase extends OrchestraTestCase
      *
      * @return non-empty-array<int, string>
      */
-    protected function getPackageProviders($app): array
+    final protected function getPackageProviders($app): array
     {
         // Bind eloquent models to IoC container
         $app['config']->set('wallet.services.exchange', MyExchangeService::class);
@@ -54,7 +54,7 @@ abstract class TestCase extends OrchestraTestCase
     /**
      * @param Application $app
      */
-    protected function getEnvironmentSetUp($app): void
+    final protected function getEnvironmentSetUp($app): void
     {
         /** @var Repository $config */
         $config = $app['config'];

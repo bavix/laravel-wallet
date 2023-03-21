@@ -9,8 +9,6 @@ use Bavix\Wallet\Traits\CanPay;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class User.
- *
  * @property string $name
  * @property string $email
  */

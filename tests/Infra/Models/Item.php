@@ -15,8 +15,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
- * Class Item.
- *
  * @property string $name
  * @property int $quantity
  * @property int $price

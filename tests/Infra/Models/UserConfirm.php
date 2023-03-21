@@ -11,8 +11,6 @@ use Bavix\Wallet\Traits\HasWallet;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class UserConfirm.
- *
  * @property string $name
  * @property string $email
  */

@@ -7,6 +7,9 @@ namespace Bavix\Wallet\Test\Infra\Factories;
 use Bavix\Wallet\Test\Infra\Models\UserConfirm;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<UserConfirm>
+ */
 final class UserConfirmFactory extends Factory
 {
     protected $model = UserConfirm::class;

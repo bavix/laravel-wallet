@@ -8,6 +8,9 @@ use Bavix\Wallet\Test\Infra\Models\Manager;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Ramsey\Uuid\Uuid;
 
+/**
+ * @extends Factory<Manager>
+ */
 final class ManagerFactory extends Factory
 {
     protected $model = Manager::class;
