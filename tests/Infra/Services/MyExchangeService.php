@@ -20,7 +20,7 @@ class MyExchangeService implements ExchangeServiceInterface
     ) {
         foreach ($this->rates as $from => $rates) {
             foreach ($rates as $to => $rate) {
-                if (empty($this->rates[$to][$from])) {
+                if (!isset($this->rates[$to][$from])) {
                     $this->rates[$to][$from] = $this->mathService->div(1, $rate);
                 }
             }
