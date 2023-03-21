@@ -19,7 +19,9 @@ final class UserConfirm extends Model implements Wallet, Confirmable
     use HasWallet;
     use CanConfirm;
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     protected $fillable = ['name', 'email'];
 
     public function getTable(): string

@@ -10,6 +10,7 @@ use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CastService;
 use Bavix\Wallet\Services\CastServiceInterface;
+use Bavix\Wallet\Test\Infra\Helpers\Config;
 use Bavix\Wallet\Traits\HasWallet;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -23,7 +24,9 @@ final class Item extends Model implements ProductLimitedInterface
 {
     use HasWallet;
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     protected $fillable = ['name', 'quantity', 'price'];
 
     public function canBuy(Customer $customer, int $quantity = 1, bool $force = false): bool
@@ -59,9 +62,9 @@ final class Item extends Model implements ProductLimitedInterface
     {
         return app(CastServiceInterface::class)
             ->getWallet($this)
-            ->morphMany(config('wallet.transfer.model', Transfer::class), 'to')
+            ->morphMany(Config::classString('wallet.transfer.model', Transfer::class), 'to')
             ->where('status', Transfer::STATUS_PAID)
-            ->where('from_type', config('wallet.wallet.model', Wallet::class))
+            ->where('from_type', Config::classString('wallet.wallet.model', Wallet::class))
             ->whereIn('from_id', $walletIds)
         ;
     }

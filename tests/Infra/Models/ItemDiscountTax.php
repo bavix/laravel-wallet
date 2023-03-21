@@ -22,7 +22,9 @@ final class ItemDiscountTax extends Model implements ProductLimitedInterface, Di
 {
     use HasWallet;
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     protected $fillable = ['name', 'quantity', 'price'];
 
     public function getTable(): string

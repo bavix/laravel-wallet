@@ -18,6 +18,7 @@ use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Test\Infra\Factories\ItemFactory;
 use Bavix\Wallet\Test\Infra\Factories\UserCashierFactory;
 use Bavix\Wallet\Test\Infra\Factories\UserMultiFactory;
+use Bavix\Wallet\Test\Infra\Helpers\Config;
 use Bavix\Wallet\Test\Infra\Models\Item;
 use Bavix\Wallet\Test\Infra\Models\UserCashier;
 use Bavix\Wallet\Test\Infra\Models\UserMulti;
@@ -34,7 +35,7 @@ final class MultiWalletTest extends TestCase
 {
     public function testCreateDefault(): void
     {
-        $slug = config('wallet.wallet.default.slug', 'default');
+        $slug = Config::string('wallet.wallet.default.slug', 'default');
 
         /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
@@ -174,7 +175,7 @@ final class MultiWalletTest extends TestCase
         $this->expectException(ModelNotFoundException::class);
 
         $userMulti
-            ->getWalletOrFail(config('wallet.wallet.default.slug', 'default'))
+            ->getWalletOrFail(Config::string('wallet.wallet.default.slug', 'default'))
         ;
     }
 
@@ -192,7 +193,7 @@ final class MultiWalletTest extends TestCase
         $userMulti->deposit(1);
 
         $walletResult = $userMulti
-            ->getWalletOrFail(config('wallet.wallet.default.slug', 'default'))
+            ->getWalletOrFail(Config::string('wallet.wallet.default.slug', 'default'))
         ;
 
         self::assertSame($uuid, $walletResult->uuid);
@@ -209,7 +210,7 @@ final class MultiWalletTest extends TestCase
         /** @var UserMulti $userMulti */
         $userMulti = UserMultiFactory::new()->create();
         $userMulti
-            ->getWalletOrFail(config('wallet.wallet.default.slug', 'default'))
+            ->getWalletOrFail(Config::string('wallet.wallet.default.slug', 'default'))
         ;
     }
 
@@ -580,7 +581,7 @@ final class MultiWalletTest extends TestCase
      */
     public function testDecimalPlaces(): void
     {
-        $slug = config('wallet.wallet.default.slug', 'default');
+        $slug = Config::string('wallet.wallet.default.slug', 'default');
 
         /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
