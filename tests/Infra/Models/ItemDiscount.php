@@ -21,7 +21,9 @@ final class ItemDiscount extends Model implements ProductLimitedInterface, Disco
 {
     use HasWallet;
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     protected $fillable = ['name', 'quantity', 'price'];
 
     public function getTable(): string

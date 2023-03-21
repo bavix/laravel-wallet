@@ -21,7 +21,9 @@ final class ItemTax extends Model implements ProductLimitedInterface, Taxable
 {
     use HasWallet;
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     protected $fillable = ['name', 'quantity', 'price'];
 
     public function getTable(): string
