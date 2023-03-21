@@ -20,6 +20,7 @@ final class ItemMeta extends Model implements ProductLimitedInterface
 {
     use HasWallet;
 
+    /** @var string[] */
     protected $fillable = ['name', 'quantity', 'price'];
 
     public function getTable(): string

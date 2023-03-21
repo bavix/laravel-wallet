@@ -17,7 +17,7 @@ final class Manager extends Model implements Wallet
     use HasWallet;
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $fillable = ['name', 'email'];
 }

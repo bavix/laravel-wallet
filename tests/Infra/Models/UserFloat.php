@@ -17,9 +17,7 @@ final class UserFloat extends Model implements Wallet, WalletFloat
 {
     use HasWalletFloat;
 
-    /**
-     * @var array
-     */
+    /** @var string[] */
     protected $fillable = ['name', 'email'];
 
     public function getTable(): string

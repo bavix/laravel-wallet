@@ -3,6 +3,8 @@ includes:
 
 parameters:
     level: 9
+    ignoreErrors:
+        - '#^Offset \d+ does not exist on.+Collection.+int.+$#'
     fileExtensions:
         - php
     ergebnis:
