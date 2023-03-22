@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property string $name
  * @property string $email
+ *
+ * @method int getKey()
  */
 final class User extends Model implements Wallet
 {
