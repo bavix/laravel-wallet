@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property int $quantity
  * @property int $price
+ *
+ * @method int getKey()
  */
 final class ItemMeta extends Model implements ProductLimitedInterface
 {
