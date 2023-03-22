@@ -12,6 +12,8 @@ use Laravel\Cashier\Billable;
 /**
  * @property string $name
  * @property string $email
+ *
+ * @method int getKey()
  */
 final class UserCashier extends Model
 {

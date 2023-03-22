@@ -19,6 +19,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property string $name
  * @property int $quantity
  * @property int $price
+ *
+ * @method int getKey()
  */
 final class Item extends Model implements ProductLimitedInterface
 {

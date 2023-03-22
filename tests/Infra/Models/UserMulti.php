@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property string $name
  * @property string $email
+ *
+ * @method int getKey()
  */
 final class UserMulti extends Model implements Wallet, WalletFloat
 {

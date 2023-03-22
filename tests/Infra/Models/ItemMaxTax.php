@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property int $quantity
  * @property int $price
+ *
+ * @method int getKey()
  */
 final class ItemMaxTax extends Model implements ProductLimitedInterface, MaximalTaxable
 {
