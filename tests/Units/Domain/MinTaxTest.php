@@ -22,9 +22,11 @@ final class MinTaxTest extends TestCase
     {
         /**
          * @var Buyer $buyer
-         * @var ItemMinTax $product
          */
         $buyer = BuyerFactory::new()->create();
+        /**
+         * @var ItemMinTax $product
+         */
         $product = ItemMinTaxFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -43,10 +45,6 @@ final class MinTaxTest extends TestCase
         $transfer = $buyer->pay($product);
         self::assertNotNull($transfer);
 
-        /**
-         * @var Transaction $withdraw
-         * @var Transaction $deposit
-         */
         $withdraw = $transfer->withdraw;
         $deposit = $transfer->deposit;
 
@@ -67,9 +65,11 @@ final class MinTaxTest extends TestCase
     {
         /**
          * @var Buyer $buyer
-         * @var ItemMaxTax $product
          */
         $buyer = BuyerFactory::new()->create();
+        /**
+         * @var ItemMaxTax $product
+         */
         $product = ItemMaxTaxFactory::new()->create([
             'quantity' => 1,
             'price' => 12000,
@@ -89,10 +89,6 @@ final class MinTaxTest extends TestCase
         $transfer = $buyer->pay($product);
         self::assertNotNull($transfer);
 
-        /**
-         * @var Transaction $withdraw
-         * @var Transaction $deposit
-         */
         $withdraw = $transfer->withdraw;
         $deposit = $transfer->deposit;
 
