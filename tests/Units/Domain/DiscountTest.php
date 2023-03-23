@@ -24,9 +24,11 @@ final class DiscountTest extends TestCase
     {
         /**
          * @var Buyer $buyer
-         * @var ItemDiscount $product
          */
         $buyer = BuyerFactory::new()->create();
+        /**
+         * @var ItemDiscount $product
+         */
         $product = ItemDiscountFactory::new()->create();
 
         self::assertSame(0, $buyer->balanceInt);
@@ -41,10 +43,6 @@ final class DiscountTest extends TestCase
 
         self::assertSame((int) $transfer->discount, $product->getPersonalDiscount($buyer));
 
-        /**
-         * @var Transaction $withdraw
-         * @var Transaction $deposit
-         */
         $withdraw = $transfer->withdraw;
         $deposit = $transfer->deposit;
 
@@ -72,9 +70,11 @@ final class DiscountTest extends TestCase
     {
         /**
          * @var Buyer $buyer
-         * @var ItemDiscount $product
          */
         $buyer = BuyerFactory::new()->create();
+        /**
+         * @var ItemDiscount $product
+         */
         $product = ItemDiscountFactory::new()->create();
 
         self::assertSame(0, $buyer->balanceInt);
@@ -89,10 +89,6 @@ final class DiscountTest extends TestCase
 
         self::assertSame((int) $transfer->discount, $product->getPersonalDiscount($buyer));
 
-        /**
-         * @var Transaction $withdraw
-         * @var Transaction $deposit
-         */
         $withdraw = $transfer->withdraw;
         $deposit = $transfer->deposit;
 
@@ -113,9 +109,11 @@ final class DiscountTest extends TestCase
     {
         /**
          * @var Buyer $buyer
-         * @var ItemDiscount $product
          */
         $buyer = BuyerFactory::new()->create();
+        /**
+         * @var ItemDiscount $product
+         */
         $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -162,9 +160,11 @@ final class DiscountTest extends TestCase
     {
         /**
          * @var Buyer $buyer
-         * @var ItemDiscount $product
          */
         $buyer = BuyerFactory::new()->create();
+        /**
+         * @var ItemDiscount $product
+         */
         $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -196,7 +196,7 @@ final class DiscountTest extends TestCase
         );
 
         self::assertSame($buyer->balanceInt, (int) $product->getAmountProduct($buyer));
-        $product->deposit(-$product->balance);
+        $product->deposit(-$product->balanceInt);
         $buyer->withdraw($buyer->balance);
 
         self::assertSame(0, $product->balanceInt);
@@ -211,9 +211,11 @@ final class DiscountTest extends TestCase
 
         /**
          * @var Buyer $buyer
-         * @var ItemDiscount $product
          */
         $buyer = BuyerFactory::new()->create();
+        /**
+         * @var ItemDiscount $product
+         */
         $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -227,9 +229,11 @@ final class DiscountTest extends TestCase
     {
         /**
          * @var Buyer $buyer
-         * @var ItemDiscount $product
          */
         $buyer = BuyerFactory::new()->create();
+        /**
+         * @var ItemDiscount $product
+         */
         $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -242,7 +246,7 @@ final class DiscountTest extends TestCase
             (int) -($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer))
         );
 
-        $buyer->deposit(-$buyer->balance);
+        $buyer->deposit(-$buyer->balanceInt);
         self::assertSame(0, $buyer->balanceInt);
     }
 
@@ -250,9 +254,11 @@ final class DiscountTest extends TestCase
     {
         /**
          * @var Buyer $buyer
-         * @var ItemDiscount $product
          */
         $buyer = BuyerFactory::new()->create();
+        /**
+         * @var ItemDiscount $product
+         */
         $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -275,9 +281,11 @@ final class DiscountTest extends TestCase
     {
         /**
          * @var Buyer $buyer
-         * @var ItemDiscount $product
          */
         $buyer = BuyerFactory::new()->create();
+        /**
+         * @var ItemDiscount $product
+         */
         $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -305,9 +313,11 @@ final class DiscountTest extends TestCase
 
         /**
          * @var Buyer $buyer
-         * @var ItemDiscount $product
          */
         $buyer = BuyerFactory::new()->create();
+        /**
+         * @var ItemDiscount $product
+         */
         $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);

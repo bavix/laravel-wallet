@@ -21,9 +21,11 @@ final class GiftDiscountTest extends TestCase
         /**
          * @var Buyer $first
          * @var Buyer $second
-         * @var ItemDiscount $product
          */
         [$first, $second] = BuyerFactory::times(2)->create();
+        /**
+         * @var ItemDiscount $product
+         */
         $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -52,9 +54,11 @@ final class GiftDiscountTest extends TestCase
         /**
          * @var Buyer $first
          * @var Buyer $second
-         * @var ItemDiscount $product
          */
         [$first, $second] = BuyerFactory::times(2)->create();
+        /**
+         * @var ItemDiscount $product
+         */
         $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -88,7 +92,7 @@ final class GiftDiscountTest extends TestCase
             (int) -($product->getAmountProduct($second) - $product->getPersonalDiscount($second))
         );
 
-        $second->deposit(-$second->balance);
+        $second->deposit(-$second->balanceInt);
         self::assertSame($second->balanceInt, 0);
 
         $first->withdraw($product->getAmountProduct($first));
