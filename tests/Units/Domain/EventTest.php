@@ -24,10 +24,12 @@ use Bavix\Wallet\Test\Infra\Listeners\BalanceUpdatedThrowUuidListener;
 use Bavix\Wallet\Test\Infra\Listeners\TransactionCreatedThrowListener;
 use Bavix\Wallet\Test\Infra\Listeners\WalletCreatedThrowListener;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
+use Bavix\Wallet\Test\Infra\Models\Item;
 use Bavix\Wallet\Test\Infra\Models\UserMulti;
 use Bavix\Wallet\Test\Infra\Services\ClockFakeService;
 use Bavix\Wallet\Test\Infra\TestCase;
 use DateTimeInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Event;
 
 /**
@@ -201,8 +203,8 @@ final class EventTest extends TestCase
     public function testTransactionCreatedMultiListener(): void
     {
         /** @var array<array<int, int>> $transactionIds */
-        /** @var array<array<int, int>> $transactionCounts */
         $transactionIds = [];
+        /** @var array<array<int, int>> $transactionCounts */
         $transactionCounts = [];
         Event::listen(
             TransactionCreatedEventInterface::class,
@@ -219,6 +221,9 @@ final class EventTest extends TestCase
         $buyer = BuyerFactory::new()->create();
         self::assertSame(0, $buyer->wallet->balanceInt);
 
+        /**
+         * @var Collection<int, Item> $products
+         */
         $products = ItemFactory::times(10)->create([
             'quantity' => 1,
         ]);
