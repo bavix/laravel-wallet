@@ -1,5 +1,6 @@
 includes:
 	- phpstan.common.neon
+	- phpstan.tests.baseline.neon
 
 parameters:
     level: 9
