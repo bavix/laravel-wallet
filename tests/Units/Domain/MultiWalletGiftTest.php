@@ -52,7 +52,10 @@ final class MultiWalletGiftTest extends TestCase
         self::assertSame($second->balanceInt, 2);
         self::assertSame($transfer->status, Transfer::STATUS_GIFT);
 
-        self::assertSame((int) $transfer->withdraw->wallet->holder->getKey(), (int) $first->getKey());
+        /** @var string $holderKey */
+        $holderKey = $transfer->withdraw->wallet->holder->getKey();
+
+        self::assertSame((int) $first->getKey(), (int) $holderKey);
         self::assertInstanceOf(UserMulti::class, $transfer->withdraw->wallet->holder);
 
         self::assertSame((int) $wallet->getKey(), (int) $transfer->withdraw->wallet->getKey());
