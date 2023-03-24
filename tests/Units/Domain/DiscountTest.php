@@ -22,13 +22,9 @@ final class DiscountTest extends TestCase
 {
     public function testPay(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemDiscount $product
-         */
+        /** @var ItemDiscount $product */
         $product = ItemDiscountFactory::new()->create();
 
         self::assertSame(0, $buyer->balanceInt);
@@ -68,13 +64,9 @@ final class DiscountTest extends TestCase
 
     public function testItemTransactions(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemDiscount $product
-         */
+        /** @var ItemDiscount $product */
         $product = ItemDiscountFactory::new()->create();
 
         self::assertSame(0, $buyer->balanceInt);
@@ -107,13 +99,9 @@ final class DiscountTest extends TestCase
 
     public function testRefund(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemDiscount $product
-         */
+        /** @var ItemDiscount $product */
         $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -158,13 +146,9 @@ final class DiscountTest extends TestCase
 
     public function testForceRefund(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemDiscount $product
-         */
+        /** @var ItemDiscount $product */
         $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -209,13 +193,9 @@ final class DiscountTest extends TestCase
         $this->expectExceptionCode(ExceptionInterface::PRODUCT_ENDED);
         $this->expectExceptionMessageStrict(trans('wallet::errors.product_stock'));
 
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemDiscount $product
-         */
+        /** @var ItemDiscount $product */
         $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -227,13 +207,9 @@ final class DiscountTest extends TestCase
 
     public function testForcePay(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemDiscount $product
-         */
+        /** @var ItemDiscount $product */
         $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -252,13 +228,9 @@ final class DiscountTest extends TestCase
 
     public function testPayFree(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemDiscount $product
-         */
+        /** @var ItemDiscount $product */
         $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -279,13 +251,9 @@ final class DiscountTest extends TestCase
 
     public function testFreePay(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemDiscount $product
-         */
+        /** @var ItemDiscount $product */
         $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -311,13 +279,9 @@ final class DiscountTest extends TestCase
         $this->expectExceptionCode(ExceptionInterface::PRODUCT_ENDED);
         $this->expectExceptionMessageStrict(trans('wallet::errors.product_stock'));
 
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemDiscount $product
-         */
+        /** @var ItemDiscount $product */
         $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);

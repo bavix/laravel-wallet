@@ -128,9 +128,7 @@ final class MultiWalletTest extends TestCase
 
     public function testDepositFloat(): void
     {
-        /**
-         * @var UserMulti $userInit
-         */
+        /** @var UserMulti $userInit */
         $userInit = UserMultiFactory::new()->create();
         $wallet = $userInit->createWallet([
             'name' => 'my-simple-wallet',
@@ -146,9 +144,7 @@ final class MultiWalletTest extends TestCase
         $wallet->withdrawFloat($wallet->balanceFloat);
         self::assertSame(0., (float) $wallet->balanceFloat);
 
-        /**
-         * @var UserMulti $userFind
-         */
+        /** @var UserMulti $userFind */
         $userFind = UserMulti::query()->find($userInit->getKey()); // refresh
         self::assertTrue($userInit->is($userFind));
         self::assertTrue($userFind->hasWallet((string) $userInit->getKey()));
@@ -491,9 +487,7 @@ final class MultiWalletTest extends TestCase
 
     public function testPay(): void
     {
-        /**
-         * @var UserMulti $user
-         */
+        /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
         $a = $user->createWallet([
             'name' => 'a',
@@ -502,9 +496,7 @@ final class MultiWalletTest extends TestCase
             'name' => 'b',
         ]);
 
-        /**
-         * @var Item $product
-         */
+        /** @var Item $product */
         $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
