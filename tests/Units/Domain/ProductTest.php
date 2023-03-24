@@ -36,7 +36,7 @@ final class ProductTest extends TestCase
         self::assertSame($buyer->balanceInt, 0);
         $buyer->deposit($product->getAmountProduct($buyer));
 
-        self::assertSame($buyer->balanceInt, (int) $product->getAmountProduct($buyer));
+        self::assertSame($buyer->balanceInt, $product->getAmountProduct($buyer));
         $transfer = $buyer->pay($product);
         self::assertNotNull($transfer);
         self::assertSame($transfer->status, Transfer::STATUS_PAID);
@@ -79,29 +79,29 @@ final class ProductTest extends TestCase
         self::assertSame(0, $buyer->balanceInt);
         $buyer->deposit($product->getAmountProduct($buyer));
 
-        self::assertSame((int) $product->getAmountProduct($buyer), $buyer->balanceInt);
+        self::assertSame($product->getAmountProduct($buyer), $buyer->balanceInt);
         $transfer = $buyer->pay($product);
         self::assertNotNull($transfer);
         self::assertSame(Transfer::STATUS_PAID, $transfer->status);
 
         self::assertTrue($buyer->refund($product));
-        self::assertSame((int) $product->getAmountProduct($buyer), $buyer->balanceInt);
+        self::assertSame($product->getAmountProduct($buyer), $buyer->balanceInt);
         self::assertSame(0, $product->balanceInt);
 
         $transfer->refresh();
         self::assertSame(Transfer::STATUS_REFUND, $transfer->status);
 
         self::assertFalse($buyer->safeRefund($product));
-        self::assertSame((int) $product->getAmountProduct($buyer), $buyer->balanceInt);
+        self::assertSame($product->getAmountProduct($buyer), $buyer->balanceInt);
 
         $transfer = $buyer->pay($product);
         self::assertNotNull($transfer);
         self::assertSame(0, $buyer->balanceInt);
-        self::assertSame((int) $product->getAmountProduct($buyer), $product->balanceInt);
+        self::assertSame($product->getAmountProduct($buyer), $product->balanceInt);
         self::assertSame(Transfer::STATUS_PAID, $transfer->status);
 
         self::assertTrue($buyer->refund($product));
-        self::assertSame((int) $product->getAmountProduct($buyer), $buyer->balanceInt);
+        self::assertSame($product->getAmountProduct($buyer), $buyer->balanceInt);
         self::assertSame(0, $product->balanceInt);
 
         $transfer->refresh();
@@ -132,8 +132,8 @@ final class ProductTest extends TestCase
         self::assertFalse($buyer->safeRefund($product));
         self::assertTrue($buyer->forceRefund($product));
 
-        self::assertSame((int) -$product->getAmountProduct($buyer), $product->balanceInt);
-        self::assertSame((int) $product->getAmountProduct($buyer), $buyer->balanceInt);
+        self::assertSame(-$product->getAmountProduct($buyer), $product->balanceInt);
+        self::assertSame($product->getAmountProduct($buyer), $buyer->balanceInt);
         $product->deposit(-$product->balanceInt);
         $buyer->withdraw($buyer->balance);
 
@@ -171,7 +171,7 @@ final class ProductTest extends TestCase
         self::assertSame(0, $buyer->balanceInt);
         $buyer->forcePay($product);
 
-        self::assertSame((int) -$product->getAmountProduct($buyer), $buyer->balanceInt);
+        self::assertSame(-$product->getAmountProduct($buyer), $buyer->balanceInt);
 
         $buyer->deposit(-$buyer->balanceInt);
         self::assertSame(0, $buyer->balanceInt);

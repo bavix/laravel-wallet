@@ -38,10 +38,10 @@ final class GiftDiscountTaxTest extends TestCase
         );
 
         $first->deposit($product->getAmountProduct($first) + $fee);
-        self::assertSame($first->balanceInt, (int) ($product->getAmountProduct($first) + $fee));
+        self::assertSame($first->balanceInt, $product->getAmountProduct($first) + $fee);
 
         $transfer = $first->wallet->gift($second, $product);
-        self::assertSame($first->balanceInt, (int) $product->getPersonalDiscount($first));
+        self::assertSame($first->balanceInt, $product->getPersonalDiscount($first));
         self::assertSame($second->balanceInt, 0);
         self::assertNull($first->paid($product, true));
         self::assertNotNull($second->paid($product, true));
@@ -71,7 +71,7 @@ final class GiftDiscountTaxTest extends TestCase
         );
 
         $first->deposit($product->getAmountProduct($first) + $fee);
-        self::assertSame($first->balanceInt, (int) $product->getAmountProduct($first) + $fee);
+        self::assertSame($first->balanceInt, $product->getAmountProduct($first) + $fee);
 
         $transfer = $first->wallet->gift($second, $product);
         self::assertSame($first->balance, (string) $product->getPersonalDiscount($first));
@@ -86,7 +86,7 @@ final class GiftDiscountTaxTest extends TestCase
 
         self::assertSame(
             $first->balanceInt,
-            (int) ($product->getAmountProduct($first) - $product->getPersonalDiscount($first))
+            $product->getAmountProduct($first) - $product->getPersonalDiscount($first)
         );
 
         $first->withdraw($first->balance);
@@ -97,7 +97,7 @@ final class GiftDiscountTaxTest extends TestCase
 
         $secondFee = (int) app(TaxServiceInterface::class)->getFee(
             $product,
-            (int) ($product->getAmountProduct($second) - $product->getPersonalDiscount($second))
+            $product->getAmountProduct($second) - $product->getPersonalDiscount($second)
         );
 
         $transfer = $second->wallet->forceGift($first, $product);
@@ -106,7 +106,7 @@ final class GiftDiscountTaxTest extends TestCase
 
         self::assertSame(
             $second->balanceInt,
-            (int) -(($product->getAmountProduct($second) + $secondFee) - $product->getPersonalDiscount($second))
+            -(($product->getAmountProduct($second) + $secondFee) - $product->getPersonalDiscount($second))
         );
 
         $second->deposit(-$second->balanceInt);
@@ -123,7 +123,7 @@ final class GiftDiscountTaxTest extends TestCase
 
         self::assertSame(
             $product->balanceInt,
-            (int) -($product->getAmountProduct($second) - $product->getPersonalDiscount($second))
+            -($product->getAmountProduct($second) - $product->getPersonalDiscount($second))
         );
 
         self::assertSame(
