@@ -304,9 +304,11 @@ final class ConfirmTest extends TestCase
         });
 
         /** @var string $sum1 */
-        $sum1 = $user1->transactions()->sum('amount');
+        $sum1 = $user1->transactions()
+            ->sum('amount');
         /** @var string $sum2 */
-        $sum2 = $user2->transactions()->sum('amount');
+        $sum2 = $user2->transactions()
+            ->sum('amount');
 
         self::assertSame(500, (int) $sum1);
         self::assertSame(500, (int) $sum2);

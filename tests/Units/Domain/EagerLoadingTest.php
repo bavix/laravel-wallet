@@ -116,7 +116,7 @@ final class EagerLoadingTest extends TestCase
         }
 
         $transfers = $buyer->forcePayCart($cart);
-        self::assertSame(-(int)$cart->getTotal($buyer), $buyer->balanceInt);
+        self::assertSame(-(int) $cart->getTotal($buyer), $buyer->balanceInt);
         self::assertCount(250, $transfers);
     }
 }

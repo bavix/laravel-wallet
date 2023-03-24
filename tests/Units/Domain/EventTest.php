@@ -221,9 +221,7 @@ final class EventTest extends TestCase
         $buyer = BuyerFactory::new()->create();
         self::assertSame(0, $buyer->wallet->balanceInt);
 
-        /**
-         * @var Collection<int, Item> $products
-         */
+        /** @var Collection<int, Item> $products */
         $products = ItemFactory::times(10)->create([
             'quantity' => 1,
         ]);

@@ -24,13 +24,9 @@ final class DiscountTaxTest extends TestCase
 {
     public function testPay(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemDiscountTax $product
-         */
+        /** @var ItemDiscountTax $product */
         $product = ItemDiscountTaxFactory::new()->create();
 
         self::assertSame(0, $buyer->balanceInt);
@@ -73,13 +69,9 @@ final class DiscountTaxTest extends TestCase
 
     public function testRefundPersonalDiscountAndTax(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemDiscountTax $product
-         */
+        /** @var ItemDiscountTax $product */
         $product = ItemDiscountTaxFactory::new()->create();
 
         self::assertSame($buyer->balanceInt, 0);
@@ -139,13 +131,9 @@ final class DiscountTaxTest extends TestCase
 
     public function testForceRefund(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemDiscountTax $product
-         */
+        /** @var ItemDiscountTax $product */
         $product = ItemDiscountTaxFactory::new()->create();
 
         self::assertSame(0, $buyer->balanceInt);
@@ -191,13 +179,9 @@ final class DiscountTaxTest extends TestCase
         $this->expectExceptionCode(ExceptionInterface::PRODUCT_ENDED);
         $this->expectExceptionMessageStrict(trans('wallet::errors.product_stock'));
 
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemDiscountTax $product
-         */
+        /** @var ItemDiscountTax $product */
         $product = ItemDiscountTaxFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -210,13 +194,9 @@ final class DiscountTaxTest extends TestCase
 
     public function testForcePay(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemDiscountTax $product
-         */
+        /** @var ItemDiscountTax $product */
         $product = ItemDiscountTaxFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -236,13 +216,9 @@ final class DiscountTaxTest extends TestCase
 
     public function testPayFreeAndRefund(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemDiscountTax $product
-         */
+        /** @var ItemDiscountTax $product */
         $product = ItemDiscountTaxFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -263,13 +239,9 @@ final class DiscountTaxTest extends TestCase
 
     public function testFreePay(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemDiscountTax $product
-         */
+        /** @var ItemDiscountTax $product */
         $product = ItemDiscountTaxFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -299,13 +271,9 @@ final class DiscountTaxTest extends TestCase
         $this->expectExceptionCode(ExceptionInterface::PRODUCT_ENDED);
         $this->expectExceptionMessageStrict(trans('wallet::errors.product_stock'));
 
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemDiscountTax $product
-         */
+        /** @var ItemDiscountTax $product */
         $product = ItemDiscountTaxFactory::new()->create([
             'quantity' => 1,
         ]);
