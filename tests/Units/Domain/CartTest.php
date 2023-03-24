@@ -19,8 +19,8 @@ use Bavix\Wallet\Test\Infra\Models\Item;
 use Bavix\Wallet\Test\Infra\Models\ItemMeta;
 use Bavix\Wallet\Test\Infra\PackageModels\Transaction;
 use Bavix\Wallet\Test\Infra\TestCase;
-use Illuminate\Database\Eloquent\Collection;
 use function count;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * @internal
@@ -52,13 +52,9 @@ final class CartTest extends TestCase
 
     public function testCartMeta(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemMeta $product
-         */
+        /** @var ItemMeta $product */
         $product = ItemMetaFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -98,13 +94,9 @@ final class CartTest extends TestCase
 
     public function testCartMetaItemNoMeta(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var Item $product
-         */
+        /** @var Item $product */
         $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -136,13 +128,9 @@ final class CartTest extends TestCase
 
     public function testPay(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var Collection<int, Item> $products
-         */
+        /** @var Collection<int, Item> $products */
         $products = ItemFactory::times(10)->create([
             'quantity' => 1,
         ]);
@@ -181,13 +169,9 @@ final class CartTest extends TestCase
 
     public function testCartQuantity(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var Collection<int, Item> $products
-         */
+        /** @var Collection<int, Item> $products */
         $products = ItemFactory::times(10)->create([
             'quantity' => 10,
         ]);
@@ -224,9 +208,7 @@ final class CartTest extends TestCase
         $this->expectExceptionCode(ExceptionInterface::MODEL_NOT_FOUND);
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var Collection<int, Item> $products
-         */
+        /** @var Collection<int, Item> $products */
         $products = ItemFactory::times(10)->create([
             'quantity' => 10,
         ]);
@@ -260,13 +242,9 @@ final class CartTest extends TestCase
 
     public function testBoughtGoods(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var Collection<int, Item> $products
-         */
+        /** @var Collection<int, Item> $products */
         $products = ItemFactory::times(10)->create([
             'quantity' => 10,
         ]);
@@ -301,13 +279,9 @@ final class CartTest extends TestCase
         $transactionLevel = Buyer::query()->getConnection()->transactionLevel();
         self::assertSame(0, $transactionLevel);
 
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var Item $product
-         */
+        /** @var Item $product */
         $product = ItemFactory::new()->create([
             'quantity' => 1,
         ]);

@@ -23,9 +23,7 @@ final class GiftDiscountTest extends TestCase
          * @var Buyer $second
          */
         [$first, $second] = BuyerFactory::times(2)->create();
-        /**
-         * @var ItemDiscount $product
-         */
+        /** @var ItemDiscount $product */
         $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -56,9 +54,7 @@ final class GiftDiscountTest extends TestCase
          * @var Buyer $second
          */
         [$first, $second] = BuyerFactory::times(2)->create();
-        /**
-         * @var ItemDiscount $product
-         */
+        /** @var ItemDiscount $product */
         $product = ItemDiscountFactory::new()->create([
             'quantity' => 1,
         ]);

@@ -9,7 +9,9 @@ use Bavix\Wallet\Services\ExchangeServiceInterface;
 
 final class MyExchangeService implements ExchangeServiceInterface
 {
-    /** @var array<string, array<string, int|float|string>> */
+    /**
+     * @var array<string, array<string, int|float|string>>
+     */
     private array $rates = [
         'USD' => [
             'RUB' => 67.61,

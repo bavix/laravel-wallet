@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
-use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Factories\ItemMaxTaxFactory;
 use Bavix\Wallet\Test\Infra\Factories\ItemMinTaxFactory;
@@ -20,13 +19,9 @@ final class MinTaxTest extends TestCase
 {
     public function testPayMinimalTax(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemMinTax $product
-         */
+        /** @var ItemMinTax $product */
         $product = ItemMinTaxFactory::new()->create([
             'quantity' => 1,
         ]);
@@ -63,13 +58,9 @@ final class MinTaxTest extends TestCase
 
     public function testPayMaximalTax(): void
     {
-        /**
-         * @var Buyer $buyer
-         */
+        /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
-        /**
-         * @var ItemMaxTax $product
-         */
+        /** @var ItemMaxTax $product */
         $product = ItemMaxTaxFactory::new()->create([
             'quantity' => 1,
             'price' => 12000,
