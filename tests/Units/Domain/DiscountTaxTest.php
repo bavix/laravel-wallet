@@ -33,7 +33,7 @@ final class DiscountTaxTest extends TestCase
         $fee = (int) app(TaxServiceInterface::class)->getFee($product, $product->getAmountProduct($buyer));
         $buyer->deposit($product->getAmountProduct($buyer) + $fee);
 
-        self::assertSame($buyer->balanceInt, (int) $product->getAmountProduct($buyer) + $fee);
+        self::assertSame($buyer->balanceInt, $product->getAmountProduct($buyer) + $fee);
         $transfer = $buyer->pay($product);
         self::assertNotNull($transfer);
         self::assertSame(Transfer::STATUS_PAID, $transfer->status);
@@ -42,7 +42,7 @@ final class DiscountTaxTest extends TestCase
 
         self::assertSame((int) $transfer->discount, $product->getPersonalDiscount($buyer));
 
-        self::assertSame((int) $transfer->fee, (int) $fee);
+        self::assertSame((int) $transfer->fee, $fee);
 
         $withdraw = $transfer->withdraw;
         $deposit = $transfer->deposit;
@@ -86,12 +86,12 @@ final class DiscountTaxTest extends TestCase
 
         self::assertSame((int) $transfer->discount, $product->getPersonalDiscount($buyer));
 
-        self::assertSame((int) $transfer->fee, (int) $fee);
+        self::assertSame((int) $transfer->fee, $fee);
 
         self::assertTrue($buyer->refund($product));
         self::assertSame(
             $buyer->balanceInt,
-            (int) $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
+            $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
         );
 
         self::assertSame($product->balanceInt, 0);
@@ -102,7 +102,7 @@ final class DiscountTaxTest extends TestCase
         self::assertFalse($buyer->safeRefund($product));
         self::assertSame(
             $buyer->balanceInt,
-            (int) $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
+            $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
         );
 
         self::assertNull($buyer->safePay($product));
@@ -112,7 +112,7 @@ final class DiscountTaxTest extends TestCase
         self::assertSame(0, $buyer->balanceInt);
         self::assertSame(
             $product->balanceInt,
-            (int) $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
+            $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
         );
 
         self::assertSame($transfer->status, Transfer::STATUS_PAID);
@@ -120,7 +120,7 @@ final class DiscountTaxTest extends TestCase
         self::assertTrue($buyer->refund($product));
         self::assertSame(
             $buyer->balanceInt,
-            (int) $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
+            $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
         );
 
         self::assertSame($product->balanceInt, 0);
@@ -142,16 +142,16 @@ final class DiscountTaxTest extends TestCase
         $buyer->deposit($product->getAmountProduct($buyer) + $fee - $discount);
 
         $paidPrice = $buyer->balance;
-        self::assertSame($buyer->balanceInt, (int) $product->getAmountProduct($buyer) + $fee - $discount);
+        self::assertSame($buyer->balanceInt, $product->getAmountProduct($buyer) + $fee - $discount);
 
         $transfer = $buyer->pay($product);
         self::assertSame(0, $buyer->balanceInt);
 
-        self::assertSame($product->balanceInt, (int) -$transfer->withdraw->amountInt - $fee);
+        self::assertSame($product->balanceInt, -$transfer->withdraw->amountInt - $fee);
 
         self::assertSame((int) $transfer->discount, $product->getPersonalDiscount($buyer));
 
-        self::assertSame((int) $transfer->fee, (int) $fee);
+        self::assertSame((int) $transfer->fee, $fee);
 
         $product->withdraw($product->balance);
         self::assertSame($product->balanceInt, 0);
@@ -162,7 +162,7 @@ final class DiscountTaxTest extends TestCase
         self::assertSame((int) $paidPrice - $fee, -$product->balanceInt);
         self::assertSame(
             $product->balanceInt,
-            (int) -($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer))
+            -($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer))
         );
 
         self::assertSame((int) $paidPrice - $fee, $buyer->balanceInt);
@@ -207,7 +207,7 @@ final class DiscountTaxTest extends TestCase
         $fee = (int) app(TaxServiceInterface::class)->getFee($product, $product->getAmountProduct($buyer));
         self::assertSame(
             $buyer->balanceInt,
-            (int) -($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)) - $fee
+            -($product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)) - $fee
         );
 
         $buyer->deposit(-$buyer->balanceInt);
