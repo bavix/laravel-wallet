@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Test\Units\Domain;
 
 use Bavix\Wallet\Internal\Dto\BasketDto;
 use Bavix\Wallet\Internal\Dto\ItemDto;
+use Bavix\Wallet\Internal\Dto\ItemDtoInterface;
 use Bavix\Wallet\Test\Infra\Models\Item;
 use Bavix\Wallet\Test\Infra\TestCase;
 
@@ -35,10 +36,13 @@ final class BasketTest extends TestCase
 
     public function testMeta(): void
     {
-        $basket1 = new BasketDto([], []);
+        /** @var non-empty-array<ItemDtoInterface> $items */
+        $items = [];
+
+        $basket1 = new BasketDto($items, []);
         self::assertEmpty($basket1->meta());
 
-        $basket2 = new BasketDto([], [
+        $basket2 = new BasketDto($items, [
             'hello' => 'world',
         ]);
         self::assertSame([
@@ -48,7 +52,10 @@ final class BasketTest extends TestCase
 
     public function testEmpty(): void
     {
-        $basket = new BasketDto([], []);
+        /** @var non-empty-array<ItemDtoInterface> $items */
+        $items = [];
+
+        $basket = new BasketDto($items, []);
         self::assertEmpty($basket->items());
         self::assertEmpty($basket->meta());
         self::assertSame(0, $basket->count());

@@ -46,21 +46,30 @@ final class StateTest extends TestCase
          * Here is an example:
          */
         app(BookkeeperServiceInterface::class)->forget($buyer->wallet);
-        self::assertSame(1000, (int) $wallet->getRawOriginal('balance'));
+
+        /** @var string $rawOriginal */
+        $rawOriginal = $wallet->getRawOriginal('balance');
+        self::assertSame(1000, (int) $rawOriginal);
 
         /**
          * We load the model from the base and our balance is 10.
          */
         $wallet->refresh();
         self::assertSame(10, $wallet->balanceInt);
-        self::assertSame(10, (int) $wallet->getRawOriginal('balance'));
+
+        /** @var string $rawOriginal */
+        $rawOriginal = $wallet->getRawOriginal('balance');
+        self::assertSame(10, (int) $rawOriginal);
 
         /**
          * Now we fill the cache with relevant data (PS, the data inside the model will be updated).
          */
         $wallet->refreshBalance();
         self::assertSame(1000, $wallet->balanceInt);
-        self::assertSame(1000, (int) $wallet->getRawOriginal('balance'));
+
+        /** @var string $rawOriginal */
+        $rawOriginal = $wallet->getRawOriginal('balance');
+        self::assertSame(1000, (int) $rawOriginal);
     }
 
     public function testTransactionRollback(): void

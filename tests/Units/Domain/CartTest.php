@@ -167,6 +167,7 @@ final class CartTest extends TestCase
         }
 
         foreach ($cart->getItems() as $product) {
+            /** @var Item $product */
             self::assertSame($product->balance, (string) $product->getAmountProduct($buyer));
         }
 
@@ -196,6 +197,8 @@ final class CartTest extends TestCase
         $price = 0;
         $productsCount = count($products);
         for ($i = 0; $i < $productsCount - 1; ++$i) {
+            self::assertNotNull($products[$i]);
+
             $rnd = random_int(1, 5);
             $cart = $cart->withItem($products[$i], $rnd);
             $price += $products[$i]->getAmountProduct($buyer) * $rnd;
@@ -232,6 +235,8 @@ final class CartTest extends TestCase
         $total = 0;
         $productsCount = count($products);
         for ($i = 0; $i < $productsCount - 1; ++$i) {
+            self::assertNotNull($products[$i]);
+
             $rnd = random_int(1, 5);
             $cart = $cart->withItem($products[$i], $rnd);
             $buyer->deposit($products[$i]->getAmountProduct($buyer) * $rnd);
@@ -330,6 +335,7 @@ final class CartTest extends TestCase
         }
 
         foreach ($cart->getItems() as $product) {
+            /** @var Item $product */
             self::assertSame($product->balance, (string) $product->getAmountProduct($buyer));
         }
 
@@ -347,6 +353,7 @@ final class CartTest extends TestCase
         self::assertSame(0, $buyer->balanceInt);
 
         // check in the database
+        /** @var string $balance */
         $balance = $buyer->wallet::query()
             ->whereKey($buyer->wallet->getKey())
             ->getQuery()

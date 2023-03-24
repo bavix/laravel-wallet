@@ -28,7 +28,7 @@ abstract class TestCase extends OrchestraTestCase
         DB::transactionLevel() && DB::rollBack();
     }
 
-    public function expectExceptionMessageStrict(mixed $message): void
+    final public function expectExceptionMessageStrict(mixed $message): void
     {
         assert(is_string($message));
 
@@ -64,6 +64,7 @@ abstract class TestCase extends OrchestraTestCase
         $config->set('database.connections.pgsql.prefix', 'tests');
         $config->set('database.connections.mysql.prefix', 'tests');
 
+        /** @var array<string, mixed> $mysql */
         $mysql = $config->get('database.connections.mysql');
         $config->set('database.connections.mariadb', array_merge($mysql, [
             'port' => 3307,
