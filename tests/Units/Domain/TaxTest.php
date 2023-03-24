@@ -43,7 +43,7 @@ final class TaxTest extends TestCase
         $deposit = $transfer->deposit;
 
         self::assertSame($withdraw->amountInt, -$balance);
-        self::assertSame($deposit->amountInt, (int) $product->getAmountProduct($buyer));
+        self::assertSame($deposit->amountInt, $product->getAmountProduct($buyer));
         self::assertNotSame($deposit->amountInt, $withdraw->amountInt);
         self::assertSame((int) $transfer->fee, $fee);
 
@@ -85,7 +85,7 @@ final class TaxTest extends TestCase
         $deposit = $transfer->deposit;
 
         self::assertSame($withdraw->amountInt, -$balance);
-        self::assertSame($deposit->amountInt, (int) $product->getAmountProduct($santa));
+        self::assertSame($deposit->amountInt, $product->getAmountProduct($santa));
         self::assertNotSame($deposit->amountInt, $withdraw->amountInt);
         self::assertSame($fee, (int) $transfer->fee);
 

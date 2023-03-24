@@ -34,7 +34,7 @@ final class GiftDiscountTest extends TestCase
         $first->deposit($product->getAmountProduct($first) - $product->getPersonalDiscount($first));
         self::assertSame(
             $first->balanceInt,
-            (int) ($product->getAmountProduct($first) - $product->getPersonalDiscount($first))
+            $product->getAmountProduct($first) - $product->getPersonalDiscount($first)
         );
 
         $transfer = $first->wallet->gift($second, $product);
@@ -63,7 +63,7 @@ final class GiftDiscountTest extends TestCase
         self::assertSame($second->balanceInt, 0);
 
         $first->deposit($product->getAmountProduct($first));
-        self::assertSame($first->balanceInt, (int) $product->getAmountProduct($first));
+        self::assertSame($first->balanceInt, $product->getAmountProduct($first));
 
         $transfer = $first->wallet->gift($second, $product);
         self::assertGreaterThan(0, $first->balance);
@@ -85,7 +85,7 @@ final class GiftDiscountTest extends TestCase
 
         self::assertSame(
             $second->balanceInt,
-            (int) -($product->getAmountProduct($second) - $product->getPersonalDiscount($second))
+            -($product->getAmountProduct($second) - $product->getPersonalDiscount($second))
         );
 
         $second->deposit(-$second->balanceInt);
@@ -101,12 +101,12 @@ final class GiftDiscountTest extends TestCase
         self::assertTrue($first->forceRefundGift($product));
         self::assertSame(
             $product->balanceInt,
-            (int) -($product->getAmountProduct($second) - $product->getPersonalDiscount($second))
+            -($product->getAmountProduct($second) - $product->getPersonalDiscount($second))
         );
 
         self::assertSame(
             $second->balanceInt,
-            (int) ($product->getAmountProduct($second) - $product->getPersonalDiscount($second))
+            $product->getAmountProduct($second) - $product->getPersonalDiscount($second)
         );
 
         $second->withdraw($second->balance);
