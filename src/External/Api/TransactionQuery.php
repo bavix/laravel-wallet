@@ -22,7 +22,8 @@ final class TransactionQuery
         private readonly Wallet $wallet,
         private readonly float|int|string $amount,
         private readonly ?array $meta,
-        private readonly bool $confirmed
+        private readonly bool $confirmed,
+        private readonly ?string $uuid
     ) {
     }
 
@@ -33,9 +34,10 @@ final class TransactionQuery
         Wallet $wallet,
         float|int|string $amount,
         ?array $meta,
-        bool $confirmed = true
+        bool $confirmed = true,
+        ?string $uuid = null
     ): self {
-        return new self(self::TYPE_DEPOSIT, $wallet, $amount, $meta, $confirmed);
+        return new self(self::TYPE_DEPOSIT, $wallet, $amount, $meta, $confirmed, $uuid);
     }
 
     /**
@@ -45,9 +47,10 @@ final class TransactionQuery
         Wallet $wallet,
         float|int|string $amount,
         ?array $meta,
-        bool $confirmed = true
+        bool $confirmed = true,
+        ?string $uuid = null
     ): self {
-        return new self(self::TYPE_WITHDRAW, $wallet, $amount, $meta, $confirmed);
+        return new self(self::TYPE_WITHDRAW, $wallet, $amount, $meta, $confirmed, $uuid);
     }
 
     /**
@@ -79,5 +82,10 @@ final class TransactionQuery
     public function isConfirmed(): bool
     {
         return $this->confirmed;
+    }
+
+    public function getUuid(): ?string
+    {
+        return $this->uuid;
     }
 }
