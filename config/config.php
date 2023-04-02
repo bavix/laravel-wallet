@@ -79,6 +79,16 @@ return [
     ],
 
     /**
+     * Feature flags for experiments.
+     */
+    'features' => [
+        /**
+         * Mode of strict work with currencies.
+         */
+        'currency_strict' => false,
+    ],
+
+    /**
      * Internal services that can be overloaded.
      */
     'internal' => [
