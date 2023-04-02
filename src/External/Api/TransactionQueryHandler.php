@@ -36,12 +36,14 @@ final class TransactionQueryHandler implements TransactionQueryHandlerInterface
                     $query->getAmount(),
                     $query->getMeta(),
                     $query->isConfirmed(),
+                    $query->getUuid(),
                 ),
                 TransactionQuery::TYPE_WITHDRAW => $this->prepareService->withdraw(
                     $query->getWallet(),
                     $query->getAmount(),
                     $query->getMeta(),
                     $query->isConfirmed(),
+                    $query->getUuid(),
                 )
             },
             $objects
