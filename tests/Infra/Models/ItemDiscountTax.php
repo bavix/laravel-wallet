@@ -45,7 +45,7 @@ final class ItemDiscountTax extends Model implements ProductLimitedInterface, Di
         return $result && ! $customer->paid($this);
     }
 
-    public function getAmountProduct(Customer $customer): int
+    public function getAmountProduct(Customer $customer, ?string $currency = null): int
     {
         /** @var Wallet $wallet */
         $wallet = app(CastService::class)->getWallet($customer);
