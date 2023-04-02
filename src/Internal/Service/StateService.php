@@ -9,7 +9,7 @@ use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 final class StateService implements StateServiceInterface
 {
-    private const RANDOM_BYTES = 4;
+    private const RANDOM_BYTES = 3;
 
     /**
      * Keeps the state of balance
@@ -52,6 +52,7 @@ final class StateService implements StateServiceInterface
         ];
 
         foreach ($uuids as $uuid) {
+            $values[self::PREFIX_STATE . $uuid] = null;
             $values[self::PREFIX_FORK_ID . $uuid] = $forkId;
         }
 
@@ -76,17 +77,20 @@ final class StateService implements StateServiceInterface
             return null;
         }
 
-        $results = $callable();
         $insertValues = [];
-        foreach ($results as $id => $value) {
-            $insertValues[self::PREFIX_STATE . $id] = $value;
+        $results = $callable();
+        foreach ($results as $rUuid => $rValue) {
+            $insertValues[self::PREFIX_STATE . $rUuid] = $rValue;
         }
+
+        // set new values
+        $this->store->setMultiple($insertValues);
 
         /** @var array<string> $uuids */
         $uuids = $this->store->pull(self::PREFIX_HASHMAP . $forkId, []);
         $deleteKeys = array_map(static fn (string $uuid) => self::PREFIX_FORK_ID . $uuid, $uuids);
 
-        $this->store->setMultiple($insertValues);
+        // delete callables by uuids
         $this->store->deleteMultiple($deleteKeys);
 
         return $results[$uuid] ?? null;
