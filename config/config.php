@@ -85,7 +85,7 @@ return [
         /**
          * Mode of strict work with currencies.
          */
-        'currency_strict' => false,
+        'currency_strict' => env('WALLET_CURRENCY_STRICT', false),
     ],
 
     /**
