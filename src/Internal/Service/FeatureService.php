@@ -9,13 +9,15 @@ namespace Bavix\Wallet\Internal\Service;
  */
 final class FeatureService implements FeatureServiceInterface
 {
+    private bool $value;
+
+    public function __construct()
+    {
+        $this->value = (bool) config('wallet.features.currency_strict', false);
+    }
+
     public function isCurrencyStrictMode(): bool
     {
-        /**
-         * @var $value bool|int
-         */
-        $value = config('wallet.features.currency_strict', false);
-
-        return (bool) $value;
+        return $this->value;
     }
 }
