@@ -44,7 +44,7 @@ final class ItemDiscount extends Model implements ProductLimitedInterface, Disco
         return $result && ! $customer->paid($this);
     }
 
-    public function getAmountProduct(Customer $customer, ?string $currency = null): int
+    public function getAmountProduct(Customer $customer): int
     {
         /** @var Wallet $wallet */
         $wallet = app(CastService::class)->getWallet($customer);
