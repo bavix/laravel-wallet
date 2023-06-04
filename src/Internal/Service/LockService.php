@@ -96,7 +96,7 @@ final class LockService implements LockServiceInterface
 
     private function getLockProvider(): LockProvider
     {
-        if ($this->lockProvider === null) {
+        if (! $this->lockProvider instanceof LockProvider) {
             $store = $this->cache->getStore();
             assert($store instanceof LockProvider);
 

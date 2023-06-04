@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
 use Bavix\Wallet\Internal\Repository\WalletRepositoryInterface;
+use Bavix\Wallet\Models\Wallet;
 
 /**
  * @internal
@@ -40,7 +41,7 @@ final class EagerLoaderService implements EagerLoaderServiceInterface
 
             foreach ($holderIds as $index => $holderId) {
                 $wallet = $wallets[$holderId] ?? null;
-                if ($wallet !== null) {
+                if ($wallet instanceof Wallet) {
                     $model = $this->castService->getModel($products[$index]);
                     $model->setRelation('wallet', $wallet);
                 }

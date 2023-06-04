@@ -15,11 +15,14 @@ use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\BookkeeperServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
+use Bavix\Wallet\Test\Infra\Exceptions\PriceNotSetException;
 use Bavix\Wallet\Test\Infra\Factories\ItemFactory;
+use Bavix\Wallet\Test\Infra\Factories\ItemMultiPriceFactory;
 use Bavix\Wallet\Test\Infra\Factories\UserCashierFactory;
 use Bavix\Wallet\Test\Infra\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Infra\Helpers\Config;
 use Bavix\Wallet\Test\Infra\Models\Item;
+use Bavix\Wallet\Test\Infra\Models\ItemMultiPrice;
 use Bavix\Wallet\Test\Infra\Models\UserCashier;
 use Bavix\Wallet\Test\Infra\Models\UserMulti;
 use Bavix\Wallet\Test\Infra\PackageModels\Wallet;
@@ -543,6 +546,65 @@ final class MultiWalletTest extends TestCase
         self::assertTrue($b->refund($product));
         self::assertSame($product->balanceInt, 0);
         self::assertSame($b->balanceInt, $product->getAmountProduct($b));
+    }
+
+    public function testPayItemMultiPrice(): void
+    {
+        /** @var UserMulti $user */
+        $user = UserMultiFactory::new()->create();
+
+        $usd = $user->createWallet([
+            'name' => 'Dollar USA',
+            'meta' => [
+                'currency' => 'USD',
+            ],
+        ]);
+
+        /** @var ItemMultiPrice $product */
+        $product = ItemMultiPriceFactory::new()->create([
+            'quantity' => 1,
+        ]);
+
+        self::assertSame(0, $usd->balanceInt);
+
+        $usd->deposit($product->getAmountProduct($usd));
+        self::assertSame($usd->balanceInt, $product->getAmountProduct($usd));
+
+        $transfer = $usd->pay($product);
+        $paidTransfer = $usd->paid($product);
+        self::assertNotNull($paidTransfer);
+        self::assertTrue((bool) $paidTransfer);
+        self::assertSame($transfer->getKey(), $paidTransfer->getKey());
+        self::assertInstanceOf(UserMulti::class, $paidTransfer->withdraw->payable);
+        self::assertSame($user->getKey(), $paidTransfer->withdraw->payable->getKey());
+        self::assertSame($transfer->from->getKey(), $usd->getKey());
+        self::assertSame($transfer->to->getKey(), $product->wallet->getKey());
+        self::assertSame($transfer->status, Transfer::STATUS_PAID);
+        self::assertSame($usd->balanceInt, 0);
+        self::assertSame($product->balanceInt, $product->getAmountProduct($usd));
+    }
+
+    public function testPayItemMultiPricePriceNotSetException(): void
+    {
+        $this->expectExceptionMessageStrict('Price not set for TRY currency');
+        $this->expectException(PriceNotSetException::class);
+
+        /** @var UserMulti $user */
+        $user = UserMultiFactory::new()->create();
+        $try = $user->createWallet([
+            'name' => 'Turkish lira',
+            'meta' => [
+                'currency' => 'TRY',
+            ],
+        ]);
+
+        /** @var ItemMultiPrice $product */
+        $product = ItemMultiPriceFactory::new()->create([
+            'quantity' => 1,
+        ]);
+
+        self::assertSame(0, $try->balanceInt);
+        $product->getAmountProduct($try);
     }
 
     public function testUserCashier(): void
