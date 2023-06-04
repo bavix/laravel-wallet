@@ -18,8 +18,8 @@ final class BasketTest extends TestCase
     public function testCount(): void
     {
         $item = new Item();
-        $productDto1 = new ItemDto($item, 24, null);
-        $productDto2 = new ItemDto($item, 26, null);
+        $productDto1 = new ItemDto($item, 24, null, null);
+        $productDto2 = new ItemDto($item, 26, null, null);
         $basket = new BasketDto([$productDto1, $productDto2], []);
 
         self::assertEmpty($basket->meta());

@@ -7,6 +7,7 @@ namespace Bavix\Wallet\Objects;
 use Bavix\Wallet\Interfaces\CartInterface;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\ProductInterface;
+use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Dto\BasketDto;
 use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
 use Bavix\Wallet\Internal\Dto\ItemDto;
@@ -58,14 +59,18 @@ final class Cart implements Countable, CartInterface
     /**
      * @param positive-int $quantity
      */
-    public function withItem(ProductInterface $product, int $quantity = 1, int|string|null $pricePerItem = null): self
-    {
+    public function withItem(
+        ProductInterface $product,
+        int $quantity = 1,
+        int|string|null $pricePerItem = null,
+        ?Wallet $receiving = null,
+    ): self {
         $self = clone $this;
 
         $productId = $self->productId($product);
 
         $self->items[$productId] ??= [];
-        $self->items[$productId][] = new ItemDto($product, $quantity, $pricePerItem);
+        $self->items[$productId][] = new ItemDto($product, $quantity, $pricePerItem, $receiving);
 
         return $self;
     }
