@@ -19,6 +19,7 @@
     <env name="DB_PASSWORD" value="wallet"/>
     <env name="WALLET_CACHE_DRIVER" value="array"/>
     <env name="WALLET_LOCK_DRIVER" value="array"/>
+    <env name="WALLET_CURRENCY_STRICT" value="false"/>
   </php>
   <source>
     <include>
