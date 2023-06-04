@@ -19,6 +19,7 @@ parameters:
 
             # php exceptions
             - RuntimeException
+            - InvalidArgumentException
 
             # phpunit
             - Orchestra\Testbench\TestCase
