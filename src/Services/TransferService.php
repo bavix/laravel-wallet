@@ -11,6 +11,7 @@ use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Repository\TransferRepositoryInterface;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
+use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\RecordsNotFoundException;
 
@@ -69,10 +70,10 @@ final class TransferService implements TransferServiceInterface
             $transfers = [];
             foreach ($objects as $object) {
                 $withdraw = $transactions[$object->getWithdrawDto()->getUuid()] ?? null;
-                assert($withdraw !== null);
+                assert($withdraw instanceof Transaction);
 
                 $deposit = $transactions[$object->getDepositDto()->getUuid()] ?? null;
-                assert($deposit !== null);
+                assert($deposit instanceof Transaction);
 
                 $fromWallet = $this->castService->getWallet($object->getFromWallet());
                 $toWallet = $this->castService->getWallet($object->getToWallet());
