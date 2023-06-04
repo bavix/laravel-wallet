@@ -22,26 +22,6 @@ final class EagerLoaderService implements EagerLoaderServiceInterface
 
     public function loadWalletsByBasket(Customer $customer, BasketDtoInterface $basketDto): void
     {
-        $customerWallet = $this->castService->getWallet($customer);
-
-        /** @var string|null $customerCurrency */
-        $customerCurrency = $customerWallet->meta['currency'] ?? null;
-
-        if ($customerCurrency === null) {
-            $this->loadDefaultWallets($basketDto);
-            return;
-        }
-
-        $this->loadCurrencyWallets($customerCurrency, $basketDto);
-    }
-
-    private function loadCurrencyWallets(string $currency, BasketDtoInterface $basketDto): void
-    {
-        // todo: needs to be implemented
-    }
-
-    private function loadDefaultWallets(BasketDtoInterface $basketDto): void
-    {
         $products = [];
         /** @var array<array-key, array<array-key, int|string>> $productGroupIds */
         $productGroupIds = [];
