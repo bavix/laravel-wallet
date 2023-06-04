@@ -14,7 +14,7 @@ return new class() extends Migration {
             $table->string('name');
             $table->integer('price');
             $table->json('prices')
-                ->default('[]');
+                ->nullable();
             $table->unsignedSmallInteger('quantity');
             $table->timestamps();
         });
