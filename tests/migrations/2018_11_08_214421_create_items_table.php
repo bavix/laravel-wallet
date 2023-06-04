@@ -13,6 +13,8 @@ return new class() extends Migration {
             $table->increments('id');
             $table->string('name');
             $table->integer('price');
+            $table->json('prices')
+                ->default('[]');
             $table->unsignedSmallInteger('quantity');
             $table->timestamps();
         });

@@ -66,7 +66,7 @@ final class TransactionService implements TransactionServiceInterface
 
         foreach ($totals as $walletId => $total) {
             $wallet = $wallets[$walletId] ?? null;
-            assert($wallet !== null);
+            assert($wallet instanceof Wallet);
 
             $object = $this->castService->getWallet($wallet);
             assert($object->getKey() === $walletId);
