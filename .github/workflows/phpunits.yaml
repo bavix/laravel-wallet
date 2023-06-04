@@ -21,6 +21,7 @@ jobs:
         php-versions: [8.1, 8.2]
         databases: [testing, pgsql, mysql, mariadb]
         caches: [array, redis, memcached]
+        locks: [redis, memcached]
 
     services:
       redis:
@@ -142,14 +143,16 @@ jobs:
             composer parabench
           fi
         env:
-          CACHE_DRIVER: ${{ matrix.caches }}
+          WALLET_CACHE_DRIVER: ${{ matrix.caches }}
+          WALLET_LOCK_DRIVER: ${{ matrix.locks }}
           DB_CONNECTION: ${{ matrix.databases }}
 
       - name: Run mutation test suite
         id: infect-run
         run: composer infect
         env:
-          CACHE_DRIVER: ${{ matrix.caches }}
+          WALLET_CACHE_DRIVER: ${{ matrix.caches }}
+          WALLET_LOCK_DRIVER: ${{ matrix.locks }}
           DB_CONNECTION: ${{ matrix.databases }}
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
         if: ${{ steps.codeclimate-check.outputs.execute == 'true' }}
