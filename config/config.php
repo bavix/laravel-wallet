@@ -199,12 +199,4 @@ return [
             'meta' => [],
         ],
     ],
-
-    /**
-     * Setting over ProductCurrencyStrict.
-     */
-    'product' => [
-        'name_format' => 'Default Wallet {name}',
-        'slug_format' => 'default_{slug}',
-    ],
 ];
