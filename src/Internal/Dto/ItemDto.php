@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Internal\Dto;
 
 use Bavix\Wallet\Interfaces\ProductInterface;
+use Bavix\Wallet\Interfaces\Wallet;
 
 /** @immutable */
 final class ItemDto implements ItemDtoInterface
@@ -13,6 +14,7 @@ final class ItemDto implements ItemDtoInterface
         private readonly ProductInterface $product,
         private readonly int $quantity,
         private readonly int|string|null $pricePerItem,
+        private readonly ?Wallet $receiving,
     ) {
     }
 
@@ -37,5 +39,10 @@ final class ItemDto implements ItemDtoInterface
     public function count(): int
     {
         return $this->quantity;
+    }
+
+    public function getReceiving(): ?Wallet
+    {
+        return $this->receiving;
     }
 }
