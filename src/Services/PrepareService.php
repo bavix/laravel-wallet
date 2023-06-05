@@ -14,6 +14,7 @@ use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Models\Wallet as WalletModel;
 
 /**
  * @internal
@@ -90,20 +91,38 @@ final class PrepareService implements PrepareServiceInterface
         float|int|string $amount,
         ExtraDtoInterface|array|null $meta = null
     ): TransferLazyDtoInterface {
+        return $this->transferExtraLazy(
+            $from,
+            $this->castService->getWallet($from),
+            $to,
+            $this->castService->getWallet($to),
+            $status,
+            $amount,
+            $meta
+        );
+    }
+
+    public function transferExtraLazy(
+        Wallet $from,
+        WalletModel $fromWallet,
+        Wallet $to,
+        WalletModel $toWallet,
+        string $status,
+        float|int|string $amount,
+        ExtraDtoInterface|array|null $meta = null
+    ): TransferLazyDtoInterface {
         $discount = $this->personalDiscountService->getDiscount($from, $to);
-        $toWallet = $this->castService->getWallet($to);
-        $from = $this->castService->getWallet($from);
         $fee = $this->taxService->getFee($to, $amount);
 
         $amountWithoutDiscount = $this->mathService->sub($amount, $discount, $toWallet->decimal_places);
         $depositAmount = $this->mathService->compare($amountWithoutDiscount, 0) === -1 ? '0' : $amountWithoutDiscount;
-        $withdrawAmount = $this->mathService->add($depositAmount, $fee, $from->decimal_places);
+        $withdrawAmount = $this->mathService->add($depositAmount, $fee, $fromWallet->decimal_places);
         $extra = $this->extraDtoAssembler->create($meta);
         $withdrawOption = $extra->getWithdrawOption();
         $depositOption = $extra->getDepositOption();
 
         $withdraw = $this->withdraw(
-            $from,
+            $fromWallet,
             $withdrawAmount,
             $withdrawOption->getMeta(),
             $withdrawOption->isConfirmed(),
@@ -119,7 +138,7 @@ final class PrepareService implements PrepareServiceInterface
         );
 
         return $this->transferLazyDtoAssembler->create(
-            $from,
+            $fromWallet,
             $toWallet,
             $discount,
             $fee,

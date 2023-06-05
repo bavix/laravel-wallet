@@ -26,6 +26,11 @@ final class EagerLoaderService implements EagerLoaderServiceInterface
         /** @var array<array-key, array<array-key, int|string>> $productGroupIds */
         $productGroupIds = [];
         foreach ($basketDto->items() as $index => $item) {
+            // If the wallet is installed, then there is no need for lazy loading
+            if ($item->getReceiving() !== null) {
+                continue;
+            }
+
             $model = $this->castService->getModel($item->getProduct());
             if (! $model->relationLoaded('wallet')) {
                 $products[$index] = $item->getProduct();

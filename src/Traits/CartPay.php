@@ -65,16 +65,21 @@ trait CartPay
             app(ConsistencyServiceInterface::class)->checkPotential($this, 0, true);
 
             $transfers = [];
+            $castService = app(CastServiceInterface::class);
             $prepareService = app(PrepareServiceInterface::class);
             $assistantService = app(AssistantServiceInterface::class);
-            foreach ($basketDto->cursor() as $product) {
-                $transfers[] = $prepareService->transferLazy(
-                    $this,
-                    $product,
-                    Transfer::STATUS_PAID,
-                    0,
-                    $assistantService->getMeta($basketDto, $product)
-                );
+            foreach ($basketDto->items() as $item) {
+                foreach ($item->getItems() as $product) {
+                    $transfers[] = $prepareService->transferExtraLazy(
+                        $this,
+                        $castService->getWallet($this),
+                        $product,
+                        $castService->getWallet($item->getReceiving() ?? $product),
+                        Transfer::STATUS_PAID,
+                        0,
+                        $assistantService->getMeta($basketDto, $product)
+                    );
+                }
             }
 
             assert($transfers !== []);
@@ -134,9 +139,11 @@ trait CartPay
                         $pricePerItem = $prices[$productId];
                     }
 
-                    $transfers[] = $prepareService->transferLazy(
+                    $transfers[] = $prepareService->transferExtraLazy(
                         $this,
+                        $castService->getWallet($this),
                         $product,
+                        $castService->getWallet($item->getReceiving() ?? $product),
                         Transfer::STATUS_PAID,
                         $pricePerItem,
                         $assistantService->getMeta($basketDto, $product)

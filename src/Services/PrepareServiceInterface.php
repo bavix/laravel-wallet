@@ -9,6 +9,7 @@ use Bavix\Wallet\External\Contracts\ExtraDtoInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
+use Bavix\Wallet\Models\Wallet as WalletModel;
 
 /**
  * @api
@@ -49,6 +50,21 @@ interface PrepareServiceInterface
     public function transferLazy(
         Wallet $from,
         Wallet $to,
+        string $status,
+        float|int|string $amount,
+        ExtraDtoInterface|array|null $meta = null
+    ): TransferLazyDtoInterface;
+
+    /**
+     * @param ExtraDtoInterface|array<mixed>|null $meta
+     *
+     * @throws AmountInvalid
+     */
+    public function transferExtraLazy(
+        Wallet $from,
+        WalletModel $fromWallet,
+        Wallet $to,
+        WalletModel $toWallet,
         string $status,
         float|int|string $amount,
         ExtraDtoInterface|array|null $meta = null
