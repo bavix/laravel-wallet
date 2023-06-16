@@ -79,16 +79,6 @@ return [
     ],
 
     /**
-     * Feature flags for experiments.
-     */
-    'features' => [
-        /**
-         * Mode of strict work with currencies.
-         */
-        'currency_strict' => env('WALLET_CURRENCY_STRICT', false),
-    ],
-
-    /**
      * Internal services that can be overloaded.
      */
     'internal' => [
