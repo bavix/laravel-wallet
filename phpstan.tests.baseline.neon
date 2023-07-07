@@ -14,3 +14,8 @@ parameters:
 			message: "#^Method Bavix\\\\Wallet\\\\Test\\\\Infra\\\\TestCase\\:\\:setUp\\(\\) is not final, but since the containing class is abstract, it should be\\.$#"
 			count: 1
 			path: tests/Infra/TestCase.php
+
+		-
+			message: "#^Call to an undefined method Bavix\\\\Wallet\\\\Interfaces\\\\ProductInterface\\:\\:getWallet\\(\\)\\.$#"
+			count: 1
+			path: tests/Units/Domain/CartReceivingTest.php

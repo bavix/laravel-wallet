@@ -29,7 +29,7 @@ final class PurchaseService implements PurchaseServiceInterface
         $productCounts = [];
         $query = $customer->transfers();
         foreach ($basketDto->items() as $itemDto) {
-            $wallet = $this->castService->getWallet($itemDto->getProduct());
+            $wallet = $this->castService->getWallet($itemDto->getReceiving() ?? $itemDto->getProduct());
             $wallets[$wallet->uuid] = $wallet;
 
             $productCounts[$wallet->uuid] = ($productCounts[$wallet->uuid] ?? 0) + count($itemDto);

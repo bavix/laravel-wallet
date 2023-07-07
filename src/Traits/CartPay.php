@@ -212,19 +212,24 @@ trait CartPay
             $objects = [];
             $transferIds = [];
             $transfers = array_values($transfers);
+            $castService = app(CastServiceInterface::class);
             $prepareService = app(PrepareServiceInterface::class);
             $assistantService = app(AssistantServiceInterface::class);
-            foreach ($basketDto->cursor() as $product) {
-                $transferIds[] = $transfers[$index]->getKey();
-                $objects[] = $prepareService->transferLazy(
-                    $product,
-                    $transfers[$index]->withdraw->wallet,
-                    Transfer::STATUS_TRANSFER,
-                    $transfers[$index]->deposit->amount,
-                    $assistantService->getMeta($basketDto, $product)
-                );
+            foreach ($basketDto->items() as $itemDto) {
+                foreach ($itemDto->getItems() as $product) {
+                    $transferIds[] = $transfers[$index]->getKey();
+                    $objects[] = $prepareService->transferExtraLazy(
+                        $product,
+                        $castService->getWallet($itemDto->getReceiving() ?? $product),
+                        $transfers[$index]->withdraw->wallet,
+                        $transfers[$index]->withdraw->wallet,
+                        Transfer::STATUS_TRANSFER,
+                        $transfers[$index]->deposit->amount,
+                        $assistantService->getMeta($basketDto, $product)
+                    );
 
-                ++$index;
+                    ++$index;
+                }
             }
 
             if (! $force) {
