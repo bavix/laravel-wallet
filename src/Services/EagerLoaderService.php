@@ -27,7 +27,7 @@ final class EagerLoaderService implements EagerLoaderServiceInterface
         $productGroupIds = [];
         foreach ($basketDto->items() as $index => $item) {
             // If the wallet is installed, then there is no need for lazy loading
-            if ($item->getReceiving() !== null) {
+            if ($item->getReceiving() instanceof \Bavix\Wallet\Interfaces\Wallet) {
                 continue;
             }
 
