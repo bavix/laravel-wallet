@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Test\Infra\Models;
 
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Traits\CanPay;
+use Bavix\Wallet\Traits\HasWallets;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
 final class Buyer extends Model implements Customer
 {
     use CanPay;
+    use HasWallets;
 
     public function getTable(): string
     {

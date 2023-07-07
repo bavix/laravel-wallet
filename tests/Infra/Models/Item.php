@@ -12,6 +12,7 @@ use Bavix\Wallet\Services\CastService;
 use Bavix\Wallet\Services\CastServiceInterface;
 use Bavix\Wallet\Test\Infra\Helpers\Config;
 use Bavix\Wallet\Traits\HasWallet;
+use Bavix\Wallet\Traits\HasWallets;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 final class Item extends Model implements ProductLimitedInterface
 {
     use HasWallet;
+    use HasWallets;
 
     /**
      * @var string[]

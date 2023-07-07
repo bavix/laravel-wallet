@@ -9,6 +9,7 @@ use Bavix\Wallet\Interfaces\ProductLimitedInterface;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CastService;
 use Bavix\Wallet\Traits\HasWallet;
+use Bavix\Wallet\Traits\HasWallets;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
 final class ItemMeta extends Model implements ProductLimitedInterface
 {
     use HasWallet;
+    use HasWallets;
 
     /**
      * @var string[]
