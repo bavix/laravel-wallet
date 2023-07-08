@@ -219,45 +219,46 @@ $user->balanceFloat; // 2.37
 ### Performance Comparison
 
 All versions:
-|            Name            |  7.3   |  8.4   |  9.0   |  9.1   |  9.2   |  9.3   |  9.4   |  9.5   |  9.6   |
-|----------------------------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
-| Atomic:Blocks              | -      | -      | -      | -      | 789ms  | 548ms  | 586ms  | 664ms  | 593ms  |
-| Cart:EagerLoaderPay        | 31.2s  | 781ms  | 782ms  | 694ms  | 668ms  | 651ms  | 607ms  | 647ms  | 580ms  |
-| Cart:Pay                   | 1.99s  | 527ms  | 492ms  | 432ms  | 478ms  | 409ms  | 377ms  | 428ms  | 331ms  |
-| Cart:PayFree               | 1.87s  | 459ms  | 404ms  | 367ms  | 394ms  | 342ms  | 329ms  | 380ms  | 338ms  |
-| Cart:PayOneItemXPieces     | 846ms  | 140ms  | 74ms   | 68.3ms | 72.1ms | 71.3ms | 62.5ms | 79.1ms | 66.1ms |
-| Gift:Gift                  | 65.4ms | 61.4ms | 70.4ms | 61ms   | 64.1ms | 60.8ms | 55.6ms | 69.5ms | 59.8ms |
-| Gift:Refund                | 149ms  | 125ms  | 155ms  | 136ms  | 142ms  | 124ms  | 118ms  | 143ms  | 127ms  |
-| Solo:Deposit               | 30.4ms | 32.9ms | 32.3ms | 26.3ms | 31.7ms | 31.8ms | 24.4ms | 33.4ms | 25.5ms |
-| Solo:EagerLoading          | 1.29s  | 1.32s  | 1.47s  | 1.2s   | 1.18s  | 1.06s  | 975ms  | 1.15s  | 1.04s  |
-| Solo:ForceWithdraw         | 30.6ms | 32.1ms | 32.3ms | 26.1ms | 31.7ms | 31.6ms | 24.7ms | 33.3ms | 25.8ms |
-| Solo:GetBalance            | 19.4ms | 22.7ms | 22.4ms | 17.5ms | 23.4ms | 24.7ms | 17.2ms | 23.7ms | 17.4ms |
-| Solo:Transfer              | 55.9ms | 48.5ms | 51ms   | 42.4ms | 46.8ms | 45ms   | 38.7ms | 49.6ms | 39.9ms |
-| Solo:Withdraw              | 38.3ms | 35.8ms | 39ms   | 31.9ms | 37ms   | 36ms   | 29.7ms | 39.4ms | 31.7ms |
-| State:InTransaction        | 771ms  | 619ms  | 772ms  | 746ms  | 749ms  | 624ms  | 647ms  | 787ms  | 520ms  |
-| State:RefreshInTransaction | 42.3ms | 44.1ms | 43.8ms | 35.4ms | 46.4ms | 44.5ms | 33.7ms | 45ms   | 36.3ms |
-| State:TransactionRollback  | 36.6ms | 34.1ms | 36.5ms | 28.9ms | 35.3ms | 35.5ms | 27.9ms | 37.3ms | 29.9ms |
+|            Name            |  7.3   |  8.4   |  9.0   |  9.1   |  9.2   |  9.3   |  9.4   |  9.5   |  9.6   |  10.0  |
+|----------------------------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+| Atomic:Blocks              | -      | -      | -      | -      | 903ms  | 703ms  | 680ms  | 649ms  | 668ms  | 668ms  |
+| Cart:EagerLoaderPay        | 27.2s  | 872ms  | 634ms  | 672ms  | 626ms  | 652ms  | 568ms  | 583ms  | 647ms  | 625ms  |
+| Cart:Pay                   | 1.69s  | 601ms  | 410ms  | 429ms  | 405ms  | 410ms  | 381ms  | 365ms  | 381ms  | 355ms  |
+| Cart:PayFree               | 1.62s  | 507ms  | 340ms  | 351ms  | 340ms  | 338ms  | 318ms  | 328ms  | 348ms  | 370ms  |
+| Cart:PayOneItemXPieces     | 724ms  | 160ms  | 73.6ms | 66.8ms | 67.3ms | 76.3ms | 76.3ms | 67.3ms | 76ms   | 59.4ms |
+| Gift:Gift                  | 60.7ms | 76.2ms | 67.8ms | 61.2ms | 62.4ms | 67.8ms | 67.9ms | 62ms   | 68.5ms | 62.7ms |
+| Gift:Refund                | 134ms  | 152ms  | 129ms  | 135ms  | 131ms  | 131ms  | 124ms  | 126ms  | 134ms  | 122ms  |
+| Solo:Deposit               | 27ms   | 41.4ms | 29.6ms | 28ms   | 27.9ms | 32.6ms | 37ms   | 28.5ms | 34.6ms | 17.8ms |
+| Solo:EagerLoading          | 1.16s  | 1.43s  | 1.22s  | 1.16s  | 1.09s  | 1.05s  | 877ms  | 1.03s  | 1.21s  | 1.14s  |
+| Solo:ForceWithdraw         | 27.3ms | 41.4ms | 30.3ms | 28.2ms | 28ms   | 31.9ms | 36.3ms | 29.2ms | 33.5ms | 18.2ms |
+| Solo:GetBalance            | 16.8ms | 29.6ms | 21.2ms | 19.6ms | 20.1ms | 23.3ms | 28.9ms | 20.5ms | 24.1ms | 7.16ms |
+| Solo:Transfer              | 48.2ms | 61.1ms | 46.2ms | 43.1ms | 43.5ms | 48.8ms | 49.9ms | 43.2ms | 50.6ms | 32.7ms |
+| Solo:Withdraw              | 33ms   | 47.4ms | 35.6ms | 33.6ms | 34.2ms | 36.1ms | 40.9ms | 34.2ms | 41.4ms | 23.3ms |
+| State:InTransaction        | 795ms  | 842ms  | 725ms  | 809ms  | 759ms  | 710ms  | 710ms  | 709ms  | 568ms  | 570ms  |
+| State:RefreshInTransaction | 36.4ms | 54.6ms | 40ms   | 36.7ms | 37.3ms | 44.4ms | 52.4ms | 38.3ms | 47.2ms | 33.8ms |
+| State:TransactionRollback  | 30.5ms | 44.5ms | 33.4ms | 31.5ms | 31.1ms | 34.7ms | 38.8ms | 32.3ms | 38.8ms | 21.7ms |
 
 Major compare:
-|            Name            |  7.x   |  8.x   |  9.x   |
-|----------------------------|--------|--------|--------|
-| Cart:EagerLoaderPay        | 31.2s  | 781ms  | 646ms  |
-| Cart:Pay                   | 1.99s  | 527ms  | 398ms  |
-| Cart:PayFree               | 1.87s  | 459ms  | 349ms  |
-| Cart:PayOneItemXPieces     | 846ms  | 140ms  | 72ms   |
-| Gift:Gift                  | 65.4ms | 61.4ms | 62.3ms |
-| Gift:Refund                | 149ms  | 125ms  | 127ms  |
-| Solo:Deposit               | 30.4ms | 32.9ms | 30.3ms |
-| Solo:EagerLoading          | 1.29s  | 1.32s  | 1.11s  |
-| Solo:ForceWithdraw         | 30.6ms | 32.1ms | 30.2ms |
-| Solo:GetBalance            | 19.4ms | 22.7ms | 20.7ms |
-| Solo:Transfer              | 55.9ms | 48.5ms | 46.2ms |
-| Solo:Withdraw              | 38.3ms | 35.8ms | 36.5ms |
-| State:InTransaction        | 771ms  | 619ms  | 669ms  |
-| State:RefreshInTransaction | 42.3ms | 44.1ms | 40.4ms |
-| State:TransactionRollback  | 36.6ms | 34.1ms | 34.1ms |
+|            Name            |  7.x   |  8.x   |  9.x   |  10.x  |
+|----------------------------|--------|--------|--------|--------|
+| Atomic:Blocks              | -      | -      | -      | 668ms  |
+| Cart:EagerLoaderPay        | 27.2s  | 872ms  | 632ms  | 625ms  |
+| Cart:Pay                   | 1.69s  | 601ms  | 401ms  | 355ms  |
+| Cart:PayFree               | 1.62s  | 507ms  | 338ms  | 370ms  |
+| Cart:PayOneItemXPieces     | 724ms  | 160ms  | 71.5ms | 59.4ms |
+| Gift:Gift                  | 60.7ms | 76.2ms | 66.2ms | 62.7ms |
+| Gift:Refund                | 134ms  | 152ms  | 131ms  | 122ms  |
+| Solo:Deposit               | 27ms   | 41.4ms | 30.4ms | 17.8ms |
+| Solo:EagerLoading          | 1.16s  | 1.43s  | 1.13s  | 1.14s  |
+| Solo:ForceWithdraw         | 27.3ms | 41.4ms | 30.5ms | 18.2ms |
+| Solo:GetBalance            | 16.8ms | 29.6ms | 21.9ms | 7.16ms |
+| Solo:Transfer              | 48.2ms | 61.1ms | 46.2ms | 32.7ms |
+| Solo:Withdraw              | 33ms   | 47.4ms | 36ms   | 23.3ms |
+| State:InTransaction        | 795ms  | 842ms  | 716ms  | 570ms  |
+| State:RefreshInTransaction | 36.4ms | 54.6ms | 40.8ms | 33.8ms |
+| State:TransactionRollback  | 30.5ms | 44.5ms | 33.9ms | 21.7ms |
 
-Table generated using [benchmark](https://github.com/bavix/laravel-wallet-benchmark/). [Pull Request](https://github.com/bavix/laravel-wallet-benchmark/pull/32).
+Table generated using [benchmark](https://github.com/bavix/laravel-wallet-benchmark/). [Pull Request](https://github.com/bavix/laravel-wallet-benchmark/pull/36).
 
 ---
 Supported by
