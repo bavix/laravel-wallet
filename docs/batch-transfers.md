@@ -31,5 +31,26 @@ app(TransferQueryHandlerInterface::class)->apply(
 The package will optimize queries and execute them in a single transaction. I strongly advise against creating large packs, because. this can lead to a large increase in request queuing.
 
 ---
+
+In version 10.x, it became possible to create transactions&transfers with a given uuid (generate on the client side).
+The main thing is to keep uniqueness.
+
+```php
+use Bavix\Wallet\External\Api\TransferQuery;
+
+new TransferQuery($from, $wallet, $amount, new \Bavix\Wallet\External\Dto\Extra(
+    deposit: new \Bavix\Wallet\External\Dto\Option(
+        null,
+        uuid: '71cecafe-da10-464f-9e00-c80437bb4c3e', // deposit transaction
+    ),
+    withdraw: new \Bavix\Wallet\External\Dto\Option(
+        null,
+        uuid: '3805730b-39a1-419d-8715-0b7cc3f1ffc2', // withdraw transaction
+    ),
+    uuid: 'f8becf81-3993-43d7-81f1-7a725c72e976', // transfer uuid
+))
+```
+
+---
 It worked! 
 
