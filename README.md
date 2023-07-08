@@ -21,11 +21,12 @@ laravel-wallet - Easy work with virtual wallet.
 
 ### Support Policy
 
-| Version    | Laravel        | PHP         | End of improvements | End of support |
-|------------|----------------|-------------|---------------------|----------------|
-| 7.x        | ^6.0,^7.0,^8.0 | 7.4,8.0,8.1 | 1 Mar 2022          | 6 Sep 2022     |
-| 8.x        | ^9.0           | 8.0,8.1     | 1 May 2022          | 1 Jun 2022     |
-| 9.x [LTS]  | ^9.0,^10.0     | 8.0,8.1,8.2 | 1 Feb 2023          | 6 Nov 2023     |
+| Version    | Laravel        | PHP         | Release date | End of improvements | End of support |
+|------------|----------------|-------------|--------------|---------------------|----------------|
+| 7.x        | ^6.0,^7.0,^8.0 | 7.4,8.0,8.1 | Nov 25, 2021 | Mar 1, 2022         | Sep 6, 2022    |
+| 8.x        | ^9.0           | 8.0,8.1     | Feb 8, 2022  | May 1, 2022         | Jun 1, 2022    |
+| 9.x [LTS]  | ^9.0,^10.0     | 8.0,8.1,8.2 | May 2, 2022  | Feb 1, 2023         | Feb 6, 2024    |
+| 10.x [LTS] | ^10.0          | 8.1,8.2     | Jul 8, 2023  | May 1, 2024         | Feb 3, 2025    |
 
 ### Upgrade Guide
 
