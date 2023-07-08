@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [10.0.0]
+## [10.0.0] - 2023-07-08
 
 ### Added
 - Added environment variables for cache and locales (WALLET_CACHE_DRIVER, WALLET_CACHE_TTL, WALLET_LOCK_DRIVER, WALLET_LOCK_TTL).
