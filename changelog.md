@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [10.0.0] - 2023-07-08
 
 ### Added
-- Added environment variables for cache and locales (WALLET_CACHE_DRIVER, WALLET_CACHE_TTL, WALLET_LOCK_DRIVER, WALLET_LOCK_TTL).
+- Added environment variables for cache and locks (WALLET_CACHE_DRIVER, WALLET_CACHE_TTL, WALLET_LOCK_DRIVER, WALLET_LOCK_TTL).
 - Transaction/transfer uuids added to External API.
 - Improved support for custom types with phpstan. Now you will find more errors.
 - Added the ability to buy for any wallet through the basket (receiving wallet).
