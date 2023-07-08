@@ -248,3 +248,10 @@ The product has been divided into two interfaces:
 The old Product interface should be replaced with one of these.
 
 Replace `Bavix\Wallet\Interfaces\Product` to `Bavix\Wallet\Interfaces\ProductLimitedInterface`. 
+
+## 9.x.x  → 10.0.x
+
+1. If you have a custom BookkeeperServiceInterface, then you need to update the contract.
+2. If you catch a LockProviderNotFoundException, then you need to remove the check. This exception no longer exists.
+3. If you have specific requests for transfers using the MorphMany relation, then you need to rewrite it to the HasMany relation.
+

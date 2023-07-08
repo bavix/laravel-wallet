@@ -91,5 +91,17 @@ app(AtomicServiceInterface::class)->blocks($wallets, function () use ($wallets, 
 ```
 
 ---
+
+In version 10.x, it became possible to create transactions with a given uuid (generate on the client side).
+The main thing is to keep uniqueness.
+
+```php
+use Bavix\Wallet\External\Api\TransactionQuery;
+
+TransactionQuery::createDeposit($wallet, $amount, null, uuid: '5f7820d1-1e82-4d03-9414-05d0c44da9a1')
+TransactionQuery::createWithdraw($wallet, $amount, null, uuid: '6e87dbf2-7be7-48c2-b688-f46ba4e25786')
+```
+
+---
 It worked! 
 
