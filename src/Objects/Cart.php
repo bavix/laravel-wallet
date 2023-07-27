@@ -16,8 +16,8 @@ use Bavix\Wallet\Internal\Exceptions\CartEmptyException;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Services\CastServiceInterface;
-use function count;
 use Countable;
+use function count;
 
 final class Cart implements Countable, CartInterface
 {

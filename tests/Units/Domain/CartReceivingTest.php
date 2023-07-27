@@ -15,8 +15,8 @@ use Bavix\Wallet\Test\Infra\Models\Item;
 use Bavix\Wallet\Test\Infra\Models\ItemMeta;
 use Bavix\Wallet\Test\Infra\PackageModels\Transaction;
 use Bavix\Wallet\Test\Infra\TestCase;
-use function count;
 use Illuminate\Database\Eloquent\Collection;
+use function count;
 
 /**
  * @internal

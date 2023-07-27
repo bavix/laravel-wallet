@@ -28,8 +28,8 @@ use Bavix\Wallet\Test\Infra\Models\UserMulti;
 use Bavix\Wallet\Test\Infra\PackageModels\Wallet;
 use Bavix\Wallet\Test\Infra\TestCase;
 use Illuminate\Database\QueryException;
-use function range;
 use Throwable;
+use function range;
 
 /**
  * @internal

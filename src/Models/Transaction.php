@@ -8,10 +8,10 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\CastServiceInterface;
-use function config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use function config;
 
 /**
  * Class Transaction.
