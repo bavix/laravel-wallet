@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Traits;
 
-use function array_key_exists;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\WalletServiceInterface;
-use function config;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
+use function array_key_exists;
+use function config;
 
 /**
  * Trait HasWallets To use a trait, you must add HasWallet trait.

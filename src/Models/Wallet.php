@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Models;
 
-use function app;
-use function array_key_exists;
 use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Exchangeable;
@@ -20,12 +18,14 @@ use Bavix\Wallet\Traits\CanConfirm;
 use Bavix\Wallet\Traits\CanExchange;
 use Bavix\Wallet\Traits\CanPayFloat;
 use Bavix\Wallet\Traits\HasGift;
-use function config;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\RecordsNotFoundException;
 use Illuminate\Support\Str;
+use function app;
+use function array_key_exists;
+use function config;
 
 /**
  * Class Wallet.

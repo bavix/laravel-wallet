@@ -14,8 +14,8 @@ use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
-use function current;
 use Illuminate\Database\RecordsNotFoundException;
+use function current;
 
 /**
  * @psalm-require-extends \Illuminate\Database\Eloquent\Model

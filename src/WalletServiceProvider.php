@@ -106,9 +106,6 @@ use Bavix\Wallet\Services\TransferService;
 use Bavix\Wallet\Services\TransferServiceInterface;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Services\WalletServiceInterface;
-use function config;
-use function dirname;
-use function function_exists;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Database\Events\TransactionBeginning;
@@ -117,6 +114,9 @@ use Illuminate\Database\Events\TransactionCommitting;
 use Illuminate\Database\Events\TransactionRolledBack;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use function config;
+use function dirname;
+use function function_exists;
 
 final class WalletServiceProvider extends ServiceProvider implements DeferrableProvider
 {
