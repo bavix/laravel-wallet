@@ -1,0 +1,16 @@
+name: build docs
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build_pages:
+    permissions:
+      contents: write
+    uses: bavix/.github/.github/workflows/build_npm.yml@master
+    secrets:
+      BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+      GPG_BOT: ${{ secrets.GPG_BOT }}
+      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      GPG_FINGERPRINT: ${{ secrets.GPG_FINGERPRINT }}

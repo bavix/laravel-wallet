@@ -11,6 +11,9 @@
   "bugs": {
     "url": "https://github.com/bavix/laravel-wallet/issues"
   },
+  "scripts": {
+    "build": "webpack"
+  },
   "homepage": "https://bavix.github.io/laravel-wallet/",
   "dependencies": {
     "@bavix/cozy-house-kit": "^1.0.5",
@@ -22,9 +25,7 @@
     "prismjs": "^1.29.0",
     "size-limit": "^8.2.4",
     "uuid": "^9.0.0",
-    "webpack": "^5.88.2"
-  },
-  "devDependencies": {
+    "webpack": "^5.88.2",
     "webpack-cli": "^5.0.0"
   }
 }
