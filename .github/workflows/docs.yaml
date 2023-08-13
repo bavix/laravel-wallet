@@ -9,8 +9,4 @@ jobs:
     permissions:
       contents: write
     uses: bavix/.github/.github/workflows/compile-assets.yml@0.0.1
-    secrets:
-      BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-      GPG_BOT: ${{ secrets.GPG_BOT }}
-      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-      GPG_FINGERPRINT: ${{ secrets.GPG_FINGERPRINT }}
+    secrets: inherit
