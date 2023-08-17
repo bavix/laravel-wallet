@@ -7,6 +7,19 @@
 $app->register(\Bavix\Wallet\WalletServiceProvider::class);
 ```
 
+You also need to add two lines to the "Register Container Bindings" section of the bootstrap/app.php file:
+```php
+\Illuminate\Support\Facades\Cache::setApplication($app);
+$app->registerDeferredProvider(\Illuminate\Cache\CacheServiceProvider::class);
+```
+
+Make sure you have Facades and Eloquent enabled.
+```php
+$app->withFacades();
+
+$app->withEloquent();
+```
+
 Start the migration and use the library.
 
 ## You can use it for customization
