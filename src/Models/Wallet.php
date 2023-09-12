@@ -158,6 +158,11 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         return $this->meta['currency'] ?? Str::upper($this->slug);
     }
 
+    public function updateOrAddMeta(array $array): array
+    {
+        return $this->meta = array_merge($this->meta ?? [], $array);
+    }
+
     protected function initializeMorphOneWallet(): void
     {
         $this->uuid = app(UuidFactoryServiceInterface::class)->uuid4();
