@@ -1,7 +1,7 @@
 # Create a wallet and use it
 
 Virtual wallets can be any number. 
-The main thing that they did not match the `slug`.
+The main thing is that they do not match the `slug`.
 
 ---
 
