@@ -2,7 +2,7 @@
 
 If you need the ability to have wallets have a credit limit, then this functionality is for you.
 
-The functionality does nothing, it only allows you not to use "force" for most of the operations within the credit limit. You yourself write the logic for collecting interest, notifications on debts, etc.
+The functionality does nothing, it only allows you not to use "force" for most of the operations within the credit limit. You should write the logic for collecting interest, notifications on debts, etc.
 
 By default, the credit limit is zero.
 
