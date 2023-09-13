@@ -29,7 +29,7 @@ Customize `name` and `slug` of default wallet.
         ],
 ```
 ## Extend Wallet class
-You can extend the Wallet class by creating a new class that extends `Bavix\Wallet\Models\Wallet` and registering the new class in config/wallet.php.
+You can extend the Wallet class by creating a new class that extends `Bavix\Wallet\Models\Wallet` and registering the new class in `config/wallet.php`.
 Example `MyWallet.php`
 
 ```php[App/Models/MyWallet.php]
