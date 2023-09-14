@@ -1,7 +1,6 @@
 # Create a wallet and use it
 
-Virtual wallets can be any number. 
-The main thing is that they do not match the `slug`.
+You can create an unlimited number of wallets, but the `slug` for each wallet should be unique.
 
 ---
 
