@@ -84,7 +84,7 @@ class Item extends Model implements ProductLimitedInterface
 ```
 
 I do not recommend using the limited interface when working with a shopping cart.
-If you are working with a shopping cart, then you should override the `PurchaseServiceInterface` interface.
+If you are working with a shopping cart, then you should override the `ProductLimitedInterface` with the `PurchaseServiceInterface` interface.
 With it, you can check the availability of all products with one request, there will be no N-queries in the database.
 
 ## Fill the cart
