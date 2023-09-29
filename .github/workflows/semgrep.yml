@@ -1,0 +1,11 @@
+name: semgrep
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  semgrep:
+    uses: bavix/.github/.github/workflows/php-semgrep.yml@0.0.7
