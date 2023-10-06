@@ -42,7 +42,7 @@ class MyWallet extends WalletBase {
 This same method above, can be used to extend the base `Transfer` and `Transaction` models and registering the extended models in the configuration file.
 ### Changing wallet decimal places
 
-You can change the default wallet decimal places, in wallet config file.
+You can change the default wallet decimal places, in wallet config file. This can be useful when working with fractional numbers.
 
 ```php[config/wallet.php]
   /**
