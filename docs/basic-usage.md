@@ -157,3 +157,10 @@ $user->depositFloat(1.37);
 $user->balance; // 237
 $user->balanceFloat; // 2.37
 ```
+You can get the float amount by accessing the `amountFloat` attribute on the transaction model
+
+```php
+$transaction->amount; // 137
+$transaction->amountFloat; // 1.37
+```
+
