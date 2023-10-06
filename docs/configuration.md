@@ -40,4 +40,18 @@ class MyWallet extends WalletBase {
    echo $user->wallet->helloWorld();
 ```
 This same method above, can be used to extend the base `Transfer` and `Transaction` models and registering the extended models in the configuration file.
+### Changing wallet decimal places
+
+You can change the default wallet decimal places, from your extended wallet model by defining a `decimal_places` attribute on the model. This is useful when working with fractional numbers
+
+```php[App/Models/MyWallet.php]
+use Bavix\Wallet\Models\Wallet as WalletBase;
+
+class MyWallet extends WalletBase {
+
+    protected $attributes = [
+        'decimal_places' => 18,
+    ];
+}
+```
 
