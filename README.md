@@ -221,44 +221,44 @@ $user->balanceFloat; // 2.37
 All versions:
 |            Name            |  7.3   |  8.4   |  9.2   |  9.3   |  9.4   |  9.5   |  9.6   |  10.0  |
 |----------------------------|--------|--------|--------|--------|--------|--------|--------|--------|
-| Atomic:Blocks              | -      | -      | 913ms  | 734ms  | 723ms  | 853ms  | 677ms  | 669ms  |
-| Cart:EagerLoaderPay        | 25.6s  | 800ms  | 650ms  | 650ms  | 641ms  | 837ms  | 666ms  | 655ms  |
-| Cart:Pay                   | 1.64s  | 580ms  | 421ms  | 424ms  | 421ms  | 524ms  | 390ms  | 382ms  |
-| Cart:PayFree               | 1.55s  | 491ms  | 344ms  | 333ms  | 337ms  | 465ms  | 361ms  | 377ms  |
-| Cart:PayOneItemXPieces     | 697ms  | 149ms  | 74.5ms | 77.1ms | 78.9ms | 94.3ms | 77.6ms | 60.4ms |
-| Gift:Gift                  | 61ms   | 69.3ms | 67.1ms | 69ms   | 70.3ms | 91.4ms | 70.2ms | 65.8ms |
-| Gift:Refund                | 130ms  | 144ms  | 133ms  | 138ms  | 139ms  | 182ms  | 140ms  | 131ms  |
-| Solo:Deposit               | 35.9ms | 36.5ms | 37.7ms | 37.9ms | 38.6ms | 43.8ms | 39.8ms | 20.5ms |
-| Solo:EagerLoading          | 1.1s   | 1.33s  | 1.12s  | 1.1s   | 1.06s  | 1.49s  | 1.28s  | 1.17s  |
-| Solo:ForceWithdraw         | 36.2ms | 37.2ms | 37.6ms | 38ms   | 38.3ms | 44.8ms | 40ms   | 20.2ms |
-| Solo:GetBalance            | 26.6ms | 27.7ms | 29.9ms | 29.2ms | 31.8ms | 32.8ms | 32ms   | 8.39ms |
-| Solo:Transfer              | 54.9ms | 56.4ms | 51.1ms | 51.8ms | 53.1ms | 65ms   | 53.2ms | 35ms   |
-| Solo:Withdraw              | 41.3ms | 42ms   | 42ms   | 41.5ms | 43ms   | 50.8ms | 44.9ms | 25.9ms |
-| State:InTransaction        | 758ms  | 778ms  | 773ms  | 742ms  | 779ms  | 1.03s  | 566ms  | 571ms  |
-| State:RefreshInTransaction | 51.6ms | 52.4ms | 52.2ms | 52.3ms | 58.8ms | 61.6ms | 53.5ms | 43ms   |
-| State:TransactionRollback  | 38.8ms | 39.7ms | 39.8ms | 41.3ms | 42ms   | 51.3ms | 43ms   | 23.9ms |
+| Atomic:Blocks              | -      | -      | 860ms  | 561ms  | 697ms  | 722ms  | 775ms  | 586ms  |
+| Cart:EagerLoaderPay        | 26.9s  | 881ms  | 818ms  | 674ms  | 829ms  | 800ms  | 768ms  | 627ms  |
+| Cart:Pay                   | 1.67s  | 651ms  | 534ms  | 426ms  | 529ms  | 492ms  | 543ms  | 355ms  |
+| Cart:PayFree               | 1.6s   | 540ms  | 448ms  | 346ms  | 435ms  | 455ms  | 487ms  | 385ms  |
+| Cart:PayOneItemXPieces     | 712ms  | 156ms  | 89ms   | 79.9ms | 80.9ms | 99.4ms | 87.5ms | 60.6ms |
+| Gift:Gift                  | 61ms   | 71.5ms | 85.7ms | 70.5ms | 75.1ms | 82.8ms | 84.4ms | 66.2ms |
+| Gift:Refund                | 126ms  | 150ms  | 166ms  | 134ms  | 153ms  | 161ms  | 160ms  | 127ms  |
+| Solo:Deposit               | 37.1ms | 38.9ms | 47.5ms | 39ms   | 42.2ms | 46.8ms | 41.1ms | 20.3ms |
+| Solo:EagerLoading          | 1.11s  | 1.45s  | 1.43s  | 1.12s  | 1.42s  | 1.47s  | 1.51s  | 1.19s  |
+| Solo:ForceWithdraw         | 36.4ms | 39.1ms | 45.9ms | 39.2ms | 41.6ms | 46ms   | 42.1ms | 20.5ms |
+| Solo:GetBalance            | 27.7ms | 30.6ms | 38.1ms | 32.4ms | 32ms   | 37.8ms | 32ms   | 8.44ms |
+| Solo:Transfer              | 55.8ms | 58.4ms | 67ms   | 53.1ms | 57.3ms | 63.8ms | 60.2ms | 35.5ms |
+| Solo:Withdraw              | 41.5ms | 44.5ms | 53.1ms | 44.1ms | 45.9ms | 51.7ms | 47.7ms | 25.9ms |
+| State:InTransaction        | 670ms  | 721ms  | 869ms  | 622ms  | 829ms  | 854ms  | 598ms  | 504ms  |
+| State:RefreshInTransaction | 51.9ms | 55.8ms | 63ms   | 53.8ms | 63.5ms | 63.6ms | 60.2ms | 41.3ms |
+| State:TransactionRollback  | 40.2ms | 41.8ms | 48.6ms | 41.3ms | 43.4ms | 48.7ms | 45.1ms | 24.1ms |
 
 Major compare:
 |            Name            |  7.x   |  8.x   |  9.x   |  10.x  |
 |----------------------------|--------|--------|--------|--------|
-| Atomic:Blocks              | -      | -      | 753ms  | 669ms  |
-| Cart:EagerLoaderPay        | 25.6s  | 800ms  | 661ms  | 655ms  |
-| Cart:Pay                   | 1.64s  | 580ms  | 424ms  | 382ms  |
-| Cart:PayFree               | 1.55s  | 491ms  | 347ms  | 377ms  |
-| Cart:PayOneItemXPieces     | 697ms  | 149ms  | 78.5ms | 60.4ms |
-| Gift:Gift                  | 61ms   | 69.3ms | 70.6ms | 65.8ms |
-| Gift:Refund                | 130ms  | 144ms  | 139ms  | 131ms  |
-| Solo:Deposit               | 35.9ms | 36.5ms | 39.3ms | 20.5ms |
-| Solo:EagerLoading          | 1.1s   | 1.33s  | 1.16s  | 1.17s  |
-| Solo:ForceWithdraw         | 36.2ms | 37.2ms | 38.8ms | 20.2ms |
-| Solo:GetBalance            | 26.6ms | 27.7ms | 31.1ms | 8.39ms |
-| Solo:Transfer              | 54.9ms | 56.4ms | 53.5ms | 35ms   |
-| Solo:Withdraw              | 41.3ms | 42ms   | 43.6ms | 25.9ms |
-| State:InTransaction        | 758ms  | 778ms  | 754ms  | 571ms  |
-| State:RefreshInTransaction | 51.6ms | 52.4ms | 59.2ms | 43ms   |
-| State:TransactionRollback  | 38.8ms | 39.7ms | 42.4ms | 23.9ms |
+| Atomic:Blocks              | -      | -      | 704ms  | 586ms  |
+| Cart:EagerLoaderPay        | 26.9s  | 881ms  | 780ms  | 627ms  |
+| Cart:Pay                   | 1.67s  | 651ms  | 492ms  | 355ms  |
+| Cart:PayFree               | 1.6s   | 540ms  | 425ms  | 385ms  |
+| Cart:PayOneItemXPieces     | 712ms  | 156ms  | 81.9ms | 60.6ms |
+| Gift:Gift                  | 61ms   | 71.5ms | 74.6ms | 66.2ms |
+| Gift:Refund                | 126ms  | 150ms  | 152ms  | 127ms  |
+| Solo:Deposit               | 37.1ms | 38.9ms | 41ms   | 20.3ms |
+| Solo:EagerLoading          | 1.11s  | 1.45s  | 1.38s  | 1.19s  |
+| Solo:ForceWithdraw         | 36.4ms | 39.1ms | 41.4ms | 20.5ms |
+| Solo:GetBalance            | 27.7ms | 30.6ms | 32.1ms | 8.44ms |
+| Solo:Transfer              | 55.8ms | 58.4ms | 57.1ms | 35.5ms |
+| Solo:Withdraw              | 41.5ms | 44.5ms | 46.1ms | 25.9ms |
+| State:InTransaction        | 670ms  | 721ms  | 754ms  | 504ms  |
+| State:RefreshInTransaction | 51.9ms | 55.8ms | 60.9ms | 41.3ms |
+| State:TransactionRollback  | 40.2ms | 41.8ms | 44.1ms | 24.1ms |
 
-Table generated using [benchmark](https://github.com/bavix/laravel-wallet-benchmark/). [Pull Request](https://github.com/bavix/laravel-wallet-benchmark/pull/38).
+Table generated using [benchmark](https://github.com/bavix/laravel-wallet-benchmark/). [Pull Request](https://github.com/bavix/laravel-wallet-benchmark/pull/40).
 
 ---
 Supported by
