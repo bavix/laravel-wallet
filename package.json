@@ -22,7 +22,7 @@
     "lodash": "^4.17.20",
     "mini-css-extract-plugin": "^2.7.6",
     "prismjs": "^1.29.0",
-    "size-limit": "^10.0.2",
+    "size-limit": "^11.0.0",
     "uuid": "^9.0.1",
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4"
