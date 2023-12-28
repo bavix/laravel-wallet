@@ -6,6 +6,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [10.1.0] - 2023-12-28
+### Bump
+* build(deps-dev): update laravel/cashier requirement from ^14.12 to ^15.0 by @dependabot in https://github.com/bavix/laravel-wallet/pull/817
+* build(deps): bump axios from 1.6.2 to 1.6.3 by @dependabot in https://github.com/bavix/laravel-wallet/pull/821
+
+### Added
+* add wallet getDynamicSlug by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/822
+
+## [10.0.2] - 2023-12-14
+### Bump
+* Bump bavix/.github from 0.0.5 to 0.0.7 by @dependabot in https://github.com/bavix/laravel-wallet/pull/784
+* docs: accessing float amount by @justinkekeocha in https://github.com/bavix/laravel-wallet/pull/786
+* docs: changing wallet decimal_places by @justinkekeocha in https://github.com/bavix/laravel-wallet/pull/785
+* remove driftingly/rector-laravel by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/787
+* Bump postcss from 8.4.19 to 8.4.31 by @dependabot in https://github.com/bavix/laravel-wallet/pull/788
+* Bump webpack from 5.88.2 to 5.89.0 by @dependabot in https://github.com/bavix/laravel-wallet/pull/790
+* Bump size-limit from 9.0.0 to 10.0.1 by @dependabot in https://github.com/bavix/laravel-wallet/pull/792
+* Bump bavix/.github from 0.0.7 to 0.0.8 by @dependabot in https://github.com/bavix/laravel-wallet/pull/793
+* Bump axios from 1.5.1 to 1.6.0 by @dependabot in https://github.com/bavix/laravel-wallet/pull/795
+* Bump size-limit from 10.0.1 to 10.0.2 by @dependabot in https://github.com/bavix/laravel-wallet/pull/797
+* build(deps): bump actions/checkout from 3 to 4 by @dependabot in https://github.com/bavix/laravel-wallet/pull/799
+* build(deps): bump axios from 1.6.0 to 1.6.1 by @dependabot in https://github.com/bavix/laravel-wallet/pull/801
+* build(deps): bump size-limit from 10.0.2 to 11.0.0 by @dependabot in https://github.com/bavix/laravel-wallet/pull/802
+* build(deps): bump axios from 1.6.1 to 1.6.2 by @dependabot in https://github.com/bavix/laravel-wallet/pull/803
+* build(deps): bump bavix/.github from 0.0.8 to 0.0.9 by @dependabot in https://github.com/bavix/laravel-wallet/pull/808
+* build(deps): bump size-limit from 11.0.0 to 11.0.1 by @dependabot in https://github.com/bavix/laravel-wallet/pull/810
+* build(deps): bump actions/stale from 8 to 9 by @dependabot in https://github.com/bavix/laravel-wallet/pull/811
+* build(deps): bump bavix/.github from 0.0.9 to 0.1.0 by @dependabot in https://github.com/bavix/laravel-wallet/pull/812
+* build(deps): bump JetBrains/qodana-action from 2023.2 to 2023.3 by @dependabot in https://github.com/bavix/laravel-wallet/pull/813
+
+### Removed
+* remove cozyhouse by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/794
+
+### Added
+* add support database cache by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/815
+* Qodana by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/798
+* add support php 8.3 by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/796
+
 ## [10.0.1] - 2023-09-30
 ### Bump
 * Bump semver from 7.3.8 to 7.5.4 by @dependabot in https://github.com/bavix/laravel-wallet/pull/726
@@ -15,11 +53,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Updated laravel rector set by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/733
 * Update driftingly/rector-laravel requirement from ^0.21 to ^0.22 by @dependabot in https://github.com/bavix/laravel-wallet/pull/735
 * Create npm workflow by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/736
-* Update docs.yaml by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/737
-* Update docs.yaml by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/739
-* Update docs.yaml by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/740
-* Update docs.yaml by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/741
-* Lumen documentation update by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/743
 * [Snyk] Upgrade webpack-cli from 5.0.0 to 5.1.4 by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/747
 * [Snyk] Upgrade axios from 1.3.4 to 1.4.0 by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/748
 * [Snyk] Upgrade size-limit from 8.2.4 to 8.2.6 by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/750
@@ -31,18 +64,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Bump size-limit from 8.2.6 to 9.0.0 by @dependabot in https://github.com/bavix/laravel-wallet/pull/762
 * Bump actions/stale from 6 to 8 by @dependabot in https://github.com/bavix/laravel-wallet/pull/761
 * Bump actions/checkout from 3 to 4 by @dependabot in https://github.com/bavix/laravel-wallet/pull/760
-* docs: update wording to sound grammatically correct by @justinkekeocha in https://github.com/bavix/laravel-wallet/pull/766
-* docs: customize name and slug of default wallet by @justinkekeocha in https://github.com/bavix/laravel-wallet/pull/765
-* docs: fixed grammatical error by @justinkekeocha in https://github.com/bavix/laravel-wallet/pull/764
 * Bump uuid from 9.0.0 to 9.0.1 by @dependabot in https://github.com/bavix/laravel-wallet/pull/768
 * checking the Wallet class extensibility by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/769
+* Update driftingly/rector-laravel requirement from ^0.24 to ^0.25 by @dependabot in https://github.com/bavix/laravel-wallet/pull/779
+* Update driftingly/rector-laravel requirement from ^0.25 to ^0.26 by @dependabot in https://github.com/bavix/laravel-wallet/pull/780
+* Bump axios from 1.5.0 to 1.5.1 by @dependabot in https://github.com/bavix/laravel-wallet/pull/781
+
+### Docs
 * docs: Create configuration.md by @justinkekeocha in https://github.com/bavix/laravel-wallet/pull/771
 * docs: add configuration file to sidebar by @justinkekeocha in https://github.com/bavix/laravel-wallet/pull/772
 * docs: move configuration details to separate file by @justinkekeocha in https://github.com/bavix/laravel-wallet/pull/773
 * docs: update for clarity by @justinkekeocha in https://github.com/bavix/laravel-wallet/pull/774
-* Update driftingly/rector-laravel requirement from ^0.24 to ^0.25 by @dependabot in https://github.com/bavix/laravel-wallet/pull/779
-* Update driftingly/rector-laravel requirement from ^0.25 to ^0.26 by @dependabot in https://github.com/bavix/laravel-wallet/pull/780
-* Bump axios from 1.5.0 to 1.5.1 by @dependabot in https://github.com/bavix/laravel-wallet/pull/781
+* docs: update wording to sound grammatically correct by @justinkekeocha in https://github.com/bavix/laravel-wallet/pull/766
+* docs: customize name and slug of default wallet by @justinkekeocha in https://github.com/bavix/laravel-wallet/pull/765
+* docs: fixed grammatical error by @justinkekeocha in https://github.com/bavix/laravel-wallet/pull/764
+* Update docs.yaml by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/737
+* Update docs.yaml by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/739
+* Update docs.yaml by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/740
+* Update docs.yaml by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/741
+* Lumen documentation update by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/743
+
+### Added
 * Add semgrep by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/783
 
 ## [10.0.0] - 2023-07-08
@@ -1047,7 +1089,9 @@ The operation is now executed in the transaction and updates the new `refund` fi
 - Exceptions: AmountInvalid, BalanceIsEmpty.
 - Models: Transfer, Transaction.
 
-[Unreleased]: https://github.com/bavix/laravel-wallet/compare/10.0.1...develop
+[Unreleased]: https://github.com/bavix/laravel-wallet/compare/10.1.0...develop
+[10.1.0]: https://github.com/bavix/laravel-wallet/compare/10.0.2...10.1.0
+[10.0.2]: https://github.com/bavix/laravel-wallet/compare/10.0.1...10.0.2
 [10.0.1]: https://github.com/bavix/laravel-wallet/compare/10.0.0...10.0.1
 [10.0.0]: https://github.com/bavix/laravel-wallet/compare/9.6.2...10.0.0
 [9.6.2]: https://github.com/bavix/laravel-wallet/compare/9.6.1...9.6.2
