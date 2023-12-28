@@ -16,7 +16,7 @@
   },
   "homepage": "https://bavix.github.io/laravel-wallet/",
   "dependencies": {
-    "axios": "^1.6.2",
+    "axios": "^1.6.3",
     "css-loader": "^6.7.3",
     "docsify": "^4.13.1",
     "lodash": "^4.17.20",
