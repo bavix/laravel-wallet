@@ -12,8 +12,11 @@ use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
+use Bavix\Wallet\Test\Infra\Factories\UserDynamicFactory;
 use Bavix\Wallet\Test\Infra\Factories\UserFactory;
 use Bavix\Wallet\Test\Infra\Models\User;
+use Bavix\Wallet\Test\Infra\Models\UserDynamic;
+use Bavix\Wallet\Test\Infra\PackageModels\Wallet;
 use Bavix\Wallet\Test\Infra\TestCase;
 use Illuminate\Database\Eloquent\Collection;
 use RuntimeException;
@@ -278,6 +281,37 @@ final class WalletTest extends TestCase
 
         $user->withdraw($user->balanceInt);
         self::assertSame(0, $user->balanceInt);
+    }
+
+    public function testDefaultWalletCustomize(): void
+    {
+        /** @var User $user */
+        $user = UserFactory::new()->create();
+
+        self::assertFalse($user->wallet->exists);
+
+        $user->wallet->meta = [
+            'internal' => 1,
+        ];
+
+        self::assertNotNull($user->deposit(100));
+        self::assertSame(100, $user->balanceInt);
+
+        $wallet = Wallet::query()->find($user->wallet->getKey());
+
+        self::assertNotNull($wallet);
+        self::assertSame(1, $wallet->meta['internal'] ?? 0);
+    }
+
+    public function testgetDynamicDefaultSlug(): void
+    {
+        /** @var UserDynamic $user */
+        $user = UserDynamicFactory::new()->create();
+
+        self::assertNotNull($user->deposit(100));
+        self::assertSame(100, $user->balanceInt);
+
+        self::assertSame('default-' . $user->email, $user->wallet->slug);
     }
 
     public function testCrash(): void
