@@ -303,7 +303,7 @@ final class WalletTest extends TestCase
         self::assertSame(1, $wallet->meta['internal'] ?? 0);
     }
 
-    public function testGetDynamicSlug(): void
+    public function testgetDynamicDefaultSlug(): void
     {
         /** @var UserDynamic $user */
         $user = UserDynamicFactory::new()->create();

@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * build(deps): bump axios from 1.6.2 to 1.6.3 by @dependabot in https://github.com/bavix/laravel-wallet/pull/821
 
 ### Added
-* add wallet getDynamicSlug by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/822
+* add wallet getDynamicDefaultSlug by @rez1dent3 in https://github.com/bavix/laravel-wallet/pull/822
 
 ## [10.0.2] - 2023-12-14
 ### Bump

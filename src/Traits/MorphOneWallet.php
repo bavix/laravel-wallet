@@ -35,8 +35,8 @@ trait MorphOneWallet
             ->withDefault(static function (WalletModel $wallet, object $holder) use ($castService) {
                 $model = $castService->getModel($holder);
 
-                $slug = method_exists($model, 'getDynamicSlug')
-                    ? $model->getDynamicSlug()
+                $slug = method_exists($model, 'getDynamicDefaultSlug')
+                    ? $model->getDynamicDefaultSlug()
                     : config('wallet.wallet.default.slug', 'default');
 
                 $wallet->forceFill(array_merge(config('wallet.wallet.creating', []), [
