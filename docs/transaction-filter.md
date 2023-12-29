@@ -20,6 +20,7 @@ Let's take a look at a livelier code example:
 ```php
 $user->transactions()->count(); // 0
 
+// Multi wallets and default wallet can be used together
 // default wallet
 $user->deposit(100);
 $user->wallet->deposit(200);
