@@ -9,16 +9,15 @@ The transfer takes place between wallets.
 
 ## User Model
 
-Prepare the model, add the `HasWallet`, `HasWallets` trait's and `Wallet` interface.
+Prepare the model, add the `HasWallets` trait's and `Wallet` interface.
 
 ```php
-use Bavix\Wallet\Traits\HasWallet;
 use Bavix\Wallet\Traits\HasWallets;
 use Bavix\Wallet\Interfaces\Wallet;
 
 class User extends Model implements Wallet
 {
-    use HasWallet, HasWallets;
+    use HasWallets;
 }
 ```
 

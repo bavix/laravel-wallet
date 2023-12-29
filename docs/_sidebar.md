@@ -24,6 +24,12 @@
     - [Transfer](wallet-transfer)
     - [Transaction Filter](transaction-filter)
 
+- Fractional Wallet
+
+  - [Deposit](deposit-float)
+  - [Withdraw](withdraw-float)
+  - [Transfer](transfer-float)
+
 - High performance api handles
 
   - [Batch transactions](batch-transactions)

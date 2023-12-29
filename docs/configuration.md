@@ -4,7 +4,8 @@ Though this package is crafted to suit most of your needs by default, you can ed
 ## Configure default wallet
 Customize `name`,`slug` and `meta` of default wallet.
 
-```php[config/wallet.php]
+config/wallet.php:
+```php
 'default' => [
             'name' => 'Ethereum',
             'slug' => 'ETH',
@@ -15,7 +16,8 @@ Customize `name`,`slug` and `meta` of default wallet.
 You can extend base Wallet model by creating a new class that extends `Bavix\Wallet\Models\Wallet` and registering the new class in `config/wallet.php`.
 Example `MyWallet.php`
 
-```php[App/Models/MyWallet.php]
+App/Models/MyWallet.php:
+```php
 use Bavix\Wallet\Models\Wallet as WalletBase;
 
 class MyWallet extends WalletBase {
@@ -24,7 +26,8 @@ class MyWallet extends WalletBase {
 ```
 ### Register base Wallet model
 
-```php[config/wallet.php]
+config/wallet.php:
+```php
     'wallet' => [
         'table' => 'wallets',
         'model' => MyWallet::class,
@@ -44,7 +47,8 @@ This same method above, can be used to extend the base `Transfer` and `Transacti
 
 You can change the default wallet decimal places, in wallet config file. This can be useful when working with fractional numbers.
 
-```php[config/wallet.php]
+config/wallet.php:
+```php
   /**
      * Base model 'wallet'.
      */
