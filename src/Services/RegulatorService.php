@@ -12,7 +12,6 @@ use Bavix\Wallet\Internal\Service\LockServiceInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Internal\Service\StorageServiceInterface;
 use Bavix\Wallet\Models\Wallet;
-use PHPUnit\Framework\Attributes\CodeCoverageIgnore;
 
 /**
  * @internal
