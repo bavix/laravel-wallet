@@ -2,9 +2,9 @@ name: phpunits
 
 on:
   push:
-    branches: [ 10.x ]
+    branches: [ master ]
   pull_request:
-    branches: [ 10.x ]
+    branches: [ master ]
 
 env:
   MEMCACHED_HOST: localhost
@@ -18,8 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: [8.1, 8.2, 8.3]
-        stability: [prefer-lowest, prefer-stable]
+        php-versions: [8.2, 8.3]
         databases: [testing, pgsql, mysql, mariadb]
         caches: [array, redis, memcached, database]
         locks: [redis, memcached]
@@ -74,7 +73,7 @@ jobs:
           - 3306:3306
 
       mariadb:
-        image: mariadb:10.10
+        image: mariadb:10.5
         env:
           MYSQL_ROOT_PASSWORD: wallet
           MYSQL_DATABASE: wallet
@@ -107,7 +106,7 @@ jobs:
 
       - name: Cache Composer packages
         id: composer-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v3
         with:
           path: vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
@@ -116,11 +115,11 @@ jobs:
 
       - name: Install dependencies
         id: composer-dependencies
-        run: composer update --${{ matrix.stability }} --prefer-dist --no-progress
+        run: composer install --prefer-dist --no-progress
 
       - name: Check codeclimate
         id: codeclimate-check
-        run: echo "execute=${{ matrix.php-versions == '8.3' && matrix.caches == 'array' && matrix.databases == 'testing' }}" >> $GITHUB_OUTPUT
+        run: echo "execute=${{ matrix.php-versions == '8.2' && matrix.caches == 'array' && matrix.databases == 'testing' }}" >> $GITHUB_OUTPUT
 
       - name: Prepare codeclimate
         id: codeclimate-prepare

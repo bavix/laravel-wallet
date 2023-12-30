@@ -1,13 +1,13 @@
-name: deptrac
+name: code-style
 
 on:
   push:
-    branches: [ 10.x ]
+    branches: [ master ]
   pull_request:
-    branches: [ 10.x ]
+    branches: [ master ]
 
 jobs:
-  deptrac:
+  ecs:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,7 +27,7 @@ jobs:
 
       - name: Cache Composer packages
         id: composer-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v3
         with:
           path: vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
@@ -37,9 +37,5 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
-      - name: Install deptrac
-        run: composer req --dev qossmic/deptrac-shim
-        if: hashFiles('vendor/bin/deptrac') == ''
-
-      - name: Run deptrac
-        run: php vendor/bin/deptrac analyse
+      - name: Run ecs
+        run: composer ecs
