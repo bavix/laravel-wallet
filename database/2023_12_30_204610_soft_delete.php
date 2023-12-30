@@ -13,11 +13,7 @@ return new class() extends Migration {
     public function up(): void
     {
         Schema::table((new Wallet())->getTable(), static function (Blueprint $table) {
-            $table->dropUnique(['holder_type', 'holder_id', 'slug']);
-
             $table->softDeletesTz();
-
-            $table->unique(['holder_type', 'holder_id', 'slug', 'deleted_at']);
         });
         Schema::table((new Transfer())->getTable(), static function (Blueprint $table) {
             $table->softDeletesTz();
@@ -30,9 +26,6 @@ return new class() extends Migration {
     public function down(): void
     {
         Schema::table((new Wallet())->getTable(), static function (Blueprint $table) {
-            $table->dropUnique(['holder_type', 'holder_id', 'slug', 'deleted_at']);
-            $table->unique(['holder_type', 'holder_id', 'slug']);
-
             $table->dropSoftDeletes();
         });
         Schema::table((new Transfer())->getTable(), static function (Blueprint $table) {

@@ -31,6 +31,7 @@ trait MorphOneWallet
         return $castService
             ->getHolder($this)
             ->morphOne($related, 'holder')
+            ->withTrashed()
             ->where('slug', config('wallet.wallet.default.slug', 'default'))
             ->withDefault(static function (WalletModel $wallet, object $holder) use ($castService) {
                 $model = $castService->getModel($holder);
