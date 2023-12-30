@@ -33,6 +33,32 @@ final class SoftDeleteTest extends TestCase
 
         $buyer->deposit(2);
 
+        self::assertSame($buyer->wallet->getKey(), $oldWallet->getKey());
+
+        self::assertSame(3, $oldWallet->balanceInt);
+        self::assertSame(3, $buyer->balanceInt);
+    }
+
+    public function testDefaultWalletForceDelete(): void
+    {
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        self::assertFalse($buyer->relationLoaded('wallet'));
+        self::assertFalse($buyer->wallet->exists);
+
+        $buyer->deposit(1);
+
+        $oldWallet = $buyer->wallet;
+
+        self::assertTrue($buyer->wallet->exists);
+        self::assertTrue($buyer->wallet->forceDelete());
+        self::assertFalse($buyer->wallet->exists);
+
+        /** @var Buyer $buyer */
+        $buyer = Buyer::query()->find($buyer->getKey());
+
+        $buyer->deposit(2);
+
         self::assertNotSame($buyer->wallet->getKey(), $oldWallet->getKey());
 
         self::assertSame(1, $oldWallet->balanceInt);
@@ -72,8 +98,8 @@ final class SoftDeleteTest extends TestCase
         $transfer = $user1->forceTransfer($user2, 100);
 
         self::assertNotNull($transfer);
-        self::assertSame(100, $transfer->deposit->amount);
-        self::assertSame(-100, $transfer->withdraw->amount);
+        self::assertSame(100, $transfer->deposit->amountInt);
+        self::assertSame(-100, $transfer->withdraw->amountInt);
 
         self::assertSame(-100, $user1->balanceInt);
         self::assertSame(100, $user2->balanceInt);
