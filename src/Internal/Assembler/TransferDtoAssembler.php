@@ -31,9 +31,7 @@ final class TransferDtoAssembler implements TransferDtoAssemblerInterface
             $depositId,
             $withdrawId,
             $status,
-            $fromModel->getMorphClass(),
             $fromModel->getKey(),
-            $toModel->getMorphClass(),
             $toModel->getKey(),
             $discount,
             $fee

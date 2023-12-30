@@ -17,10 +17,8 @@ use function config;
  * @property int $deposit_id
  * @property int $withdraw_id
  * @property Wallet $from
- * @property class-string $from_type
  * @property int $from_id
  * @property Wallet $to
- * @property class-string $to_type
  * @property int $to_id
  * @property string $uuid
  * @property string $fee
@@ -49,9 +47,7 @@ class Transfer extends Model
         'discount',
         'deposit_id',
         'withdraw_id',
-        'from_type',
         'from_id',
-        'to_type',
         'to_id',
         'uuid',
         'fee',

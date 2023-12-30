@@ -12,12 +12,6 @@ use Bavix\Wallet\Models\Wallet;
  */
 interface BookkeeperServiceInterface
 {
-    /**
-     * @deprecated Fixed naming.
-     * @see forget
-     */
-    public function missing(Wallet $wallet): bool;
-
     public function forget(Wallet $wallet): bool;
 
     public function amount(Wallet $wallet): string;

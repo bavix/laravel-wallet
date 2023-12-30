@@ -14,7 +14,7 @@ use Bavix\Wallet\Test\Infra\Helpers\Config;
 use Bavix\Wallet\Traits\HasWallet;
 use Bavix\Wallet\Traits\HasWallets;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string $name
@@ -60,15 +60,14 @@ final class Item extends Model implements ProductLimitedInterface
     /**
      * @param int[] $walletIds
      *
-     * @return MorphMany<Transfer>
+     * @return HasMany<Transfer>
      */
-    public function boughtGoods(array $walletIds): MorphMany
+    public function boughtGoods(array $walletIds): HasMany
     {
         return app(CastServiceInterface::class)
             ->getWallet($this)
-            ->morphMany(Config::classString('wallet.transfer.model', Transfer::class), 'to')
+            ->hasMany(Config::classString('wallet.transfer.model', Transfer::class), 'to_id')
             ->where('status', Transfer::STATUS_PAID)
-            ->where('from_type', Config::classString('wallet.wallet.model', Wallet::class))
             ->whereIn('from_id', $walletIds)
         ;
     }
