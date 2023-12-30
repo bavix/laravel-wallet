@@ -21,6 +21,7 @@ use Bavix\Wallet\Traits\HasGift;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\RecordsNotFoundException;
 use Illuminate\Support\Str;
 use function app;
@@ -43,6 +44,7 @@ use function config;
  * @property string $currency
  * @property DateTimeInterface $created_at
  * @property DateTimeInterface $updated_at
+ * @property DateTimeInterface $deleted_at
  *
  * @method int getKey()
  */
@@ -52,6 +54,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     use CanExchange;
     use CanPayFloat;
     use HasGift;
+    use SoftDeletes;
 
     /**
      * @var string[]
