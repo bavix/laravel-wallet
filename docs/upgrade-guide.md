@@ -163,7 +163,11 @@ Your code on 6.x:
     'mathable' => BrickMath::class,
 ```
 
-## 6.x.x → 7.x.x
+## 6.x.x → 6.2.4
+
+You need to update to the latest version for all migrations to appear.
+
+## 6.2.4 → 7.x.x
 
 *Update `config/wallet.php`*
 
