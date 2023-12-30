@@ -134,7 +134,7 @@ final class BalanceTest extends TestCase
         self::assertSame(1000, $wallet->balanceInt);
 
         $key = $wallet->getKey();
-        self::assertTrue($wallet->delete());
+        self::assertTrue($wallet->forceDelete());
         self::assertFalse($wallet->exists);
         self::assertSame($wallet->getKey(), $key);
         $result = app(RegulatorServiceInterface::class)->increase($wallet, 100);
