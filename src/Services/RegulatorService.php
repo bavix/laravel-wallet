@@ -40,12 +40,6 @@ final class RegulatorService implements RegulatorServiceInterface
     ) {
     }
 
-    #[CodeCoverageIgnore]
-    public function missing(Wallet $wallet): bool
-    {
-        return $this->forget($wallet);
-    }
-
     public function forget(Wallet $wallet): bool
     {
         unset($this->wallets[$wallet->uuid]);
