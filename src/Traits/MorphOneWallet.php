@@ -56,10 +56,10 @@ trait MorphOneWallet
 
     public function getWalletAttribute(): ?WalletModel
     {
-        /** @var WalletModel $wallet */
+        /** @var WalletModel|null $wallet */
         $wallet = $this->getRelationValue('wallet');
 
-        if (! $wallet->relationLoaded('holder')) {
+        if ($wallet && ! $wallet->relationLoaded('holder')) {
             $holder = app(CastServiceInterface::class)->getHolder($this);
             $wallet->setRelation('holder', $holder->withoutRelations());
         }
