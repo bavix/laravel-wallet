@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace database;
-
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Wallet;
 use Illuminate\Database\Migrations\Migration;
