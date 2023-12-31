@@ -44,6 +44,7 @@ use Bavix\Wallet\Services\ConsistencyService;
 use Bavix\Wallet\Services\DiscountService;
 use Bavix\Wallet\Services\EagerLoaderService;
 use Bavix\Wallet\Services\ExchangeService;
+use Bavix\Wallet\Services\FormatterService;
 use Bavix\Wallet\Services\PrepareService;
 use Bavix\Wallet\Services\PurchaseService;
 use Bavix\Wallet\Services\RegulatorService;
@@ -110,6 +111,7 @@ return [
         'discount' => DiscountService::class,
         'eager_loader' => EagerLoaderService::class,
         'exchange' => ExchangeService::class,
+        'formatter' => FormatterService::class,
         'prepare' => PrepareService::class,
         'purchase' => PurchaseService::class,
         'tax' => TaxService::class,
