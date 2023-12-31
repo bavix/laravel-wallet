@@ -92,6 +92,8 @@ use Bavix\Wallet\Services\EagerLoaderService;
 use Bavix\Wallet\Services\EagerLoaderServiceInterface;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\ExchangeServiceInterface;
+use Bavix\Wallet\Services\FormatterService;
+use Bavix\Wallet\Services\FormatterServiceInterface;
 use Bavix\Wallet\Services\PrepareService;
 use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\PurchaseService;
@@ -274,6 +276,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
             $configure['eager_loader'] ?? EagerLoaderService::class
         );
         $this->app->singleton(ExchangeServiceInterface::class, $configure['exchange'] ?? ExchangeService::class);
+        $this->app->singleton(FormatterServiceInterface::class, $configure['formatter'] ?? FormatterService::class);
         $this->app->singleton(PrepareServiceInterface::class, $configure['prepare'] ?? PrepareService::class);
         $this->app->singleton(PurchaseServiceInterface::class, $configure['purchase'] ?? PurchaseService::class);
         $this->app->singleton(TaxServiceInterface::class, $configure['tax'] ?? TaxService::class);
@@ -466,6 +469,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
             DiscountServiceInterface::class,
             EagerLoaderServiceInterface::class,
             ExchangeServiceInterface::class,
+            FormatterServiceInterface::class,
             PrepareServiceInterface::class,
             PurchaseServiceInterface::class,
             TaxServiceInterface::class,
