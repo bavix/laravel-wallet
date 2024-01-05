@@ -6,10 +6,10 @@ namespace Bavix\Wallet\Internal\Service;
 
 use Illuminate\Contracts\Translation\Translator;
 
-final class TranslatorService implements TranslatorServiceInterface
+final readonly class TranslatorService implements TranslatorServiceInterface
 {
     public function __construct(
-        private readonly Translator $translator
+        private Translator $translator
     ) {
     }
 

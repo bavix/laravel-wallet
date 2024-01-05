@@ -7,10 +7,10 @@ namespace Bavix\Wallet\Internal\Assembler;
 use Bavix\Wallet\External\Contracts\ExtraDtoInterface;
 use Bavix\Wallet\External\Dto\Extra;
 
-final class ExtraDtoAssembler implements ExtraDtoAssemblerInterface
+final readonly class ExtraDtoAssembler implements ExtraDtoAssemblerInterface
 {
     public function __construct(
-        private readonly OptionDtoAssemblerInterface $optionDtoAssembler
+        private OptionDtoAssemblerInterface $optionDtoAssembler
     ) {
     }
 

@@ -7,15 +7,15 @@ namespace Bavix\Wallet\Internal\Dto;
 use Bavix\Wallet\Interfaces\ProductInterface;
 use Generator;
 
-final class BasketDto implements BasketDtoInterface
+final readonly class BasketDto implements BasketDtoInterface
 {
     /**
      * @param non-empty-array<int|string, ItemDtoInterface> $items
      * @param array<mixed> $meta
      */
     public function __construct(
-        private readonly array $items,
-        private readonly array $meta
+        private array $items,
+        private array $meta
     ) {
     }
 

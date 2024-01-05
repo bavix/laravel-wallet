@@ -10,10 +10,10 @@ use Bavix\Wallet\Internal\Exceptions\TransactionRollbackException;
 use Illuminate\Database\RecordsNotFoundException;
 use Throwable;
 
-final class DatabaseService implements DatabaseServiceInterface
+final readonly class DatabaseService implements DatabaseServiceInterface
 {
     public function __construct(
-        private readonly ConnectionServiceInterface $connectionService
+        private ConnectionServiceInterface $connectionService
     ) {
     }
 

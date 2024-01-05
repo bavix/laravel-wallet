@@ -7,16 +7,16 @@ namespace Bavix\Wallet\External\Api;
 use Bavix\Wallet\External\Contracts\ExtraDtoInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 
-final class TransferQuery
+final readonly class TransferQuery
 {
     /**
      * @param array<mixed>|ExtraDtoInterface|null $meta
      */
     public function __construct(
-        private readonly Wallet $from,
-        private readonly Wallet $to,
-        private readonly float|int|string $amount,
-        private readonly array|ExtraDtoInterface|null $meta
+        private Wallet $from,
+        private Wallet $to,
+        private float|int|string $amount,
+        private array|ExtraDtoInterface|null $meta
     ) {
     }
 

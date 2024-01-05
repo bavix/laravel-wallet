@@ -18,5 +18,5 @@ return static function (RectorConfig $config): void {
     $config->import(PHPUnitSetList::PHPUNIT_100);
     $config->import(SetList::CODE_QUALITY);
     $config->import(SetList::DEAD_CODE);
-    $config->import(SetList::PHP_81);
+    $config->import(SetList::PHP_82);
 };

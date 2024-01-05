@@ -6,13 +6,13 @@ namespace Bavix\Wallet\Internal\Events;
 
 use DateTimeImmutable;
 
-final class TransactionCreatedEvent implements TransactionCreatedEventInterface
+final readonly class TransactionCreatedEvent implements TransactionCreatedEventInterface
 {
     public function __construct(
-        private readonly int $id,
-        private readonly string $type,
-        private readonly int $walletId,
-        private readonly DateTimeImmutable $createdAt,
+        private int $id,
+        private string $type,
+        private int $walletId,
+        private DateTimeImmutable $createdAt,
     ) {
     }
 

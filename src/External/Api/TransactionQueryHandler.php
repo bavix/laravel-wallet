@@ -13,13 +13,13 @@ use Bavix\Wallet\Services\TransactionServiceInterface;
 /**
  * @internal
  */
-final class TransactionQueryHandler implements TransactionQueryHandlerInterface
+final readonly class TransactionQueryHandler implements TransactionQueryHandlerInterface
 {
     public function __construct(
-        private readonly TransactionServiceInterface $transactionService,
-        private readonly AssistantServiceInterface $assistantService,
-        private readonly PrepareServiceInterface $prepareService,
-        private readonly AtomicServiceInterface $atomicService
+        private TransactionServiceInterface $transactionService,
+        private AssistantServiceInterface $assistantService,
+        private PrepareServiceInterface $prepareService,
+        private AtomicServiceInterface $atomicService
     ) {
     }
 

@@ -6,14 +6,14 @@ namespace Bavix\Wallet\Internal\Events;
 
 use DateTimeImmutable;
 
-final class WalletCreatedEvent implements WalletCreatedEventInterface
+final readonly class WalletCreatedEvent implements WalletCreatedEventInterface
 {
     public function __construct(
-        private readonly string $holderType,
-        private readonly int|string $holderId,
-        private readonly string $walletUuid,
-        private readonly int $walletId,
-        private readonly DateTimeImmutable $createdAt
+        private string $holderType,
+        private int|string $holderId,
+        private string $walletUuid,
+        private int $walletId,
+        private DateTimeImmutable $createdAt
     ) {
     }
 
