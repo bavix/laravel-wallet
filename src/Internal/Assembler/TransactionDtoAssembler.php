@@ -6,13 +6,15 @@ namespace Bavix\Wallet\Internal\Assembler;
 
 use Bavix\Wallet\Internal\Dto\TransactionDto;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
+use Bavix\Wallet\Internal\Service\ClockServiceInterface;
 use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 
 final readonly class TransactionDtoAssembler implements TransactionDtoAssemblerInterface
 {
     public function __construct(
-        private UuidFactoryServiceInterface $uuidService
+        private UuidFactoryServiceInterface $uuidService,
+        private ClockServiceInterface $clockService,
     ) {
     }
 
@@ -33,7 +35,9 @@ final readonly class TransactionDtoAssembler implements TransactionDtoAssemblerI
             $type,
             $amount,
             $confirmed,
-            $meta
+            $meta,
+            $this->clockService->now(),
+            $this->clockService->now(),
         );
     }
 }
