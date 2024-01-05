@@ -13,10 +13,10 @@ use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\AtomicServiceInterface;
 use Illuminate\Database\RecordsNotFoundException;
 
-final class TransferObserver
+final readonly class TransferObserver
 {
     public function __construct(
-        private readonly AtomicServiceInterface $atomicService
+        private AtomicServiceInterface $atomicService
     ) {
     }
 

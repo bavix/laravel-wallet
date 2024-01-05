@@ -14,13 +14,13 @@ use Bavix\Wallet\Services\TransferServiceInterface;
 /**
  * @internal
  */
-final class TransferQueryHandler implements TransferQueryHandlerInterface
+final readonly class TransferQueryHandler implements TransferQueryHandlerInterface
 {
     public function __construct(
-        private readonly AssistantServiceInterface $assistantService,
-        private readonly TransferServiceInterface $transferService,
-        private readonly PrepareServiceInterface $prepareService,
-        private readonly AtomicServiceInterface $atomicService
+        private AssistantServiceInterface $assistantService,
+        private TransferServiceInterface $transferService,
+        private PrepareServiceInterface $prepareService,
+        private AtomicServiceInterface $atomicService
     ) {
     }
 

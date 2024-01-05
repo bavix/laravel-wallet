@@ -8,14 +8,14 @@ use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
-final class StorageService implements StorageServiceInterface
+final readonly class StorageService implements StorageServiceInterface
 {
     private const PREFIX = 'wallet_sg::';
 
     public function __construct(
-        private readonly MathServiceInterface $mathService,
-        private readonly CacheRepository $cacheRepository,
-        private readonly ?int $ttl
+        private MathServiceInterface $mathService,
+        private CacheRepository $cacheRepository,
+        private ?int $ttl
     ) {
     }
 

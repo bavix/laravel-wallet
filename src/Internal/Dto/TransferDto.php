@@ -7,21 +7,21 @@ namespace Bavix\Wallet\Internal\Dto;
 use DateTimeImmutable;
 
 /** @immutable */
-final class TransferDto implements TransferDtoInterface
+final readonly class TransferDto implements TransferDtoInterface
 {
-    private readonly DateTimeImmutable $createdAt;
+    private DateTimeImmutable $createdAt;
 
-    private readonly DateTimeImmutable $updatedAt;
+    private DateTimeImmutable $updatedAt;
 
     public function __construct(
-        private readonly string $uuid,
-        private readonly int $depositId,
-        private readonly int $withdrawId,
-        private readonly string $status,
-        private readonly int|string $fromId,
-        private readonly int|string $toId,
-        private readonly int $discount,
-        private readonly string $fee
+        private string $uuid,
+        private int $depositId,
+        private int $withdrawId,
+        private string $status,
+        private int|string $fromId,
+        private int|string $toId,
+        private int $discount,
+        private string $fee
     ) {
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();

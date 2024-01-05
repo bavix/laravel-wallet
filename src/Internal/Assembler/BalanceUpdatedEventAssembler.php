@@ -9,10 +9,10 @@ use Bavix\Wallet\Internal\Events\BalanceUpdatedEventInterface;
 use Bavix\Wallet\Internal\Service\ClockServiceInterface;
 use Bavix\Wallet\Models\Wallet;
 
-final class BalanceUpdatedEventAssembler implements BalanceUpdatedEventAssemblerInterface
+final readonly class BalanceUpdatedEventAssembler implements BalanceUpdatedEventAssemblerInterface
 {
     public function __construct(
-        private readonly ClockServiceInterface $clockService
+        private ClockServiceInterface $clockService
     ) {
     }
 

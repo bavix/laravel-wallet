@@ -7,6 +7,9 @@ namespace Bavix\Wallet\Services;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
 
+/**
+ * @internal
+ */
 final readonly class FormatterService implements FormatterServiceInterface
 {
     public function intValue(string|int|float $amount, int $decimalPlaces): string

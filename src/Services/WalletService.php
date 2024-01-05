@@ -15,13 +15,13 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @internal
  */
-final class WalletService implements WalletServiceInterface
+final readonly class WalletService implements WalletServiceInterface
 {
     public function __construct(
-        private readonly WalletCreatedEventAssemblerInterface $walletCreatedEventAssembler,
-        private readonly UuidFactoryServiceInterface $uuidFactoryService,
-        private readonly DispatcherServiceInterface $dispatcherService,
-        private readonly WalletRepositoryInterface $walletRepository
+        private WalletCreatedEventAssemblerInterface $walletCreatedEventAssembler,
+        private UuidFactoryServiceInterface $uuidFactoryService,
+        private DispatcherServiceInterface $dispatcherService,
+        private WalletRepositoryInterface $walletRepository
     ) {
     }
 

@@ -12,11 +12,11 @@ use Bavix\Wallet\Models\Wallet;
 /**
  * @internal
  */
-final class BookkeeperService implements BookkeeperServiceInterface
+final readonly class BookkeeperService implements BookkeeperServiceInterface
 {
     public function __construct(
-        private readonly StorageServiceInterface $storageService,
-        private readonly LockServiceInterface $lockService
+        private StorageServiceInterface $storageService,
+        private LockServiceInterface $lockService
     ) {
     }
 

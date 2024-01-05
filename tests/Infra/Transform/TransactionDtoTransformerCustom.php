@@ -8,10 +8,10 @@ use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
 
-final class TransactionDtoTransformerCustom implements TransactionDtoTransformerInterface
+final readonly class TransactionDtoTransformerCustom implements TransactionDtoTransformerInterface
 {
     public function __construct(
-        private readonly TransactionDtoTransformer $transactionDtoTransformer
+        private TransactionDtoTransformer $transactionDtoTransformer
     ) {
     }
 

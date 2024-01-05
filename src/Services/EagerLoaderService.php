@@ -12,11 +12,11 @@ use Bavix\Wallet\Models\Wallet;
 /**
  * @internal
  */
-final class EagerLoaderService implements EagerLoaderServiceInterface
+final readonly class EagerLoaderService implements EagerLoaderServiceInterface
 {
     public function __construct(
-        private readonly CastServiceInterface $castService,
-        private readonly WalletRepositoryInterface $walletRepository
+        private CastServiceInterface $castService,
+        private WalletRepositoryInterface $walletRepository
     ) {
     }
 

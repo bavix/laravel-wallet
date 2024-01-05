@@ -18,15 +18,15 @@ use Illuminate\Database\RecordsNotFoundException;
 /**
  * @internal
  */
-final class TransferService implements TransferServiceInterface
+final readonly class TransferService implements TransferServiceInterface
 {
     public function __construct(
-        private readonly TransferDtoAssemblerInterface $transferDtoAssembler,
-        private readonly TransferRepositoryInterface $transferRepository,
-        private readonly TransactionServiceInterface $transactionService,
-        private readonly DatabaseServiceInterface $databaseService,
-        private readonly CastServiceInterface $castService,
-        private readonly AtmServiceInterface $atmService,
+        private TransferDtoAssemblerInterface $transferDtoAssembler,
+        private TransferRepositoryInterface $transferRepository,
+        private TransactionServiceInterface $transactionService,
+        private DatabaseServiceInterface $databaseService,
+        private CastServiceInterface $castService,
+        private AtmServiceInterface $atmService,
     ) {
     }
 
