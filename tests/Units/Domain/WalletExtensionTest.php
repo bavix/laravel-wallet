@@ -53,8 +53,8 @@ final class WalletExtensionTest extends TestCase
         self::assertTrue($transaction->getKey() > 0);
         self::assertSame($transaction->amountInt, $buyer->balanceInt);
         self::assertInstanceOf(TransactionMoney::class, $transaction);
-        self::assertSame('1000', $transaction->currency->getAmount());
-        self::assertSame('EUR', $transaction->currency->getCurrency()->getCode());
+        self::assertSame('1000', $transaction->currency->amount);
+        self::assertSame('EUR', $transaction->currency->currency);
     }
 
     public function testNoCustomAttribute(): void

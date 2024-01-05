@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Infra\PackageModels;
 
-use Cknow\Money\Money;
+use Bavix\Wallet\Test\Infra\Values\Money;
 
 /**
  * Class Transaction.
@@ -17,7 +17,7 @@ final class TransactionMoney extends \Bavix\Wallet\Models\Transaction
 
     public function getCurrencyAttribute(): Money
     {
-        $this->currency ??= \money($this->amount, $this->meta['currency'] ?? 'USD');
+        $this->currency ??= new Money($this->amount, $this->meta['currency'] ?? 'USD');
 
         return $this->currency;
     }
