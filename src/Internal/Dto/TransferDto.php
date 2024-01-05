@@ -9,10 +9,6 @@ use DateTimeImmutable;
 /** @immutable */
 final readonly class TransferDto implements TransferDtoInterface
 {
-    private DateTimeImmutable $createdAt;
-
-    private DateTimeImmutable $updatedAt;
-
     public function __construct(
         private string $uuid,
         private int $depositId,
@@ -21,10 +17,10 @@ final readonly class TransferDto implements TransferDtoInterface
         private int $fromId,
         private int $toId,
         private int $discount,
-        private string $fee
+        private string $fee,
+        private DateTimeImmutable $createdAt,
+        private DateTimeImmutable $updatedAt,
     ) {
-        $this->createdAt = new DateTimeImmutable();
-        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function getUuid(): string
