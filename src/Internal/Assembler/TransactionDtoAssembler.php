@@ -9,10 +9,10 @@ use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 
-final class TransactionDtoAssembler implements TransactionDtoAssemblerInterface
+final readonly class TransactionDtoAssembler implements TransactionDtoAssemblerInterface
 {
     public function __construct(
-        private readonly UuidFactoryServiceInterface $uuidService
+        private UuidFactoryServiceInterface $uuidService
     ) {
     }
 

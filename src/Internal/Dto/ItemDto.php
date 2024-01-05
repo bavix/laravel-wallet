@@ -8,13 +8,13 @@ use Bavix\Wallet\Interfaces\ProductInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 
 /** @immutable */
-final class ItemDto implements ItemDtoInterface
+final readonly class ItemDto implements ItemDtoInterface
 {
     public function __construct(
-        private readonly ProductInterface $product,
-        private readonly int $quantity,
-        private readonly int|string|null $pricePerItem,
-        private readonly ?Wallet $receiving,
+        private ProductInterface $product,
+        private int $quantity,
+        private int|string|null $pricePerItem,
+        private ?Wallet $receiving,
     ) {
     }
 

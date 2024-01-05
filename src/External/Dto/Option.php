@@ -6,15 +6,15 @@ namespace Bavix\Wallet\External\Dto;
 
 use Bavix\Wallet\External\Contracts\OptionDtoInterface;
 
-final class Option implements OptionDtoInterface
+final readonly class Option implements OptionDtoInterface
 {
     /**
      * @param null|array<mixed> $meta
      */
     public function __construct(
-        private readonly ?array $meta,
-        private readonly bool $confirmed = true,
-        private readonly ?string $uuid = null
+        private ?array $meta,
+        private bool $confirmed = true,
+        private ?string $uuid = null
     ) {
     }
 

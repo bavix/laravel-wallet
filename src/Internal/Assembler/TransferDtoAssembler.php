@@ -9,10 +9,10 @@ use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
 use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 
-final class TransferDtoAssembler implements TransferDtoAssemblerInterface
+final readonly class TransferDtoAssembler implements TransferDtoAssemblerInterface
 {
     public function __construct(
-        private readonly UuidFactoryServiceInterface $uuidService
+        private UuidFactoryServiceInterface $uuidService
     ) {
     }
 

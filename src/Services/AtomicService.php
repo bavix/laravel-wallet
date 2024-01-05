@@ -15,14 +15,14 @@ use Illuminate\Database\RecordsNotFoundException;
 /**
  * @internal
  */
-final class AtomicService implements AtomicServiceInterface
+final readonly class AtomicService implements AtomicServiceInterface
 {
     public function __construct(
-        private readonly BookkeeperServiceInterface $bookkeeperService,
-        private readonly DatabaseServiceInterface $databaseService,
-        private readonly StateServiceInterface $stateService,
-        private readonly LockServiceInterface $lockService,
-        private readonly CastServiceInterface $castService
+        private BookkeeperServiceInterface $bookkeeperService,
+        private DatabaseServiceInterface $databaseService,
+        private StateServiceInterface $stateService,
+        private LockServiceInterface $lockService,
+        private CastServiceInterface $castService
     ) {
     }
 

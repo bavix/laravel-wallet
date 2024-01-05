@@ -11,10 +11,10 @@ use Bavix\Wallet\Models\Transfer;
 /**
  * @internal
  */
-final class PurchaseService implements PurchaseServiceInterface
+final readonly class PurchaseService implements PurchaseServiceInterface
 {
     public function __construct(
-        private readonly CastServiceInterface $castService
+        private CastServiceInterface $castService
     ) {
     }
 

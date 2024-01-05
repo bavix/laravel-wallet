@@ -14,16 +14,16 @@ use Bavix\Wallet\Models\Transaction;
 /**
  * @internal
  */
-final class TransactionService implements TransactionServiceInterface
+final readonly class TransactionService implements TransactionServiceInterface
 {
     public function __construct(
-        private readonly TransactionCreatedEventAssemblerInterface $transactionCreatedEventAssembler,
-        private readonly DispatcherServiceInterface $dispatcherService,
-        private readonly AssistantServiceInterface $assistantService,
-        private readonly RegulatorServiceInterface $regulatorService,
-        private readonly PrepareServiceInterface $prepareService,
-        private readonly CastServiceInterface $castService,
-        private readonly AtmServiceInterface $atmService,
+        private TransactionCreatedEventAssemblerInterface $transactionCreatedEventAssembler,
+        private DispatcherServiceInterface $dispatcherService,
+        private AssistantServiceInterface $assistantService,
+        private RegulatorServiceInterface $regulatorService,
+        private PrepareServiceInterface $prepareService,
+        private CastServiceInterface $castService,
+        private AtmServiceInterface $atmService,
     ) {
     }
 

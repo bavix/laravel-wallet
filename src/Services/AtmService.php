@@ -16,14 +16,14 @@ use Bavix\Wallet\Models\Transfer;
 /**
  * @internal
  */
-final class AtmService implements AtmServiceInterface
+final readonly class AtmService implements AtmServiceInterface
 {
     public function __construct(
-        private readonly TransactionQueryAssemblerInterface $transactionQueryAssembler,
-        private readonly TransferQueryAssemblerInterface $transferQueryAssembler,
-        private readonly TransactionRepositoryInterface $transactionRepository,
-        private readonly TransferRepositoryInterface $transferRepository,
-        private readonly AssistantServiceInterface $assistantService
+        private TransactionQueryAssemblerInterface $transactionQueryAssembler,
+        private TransferQueryAssemblerInterface $transferQueryAssembler,
+        private TransactionRepositoryInterface $transactionRepository,
+        private TransferRepositoryInterface $transferRepository,
+        private AssistantServiceInterface $assistantService
     ) {
     }
 

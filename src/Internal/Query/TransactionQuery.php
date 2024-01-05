@@ -8,13 +8,13 @@ namespace Bavix\Wallet\Internal\Query;
  * @immutable
  * @internal
  */
-final class TransactionQuery implements TransactionQueryInterface
+final readonly class TransactionQuery implements TransactionQueryInterface
 {
     /**
      * @param non-empty-array<int|string, string> $uuids
      */
     public function __construct(
-        private readonly array $uuids
+        private array $uuids
     ) {
     }
 

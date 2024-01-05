@@ -9,10 +9,10 @@ use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Models\Wallet;
 use Illuminate\Database\Eloquent\ModelNotFoundException as EloquentModelNotFoundException;
 
-final class WalletRepository implements WalletRepositoryInterface
+final readonly class WalletRepository implements WalletRepositoryInterface
 {
     public function __construct(
-        private readonly Wallet $wallet
+        private Wallet $wallet
     ) {
     }
 

@@ -14,11 +14,11 @@ use Bavix\Wallet\Internal\Service\MathServiceInterface;
 /**
  * @internal
  */
-final class AssistantService implements AssistantServiceInterface
+final readonly class AssistantService implements AssistantServiceInterface
 {
     public function __construct(
-        private readonly CastServiceInterface $castService,
-        private readonly MathServiceInterface $mathService
+        private CastServiceInterface $castService,
+        private MathServiceInterface $mathService
     ) {
     }
 
