@@ -21,12 +21,12 @@ parameters:
 			path: src/Internal/Assembler/TransactionDtoAssembler.php
 
 		-
-			message: "#^Parameter \\#5 \\$fromId of class Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransferDto constructor expects int\\|string, mixed given\\.$#"
+			message: "#^Parameter \\#5 \\$fromId of class Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransferDto constructor expects int, mixed given\\.$#"
 			count: 1
 			path: src/Internal/Assembler/TransferDtoAssembler.php
 
 		-
-			message: "#^Parameter \\#6 \\$toId of class Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransferDto constructor expects int\\|string, mixed given\\.$#"
+			message: "#^Parameter \\#6 \\$toId of class Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransferDto constructor expects int, mixed given\\.$#"
 			count: 1
 			path: src/Internal/Assembler/TransferDtoAssembler.php
 

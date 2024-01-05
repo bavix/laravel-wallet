@@ -18,8 +18,8 @@ final readonly class TransferDto implements TransferDtoInterface
         private int $depositId,
         private int $withdrawId,
         private string $status,
-        private int|string $fromId,
-        private int|string $toId,
+        private int $fromId,
+        private int $toId,
         private int $discount,
         private string $fee
     ) {
