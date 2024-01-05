@@ -15,6 +15,7 @@ use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\CastServiceInterface;
+use Bavix\Wallet\Services\FormatterServiceInterface;
 use Illuminate\Database\RecordsNotFoundException;
 
 /**
@@ -147,12 +148,12 @@ trait HasWalletFloat
 
     public function getBalanceFloatAttribute(): string
     {
-        $math = app(MathServiceInterface::class);
         $wallet = app(CastServiceInterface::class)->getWallet($this);
-        $decimalPlacesValue = $wallet->decimal_places;
-        $decimalPlaces = $math->powTen($decimalPlacesValue);
 
-        return $math->div($wallet->getBalanceAttribute(), $decimalPlaces, $decimalPlacesValue);
+        return app(FormatterServiceInterface::class)->floatValue(
+            $wallet->getBalanceAttribute(),
+            $wallet->decimal_places,
+        );
     }
 
     public function getBalanceFloatNumAttribute(): float
