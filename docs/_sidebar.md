@@ -35,10 +35,6 @@
   - [Batch transactions](batch-transactions)
   - [Batch transfers](batch-transfers)
 
-- Nova
-
-    - [Change of balance](nova-action)
-
 - Purchases
 
     - [Payment](payment)
@@ -54,6 +50,11 @@
     - [Race condition](race-condition) 
     - [Atomic Service](atomic-service) 
 
+- Additions
+
+  - [Wallet Swap](laravel-wallet-swap)
+  - [Wallet UUID](laravel-wallet-uuid)
+
 - Events
     
     - [BalanceUpdatedEvent](balance-updated-event)
@@ -65,6 +66,6 @@
 
     - [Create Wallet](command-create-wallet)
 
-- Additions
+- Nova
 
-    - [Wallet Swap](laravel-wallet-swap)
+  - [Change of balance](nova-action)
