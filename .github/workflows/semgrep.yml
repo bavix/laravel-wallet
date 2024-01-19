@@ -8,4 +8,4 @@ on:
 
 jobs:
   semgrep:
-    uses: bavix/.github/.github/workflows/php-semgrep.yml@0.1.7
+    uses: bavix/.github/.github/workflows/php-semgrep.yml@0.1.9
