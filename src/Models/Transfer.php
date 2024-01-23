@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use function config;
 
 /**
@@ -79,17 +80,17 @@ class Transfer extends Model
     /**
      * @return BelongsTo<Wallet, self>
      */
-    public function from(): BelongsTo
+    public function from(): MorphTo
     {
-        return $this->belongsTo(config('wallet.wallet.model', Wallet::class), 'from_id');
+        return $this->morphTo();
     }
 
     /**
      * @return BelongsTo<Wallet, self>
      */
-    public function to(): BelongsTo
+    public function to(): MorphTo
     {
-        return $this->belongsTo(config('wallet.wallet.model', Wallet::class), 'to_id');
+        return $this->morphTo();
     }
 
     /**
