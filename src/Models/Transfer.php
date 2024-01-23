@@ -89,11 +89,11 @@ class Transfer extends Model
 
     public function deposit(): BelongsTo
     {
-        return $this->belongsTo(Transaction::class, 'deposit_id');
+        return $this->belongsTo(config('wallet.transaction.model', Transaction::class), 'deposit_id');
     }
 
     public function withdraw(): BelongsTo
     {
-        return $this->belongsTo(Transaction::class, 'withdraw_id');
+        return $this->belongsTo(config('wallet.transaction.model', Transaction::class), 'withdraw_id');
     }
 }
