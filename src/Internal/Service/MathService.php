@@ -7,10 +7,10 @@ namespace Bavix\Wallet\Internal\Service;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
 
-final class MathService implements MathServiceInterface
+final readonly class MathService implements MathServiceInterface
 {
     public function __construct(
-        private readonly int $scale
+        private int $scale
     ) {
     }
 

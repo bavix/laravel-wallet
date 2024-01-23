@@ -22,7 +22,7 @@
     }
   ],
   "require": {
-    "php": "^8.1",
+    "php": "^8.2",
     "ext-json": "*",
     "ext-pdo": "*",
     "brick/math": "~0.10",
@@ -32,16 +32,15 @@
     "ramsey/uuid": "^4.0"
   },
   "require-dev": {
-    "brianium/paratest": "^7.2",
-    "cknow/laravel-money": "^7.1",
-    "ergebnis/phpstan-rules": "^1.0",
+    "brianium/paratest": "^7.3",
+    "ergebnis/phpstan-rules": "^2.1",
     "infection/infection": "~0.27",
     "laravel/cashier": "^15.0",
-    "nunomaduro/collision": "^7.7",
-    "nunomaduro/larastan": "^2.6",
-    "orchestra/testbench": "^8.5",
+    "nunomaduro/collision": "^7.10",
+    "nunomaduro/larastan": "^2.7",
+    "orchestra/testbench": "^8.19",
     "phpstan/phpstan": "^1.10",
-    "phpunit/phpunit": "^10.2",
+    "phpunit/phpunit": "^10.5",
     "rector/rector": "^0.19",
     "symplify/easy-coding-standard": "^12.0"
   },

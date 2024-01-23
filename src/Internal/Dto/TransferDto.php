@@ -7,26 +7,20 @@ namespace Bavix\Wallet\Internal\Dto;
 use DateTimeImmutable;
 
 /** @immutable */
-final class TransferDto implements TransferDtoInterface
+final readonly class TransferDto implements TransferDtoInterface
 {
-    private readonly DateTimeImmutable $createdAt;
-
-    private readonly DateTimeImmutable $updatedAt;
-
     public function __construct(
-        private readonly string $uuid,
-        private readonly int $depositId,
-        private readonly int $withdrawId,
-        private readonly string $status,
-        private readonly string $fromType,
-        private readonly int|string $fromId,
-        private readonly string $toType,
-        private readonly int|string $toId,
-        private readonly int $discount,
-        private readonly string $fee
+        private string $uuid,
+        private int $depositId,
+        private int $withdrawId,
+        private string $status,
+        private int $fromId,
+        private int $toId,
+        private int $discount,
+        private string $fee,
+        private DateTimeImmutable $createdAt,
+        private DateTimeImmutable $updatedAt,
     ) {
-        $this->createdAt = new DateTimeImmutable();
-        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function getUuid(): string
@@ -49,19 +43,9 @@ final class TransferDto implements TransferDtoInterface
         return $this->status;
     }
 
-    public function getFromType(): string
-    {
-        return $this->fromType;
-    }
-
     public function getFromId(): int|string
     {
         return $this->fromId;
-    }
-
-    public function getToType(): string
-    {
-        return $this->toType;
     }
 
     public function getToId(): int|string

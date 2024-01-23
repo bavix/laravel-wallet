@@ -7,12 +7,12 @@ namespace Bavix\Wallet\Internal\Dto;
 use Bavix\Wallet\Interfaces\Customer;
 
 /** @immutable */
-final class AvailabilityDto implements AvailabilityDtoInterface
+final readonly class AvailabilityDto implements AvailabilityDtoInterface
 {
     public function __construct(
-        private readonly Customer $customer,
-        private readonly BasketDtoInterface $basketDto,
-        private readonly bool $force
+        private Customer $customer,
+        private BasketDtoInterface $basketDto,
+        private bool $force
     ) {
     }
 

@@ -8,23 +8,16 @@ use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Service\LockServiceInterface;
 use Bavix\Wallet\Internal\Service\StorageServiceInterface;
 use Bavix\Wallet\Models\Wallet;
-use PHPUnit\Framework\Attributes\CodeCoverageIgnore;
 
 /**
  * @internal
  */
-final class BookkeeperService implements BookkeeperServiceInterface
+final readonly class BookkeeperService implements BookkeeperServiceInterface
 {
     public function __construct(
-        private readonly StorageServiceInterface $storageService,
-        private readonly LockServiceInterface $lockService
+        private StorageServiceInterface $storageService,
+        private LockServiceInterface $lockService
     ) {
-    }
-
-    #[CodeCoverageIgnore]
-    public function missing(Wallet $wallet): bool
-    {
-        return $this->forget($wallet);
     }
 
     public function forget(Wallet $wallet): bool

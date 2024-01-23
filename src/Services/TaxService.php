@@ -13,11 +13,11 @@ use Bavix\Wallet\Internal\Service\MathServiceInterface;
 /**
  * @internal
  */
-final class TaxService implements TaxServiceInterface
+final readonly class TaxService implements TaxServiceInterface
 {
     public function __construct(
-        private readonly MathServiceInterface $mathService,
-        private readonly CastServiceInterface $castService
+        private MathServiceInterface $mathService,
+        private CastServiceInterface $castService
     ) {
     }
 

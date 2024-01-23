@@ -7,7 +7,7 @@ namespace Bavix\Wallet\External\Api;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Models\Transaction;
 
-final class TransactionQuery
+final readonly class TransactionQuery
 {
     public const TYPE_DEPOSIT = Transaction::TYPE_DEPOSIT;
 
@@ -18,12 +18,12 @@ final class TransactionQuery
      * @param array<mixed>|null $meta
      */
     private function __construct(
-        private readonly string $type,
-        private readonly Wallet $wallet,
-        private readonly float|int|string $amount,
-        private readonly ?array $meta,
-        private readonly bool $confirmed,
-        private readonly ?string $uuid
+        private string $type,
+        private Wallet $wallet,
+        private float|int|string $amount,
+        private ?array $meta,
+        private bool $confirmed,
+        private ?string $uuid
     ) {
     }
 

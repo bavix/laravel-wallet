@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Models;
 
+use Bavix\Wallet\Internal\Observers\TransferObserver;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use function config;
 
 /**
@@ -17,20 +20,23 @@ use function config;
  * @property int $deposit_id
  * @property int $withdraw_id
  * @property Wallet $from
- * @property class-string $from_type
  * @property int $from_id
  * @property Wallet $to
- * @property class-string $to_type
  * @property int $to_id
  * @property string $uuid
  * @property string $fee
  * @property Transaction $deposit
  * @property Transaction $withdraw
+ * @property DateTimeInterface $created_at
+ * @property DateTimeInterface $updated_at
+ * @property DateTimeInterface $deleted_at
  *
  * @method int getKey()
  */
 class Transfer extends Model
 {
+    use SoftDeletes;
+
     final public const STATUS_EXCHANGE = 'exchange';
 
     final public const STATUS_TRANSFER = 'transfer';
@@ -49,9 +55,7 @@ class Transfer extends Model
         'discount',
         'deposit_id',
         'withdraw_id',
-        'from_type',
         'from_id',
-        'to_type',
         'to_id',
         'uuid',
         'fee',
@@ -106,5 +110,12 @@ class Transfer extends Model
     public function withdraw(): BelongsTo
     {
         return $this->belongsTo(config('wallet.transaction.model', Transaction::class), 'withdraw_id');
+    }
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::observe(TransferObserver::class);
     }
 }

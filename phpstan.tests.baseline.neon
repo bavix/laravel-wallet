@@ -1,7 +1,7 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method Bavix\\\\Wallet\\\\Test\\\\Infra\\\\Models\\\\Item\\:\\:boughtGoods\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\<Bavix\\\\Wallet\\\\Models\\\\Transfer\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\.$#"
+			message: "#^Method Bavix\\\\Wallet\\\\Test\\\\Infra\\\\Models\\\\Item\\:\\:boughtGoods\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Bavix\\\\Wallet\\\\Models\\\\Transfer\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\.$#"
 			count: 1
 			path: tests/Infra/Models/Item.php
 
