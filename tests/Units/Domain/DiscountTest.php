@@ -14,6 +14,8 @@ use Bavix\Wallet\Test\Infra\Factories\ItemDiscountFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\Models\ItemDiscount;
 use Bavix\Wallet\Test\Infra\TestCase;
+use Bavix\Wallet\Test\Infra\PackageModels\Transaction as InfraTransaction;
+use Bavix\Wallet\Test\Infra\PackageModels\Wallet as InfraWallet;
 
 /**
  * @internal
@@ -239,7 +241,11 @@ final class DiscountTest extends TestCase
 
         $transfer = $buyer->payFree($product);
         self::assertSame(Transaction::TYPE_DEPOSIT, $transfer->deposit->type);
+        self::assertInstanceOf(InfraTransaction::class, $transfer->deposit);
+        self::assertInstanceOf(InfraWallet::class, $transfer->from);
         self::assertSame(Transaction::TYPE_WITHDRAW, $transfer->withdraw->type);
+        self::assertInstanceOf(InfraTransaction::class, $transfer->withdraw);
+        self::assertInstanceOf(InfraWallet::class, $transfer->to);
 
         self::assertSame(0, $buyer->balanceInt);
         self::assertSame(0, $product->balanceInt);
