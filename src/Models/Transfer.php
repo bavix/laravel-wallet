@@ -81,7 +81,7 @@ class Transfer extends Model
      */
     public function from(): BelongsTo
     {
-        return $this->belongsTo(Wallet::class, 'from_id');
+        return $this->belongsTo(config('wallet.wallet.model', Wallet::class), 'from_id');
     }
 
     /**
@@ -89,7 +89,7 @@ class Transfer extends Model
      */
     public function to(): BelongsTo
     {
-        return $this->belongsTo(Wallet::class, 'to_id');
+        return $this->belongsTo(config('wallet.wallet.model', Wallet::class), 'to_id');
     }
 
     /**
@@ -97,7 +97,7 @@ class Transfer extends Model
      */
     public function deposit(): BelongsTo
     {
-        return $this->belongsTo(Transaction::class, 'deposit_id');
+        return $this->belongsTo(config('wallet.transaction.model', Transaction::class), 'deposit_id');
     }
 
     /**
@@ -105,6 +105,6 @@ class Transfer extends Model
      */
     public function withdraw(): BelongsTo
     {
-        return $this->belongsTo(Transaction::class, 'withdraw_id');
+        return $this->belongsTo(config('wallet.transaction.model', Transaction::class), 'withdraw_id');
     }
 }
