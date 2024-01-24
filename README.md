@@ -15,8 +15,6 @@ laravel-wallet - Easy work with virtual wallet.
 * **Vendor**: bavix
 * **Package**: laravel-wallet
 * **Version**: [![Latest Stable Version](https://poser.pugx.org/bavix/laravel-wallet/v)](https://packagist.org/packages/bavix/laravel-wallet)
-* **PHP Version**: 8.0+
-* **Laravel Version**: `9.x`
 * **[Composer](https://getcomposer.org/):** `composer require bavix/laravel-wallet`
 
 ### Support Policy
@@ -27,6 +25,7 @@ laravel-wallet - Easy work with virtual wallet.
 | 8.x        | ^9.0           | 8.0,8.1         | Feb 8, 2022  | May 1, 2022         | Jun 1, 2022    |
 | 9.x [LTS]  | ^9.0,^10.0     | 8.0,8.1,8.2,8.3 | May 2, 2022  | Feb 1, 2023         | Feb 6, 2024    |
 | 10.x [LTS] | ^10.0          | 8.1,8.2,8.3     | Jul 8, 2023  | May 1, 2024         | Feb 4, 2025    |
+| 11.x       | ^11.0          | 8.2,8.3         | Q1, 2024     | May 1, 2025 [?]     | Sep 6, 2025 [?]|
 
 ### Upgrade Guide
 
