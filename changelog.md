@@ -1,5 +1,28 @@
 # Changelog
 
+## 10.1.2 - 2024-01-23
+
+## What's Changed
+* build(deps): bump bavix/.github from 0.1.7 to 0.1.9 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/854
+* add a check for passing the correct model by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/859
+* Update Transfer Model by [@gkmk](https://github.com/gkmk) in https://github.com/bavix/laravel-wallet/pull/858
+* phpstan baseline by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/860
+
+## New Contributors
+* [@gkmk](https://github.com/gkmk) made their first contribution in https://github.com/bavix/laravel-wallet/pull/858
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/10.1.1...10.1.2
+
+## 9.6.3 - 2024-01-23
+
+## What's Changed
+* Update Transfer Model by [@gkmk](https://github.com/gkmk) in https://github.com/bavix/laravel-wallet/pull/858
+
+## New Contributors
+* [@gkmk](https://github.com/gkmk) made their first contribution in https://github.com/bavix/laravel-wallet/pull/858
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/9.6.2...9.6.3
+
 ## 10.1.1 - 2024-01-19
 
 ## What's Changed
@@ -1996,6 +2019,7 @@ The operation is now executed in the transaction and updates the new `refund` fi
 
 
 **Full Changelog**: https://github.com/bavix/laravel-wallet/commits/0.0.1
+
 
 
 
