@@ -5,14 +5,9 @@ declare(strict_types=1);
 namespace Bavix\Wallet\External\Api;
 
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Models\Transaction;
 
-final readonly class TransactionQuery
+final readonly class TransactionQuery implements TransactionQueryInterface
 {
-    public const TYPE_DEPOSIT = Transaction::TYPE_DEPOSIT;
-
-    public const TYPE_WITHDRAW = Transaction::TYPE_WITHDRAW;
-
     /**
      * @param self::TYPE_DEPOSIT|self::TYPE_WITHDRAW $type
      * @param array<mixed>|null $meta
