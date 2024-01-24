@@ -25,6 +25,7 @@ use function config;
  * @property int $to_id
  * @property string $uuid
  * @property string $fee
+ * @property ?array<mixed> $extra
  * @property Transaction $deposit
  * @property Transaction $withdraw
  * @property DateTimeInterface $created_at
