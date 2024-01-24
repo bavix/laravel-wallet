@@ -26,19 +26,19 @@ final readonly class TransactionQueryHandler implements TransactionQueryHandlerI
     public function apply(array $objects): array
     {
         $wallets = $this->assistantService->getWallets(
-            array_map(static fn (TransactionQuery $query): Wallet => $query->getWallet(), $objects),
+            array_map(static fn (TransactionQueryInterface $query): Wallet => $query->getWallet(), $objects),
         );
 
         $values = array_map(
-            fn (TransactionQuery $query) => match ($query->getType()) {
-                TransactionQuery::TYPE_DEPOSIT => $this->prepareService->deposit(
+            fn (TransactionQueryInterface $query) => match ($query->getType()) {
+                TransactionQueryInterface::TYPE_DEPOSIT => $this->prepareService->deposit(
                     $query->getWallet(),
                     $query->getAmount(),
                     $query->getMeta(),
                     $query->isConfirmed(),
                     $query->getUuid(),
                 ),
-                TransactionQuery::TYPE_WITHDRAW => $this->prepareService->withdraw(
+                TransactionQueryInterface::TYPE_WITHDRAW => $this->prepareService->withdraw(
                     $query->getWallet(),
                     $query->getAmount(),
                     $query->getMeta(),

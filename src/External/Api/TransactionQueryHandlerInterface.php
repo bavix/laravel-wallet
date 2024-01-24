@@ -17,7 +17,7 @@ interface TransactionQueryHandlerInterface
      * If there is a need to check the balance, then you need to wrap the method call in the AtomicServiceInterface
      * and check the correctness of the balance manually.
      *
-     * @param non-empty-array<TransactionQuery> $objects
+     * @param non-empty-array<TransactionQueryInterface> $objects
      *
      * @return non-empty-array<string, Transaction>
      *

@@ -27,11 +27,11 @@ final readonly class TransferQueryHandler implements TransferQueryHandlerInterfa
     public function apply(array $objects): array
     {
         $wallets = $this->assistantService->getWallets(
-            array_map(static fn (TransferQuery $query): Wallet => $query->getFrom(), $objects),
+            array_map(static fn (TransferQueryInterface $query): Wallet => $query->getFrom(), $objects),
         );
 
         $values = array_map(
-            fn (TransferQuery $query) => $this->prepareService->transferLazy(
+            fn (TransferQueryInterface $query) => $this->prepareService->transferLazy(
                 $query->getFrom(),
                 $query->getTo(),
                 Transfer::STATUS_TRANSFER,
