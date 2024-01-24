@@ -37,9 +37,10 @@ final class CartTest extends TestCase
         $cart = app(Cart::class);
 
         $cartWithItems = $cart->withItems([$product]);
-        $cartWithMeta = $cart->withMeta([
-            'product_id' => $product->getKey(),
-        ]);
+        $cartWithMeta = $cart
+            ->withMeta(['product_id' => $product->getKey()])
+            ->withExtra(['products' => count($cartWithItems->getItems())])
+        ;
 
         self::assertCount(0, $cart->getItems());
         self::assertCount(1, $cartWithItems->getItems());
@@ -48,6 +49,9 @@ final class CartTest extends TestCase
         self::assertSame([
             'product_id' => $product->getKey(),
         ], $cartWithMeta->getMeta());
+        self::assertSame([
+            'products' => count($cartWithItems->getItems()),
+        ], $cartWithMeta->getExtra());
     }
 
     public function testCartMeta(): void
