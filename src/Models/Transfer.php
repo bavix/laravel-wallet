@@ -59,6 +59,7 @@ class Transfer extends Model
         'to_id',
         'uuid',
         'fee',
+        'extra',
         'created_at',
         'updated_at',
     ];
@@ -69,6 +70,7 @@ class Transfer extends Model
     protected $casts = [
         'deposit_id' => 'int',
         'withdraw_id' => 'int',
+        'extra' => 'json',
     ];
 
     public function getTable(): string

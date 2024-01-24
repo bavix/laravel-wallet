@@ -87,6 +87,7 @@ final readonly class TransferService implements TransferServiceInterface
                     $object->getDiscount(),
                     $object->getFee(),
                     $object->getUuid(),
+                    $object->getExtra(),
                 );
 
                 $transfers[] = $transfer;

@@ -23,4 +23,7 @@ interface TransferLazyDtoInterface
     public function getStatus(): string;
 
     public function getUuid(): ?string;
+
+    /** @return array<mixed>|null */
+    public function getExtra(): ?array;
 }

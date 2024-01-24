@@ -9,6 +9,7 @@ use DateTimeImmutable;
 /** @immutable */
 final readonly class TransferDto implements TransferDtoInterface
 {
+    /** @param array<mixed>|null $extra */
     public function __construct(
         private string $uuid,
         private int $depositId,
@@ -18,6 +19,7 @@ final readonly class TransferDto implements TransferDtoInterface
         private int $toId,
         private int $discount,
         private string $fee,
+        private ?array $extra,
         private DateTimeImmutable $createdAt,
         private DateTimeImmutable $updatedAt,
     ) {
@@ -61,6 +63,14 @@ final readonly class TransferDto implements TransferDtoInterface
     public function getFee(): string
     {
         return $this->fee;
+    }
+
+    /**
+     * @return array<mixed>|null
+     */
+    public function getExtra(): ?array
+    {
+        return $this->extra;
     }
 
     public function getCreatedAt(): DateTimeImmutable

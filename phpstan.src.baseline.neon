@@ -1,6 +1,11 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Constructor in Bavix\\\\Wallet\\\\External\\\\Dto\\\\Extra has parameter \\$extra with default value\\.$#"
+			count: 1
+			path: src/External/Dto/Extra.php
+
+		-
 			message: "#^Constructor in Bavix\\\\Wallet\\\\External\\\\Dto\\\\Extra has parameter \\$uuid with default value\\.$#"
 			count: 1
 			path: src/External/Dto/Extra.php

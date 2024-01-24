@@ -145,7 +145,8 @@ final readonly class PrepareService implements PrepareServiceInterface
             $withdraw,
             $deposit,
             $status,
-            $extra->getUuid()
+            $extra->getUuid(),
+            $extra->getExtra(),
         );
     }
 }

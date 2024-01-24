@@ -20,7 +20,7 @@ final class BasketTest extends TestCase
         $item = new Item();
         $productDto1 = new ItemDto($item, 24, null, null);
         $productDto2 = new ItemDto($item, 26, null, null);
-        $basket = new BasketDto([$productDto1, $productDto2], []);
+        $basket = new BasketDto([$productDto1, $productDto2], [], null);
 
         self::assertEmpty($basket->meta());
         self::assertSame(2, $basket->count());
@@ -39,15 +39,31 @@ final class BasketTest extends TestCase
         /** @var non-empty-array<ItemDtoInterface> $items */
         $items = [];
 
-        $basket1 = new BasketDto($items, []);
+        $basket1 = new BasketDto($items, [], null);
         self::assertEmpty($basket1->meta());
 
         $basket2 = new BasketDto($items, [
             'hello' => 'world',
-        ]);
+        ], null);
         self::assertSame([
             'hello' => 'world',
         ], $basket2->meta());
+    }
+
+    public function testExtra(): void
+    {
+        /** @var non-empty-array<ItemDtoInterface> $items */
+        $items = [];
+
+        $basket1 = new BasketDto($items, [], null);
+        self::assertNull($basket1->extra());
+
+        $basket2 = new BasketDto($items, [], [
+            'hello' => 'world',
+        ]);
+        self::assertSame([
+            'hello' => 'world',
+        ], $basket2->extra());
     }
 
     public function testEmpty(): void
@@ -55,7 +71,7 @@ final class BasketTest extends TestCase
         /** @var non-empty-array<ItemDtoInterface> $items */
         $items = [];
 
-        $basket = new BasketDto($items, []);
+        $basket = new BasketDto($items, [], null);
         self::assertEmpty($basket->items());
         self::assertEmpty($basket->meta());
         self::assertSame(0, $basket->count());
