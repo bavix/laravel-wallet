@@ -12,10 +12,12 @@ final readonly class BasketDto implements BasketDtoInterface
     /**
      * @param non-empty-array<int|string, ItemDtoInterface> $items
      * @param array<mixed> $meta
+     * @param array<mixed>|null $extra
      */
     public function __construct(
         private array $items,
-        private array $meta
+        private array $meta,
+        private ?array $extra,
     ) {
     }
 
@@ -52,5 +54,13 @@ final readonly class BasketDto implements BasketDtoInterface
     public function items(): array
     {
         return $this->items;
+    }
+
+    /**
+     * @return array<mixed>|null
+     */
+    public function extra(): ?array
+    {
+        return $this->extra;
     }
 }

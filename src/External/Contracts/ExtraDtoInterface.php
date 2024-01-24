@@ -11,4 +11,9 @@ interface ExtraDtoInterface
     public function getWithdrawOption(): OptionDtoInterface;
 
     public function getUuid(): ?string;
+
+    /**
+     * @return array<mixed>|null
+     */
+    public function getExtra(): ?array;
 }

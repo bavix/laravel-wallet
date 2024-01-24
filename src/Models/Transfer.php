@@ -25,6 +25,7 @@ use function config;
  * @property int $to_id
  * @property string $uuid
  * @property string $fee
+ * @property ?array<mixed> $extra
  * @property Transaction $deposit
  * @property Transaction $withdraw
  * @property DateTimeInterface $created_at
@@ -59,6 +60,7 @@ class Transfer extends Model
         'to_id',
         'uuid',
         'fee',
+        'extra',
         'created_at',
         'updated_at',
     ];
@@ -69,6 +71,7 @@ class Transfer extends Model
     protected $casts = [
         'deposit_id' => 'int',
         'withdraw_id' => 'int',
+        'extra' => 'json',
     ];
 
     public function getTable(): string

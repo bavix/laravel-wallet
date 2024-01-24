@@ -31,6 +31,11 @@ final class Cart implements Countable, CartInterface
      */
     private array $meta = [];
 
+    /**
+     * @var array<mixed>|null
+     */
+    private ?array $extra = null;
+
     public function __construct(
         private readonly CastServiceInterface $castService,
         private readonly MathServiceInterface $math
@@ -52,6 +57,25 @@ final class Cart implements Countable, CartInterface
     {
         $self = clone $this;
         $self->meta = $meta;
+
+        return $self;
+    }
+
+    /**
+     * @return array<mixed>|null
+     */
+    public function getExtra(): ?array
+    {
+        return $this->extra;
+    }
+
+    /**
+     * @param array<mixed> $extra
+     */
+    public function withExtra(array $extra): self
+    {
+        $self = clone $this;
+        $self->extra = $extra;
 
         return $self;
     }
@@ -151,7 +175,7 @@ final class Cart implements Countable, CartInterface
             throw new CartEmptyException('Cart is empty', ExceptionInterface::CART_EMPTY);
         }
 
-        return new BasketDto($items, $this->getMeta());
+        return new BasketDto($items, $this->getMeta(), $this->getExtra());
     }
 
     private function productId(ProductInterface $product): string

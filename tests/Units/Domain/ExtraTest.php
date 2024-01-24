@@ -41,6 +41,7 @@ final class ExtraTest extends TestCase
                     ],
                     false
                 ),
+                extra: ['msg' => 'hello world'],
             )
         );
 
@@ -54,6 +55,9 @@ final class ExtraTest extends TestCase
         self::assertSame([
             'type' => 'extra-withdraw',
         ], $transfer->withdraw->meta);
+        self::assertSame([
+            'msg' => 'hello world',
+        ], $transfer->extra);
     }
 
     public function testExtraTransferUuidFixed(): void

@@ -9,6 +9,9 @@ use Bavix\Wallet\Interfaces\Wallet;
 /** @immutable */
 final readonly class TransferLazyDto implements TransferLazyDtoInterface
 {
+    /**
+     * @param array<mixed>|null $extra
+     */
     public function __construct(
         private Wallet $fromWallet,
         private Wallet $toWallet,
@@ -17,7 +20,8 @@ final readonly class TransferLazyDto implements TransferLazyDtoInterface
         private TransactionDtoInterface $withdrawDto,
         private TransactionDtoInterface $depositDto,
         private string $status,
-        private ?string $uuid
+        private ?string $uuid,
+        private ?array $extra,
     ) {
     }
 
@@ -59,5 +63,13 @@ final readonly class TransferLazyDto implements TransferLazyDtoInterface
     public function getUuid(): ?string
     {
         return $this->uuid;
+    }
+
+    /**
+     * @return array<mixed>|null
+     */
+    public function getExtra(): ?array
+    {
+        return $this->extra;
     }
 }

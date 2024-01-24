@@ -19,6 +19,7 @@ interface TransferDtoTransformerInterface
      *     to_id: int|string,
      *     discount: int,
      *     fee: string,
+     *     extra: array<mixed>|null,
      *     created_at: DateTimeImmutable,
      *     updated_at: DateTimeImmutable,
      * }

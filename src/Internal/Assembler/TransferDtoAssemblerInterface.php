@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 interface TransferDtoAssemblerInterface
 {
+    /** @param array<mixed>|null $extra */
     public function create(
         int $depositId,
         int $withdrawId,
@@ -17,6 +18,7 @@ interface TransferDtoAssemblerInterface
         Model $toModel,
         int $discount,
         string $fee,
-        ?string $uuid
+        ?string $uuid,
+        ?array $extra,
     ): TransferDtoInterface;
 }

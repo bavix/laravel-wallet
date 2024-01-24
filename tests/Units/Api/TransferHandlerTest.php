@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Test\Units\Api;
 
 use Bavix\Wallet\External\Api\TransferQuery;
 use Bavix\Wallet\External\Api\TransferQueryHandlerInterface;
+use Bavix\Wallet\External\Dto\Extra;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\TestCase;
@@ -31,13 +32,39 @@ final class TransferHandlerTest extends TestCase
         self::assertFalse($to->wallet->exists);
 
         $transfers = $transferQueryHandler->apply([
-            new TransferQuery($from, $to, 100, null),
-            new TransferQuery($from, $to, 100, null),
-            new TransferQuery($to, $from, 50, null),
+            new TransferQuery(
+                $from,
+                $to,
+                100,
+                new Extra(
+                    null,
+                    null,
+                    '598c184c-e6d6-4fc2-9640-c1c7acb38093',
+                    ['type' => 'first'],
+                ),
+            ),
+            new TransferQuery($from, $to, 100,
+                new Extra(
+                    null,
+                    null,
+                    'f303d60d-c2de-45d0-b9ed-e1487429709a',
+                    ['type' => 'second'],
+                )),
+            new TransferQuery($to, $from, 50,
+                new Extra(
+                    null,
+                    null,
+                    '7f0175fe-99cc-4058-92c6-157f0da18243',
+                    ['type' => 'third'],
+                )),
         ]);
 
         self::assertSame(-150, $from->balanceInt);
         self::assertSame(150, $to->balanceInt);
         self::assertCount(3, $transfers);
+
+        self::assertSame(['type' => 'first'], $transfers['598c184c-e6d6-4fc2-9640-c1c7acb38093']->extra);
+        self::assertSame(['type' => 'second'], $transfers['f303d60d-c2de-45d0-b9ed-e1487429709a']->extra);
+        self::assertSame(['type' => 'third'], $transfers['7f0175fe-99cc-4058-92c6-157f0da18243']->extra);
     }
 }

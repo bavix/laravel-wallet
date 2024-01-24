@@ -19,6 +19,7 @@ final class TransferDtoTransformer implements TransferDtoTransformerInterface
             'to_id' => $dto->getToId(),
             'discount' => $dto->getDiscount(),
             'fee' => $dto->getFee(),
+            'extra' => $dto->getExtra(),
             'created_at' => $dto->getCreatedAt(),
             'updated_at' => $dto->getUpdatedAt(),
         ];
