@@ -7,7 +7,7 @@ namespace Bavix\Wallet\External\Api;
 use Bavix\Wallet\External\Contracts\ExtraDtoInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 
-final readonly class TransferQuery
+final readonly class TransferQuery implements TransferQueryInterface
 {
     /**
      * @param array<mixed>|ExtraDtoInterface|null $meta
