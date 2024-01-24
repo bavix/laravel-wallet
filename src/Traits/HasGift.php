@@ -85,6 +85,7 @@ trait HasGift
                 $castService->getWallet($product),
                 $discount,
                 $fee,
+                null,
                 null
             );
 

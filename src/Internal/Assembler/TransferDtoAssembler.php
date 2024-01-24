@@ -18,6 +18,7 @@ final readonly class TransferDtoAssembler implements TransferDtoAssemblerInterfa
     ) {
     }
 
+    /** @param array<mixed>|null $extra */
     public function create(
         int $depositId,
         int $withdrawId,
@@ -26,7 +27,8 @@ final readonly class TransferDtoAssembler implements TransferDtoAssemblerInterfa
         Model $toModel,
         int $discount,
         string $fee,
-        ?string $uuid
+        ?string $uuid,
+        ?array $extra,
     ): TransferDtoInterface {
         return new TransferDto(
             $uuid ?? $this->uuidService->uuid4(),
@@ -37,6 +39,7 @@ final readonly class TransferDtoAssembler implements TransferDtoAssemblerInterfa
             $toModel->getKey(),
             $discount,
             $fee,
+            $extra,
             $this->clockService->now(),
             $this->clockService->now(),
         );
