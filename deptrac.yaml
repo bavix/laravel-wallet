@@ -171,12 +171,13 @@ parameters:
       - Model
 
     ApiQuery:
+      - Api
       - Model
       - Contract
 
     Api:
       - Model
-      - ApiQuery
+      - Contract
       - InternalException
 
     ApiHandler:
