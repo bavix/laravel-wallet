@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Api;
 
+use Bavix\Wallet\External\Api\TransactionFloatQuery;
 use Bavix\Wallet\External\Api\TransactionQuery;
 use Bavix\Wallet\External\Api\TransactionQueryHandlerInterface;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
@@ -33,17 +34,19 @@ final class TransactionHandlerTest extends TestCase
             TransactionQuery::createDeposit($buyer, 100, null),
             TransactionQuery::createDeposit($buyer, 100, null),
             TransactionQuery::createWithdraw($buyer, 400, null),
+            TransactionFloatQuery::createDeposit($buyer, 2.00, null),
+            TransactionFloatQuery::createWithdraw($buyer, 2.00, null),
         ]);
 
         self::assertSame(1, $buyer->balanceInt);
-        self::assertCount(5, $transactions);
+        self::assertCount(7, $transactions);
 
         self::assertCount(
-            4,
+            5,
             array_filter($transactions, static fn ($t) => $t->type === Transaction::TYPE_DEPOSIT),
         );
         self::assertCount(
-            1,
+            2,
             array_filter($transactions, static fn ($t) => $t->type === Transaction::TYPE_WITHDRAW),
         );
     }
