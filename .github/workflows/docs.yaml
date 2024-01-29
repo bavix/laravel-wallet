@@ -8,5 +8,5 @@ jobs:
   build_pages:
     permissions:
       contents: write
-    uses: bavix/.github/.github/workflows/compile-assets.yml@0.2.1
+    uses: bavix/.github/.github/workflows/compile-assets.yml@0.2.2
     secrets: inherit
