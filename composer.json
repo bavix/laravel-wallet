@@ -26,8 +26,8 @@
     "ext-json": "*",
     "ext-pdo": "*",
     "brick/math": "~0.10",
-    "illuminate/contracts": "11.x-dev",
-    "illuminate/database": "11.x-dev",
+    "illuminate/contracts": "^11.0",
+    "illuminate/database": "^11.0",
     "ramsey/uuid": "^4.0"
   },
   "require-dev": {
@@ -37,7 +37,7 @@
     "laravel/cashier": "^15.0",
     "nunomaduro/collision": "^8.0",
     "nunomaduro/larastan": "^2.7",
-    "orchestra/testbench": "9.x-dev",
+    "orchestra/testbench": "^9.0",
     "phpstan/phpstan": "^1.10",
     "phpunit/phpunit": "^10.5",
     "rector/rector": "^0.18",
