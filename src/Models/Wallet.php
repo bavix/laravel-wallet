@@ -15,6 +15,7 @@ use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Bavix\Wallet\Services\AtomicServiceInterface;
+use Bavix\Wallet\Services\CastServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Traits\CanConfirm;
 use Bavix\Wallet\Traits\CanExchange;
@@ -23,6 +24,7 @@ use Bavix\Wallet\Traits\HasGift;
 use function config;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\RecordsNotFoundException;
@@ -169,5 +171,18 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     protected function initializeMorphOneWallet(): void
     {
         $this->uuid ??= app(UuidFactoryServiceInterface::class)->uuid4();
+    }
+
+    /**
+     * returns all the receiving transfers to this wallet.
+     *
+     * @return HasMany<Transfer>
+     */
+    public function receivedTransfers(): HasMany
+    {
+        return app(CastServiceInterface::class)
+            ->getWallet($this, false)
+            ->hasMany(config('wallet.transfer.model', Transfer::class), 'to_id')
+        ;
     }
 }
