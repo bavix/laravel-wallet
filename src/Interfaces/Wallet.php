@@ -105,4 +105,9 @@ interface Wallet
      * @return HasMany<Transfer>
      */
     public function transfers(): HasMany;
+
+    /**
+     * @return HasMany<Transfer>
+     */
+    public function receivedTransfers(): HasMany;
 }

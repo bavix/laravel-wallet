@@ -227,4 +227,17 @@ trait HasWallet
             ->hasMany(config('wallet.transfer.model', Transfer::class), 'from_id')
         ;
     }
+
+    /**
+     * returns all the receiving transfers to this wallet.
+     *
+     * @return HasMany<Transfer>
+     */
+    public function receivedTransfers(): HasMany
+    {
+        return app(CastServiceInterface::class)
+            ->getWallet($this, false)
+            ->hasMany(config('wallet.transfer.model', Transfer::class), 'to_id')
+        ;
+    }
 }
