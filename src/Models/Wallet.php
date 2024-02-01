@@ -20,6 +20,7 @@ use Bavix\Wallet\Traits\CanPayFloat;
 use Bavix\Wallet\Traits\HasGift;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\RecordsNotFoundException;
 use Illuminate\Support\Str;
@@ -161,5 +162,15 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     protected function initializeMorphOneWallet(): void
     {
         $this->uuid = app(UuidFactoryServiceInterface::class)->uuid4();
+    }
+
+    /**
+     * returns all the receiving transfers to this wallet.
+     *
+     * @return HasMany<Transfer>
+     */
+    public function receivedTransfers(): HasMany
+    {
+        return $this->hasMany(config('wallet.transfer.model', Transfer::class), 'to_id');
     }
 }
