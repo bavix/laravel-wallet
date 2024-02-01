@@ -177,17 +177,4 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     {
         $this->uuid ??= app(UuidFactoryServiceInterface::class)->uuid4();
     }
-
-    /**
-     * returns all the receiving transfers to this wallet.
-     *
-     * @return HasMany<Transfer>
-     */
-    public function receivedTransfers(): HasMany
-    {
-        return app(CastServiceInterface::class)
-            ->getWallet($this, false)
-            ->hasMany(config('wallet.transfer.model', Transfer::class), 'to_id')
-        ;
-    }
 }

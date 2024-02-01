@@ -35,9 +35,9 @@ final class AtomicServiceTest extends TestCase
         );
 
         self::assertSame(1, $user2->transfers()->count());
-        self::assertSame(2, $user2->wallet->receivedTransfers()->count());
-        self::assertSame(1, $user1->wallet->receivedTransfers()->count());
+        self::assertSame(2, $user2->receivedTransfers()->count());
         self::assertSame(2, $user1->transfers()->count());
+        self::assertSame(1, $user1->receivedTransfers()->count());
         self::assertSame(3, $user2->transactions()->count());
         self::assertSame(4, $user1->transactions()->count());
 
