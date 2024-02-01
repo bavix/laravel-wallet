@@ -180,9 +180,6 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
      */
     public function receivedTransfers(): HasMany
     {
-        return app(CastServiceInterface::class)
-            ->getWallet($this, false)
-            ->hasMany(config('wallet.transfer.model', Transfer::class), 'to_id')
-        ;
+        return $this->hasMany(config('wallet.transfer.model', Transfer::class), 'to_id');
     }
 }
