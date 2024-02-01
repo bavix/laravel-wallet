@@ -65,6 +65,8 @@ jobs:
           MYSQL_ROOT_PASSWORD: wallet
           MYSQL_DATABASE: wallet
         options: >-
+          --character-set-server=utf8mb4
+          --collation-server=utf8mb4_unicode_ci
           --health-cmd="mysqladmin ping"
           --health-interval 10s
           --health-timeout 5s
@@ -78,6 +80,8 @@ jobs:
           MYSQL_ROOT_PASSWORD: wallet
           MYSQL_DATABASE: wallet
         options: >-
+          --character-set-server=utf8mb4
+          --collation-server=utf8mb4_unicode_ci
           --health-cmd="mysqladmin ping"
           --health-interval 10s
           --health-timeout 5s
