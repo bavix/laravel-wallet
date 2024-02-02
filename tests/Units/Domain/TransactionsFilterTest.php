@@ -117,6 +117,7 @@ final class TransactionsFilterTest extends TestCase
 
         $query = Transaction::with('wallet')
             ->where('payable_id', $buyer->getKey())
+            ->where('wallet_id', '=', $buyer->wallet->getKey())
             ->orderBy('created_at', 'desc')
         ;
 
@@ -154,7 +155,10 @@ final class TransactionsFilterTest extends TestCase
 
         $query = Transaction::query()
             ->where(function ($query) use ($buyer, $walletTableName, $transactionTableName) {
-                $query->where('payable_id', '=', $buyer->getKey())
+                $query
+                    ->where('payable_type', '=', $buyer->getMorphClass())
+                    ->where('payable_id', '=', $buyer->getKey())
+                    ->where('wallet_id', '=', $buyer->wallet->getKey())
                     ->join($walletTableName, $transactionTableName . '.wallet_id', '=', $walletTableName . '.id')
                     ->select($transactionTableName . '.*', $walletTableName . '.name')
                     ->get()
