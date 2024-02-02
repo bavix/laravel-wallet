@@ -1,5 +1,13 @@
 # Changelog
 
+## 10.1.3 - 2024-02-01
+
+## What's Changed
+* [10.x] received transfers by [@gkmk](https://github.com/gkmk) in https://github.com/bavix/laravel-wallet/pull/878
+
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/10.1.2...10.1.3
+
 ## 10.1.2 - 2024-01-23
 
 ## What's Changed
@@ -840,7 +848,7 @@
 ## 6.2.1 - 2021-11-02
 
 ### Fixed
-- Fix looping for old configs. #387 [@AbdullahFaqeir](https://github.com/AbdullahFaqeir), #391 [@Hussam3bd](https://github.com/Hussam3bd) [@alexstewartja](https://github.com/alexstewartja)
+- Fix looping for old configs. #387 [@AbdullahFaqeir](https://github.com/AbdullahFaqeir), #391 [@Hussam3bd](https://github.com/Hussam3bd) @alexstewartja
 
 ## What's Changed
 * Looping by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/393
@@ -1137,7 +1145,7 @@ This removes a lot of errors that were sent to my email.
 ## 5.3.1 - 2020-08-18
 
 ### Fixed
-- Fixed migration issue with db table prefix #195 [@reedknight](https://github.com/reedknight) [@cispl-shaswatad](https://github.com/cispl-shaswatad)
+- Fixed migration issue with db table prefix #195 [@reedknight](https://github.com/reedknight) @cispl-shaswatad
 
 ## What's Changed
 * Pull195 by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/196
@@ -2019,7 +2027,5 @@ The operation is now executed in the transaction and updates the new `refund` fi
 
 
 **Full Changelog**: https://github.com/bavix/laravel-wallet/commits/0.0.1
-
-
 
 
