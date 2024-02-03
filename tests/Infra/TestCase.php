@@ -48,9 +48,6 @@ abstract class TestCase extends OrchestraTestCase
         $app['config']->set('wallet.transfer.model', Transfer::class);
         $app['config']->set('wallet.wallet.model', Wallet::class);
 
-        //infra
-        $app['config']->set('database.mysql.collation', 'utf8mb4_unicode_ci');
-
         return [WalletServiceProvider::class, TestServiceProvider::class];
     }
 
@@ -66,13 +63,8 @@ abstract class TestCase extends OrchestraTestCase
         $config->set('database.connections.testing.prefix', 'tests');
         $config->set('database.connections.pgsql.prefix', 'tests');
         $config->set('database.connections.mysql.prefix', 'tests');
-
-        /** @var array<string, mixed> $mysql */
-        $mysql = $config->get('database.connections.mysql');
-        $config->set('database.connections.mariadb', array_merge($mysql, [
-            'collation' => 'utf8mb4_unicode_ci',
-            'port' => 3307,
-        ]));
+        $config->set('database.connections.mariadb.prefix', 'tests');
+        $config->set('database.connections.mariadb.port', 3307);
 
         // new table name's
         $config->set('wallet.transaction.table', 'transaction');
