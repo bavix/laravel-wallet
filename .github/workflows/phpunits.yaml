@@ -73,7 +73,7 @@ jobs:
           - 3306:3306
 
       mariadb:
-        image: mariadb:10.7 # https://github.com/laravel/framework/pull/48455
+        image: mariadb:10.8 # https://github.com/laravel/framework/pull/48455
         env:
           MYSQL_ROOT_PASSWORD: wallet
           MYSQL_DATABASE: wallet
