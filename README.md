@@ -14,7 +14,6 @@ laravel-wallet - Easy work with virtual wallet.
 
 * **Vendor**: bavix
 * **Package**: laravel-wallet
-* **Version**: [![Latest Stable Version](https://poser.pugx.org/bavix/laravel-wallet/v)](https://packagist.org/packages/bavix/laravel-wallet)
 * **[Composer](https://getcomposer.org/):** `composer require bavix/laravel-wallet`
 
 ### Support Policy
