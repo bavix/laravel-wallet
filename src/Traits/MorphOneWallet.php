@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
  * Trait MorphOneWallet.
  *
  * @property WalletModel $wallet
+ *
  * @psalm-require-extends \Illuminate\Database\Eloquent\Model
  */
 trait MorphOneWallet
@@ -50,8 +51,7 @@ trait MorphOneWallet
                 if ($model->exists) {
                     $wallet->setRelation('holder', $model->withoutRelations());
                 }
-            })
-        ;
+            });
     }
 
     public function getWalletAttribute(): ?WalletModel

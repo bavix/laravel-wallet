@@ -53,10 +53,9 @@ final readonly class TransactionService implements TransactionServiceInterface
     /**
      * @param non-empty-array<int, Wallet> $wallets
      * @param non-empty-array<int, TransactionDtoInterface> $objects
+     * @return non-empty-array<string, Transaction>
      *
      * @throws RecordNotFoundException
-     *
-     * @return non-empty-array<string, Transaction>
      */
     public function apply(array $wallets, array $objects): array
     {

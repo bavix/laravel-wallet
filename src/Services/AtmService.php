@@ -29,7 +29,6 @@ final readonly class AtmService implements AtmServiceInterface
 
     /**
      * @param non-empty-array<array-key, TransactionDtoInterface> $objects
-     *
      * @return non-empty-array<string, Transaction>
      */
     public function makeTransactions(array $objects): array
@@ -55,7 +54,6 @@ final readonly class AtmService implements AtmServiceInterface
 
     /**
      * @param non-empty-array<array-key, TransferDtoInterface> $objects
-     *
      * @return non-empty-array<string, Transfer>
      */
     public function makeTransfers(array $objects): array

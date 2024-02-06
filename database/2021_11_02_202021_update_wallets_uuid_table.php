@@ -9,7 +9,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 
-return new class() extends Migration {
+return new class() extends Migration
+{
     public function up(): void
     {
         if (Schema::hasColumn($this->table(), 'uuid')) {
@@ -21,8 +22,7 @@ return new class() extends Migration {
             $table->uuid('uuid')
                 ->after('slug')
                 ->nullable()
-                ->unique()
-            ;
+                ->unique();
         });
 
         Wallet::query()->chunk(10000, static function (Collection $wallets) {
@@ -34,8 +34,7 @@ return new class() extends Migration {
 
         Schema::table($this->table(), static function (Blueprint $table) {
             $table->uuid('uuid')
-                ->change()
-            ;
+                ->change();
         });
     }
 

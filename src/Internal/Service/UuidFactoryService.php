@@ -16,7 +16,6 @@ final readonly class UuidFactoryService implements UuidFactoryServiceInterface
     public function uuid4(): string
     {
         return $this->uuidFactory->uuid4()
-            ->toString()
-        ;
+            ->toString();
     }
 }

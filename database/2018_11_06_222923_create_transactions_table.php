@@ -7,7 +7,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class() extends Migration {
+return new class() extends Migration
+{
     public function up(): void
     {
         Schema::create($this->table(), static function (Blueprint $table) {
@@ -18,11 +19,9 @@ return new class() extends Migration {
             $table->decimal('amount', 64, 0);
             $table->boolean('confirmed');
             $table->json('meta')
-                ->nullable()
-            ;
+                ->nullable();
             $table->uuid('uuid')
-                ->unique()
-            ;
+                ->unique();
             $table->timestamps();
 
             $table->index(['payable_type', 'payable_id'], 'payable_type_payable_id_ind');

@@ -108,6 +108,9 @@ use Bavix\Wallet\Services\TransferService;
 use Bavix\Wallet\Services\TransferServiceInterface;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Services\WalletServiceInterface;
+use function config;
+use function dirname;
+use function function_exists;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Database\Events\TransactionBeginning;
@@ -116,9 +119,6 @@ use Illuminate\Database\Events\TransactionCommitting;
 use Illuminate\Database\Events\TransactionRolledBack;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-use function config;
-use function dirname;
-use function function_exists;
 
 final class WalletServiceProvider extends ServiceProvider implements DeferrableProvider
 {
@@ -127,7 +127,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
      */
     public function boot(): void
     {
-        $this->loadTranslationsFrom(dirname(__DIR__) . '/resources/lang', 'wallet');
+        $this->loadTranslationsFrom(dirname(__DIR__).'/resources/lang', 'wallet');
 
         Event::listen(TransactionBeginning::class, Internal\Listeners\TransactionBeginningListener::class);
         Event::listen(TransactionCommitting::class, Internal\Listeners\TransactionCommittingListener::class);
@@ -141,17 +141,17 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         // @codeCoverageIgnoreEnd
 
         if (WalletConfigure::isRunsMigrations()) {
-            $this->loadMigrationsFrom([dirname(__DIR__) . '/database']);
+            $this->loadMigrationsFrom([dirname(__DIR__).'/database']);
         }
 
         if (function_exists('config_path')) {
             $this->publishes([
-                dirname(__DIR__) . '/config/config.php' => config_path('wallet.php'),
+                dirname(__DIR__).'/config/config.php' => config_path('wallet.php'),
             ], 'laravel-wallet-config');
         }
 
         $this->publishes([
-            dirname(__DIR__) . '/database/' => database_path('migrations'),
+            dirname(__DIR__).'/database/' => database_path('migrations'),
         ], 'laravel-wallet-migrations');
     }
 
@@ -160,7 +160,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
      */
     public function register(): void
     {
-        $this->mergeConfigFrom(dirname(__DIR__) . '/config/config.php', 'wallet');
+        $this->mergeConfigFrom(dirname(__DIR__).'/config/config.php', 'wallet');
 
         /**
          * @var array{

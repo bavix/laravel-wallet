@@ -103,7 +103,7 @@ final class EventTest extends TestCase
         $uuid = $buyer->wallet->uuid;
         $createdAt = app(ClockServiceInterface::class)->now()->format(DateTimeInterface::ATOM);
 
-        $message = hash('sha256', $holderType . $uuid . $createdAt);
+        $message = hash('sha256', $holderType.$uuid.$createdAt);
 
         // unit
         $this->expectException(UnknownEventException::class);
@@ -127,7 +127,7 @@ final class EventTest extends TestCase
         $holderType = $user->getMorphClass();
         $createdAt = app(ClockServiceInterface::class)->now()->format(DateTimeInterface::ATOM);
 
-        $message = hash('sha256', $holderType . $uuid . $createdAt);
+        $message = hash('sha256', $holderType.$uuid.$createdAt);
 
         // unit
         $this->expectException(UnknownEventException::class);
@@ -185,10 +185,9 @@ final class EventTest extends TestCase
 
         $createdAt = app(ClockServiceInterface::class)
             ->now()
-            ->format(DateTimeInterface::ATOM)
-        ;
+            ->format(DateTimeInterface::ATOM);
 
-        $message = hash('sha256', Transaction::TYPE_DEPOSIT . $createdAt);
+        $message = hash('sha256', Transaction::TYPE_DEPOSIT.$createdAt);
 
         // unit
         $this->expectException(UnknownEventException::class);

@@ -12,6 +12,7 @@ interface DatabaseServiceInterface
 {
     /**
      * @template T
+     *
      * @param callable(): T $callback
      * @return T
      *

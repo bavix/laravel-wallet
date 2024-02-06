@@ -37,7 +37,6 @@ interface WalletRepositoryInterface
 
     /**
      * @param array<int|string> $holderIds
-     *
      * @return Wallet[]
      */
     public function findDefaultAll(string $holderType, array $holderIds): array;

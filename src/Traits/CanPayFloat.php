@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Traits;
 
 /**
  * @psalm-require-extends \Illuminate\Database\Eloquent\Model
+ *
  * @psalm-require-implements \Bavix\Wallet\Interfaces\Customer
  */
 trait CanPayFloat

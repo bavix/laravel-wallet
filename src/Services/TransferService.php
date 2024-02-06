@@ -40,13 +40,12 @@ final readonly class TransferService implements TransferServiceInterface
 
     /**
      * @param non-empty-array<TransferLazyDtoInterface> $objects
+     * @return non-empty-array<string, Transfer>
      *
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
-     *
-     * @return non-empty-array<string, Transfer>
      */
     public function apply(array $objects): array
     {

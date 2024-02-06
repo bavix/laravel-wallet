@@ -28,7 +28,6 @@ interface StorageServiceInterface
      * @template T of non-empty-array<string>
      *
      * @param T $uuids
-     *
      * @return non-empty-array<value-of<T>, string>
      *
      * @throws RecordNotFoundException
@@ -44,7 +43,6 @@ interface StorageServiceInterface
      * @template T of non-empty-array<string, float|int|string>
      *
      * @param T $inputs
-     *
      * @return non-empty-array<key-of<T>, string>
      *
      * @throws RecordNotFoundException

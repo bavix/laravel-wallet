@@ -94,6 +94,8 @@ interface Customer extends Wallet
     public function forceRefundGift(ProductInterface $product): bool;
 
     /**
+     * @return non-empty-array<Transfer>
+     *
      * @throws ProductEnded
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
@@ -101,8 +103,6 @@ interface Customer extends Wallet
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
-     *
-     * @return non-empty-array<Transfer>
      */
     public function payFreeCart(CartInterface $cart): array;
 
@@ -112,6 +112,8 @@ interface Customer extends Wallet
     public function safePayCart(CartInterface $cart, bool $force = false): array;
 
     /**
+     * @return non-empty-array<Transfer>
+     *
      * @throws ProductEnded
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
@@ -119,19 +121,17 @@ interface Customer extends Wallet
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
-     *
-     * @return non-empty-array<Transfer>
      */
     public function payCart(CartInterface $cart, bool $force = false): array;
 
     /**
+     * @return non-empty-array<Transfer>
+     *
      * @throws ProductEnded
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
-     *
-     * @return non-empty-array<Transfer>
      */
     public function forcePayCart(CartInterface $cart): array;
 

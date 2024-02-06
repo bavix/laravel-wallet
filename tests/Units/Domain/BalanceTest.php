@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
+use function app;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\BookkeeperServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
@@ -12,7 +13,6 @@ use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\TestCase;
 use PDOException;
 use PHPUnit\Framework\MockObject\MockObject;
-use function app;
 
 /**
  * @internal
@@ -142,8 +142,7 @@ final class BalanceTest extends TestCase
         // databases that do not support fk will not delete data... need to help them
         $wallet->transactions()
             ->where('wallet_id', $key)
-            ->delete()
-        ;
+            ->delete();
 
         self::assertFalse($wallet->exists);
         self::assertSame(1100, (int) $result);
@@ -187,30 +186,24 @@ final class BalanceTest extends TestCase
         /** @var MockObject&Wallet $mockQuery */
         $mockQuery = $this->createMock($wallet->newQuery()::class);
         $mockQuery->method('whereKey')
-            ->willReturn($mockQuery)
-        ;
+            ->willReturn($mockQuery);
         $mockQuery->method('update')
-            ->willThrowException(new PDOException())
-        ;
+            ->willThrowException(new PDOException());
 
         /** @var MockObject&Wallet $mockWallet */
         $mockWallet = $this->createMock(Wallet::class);
         $mockWallet->method('getBalanceAttribute')
-            ->willReturn('125')
-        ;
+            ->willReturn('125');
         $mockWallet->method('newQuery')
-            ->willReturn($mockQuery)
-        ;
+            ->willReturn($mockQuery);
         $mockWallet->method('getKey')
-            ->willReturn(1)
-        ;
+            ->willReturn(1);
 
         $mockWallet->newQuery()
             ->whereKey(1)
             ->update([
                 'balance' => 100,
-            ])
-        ;
+            ]);
     }
 
     public function testEqualWallet(): void

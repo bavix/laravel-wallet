@@ -26,7 +26,7 @@ final readonly class StorageService implements StorageServiceInterface
 
     public function forget(string $uuid): bool
     {
-        return $this->cacheRepository->forget(self::PREFIX . $uuid);
+        return $this->cacheRepository->forget(self::PREFIX.$uuid);
     }
 
     /**
@@ -58,7 +58,6 @@ final readonly class StorageService implements StorageServiceInterface
      * @template T of non-empty-array<string>
      *
      * @param T $uuids
-     *
      * @return non-empty-array<value-of<T>, string>
      *
      * @throws RecordNotFoundException
@@ -67,7 +66,7 @@ final readonly class StorageService implements StorageServiceInterface
     {
         $keys = [];
         foreach ($uuids as $uuid) {
-            $keys[self::PREFIX . $uuid] = $uuid;
+            $keys[self::PREFIX.$uuid] = $uuid;
         }
 
         $missingKeys = [];
@@ -86,6 +85,7 @@ final readonly class StorageService implements StorageServiceInterface
             $uuid = $keys[$key];
             if ($value === null) {
                 $missingKeys[] = $uuid;
+
                 continue;
             }
 
@@ -112,7 +112,7 @@ final readonly class StorageService implements StorageServiceInterface
     {
         $values = [];
         foreach ($inputs as $uuid => $value) {
-            $values[self::PREFIX . $uuid] = $this->mathService->round($value);
+            $values[self::PREFIX.$uuid] = $this->mathService->round($value);
         }
 
         if (count($values) === 1) {
@@ -126,7 +126,6 @@ final readonly class StorageService implements StorageServiceInterface
      * @template T of non-empty-array<string, float|int|string>
      *
      * @param T $inputs
-     *
      * @return non-empty-array<key-of<T>, string>
      *
      * @throws RecordNotFoundException

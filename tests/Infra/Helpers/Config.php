@@ -16,7 +16,6 @@ final class Config
 
     /**
      * @param class-string $default
-     *
      * @return class-string
      */
     public static function classString(string $key, string $default): string

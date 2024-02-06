@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Traits;
 
+use function app;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
@@ -22,11 +23,10 @@ use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Services\TransactionServiceInterface;
 use Bavix\Wallet\Services\TransferServiceInterface;
+use function config;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\RecordsNotFoundException;
-use function app;
-use function config;
 
 /**
  * Trait HasWallet.
@@ -34,7 +34,9 @@ use function config;
  * @property WalletModel $wallet
  * @property string $balance
  * @property int $balanceInt
+ *
  * @psalm-require-extends \Illuminate\Database\Eloquent\Model
+ *
  * @psalm-require-implements \Bavix\Wallet\Interfaces\Wallet
  */
 trait HasWallet
@@ -81,8 +83,7 @@ trait HasWallet
     {
         return app(CastServiceInterface::class)
             ->getWallet($this, false)
-            ->hasMany(config('wallet.transaction.model', Transaction::class), 'wallet_id')
-        ;
+            ->hasMany(config('wallet.transaction.model', Transaction::class), 'wallet_id');
     }
 
     /**
@@ -94,8 +95,7 @@ trait HasWallet
     {
         return app(CastServiceInterface::class)
             ->getHolder($this)
-            ->morphMany(config('wallet.transaction.model', Transaction::class), 'payable')
-        ;
+            ->morphMany(config('wallet.transaction.model', Transaction::class), 'payable');
     }
 
     /**
@@ -205,8 +205,7 @@ trait HasWallet
     ): Transfer {
         return app(AtomicServiceInterface::class)->block($this, function () use ($wallet, $amount, $meta): Transfer {
             $transferLazyDto = app(PrepareServiceInterface::class)
-                ->transferLazy($this, $wallet, Transfer::STATUS_TRANSFER, $amount, $meta)
-            ;
+                ->transferLazy($this, $wallet, Transfer::STATUS_TRANSFER, $amount, $meta);
 
             $transfers = app(TransferServiceInterface::class)->apply([$transferLazyDto]);
 
@@ -224,8 +223,7 @@ trait HasWallet
         /** @var Wallet $this */
         return app(CastServiceInterface::class)
             ->getWallet($this, false)
-            ->hasMany(config('wallet.transfer.model', Transfer::class), 'from_id')
-        ;
+            ->hasMany(config('wallet.transfer.model', Transfer::class), 'from_id');
     }
 
     /**
@@ -237,7 +235,6 @@ trait HasWallet
     {
         return app(CastServiceInterface::class)
             ->getWallet($this, false)
-            ->hasMany(config('wallet.transfer.model', Transfer::class), 'to_id')
-        ;
+            ->hasMany(config('wallet.transfer.model', Transfer::class), 'to_id');
     }
 }

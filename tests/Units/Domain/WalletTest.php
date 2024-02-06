@@ -272,8 +272,7 @@ final class WalletTest extends TestCase
         $user->transactions()
             ->update([
                 'confirmed' => true,
-            ])
-        ;
+            ]);
         self::assertSame(0, $user->balanceInt);
 
         $user->wallet->refreshBalance();
@@ -311,7 +310,7 @@ final class WalletTest extends TestCase
         self::assertNotNull($user->deposit(100));
         self::assertSame(100, $user->balanceInt);
 
-        self::assertSame('default-' . $user->email, $user->wallet->slug);
+        self::assertSame('default-'.$user->email, $user->wallet->slug);
     }
 
     public function testCrash(): void

@@ -47,13 +47,13 @@ final class StateService implements StateServiceInterface
         $forkId = $this->getForkId();
 
         $values = [
-            self::PREFIX_FORK_REF . $forkId => $value,
-            self::PREFIX_HASHMAP . $forkId => $uuids,
+            self::PREFIX_FORK_REF.$forkId => $value,
+            self::PREFIX_HASHMAP.$forkId => $uuids,
         ];
 
         foreach ($uuids as $uuid) {
-            $values[self::PREFIX_STATE . $uuid] = null;
-            $values[self::PREFIX_FORK_ID . $uuid] = $forkId;
+            $values[self::PREFIX_STATE.$uuid] = null;
+            $values[self::PREFIX_FORK_ID.$uuid] = $forkId;
         }
 
         $this->store->setMultiple($values);
@@ -61,18 +61,18 @@ final class StateService implements StateServiceInterface
 
     public function get(string $uuid): ?string
     {
-        $value = $this->store->get(self::PREFIX_STATE . $uuid);
+        $value = $this->store->get(self::PREFIX_STATE.$uuid);
         if ($value !== null) {
             return $value;
         }
 
-        $forkId = $this->store->pull(self::PREFIX_FORK_ID . $uuid);
+        $forkId = $this->store->pull(self::PREFIX_FORK_ID.$uuid);
         if ($forkId === null) {
             return null;
         }
 
         /** @var null|callable(): array<string, string> $callable */
-        $callable = $this->store->pull(self::PREFIX_FORK_REF . $forkId);
+        $callable = $this->store->pull(self::PREFIX_FORK_REF.$forkId);
         if ($callable === null) {
             return null;
         }
@@ -80,15 +80,15 @@ final class StateService implements StateServiceInterface
         $insertValues = [];
         $results = $callable();
         foreach ($results as $rUuid => $rValue) {
-            $insertValues[self::PREFIX_STATE . $rUuid] = $rValue;
+            $insertValues[self::PREFIX_STATE.$rUuid] = $rValue;
         }
 
         // set new values
         $this->store->setMultiple($insertValues);
 
         /** @var array<string> $uuids */
-        $uuids = $this->store->pull(self::PREFIX_HASHMAP . $forkId, []);
-        $deleteKeys = array_map(static fn (string $uuid) => self::PREFIX_FORK_ID . $uuid, $uuids);
+        $uuids = $this->store->pull(self::PREFIX_HASHMAP.$forkId, []);
+        $deleteKeys = array_map(static fn (string $uuid) => self::PREFIX_FORK_ID.$uuid, $uuids);
 
         // delete callables by uuids
         $this->store->deleteMultiple($deleteKeys);
@@ -98,12 +98,12 @@ final class StateService implements StateServiceInterface
 
     public function drop(string $uuid): void
     {
-        $deleteKeys = [self::PREFIX_STATE . $uuid];
+        $deleteKeys = [self::PREFIX_STATE.$uuid];
 
-        $forkId = $this->store->pull(self::PREFIX_FORK_ID . $uuid);
+        $forkId = $this->store->pull(self::PREFIX_FORK_ID.$uuid);
         if ($forkId !== null) {
-            $deleteKeys[] = self::PREFIX_FORK_REF . $forkId;
-            $deleteKeys[] = self::PREFIX_HASHMAP . $forkId;
+            $deleteKeys[] = self::PREFIX_FORK_REF.$forkId;
+            $deleteKeys[] = self::PREFIX_HASHMAP.$forkId;
         }
 
         $this->store->deleteMultiple($deleteKeys);
@@ -113,7 +113,7 @@ final class StateService implements StateServiceInterface
     {
         do {
             $forkId = bin2hex(random_bytes(self::RANDOM_BYTES));
-        } while ($this->store->has(self::PREFIX_FORK_REF . $forkId));
+        } while ($this->store->has(self::PREFIX_FORK_REF.$forkId));
 
         return $forkId;
     }
