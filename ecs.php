@@ -22,11 +22,13 @@ return static function (ECSConfig $config): void {
     $config->sets([
         SetList::CLEAN_CODE,
         SetList::SYMPLIFY,
+        SetList::ARRAY,
         SetList::COMMON,
         SetList::PSR_12,
         SetList::CONTROL_STRUCTURES,
         SetList::NAMESPACES,
         SetList::STRICT,
         SetList::PHPUNIT,
+        SetList::LARAVEL,
     ]);
 };
