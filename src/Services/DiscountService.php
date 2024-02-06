@@ -21,6 +21,7 @@ final class DiscountService implements DiscountServiceInterface
         if (! $product instanceof Discount) {
             return 0;
         }
+
         return (int) $product->getPersonalDiscount($customer);
     }
 }

@@ -26,11 +26,12 @@ use Bavix\Wallet\Services\EagerLoaderServiceInterface;
 use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\PurchaseServiceInterface;
 use Bavix\Wallet\Services\TransferServiceInterface;
-use Illuminate\Database\RecordsNotFoundException;
 use function count;
+use Illuminate\Database\RecordsNotFoundException;
 
 /**
  * @psalm-require-extends \Illuminate\Database\Eloquent\Model
+ *
  * @psalm-require-implements \Bavix\Wallet\Interfaces\Customer
  */
 trait CartPay
@@ -38,6 +39,8 @@ trait CartPay
     use HasWallet;
 
     /**
+     * @return non-empty-array<Transfer>
+     *
      * @throws ProductEnded
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
@@ -45,8 +48,6 @@ trait CartPay
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
-     *
-     * @return non-empty-array<Transfer>
      */
     public function payFreeCart(CartInterface $cart): array
     {
@@ -101,6 +102,8 @@ trait CartPay
     }
 
     /**
+     * @return non-empty-array<Transfer>
+     *
      * @throws ProductEnded
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds
@@ -108,8 +111,6 @@ trait CartPay
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
-     *
-     * @return non-empty-array<Transfer>
      */
     public function payCart(CartInterface $cart, bool $force = false): array
     {
@@ -132,7 +133,7 @@ trait CartPay
             $assistantService = app(AssistantServiceInterface::class);
             foreach ($cart->getBasketDto()->items() as $item) {
                 foreach ($item->getItems() as $product) {
-                    $productId = $product::class . ':' . $castService->getModel($product)->getKey();
+                    $productId = $product::class.':'.$castService->getModel($product)->getKey();
                     $pricePerItem = $item->getPricePerItem();
                     if ($pricePerItem === null) {
                         $prices[$productId] ??= $product->getAmountProduct($this);
@@ -162,13 +163,13 @@ trait CartPay
     }
 
     /**
+     * @return non-empty-array<Transfer>
+     *
      * @throws ProductEnded
      * @throws RecordNotFoundException
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException
      * @throws ExceptionInterface
-     *
-     * @return non-empty-array<Transfer>
      */
     public function forcePayCart(CartInterface $cart): array
     {
@@ -228,7 +229,7 @@ trait CartPay
                         $assistantService->getMeta($basketDto, $product)
                     );
 
-                    ++$index;
+                    $index++;
                 }
             }
 
@@ -243,8 +244,7 @@ trait CartPay
             $transferService->apply($objects);
 
             return $transferService
-                ->updateStatusByIds(Transfer::STATUS_REFUND, $transferIds)
-            ;
+                ->updateStatusByIds(Transfer::STATUS_REFUND, $transferIds);
         });
     }
 
@@ -305,8 +305,7 @@ trait CartPay
     {
         $cart = app(Cart::class)->withItem($product);
         $purchases = app(PurchaseServiceInterface::class)
-            ->already($this, $cart->getBasketDto(), $gifts)
-        ;
+            ->already($this, $cart->getBasketDto(), $gifts);
 
         return current($purchases) ?: null;
     }

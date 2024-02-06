@@ -60,6 +60,7 @@ final readonly class StorageServiceLockDecorator implements StorageServiceInterf
             $item = $this->stateService->get($uuid);
             if ($item === null) {
                 $missingKeys[] = $uuid;
+
                 continue;
             }
 

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Models;
 
 use Bavix\Wallet\Internal\Observers\TransferObserver;
+use function config;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use function config;
 
 /**
  * Class Transfer.

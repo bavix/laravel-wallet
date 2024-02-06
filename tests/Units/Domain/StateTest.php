@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
+use function app;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\BookkeeperServiceInterface;
@@ -11,7 +12,6 @@ use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\TestCase;
-use function app;
 
 /**
  * @internal
@@ -36,8 +36,7 @@ final class StateTest extends TestCase
         Wallet::whereKey($buyer->wallet->getKey())
             ->update([
                 'balance' => 10,
-            ])
-        ;
+            ]);
 
         /**
          * Create a state when the cache is empty. For example, something went wrong and your database has incorrect

@@ -28,8 +28,8 @@ use Bavix\Wallet\Test\Infra\Models\UserMulti;
 use Bavix\Wallet\Test\Infra\PackageModels\Wallet;
 use Bavix\Wallet\Test\Infra\TestCase;
 use Illuminate\Database\QueryException;
-use Throwable;
 use function range;
+use Throwable;
 
 /**
  * @internal
@@ -175,8 +175,7 @@ final class MultiWalletTest extends TestCase
         $this->expectException(ModelNotFoundException::class);
 
         $userMulti
-            ->getWalletOrFail(Config::string('wallet.wallet.default.slug', 'default'))
-        ;
+            ->getWalletOrFail(Config::string('wallet.wallet.default.slug', 'default'));
     }
 
     /**
@@ -193,8 +192,7 @@ final class MultiWalletTest extends TestCase
         $userMulti->deposit(1);
 
         $walletResult = $userMulti
-            ->getWalletOrFail(Config::string('wallet.wallet.default.slug', 'default'))
-        ;
+            ->getWalletOrFail(Config::string('wallet.wallet.default.slug', 'default'));
 
         self::assertSame($uuid, $walletResult->uuid);
     }
@@ -210,8 +208,7 @@ final class MultiWalletTest extends TestCase
         /** @var UserMulti $userMulti */
         $userMulti = UserMultiFactory::new()->create();
         $userMulti
-            ->getWalletOrFail(Config::string('wallet.wallet.default.slug', 'default'))
-        ;
+            ->getWalletOrFail(Config::string('wallet.wallet.default.slug', 'default'));
     }
 
     public function testInvalidDeposit(): void
@@ -449,8 +446,7 @@ final class MultiWalletTest extends TestCase
             ->create([
                 'name' => 'Test2',
                 'uuid' => $uuid,
-            ])
-        ;
+            ]);
 
         self::assertNotNull($test2->refresh());
         self::assertSame($uuid, $test2->uuid);
@@ -668,7 +664,7 @@ final class MultiWalletTest extends TestCase
         $wallets = [];
         foreach (range(1, 10) as $item) {
             $wallets[] = $user->createWallet([
-                'name' => 'index' . $item,
+                'name' => 'index'.$item,
             ]);
         }
 

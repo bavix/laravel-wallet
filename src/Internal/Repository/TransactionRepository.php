@@ -33,8 +33,7 @@ final readonly class TransactionRepository implements TransactionRepositoryInter
         }
 
         $this->transaction->newQuery()
-            ->insert($values)
-        ;
+            ->insert($values);
     }
 
     public function insertOne(TransactionDtoInterface $dto): Transaction
@@ -54,7 +53,6 @@ final readonly class TransactionRepository implements TransactionRepositoryInter
         return $this->transaction->newQuery()
             ->whereIn('uuid', $query->getUuids())
             ->get()
-            ->all()
-        ;
+            ->all();
     }
 }

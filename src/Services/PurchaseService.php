@@ -48,8 +48,7 @@ final readonly class PurchaseService implements PurchaseServiceInterface
                 ->orderBy('id', 'desc')
                 ->limit($productCounts[$wallet->uuid])
                 ->get()
-                ->all()
-            ;
+                ->all();
         }
 
         return array_merge(...$arrays);

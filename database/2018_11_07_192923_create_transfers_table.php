@@ -8,7 +8,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class() extends Migration {
+return new class() extends Migration
+{
     public function up(): void
     {
         Schema::create($this->table(), function (Blueprint $table) {
@@ -17,41 +18,34 @@ return new class() extends Migration {
             $table->morphs('to');
             $table
                 ->enum('status', ['exchange', 'transfer', 'paid', 'refund', 'gift'])
-                ->default('transfer')
-            ;
+                ->default('transfer');
 
             $table
                 ->enum('status_last', ['exchange', 'transfer', 'paid', 'refund', 'gift'])
-                ->nullable()
-            ;
+                ->nullable();
 
             $table->unsignedBigInteger('deposit_id');
             $table->unsignedBigInteger('withdraw_id');
 
             $table->decimal('discount', 64, 0)
-                ->default(0)
-            ;
+                ->default(0);
 
             $table->decimal('fee', 64, 0)
-                ->default(0)
-            ;
+                ->default(0);
 
             $table->uuid('uuid')
-                ->unique()
-            ;
+                ->unique();
             $table->timestamps();
 
             $table->foreign('deposit_id')
                 ->references('id')
                 ->on($this->transactionTable())
-                ->onDelete('cascade')
-            ;
+                ->onDelete('cascade');
 
             $table->foreign('withdraw_id')
                 ->references('id')
                 ->on($this->transactionTable())
-                ->onDelete('cascade')
-            ;
+                ->onDelete('cascade');
         });
     }
 

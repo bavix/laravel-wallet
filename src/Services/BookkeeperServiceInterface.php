@@ -30,7 +30,6 @@ interface BookkeeperServiceInterface
      * @template T of non-empty-array<string, Wallet>
      *
      * @param T $wallets
-     *
      * @return non-empty-array<key-of<T>, string>
      */
     public function multiAmount(array $wallets): array;
@@ -47,7 +46,6 @@ interface BookkeeperServiceInterface
      *
      * @param non-empty-array<key-of<T>, Wallet> $wallets
      * @param T $incrementValues
-     *
      * @return non-empty-array<key-of<T>, string>
      *
      * @throws RecordNotFoundException

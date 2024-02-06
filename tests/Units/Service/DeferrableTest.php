@@ -16,8 +16,7 @@ final class DeferrableTest extends TestCase
     public function testCheckDeferrableProvider(): void
     {
         $walletServiceProvider = app()
-            ->resolveProvider(WalletServiceProvider::class)
-        ;
+            ->resolveProvider(WalletServiceProvider::class);
 
         self::assertInstanceOf(DeferrableProvider::class, $walletServiceProvider);
         self::assertNotEmpty($walletServiceProvider->provides());

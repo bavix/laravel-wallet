@@ -8,7 +8,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class() extends Migration {
+return new class() extends Migration
+{
     public function up(): void
     {
         Schema::create($this->table(), static function (Blueprint $table) {
@@ -16,23 +17,17 @@ return new class() extends Migration {
             $table->morphs('holder');
             $table->string('name');
             $table->string('slug')
-                ->index()
-            ;
+                ->index();
             $table->uuid('uuid')
-                ->unique()
-            ;
+                ->unique();
             $table->string('description')
-                ->nullable()
-            ;
+                ->nullable();
             $table->json('meta')
-                ->nullable()
-            ;
+                ->nullable();
             $table->decimal('balance', 64, 0)
-                ->default(0)
-            ;
+                ->default(0);
             $table->unsignedSmallInteger('decimal_places')
-                ->default(2)
-            ;
+                ->default(2);
             $table->timestamps();
 
             $table->unique(['holder_type', 'holder_id', 'slug']);
@@ -42,8 +37,7 @@ return new class() extends Migration {
             $table->foreign('wallet_id')
                 ->references('id')
                 ->on($this->table())
-                ->onDelete('cascade')
-            ;
+                ->onDelete('cascade');
         });
     }
 

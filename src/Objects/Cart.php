@@ -16,8 +16,8 @@ use Bavix\Wallet\Internal\Exceptions\CartEmptyException;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Services\CastServiceInterface;
-use Countable;
 use function count;
+use Countable;
 
 final class Cart implements Countable, CartInterface
 {
@@ -180,6 +180,6 @@ final class Cart implements Countable, CartInterface
 
     private function productId(ProductInterface $product): string
     {
-        return $product::class . ':' . $this->castService->getModel($product)->getKey();
+        return $product::class.':'.$this->castService->getModel($product)->getKey();
     }
 }
