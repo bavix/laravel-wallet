@@ -38,8 +38,12 @@ final class CartTest extends TestCase
 
         $cartWithItems = $cart->withItems([$product]);
         $cartWithMeta = $cart
-            ->withMeta(['product_id' => $product->getKey()])
-            ->withExtra(['products' => count($cartWithItems->getItems())])
+            ->withMeta([
+                'product_id' => $product->getKey(),
+            ])
+            ->withExtra([
+                'products' => count($cartWithItems->getItems()),
+            ])
         ;
 
         self::assertCount(0, $cart->getItems());

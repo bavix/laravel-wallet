@@ -18,7 +18,9 @@ final readonly class TransferDtoAssembler implements TransferDtoAssemblerInterfa
     ) {
     }
 
-    /** @param array<mixed>|null $extra */
+    /**
+     * @param array<mixed>|null $extra
+     */
     public function create(
         int $depositId,
         int $withdrawId,

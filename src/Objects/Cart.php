@@ -175,7 +175,7 @@ final class Cart implements Countable, CartInterface
             throw new CartEmptyException('Cart is empty', ExceptionInterface::CART_EMPTY);
         }
 
-        return new BasketDto($items, $this->getMeta(), $this->getExtra());
+        return new BasketDto($items, $this->meta, $this->extra);
     }
 
     private function productId(ProductInterface $product): string

@@ -41,39 +41,67 @@ final class TransferHandlerTest extends TestCase
                     null,
                     null,
                     '598c184c-e6d6-4fc2-9640-c1c7acb38093',
-                    ['type' => 'first'],
+                    [
+                        'type' => 'first',
+                    ],
                 ),
             ),
-            new TransferQuery($from, $to, 100,
+            new TransferQuery(
+                $from,
+                $to,
+                100,
                 new Extra(
                     null,
                     null,
                     'f303d60d-c2de-45d0-b9ed-e1487429709a',
-                    ['type' => 'second'],
-                )),
-            new TransferQuery($to, $from, 50,
+                    [
+                        'type' => 'second',
+                    ],
+                )
+            ),
+            new TransferQuery(
+                $to,
+                $from,
+                50,
                 new Extra(
                     null,
                     null,
                     '7f0175fe-99cc-4058-92c6-157f0da18243',
-                    ['type' => 'third'],
-                )),
-            new TransferFloatQuery($to, $from, .50,
+                    [
+                        'type' => 'third',
+                    ],
+                )
+            ),
+            new TransferFloatQuery(
+                $to,
+                $from,
+                .50,
                 new Extra(
                     null,
                     null,
                     '1a7326a6-dfdf-4ec8-afc4-cb21cf1f43c6',
-                    ['type' => 'fourth'],
-                )),
+                    [
+                        'type' => 'fourth',
+                    ],
+                )
+            ),
         ]);
 
         self::assertSame(-100, $from->balanceInt);
         self::assertSame(100, $to->balanceInt);
         self::assertCount(4, $transfers);
 
-        self::assertSame(['type' => 'first'], $transfers['598c184c-e6d6-4fc2-9640-c1c7acb38093']->extra);
-        self::assertSame(['type' => 'second'], $transfers['f303d60d-c2de-45d0-b9ed-e1487429709a']->extra);
-        self::assertSame(['type' => 'third'], $transfers['7f0175fe-99cc-4058-92c6-157f0da18243']->extra);
-        self::assertSame(['type' => 'fourth'], $transfers['1a7326a6-dfdf-4ec8-afc4-cb21cf1f43c6']->extra);
+        self::assertSame([
+            'type' => 'first',
+        ], $transfers['598c184c-e6d6-4fc2-9640-c1c7acb38093']->extra);
+        self::assertSame([
+            'type' => 'second',
+        ], $transfers['f303d60d-c2de-45d0-b9ed-e1487429709a']->extra);
+        self::assertSame([
+            'type' => 'third',
+        ], $transfers['7f0175fe-99cc-4058-92c6-157f0da18243']->extra);
+        self::assertSame([
+            'type' => 'fourth',
+        ], $transfers['1a7326a6-dfdf-4ec8-afc4-cb21cf1f43c6']->extra);
     }
 }

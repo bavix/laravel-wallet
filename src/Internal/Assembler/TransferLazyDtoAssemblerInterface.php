@@ -10,7 +10,9 @@ use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 
 interface TransferLazyDtoAssemblerInterface
 {
-    /** @param array<mixed>|null $extra */
+    /**
+     * @param array<mixed>|null $extra
+     */
     public function create(
         Wallet $fromWallet,
         Wallet $toWallet,
