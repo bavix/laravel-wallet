@@ -118,8 +118,7 @@ final class ExchangeTest extends TestCase
         self::assertInstanceOf($superWallet->holder_type, $user);
 
         $rate = app(ExchangeServiceInterface::class)
-            ->convertTo($usd->currency, $rub->currency, 1000)
-        ;
+            ->convertTo($usd->currency, $rub->currency, 1000);
 
         self::assertSame(67610., (float) $rate);
     }
@@ -127,14 +126,12 @@ final class ExchangeTest extends TestCase
     public function testExchange(): void
     {
         $rate = app(ExchangeServiceInterface::class)
-            ->convertTo('USD', 'RUB', 1)
-        ;
+            ->convertTo('USD', 'RUB', 1);
 
         self::assertSame(67.61, (float) $rate);
 
         $rate = app(ExchangeServiceInterface::class)
-            ->convertTo('RUB', 'USD', 1)
-        ;
+            ->convertTo('RUB', 'USD', 1);
 
         self::assertSame(1 / 67.61, (float) $rate);
     }
@@ -144,8 +141,7 @@ final class ExchangeTest extends TestCase
         app()->bind(ExchangeServiceInterface::class, ExchangeUsdToBtcService::class);
 
         $rate = (float) app(ExchangeServiceInterface::class)
-            ->convertTo('USD', 'BTC', 1)
-        ;
+            ->convertTo('USD', 'BTC', 1);
 
         self::assertSame(0.004636, $rate);
 

@@ -36,8 +36,8 @@ final class LockService implements LockServiceInterface
         }
 
         $lock = $this->getLockProvider()
-            ->lock(self::LOCK_KEY . $key, $this->seconds);
-        $this->lockedKeys->put(self::INNER_KEYS . $key, true, $this->seconds);
+            ->lock(self::LOCK_KEY.$key, $this->seconds);
+        $this->lockedKeys->put(self::INNER_KEYS.$key, true, $this->seconds);
 
         // let's release the lock after the transaction, the fight against the race
         if ($this->connectionService->get()->transactionLevel() > 0) {
@@ -49,15 +49,15 @@ final class LockService implements LockServiceInterface
         try {
             return $lock->block($this->seconds, $callback);
         } finally {
-            $this->lockedKeys->delete(self::INNER_KEYS . $key);
+            $this->lockedKeys->delete(self::INNER_KEYS.$key);
         }
     }
 
     /**
      * @template T
+     *
      * @param string[] $keys
      * @param callable(): T $callback
-     *
      * @return T
      */
     public function blocks(array $keys, callable $callback): mixed
@@ -82,16 +82,16 @@ final class LockService implements LockServiceInterface
             }
 
             $lockProvider
-                ->lock(self::LOCK_KEY . $key, $this->seconds)
+                ->lock(self::LOCK_KEY.$key, $this->seconds)
                 ->forceRelease();
 
-            $this->lockedKeys->delete(self::INNER_KEYS . $key);
+            $this->lockedKeys->delete(self::INNER_KEYS.$key);
         }
     }
 
     public function isBlocked(string $key): bool
     {
-        return $this->lockedKeys->get(self::INNER_KEYS . $key) === true;
+        return $this->lockedKeys->get(self::INNER_KEYS.$key) === true;
     }
 
     private function getLockProvider(): LockProvider

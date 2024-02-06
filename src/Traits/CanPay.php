@@ -14,11 +14,12 @@ use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
-use Illuminate\Database\RecordsNotFoundException;
 use function current;
+use Illuminate\Database\RecordsNotFoundException;
 
 /**
  * @psalm-require-extends \Illuminate\Database\Eloquent\Model
+ *
  * @psalm-require-implements \Bavix\Wallet\Interfaces\Customer
  */
 trait CanPay

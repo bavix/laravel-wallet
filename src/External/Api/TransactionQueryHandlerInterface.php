@@ -18,7 +18,6 @@ interface TransactionQueryHandlerInterface
      * and check the correctness of the balance manually.
      *
      * @param non-empty-array<TransactionQueryInterface> $objects
-     *
      * @return non-empty-array<string, Transaction>
      *
      * @throws ExceptionInterface

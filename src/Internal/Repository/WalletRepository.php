@@ -40,11 +40,11 @@ final readonly class WalletRepository implements WalletRepositoryInterface
 
         $cases = [];
         foreach ($data as $walletId => $balance) {
-            $cases[] = 'WHEN id = ' . $walletId . ' THEN ' . $balance;
+            $cases[] = 'WHEN id = '.$walletId.' THEN '.$balance;
         }
 
         $buildQuery = $this->wallet->getConnection()
-            ->raw('CASE ' . implode(' ', $cases) . ' END');
+            ->raw('CASE '.implode(' ', $cases).' END');
 
         return $this->wallet->newQuery()
             ->whereIn('id', array_keys($data))
@@ -114,7 +114,6 @@ final readonly class WalletRepository implements WalletRepositoryInterface
 
     /**
      * @param array<int|string> $holderIds
-     *
      * @return Wallet[]
      */
     public function findDefaultAll(string $holderType, array $holderIds): array
@@ -124,8 +123,7 @@ final readonly class WalletRepository implements WalletRepositoryInterface
             ->where('holder_type', $holderType)
             ->whereIn('holder_id', $holderIds)
             ->get()
-            ->all()
-        ;
+            ->all();
     }
 
     /**
@@ -138,8 +136,7 @@ final readonly class WalletRepository implements WalletRepositoryInterface
         try {
             $wallet = $this->wallet->newQuery()
                 ->where($attributes)
-                ->firstOrFail()
-            ;
+                ->firstOrFail();
             assert($wallet instanceof Wallet);
 
             return $wallet;

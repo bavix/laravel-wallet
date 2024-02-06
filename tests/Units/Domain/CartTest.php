@@ -19,8 +19,8 @@ use Bavix\Wallet\Test\Infra\Models\Item;
 use Bavix\Wallet\Test\Infra\Models\ItemMeta;
 use Bavix\Wallet\Test\Infra\PackageModels\Transaction;
 use Bavix\Wallet\Test\Infra\TestCase;
-use Illuminate\Database\Eloquent\Collection;
 use function count;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * @internal
@@ -38,9 +38,12 @@ final class CartTest extends TestCase
 
         $cartWithItems = $cart->withItems([$product]);
         $cartWithMeta = $cart
-            ->withMeta(['product_id' => $product->getKey()])
-            ->withExtra(['products' => count($cartWithItems->getItems())])
-        ;
+            ->withMeta([
+                'product_id' => $product->getKey(),
+            ])
+            ->withExtra([
+                'products' => count($cartWithItems->getItems()),
+            ]);
 
         self::assertCount(0, $cart->getItems());
         self::assertCount(1, $cartWithItems->getItems());
@@ -69,8 +72,7 @@ final class CartTest extends TestCase
             ->withItems([$product])
             ->withMeta([
                 'type' => $expected,
-            ])
-        ;
+            ]);
 
         self::assertSame(0, $buyer->balanceInt);
         self::assertNotNull($buyer->deposit($cart->getTotal($buyer)));
@@ -111,8 +113,7 @@ final class CartTest extends TestCase
             ->withItems([$product])
             ->withMeta([
                 'type' => $expected,
-            ])
-        ;
+            ]);
 
         self::assertSame(0, $buyer->balanceInt);
         self::assertNotNull($buyer->deposit($cart->getTotal($buyer)));
@@ -184,7 +185,7 @@ final class CartTest extends TestCase
         $amount = 0;
         $price = 0;
         $productsCount = count($products);
-        for ($i = 0; $i < $productsCount - 1; ++$i) {
+        for ($i = 0; $i < $productsCount - 1; $i++) {
             self::assertNotNull($products[$i]);
 
             $rnd = random_int(1, 5);
@@ -220,7 +221,7 @@ final class CartTest extends TestCase
         $cart = app(Cart::class);
         $total = 0;
         $productsCount = count($products);
-        for ($i = 0; $i < $productsCount - 1; ++$i) {
+        for ($i = 0; $i < $productsCount - 1; $i++) {
             self::assertNotNull($products[$i]);
 
             $rnd = random_int(1, 5);
@@ -238,8 +239,7 @@ final class CartTest extends TestCase
         self::assertCount($total, $transfers);
 
         $refundCart = app(Cart::class)
-            ->withItems($products) // all goods
-        ;
+            ->withItems($products); // all goods
 
         $buyer->refundCart($refundCart);
     }
@@ -268,8 +268,7 @@ final class CartTest extends TestCase
         foreach ($products as $product) {
             $count = $product
                 ->boughtGoods([$buyer->wallet->getKey()])
-                ->count()
-            ;
+                ->count();
 
             self::assertSame($total[$product->getKey()], $count);
         }
@@ -335,8 +334,7 @@ final class CartTest extends TestCase
         $balance = $buyer->wallet::query()
             ->whereKey($buyer->wallet->getKey())
             ->getQuery()
-            ->value('balance')
-        ;
+            ->value('balance');
 
         self::assertSame(0, (int) $balance);
     }

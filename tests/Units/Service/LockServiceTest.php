@@ -67,8 +67,8 @@ final class LockServiceTest extends TestCase
 
     public function testInTransactionLockable(): void
     {
-        $blockKey1 = __METHOD__ . '1';
-        $blockKey2 = __METHOD__ . '2';
+        $blockKey1 = __METHOD__.'1';
+        $blockKey2 = __METHOD__.'2';
         $lock = app(LockServiceInterface::class);
         self::assertFalse($lock->isBlocked($blockKey1));
         self::assertFalse($lock->isBlocked($blockKey2));

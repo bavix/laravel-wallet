@@ -261,8 +261,7 @@ final class ProductTest extends TestCase
 
         $cart = app(Cart::class)
             ->withItem($productIn, pricePerItem: 1_000)
-            ->withItem($productIn)
-        ;
+            ->withItem($productIn);
 
         self::assertSame(6_000 + (int) $buyer->getKey(), (int) $cart->getTotal($buyer));
 

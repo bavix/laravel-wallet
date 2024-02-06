@@ -18,6 +18,7 @@ interface AtomicServiceInterface
      * The method atomically locks the transaction for other concurrent requests.
      *
      * @template T
+     *
      * @param callable(): T $callback
      * @return T
      *
@@ -32,6 +33,7 @@ interface AtomicServiceInterface
      * caution, generates N requests to the lock service.
      *
      * @template T
+     *
      * @param non-empty-array<Wallet> $objects
      * @param callable(): T $callback
      * @return T

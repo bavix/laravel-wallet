@@ -41,7 +41,7 @@ final class Item extends Model implements ProductLimitedInterface
             return $result;
         }
 
-        return $result && ! $customer->paid($this);
+        return $result && ! $customer->paid($this) instanceof Transfer;
     }
 
     public function getAmountProduct(Customer $customer): int
@@ -59,7 +59,6 @@ final class Item extends Model implements ProductLimitedInterface
 
     /**
      * @param int[] $walletIds
-     *
      * @return HasMany<Transfer>
      */
     public function boughtGoods(array $walletIds): HasMany
@@ -68,7 +67,6 @@ final class Item extends Model implements ProductLimitedInterface
             ->getWallet($this)
             ->hasMany(Config::classString('wallet.transfer.model', Transfer::class), 'to_id')
             ->where('status', Transfer::STATUS_PAID)
-            ->whereIn('from_id', $walletIds)
-        ;
+            ->whereIn('from_id', $walletIds);
     }
 }

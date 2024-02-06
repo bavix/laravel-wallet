@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Internal\Query;
 
 /**
  * @immutable
+ *
  * @internal
  */
 final readonly class TransferQuery implements TransferQueryInterface

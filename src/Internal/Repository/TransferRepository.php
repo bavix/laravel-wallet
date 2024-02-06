@@ -33,8 +33,7 @@ final readonly class TransferRepository implements TransferRepositoryInterface
         }
 
         $this->transfer->newQuery()
-            ->insert($values)
-        ;
+            ->insert($values);
     }
 
     public function insertOne(TransferDtoInterface $dto): Transfer
@@ -54,8 +53,7 @@ final readonly class TransferRepository implements TransferRepositoryInterface
         return $this->transfer->newQuery()
             ->whereIn('uuid', $query->getUuids())
             ->get()
-            ->all()
-        ;
+            ->all();
     }
 
     /**
@@ -71,7 +69,6 @@ final readonly class TransferRepository implements TransferRepositoryInterface
             ->update([
                 'status_last' => $connection->raw('status'),
                 'status' => $status,
-            ])
-        ;
+            ]);
     }
 }

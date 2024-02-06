@@ -18,39 +18,34 @@ final readonly class MathService implements MathServiceInterface
     {
         return (string) BigDecimal::of($first)
             ->plus(BigDecimal::of($second))
-            ->toScale($scale ?? $this->scale, RoundingMode::DOWN)
-        ;
+            ->toScale($scale ?? $this->scale, RoundingMode::DOWN);
     }
 
     public function sub(float|int|string $first, float|int|string $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($first)
             ->minus(BigDecimal::of($second))
-            ->toScale($scale ?? $this->scale, RoundingMode::DOWN)
-        ;
+            ->toScale($scale ?? $this->scale, RoundingMode::DOWN);
     }
 
     public function div(float|int|string $first, float|int|string $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($first)
-            ->dividedBy(BigDecimal::of($second), $scale ?? $this->scale, RoundingMode::DOWN)
-        ;
+            ->dividedBy(BigDecimal::of($second), $scale ?? $this->scale, RoundingMode::DOWN);
     }
 
     public function mul(float|int|string $first, float|int|string $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($first)
             ->multipliedBy(BigDecimal::of($second))
-            ->toScale($scale ?? $this->scale, RoundingMode::DOWN)
-        ;
+            ->toScale($scale ?? $this->scale, RoundingMode::DOWN);
     }
 
     public function pow(float|int|string $first, float|int|string $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($first)
             ->power((int) $second)
-            ->toScale($scale ?? $this->scale, RoundingMode::DOWN)
-        ;
+            ->toScale($scale ?? $this->scale, RoundingMode::DOWN);
     }
 
     public function powTen(float|int|string $number): string
@@ -61,22 +56,19 @@ final readonly class MathService implements MathServiceInterface
     public function ceil(float|int|string $number): string
     {
         return (string) BigDecimal::of($number)
-            ->dividedBy(BigDecimal::one(), 0, RoundingMode::CEILING)
-        ;
+            ->dividedBy(BigDecimal::one(), 0, RoundingMode::CEILING);
     }
 
     public function floor(float|int|string $number): string
     {
         return (string) BigDecimal::of($number)
-            ->dividedBy(BigDecimal::one(), 0, RoundingMode::FLOOR)
-        ;
+            ->dividedBy(BigDecimal::one(), 0, RoundingMode::FLOOR);
     }
 
     public function round(float|int|string $number, int $precision = 0): string
     {
         return (string) BigDecimal::of($number)
-            ->dividedBy(BigDecimal::one(), $precision, RoundingMode::HALF_UP)
-        ;
+            ->dividedBy(BigDecimal::one(), $precision, RoundingMode::HALF_UP);
     }
 
     public function abs(float|int|string $number): string

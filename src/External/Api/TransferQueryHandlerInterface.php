@@ -18,7 +18,6 @@ interface TransferQueryHandlerInterface
      * and check the correctness of the balance manually.
      *
      * @param non-empty-array<TransferQueryInterface> $objects
-     *
      * @return non-empty-array<string, Transfer>
      *
      * @throws ExceptionInterface

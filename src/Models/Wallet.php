@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Models;
 
+use function app;
+use function array_key_exists;
 use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Exchangeable;
@@ -13,21 +15,18 @@ use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Bavix\Wallet\Services\AtomicServiceInterface;
-use Bavix\Wallet\Services\CastServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Traits\CanConfirm;
 use Bavix\Wallet\Traits\CanExchange;
 use Bavix\Wallet\Traits\CanPayFloat;
 use Bavix\Wallet\Traits\HasGift;
+use function config;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\RecordsNotFoundException;
 use Illuminate\Support\Str;
-use function app;
-use function array_key_exists;
-use function config;
 
 /**
  * Class Wallet.
@@ -102,13 +101,16 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     public function setNameAttribute(string $name): void
     {
         $this->attributes['name'] = $name;
-
         /**
          * Must be updated only if the model does not exist or the slug is empty.
          */
-        if (! $this->exists && ! array_key_exists('slug', $this->attributes)) {
-            $this->attributes['slug'] = Str::slug($name);
+        if ($this->exists) {
+            return;
         }
+        if (array_key_exists('slug', $this->attributes)) {
+            return;
+        }
+        $this->attributes['slug'] = Str::slug($name);
     }
 
     /**
@@ -140,8 +142,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     {
         return $this->walletTransactions()
             ->where('confirmed', true)
-            ->sum('amount')
-        ;
+            ->sum('amount');
     }
 
     /**

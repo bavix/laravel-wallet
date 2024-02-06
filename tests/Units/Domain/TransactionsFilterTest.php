@@ -38,20 +38,16 @@ final class TransactionsFilterTest extends TestCase
 
         $nullable = $buyer->transactions()
             ->whereNull('meta')
-            ->count()
-        ;
+            ->count();
         $customers = $buyer->transactions()
             ->where('meta->account', 'customers')
-            ->count()
-        ;
+            ->count();
         $expenses = $buyer->transactions()
             ->where('meta->account', 'expenses')
-            ->count()
-        ;
+            ->count();
         $vendors = $buyer->transactions()
             ->where('meta->account', 'vendors')
-            ->count()
-        ;
+            ->count();
 
         self::assertSame(1, $nullable);
         self::assertSame(1, $customers);
@@ -61,8 +57,7 @@ final class TransactionsFilterTest extends TestCase
         $countByPeriods = $buyer->transactions()
             ->whereIn('meta->account', ['customers', 'expenses', 'vendors'])
             ->whereBetween('created_at', [now()->subDays(7), now()])
-            ->count()
-        ;
+            ->count();
 
         self::assertSame(3, $countByPeriods);
     }
@@ -90,13 +85,11 @@ final class TransactionsFilterTest extends TestCase
 
         $credits1 = $buyer1->transactions()
             ->where('meta->type', 'credit')
-            ->count()
-        ;
+            ->count();
 
         $credits2 = $buyer2->transactions()
             ->where('meta->type', 'credit')
-            ->count()
-        ;
+            ->count();
 
         self::assertSame(1, $credits1);
         self::assertSame(1, $credits2);
@@ -118,8 +111,7 @@ final class TransactionsFilterTest extends TestCase
         $query = Transaction::with('wallet')
             ->where('payable_id', $buyer->getKey())
             ->where('wallet_id', '=', $buyer->wallet->getKey())
-            ->orderBy('created_at', 'desc')
-        ;
+            ->orderBy('created_at', 'desc');
 
         $page1 = (clone $query)->paginate(10, page: 1);
         self::assertCount(10, $page1->items());
@@ -159,13 +151,11 @@ final class TransactionsFilterTest extends TestCase
                     ->where('payable_type', '=', $buyer->getMorphClass())
                     ->where('payable_id', '=', $buyer->getKey())
                     ->where('wallet_id', '=', $buyer->wallet->getKey())
-                    ->join($walletTableName, $transactionTableName . '.wallet_id', '=', $walletTableName . '.id')
-                    ->select($transactionTableName . '.*', $walletTableName . '.name')
-                    ->get()
-                ;
+                    ->join($walletTableName, $transactionTableName.'.wallet_id', '=', $walletTableName.'.id')
+                    ->select($transactionTableName.'.*', $walletTableName.'.name')
+                    ->get();
             })
-            ->orderBy('created_at', 'desc')
-        ;
+            ->orderBy('created_at', 'desc');
 
         $page1 = (clone $query)->paginate(10, page: 1);
         self::assertCount(10, $page1->items());
