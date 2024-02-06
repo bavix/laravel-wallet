@@ -41,7 +41,9 @@ final class ExtraTest extends TestCase
                     ],
                     false
                 ),
-                extra: ['msg' => 'hello world'],
+                extra: [
+                    'msg' => 'hello world',
+                ],
             )
         );
 

@@ -46,7 +46,7 @@ final class ItemMultiPrice extends Model implements ProductLimitedInterface
             return $result;
         }
 
-        return $result && ! $customer->paid($this);
+        return $result && ! $customer->paid($this) instanceof \Bavix\Wallet\Models\Transfer;
     }
 
     public function getAmountProduct(Customer $customer): int

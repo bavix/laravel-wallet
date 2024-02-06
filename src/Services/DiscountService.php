@@ -15,10 +15,12 @@ final class DiscountService implements DiscountServiceInterface
 {
     public function getDiscount(Wallet $customer, Wallet $product): int
     {
-        if ($customer instanceof Customer && $product instanceof Discount) {
-            return (int) $product->getPersonalDiscount($customer);
+        if (! $customer instanceof Customer) {
+            return 0;
         }
-
-        return 0;
+        if (! $product instanceof Discount) {
+            return 0;
+        }
+        return (int) $product->getPersonalDiscount($customer);
     }
 }

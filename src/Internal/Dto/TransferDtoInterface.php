@@ -24,7 +24,9 @@ interface TransferDtoInterface
 
     public function getFee(): string;
 
-    /** @return array<mixed>|null */
+    /**
+     * @return array<mixed>|null
+     */
     public function getExtra(): ?array;
 
     public function getCreatedAt(): DateTimeImmutable;

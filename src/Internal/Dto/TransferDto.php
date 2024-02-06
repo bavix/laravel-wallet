@@ -9,7 +9,9 @@ use DateTimeImmutable;
 /** @immutable */
 final readonly class TransferDto implements TransferDtoInterface
 {
-    /** @param array<mixed>|null $extra */
+    /**
+     * @param array<mixed>|null $extra
+     */
     public function __construct(
         private string $uuid,
         private int $depositId,
