@@ -36,9 +36,9 @@ final class BalanceTest extends TestCase
         $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
 
-        unset($buyer->wallet["slug"], $buyer->wallet["name"]);
+        unset($buyer->wallet['slug'], $buyer->wallet['name']);
 
-        $buyer->wallet->name = "test";
+        $buyer->wallet->name = 'test';
         $buyer->wallet->save();
 
         $buyer->deposit(1);
@@ -46,24 +46,24 @@ final class BalanceTest extends TestCase
         self::assertTrue($buyer->relationLoaded('wallet'));
         self::assertTrue($buyer->wallet->exists);
 
-        self::assertSame("test", $buyer->wallet->name);
-        self::assertSame("test", $buyer->wallet->slug);
+        self::assertSame('test', $buyer->wallet->name);
+        self::assertSame('test', $buyer->wallet->slug);
 
         self::assertTrue($buyer->wallet->forceDelete());
         self::assertFalse($buyer->wallet->exists);
 
-        $buyer->wallet->name = "test2";
+        $buyer->wallet->name = 'test2';
         $buyer->wallet->save();
 
-        self::assertSame("test2", $buyer->wallet->name);
-        self::assertSame("test", $buyer->wallet->slug);
+        self::assertSame('test2', $buyer->wallet->name);
+        self::assertSame('test', $buyer->wallet->slug);
 
         // exists
-        $buyer->wallet->name = "test3";
+        $buyer->wallet->name = 'test3';
         $buyer->wallet->save();
 
-        self::assertSame("test3", $buyer->wallet->name);
-        self::assertSame("test", $buyer->wallet->slug);
+        self::assertSame('test3', $buyer->wallet->name);
+        self::assertSame('test', $buyer->wallet->slug);
     }
 
     public function testDecimalPlaces(): void
