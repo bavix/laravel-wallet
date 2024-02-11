@@ -12,7 +12,8 @@
     "wallet",
     "payments"
   ],
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "homepage": "https://bavix.github.io/laravel-wallet/",
   "license": "MIT",
   "authors": [
@@ -26,14 +27,12 @@
     "ext-json": "*",
     "ext-pdo": "*",
     "brick/math": "~0.10",
-    "doctrine/dbal": "^3.5",
-    "illuminate/contracts": "^10.0",
-    "illuminate/database": "^10.0",
+    "illuminate/contracts": "^10.0|^11.0",
+    "illuminate/database": "^10.0|^11.0",
     "ramsey/uuid": "^4.0"
   },
   "require-dev": {
     "brianium/paratest": "^7.2",
-    "cknow/laravel-money": "^7.1",
     "ergebnis/phpstan-rules": "^1.0",
     "infection/infection": "~0.27",
     "laravel/cashier": "^15.0",
@@ -47,7 +46,9 @@
   },
   "suggest": {
     "bavix/laravel-wallet-swap": "Addition to the laravel-wallet library for quick setting of exchange rates",
-    "bavix/laravel-wallet-warmup": "Addition to the laravel-wallet library for refresh balance wallets"
+    "bavix/laravel-wallet-uuid": "Addition to the laravel-wallet library uuid support in laravel-wallet",
+    "bavix/laravel-wallet-warmup": "Addition to the laravel-wallet library for refresh balance wallets",
+    "doctrine/dbal": "Required to rename columns and drop SQLite columns (^3.5.1)."
   },
   "autoload": {
     "psr-4": {
