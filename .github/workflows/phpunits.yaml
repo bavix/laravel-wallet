@@ -19,6 +19,7 @@ jobs:
     strategy:
       matrix:
         php-versions: [8.1, 8.2, 8.3]
+        stability: [prefer-lowest, prefer-stable]
         databases: [testing, pgsql, mysql, mariadb]
         caches: [array, redis, memcached, database]
         locks: [redis, memcached]
@@ -115,7 +116,7 @@ jobs:
 
       - name: Install dependencies
         id: composer-dependencies
-        run: composer install --prefer-dist --no-progress
+        run: composer install --${{ matrix.stability }} --no-progress
 
       - name: Check codeclimate
         id: codeclimate-check
