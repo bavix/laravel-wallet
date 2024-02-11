@@ -116,7 +116,7 @@ jobs:
 
       - name: Install dependencies
         id: composer-dependencies
-        run: composer install --${{ matrix.stability }} --no-progress
+        run: composer update --${{ matrix.stability }} --prefer-dist --no-progress
 
       - name: Check codeclimate
         id: codeclimate-check
