@@ -2,9 +2,9 @@ name: phpunits
 
 on:
   push:
-    branches: [ master ]
+    branches: [ 10.x ]
   pull_request:
-    branches: [ master ]
+    branches: [ 10.x ]
 
 env:
   MEMCACHED_HOST: localhost

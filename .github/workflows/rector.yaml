@@ -2,9 +2,9 @@ name: rector
 
 on:
   push:
-    branches: [ master ]
+    branches: [ 10.x ]
   pull_request:
-    branches: [ master ]
+    branches: [ 10.x ]
 
 jobs:
   rector:
