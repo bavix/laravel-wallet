@@ -70,7 +70,6 @@ class Transfer extends Model
      */
     public function casts(): array
     {
-
         return [
             'deposit_id' => 'int',
             'withdraw_id' => 'int',
