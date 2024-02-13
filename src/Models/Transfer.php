@@ -66,13 +66,16 @@ class Transfer extends Model
     ];
 
     /**
-     * @var array<string, string>
+     * @return array<string, string>
      */
-    protected $casts = [
-        'deposit_id' => 'int',
-        'withdraw_id' => 'int',
-        'extra' => 'json',
-    ];
+    public function casts(): array
+    {
+        return [
+            'deposit_id' => 'int',
+            'withdraw_id' => 'int',
+            'extra' => 'json',
+        ];
+    }
 
     public function getTable(): string
     {

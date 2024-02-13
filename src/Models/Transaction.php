@@ -62,13 +62,16 @@ class Transaction extends Model
     ];
 
     /**
-     * @var array<string, string>
+     * @return array<string, string>
      */
-    protected $casts = [
-        'wallet_id' => 'int',
-        'confirmed' => 'bool',
-        'meta' => 'json',
-    ];
+    public function casts(): array
+    {
+        return [
+            'wallet_id' => 'int',
+            'confirmed' => 'bool',
+            'meta' => 'json',
+        ];
+    }
 
     public function getTable(): string
     {

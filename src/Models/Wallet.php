@@ -74,20 +74,23 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     ];
 
     /**
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'decimal_places' => 'int',
-        'meta' => 'json',
-    ];
-
-    /**
      * @var array<string, int|string>
      */
     protected $attributes = [
         'balance' => 0,
         'decimal_places' => 2,
     ];
+
+    /**
+     * @return array<string, string>
+     */
+    public function casts(): array
+    {
+        return [
+            'decimal_places' => 'int',
+            'meta' => 'json',
+        ];
+    }
 
     public function getTable(): string
     {
