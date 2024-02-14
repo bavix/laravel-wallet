@@ -29,10 +29,6 @@ final class ItemMultiPrice extends Model implements ProductLimitedInterface
      */
     protected $fillable = ['name', 'quantity', 'price', 'prices'];
 
-    protected $casts = [
-        'prices' => 'array',
-    ];
-
     public function getTable(): string
     {
         return 'items';
@@ -64,5 +60,12 @@ final class ItemMultiPrice extends Model implements ProductLimitedInterface
     public function getMetaProduct(): ?array
     {
         return null;
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'prices' => 'array',
+        ];
     }
 }
