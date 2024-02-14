@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
+use RectorLaravel\Set\LaravelLevelSetList;
 
 return static function (RectorConfig $config): void {
     $config->parallel();
@@ -15,6 +16,7 @@ return static function (RectorConfig $config): void {
 
     // Define what rule sets will be applied
     $config->import(PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES);
+    $config->import(LaravelLevelSetList::UP_TO_LARAVEL_110);
     $config->import(PHPUnitSetList::PHPUNIT_100);
     $config->import(SetList::STRICT_BOOLEANS);
     $config->import(SetList::PRIVATIZATION);
