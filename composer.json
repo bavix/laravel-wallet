@@ -32,7 +32,6 @@
     "ramsey/uuid": "^4.0"
   },
   "require-dev": {
-    "brianium/paratest": "^7.4",
     "driftingly/rector-laravel": "^1.0",
     "ergebnis/phpstan-rules": "^2.1",
     "infection/infection": "~0.27",
@@ -62,8 +61,6 @@
   },
   "scripts": {
     "docs": "@php -S localhost:3000 -t ./docs",
-    "unit":"@php vendor/bin/phpunit --coverage-xml=build/coverage-xml --log-junit=build/junit.xml",
-    "paraunit":"@php vendor/bin/paratest --coverage-xml=build/coverage-xml --log-junit=build/junit.xml",
     "parabench":"@php ./vendor/bin/testbench package:test --coverage-xml=build/coverage-xml --log-junit=build/junit.xml",
     "infect": "@php vendor/bin/infection --coverage=build --min-msi=50 -j$(nproc) --only-covering-test-cases",
     "phpstan": ["@phpstan-src", "@phpstan-tests"],

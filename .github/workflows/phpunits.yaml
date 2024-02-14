@@ -137,11 +137,7 @@ jobs:
       - name: Run test suite
         id: unit-run
         run: |
-          if [[ $DB_CONNECTION == "mariadb" ]]; then
-            composer unit
-          else
-            composer parabench
-          fi
+          composer parabench
         env:
           WALLET_CACHE_DRIVER: ${{ matrix.caches }}
           WALLET_LOCK_DRIVER: ${{ matrix.locks }}
