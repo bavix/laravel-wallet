@@ -62,6 +62,9 @@ final class ItemMultiPrice extends Model implements ProductLimitedInterface
         return null;
     }
 
+    /**
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [

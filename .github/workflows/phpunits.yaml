@@ -119,7 +119,7 @@ jobs:
 
       - name: Check codeclimate
         id: codeclimate-check
-        run: echo "execute=${{ matrix.php-versions == '8.2' && matrix.caches == 'array' && matrix.databases == 'testing' }}" >> $GITHUB_OUTPUT
+        run: echo "execute=${{ matrix.php-versions == '8.3' && matrix.caches == 'array' && matrix.locks == 'redis' && matrix.databases == 'testing' }}" >> $GITHUB_OUTPUT
 
       - name: Prepare codeclimate
         id: codeclimate-prepare
@@ -137,11 +137,7 @@ jobs:
       - name: Run test suite
         id: unit-run
         run: |
-          if [[ $DB_CONNECTION == "mariadb" ]]; then
-            composer unit
-          else
-            composer parabench
-          fi
+          composer parabench
         env:
           WALLET_CACHE_DRIVER: ${{ matrix.caches }}
           WALLET_LOCK_DRIVER: ${{ matrix.locks }}
