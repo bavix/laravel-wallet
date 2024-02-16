@@ -6,15 +6,12 @@ namespace Bavix\Wallet\Test\Units\Domain;
 
 use Bavix\Wallet\External\Api\TransferQuery;
 use Bavix\Wallet\External\Api\TransferQueryHandlerInterface;
-use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
-use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\PackageModels\Transfer;
 use Bavix\Wallet\Test\Infra\PackageModels\Wallet;
 use Bavix\Wallet\Test\Infra\TestCase;
 use Illuminate\Database\Eloquent\Builder;
-use function now;
 
 /**
  * @internal
@@ -48,16 +45,17 @@ final class TransfersFilterTest extends TestCase
         $filter = static fn (Buyer $buyer): Builder => Transfer::query()
             ->whereHas(
                 'from',
-                fn (Builder $q) => $q->whereHas(
-                    'holder',
-                    fn (Builder $q) => $q->where('name', $buyer->name),
-                )
+                fn (Builder $q) => $q->whereHas('holder', fn (Builder $q) => $q->where('name', $buyer->name))
             );
 
-        $fromFiltered = $filter($from)->get()->all();
+        $fromFiltered = $filter($from)
+            ->get()
+            ->all();
         self::assertCount(3, $fromFiltered);
 
-        $toFiltered = $filter($to)->get()->all();
+        $toFiltered = $filter($to)
+            ->get()
+            ->all();
         self::assertCount(1, $toFiltered);
     }
 }
