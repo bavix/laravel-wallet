@@ -46,7 +46,7 @@ class Transaction extends Model
     final public const TYPE_WITHDRAW = 'withdraw';
 
     /**
-     * @var string[]
+     * @var array<int, string>
      */
     protected $fillable = [
         'payable_type',

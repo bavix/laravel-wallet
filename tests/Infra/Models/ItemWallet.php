@@ -25,7 +25,7 @@ final class ItemWallet extends Model implements ProductLimitedInterface
     use HasWallets;
 
     /**
-     * @var string[]
+     * @var array<int, string>
      */
     protected $fillable = ['name', 'quantity', 'price'];
 
