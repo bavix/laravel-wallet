@@ -24,7 +24,7 @@ final class ItemDiscount extends Model implements ProductLimitedInterface, Disco
     use HasWallet;
 
     /**
-     * @var array<int,string>
+     * @var array<int, string>
      */
     protected $fillable = ['name', 'quantity', 'price'];
 

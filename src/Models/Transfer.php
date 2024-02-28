@@ -49,7 +49,7 @@ class Transfer extends Model
     final public const STATUS_GIFT = 'gift';
 
     /**
-     * @var array<int,string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'status',

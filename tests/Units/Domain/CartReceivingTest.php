@@ -103,6 +103,7 @@ final class CartReceivingTest extends TestCase
         self::assertCount(10, $cart->getItems());
 
         foreach ($cart->getItems() as $product) {
+            /** @var Item $product */
             self::assertSame(0, $product->getWallet('dollar')?->balanceInt);
         }
 

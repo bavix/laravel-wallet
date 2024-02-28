@@ -22,7 +22,7 @@ final class UserConfirm extends Model implements Wallet, Confirmable
     use CanConfirm;
 
     /**
-     * @var array<int,string>
+     * @var array<int, string>
      */
     protected $fillable = ['name', 'email'];
 

@@ -23,7 +23,6 @@ use Bavix\Wallet\Traits\HasGift;
 use function config;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\RecordsNotFoundException;
@@ -58,7 +57,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     use SoftDeletes;
 
     /**
-     * @var array<int,string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'holder_type',
@@ -167,18 +166,8 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         return $this->meta['currency'] ?? Str::upper($this->slug);
     }
 
-    /**
-     * returns all the receiving transfers to this wallet.
-     *
-     * @return HasMany<Transfer>
-     */
-    public function receivedTransfers(): HasMany
-    {
-        return $this->hasMany(config('wallet.transfer.model', Transfer::class), 'to_id');
-    }
-
     protected function initializeMorphOneWallet(): void
     {
-        $this->uuid ??= app(UuidFactoryServiceInterface::class)->uuid4();
+        $this->uuid = app(UuidFactoryServiceInterface::class)->uuid4();
     }
 }

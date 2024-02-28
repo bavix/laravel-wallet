@@ -20,7 +20,7 @@ final class UserFloat extends Model implements Wallet, WalletFloat
     use HasWalletFloat;
 
     /**
-     * @var array<int,string>
+     * @var array<int, string>
      */
     protected $fillable = ['name', 'email'];
 
