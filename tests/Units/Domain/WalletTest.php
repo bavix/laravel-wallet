@@ -306,11 +306,19 @@ final class WalletTest extends TestCase
     {
         /** @var UserDynamic $user */
         $user = UserDynamicFactory::new()->create();
+        self::assertFalse($user->relationLoaded('wallet'));
 
         self::assertNotNull($user->deposit(100));
         self::assertSame(100, $user->balanceInt);
 
+        self::assertTrue($user->relationLoaded('wallet'));
         self::assertSame('default-'.$user->email, $user->wallet->slug);
+
+        /** @var UserDynamic $userFound */
+        $userFound = UserDynamic::query()->find($user->getKey());
+
+        self::assertFalse($userFound->relationLoaded('wallet'));
+        self::assertSame('default-'.$user->email, $userFound->wallet->slug);
     }
 
     public function testCrash(): void

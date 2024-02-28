@@ -24,7 +24,7 @@ final class ItemMinTax extends Model implements ProductLimitedInterface, Minimal
     use HasWallet;
 
     /**
-     * @var string[]
+     * @var array<int, string>
      */
     protected $fillable = ['name', 'quantity', 'price'];
 

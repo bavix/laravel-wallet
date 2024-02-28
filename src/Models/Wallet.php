@@ -57,7 +57,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     use SoftDeletes;
 
     /**
-     * @var string[]
+     * @var array<int, string>
      */
     protected $fillable = [
         'holder_type',

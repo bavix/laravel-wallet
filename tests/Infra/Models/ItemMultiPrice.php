@@ -25,7 +25,7 @@ final class ItemMultiPrice extends Model implements ProductLimitedInterface
     use HasWallet;
 
     /**
-     * @var string[]
+     * @var array<int, string>
      */
     protected $fillable = ['name', 'quantity', 'price', 'prices'];
 
