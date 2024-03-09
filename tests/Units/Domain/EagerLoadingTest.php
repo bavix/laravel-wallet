@@ -22,11 +22,14 @@ final class EagerLoadingTest extends TestCase
 {
     public function testUuidDuplicate(): void
     {
+        $expected = [];
+
         /** @var Buyer[]|Collection $buyerTimes */
         $buyerTimes = BuyerFactory::times(10)->create();
         foreach ($buyerTimes as $buyerTime) {
             self::assertTrue($buyerTime->wallet->relationLoaded('holder'));
             $buyerTime->deposit(100);
+            $expected[] = $buyerTime->wallet->uuid;
         }
 
         /** @var Buyer[] $buyers */
@@ -47,6 +50,7 @@ final class EagerLoadingTest extends TestCase
 
         self::assertCount(10, array_unique($uuids));
         self::assertCount(1, array_unique($balances));
+        self::assertEquals($expected, $uuids);
     }
 
     public function testTransferTransactions(): void

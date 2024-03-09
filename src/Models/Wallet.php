@@ -156,6 +156,6 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
 
     protected function initializeMorphOneWallet(): void
     {
-        $this->uuid = app(UuidFactoryServiceInterface::class)->uuid4();
+        $this->uuid ??= app(UuidFactoryServiceInterface::class)->uuid4();
     }
 }
