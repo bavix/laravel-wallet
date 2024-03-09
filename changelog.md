@@ -1,5 +1,13 @@
 # Changelog
 
+## 10.1.4 - 2024-03-09
+
+### What's Changed
+
+* [10.x] fix initializeMorphOneWallet by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/905
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/10.1.3...10.1.4
+
 ## 10.1.3 - 2024-02-01
 
 ### What's Changed
@@ -2182,11 +2190,17 @@ Added a patch from version 4.2.1 #150
 ### Added
 
 - written README.
+  
 - Project configuration file created.
+  
 - Migration 2018_11_06_222923_create_transactions_table.
+  
 - Migration 2018_11_07_192923_create_transfers_table.
+  
 - `HasWallet` trait and `Wallet` interface.
+  
   - methods:
+    
     - private checkAmount(int $amount): void
     - public forceWithdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     - public deposit(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
@@ -2200,14 +2214,17 @@ Added a patch from version 4.2.1 #150
     - public resetBalance(): void
     
   - relations:
+    
     - public transactions(): MorphMany
     - public transfers(): MorphMany
     
   - magic property
+    
     - public getBalanceAttribute(): int
     
   
 - `CanBePaid` trait and `Product`, `Costomer` interface's
+  
   - methods:
     - public pay(Product $product): Transfer
     - public safePay(Product $product): ?Transfer
@@ -2216,7 +2233,9 @@ Added a patch from version 4.2.1 #150
     
   
 - Exceptions: AmountInvalid, BalanceIsEmpty.
+  
 - Models: Transfer, Transaction.
+  
 
 ## What's Changed
 
