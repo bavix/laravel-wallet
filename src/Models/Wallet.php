@@ -167,11 +167,6 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         return $this->meta['currency'] ?? Str::upper($this->slug);
     }
 
-    protected function initializeMorphOneWallet(): void
-    {
-        $this->uuid ??= app(UuidFactoryServiceInterface::class)->uuid4();
-    }
-
     /**
      * returns all the receiving transfers to this wallet.
      *
@@ -180,5 +175,10 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     public function receivedTransfers(): HasMany
     {
         return $this->hasMany(config('wallet.transfer.model', Transfer::class), 'to_id');
+    }
+
+    protected function initializeMorphOneWallet(): void
+    {
+        $this->uuid ??= app(UuidFactoryServiceInterface::class)->uuid4();
     }
 }
