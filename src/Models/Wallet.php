@@ -167,16 +167,6 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         return $this->meta['currency'] ?? Str::upper($this->slug);
     }
 
-    /**
-     * returns all the receiving transfers to this wallet.
-     *
-     * @return HasMany<Transfer>
-     */
-    public function receivedTransfers(): HasMany
-    {
-        return $this->hasMany(config('wallet.transfer.model', Transfer::class), 'to_id');
-    }
-
     protected function initializeMorphOneWallet(): void
     {
         $this->uuid ??= app(UuidFactoryServiceInterface::class)->uuid4();
