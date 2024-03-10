@@ -2,7 +2,7 @@ name: build docs
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ 10.x ]
 
 jobs:
   build_pages:

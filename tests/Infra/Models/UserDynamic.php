@@ -19,7 +19,7 @@ final class UserDynamic extends Model implements Wallet
     use HasWallet;
 
     /**
-     * @var string[]
+     * @var array<int,string>
      */
     protected $fillable = ['name', 'email'];
 

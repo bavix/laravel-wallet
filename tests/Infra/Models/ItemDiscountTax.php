@@ -25,7 +25,7 @@ final class ItemDiscountTax extends Model implements ProductLimitedInterface, Di
     use HasWallet;
 
     /**
-     * @var string[]
+     * @var array<int,string>
      */
     protected $fillable = ['name', 'quantity', 'price'];
 

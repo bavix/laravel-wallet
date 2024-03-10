@@ -13,9 +13,9 @@ use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Factories\ItemDiscountFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\Models\ItemDiscount;
-use Bavix\Wallet\Test\Infra\TestCase;
 use Bavix\Wallet\Test\Infra\PackageModels\Transaction as InfraTransaction;
 use Bavix\Wallet\Test\Infra\PackageModels\Wallet as InfraWallet;
+use Bavix\Wallet\Test\Infra\TestCase;
 
 /**
  * @internal

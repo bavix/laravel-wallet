@@ -2,9 +2,9 @@ name: phpunits
 
 on:
   push:
-    branches: [ master ]
+    branches: [ 10.x ]
   pull_request:
-    branches: [ master ]
+    branches: [ 10.x ]
 
 env:
   MEMCACHED_HOST: localhost
@@ -19,6 +19,7 @@ jobs:
     strategy:
       matrix:
         php-versions: [8.1, 8.2, 8.3]
+        stability: [prefer-lowest, prefer-stable]
         databases: [testing, pgsql, mysql, mariadb]
         caches: [array, redis, memcached, database]
         locks: [redis, memcached]
@@ -73,7 +74,7 @@ jobs:
           - 3306:3306
 
       mariadb:
-        image: mariadb:10.5
+        image: mariadb:10.10
         env:
           MYSQL_ROOT_PASSWORD: wallet
           MYSQL_DATABASE: wallet
@@ -115,11 +116,11 @@ jobs:
 
       - name: Install dependencies
         id: composer-dependencies
-        run: composer install --prefer-dist --no-progress
+        run: composer update --${{ matrix.stability }} --prefer-dist --no-progress
 
       - name: Check codeclimate
         id: codeclimate-check
-        run: echo "execute=${{ matrix.php-versions == '8.2' && matrix.caches == 'array' && matrix.databases == 'testing' }}" >> $GITHUB_OUTPUT
+        run: echo "execute=${{ matrix.php-versions == '8.3' && matrix.caches == 'array' && matrix.databases == 'testing' }}" >> $GITHUB_OUTPUT
 
       - name: Prepare codeclimate
         id: codeclimate-prepare
