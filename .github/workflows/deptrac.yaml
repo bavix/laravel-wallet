@@ -2,9 +2,9 @@ name: deptrac
 
 on:
   push:
-    branches: [ 10.x ]
+    branches: [ master ]
   pull_request:
-    branches: [ 10.x ]
+    branches: [ master ]
 
 jobs:
   deptrac:
