@@ -26,7 +26,8 @@ laravel-wallet - Easy work with virtual wallet.
 | 10.x [LTS] | ^10.0,^11.0    | 8.1,8.2,8.3     | Jul 8, 2023  | May 1, 2024         | Feb 4, 2025    |
 | 11.x       | ^11.0          | 8.2,8.3         | Q1, 2024     | May 1, 2025         | Sep 6, 2025    |
 
-If you are using laravel-wallet ^10.0 with laravel ^11, then the minimum php version is 8.2.
+> [!IMPORTANT]
+> If you are using laravel-wallet ^10.0 with laravel ^11, then the minimum php version is 8.2.
 
 ### Upgrade Guide
 
