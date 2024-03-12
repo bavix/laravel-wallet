@@ -116,7 +116,7 @@ jobs:
 
       - name: Install dependencies
         id: composer-dependencies
-        run: composer req --dev laravel/framework:${{ matrix.laravel-versions }} -W
+        run: composer req --dev laravel/framework:${{ matrix.laravel-versions }} -W || composer install
 
       - name: Check codeclimate
         id: codeclimate-check
