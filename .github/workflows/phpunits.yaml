@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         php-versions: [8.1, 8.2, 8.3]
-        stability: [prefer-lowest, prefer-stable]
+        laravel-versions: [^10.0, ^11.0]
         databases: [testing, pgsql, mysql, mariadb]
         caches: [array, redis, memcached, database]
         locks: [redis, memcached]
@@ -115,8 +115,8 @@ jobs:
             ${{ runner.os }}-php-
 
       - name: Install dependencies
-        id: composer-dependencies
-        run: composer update --${{ matrix.stability }} --prefer-dist --no-progress
+        id: Install dependencies
+        run: composer req --dev laravel/framework:${{ matrix.laravel-versions }} -W
 
       - name: Check codeclimate
         id: codeclimate-check
