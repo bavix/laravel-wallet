@@ -64,7 +64,7 @@ abstract class TestCase extends OrchestraTestCase
         $config->set('database.connections.pgsql.prefix', 'tests');
         $config->set('database.connections.mysql.prefix', 'tests');
 
-        if (!$config->has('database.connections.mariadb')) {
+        if (! $config->has('database.connections.mariadb')) {
             /** @var array<string, mixed> $mysql */
             $mysql = $config->get('database.connections.mysql');
             $config->set('database.connections.mariadb', $mysql);
