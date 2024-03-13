@@ -1,7 +1,5 @@
 ### API. Batch Transactions
 
-> Since version 9.5+
-
 Sometimes situations arise when there is a need to make multiple changes to wallets.
 For example, we need to change the balance of many wallets at once. For example, the system administrator accrues a bonus for participating in some promotion. Previously, the code would look like this:
 ```php
@@ -78,7 +76,6 @@ use Bavix\Wallet\Services\ConsistencyServiceInterface;
 app(AtomicServiceInterface::class)->blocks($wallets, function () use ($wallets, $amount) {
     foreach ($wallets as $wallet) {
         app(ConsistencyServiceInterface::class)->checkPotential($wallet, $amount);
-
     }
 
     app(TransactionQueryHandlerInterface::class)->apply(
@@ -98,10 +95,15 @@ The main thing is to keep uniqueness.
 ```php
 use Bavix\Wallet\External\Api\TransactionQuery;
 
-TransactionQuery::createDeposit($wallet, $amount, null, uuid: '5f7820d1-1e82-4d03-9414-05d0c44da9a1')
-TransactionQuery::createWithdraw($wallet, $amount, null, uuid: '6e87dbf2-7be7-48c2-b688-f46ba4e25786')
+// int version
+TransactionQuery::createDeposit($wallet, $amount, null, uuid: '5f7820d1-1e82-4d03-9414-05d0c44da9a1');
+TransactionQuery::createWithdraw($wallet, $amount, null, uuid: '6e87dbf2-7be7-48c2-b688-f46ba4e25786');
+
+// float version
+TransactionFloatQuery::createDeposit($wallet, $amountFloat, null, uuid: '5f7820d1-1e82-4d03-9414-05d0c44da9a1');
+TransactionFloatQuery::createWithdraw($wallet, $amountFloat, null, uuid: '6e87dbf2-7be7-48c2-b688-f46ba4e25786');
 ```
 
 ---
-It worked! 
+It's simple!
 

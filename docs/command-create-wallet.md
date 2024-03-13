@@ -1,7 +1,5 @@
 # Asynchronous wallet creation
 
-> You need wallet version 9.2 or higher
-
 The idea is based on the division into teams for creating wallets, transactions, etc. The creation of a wallet can be accelerated if the client "generates a wallet himself".
 
 ---
@@ -58,4 +56,5 @@ You receive requests to create a wallet on the backend, and you create them asyn
 
 The user no longer needs to wait for the creation of a wallet, it is enough to know the uuid. You get the most stable application.
 
-It worked! 
+---
+It's simple!

@@ -38,7 +38,7 @@ $user->balanceInt; // 9000
 $user->balanceFloatNum; // 90.00
 ```
 
-It worked! 
+It's simple!
 
 ## Force Withdraw
 

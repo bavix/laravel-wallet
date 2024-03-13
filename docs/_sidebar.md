@@ -2,7 +2,6 @@
 
     - [Introduction](README)
     - [Installation](installation)
-    - [Lumen installation](lumen)
     - [Configuration](configuration)
     - [Basic Usage](basic-usage)
     - [Upgrade Guide](upgrade-guide)
@@ -55,6 +54,9 @@
   - [Wallet Swap](laravel-wallet-swap)
   - [Wallet UUID](laravel-wallet-uuid)
 
+- Helpers
+  - [Formatter](formatter)
+
 - Events
     
     - [BalanceUpdatedEvent](balance-updated-event)
@@ -65,7 +67,3 @@
 - CQRS
 
     - [Create Wallet](command-create-wallet)
-
-- Nova
-
-  - [Change of balance](nova-action)

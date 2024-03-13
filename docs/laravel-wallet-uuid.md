@@ -24,4 +24,4 @@ After migration, you can use the UUID in your models.
 
 You can find implementation examples in the package tests: https://github.com/bavix/laravel-wallet-uuid/tree/master/tests
 
-It worked! 
+It's simple!

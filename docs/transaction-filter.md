@@ -7,12 +7,6 @@ If you only need to filter one wallet at a time, now you can use the `walletTran
 ```php
 /** @var \Bavix\Wallet\Models\Wallet $wallet */
 
-// Before version 7.3
-$query = $wallet
-    ->transactions()
-    ->where('wallet_id', $wallet->getKey());
-
-// 7.3+
 $query = $wallet->walletTransactions();
 ```
 
@@ -46,4 +40,4 @@ $usd->walletTransactions()->count(); // 1
 $eur->walletTransactions()->count(); // 1
 ```
 
-It worked! 
+It's simple!

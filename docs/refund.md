@@ -112,4 +112,4 @@ $item->balance; // 0
 $user->balance; // 100
 ```
 
-It worked! 
+It's simple!

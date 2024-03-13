@@ -36,7 +36,7 @@ $user->balance; // 90
 $user->balanceInt; // 90
 ```
 
-It worked! 
+It's simple!
 
 ## Force Withdraw
 

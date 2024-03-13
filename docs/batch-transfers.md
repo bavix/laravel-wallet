@@ -1,7 +1,5 @@
 ### API. Batch Transfers
 
-> Since version 9.5+
-
 If you need multiple transfers between wallets, you can use a high-performance handle. It is worth remembering that the pen does not check the balance of the wallet before transferring, you need to take care of this yourself.
 
 Previously, you would have written the following code:
@@ -38,6 +36,7 @@ The main thing is to keep uniqueness.
 ```php
 use Bavix\Wallet\External\Api\TransferQuery;
 
+// int version
 new TransferQuery($from, $wallet, $amount, new \Bavix\Wallet\External\Dto\Extra(
     deposit: new \Bavix\Wallet\External\Dto\Option(
         null,
@@ -48,9 +47,24 @@ new TransferQuery($from, $wallet, $amount, new \Bavix\Wallet\External\Dto\Extra(
         uuid: '3805730b-39a1-419d-8715-0b7cc3f1ffc2', // withdraw transaction
     ),
     uuid: 'f8becf81-3993-43d7-81f1-7a725c72e976', // transfer uuid
-))
+    extra: ['info' => 'fast deposit'], // metadata in the table transfers
+));
+
+// float version
+new TransferFloatQuery($from, $wallet, $amountFlaot, new \Bavix\Wallet\External\Dto\Extra(
+    deposit: new \Bavix\Wallet\External\Dto\Option(
+        null,
+        uuid: '71cecafe-da10-464f-9e00-c80437bb4c3e', // deposit transaction
+    ),
+    withdraw: new \Bavix\Wallet\External\Dto\Option(
+        null,
+        uuid: '3805730b-39a1-419d-8715-0b7cc3f1ffc2', // withdraw transaction
+    ),
+    uuid: 'f8becf81-3993-43d7-81f1-7a725c72e976', // transfer uuid
+    extra: ['info' => 'fast deposit'], // metadata in the table transfers
+));
 ```
 
 ---
-It worked! 
+It's simple!
 

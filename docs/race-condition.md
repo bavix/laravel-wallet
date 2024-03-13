@@ -34,4 +34,4 @@ You need `redis-server` and `php-redis`.
 
 Redis is recommended but not required. You can choose whatever the [framework](https://laravel.com/docs/8.x/cache#introduction) offers you.
 
-It worked! 
+It's simple!

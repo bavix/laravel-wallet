@@ -2,8 +2,6 @@
 
 Working with atomic wallet operations.
 
-> You need wallet version 9.2 or higher
-
 Before you start working with atomicity, you need to study the "Race Condition" section and configure the lock.
 
 Sometimes it is necessary to apply actions to the user and the wallet atomically. For example, you want to raise an ad in the search and withdraw money from your wallet.
@@ -39,4 +37,4 @@ app(AtomicServiceInterface::class)->blocks([$wallet1, $wallet2], function () use
 
 In this case, we blocked both wallets and started the process of debiting funds. Debiting from both wallets will be considered a successful operation. If there are not enough funds on some wallet, the operation is canceled.
 
-It worked! 
+It's simple!

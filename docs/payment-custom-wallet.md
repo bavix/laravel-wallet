@@ -120,4 +120,4 @@ $user->balance; // 0
 $receiving->balanceInt; // $100
 ```
 
-It worked! 
+It's simple!

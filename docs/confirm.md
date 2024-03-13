@@ -33,4 +33,4 @@ $transaction->confirmed; // bool(true)
 $user->balance; // 100 
 ```
 
-It worked! 
+It's simple!

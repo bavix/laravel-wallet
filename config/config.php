@@ -60,7 +60,7 @@ return [
      * 'scale' - length of the mantissa
      */
     'math' => [
-        'scale' => 64,
+        'scale' => env('WALLET_MATH_SCALE', 64),
     ],
 
     /**
@@ -166,7 +166,7 @@ return [
      * Base model 'transaction'.
      */
     'transaction' => [
-        'table' => 'transactions',
+        'table' => env('WALLET_TRANSACTION_TABLE_NAME', 'transactions'),
         'model' => Transaction::class,
     ],
 
@@ -174,7 +174,7 @@ return [
      * Base model 'transfer'.
      */
     'transfer' => [
-        'table' => 'transfers',
+        'table' => env('WALLET_TRANSFER_TABLE_NAME', 'transfers'),
         'model' => Transfer::class,
     ],
 
@@ -182,12 +182,12 @@ return [
      * Base model 'wallet'.
      */
     'wallet' => [
-        'table' => 'wallets',
+        'table' => env('WALLET_WALLET_TABLE_NAME', 'wallets'),
         'model' => Wallet::class,
         'creating' => [],
         'default' => [
-            'name' => 'Default Wallet',
-            'slug' => 'default',
+            'name' => env('WALLET_DEFAULT_WALLET_NAME', 'Default Wallet'),
+            'slug' => env('WALLET_DEFAULT_WALLET_SLUG', 'default'),
             'meta' => [],
         ],
     ],

@@ -129,4 +129,4 @@ $user->balanceFloat; // 156.27
 $user->balanceFloat; // 0
 ```
 
-It worked! 
+It's simple!

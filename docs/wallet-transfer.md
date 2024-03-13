@@ -49,7 +49,7 @@ $firstWallet->balance; // 95
 $lastWallet->balance; // 5
 ```
 
-It worked! 
+It's simple!
 
 ## Force Transfer
 
@@ -101,4 +101,4 @@ $firstWallet->balanceInt; // 1_000
 $secondWallet->balanceInt; // 500
 ```
 
-It worked! 
+It's simple!
