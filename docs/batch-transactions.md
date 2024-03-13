@@ -78,7 +78,6 @@ use Bavix\Wallet\Services\ConsistencyServiceInterface;
 app(AtomicServiceInterface::class)->blocks($wallets, function () use ($wallets, $amount) {
     foreach ($wallets as $wallet) {
         app(ConsistencyServiceInterface::class)->checkPotential($wallet, $amount);
-
     }
 
     app(TransactionQueryHandlerInterface::class)->apply(
@@ -98,8 +97,13 @@ The main thing is to keep uniqueness.
 ```php
 use Bavix\Wallet\External\Api\TransactionQuery;
 
-TransactionQuery::createDeposit($wallet, $amount, null, uuid: '5f7820d1-1e82-4d03-9414-05d0c44da9a1')
-TransactionQuery::createWithdraw($wallet, $amount, null, uuid: '6e87dbf2-7be7-48c2-b688-f46ba4e25786')
+// int version
+TransactionQuery::createDeposit($wallet, $amount, null, uuid: '5f7820d1-1e82-4d03-9414-05d0c44da9a1');
+TransactionQuery::createWithdraw($wallet, $amount, null, uuid: '6e87dbf2-7be7-48c2-b688-f46ba4e25786');
+
+// float version
+TransactionFloatQuery::createDeposit($wallet, $amountFloat, null, uuid: '5f7820d1-1e82-4d03-9414-05d0c44da9a1');
+TransactionFloatQuery::createWithdraw($wallet, $amountFloat, null, uuid: '6e87dbf2-7be7-48c2-b688-f46ba4e25786');
 ```
 
 ---
