@@ -121,4 +121,4 @@ $last->balance; // 0
 $item->balance; // 100
 ```
 
-It worked! 
+It's simple!

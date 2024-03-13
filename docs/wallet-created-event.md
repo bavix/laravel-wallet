@@ -30,4 +30,4 @@ class MyWalletCreatedListener
 }
 ```
 
-It worked! 
+It's simple!

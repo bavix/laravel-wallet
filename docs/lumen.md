@@ -1,5 +1,7 @@
 [composer](_include/composer.md ':include')
 
+> Note: In the years since releasing Lumen, PHP has made a variety of wonderful performance improvements. For this reason, along with the availability of Laravel Octane, we no longer recommend that you begin new projects with Lumen. Instead, we recommend always beginning new projects with Laravel.
+
 ## Add the service to the app
 
 [Editing the application file](https://lumen.laravel.com/docs/5.8/providers#registering-providers) `bootstrap/app.php`

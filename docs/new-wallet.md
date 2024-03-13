@@ -73,4 +73,4 @@ $wallet->balance; // 10
 $wallet->balanceFloatNum; // 0.10
 ```
 
-It worked! 
+It's simple!

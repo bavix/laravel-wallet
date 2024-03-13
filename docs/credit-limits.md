@@ -33,4 +33,4 @@ $wallet = $user->createWallet([
 ]);
 ```
 
-It worked! 
+It's simple!

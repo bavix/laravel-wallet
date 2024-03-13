@@ -40,4 +40,4 @@ $user->wallet->refreshBalance();
 $user->balance; // 42
 ```
 
-It worked! 
+It's simple!

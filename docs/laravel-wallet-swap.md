@@ -54,4 +54,4 @@ $usd->balance; // 190
 $rub->balance; // 622
 ```
 
-It worked! 
+It's simple!

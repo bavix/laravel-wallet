@@ -112,5 +112,5 @@ Due to conversion and mathematical rounding, you lost 62 kopecks.
 You have 99 rubles 38 kopecks left.
 
 ---
-It worked! 
+It's simple!
 

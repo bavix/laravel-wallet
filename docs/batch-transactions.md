@@ -1,7 +1,5 @@
 ### API. Batch Transactions
 
-> Since version 9.5+
-
 Sometimes situations arise when there is a need to make multiple changes to wallets.
 For example, we need to change the balance of many wallets at once. For example, the system administrator accrues a bonus for participating in some promotion. Previously, the code would look like this:
 ```php
@@ -107,5 +105,5 @@ TransactionFloatQuery::createWithdraw($wallet, $amountFloat, null, uuid: '6e87db
 ```
 
 ---
-It worked! 
+It's simple!
 

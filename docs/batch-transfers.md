@@ -1,7 +1,5 @@
 ### API. Batch Transfers
 
-> Since version 9.5+
-
 If you need multiple transfers between wallets, you can use a high-performance handle. It is worth remembering that the pen does not check the balance of the wallet before transferring, you need to take care of this yourself.
 
 Previously, you would have written the following code:
@@ -68,5 +66,5 @@ new TransferFloatQuery($from, $wallet, $amountFlaot, new \Bavix\Wallet\External\
 ```
 
 ---
-It worked! 
+It's simple!
 

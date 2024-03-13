@@ -165,4 +165,4 @@ $user->safePay($item); // failed, 100 (product) + 5 (minimal fee) = 105
 $user->balance; // 103
 ```
 
-It worked! 
+It's simple!

@@ -135,4 +135,4 @@ if ($user->safePay($item)) {
 }
 ```
 
-It worked! 
+It's simple!

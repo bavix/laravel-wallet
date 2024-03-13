@@ -11,6 +11,29 @@ The transfer takes place between wallets.
 
 [User Simple](_include/models/user_simple_float.md ':include')
 
+### Example contract
+
+```php
+$transfer = $user1->transferFloat(
+    $user2,
+    5.11,
+    new Extra(
+        deposit: [
+            'type' => 'extra-deposit',
+        ],
+        withdraw: new Option(
+            [
+                'type' => 'extra-withdraw',
+            ],
+            false // confirmed
+        ),
+        extra: [
+            'msg' => 'hello world',
+        ],
+    )
+);
+```
+
 ## Make a Transfer
 
 Find user:
@@ -37,7 +60,7 @@ $first->balanceFloatNum; // 95
 $last->balanceFloatNum; // 5
 ```
 
-It worked! 
+It's simple!
 
 ## Force Transfer
 
@@ -56,4 +79,4 @@ $first->balanceFloatNum; // -400
 $last->balanceFloatNum; // 500
 ```
 
-It worked! 
+It's simple!
