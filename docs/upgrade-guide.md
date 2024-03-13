@@ -259,3 +259,11 @@ Replace `Bavix\Wallet\Interfaces\Product` to `Bavix\Wallet\Interfaces\ProductLim
 2. If you catch a LockProviderNotFoundException, then you need to remove the check. This exception no longer exists.
 3. If you have specific requests for transfers using the MorphMany relation, then you need to rewrite it to the HasMany relation.
 
+## 10.x.x  → 11.0.x
+
+1. If you have mariadb, then the minimum supported version is 10.10. More details here: https://github.com/laravel/framework/pull/48455;
+2. Perform new package migrations, support for soft deleted has been added;
+3. If you used delete methods, then they need to be replaced with forceDelete (if soft delete support is not needed);
+4. Obsolete columns `from_type`, `to_type` in the transfers table have been physically removed. Make sure you don't use them;
+5. An `extra` column has been added to the transfers table. Don't forget to apply all new migrations;
+6. The `Bavix\Wallet\Interfaces\Wallet` contract has been extended with the receivedTransfers method. If you overridden the implementation, then implement the new method;
