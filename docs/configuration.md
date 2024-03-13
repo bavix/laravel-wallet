@@ -1,5 +1,7 @@
 # Configuration
 
+Though this package is crafted to suit most of your needs by default, you can edit the configuration file to suit certain demands.
+
 ## Environment
 
 | Name                            | Description                   | Default        | 
@@ -14,8 +16,6 @@
 | `WALLET_WALLET_TABLE_NAME`      | Wallet table name             | wallets        |
 | `WALLET_DEFAULT_WALLET_NAME`    | Default wallet name           | Default Wallet |
 | `WALLET_DEFAULT_WALLET_SLUG`    | Default wallet slug           | default        |
-
-Though this package is crafted to suit most of your needs by default, you can edit the configuration file to suit certain demands.
 
 ## Configure default wallet
 Customize `name`,`slug` and `meta` of default wallet.
