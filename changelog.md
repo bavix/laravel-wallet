@@ -1,5 +1,14 @@
 # Changelog
 
+## 11.0.1 - 2024-03-14
+
+### What's Changed
+
+* build(deps): bump size-limit from 11.0.3 to 11.1.0 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/914
+* [11.x] fix pipeline by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/915
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/11.0.0...11.0.1
+
 ## 11.0.0 - 2024-03-13
 
 ### What's Changed
@@ -2286,11 +2295,17 @@ Added a patch from version 4.2.1 #150
 ### Added
 
 - written README.
+  
 - Project configuration file created.
+  
 - Migration 2018_11_06_222923_create_transactions_table.
+  
 - Migration 2018_11_07_192923_create_transfers_table.
+  
 - `HasWallet` trait and `Wallet` interface.
+  
   - methods:
+    
     - private checkAmount(int $amount): void
     - public forceWithdraw(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
     - public deposit(int $amount, ?array $meta = null, bool $confirmed = true): Transaction
@@ -2304,14 +2319,17 @@ Added a patch from version 4.2.1 #150
     - public resetBalance(): void
     
   - relations:
+    
     - public transactions(): MorphMany
     - public transfers(): MorphMany
     
   - magic property
+    
     - public getBalanceAttribute(): int
     
   
 - `CanBePaid` trait and `Product`, `Costomer` interface's
+  
   - methods:
     - public pay(Product $product): Transfer
     - public safePay(Product $product): ?Transfer
@@ -2320,7 +2338,9 @@ Added a patch from version 4.2.1 #150
     
   
 - Exceptions: AmountInvalid, BalanceIsEmpty.
+  
 - Models: Transfer, Transaction.
+  
 
 ## What's Changed
 
