@@ -1,5 +1,17 @@
 # Changelog
 
+## 11.0.2 - 2024-03-15
+
+### What's Changed
+
+* Small translation issue "translation" => "transaction" by [@Thiritin](https://github.com/Thiritin) in https://github.com/bavix/laravel-wallet/pull/916
+
+### New Contributors
+
+* [@Thiritin](https://github.com/Thiritin) made their first contribution in https://github.com/bavix/laravel-wallet/pull/916
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/11.0.1...11.0.2
+
 ## 11.0.1 - 2024-03-14
 
 ### What's Changed
