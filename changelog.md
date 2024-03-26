@@ -1,5 +1,19 @@
 # Changelog
 
+## 11.0.3 - 2024-03-26
+
+### What's Changed
+
+* build(deps): bump axios from 1.6.7 to 1.6.8 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/917
+* build(deps): bump size-limit from 11.1.0 to 11.1.1 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/918
+* build(deps): bump webpack from 5.90.3 to 5.91.0 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/920
+* build(deps): bump size-limit from 11.1.1 to 11.1.2 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/921
+* build(deps-dev): update phpunit/phpunit requirement from ^10.5 to ^11.0 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/924
+* build(deps): bump bavix/.github from 0.2.4 to 0.2.5 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/925
+* Update composer.json by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/926
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/11.0.2...11.0.3
+
 ## 11.0.2 - 2024-03-15
 
 ### What's Changed
