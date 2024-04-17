@@ -303,4 +303,31 @@ final class ExtraTest extends TestCase
             'message' => 'Write off from the ruble account',
         ], $transfer->withdraw->meta);
     }
+
+    public function testPendingBalances(): void
+    {
+        /** @var Buyer $user1 */
+        /** @var Buyer $user2 */
+        [$user1, $user2] = BuyerFactory::times(2)->create();
+
+        $user1->deposit(1000);
+        self::assertSame(1000, $user1->balanceInt);
+        self::assertSame(0, $user2->balanceInt);
+
+        $transfer = $user1->transfer($user2, 500, new Extra(
+            deposit: new Option(null, confirmed: false),
+            withdraw: null,
+        ));
+
+        self::assertNotNull($transfer);
+        self::assertTrue($transfer->withdraw->confirmed);
+        self::assertFalse($transfer->deposit->confirmed);
+
+        self::assertSame(500, $user1->balanceInt);
+        self::assertSame(0, $user2->balanceInt);
+
+        self::assertTrue($user2->wallet->confirm($transfer->deposit)); // confirmed
+
+        self::assertSame(500, $user2->balanceInt);
+    }
 }
