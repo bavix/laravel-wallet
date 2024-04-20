@@ -10,7 +10,6 @@ use Bavix\Wallet\Test\Infra\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\Models\UserMulti;
 use Bavix\Wallet\Test\Infra\TestCase;
-use Illuminate\Support\Facades\DB;
 
 /**
  * @internal
