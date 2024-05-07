@@ -1,5 +1,20 @@
 # Changelog
 
+## 11.0.4 - 2024-04-25
+
+### What's Changed
+
+* build(deps): bump css-loader from 6.10.0 to 6.11.0 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/928
+* build(deps): bump css-loader from 6.11.0 to 7.0.0 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/929
+* build(deps): bump css-loader from 7.0.0 to 7.1.0 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/930
+* build(deps): bump css-loader from 7.1.0 to 7.1.1 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/933
+* build(deps): bump mini-css-extract-plugin from 2.8.1 to 2.9.0 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/936
+* Pending Balances  by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/938
+* Frozen balance by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/940
+* build(deps): bump JetBrains/qodana-action from 2023.3 to 2024.1 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/941
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/11.0.3...11.0.4
+
 ## 11.0.3 - 2024-03-26
 
 ### What's Changed
