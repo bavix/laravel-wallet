@@ -18,7 +18,7 @@
   "dependencies": {
     "axios": "^1.7.2",
     "css-loader": "^7.1.2",
-    "docsify": "^4.13.1",
+    "docsify": "^4.11.4",
     "lodash": "^4.17.20",
     "mini-css-extract-plugin": "^2.9.0",
     "prismjs": "^1.29.0",
