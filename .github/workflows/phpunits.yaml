@@ -160,9 +160,12 @@ jobs:
           timeout_seconds: 15
           max_attempts: 3
           command: >-
-            ./cc-test-reporter after-build --coverage-input-type clover --exit-code 0;
-            bash <(curl -s https://codecov.io/bash)
+            ./cc-test-reporter after-build --coverage-input-type clover --exit-code 0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        if: ${{ steps.codeclimate-check.outputs.execute == 'true' }}
+
+      - uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
         if: ${{ steps.codeclimate-check.outputs.execute == 'true' }}
