@@ -1,6 +1,6 @@
 {
   "name": "laravel-wallet",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Package documentation",
   "repository": {
     "type": "git",
@@ -11,20 +11,14 @@
   "bugs": {
     "url": "https://github.com/bavix/laravel-wallet/issues"
   },
-  "scripts": {
-    "build": "webpack"
-  },
   "homepage": "https://bavix.github.io/laravel-wallet/",
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "build": "vitepress build docs"
+  },
   "dependencies": {
-    "axios": "^1.7.2",
-    "css-loader": "^7.1.2",
-    "docsify": "^4.11.4",
-    "lodash": "^4.17.20",
-    "mini-css-extract-plugin": "^2.9.0",
-    "prismjs": "^1.29.0",
-    "size-limit": "^11.1.4",
-    "uuid": "^10.0.0",
-    "webpack": "^5.92.1",
-    "webpack-cli": "^5.1.4"
+    "vitepress": "^1.2.3"
   }
 }
