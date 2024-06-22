@@ -59,7 +59,7 @@
     }
   },
   "scripts": {
-    "docs": "@php -S localhost:3000 -t ./docs",
+    "docs": "@php -S localhost:3000 -t old_docs",
     "parabench":"@php ./vendor/bin/testbench package:test --coverage-xml=build/coverage-xml --log-junit=build/junit.xml",
     "infect": "@php vendor/bin/infection --coverage=build --min-msi=50 -j$(nproc) --only-covering-test-cases",
     "phpstan": ["@phpstan-src", "@phpstan-tests"],

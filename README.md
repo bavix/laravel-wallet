@@ -10,7 +10,7 @@ laravel-wallet - Easy work with virtual wallet.
 
 [[Benchmark](https://github.com/bavix/laravel-wallet-benchmark/)] 
 [[Documentation](https://bavix.github.io/laravel-wallet/)] 
-[[Get Started](https://bavix.github.io/laravel-wallet/#/basic-usage)] 
+[[Get Started](https://bavix.github.io/laravel-wallet/guide/introduction/)] 
 
 * **Vendor**: bavix
 * **Package**: laravel-wallet
