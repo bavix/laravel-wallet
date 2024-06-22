@@ -5,6 +5,7 @@ export default defineConfig({
   title: "Laravel Wallet",
   description: "Easy work with virtual wallet",
   base: '/laravel-wallet/',
+  lastUpdated: true,
   head: [
     [
       'script',
