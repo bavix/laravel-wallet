@@ -1,7 +1,24 @@
 {
+  "name": "laravel-wallet",
+  "version": "2.0.0",
+  "description": "Package documentation",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bavix/laravel-wallet.git"
+  },
+  "author": "Maxim Babichev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bavix/laravel-wallet/issues"
+  },
+  "homepage": "https://bavix.github.io/laravel-wallet/",
   "scripts": {
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "build": "@docs:build"
+  },
+  "dependencies": {
+    "vitepress": "^1.2.3"
   }
 }
