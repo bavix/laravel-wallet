@@ -124,6 +124,13 @@ export default defineConfig({
           { text: 'Create Wallet', link: '/guide/cqrs/create-wallet' },
         ]
       },
+      {
+        text: 'Additions',
+        items: [
+          { text: 'Wallet Swap', link: '/guide/additions/swap' },
+          { text: 'Support UUID', link: '/guide/additions/uuid' },
+        ]
+      },
     ],
 
     socialLinks: [

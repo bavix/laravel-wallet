@@ -1,4 +1,4 @@
-## Laravel Wallet Swap
+# Laravel Wallet Swap
 
 ## Composer
 
@@ -10,7 +10,7 @@ In your project root just run:
 composer req bavix/laravel-wallet-swap
 ```
 
-### User model
+## User model
 We need a simple model with the ability to work multi-wallets.
 
 ```php
@@ -24,7 +24,7 @@ class User extends Model implements Wallet
 }
 ```
 
-### Simple example
+## Simple example
 Let's create wallets with currency:
 ```php
 $usd = $user->createWallet([

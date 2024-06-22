@@ -4,21 +4,15 @@
 
 Replace `::with('balance')` to `::with('wallet')`
 
----
-
 ## 2.1.x → 2.2.x
 
 Replace `CanBePaid` to `CanPay`.
 
 Replace `CanBePaidFloat` to `CanPayFloat`.
 
----
-
 ## 2.2.x → 2.4.x
 
 Replace `calculateBalance` to `refreshBalance`
-
----
 
 ## 2.4.x → 3.0.x
 

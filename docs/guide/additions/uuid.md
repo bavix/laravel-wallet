@@ -1,4 +1,4 @@
-## Laravel Wallet UUID
+# Laravel Wallet UUID
 
 > Using uuid greatly reduces package performance. We recommend using int.
 
