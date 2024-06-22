@@ -17,7 +17,14 @@ export default defineConfig({
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-LNEGT551DV');`
-    ]
+    ],
+    [
+      'link', {
+        rel: 'mask-icon',
+        href: 'https://github.com/bavix/laravel-wallet/assets/5111255/f48a8e79-8a9d-469a-b056-b3d04835992d',
+        color: "#f4e664",
+      }
+    ],
   ],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
