@@ -1,5 +1,26 @@
 # Changelog
 
+## 11.0.5 - 2024-06-22
+
+### What's Changed
+
+* build(deps): bump size-limit from 11.1.2 to 11.1.3 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/942
+* build(deps): bump size-limit from 11.1.3 to 11.1.4 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/944
+* build(deps): bump axios from 1.6.8 to 1.7.1 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/946
+* Bump axios from 1.7.1 to 1.7.2 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/947
+* Bump css-loader from 7.1.1 to 7.1.2 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/948
+* upgrade npm packages by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/949
+* codecov github actions by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/953
+* Bump uuid from 9.0.1 to 10.0.0 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/952
+* Bump webpack from 5.91.0 to 5.92.0 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/954
+* Bump bavix/.github from 0.2.5 to 0.3.0 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/956
+* Bump webpack from 5.92.0 to 5.92.1 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/957
+* Docs v2.0 by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/958
+* remove static docs by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/959
+* add lastUpdated by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/960
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/11.0.4...11.0.5
+
 ## 11.0.4 - 2024-04-25
 
 ### What's Changed
