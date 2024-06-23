@@ -1,4 +1,4 @@
-![Laravel Wallet](https://github.com/bavix/laravel-wallet/assets/5111255/8697195c-ce99-4326-bf1f-c2055b803d2f)
+![Laravel Wallet](https://github.com/bavix/laravel-wallet/assets/5111255/95e7877c-a950-4b04-9414-de62216d31c2)
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/588400f5f40cbbf3a8ab/maintainability)](https://codeclimate.com/github/bavix/laravel-wallet/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/588400f5f40cbbf3a8ab/test_coverage)](https://codeclimate.com/github/bavix/laravel-wallet/test_coverage) [![Financial Contributors on Open Collective](https://opencollective.com/laravel-wallet/all/badge.svg?label=financial+contributors)](https://opencollective.com/laravel-wallet) [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fbavix%2Flaravel-wallet%2Fmaster)](https://packagist.org/packages/bavix/laravel-wallet)
 
@@ -6,7 +6,7 @@
 
 [![Sparkline](https://stars.medv.io/bavix/laravel-wallet.svg)](https://stars.medv.io/bavix/laravel-wallet)
 
-laravel-wallet - Easy work with virtual wallet.
+laravel-wallet - It's easy to work with a virtual wallet.
 
 [[Benchmark](https://github.com/bavix/laravel-wallet-benchmark/)] 
 [[Documentation](https://bavix.github.io/laravel-wallet/)] 
