@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Laravel Wallet",
-  description: "Easy work with virtual wallet",
+  description: "It's easy to work with a virtual wallet",
   base: '/laravel-wallet/',
   lastUpdated: true,
   head: [
