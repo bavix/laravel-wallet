@@ -1,5 +1,16 @@
 # Changelog
 
+## 11.0.6 - 2024-06-23
+
+### What's Changed
+
+* Update README.md by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/961
+* Optimize large logo by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/962
+* update docs by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/963
+* [rebranding] new summary by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/964
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/11.0.5...11.0.6
+
 ## 11.0.5 - 2024-06-22
 
 ### What's Changed
