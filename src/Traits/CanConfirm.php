@@ -99,6 +99,8 @@ trait CanConfirm
     {
         try {
             return $this->resetConfirm($transaction);
+        } catch (UnconfirmedInvalid) {
+            return true;
         } catch (ExceptionInterface) {
             return false;
         }

@@ -6,11 +6,9 @@ namespace Bavix\Wallet\Internal\Observers;
 
 use Bavix\Wallet\Exceptions\UnconfirmedInvalid;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
-use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
-use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\AtomicServiceInterface;
 use Illuminate\Database\RecordsNotFoundException;
@@ -33,17 +31,8 @@ final readonly class TransferObserver
     public function deleting(Transfer $model): bool
     {
         return $this->atomicService->blocks([$model->from, $model->to], function () use ($model) {
-            return $this->safeResetConfirm($model->from, $model->withdraw)
-                && $this->safeResetConfirm($model->to, $model->deposit);
+            return $model->from->safeResetConfirm($model->withdraw)
+                && $model->to->safeResetConfirm($model->deposit);
         });
-    }
-
-    private function safeResetConfirm(Wallet $model, Transaction $transaction): bool 
-    {
-        try {
-            return $model->resetConfirm($transaction);
-        } catch (UnconfirmedInvalid) {
-            return true;
-        }
     }
 }
