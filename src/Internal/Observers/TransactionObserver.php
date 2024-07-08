@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Internal\Observers;
 
 use Bavix\Wallet\Exceptions\UnconfirmedInvalid;
 use Bavix\Wallet\Exceptions\WalletOwnerInvalid;
+use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
@@ -24,6 +25,15 @@ final class TransactionObserver
      */
     public function deleting(Transaction $model): bool
     {
-        return $model->wallet->resetConfirm($model);
+        return $this->safeResetConfirm($model->wallet, $model);
+    }
+
+    private function safeResetConfirm(Wallet $model, Transaction $transaction): bool 
+    {
+        try {
+            return $model->resetConfirm($transaction);
+        } catch (UnconfirmedInvalid) {
+            return true;
+        }
     }
 }
