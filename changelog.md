@@ -1,5 +1,17 @@
 # Changelog
 
+## 11.1.0 - 2024-07-08
+
+### What's Changed
+
+* optimize telegram svg by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/965
+* Bump actions/configure-pages from 4 to 5 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/966
+* logo consecration by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/969
+* phpstan fix by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/970
+* allow deletion of unconfirmed operations without forceDelete by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/972 (Thank you [@momostafa](https://github.com/momostafa))
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/11.0.6...11.1.0
+
 ## 11.0.6 - 2024-06-23
 
 ### What's Changed
