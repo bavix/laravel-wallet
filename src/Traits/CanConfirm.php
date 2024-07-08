@@ -54,6 +54,8 @@ trait CanConfirm
     {
         try {
             return $this->confirm($transaction);
+        } catch (ConfirmedInvalid) {
+            return true;
         } catch (ExceptionInterface) {
             return false;
         }
