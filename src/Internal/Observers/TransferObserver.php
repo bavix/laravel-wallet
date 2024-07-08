@@ -31,8 +31,8 @@ final readonly class TransferObserver
     public function deleting(Transfer $model): bool
     {
         return $this->atomicService->blocks([$model->from, $model->to], function () use ($model) {
-            return $model->from->resetConfirm($model->withdraw)
-                && $model->to->resetConfirm($model->deposit);
+            return $model->from->safeResetConfirm($model->withdraw)
+                && $model->to->safeResetConfirm($model->deposit);
         });
     }
 }

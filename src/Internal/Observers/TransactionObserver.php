@@ -24,6 +24,6 @@ final class TransactionObserver
      */
     public function deleting(Transaction $model): bool
     {
-        return $model->wallet->resetConfirm($model);
+        return $model->wallet->safeResetConfirm($model);
     }
 }

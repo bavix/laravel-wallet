@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
-use Bavix\Wallet\Exceptions\UnconfirmedInvalid;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\TestCase;
@@ -87,8 +86,6 @@ final class SoftDeletesTest extends TestCase
 
     public function testTransactionDeleteIfNotConfirmed(): void
     {
-        $this->expectException(UnconfirmedInvalid::class);
-
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
         self::assertFalse($buyer->relationLoaded('wallet'));
@@ -141,8 +138,6 @@ final class SoftDeletesTest extends TestCase
 
     public function testTransferDeleteIfNotConfirmed(): void
     {
-        $this->expectException(UnconfirmedInvalid::class);
-
         /** @var Buyer $user1 */
         /** @var Buyer $user2 */
         [$user1, $user2] = BuyerFactory::times(2)->create();

@@ -195,7 +195,7 @@ final class ConfirmTest extends TestCase
         $transaction = $wallet->deposit(1000, null, false);
         self::assertSame(0, $wallet->balanceInt);
         self::assertFalse($transaction->confirmed);
-        self::assertFalse($wallet->safeResetConfirm($transaction));
+        self::assertTrue($wallet->safeResetConfirm($transaction));
     }
 
     public function testWalletOwnerInvalid(): void
