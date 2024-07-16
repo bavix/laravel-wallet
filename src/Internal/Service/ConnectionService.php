@@ -10,9 +10,9 @@ use Illuminate\Database\ConnectionResolverInterface;
 /**
  * @internal
  */
-final class ConnectionService implements ConnectionServiceInterface
+final readonly class ConnectionService implements ConnectionServiceInterface
 {
-    private readonly ConnectionInterface $connection;
+    private ConnectionInterface $connection;
 
     public function __construct(ConnectionResolverInterface $connectionResolver)
     {

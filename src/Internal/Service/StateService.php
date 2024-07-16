@@ -7,7 +7,7 @@ namespace Bavix\Wallet\Internal\Service;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
-final class StateService implements StateServiceInterface
+final readonly class StateService implements StateServiceInterface
 {
     private const RANDOM_BYTES = 3;
 
@@ -31,7 +31,7 @@ final class StateService implements StateServiceInterface
      */
     private const PREFIX_HASHMAP = 'wallet_hm::';
 
-    private readonly CacheRepository $store;
+    private CacheRepository $store;
 
     public function __construct(CacheFactory $cacheFactory)
     {

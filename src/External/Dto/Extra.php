@@ -7,11 +7,11 @@ namespace Bavix\Wallet\External\Dto;
 use Bavix\Wallet\External\Contracts\ExtraDtoInterface;
 use Bavix\Wallet\External\Contracts\OptionDtoInterface;
 
-final class Extra implements ExtraDtoInterface
+final readonly class Extra implements ExtraDtoInterface
 {
-    private readonly OptionDtoInterface $deposit;
+    private OptionDtoInterface $deposit;
 
-    private readonly OptionDtoInterface $withdraw;
+    private OptionDtoInterface $withdraw;
 
     /**
      * @param OptionDtoInterface|array<mixed>|null $deposit
@@ -21,8 +21,8 @@ final class Extra implements ExtraDtoInterface
     public function __construct(
         OptionDtoInterface|array|null $deposit,
         OptionDtoInterface|array|null $withdraw,
-        private readonly ?string $uuid = null,
-        private readonly ?array $extra = null
+        private ?string $uuid = null,
+        private ?array $extra = null
     ) {
         $this->deposit = $deposit instanceof OptionDtoInterface ? $deposit : new Option($deposit);
         $this->withdraw = $withdraw instanceof OptionDtoInterface ? $withdraw : new Option($withdraw);
