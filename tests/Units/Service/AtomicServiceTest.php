@@ -67,36 +67,63 @@ final class AtomicServiceTest extends TestCase
         self::assertSame($iterations * 2000, $user->balanceInt);
     }
 
+    /**
+     * Tests the rollback functionality of the AtomicService.
+     *
+     * This test creates a new Buyer and deposits 1000 units into their wallet. Then, it attempts to
+     * withdraw 3000 units from the wallet within an atomic block. Since there are not enough funds,
+     * an exception is thrown. The test then checks that the balance of the wallet has not changed.
+     *
+     * @return void
+     */
     public function testRollback(): void
     {
+        // Create a new instance of the AtomicService
         $atomic = app(AtomicServiceInterface::class);
-        
+
+        // Create a new Buyer and deposit 1000 units into their wallet
         /** @var Buyer $user */
         $user = BuyerFactory::new()->create();
-
         $user->deposit(1000);
 
-        self::assertSame(1000, $user->balanceInt);
+        // Check that the balance of the wallet is 1000 units
+        $this->assertSame(1000, $user->balanceInt);
 
         try {
+            // Start an atomic block and attempt to withdraw 3000 units from the wallet
             $atomic->block($user, function () use ($user) {
+                // Withdraw 1000 units from the wallet
                 $user->forceWithdraw(1000);
+                // Withdraw 1000 units from the wallet
                 $user->forceWithdraw(1000);
+                // Withdraw 1000 units from the wallet
                 $user->forceWithdraw(1000);
+                // Deposit 5000 units into the wallet
                 $user->deposit(5000);
 
+                // Throw an exception to simulate an error
                 throw new \Exception();
             });
 
-            self::assertTrue(false); // check
-        } catch (\Throwable) {
+            // This should not be reached
+            $this->assertTrue(false); // check
+        } catch (\Throwable $e) {
+            // Intentionally left empty
         }
 
-        self::assertTrue($user->wallet->refreshBalance()); // check
+        // Refresh the balance of the wallet to ensure it has not changed
+        $this->assertTrue($user->wallet->refreshBalance()); // check
 
+        // Retrieve the Buyer from the database and check that the balance is still 1000 units
+
+        /**
+         * @var Buyer $userFromDb
+         */
         $userFromDb = Buyer::find($user->getKey());
 
-        self::assertSame(1000, $userFromDb->balanceInt);
-        self::assertSame(1000, $user->balanceInt);
+        // Check that the balance of the wallet is 1000 units
+        $this->assertSame(1000, $userFromDb->balanceInt);
+        // Check that the balance of the wallet is 1000 units
+        $this->assertSame(1000, $user->balanceInt);
     }
 }
