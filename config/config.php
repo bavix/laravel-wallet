@@ -133,8 +133,6 @@ return [
      * critical for it to function properly.
      *
      * @var array<string, class-string>
-     *
-     * @see Bavix\Wallet\Internal\Service
      */
     'internal' => [
         /**
@@ -223,7 +221,7 @@ return [
      *
      * @var array<string, class-string>
      *
-     * @see Bavix\Wallet\Services
+     * @see \Bavix\Wallet\Services
      */
     'services' => [
         // Service for performing operations related to the assistant.
@@ -269,27 +267,27 @@ return [
      *
      * Each repository is responsible for fetching data from the database for a specific entity.
      *
-     * @see Bavix\Wallet\Interfaces\Wallet
-     * @see Bavix\Wallet\Interfaces\Transaction
-     * @see Bavix\Wallet\Interfaces\Transfer
+     * @see \Bavix\Wallet\Interfaces\Wallet
+     * @see \Bavix\Wallet\Interfaces\Transaction
+     * @see \Bavix\Wallet\Interfaces\Transfer
      */
     'repositories' => [
         /**
          * Repository for fetching transaction data.
          *
-         * @see Bavix\Wallet\Interfaces\Transaction
+         * @see \Bavix\Wallet\Interfaces\Transaction
          */
         'transaction' => TransactionRepository::class,
         /**
          * Repository for fetching transfer data.
          *
-         * @see Bavix\Wallet\Interfaces\Transfer
+         * @see \Bavix\Wallet\Interfaces\Transfer
          */
         'transfer' => TransferRepository::class,
         /**
          * Repository for fetching wallet data.
          *
-         * @see Bavix\Wallet\Interfaces\Wallet
+         * @see \Bavix\Wallet\Interfaces\Wallet
          */
         'wallet' => WalletRepository::class,
     ],

@@ -124,7 +124,7 @@ interface Wallet
      *
      * @throws AmountInvalid If the amount specified is invalid (e.g., negative values).
      * @throws RecordsNotFoundException If the target wallet cannot be found.
-     * @throws TransactionFailed It indicates that the transfer could not be completed due to a failure
+     * @throws TransactionFailedException It indicates that the transfer could not be completed due to a failure
      * in the underlying transaction system.
      * @throws ExceptionInterface A generic exception interface catch-all for any other exceptions that
      * might occur during the execution of the transfer.

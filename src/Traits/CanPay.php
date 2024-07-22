@@ -40,7 +40,7 @@ trait CanPay
      * @throws TransactionFailedException If the transaction fails.
      * @throws ExceptionInterface If an exception occurs.
      *
-     * @see Bavix\Wallet\Interfaces\Customer::payFreeCart
+     * @see \Bavix\Wallet\Interfaces\Customer::payFreeCart
      */
     public function payFree(ProductInterface $product): Transfer
     {
@@ -71,7 +71,7 @@ trait CanPay
      * @throws TransactionFailedException If the transaction fails.
      * @throws ExceptionInterface If an exception occurs.
      *
-     * @see Bavix\Wallet\Interfaces\Customer::safePayCart
+     * @see \Bavix\Wallet\Interfaces\Customer::safePayCart
      */
     public function safePay(ProductInterface $product, bool $force = false): ?Transfer
     {

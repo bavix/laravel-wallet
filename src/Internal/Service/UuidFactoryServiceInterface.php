@@ -19,7 +19,7 @@ interface UuidFactoryServiceInterface
      * @throws \Ramsey\Uuid\Exception\InvalidArgumentException If a field is invalid in the UUID.
      * @throws \Ramsey\Uuid\Exception\InvalidUuidStringException If the string we are parsing is not a valid UUID.
      * @throws \Ramsey\Uuid\Exception\UnsupportedOperationException If the UUID implementation can't support a feature.
-     * @throws \Ramsey\Uuid\Exception\UuidException If there is an error generating the UUID.
+     * @throws \Ramsey\Uuid\Exception\UuidExceptionInterface If there is an error generating the UUID.
      */
     public function uuid4(): string;
 }

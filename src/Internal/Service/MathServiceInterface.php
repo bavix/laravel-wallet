@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Service;
 
+use Brick\Math\Exception\DivisionByZeroException;
+
 interface MathServiceInterface
 {
     /**
@@ -40,7 +42,7 @@ interface MathServiceInterface
      * @param int|null $scale The scale to use for rounding. Defaults to null, which means the scale will be determined automatically.
      * @return string The result of the division.
      *
-     * @throws \DivisionByZeroException If the second number is zero.
+     * @throws DivisionByZeroException If the second number is zero.
      */
     public function div(float|int|string $first, float|int|string $second, ?int $scale = null): string;
 

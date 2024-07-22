@@ -26,11 +26,6 @@ parameters:
 			path: src/Interfaces/Customer.php
 
 		-
-			message: "#^PHPDoc tag @throws with type Bavix\\\\Wallet\\\\Interfaces\\\\TransactionFailed\\|Bavix\\\\Wallet\\\\Internal\\\\Exceptions\\\\ExceptionInterface\\|Illuminate\\\\Database\\\\RecordsNotFoundException is not subtype of Throwable$#"
-			count: 1
-			path: src/Interfaces/Wallet.php
-
-		-
 			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Assembler\\\\OptionDtoAssembler\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Internal/Assembler/OptionDtoAssembler.php
@@ -81,19 +76,9 @@ parameters:
 			path: src/Internal/Service/LockService.php
 
 		-
-			message: "#^PHPDoc tag @throws with type DivisionByZeroException is not subtype of Throwable$#"
-			count: 1
-			path: src/Internal/Service/MathServiceInterface.php
-
-		-
 			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StateService\\:\\:get\\(\\) should return string\\|null but returns mixed\\.$#"
 			count: 1
 			path: src/Internal/Service/StateService.php
-
-		-
-			message: "#^PHPDoc tag @throws with type Ramsey\\\\Uuid\\\\Exception\\\\InvalidArgumentException\\|Ramsey\\\\Uuid\\\\Exception\\\\UnsupportedOperationException\\|Ramsey\\\\Uuid\\\\Exception\\\\UuidException is not subtype of Throwable$#"
-			count: 1
-			path: src/Internal/Service/UuidFactoryServiceInterface.php
 
 		-
 			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Transaction\\:\\:wallet\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<Bavix\\\\Wallet\\\\Models\\\\Wallet, Bavix\\\\Wallet\\\\Models\\\\Transaction\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, \\$this\\(Bavix\\\\Wallet\\\\Models\\\\Transaction\\)\\>\\.$#"

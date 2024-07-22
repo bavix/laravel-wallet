@@ -205,12 +205,6 @@ trait HasWallet
      * @throws RecordsNotFoundException If the wallet is not found.
      * @throws TransactionFailedException If the transaction fails.
      * @throws ExceptionInterface If an exception occurs.
-     *
-     * @see TransactionFailedException
-     * @see AmountInvalid
-     * @see BalanceIsEmpty
-     * @see InsufficientFunds
-     * @see RecordsNotFoundException
      */
     public function safeTransfer(
         Wallet $wallet,

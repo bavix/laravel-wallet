@@ -4,6 +4,18 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Exceptions\AmountInvalid;
+use Bavix\Wallet\Exceptions\BalanceIsEmpty;
+use Bavix\Wallet\Exceptions\InsufficientFunds;
+use Bavix\Wallet\Interfaces\Customer;
+use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
+use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
+use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Models\Transfer;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\RecordsNotFoundException;
+
 /**
  * @psalm-require-extends \Illuminate\Database\Eloquent\Model
  *

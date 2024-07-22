@@ -9,6 +9,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
+use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 
 /**
  * @api
@@ -24,15 +25,6 @@ interface AssistantServiceInterface
      *
      * @throws ModelNotFoundException If any of the objects does not have a wallet.
      */
-    /**
-     * Retrieves an array of wallets from an array of objects that implement the Wallet interface.
-     *
-     * @param non-empty-array<Wallet> $objects An array of objects that implement the Wallet interface.
-     * @return non-empty-array<int, Wallet> An array of wallets. The keys are the wallet IDs and the values are the
-     *                                      wallet objects.
-     *
-     * @throws \Bavix\Wallet\Internal\Exceptions\ModelNotFoundException If any of the objects does not have a wallet.
-     */
     public function getWallets(array $objects): array;
 
     /**
@@ -45,7 +37,7 @@ interface AssistantServiceInterface
      * @return non-empty-array<key-of<T>, string> An array of UUIDs. The keys are the same keys of the input array.
      *                                              The values are the UUIDs extracted from the objects.
      *
-     * @throws \Bavix\Wallet\Internal\Exceptions\ModelNotFoundException If any of the objects does not have a UUID.
+     * @throws ModelNotFoundException If any of the objects does not have a UUID.
      */
     public function getUuids(array $objects): array;
 
@@ -61,7 +53,7 @@ interface AssistantServiceInterface
      *                             The amounts are formatted as strings with the decimal part rounded to the wallet's
      *                             decimal places.
      *
-     * @throws \Bavix\Wallet\Internal\Exceptions\ModelNotFoundException If any of the transactions does not have a wallet.
+     * @throws ModelNotFoundException If any of the transactions does not have a wallet.
      *
      * @see TransactionDtoInterface
      */
