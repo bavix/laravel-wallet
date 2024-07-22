@@ -60,7 +60,7 @@ return [
      * The 'scale' option defines the number of decimal places
      * that the calculator will use when performing calculations.
      *
-     * @see \Bavix\Wallet\Internal\Service\MathService
+     * @see MathService
      */
     'math' => [
         /**
@@ -77,7 +77,7 @@ return [
      * This is used to cache the results of calculations
      * in order to improve the performance of the package.
      *
-     * @see \Bavix\Wallet\Internal\Service\StorageService
+     * @see StorageService
      */
     'cache' => [
         /**
@@ -101,7 +101,7 @@ return [
      * This is used to protect against race conditions
      * when updating the balance of a wallet.
      *
-     * @see \Bavix\Wallet\Internal\Service\LockService
+     * @see LockService
      */
     'lock' => [
         /**
@@ -133,8 +133,8 @@ return [
      * critical for it to function properly.
      *
      * @var array<string, class-string>
-     * 
-     * @see \Bavix\Wallet\Internal\Service
+     *
+     * @see Bavix\Wallet\Internal\Service
      */
     'internal' => [
         /**
@@ -222,8 +222,8 @@ return [
      * The default service class is provided here.
      *
      * @var array<string, class-string>
-     * 
-     * @see \Bavix\Wallet\Services
+     *
+     * @see Bavix\Wallet\Services
      */
     'services' => [
         // Service for performing operations related to the assistant.
@@ -269,32 +269,32 @@ return [
      *
      * Each repository is responsible for fetching data from the database for a specific entity.
      *
-     * @see \Bavix\Wallet\Interfaces\Wallet
-     * @see \Bavix\Wallet\Interfaces\Transaction
-     * @see \Bavix\Wallet\Interfaces\Transfer
+     * @see Bavix\Wallet\Interfaces\Wallet
+     * @see Bavix\Wallet\Interfaces\Transaction
+     * @see Bavix\Wallet\Interfaces\Transfer
      */
     'repositories' => [
         /**
          * Repository for fetching transaction data.
          *
-         * @see \Bavix\Wallet\Interfaces\Transaction
+         * @see Bavix\Wallet\Interfaces\Transaction
          */
         'transaction' => TransactionRepository::class,
         /**
          * Repository for fetching transfer data.
          *
-         * @see \Bavix\Wallet\Interfaces\Transfer
+         * @see Bavix\Wallet\Interfaces\Transfer
          */
         'transfer' => TransferRepository::class,
         /**
          * Repository for fetching wallet data.
          *
-         * @see \Bavix\Wallet\Interfaces\Wallet
+         * @see Bavix\Wallet\Interfaces\Wallet
          */
         'wallet' => WalletRepository::class,
     ],
 
-/**
+    /**
      * Defines the mapping of DTO (Data Transfer Object) types to their respective transformer classes.
      * Transformers are used to convert DTOs into a structured array format, suitable for further processing
      * or output. This allows for a clean separation between the internal data representation and the format
@@ -307,7 +307,7 @@ return [
          * information is presented in a structured and consistent manner for downstream processing.
          */
         'transaction' => TransactionDtoTransformer::class,
-        
+
         /**
          * Transformer for converting transfer DTOs.
          * Similar to the transaction transformer, this class is responsible for taking transfer-related
@@ -388,7 +388,7 @@ return [
     /**
      * Base model 'transaction'.
      *
-     * @see \Bavix\Wallet\Models\Transaction
+     * @see Transaction
      */
     'transaction' => [
         /**
@@ -396,7 +396,7 @@ return [
          *
          * This value is used to store transactions in a database.
          *
-         * @see \Bavix\Wallet\Models\Transaction
+         * @see Transaction
          */
         'table' => env('WALLET_TRANSACTION_TABLE_NAME', 'transactions'),
 
@@ -405,7 +405,7 @@ return [
          *
          * This value is used to create new transactions.
          *
-         * @see \Bavix\Wallet\Models\Transaction
+         * @see Transaction
          */
         'model' => Transaction::class,
     ],
@@ -415,7 +415,7 @@ return [
      *
      * Contains the configuration for the transfer model.
      *
-     * @see \Bavix\Wallet\Models\Transfer
+     * @see Transfer
      */
     'transfer' => [
         /**
@@ -423,7 +423,7 @@ return [
          *
          * This value is used to store transfers in a database.
          *
-         * @see \Bavix\Wallet\Models\Transfer
+         * @see Transfer
          */
         'table' => env('WALLET_TRANSFER_TABLE_NAME', 'transfers'),
 
@@ -432,7 +432,7 @@ return [
          *
          * This value is used to create new transfers.
          *
-         * @see \Bavix\Wallet\Models\Transfer
+         * @see Transfer
          */
         'model' => Transfer::class,
     ],
@@ -442,7 +442,7 @@ return [
      *
      * Contains the configuration for the wallet model.
      *
-     * @see \Bavix\Wallet\Models\Wallet
+     * @see Wallet
      */
     'wallet' => [
         /**
@@ -450,7 +450,7 @@ return [
          *
          * This value is used to store wallets in a database.
          *
-         * @see \Bavix\Wallet\Models\Wallet
+         * @see Wallet
          */
         'table' => env('WALLET_WALLET_TABLE_NAME', 'wallets'),
 
@@ -459,7 +459,7 @@ return [
          *
          * This value is used to create new wallets.
          *
-         * @see \Bavix\Wallet\Models\Wallet
+         * @see Wallet
          */
         'model' => Wallet::class,
 
