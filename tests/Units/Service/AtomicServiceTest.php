@@ -73,8 +73,6 @@ final class AtomicServiceTest extends TestCase
      * This test creates a new Buyer and deposits 1000 units into their wallet. Then, it attempts to
      * withdraw 3000 units from the wallet within an atomic block. Since there are not enough funds,
      * an exception is thrown. The test then checks that the balance of the wallet has not changed.
-     *
-     * @return void
      */
     public function testRollback(): void
     {
@@ -116,9 +114,7 @@ final class AtomicServiceTest extends TestCase
 
         // Retrieve the Buyer from the database and check that the balance is still 1000 units
 
-        /**
-         * @var Buyer $userFromDb
-         */
+        /** @var Buyer $userFromDb */
         $userFromDb = Buyer::find($user->getKey());
 
         // Check that the balance of the wallet is 1000 units
