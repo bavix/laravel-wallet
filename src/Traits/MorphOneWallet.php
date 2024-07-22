@@ -49,6 +49,7 @@ trait MorphOneWallet
 
                 // Get the dynamic default slug from the related model, if available.
                 // Otherwise, use the default slug from the configuration.
+                /** @var class-string $slug */
                 $slug = method_exists($model, 'getDynamicDefaultSlug')
                     ? $model->getDynamicDefaultSlug()
                     : config('wallet.wallet.default.slug', 'default');
