@@ -53,6 +53,9 @@ jobs:
       - name: Run parabench
         run: composer parabench
 
+      - name: baseline
+        run: composer phpstan-baseline
+
       - name: "Check if build has changed"
         if: success()
         id: has-changes
