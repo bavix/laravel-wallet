@@ -16,29 +16,58 @@ use Illuminate\Database\RecordsNotFoundException;
 interface Exchangeable
 {
     /**
-     * @param ExtraDtoInterface|array<mixed>|null $meta
+     * Exchange currency from this wallet to another wallet.
      *
-     * @throws BalanceIsEmpty
-     * @throws InsufficientFunds
-     * @throws RecordNotFoundException
-     * @throws RecordsNotFoundException
-     * @throws TransactionFailedException
-     * @throws ExceptionInterface
+     * @param Wallet $to The wallet to exchange the currency to.
+     * @param int|string $amount The amount to exchange.
+     * @param ExtraDtoInterface|array<mixed>|null $meta The extra data for the transaction.
+     * @return Transfer The created transfer.
+     *
+     * @throws BalanceIsEmpty             if the wallet does not have enough funds to make the exchange.
+     * @throws InsufficientFunds          if the wallet does not have enough funds to make the exchange.
+     * @throws RecordNotFoundException    if the wallet does not exist.
+     * @throws RecordsNotFoundException   if the wallet does not exist.
+     * @throws TransactionFailedException if the transaction fails.
+     * @throws ExceptionInterface         if an unexpected error occurs.
      */
     public function exchange(Wallet $to, int|string $amount, ExtraDtoInterface|array|null $meta = null): Transfer;
 
     /**
-     * @param ExtraDtoInterface|array<mixed>|null $meta
+     * Safely exchanges currency from this wallet to another wallet.
+     *
+     * If an error occurs during the process, null is returned.
+     *
+     * @param Wallet $to The wallet to exchange the currency to.
+     * @param int|string $amount The amount to exchange.
+     * @param ExtraDtoInterface|array<mixed>|null $meta The extra data for the transaction.
+     * @return null|Transfer The created transfer, or null if an error occurred.
      */
-    public function safeExchange(Wallet $to, int|string $amount, ExtraDtoInterface|array|null $meta = null): ?Transfer;
+    public function safeExchange(
+        Wallet $to,
+        int|string $amount,
+        ExtraDtoInterface|array|null $meta = null
+    ): ?Transfer;
 
     /**
-     * @param ExtraDtoInterface|array<mixed>|null $meta
+     * Force exchange currency from this wallet to another wallet.
      *
-     * @throws RecordNotFoundException
-     * @throws RecordsNotFoundException
-     * @throws TransactionFailedException
-     * @throws ExceptionInterface
+     * This method will throw an exception if the exchange is not possible.
+     *
+     * @param Wallet $to The wallet to exchange the currency to.
+     * @param int|string $amount The amount to exchange.
+     * @param ExtraDtoInterface|array<mixed>|null $meta The extra data for the transaction.
+     * @return Transfer The created transfer.
+     *
+     * @throws RecordNotFoundException If the wallet does not exist.
+     * @throws RecordsNotFoundException If the wallet does not exist.
+     * @throws TransactionFailedException If the transaction fails.
+     * @throws ExceptionInterface If an unexpected error occurs.
+     *
+     * @see Exchangeable::exchange()
      */
-    public function forceExchange(Wallet $to, int|string $amount, ExtraDtoInterface|array|null $meta = null): Transfer;
+    public function forceExchange(
+        Wallet $to,
+        int|string $amount,
+        ExtraDtoInterface|array|null $meta = null
+    ): Transfer;
 }

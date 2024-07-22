@@ -21,6 +21,26 @@ parameters:
 			path: src/External/Dto/Option.php
 
 		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$force$#"
+			count: 1
+			path: src/Interfaces/Customer.php
+
+		-
+			message: "#^PHPDoc tag @throws with type Bavix\\\\Wallet\\\\Interfaces\\\\TransactionFailed\\|Bavix\\\\Wallet\\\\Internal\\\\Exceptions\\\\ExceptionInterface\\|Illuminate\\\\Database\\\\RecordsNotFoundException is not subtype of Throwable$#"
+			count: 1
+			path: src/Interfaces/Wallet.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Assembler\\\\OptionDtoAssembler\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Internal/Assembler/OptionDtoAssembler.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Assembler\\\\OptionDtoAssemblerInterface\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Internal/Assembler/OptionDtoAssemblerInterface.php
+
+		-
 			message: "#^Parameter \\#3 \\$payableId of class Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransactionDto constructor expects int\\|string, mixed given\\.$#"
 			count: 1
 			path: src/Internal/Assembler/TransactionDtoAssembler.php
@@ -36,6 +56,21 @@ parameters:
 			path: src/Internal/Assembler/TransferDtoAssembler.php
 
 		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Assembler\\\\TransferDtoAssemblerInterface\\:\\:create\\(\\) has parameter \\$extra with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Internal/Assembler/TransferDtoAssemblerInterface.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Decorator\\\\StorageServiceLockDecorator\\:\\:get\\(\\) should return string but returns string\\|false\\.$#"
+			count: 1
+			path: src/Internal/Decorator/StorageServiceLockDecorator.php
+
+		-
+			message: "#^Parameter \\#1 \\$inputs of method Bavix\\\\Wallet\\\\Internal\\\\Decorator\\\\StorageServiceLockDecorator\\:\\:multiSync\\(\\) expects non\\-empty\\-array\\<string, float\\|int\\|string\\>, array\\<string, string\\> given\\.$#"
+			count: 1
+			path: src/Internal/Decorator/StorageServiceLockDecorator.php
+
+		-
 			message: "#^Parameter \\#1 \\$name of method Illuminate\\\\Database\\\\ConnectionResolverInterface\\:\\:connection\\(\\) expects string\\|null, mixed given\\.$#"
 			count: 1
 			path: src/Internal/Service/ConnectionService.php
@@ -46,9 +81,19 @@ parameters:
 			path: src/Internal/Service/LockService.php
 
 		-
+			message: "#^PHPDoc tag @throws with type DivisionByZeroException is not subtype of Throwable$#"
+			count: 1
+			path: src/Internal/Service/MathServiceInterface.php
+
+		-
 			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StateService\\:\\:get\\(\\) should return string\\|null but returns mixed\\.$#"
 			count: 1
 			path: src/Internal/Service/StateService.php
+
+		-
+			message: "#^PHPDoc tag @throws with type Ramsey\\\\Uuid\\\\Exception\\\\InvalidArgumentException\\|Ramsey\\\\Uuid\\\\Exception\\\\UnsupportedOperationException\\|Ramsey\\\\Uuid\\\\Exception\\\\UuidException is not subtype of Throwable$#"
+			count: 1
+			path: src/Internal/Service/UuidFactoryServiceInterface.php
 
 		-
 			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Transaction\\:\\:wallet\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<Bavix\\\\Wallet\\\\Models\\\\Wallet, Bavix\\\\Wallet\\\\Models\\\\Transaction\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, \\$this\\(Bavix\\\\Wallet\\\\Models\\\\Transaction\\)\\>\\.$#"
@@ -106,7 +151,7 @@ parameters:
 			path: src/Models/Transfer.php
 
 		-
-			message: "#^Cannot call method getDynamicDefaultSlug\\(\\) on class\\-string\\|object\\.$#"
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphOne\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:withTrashed\\(\\)\\.$#"
 			count: 2
 			path: src/Models/Wallet.php
 
@@ -116,14 +161,139 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
+			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:deposit\\(\\) has parameter \\$meta with no value type specified in iterable type array\\.$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:forceWithdraw\\(\\) has parameter \\$meta with no value type specified in iterable type array\\.$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:getBalanceFloatAttribute\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:receivedTransfers\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Bavix\\\\Wallet\\\\Models\\\\Transfer\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, Bavix\\\\Wallet\\\\Models\\\\Wallet\\>\\.$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:transactions\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\<Bavix\\\\Wallet\\\\Models\\\\Transaction\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\.$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:transfers\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Bavix\\\\Wallet\\\\Models\\\\Transfer\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, Bavix\\\\Wallet\\\\Models\\\\Wallet\\>\\.$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:walletTransactions\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Bavix\\\\Wallet\\\\Models\\\\Transaction\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, Bavix\\\\Wallet\\\\Models\\\\Wallet\\>\\.$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:withdraw\\(\\) has parameter \\$meta with no value type specified in iterable type array\\.$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Parameter \\#1 \\$objects of method Bavix\\\\Wallet\\\\Services\\\\TransferService\\:\\:apply\\(\\) expects non\\-empty\\-array\\<Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransferLazyDtoInterface\\>, array\\<int\\<0, max\\>, Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransferLazyDtoInterface\\> given\\.$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Parameter \\#1 \\$related of method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:hasMany\\(\\) expects class\\-string\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>, mixed given\\.$#"
+			count: 6
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Parameter \\#1 \\$related of method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:morphMany\\(\\) expects class\\-string\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>, mixed given\\.$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
 			message: "#^Parameter \\#1 \\.\\.\\.\\$arrays of function array_merge expects array, mixed given\\.$#"
 			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method Bavix\\\\Wallet\\\\Services\\\\RegulatorService\\:\\:increase\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"
+			count: 1
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method Bavix\\\\Wallet\\\\Services\\\\RegulatorService\\:\\:sync\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
+			count: 1
 			path: src/Models/Wallet.php
 
 		-
 			message: "#^Property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$table \\(string\\) does not accept mixed\\.$#"
 			count: 1
 			path: src/Models/Wallet.php
+
+		-
+			message: "#^Unable to resolve the template type TRelatedModel in call to method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:hasMany\\(\\)$#"
+			count: 6
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Unable to resolve the template type TRelatedModel in call to method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:morphMany\\(\\)$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Parameter \\#1 \\$objects \\(non\\-empty\\-array\\<Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransactionDtoInterface\\|Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransferDtoInterface\\>\\) of method Bavix\\\\Wallet\\\\Services\\\\AssistantService\\:\\:getUuids\\(\\) should be compatible with parameter \\$objects \\(non\\-empty\\-array\\<string\\>\\) of method Bavix\\\\Wallet\\\\Services\\\\AssistantServiceInterface\\:\\:getUuids\\(\\)$#"
+			count: 1
+			path: src/Services/AssistantService.php
+
+		-
+			message: "#^Parameter \\#1 \\$objects of method Bavix\\\\Wallet\\\\Services\\\\AssistantServiceInterface\\:\\:getUuids\\(\\) expects non\\-empty\\-array\\<string\\>, non\\-empty\\-array\\<Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransactionDtoInterface\\> given\\.$#"
+			count: 1
+			path: src/Services/AtmService.php
+
+		-
+			message: "#^Parameter \\#1 \\$objects of method Bavix\\\\Wallet\\\\Services\\\\AssistantServiceInterface\\:\\:getUuids\\(\\) expects non\\-empty\\-array\\<string\\>, non\\-empty\\-array\\<Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransferDtoInterface\\> given\\.$#"
+			count: 1
+			path: src/Services/AtmService.php
+
+		-
+			message: "#^Unable to resolve the template type T in call to method Bavix\\\\Wallet\\\\Services\\\\AssistantServiceInterface\\:\\:getUuids\\(\\)$#"
+			count: 2
+			path: src/Services/AtmService.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Services\\\\BookkeeperService\\:\\:multiAmount\\(\\) should return non\\-empty\\-array\\<string, string\\> but returns array\\<string, string\\>\\.$#"
+			count: 2
+			path: src/Services/BookkeeperService.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Services\\\\RegulatorService\\:\\:amount\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Services/RegulatorService.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Services\\\\RegulatorService\\:\\:diff\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Services/RegulatorService.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method Bavix\\\\Wallet\\\\Services\\\\RegulatorService\\:\\:increase\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"
+			count: 1
+			path: src/Services/RegulatorService.php
+
+		-
+			message: "#^PHPDoc tag @return with type string is incompatible with native type bool\\.$#"
+			count: 1
+			path: src/Services/RegulatorServiceInterface.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method Bavix\\\\Wallet\\\\Services\\\\RegulatorServiceInterface\\:\\:increase\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"
+			count: 1
+			path: src/Services/TransactionService.php
 
 		-
 			message: "#^Parameter \\#1 \\$attributes of method Bavix\\\\Wallet\\\\Internal\\\\Repository\\\\WalletRepositoryInterface\\:\\:create\\(\\) expects array\\{holder_type\\: string, holder_id\\: int\\|string, name\\: string, slug\\?\\: string, uuid\\: string, description\\?\\: string, meta\\: array\\|null, balance\\?\\: int, \\.\\.\\.\\}, non\\-empty\\-array given\\.$#"

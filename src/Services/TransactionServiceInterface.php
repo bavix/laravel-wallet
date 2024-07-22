@@ -15,9 +15,16 @@ use Bavix\Wallet\Models\Transaction;
 interface TransactionServiceInterface
 {
     /**
-     * @param null|array<mixed> $meta
+     * Create a new transaction.
      *
-     * @throws RecordNotFoundException
+     * @param Wallet $wallet The wallet associated with the transaction.
+     * @param string $type The type of the transaction.
+     * @param float|int|string $amount The amount of the transaction.
+     * @param null|array<mixed> $meta Additional information for the transaction.
+     * @param bool $confirmed Whether the transaction is confirmed or not.
+     * @return Transaction The created transaction.
+     *
+     * @throws RecordNotFoundException If the wallet is not found.
      */
     public function makeOne(
         Wallet $wallet,
@@ -28,11 +35,16 @@ interface TransactionServiceInterface
     ): Transaction;
 
     /**
-     * @param non-empty-array<int, Wallet> $wallets
-     * @param non-empty-array<int, TransactionDtoInterface> $objects
-     * @return non-empty-array<string, Transaction>
+     * Apply multiple transactions to multiple wallets.
      *
-     * @throws RecordNotFoundException
+     * This method applies multiple transactions to multiple wallets. It takes an array of wallets and an array of
+     * transaction objects as input. It returns an array of transactions.
+     *
+     * @param non-empty-array<int, Wallet> $wallets An array of wallets to apply the transactions to.
+     * @param non-empty-array<int, TransactionDtoInterface> $objects An array of transaction objects.
+     * @return non-empty-array<string, Transaction> An array of transactions.
+     *
+     * @throws RecordNotFoundException If any of the wallets are not found.
      */
     public function apply(array $wallets, array $objects): array;
 }

@@ -7,9 +7,20 @@ namespace Bavix\Wallet\Interfaces;
 interface Taxable
 {
     /**
-     * Specify the percentage of the amount. For example, the product costs $100, the equivalent of 15%. That's $115.
+     * Returns the percentage fee of the amount.
      *
-     * Minimum 0; Maximum 100 Example: return 7.5; // 7.5%
+     * This method should return the percentage fee of the amount.
+     * For example, if the product costs $100 and the fee is 15%,
+     * then the fee will be $15 ($115 - $100).
+     *
+     * The return value must be a float or integer.
+     *
+     * @return float|int The percentage fee of the amount.
+     *
+     * @example
+     *
+     * If the product costs $100 and the fee is 15%, then the fee will be $15 ($115 - $100).
+     * If the product costs $100 and the fee is 7.5%, then the fee will be $7.5 ($107.5 - $100).
      */
     public function getFeePercent(): float|int;
 }

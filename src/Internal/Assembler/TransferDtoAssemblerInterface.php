@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 interface TransferDtoAssemblerInterface
 {
     /**
-     * @param array<mixed>|null $extra
+     * Create transfer dto.
      */
     public function create(
         int $depositId,
