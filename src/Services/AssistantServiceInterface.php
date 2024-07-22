@@ -67,7 +67,7 @@ interface AssistantServiceInterface
      * relevant details.
      *
      * @param BasketDtoInterface $basketDto The basket DTO object.
-     * @param ProductInterface   $product    The product object.
+     * @param ProductInterface $product The product object.
      * @return array<mixed>|null The meta data for the cart, or null if there is no meta data.
      *
      * @example

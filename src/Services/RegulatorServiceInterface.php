@@ -48,7 +48,7 @@ interface RegulatorServiceInterface
      * If the value does not exist, it will be created. If the value already exists, it will be updated.
      *
      * @param Wallet $wallet The wallet to synchronize.
-     * @param float|int|non-empty-string           $value  The value to synchronize.
+     * @param float|int|non-empty-string $value The value to synchronize.
      * @return non-empty-string True if the synchronization was successful, false otherwise.
      */
     public function sync(Wallet $wallet, float|int|string $value): bool;
@@ -59,7 +59,7 @@ interface RegulatorServiceInterface
      * This method increases the stored value associated with the provided wallet by the given amount.
      *
      * @param Wallet $wallet The wallet to increase.
-     * @param float|int|non-empty-string           $value  The amount to increase the stored value by.
+     * @param float|int|non-empty-string $value The amount to increase the stored value by.
      * @return non-empty-string The updated stored value, formatted as a string with the same decimal places as the wallet.
      */
     public function increase(Wallet $wallet, float|int|string $value): string;
@@ -70,7 +70,7 @@ interface RegulatorServiceInterface
      * This method decreases the stored value associated with the provided wallet by the given amount.
      *
      * @param Wallet $wallet The wallet to decrease.
-     * @param float|int|string           $value  The amount to decrease the stored value by.
+     * @param float|int|string $value The amount to decrease the stored value by.
      * @return string The updated stored value, formatted as a string with the same decimal places as the wallet.
      */
     public function decrease(Wallet $wallet, float|int|string $value): string;

@@ -33,17 +33,17 @@ interface TransferRepositoryInterface
      */
     public function findBy(TransferQueryInterface $query): array;
 
-/**
- * Updates the status of transfers identified by their IDs.
- *
- * This method updates the status field of transfers in the repository
- * to the provided status, for all transfers whose IDs are included
- * in the provided array. The method returns the number of transfers
- * that were updated.
- *
- * @param string $status The new status to set for the specified transfers.
- * @param non-empty-array<int> $ids A non-empty array of transfer IDs to update.
- * @return int The number of transfers whose status was updated.
- */
-public function updateStatusByIds(string $status, array $ids): int;
+    /**
+     * Updates the status of transfers identified by their IDs.
+     *
+     * This method updates the status field of transfers in the repository
+     * to the provided status, for all transfers whose IDs are included
+     * in the provided array. The method returns the number of transfers
+     * that were updated.
+     *
+     * @param string $status The new status to set for the specified transfers.
+     * @param non-empty-array<int> $ids A non-empty array of transfer IDs to update.
+     * @return int The number of transfers whose status was updated.
+     */
+    public function updateStatusByIds(string $status, array $ids): int;
 }

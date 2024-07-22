@@ -353,12 +353,12 @@ trait HasWallet
         // The atomic block ensures that the creation of the transaction is atomic,
         // meaning that either the entire transaction is created or none of it is.
         return app(AtomicServiceInterface::class)->block(
-            // The wallet instance
+        // The wallet instance
             $this,
             function () use ($amount, $meta, $confirmed): Transaction {
                 // Create a new withdrawal transaction.
                 return app(TransactionServiceInterface::class)->makeOne(
-                    // The wallet instance
+                // The wallet instance
                     $this,
                     // The transaction type
                     Transaction::TYPE_WITHDRAW,
@@ -448,8 +448,8 @@ trait HasWallet
         // The relationship is defined using the `from_id` foreign key.
         return $wallet
             ->hasMany(
-                // Retrieve the transfer model class from the configuration.
-                // The default value is `Transfer::class`.
+            // Retrieve the transfer model class from the configuration.
+            // The default value is `Transfer::class`.
                 config('wallet.transfer.model', Transfer::class),
                 // Define the foreign key for the relationship.
                 // The foreign key is `from_id`.
@@ -483,8 +483,8 @@ trait HasWallet
         // The relationship is defined using the `to_id` foreign key.
         return $wallet
             ->hasMany(
-                // Retrieve the transfer model class from the configuration.
-                // The default value is `Transfer::class`.
+            // Retrieve the transfer model class from the configuration.
+            // The default value is `Transfer::class`.
                 config('wallet.transfer.model', Transfer::class),
                 // Define the foreign key for the relationship.
                 // The foreign key is `to_id`.

@@ -161,12 +161,12 @@ interface Wallet
      */
     public function getBalanceIntAttribute(): int;
 
-/**
- * Represents a relationship where a wallet has many transactions.
- *
- * @return HasMany<Transaction> A collection of transactions associated with this wallet.
- */
-public function walletTransactions(): HasMany;
+    /**
+     * Represents a relationship where a wallet has many transactions.
+     *
+     * @return HasMany<Transaction> A collection of transactions associated with this wallet.
+     */
+    public function walletTransactions(): HasMany;
 
     /**
      * Returns all the transactions associated with this wallet.

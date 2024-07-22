@@ -17,35 +17,35 @@ use Illuminate\Database\ConnectionInterface;
  */
 interface ConnectionServiceInterface
 {
-/**
- * Get a database connection instance.
- *
- * This method returns a database connection instance.
- *
- * @return ConnectionInterface The database connection instance.
- *
- * @example
- *     // Get a database connection instance.
- *     $connection = $this->get();
- *
- *     // Run a query on the "users" table.
- *     * $connection->table('users')->where('id', 1)->update(['name' => 'Jane']);
- *
- *     // Start a database transaction.
- *     $connection->beginTransaction();
- *
- *     try {
- *         // Run queries...
- *
- *         // Commit the transaction.
- *         $connection->commit();
- *     } catch (Exception $e) {
- *         // Rollback the transaction.
- *         $connection->rollback();
- *
- *         // Rethrow the exception.
- *         throw $e;
- *     }
- */
-public function get(): ConnectionInterface;
+    /**
+     * Get a database connection instance.
+     *
+     * This method returns a database connection instance.
+     *
+     * @return ConnectionInterface The database connection instance.
+     *
+     * @example
+     *     // Get a database connection instance.
+     *     $connection = $this->get();
+     *
+     *     // Run a query on the "users" table.
+     *     * $connection->table('users')->where('id', 1)->update(['name' => 'Jane']);
+     *
+     *     // Start a database transaction.
+     *     $connection->beginTransaction();
+     *
+     *     try {
+     *         // Run queries...
+     *
+     *         // Commit the transaction.
+     *         $connection->commit();
+     *     } catch (Exception $e) {
+     *         // Rollback the transaction.
+     *         $connection->rollback();
+     *
+     *         // Rethrow the exception.
+     *         throw $e;
+     *     }
+     */
+    public function get(): ConnectionInterface;
 }

@@ -50,7 +50,7 @@ trait CanConfirm
             if ($transaction->type === Transaction::TYPE_WITHDRAW) {
                 // Check if the wallet has enough money
                 app(ConsistencyServiceInterface::class)->checkPotential(
-                    // Get the wallet
+                // Get the wallet
                     app(CastServiceInterface::class)->getWallet($this),
                     // Negative amount
                     app(MathServiceInterface::class)->negative($transaction->amount)
@@ -120,7 +120,7 @@ trait CanConfirm
             // Check if the transaction is already confirmed
             if (! $transaction->confirmed) {
                 throw new UnconfirmedInvalid(
-                    // If the transaction is not confirmed, throw an `UnconfirmedInvalid` exception
+                // If the transaction is not confirmed, throw an `UnconfirmedInvalid` exception
                     app(TranslatorServiceInterface::class)->get('wallet::errors.unconfirmed_invalid'),
                     // The code of the exception
                     ExceptionInterface::UNCONFIRMED_INVALID
@@ -131,7 +131,7 @@ trait CanConfirm
             $wallet = app(CastServiceInterface::class)->getWallet($this);
             if ($wallet->getKey() !== $transaction->wallet_id) {
                 throw new WalletOwnerInvalid(
-                    // If the transaction does not belong to the wallet, throw a `WalletOwnerInvalid` exception
+                // If the transaction does not belong to the wallet, throw a `WalletOwnerInvalid` exception
                     app(TranslatorServiceInterface::class)->get('wallet::errors.owner_invalid'),
                     // The code of the exception
                     ExceptionInterface::WALLET_OWNER_INVALID

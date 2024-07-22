@@ -160,7 +160,7 @@ trait CanExchange
                 $castService->getWallet($this)
                     ->getCurrencyAttribute(),
                 $castService->getWallet($to)
-->currency,
+                    ->currency,
                 1
             );
 

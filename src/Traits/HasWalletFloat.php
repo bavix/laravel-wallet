@@ -85,11 +85,8 @@ trait HasWalletFloat
      * @throws TransactionFailedException If the transaction fails.
      * @throws ExceptionInterface If an exception occurs.
      */
-    public function depositFloat(
-        float|int|string $amount,
-        ?array $meta = null,
-        bool $confirmed = true
-    ): Transaction {
+    public function depositFloat(float|int|string $amount, ?array $meta = null, bool $confirmed = true): Transaction
+    {
         // Get the math service.
         $math = app(MathServiceInterface::class);
 
@@ -331,7 +328,7 @@ trait HasWalletFloat
 
         // Use the formatter service to format the balance as a float.
         return app(FormatterServiceInterface::class)->floatValue(
-            // The balance of the wallet.
+        // The balance of the wallet.
             $balance,
 
             // The number of decimal places for the wallet.

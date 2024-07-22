@@ -118,7 +118,7 @@ trait CartPay
      * the method returns an array of Transfer instances. If the payment fails, an empty array is returned.
      *
      * @param CartInterface $cart The cart containing the items to be purchased.
-     * @param bool          $force Whether to force the purchase. Defaults to false.
+     * @param bool $force Whether to force the purchase. Defaults to false.
      * @return Transfer[] An array of Transfer instances representing the successfully paid items, or an empty array if the payment failed.
      */
     public function safePayCart(CartInterface $cart, bool $force = false): array
