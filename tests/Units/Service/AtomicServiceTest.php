@@ -66,4 +66,37 @@ final class AtomicServiceTest extends TestCase
 
         self::assertSame($iterations * 2000, $user->balanceInt);
     }
+
+    public function testRollback(): void
+    {
+        $atomic = app(AtomicServiceInterface::class);
+        
+        /** @var Buyer $user */
+        $user = BuyerFactory::new()->create();
+
+        $user->deposit(1000);
+
+        self::assertSame(1000, $user->balanceInt);
+
+        try {
+            $atomic->block($user, function () use ($user) {
+                $user->forceWithdraw(1000);
+                $user->forceWithdraw(1000);
+                $user->forceWithdraw(1000);
+                $user->deposit(5000);
+
+                throw new \Exception();
+            });
+
+            self::assertTrue(false); // check
+        } catch (\Throwable) {
+        }
+
+        self::assertTrue($user->wallet->refreshBalance()); // check
+
+        $userFromDb = Buyer::find($user->getKey());
+
+        self::assertSame(1000, $userFromDb->balanceInt);
+        self::assertSame(1000, $user->balanceInt);
+    }
 }
