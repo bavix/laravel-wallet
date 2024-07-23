@@ -1,16 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method Bavix\\\\Wallet\\\\Test\\\\Infra\\\\Models\\\\Item\\:\\:boughtGoods\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Bavix\\\\Wallet\\\\Models\\\\Transfer\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\.$#"
-			count: 1
-			path: tests/Infra/Models/Item.php
-
-		-
-			message: "#^Parameter \\#1 \\$related of method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:hasMany\\(\\) expects class\\-string\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>, class\\-string given\\.$#"
-			count: 1
-			path: tests/Infra/Models/Item.php
-
-		-
 			message: "#^Parameter \\#2 \\$currency of class Bavix\\\\Wallet\\\\Test\\\\Infra\\\\Values\\\\Money constructor expects string, mixed given\\.$#"
 			count: 1
 			path: tests/Infra/PackageModels/TransactionMoney.php
@@ -44,16 +34,6 @@ parameters:
 			message: "#^Method Bavix\\\\Wallet\\\\Test\\\\Infra\\\\TestCase\\:\\:setUp\\(\\) is not final, but since the containing class is abstract, it should be\\.$#"
 			count: 1
 			path: tests/Infra/TestCase.php
-
-		-
-			message: "#^Parameter \\#1 \\$first of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:compare\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"
-			count: 2
-			path: tests/Units/Domain/CartTest.php
-
-		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
-			count: 1
-			path: tests/Units/Service/AtomicServiceTest.php
 
 		-
 			message: "#^Parameter \\#1 \\$number of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:abs\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"

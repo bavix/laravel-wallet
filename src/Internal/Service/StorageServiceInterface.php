@@ -77,7 +77,7 @@ interface StorageServiceInterface
      * @param non-empty-array<non-empty-string> $uuids The UUIDs of the stored values.
      * @return non-empty-array<non-empty-string, non-empty-string> The stored values. The keys are the UUIDs and the values are the corresponding
      *                              stored values.
-     * 
+     *
      * @throws RecordNotFoundException If any of the values with the given UUIDs are not found.
      */
     public function multiGet(array $uuids): array;

@@ -191,11 +191,6 @@ parameters:
 			path: src/Models/Transaction.php
 
 		-
-			message: "#^Parameter \\#1 \\$first of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:mul\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
-			count: 1
-			path: src/Models/Transaction.php
-
-		-
 			message: "#^Parameter \\#1 \\$related of method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:belongsTo\\(\\) expects class\\-string\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>, mixed given\\.$#"
 			count: 1
 			path: src/Models/Transaction.php
@@ -246,7 +241,7 @@ parameters:
 			path: src/Models/Transfer.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphOne\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:withTrashed\\(\\)\\.$#"
+			message: "#^Cannot call method getDynamicDefaultSlug\\(\\) on class\\-string\\|object\\.$#"
 			count: 2
 			path: src/Models/Wallet.php
 
@@ -256,62 +251,12 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
-			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:getBalanceFloatAttribute\\(\\) should return non\\-empty\\-string but returns string\\.$#"
-			count: 1
-			path: src/Models/Wallet.php
-
-		-
 			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:getCurrencyAttribute\\(\\) should return string but returns mixed\\.$#"
 			count: 1
 			path: src/Models/Wallet.php
 
 		-
-			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:receivedTransfers\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Bavix\\\\Wallet\\\\Models\\\\Transfer\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, Bavix\\\\Wallet\\\\Models\\\\Wallet\\>\\.$#"
-			count: 2
-			path: src/Models/Wallet.php
-
-		-
-			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:transactions\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\<Bavix\\\\Wallet\\\\Models\\\\Transaction\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\.$#"
-			count: 2
-			path: src/Models/Wallet.php
-
-		-
-			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:transfers\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Bavix\\\\Wallet\\\\Models\\\\Transfer\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, Bavix\\\\Wallet\\\\Models\\\\Wallet\\>\\.$#"
-			count: 2
-			path: src/Models/Wallet.php
-
-		-
-			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:walletTransactions\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Bavix\\\\Wallet\\\\Models\\\\Transaction\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, Bavix\\\\Wallet\\\\Models\\\\Wallet\\>\\.$#"
-			count: 2
-			path: src/Models/Wallet.php
-
-		-
 			message: "#^Parameter \\#1 \\$amount of method Bavix\\\\Wallet\\\\Interfaces\\\\Wallet\\:\\:forceWithdraw\\(\\) expects int\\|non\\-empty\\-string, int\\|string given\\.$#"
-			count: 2
-			path: src/Models/Wallet.php
-
-		-
-			message: "#^Parameter \\#1 \\$first of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:add\\(\\) expects float\\|int\\|non\\-empty\\-string, int\\|string given\\.$#"
-			count: 1
-			path: src/Models/Wallet.php
-
-		-
-			message: "#^Parameter \\#1 \\$first of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:mul\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
-			count: 7
-			path: src/Models/Wallet.php
-
-		-
-			message: "#^Parameter \\#1 \\$first of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:mul\\(\\) expects float\\|int\\|non\\-empty\\-string, int\\|string given\\.$#"
-			count: 1
-			path: src/Models/Wallet.php
-
-		-
-			message: "#^Parameter \\#1 \\$related of method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:hasMany\\(\\) expects class\\-string\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>, mixed given\\.$#"
-			count: 6
-			path: src/Models/Wallet.php
-
-		-
-			message: "#^Parameter \\#1 \\$related of method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:morphMany\\(\\) expects class\\-string\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>, mixed given\\.$#"
 			count: 2
 			path: src/Models/Wallet.php
 
@@ -326,38 +271,8 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
-			message: "#^Parameter \\#2 \\$second of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:add\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"
-			count: 5
-			path: src/Models/Wallet.php
-
-		-
-			message: "#^Parameter \\#2 \\$second of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:compare\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
-			count: 1
-			path: src/Models/Wallet.php
-
-		-
-			message: "#^Parameter \\#2 \\$second of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:mul\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"
-			count: 1
-			path: src/Models/Wallet.php
-
-		-
-			message: "#^Parameter \\#2 \\$value of method Bavix\\\\Wallet\\\\Services\\\\RegulatorService\\:\\:sync\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
-			count: 1
-			path: src/Models/Wallet.php
-
-		-
 			message: "#^Property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$table \\(string\\) does not accept mixed\\.$#"
 			count: 1
-			path: src/Models/Wallet.php
-
-		-
-			message: "#^Unable to resolve the template type TRelatedModel in call to method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:hasMany\\(\\)$#"
-			count: 6
-			path: src/Models/Wallet.php
-
-		-
-			message: "#^Unable to resolve the template type TRelatedModel in call to method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:morphMany\\(\\)$#"
-			count: 2
 			path: src/Models/Wallet.php
 
 		-
@@ -411,18 +326,8 @@ parameters:
 			path: src/Services/BookkeeperService.php
 
 		-
-			message: "#^Parameter \\#1 \\$first of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:compare\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
-			count: 2
-			path: src/Services/ConsistencyService.php
-
-		-
 			message: "#^Parameter \\#1 \\$first of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:compare\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
 			count: 2
-			path: src/Services/ConsistencyService.php
-
-		-
-			message: "#^Parameter \\#2 \\$second of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:compare\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
-			count: 1
 			path: src/Services/ConsistencyService.php
 
 		-
