@@ -11,6 +11,26 @@ parameters:
 			path: tests/Infra/Models/Item.php
 
 		-
+			message: "#^Parameter \\#1 \\$first of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:mul\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
+			count: 1
+			path: tests/Infra/Services/ExchangeUsdToBtcService.php
+
+		-
+			message: "#^Parameter \\#1 \\$first of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:mul\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
+			count: 1
+			path: tests/Infra/Services/MyExchangeService.php
+
+		-
+			message: "#^Parameter \\#2 \\$second of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:div\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
+			count: 1
+			path: tests/Infra/Services/MyExchangeService.php
+
+		-
+			message: "#^Parameter \\#2 \\$second of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:mul\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
+			count: 1
+			path: tests/Infra/Services/MyExchangeService.php
+
+		-
 			message: "#^Class Bavix\\\\Wallet\\\\Test\\\\Infra\\\\TestCase is not final\\.$#"
 			count: 1
 			path: tests/Infra/TestCase.php
@@ -21,6 +41,16 @@ parameters:
 			path: tests/Infra/TestCase.php
 
 		-
+			message: "#^Parameter \\#1 \\$first of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:compare\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"
+			count: 2
+			path: tests/Units/Domain/CartTest.php
+
+		-
 			message: "#^Unreachable statement \\- code above always terminates\\.$#"
 			count: 1
 			path: tests/Units/Service/AtomicServiceTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$number of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:abs\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"
+			count: 1
+			path: tests/Units/Service/MathTest.php
