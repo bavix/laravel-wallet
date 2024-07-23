@@ -38,6 +38,9 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
+      - name: phpstan baseline
+        run: composer phpstan-baseline && git add .
+
       - name: Run rector-fix
         run: composer rector-fix
 
