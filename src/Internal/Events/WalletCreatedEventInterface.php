@@ -25,7 +25,7 @@ interface WalletCreatedEventInterface extends EventInterface
 
     /**
      * Returns the UUID of the wallet.
-     * 
+     *
      * @return non-empty-string
      */
     public function getWalletUuid(): string;
