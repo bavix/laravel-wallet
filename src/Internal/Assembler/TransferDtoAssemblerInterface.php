@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 interface TransferDtoAssemblerInterface
 {
-/**
+    /**
      * Create transfer dto.
      *
      * @param int $depositId ID of deposit transaction
@@ -21,7 +21,6 @@ interface TransferDtoAssemblerInterface
      * @param string $fee Fee of transfer
      * @param string|null $uuid UUID of transfer
      * @param array<mixed>|null $extra Extra data of transfer
-     * @return TransferDtoInterface
      */
     public function create(
         int $depositId,
