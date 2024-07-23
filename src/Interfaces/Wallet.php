@@ -21,7 +21,7 @@ interface Wallet
     /**
      * Deposit the specified amount of money into the wallet.
      *
-     * @param int|string $amount The amount to deposit.
+     * @param int|non-empty-string $amount The amount to deposit.
      * @param array<mixed>|null $meta Additional information for the transaction.
      * @param bool $confirmed Whether the transaction is confirmed or not.
      * @return Transaction The created transaction.
@@ -36,7 +36,7 @@ interface Wallet
     /**
      * Withdraw the specified amount of money from the wallet.
      *
-     * @param int|string $amount The amount to withdraw.
+     * @param int|non-empty-string $amount The amount to withdraw.
      * @param array<mixed>|null $meta Additional information for the transaction.
      * @param bool $confirmed Whether the transaction is confirmed or not.
      * @return Transaction The created transaction.
@@ -53,7 +53,7 @@ interface Wallet
     /**
      * Forced to withdraw funds from the wallet.
      *
-     * @param int|string $amount The amount to withdraw.
+     * @param int|non-empty-string $amount The amount to withdraw.
      * @param array<mixed>|null $meta Additional information for the transaction.
      * @param bool $confirmed Whether the transaction is confirmed or not.
      * @return Transaction The created transaction.
@@ -69,7 +69,7 @@ interface Wallet
      * Transfer funds from this wallet to another.
      *
      * @param self $wallet The wallet to transfer funds to.
-     * @param int|string $amount The amount to transfer.
+     * @param int|non-empty-string $amount The amount to transfer.
      * @param ExtraDtoInterface|array<mixed>|null $meta Additional information for the transaction.
      * @return Transfer The created transaction.
      *
@@ -89,7 +89,7 @@ interface Wallet
      * If an error occurs during the process, null is returned.
      *
      * @param self $wallet The wallet to transfer funds to.
-     * @param int|string $amount The amount to transfer.
+     * @param int|non-empty-string $amount The amount to transfer.
      * @param ExtraDtoInterface|array<mixed>|null $meta Additional information for the transaction.
      *                                                This can be an instance of an ExtraDtoInterface
      *                                                or an array of arbitrary data.
@@ -116,7 +116,7 @@ interface Wallet
      * method with caution as it can result in negative balances or other unintended consequences.
      *
      * @param self $wallet The wallet instance to which funds will be transferred.
-     * @param int|string $amount The amount of funds to transfer. Can be specified as an integer or a string.
+     * @param int|non-empty-string $amount The amount of funds to transfer. Can be specified as an integer or a string.
      * @param ExtraDtoInterface|array<mixed>|null $meta Additional metadata associated with the transfer. This
      * can be used to store extra information about the transaction, such as reasons for the transfer or
      * identifiers linking to other systems.
@@ -138,7 +138,7 @@ interface Wallet
     /**
      * Checks if the wallet can safely withdraw the specified amount.
      *
-     * @param int|string $amount The amount to withdraw.
+     * @param int|non-empty-string $amount The amount to withdraw.
      * @param bool $allowZero Whether to allow withdrawing when the balance is zero.
      * @return bool Returns true if the wallet can withdraw the specified amount, false otherwise.
      */

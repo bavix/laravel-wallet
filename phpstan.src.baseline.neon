@@ -21,21 +21,6 @@ parameters:
 			path: src/External/Dto/Option.php
 
 		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$force$#"
-			count: 1
-			path: src/Interfaces/Customer.php
-
-		-
-			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Assembler\\\\OptionDtoAssembler\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Internal/Assembler/OptionDtoAssembler.php
-
-		-
-			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Assembler\\\\OptionDtoAssemblerInterface\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Internal/Assembler/OptionDtoAssemblerInterface.php
-
-		-
 			message: "#^Parameter \\#3 \\$payableId of class Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransactionDto constructor expects int\\|string, mixed given\\.$#"
 			count: 1
 			path: src/Internal/Assembler/TransactionDtoAssembler.php
@@ -56,12 +41,17 @@ parameters:
 			path: src/Internal/Assembler/TransferDtoAssemblerInterface.php
 
 		-
-			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Decorator\\\\StorageServiceLockDecorator\\:\\:get\\(\\) should return string but returns string\\|false\\.$#"
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Decorator\\\\StorageServiceLockDecorator\\:\\:multiGet\\(\\) should return non\\-empty\\-array\\<non\\-empty\\-string, non\\-empty\\-string\\> but returns non\\-empty\\-array\\<non\\-empty\\-string, string\\>\\.$#"
 			count: 1
 			path: src/Internal/Decorator/StorageServiceLockDecorator.php
 
 		-
-			message: "#^Parameter \\#1 \\$inputs of method Bavix\\\\Wallet\\\\Internal\\\\Decorator\\\\StorageServiceLockDecorator\\:\\:multiSync\\(\\) expects non\\-empty\\-array\\<string, float\\|int\\|string\\>, array\\<string, string\\> given\\.$#"
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Decorator\\\\StorageServiceLockDecorator\\:\\:multiIncrease\\(\\) should return non\\-empty\\-array\\<non\\-empty\\-string, non\\-empty\\-string\\> but returns non\\-empty\\-array\\<string, string\\>\\.$#"
+			count: 1
+			path: src/Internal/Decorator/StorageServiceLockDecorator.php
+
+		-
+			message: "#^Parameter \\#1 \\$inputs of method Bavix\\\\Wallet\\\\Internal\\\\Decorator\\\\StorageServiceLockDecorator\\:\\:multiSync\\(\\) expects non\\-empty\\-array\\<non\\-empty\\-string, float\\|int\\|non\\-empty\\-string\\>, non\\-empty\\-array\\<non\\-empty\\-string, string\\> given\\.$#"
 			count: 1
 			path: src/Internal/Decorator/StorageServiceLockDecorator.php
 
@@ -79,6 +69,16 @@ parameters:
 			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StateService\\:\\:get\\(\\) should return string\\|null but returns mixed\\.$#"
 			count: 1
 			path: src/Internal/Service/StateService.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageService\\:\\:get\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Service/StorageService.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageService\\:\\:increase\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Service/StorageService.php
 
 		-
 			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Transaction\\:\\:wallet\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<Bavix\\\\Wallet\\\\Models\\\\Wallet, Bavix\\\\Wallet\\\\Models\\\\Transaction\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, \\$this\\(Bavix\\\\Wallet\\\\Models\\\\Transaction\\)\\>\\.$#"
@@ -146,16 +146,6 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
-			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:deposit\\(\\) has parameter \\$meta with no value type specified in iterable type array\\.$#"
-			count: 2
-			path: src/Models/Wallet.php
-
-		-
-			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:forceWithdraw\\(\\) has parameter \\$meta with no value type specified in iterable type array\\.$#"
-			count: 2
-			path: src/Models/Wallet.php
-
-		-
 			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:getBalanceFloatAttribute\\(\\) should return non\\-empty\\-string but returns string\\.$#"
 			count: 1
 			path: src/Models/Wallet.php
@@ -181,7 +171,7 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
-			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:withdraw\\(\\) has parameter \\$meta with no value type specified in iterable type array\\.$#"
+			message: "#^Parameter \\#1 \\$amount of method Bavix\\\\Wallet\\\\Interfaces\\\\Wallet\\:\\:forceWithdraw\\(\\) expects int\\|non\\-empty\\-string, int\\|string given\\.$#"
 			count: 2
 			path: src/Models/Wallet.php
 
@@ -202,6 +192,11 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\.\\.\\.\\$arrays of function array_merge expects array, mixed given\\.$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Parameter \\#2 \\$amount of method Bavix\\\\Wallet\\\\Interfaces\\\\Wallet\\:\\:forceTransfer\\(\\) expects int\\|non\\-empty\\-string, int\\|string given\\.$#"
 			count: 2
 			path: src/Models/Wallet.php
 
@@ -251,7 +246,22 @@ parameters:
 			path: src/Services/AtmService.php
 
 		-
-			message: "#^Method Bavix\\\\Wallet\\\\Services\\\\BookkeeperService\\:\\:multiAmount\\(\\) should return non\\-empty\\-array\\<string, string\\> but returns array\\<string, string\\>\\.$#"
+			message: "#^Parameter \\#1 \\$inputs of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageServiceInterface\\:\\:multiIncrease\\(\\) expects non\\-empty\\-array\\<non\\-empty\\-string, float\\|int\\|non\\-empty\\-string\\>, T of non\\-empty\\-array\\<string, float\\|int\\|string\\> given\\.$#"
+			count: 2
+			path: src/Services/BookkeeperService.php
+
+		-
+			message: "#^Parameter \\#1 \\$inputs of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageServiceInterface\\:\\:multiSync\\(\\) expects non\\-empty\\-array\\<non\\-empty\\-string, float\\|int\\|non\\-empty\\-string\\>, non\\-empty\\-array\\<string, float\\|int\\|string\\> given\\.$#"
+			count: 1
+			path: src/Services/BookkeeperService.php
+
+		-
+			message: "#^Parameter \\#1 \\$uuid of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageServiceInterface\\:\\:forget\\(\\) expects non\\-empty\\-string, string given\\.$#"
+			count: 1
+			path: src/Services/BookkeeperService.php
+
+		-
+			message: "#^Parameter \\#1 \\$uuids of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageServiceInterface\\:\\:multiGet\\(\\) expects non\\-empty\\-array\\<non\\-empty\\-string\\>, non\\-empty\\-array\\<int, string\\> given\\.$#"
 			count: 2
 			path: src/Services/BookkeeperService.php
 
@@ -263,6 +273,31 @@ parameters:
 		-
 			message: "#^Method Bavix\\\\Wallet\\\\Services\\\\RegulatorService\\:\\:diff\\(\\) should return non\\-empty\\-string but returns string\\.$#"
 			count: 1
+			path: src/Services/RegulatorService.php
+
+		-
+			message: "#^Parameter \\#1 \\$uuid of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageServiceInterface\\:\\:forget\\(\\) expects non\\-empty\\-string, string given\\.$#"
+			count: 1
+			path: src/Services/RegulatorService.php
+
+		-
+			message: "#^Parameter \\#1 \\$uuid of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageServiceInterface\\:\\:get\\(\\) expects non\\-empty\\-string, string given\\.$#"
+			count: 1
+			path: src/Services/RegulatorService.php
+
+		-
+			message: "#^Parameter \\#1 \\$uuid of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageServiceInterface\\:\\:increase\\(\\) expects non\\-empty\\-string, string given\\.$#"
+			count: 1
+			path: src/Services/RegulatorService.php
+
+		-
+			message: "#^Parameter \\#1 \\$uuid of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageServiceInterface\\:\\:sync\\(\\) expects non\\-empty\\-string, string given\\.$#"
+			count: 2
+			path: src/Services/RegulatorService.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageServiceInterface\\:\\:sync\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"
+			count: 2
 			path: src/Services/RegulatorService.php
 
 		-

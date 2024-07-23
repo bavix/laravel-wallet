@@ -19,24 +19,22 @@ interface Customer extends Wallet
     /**
      * Purchase a product without payment.
      *
-     * This method purchases the provided product without payment. If the purchase is successful,
-     * the method returns the transfer object. If the purchase fails due to insufficient funds or
-     * empty balance, it returns null. If the purchase fails due to a reason
-     * other than the above, it throws a more specific exception.
+     * This method allows the user to purchase the provided product without any payment involved.
+     * If the purchase is successful, the method returns the transfer object representing the purchase.
      *
      * @param ProductInterface $product The product to be purchased.
-     * @param bool $force [optional] Whether to force the purchase. Defaults to false.
-     * @return Transfer|null The transfer object representing the purchase, or null if the purchase fails.
+     * @return Transfer The transfer object representing the purchase.
      *
      * @throws ProductEnded If the product is ended.
      * @throws BalanceIsEmpty If the balance of the wallet is empty.
      * @throws InsufficientFunds If there are insufficient funds in the wallet.
-     * @throws RecordNotFoundException If the record is not found.
+     * @throws RecordNotFoundException If the wallet or the product record is not found.
      * @throws RecordsNotFoundException If the records are not found.
      * @throws TransactionFailedException If the transaction fails.
+     * @throws ModelNotFoundException If the wallet or the product is not found.
      * @throws ExceptionInterface If an exception occurs.
      */
-    public function payFree(ProductInterface $product): ?Transfer;
+    public function payFree(ProductInterface $product): Transfer;
 
     /**
      * Attempts to purchase a product without payment.

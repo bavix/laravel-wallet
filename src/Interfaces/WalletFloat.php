@@ -19,7 +19,7 @@ interface WalletFloat
     /**
      * Deposit a float amount of money into the wallet.
      *
-     * @param float|int|string $amount The amount to deposit.
+     * @param float|int|non-empty-string $amount The amount to deposit.
      * @param null|array<mixed> $meta Additional information for the transaction.
      * @param bool $confirmed Whether the transaction is confirmed or not.
      * @return Transaction The created transaction.
@@ -38,7 +38,7 @@ interface WalletFloat
     /**
      * Withdraw the specified float amount of money from the wallet.
      *
-     * @param float|int|string $amount The amount to withdraw.
+     * @param float|int|non-empty-string $amount The amount to withdraw.
      * @param array<mixed>|null $meta Additional information for the transaction.
      * @param bool $confirmed Whether the transaction is confirmed or not.
      * @return Transaction The created transaction.
@@ -59,7 +59,7 @@ interface WalletFloat
     /**
      * Forced to withdraw funds from the wallet.
      *
-     * @param float|int|string $amount The amount to withdraw.
+     * @param float|int|non-empty-string $amount The amount to withdraw.
      * @param null|array<mixed> $meta Additional information for the transaction.
      * @param bool $confirmed Whether the transaction is confirmed or not.
      * @return Transaction The created transaction.
@@ -79,7 +79,7 @@ interface WalletFloat
      * Transfer funds from this wallet to another.
      *
      * @param Wallet $wallet The wallet to transfer funds to.
-     * @param float|int|string $amount The amount to transfer.
+     * @param float|int|non-empty-string $amount The amount to transfer.
      * @param ExtraDtoInterface|array<mixed>|null $meta Additional information for the transaction.
      *                                                This can be an instance of an ExtraDtoInterface
      *                                                or an array of arbitrary data.
@@ -104,7 +104,7 @@ interface WalletFloat
      * This method will not throw an exception if the transfer fails. Instead, it will return null.
      *
      * @param Wallet $wallet The wallet to transfer funds to.
-     * @param float|int|string $amount The amount to transfer.
+     * @param float|int|non-empty-string $amount The amount to transfer.
      * @param ExtraDtoInterface|array<mixed>|null $meta Additional information for the transaction.
      *                                                This can be an instance of an ExtraDtoInterface
      *                                                or an array of arbitrary data.
@@ -126,7 +126,7 @@ interface WalletFloat
      * method with caution as it can result in negative balances or other unintended consequences.
      *
      * @param Wallet $wallet The wallet instance to which funds will be transferred.
-     * @param float|int|string $amount The amount of funds to transfer. Can be specified as a float, int, or string.
+     * @param float|int|non-empty-string $amount The amount of funds to transfer. Can be specified as a float, int, or string.
      * @param ExtraDtoInterface|array<mixed>|null $meta Additional metadata associated with the transfer. This
      * can be used to store extra information about the transaction, such as reasons for the transfer or
      * identifiers linking to other systems.
@@ -148,7 +148,7 @@ interface WalletFloat
     /**
      * Checks if the user can withdraw the specified amount of funds.
      *
-     * @param float|int|string $amount The amount of funds to withdraw. Can be specified as a float, int, or string.
+     * @param float|int|non-empty-string $amount The amount of funds to withdraw. Can be specified as a float, int, or string.
      * @return bool Returns TRUE if the withdrawal is possible, FALSE otherwise.
      *
      * @throws AmountInvalid If the amount is invalid (e.g., negative values).
@@ -161,7 +161,7 @@ interface WalletFloat
      * This method returns the balance of the wallet as a string. The balance is the total amount of funds
      * held by the wallet.
      *
-     * @return string The user's current balance as a string (e.g. "1.23").
+     * @return non-empty-string The user's current balance as a string (e.g. "1.23").
      */
     public function getBalanceFloatAttribute(): string;
 

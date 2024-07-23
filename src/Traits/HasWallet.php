@@ -49,7 +49,7 @@ trait HasWallet
      * This method executes the deposit transaction within an atomic block to ensure data consistency.
      *
      * @param int|string $amount The amount to deposit.
-     * @param array|null $meta Additional metadata for the transaction. This can be used to store
+     * @param array<mixed>|null $meta Additional metadata for the transaction. This can be used to store
      * information about the type of deposit, the source of the funds, or any other relevant details.
      * @param bool $confirmed Whether the transaction is confirmed. This can be used to indicate whether the
      * transaction has been verified and is considered final. Defaults to true.
@@ -271,7 +271,7 @@ trait HasWallet
      * It checks if the withdrawal is possible before attempting it.
      *
      * @param int|string $amount The amount to withdraw.
-     * @param array|null $meta Additional information for the transaction.
+     * @param array<mixed>|null $meta Additional information for the transaction.
      * @param bool $confirmed Whether the withdrawal is confirmed.
      * @return Transaction The created transaction.
      *
@@ -338,7 +338,7 @@ trait HasWallet
      * in an atomic block to ensure atomicity and consistency.
      *
      * @param int|string $amount The amount to withdraw.
-     * @param array|null $meta Additional information for the transaction.
+     * @param array<mixed>|null $meta Additional information for the transaction.
      * @param bool $confirmed Whether the transaction is confirmed. Defaults to true.
      * @return Transaction The created transaction.
      *

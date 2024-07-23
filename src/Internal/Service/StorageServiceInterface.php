@@ -24,7 +24,7 @@ interface StorageServiceInterface
      *
      * This method removes the stored value associated with the provided UUID from the storage.
      *
-     * @param string $uuid The UUID of the stored value to forget.
+     * @param non-empty-string $uuid The UUID of the stored value to forget.
      * @return bool True if the value was successfully forgotten, false otherwise.
      */
     public function forget(string $uuid): bool;
@@ -35,8 +35,8 @@ interface StorageServiceInterface
      * This method retrieves the stored value associated with the provided UUID from the storage.
      * If the value with the given UUID does not exist, a `RecordNotFoundException` is thrown.
      *
-     * @param string $uuid The UUID of the stored value.
-     * @return string The stored value.
+     * @param non-empty-string $uuid The UUID of the stored value.
+     * @return non-empty-string The stored value.
      *
      * @throws RecordNotFoundException If the value with the given UUID is not found.
      */
@@ -48,8 +48,8 @@ interface StorageServiceInterface
      * This method updates the stored value associated with the provided UUID with the specified value.
      * If the value does not exist, it will be created. If the value already exists, it will be updated.
      *
-     * @param string $uuid The UUID of the stored value.
-     * @param float|int|string $value The value to synchronize.
+     * @param non-empty-string $uuid The UUID of the stored value.
+     * @param float|int|non-empty-string $value The value to synchronize.
      * @return bool Returns `true` if the synchronization was successful, `false` otherwise.
      */
     public function sync(string $uuid, float|int|string $value): bool;
@@ -60,9 +60,9 @@ interface StorageServiceInterface
      * This method increases the stored value associated with the provided UUID by the specified amount.
      * If the value with the given UUID does not exist, a `RecordNotFoundException` is thrown.
      *
-     * @param string $uuid The UUID of the stored value.
-     * @param float|int|string $value The amount to increase the stored value by.
-     * @return string The updated stored value.
+     * @param non-empty-string $uuid The UUID of the stored value.
+     * @param float|int|non-empty-string $value The amount to increase the stored value by.
+     * @return non-empty-string The updated stored value.
      *
      * @throws RecordNotFoundException If the value with the given UUID is not found.
      */
@@ -74,8 +74,8 @@ interface StorageServiceInterface
      * This method retrieves the stored values associated with the provided UUIDs from the storage.
      * If any of the values with the given UUIDs do not exist, a `RecordNotFoundException` is thrown.
      *
-     * @param array<string> $uuids The UUIDs of the stored values.
-     * @return array<string, string> The stored values. The keys are the UUIDs and the values are the corresponding
+     * @param non-empty-array<non-empty-string> $uuids The UUIDs of the stored values.
+     * @return non-empty-array<non-empty-string, non-empty-string> The stored values. The keys are the UUIDs and the values are the corresponding
      *                              stored values.
      *
      * @throws RecordNotFoundException If any of the values with the given UUIDs are not found.
@@ -88,7 +88,7 @@ interface StorageServiceInterface
      * This method updates the stored values associated with the provided UUIDs with the specified values.
      * If any of the values with the given UUIDs do not exist, a `RecordNotFoundException` is thrown.
      *
-     * @param non-empty-array<string, float|int|string> $inputs An associative array
+     * @param non-empty-array<non-empty-string, float|int|non-empty-string> $inputs An associative array
      *                                                          where the keys are UUIDs and the values are the corresponding
      *                                                          stored values.
      * @return bool Returns `true` if the synchronization was successful, `false` otherwise.
@@ -103,11 +103,11 @@ interface StorageServiceInterface
      * This method takes an associative array where the keys are UUIDs and the values are the amounts to increase the
      * corresponding stored values by.
      *
-     * @template T of non-empty-array<string, float|int|string>
+     * @template T of non-empty-array<non-empty-string, float|int|non-empty-string>
      *
      * @param T $inputs An associative array where the keys are UUIDs and the values are the amounts to increase the
      *                  corresponding stored values by.
-     * @return non-empty-array<key-of<T>, string> An associative array where the keys are the UUIDs and the values are the
+     * @return non-empty-array<key-of<T>, non-empty-string> An associative array where the keys are the UUIDs and the values are the
      *                                           updated stored values.
      *
      * @throws RecordNotFoundException If any of the values with the given UUIDs are not found.

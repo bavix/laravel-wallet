@@ -14,7 +14,7 @@ interface UuidFactoryServiceInterface
      *
      * @see https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)
      *
-     * @return string The generated version 4 UUID.
+     * @return non-empty-string The generated version 4 UUID.
      *
      * @throws \Ramsey\Uuid\Exception\InvalidArgumentException If a field is invalid in the UUID.
      * @throws \Ramsey\Uuid\Exception\InvalidUuidStringException If the string we are parsing is not a valid UUID.
