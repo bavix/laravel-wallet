@@ -28,6 +28,9 @@ final class UserDynamic extends Model implements Wallet
         return 'users';
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getDynamicDefaultSlug(): string
     {
         return 'default-'.$this->email;

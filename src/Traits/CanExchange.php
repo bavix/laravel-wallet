@@ -30,47 +30,133 @@ use Illuminate\Database\RecordsNotFoundException;
 trait CanExchange
 {
     /**
-     * @throws BalanceIsEmpty
-     * @throws InsufficientFunds
-     * @throws RecordNotFoundException
-     * @throws RecordsNotFoundException
-     * @throws TransactionFailedException
-     * @throws ExceptionInterface
+     * Exchange currency from this wallet to another wallet.
+     *
+     * This method attempts to exchange currency from this wallet to another wallet.
+     * It uses the AtomicServiceInterface to ensure atomicity and consistency of the exchange.
+     * The ConsistencyServiceInterface is used to check if the exchange is possible before attempting it.
+     *
+     * @param Wallet $to The wallet to exchange the currency to.
+     * @param int|string $amount The amount to exchange.
+     * @param ExtraDtoInterface|array<mixed>|null $meta The extra data for the transaction.
+     * @return Transfer The created transfer.
+     *
+     * @throws BalanceIsEmpty             if the wallet does not have enough funds to make the exchange.
+     * @throws InsufficientFunds          if the wallet does not have enough funds to make the exchange.
+     * @throws RecordNotFoundException    if the wallet does not exist.
+     * @throws RecordsNotFoundException   if the wallet does not exist.
+     * @throws TransactionFailedException if the transaction fails.
+     * @throws ExceptionInterface         if an unexpected error occurs.
      */
     public function exchange(Wallet $to, int|string $amount, ExtraDtoInterface|array|null $meta = null): Transfer
     {
+        // Execute the exchange operation atomically
+        // AtomicServiceInterface ensures that the exchange operation is performed as a single, indivisible action
+        // to prevent race conditions and ensure consistency.
         return app(AtomicServiceInterface::class)->block($this, function () use ($to, $amount, $meta): Transfer {
+            // Check if the exchange is possible before attempting it
+            // ConsistencyServiceInterface checks if the exchange is possible before attempting it.
+            // This helps to avoid unnecessary failures and ensures that the exchange is valid.
             app(ConsistencyServiceInterface::class)->checkPotential($this, $amount);
 
+            // Perform the exchange
+            // forceExchange is called to perform the actual exchange of currency.
+            // If the exchange is not possible, an exception is thrown.
             return $this->forceExchange($to, $amount, $meta);
         });
     }
 
+    /**
+     * Safely attempts to exchange currency from this wallet to another wallet.
+     *
+     * This method attempts to exchange currency from this wallet to another wallet.
+     * If an error occurs during the process, null is returned.
+     *
+     * @param Wallet $to The wallet to exchange the currency to.
+     * @param int|string $amount The amount to exchange.
+     * @param ExtraDtoInterface|array<mixed>|null $meta The extra data for the transaction.
+     * @return null|Transfer The created transfer, or null if an error occurred.
+     *
+     * @throws ExceptionInterface If an unexpected error occurs.
+     */
     public function safeExchange(Wallet $to, int|string $amount, ExtraDtoInterface|array|null $meta = null): ?Transfer
     {
         try {
+            // Execute the exchange operation and return the created transfer.
+            // If an error occurs during the process, an exception is thrown.
             return $this->exchange($to, $amount, $meta);
-        } catch (ExceptionInterface) {
+        } catch (ExceptionInterface $e) {
+            // If an exception occurs during the exchange process, return null.
             return null;
         }
     }
 
     /**
-     * @throws RecordNotFoundException
-     * @throws RecordsNotFoundException
-     * @throws TransactionFailedException
-     * @throws ExceptionInterface
+     * Force exchange currency from this wallet to another wallet.
+     *
+     * This method will throw an exception if the exchange is not possible.
+     *
+     * @param Wallet $to The wallet to exchange the currency to.
+     * @param int|string $amount The amount to exchange.
+     * @param ExtraDtoInterface|array<mixed>|null $meta The extra data for the transaction.
+     * @return Transfer The created transfer.
+     *
+     * @throws RecordNotFoundException If the wallet does not exist.
+     * @throws RecordsNotFoundException If the wallet does not exist.
+     * @throws TransactionFailedException If the transaction fails.
+     * @throws ExceptionInterface If an unexpected error occurs.
      */
     public function forceExchange(Wallet $to, int|string $amount, ExtraDtoInterface|array|null $meta = null): Transfer
     {
-        return app(AtomicServiceInterface::class)->block($this, function () use ($to, $amount, $meta): Transfer {
-            $extraAssembler = app(ExtraDtoAssemblerInterface::class);
-            $prepareService = app(PrepareServiceInterface::class);
-            $mathService = app(MathServiceInterface::class);
-            $castService = app(CastServiceInterface::class);
-            $taxService = app(TaxServiceInterface::class);
+        // Get the atomic service to execute the exchange operation as a single, indivisible action.
+        $atomicService = app(AtomicServiceInterface::class);
+
+        // Get the extra assembler to assemble the extra data for the transaction.
+        $extraAssembler = app(ExtraDtoAssemblerInterface::class);
+
+        // Get the prepare service to prepare the transfer operation.
+        $prepareService = app(PrepareServiceInterface::class);
+
+        // Get the math service to perform mathematical operations.
+        $mathService = app(MathServiceInterface::class);
+
+        // Get the cast service to cast the wallet to the correct type.
+        $castService = app(CastServiceInterface::class);
+
+        // Get the tax service to calculate the tax fee.
+        $taxService = app(TaxServiceInterface::class);
+
+        // Get the exchange service to convert the currency.
+        $exchangeService = app(ExchangeServiceInterface::class);
+
+        // Get the transfer lazy DTO assembler to assemble the transfer lazy DTO.
+        $transferLazyDtoAssembler = app(TransferLazyDtoAssemblerInterface::class);
+
+        // Get the transfer service to apply the transfer operation.
+        $transferService = app(TransferServiceInterface::class);
+
+        // Execute the exchange operation as a single, indivisible action.
+        return $atomicService->block($this, function () use (
+            $to,
+            $amount,
+            $meta,
+            $extraAssembler,
+            $prepareService,
+            $mathService,
+            $castService,
+            $taxService,
+            $exchangeService,
+            $transferLazyDtoAssembler,
+            $transferService
+        ): Transfer {
+            // Assemble the extra data for the transaction.
+            $extraDto = $extraAssembler->create($meta);
+
+            // Calculate the tax fee.
             $fee = $taxService->getFee($to, $amount);
-            $rate = app(ExchangeServiceInterface::class)->convertTo(
+
+            // Convert the currency to the target wallet currency.
+            $rate = $exchangeService->convertTo(
                 $castService->getWallet($this)
                     ->getCurrencyAttribute(),
                 $castService->getWallet($to)
@@ -78,9 +164,10 @@ trait CanExchange
                 1
             );
 
-            $extraDto = $extraAssembler->create($meta);
+            // Get the withdraw option from the extra data.
             $withdrawOption = $extraDto->getWithdrawOption();
-            $depositOption = $extraDto->getDepositOption();
+
+            // Prepare the withdraw operation.
             $withdrawDto = $prepareService->withdraw(
                 $this,
                 $mathService->add($amount, $fee),
@@ -88,6 +175,11 @@ trait CanExchange
                 $withdrawOption->isConfirmed(),
                 $withdrawOption->getUuid(),
             );
+
+            // Get the deposit option from the extra data.
+            $depositOption = $extraDto->getDepositOption();
+
+            // Prepare the deposit operation.
             $depositDto = $prepareService->deposit(
                 $to,
                 $mathService->floor($mathService->mul($amount, $rate, 1)),
@@ -95,7 +187,9 @@ trait CanExchange
                 $depositOption->isConfirmed(),
                 $depositOption->getUuid(),
             );
-            $transferLazyDto = app(TransferLazyDtoAssemblerInterface::class)->create(
+
+            // Assemble the transfer lazy DTO.
+            $transferLazyDto = $transferLazyDtoAssembler->create(
                 $this,
                 $to,
                 0,
@@ -107,8 +201,10 @@ trait CanExchange
                 $extraDto->getExtra()
             );
 
-            $transfers = app(TransferServiceInterface::class)->apply([$transferLazyDto]);
+            // Apply the transfer operation.
+            $transfers = $transferService->apply([$transferLazyDto]);
 
+            // Return the created transfer.
             return current($transfers);
         });
     }

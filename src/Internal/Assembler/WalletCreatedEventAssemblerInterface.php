@@ -9,5 +9,8 @@ use Bavix\Wallet\Models\Wallet;
 
 interface WalletCreatedEventAssemblerInterface
 {
+    /**
+     * Assemble the wallet created event.
+     */
     public function create(Wallet $wallet): WalletCreatedEventInterface;
 }

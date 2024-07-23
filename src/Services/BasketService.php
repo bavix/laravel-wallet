@@ -19,10 +19,10 @@ final class BasketService implements BasketServiceInterface
         foreach ($basketDto->items() as $itemDto) {
             $product = $itemDto->getProduct();
             if ($product instanceof ProductLimitedInterface && ! $product->canBuy(
-                $customer,
-                $itemDto->count(),
-                $availabilityDto->isForce()
-            )) {
+                    $customer,
+                    $itemDto->count(),
+                    $availabilityDto->isForce()
+                )) {
                 return false;
             }
         }

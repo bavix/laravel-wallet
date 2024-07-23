@@ -32,15 +32,15 @@ use Illuminate\Support\Str;
  * Class Wallet.
  *
  * @property class-string $holder_type
- * @property int|string $holder_id
+ * @property int|non-empty-string $holder_id
  * @property string $name
  * @property string $slug
- * @property string $uuid
+ * @property non-empty-string $uuid
  * @property string $description
- * @property null|array $meta
+ * @property null|array<mixed> $meta
  * @property int $decimal_places
  * @property Model $holder
- * @property string $credit
+ * @property non-empty-string $credit
  * @property string $currency
  * @property DateTimeInterface $created_at
  * @property DateTimeInterface $updated_at
@@ -138,14 +138,24 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
 
     public function getOriginalBalanceAttribute(): string
     {
-        return (string) $this->getRawOriginal('balance', 0);
+        $balance = (string) $this->getRawOriginal('balance', 0);
+
+        // Perform assertion to check if balance is not an empty string
+        assert($balance !== '', 'Balance should not be an empty string');
+
+        return $balance;
     }
 
     public function getAvailableBalanceAttribute(): float|int|string
     {
-        return $this->walletTransactions()
+        $balance = $this->walletTransactions()
             ->where('confirmed', true)
             ->sum('amount');
+
+        // Perform assertion to check if balance is not an empty string
+        assert($balance !== '', 'Balance should not be an empty string');
+
+        return $balance;
     }
 
     /**
@@ -158,7 +168,22 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
 
     public function getCreditAttribute(): string
     {
-        return (string) ($this->meta['credit'] ?? '0');
+        $credit = (string) ($this->meta['credit'] ?? '0');
+
+        /**
+         * Assert that the credit attribute is not an empty string.
+         *
+         * This is to ensure that the credit attribute always has a value.
+         * If the credit attribute is empty, it can cause issues with the math service.
+         *
+         * @throws \AssertionError If the credit attribute is an empty string.
+         */
+        // Assert that credit is not an empty string
+        // This is to ensure that the credit attribute always has a value
+        // If the credit attribute is empty, it can cause issues with the math service
+        assert($credit !== '', 'Credit should not be an empty string. It can cause issues with the math service.');
+
+        return $credit;
     }
 
     public function getCurrencyAttribute(): string

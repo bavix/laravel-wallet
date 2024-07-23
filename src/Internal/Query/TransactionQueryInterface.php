@@ -7,7 +7,11 @@ namespace Bavix\Wallet\Internal\Query;
 interface TransactionQueryInterface
 {
     /**
-     * @return non-empty-array<int|string, string>
+     * Returns an array of UUIDs for the transactions.
+     *
+     * The array should not be empty and should contain only non-empty-strings or integers.
+     *
+     * @return non-empty-array<int|string, string> An array of transaction UUIDs.
      */
     public function getUuids(): array;
 }

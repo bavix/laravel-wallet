@@ -55,10 +55,10 @@ final readonly class StorageService implements StorageServiceInterface
     }
 
     /**
-     * @template T of non-empty-array<string>
+     * @template T of non-empty-array<non-empty-string>
      *
      * @param T $uuids
-     * @return non-empty-array<value-of<T>, string>
+     * @return non-empty-array<value-of<T>, non-empty-string>
      *
      * @throws RecordNotFoundException
      */
@@ -80,7 +80,7 @@ final readonly class StorageService implements StorageServiceInterface
         }
 
         $results = [];
-        /** @var array<float|int|string|null> $values */
+        /** @var array<float|int|non-empty-string|null> $values */
         foreach ($values as $key => $value) {
             $uuid = $keys[$key];
             if ($value === null) {

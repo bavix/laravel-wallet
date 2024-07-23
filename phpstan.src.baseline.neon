@@ -36,6 +36,66 @@ parameters:
 			path: src/Internal/Assembler/TransferDtoAssembler.php
 
 		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Decorator\\\\StorageServiceLockDecorator\\:\\:multiIncrease\\(\\) should return non\\-empty\\-array\\<non\\-empty\\-string, non\\-empty\\-string\\> but returns non\\-empty\\-array\\<string, string\\>\\.$#"
+			count: 1
+			path: src/Internal/Decorator/StorageServiceLockDecorator.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\ItemDto\\:\\:getPricePerItem\\(\\) should return int\\|non\\-empty\\-string\\|null but returns int\\|string\\|null\\.$#"
+			count: 1
+			path: src/Internal/Dto/ItemDto.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransactionDto\\:\\:getAmount\\(\\) should return float\\|int\\|non\\-empty\\-string but returns float\\|int\\|string\\.$#"
+			count: 1
+			path: src/Internal/Dto/TransactionDto.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransactionDto\\:\\:getPayableType\\(\\) should return class\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Dto/TransactionDto.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransactionDto\\:\\:getUuid\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Dto/TransactionDto.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransferDto\\:\\:getFee\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Dto/TransferDto.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransferDto\\:\\:getUuid\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Dto/TransferDto.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransferLazyDto\\:\\:getFee\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Dto/TransferLazyDto.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransferLazyDto\\:\\:getUuid\\(\\) should return non\\-empty\\-string\\|null but returns string\\|null\\.$#"
+			count: 1
+			path: src/Internal/Dto/TransferLazyDto.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Events\\\\BalanceUpdatedEvent\\:\\:getBalance\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Events/BalanceUpdatedEvent.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Events\\\\BalanceUpdatedEvent\\:\\:getWalletUuid\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Events/BalanceUpdatedEvent.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Events\\\\WalletCreatedEvent\\:\\:getWalletUuid\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Events/WalletCreatedEvent.php
+
+		-
 			message: "#^Parameter \\#1 \\$name of method Illuminate\\\\Database\\\\ConnectionResolverInterface\\:\\:connection\\(\\) expects string\\|null, mixed given\\.$#"
 			count: 1
 			path: src/Internal/Service/ConnectionService.php
@@ -46,9 +106,84 @@ parameters:
 			path: src/Internal/Service/LockService.php
 
 		-
-			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StateService\\:\\:get\\(\\) should return string\\|null but returns mixed\\.$#"
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:abs\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Service/MathService.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:add\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Service/MathService.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:ceil\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Service/MathService.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:div\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Service/MathService.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:floor\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Service/MathService.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:mul\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Service/MathService.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:negative\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Service/MathService.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:pow\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Service/MathService.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:round\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Service/MathService.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:sub\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Service/MathService.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StateService\\:\\:get\\(\\) should return non\\-empty\\-string\\|null but returns mixed\\.$#"
 			count: 1
 			path: src/Internal/Service/StateService.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StateService\\:\\:get\\(\\) should return non\\-empty\\-string\\|null but returns string\\|null\\.$#"
+			count: 1
+			path: src/Internal/Service/StateService.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageService\\:\\:increase\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Internal/Service/StorageService.php
+
+		-
+			message: "#^Parameter \\#1 \\$number of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:round\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
+			count: 1
+			path: src/Internal/Service/StorageService.php
+
+		-
+			message: "#^Parameter \\#1 \\$uuids of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageService\\:\\:multiGet\\(\\) expects non\\-empty\\-array\\<non\\-empty\\-string\\>, non\\-empty\\-array\\<int, string\\> given\\.$#"
+			count: 1
+			path: src/Internal/Service/StorageService.php
+
+		-
+			message: "#^Parameter \\#2 \\$second of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:add\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
+			count: 1
+			path: src/Internal/Service/StorageService.php
 
 		-
 			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Transaction\\:\\:wallet\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<Bavix\\\\Wallet\\\\Models\\\\Wallet, Bavix\\\\Wallet\\\\Models\\\\Transaction\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, \\$this\\(Bavix\\\\Wallet\\\\Models\\\\Transaction\\)\\>\\.$#"
@@ -112,7 +247,17 @@ parameters:
 
 		-
 			message: "#^Cannot cast mixed to string\\.$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:getCurrencyAttribute\\(\\) should return string but returns mixed\\.$#"
 			count: 1
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Parameter \\#1 \\$amount of method Bavix\\\\Wallet\\\\Interfaces\\\\Wallet\\:\\:forceWithdraw\\(\\) expects int\\|non\\-empty\\-string, int\\|string given\\.$#"
+			count: 2
 			path: src/Models/Wallet.php
 
 		-
@@ -121,9 +266,114 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
+			message: "#^Parameter \\#2 \\$amount of method Bavix\\\\Wallet\\\\Interfaces\\\\Wallet\\:\\:forceTransfer\\(\\) expects int\\|non\\-empty\\-string, int\\|string given\\.$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
 			message: "#^Property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$table \\(string\\) does not accept mixed\\.$#"
 			count: 1
 			path: src/Models/Wallet.php
+
+		-
+			message: "#^Parameter \\#1 \\$objects \\(non\\-empty\\-array\\<Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransactionDtoInterface\\|Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransferDtoInterface\\>\\) of method Bavix\\\\Wallet\\\\Services\\\\AssistantService\\:\\:getUuids\\(\\) should be compatible with parameter \\$objects \\(non\\-empty\\-array\\<string\\>\\) of method Bavix\\\\Wallet\\\\Services\\\\AssistantServiceInterface\\:\\:getUuids\\(\\)$#"
+			count: 1
+			path: src/Services/AssistantService.php
+
+		-
+			message: "#^Parameter \\#1 \\$objects of method Bavix\\\\Wallet\\\\Services\\\\AssistantServiceInterface\\:\\:getUuids\\(\\) expects non\\-empty\\-array\\<string\\>, non\\-empty\\-array\\<Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransactionDtoInterface\\> given\\.$#"
+			count: 1
+			path: src/Services/AtmService.php
+
+		-
+			message: "#^Parameter \\#1 \\$objects of method Bavix\\\\Wallet\\\\Services\\\\AssistantServiceInterface\\:\\:getUuids\\(\\) expects non\\-empty\\-array\\<string\\>, non\\-empty\\-array\\<Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransferDtoInterface\\> given\\.$#"
+			count: 1
+			path: src/Services/AtmService.php
+
+		-
+			message: "#^Unable to resolve the template type T in call to method Bavix\\\\Wallet\\\\Services\\\\AssistantServiceInterface\\:\\:getUuids\\(\\)$#"
+			count: 2
+			path: src/Services/AtmService.php
+
+		-
+			message: "#^Parameter \\#1 \\$uuid of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StateServiceInterface\\:\\:drop\\(\\) expects non\\-empty\\-string, string given\\.$#"
+			count: 1
+			path: src/Services/AtomicService.php
+
+		-
+			message: "#^Parameter \\#1 \\$uuids of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StateServiceInterface\\:\\:multiFork\\(\\) expects array\\<non\\-empty\\-string\\>, non\\-empty\\-array\\<int, string\\> given\\.$#"
+			count: 1
+			path: src/Services/AtomicService.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StateServiceInterface\\:\\:multiFork\\(\\) expects callable\\(\\)\\: array\\<non\\-empty\\-string, non\\-empty\\-string\\>, Closure\\(\\)\\: non\\-empty\\-array\\<string, string\\> given\\.$#"
+			count: 1
+			path: src/Services/AtomicService.php
+
+		-
+			message: "#^Parameter \\#1 \\$inputs of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageServiceInterface\\:\\:multiIncrease\\(\\) expects non\\-empty\\-array\\<non\\-empty\\-string, float\\|int\\|non\\-empty\\-string\\>, T of non\\-empty\\-array\\<string, float\\|int\\|string\\> given\\.$#"
+			count: 2
+			path: src/Services/BookkeeperService.php
+
+		-
+			message: "#^Parameter \\#1 \\$inputs of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageServiceInterface\\:\\:multiSync\\(\\) expects non\\-empty\\-array\\<non\\-empty\\-string, float\\|int\\|non\\-empty\\-string\\>, non\\-empty\\-array\\<string, float\\|int\\|string\\> given\\.$#"
+			count: 1
+			path: src/Services/BookkeeperService.php
+
+		-
+			message: "#^Parameter \\#1 \\$uuids of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageServiceInterface\\:\\:multiGet\\(\\) expects non\\-empty\\-array\\<non\\-empty\\-string\\>, non\\-empty\\-array\\<int, string\\> given\\.$#"
+			count: 2
+			path: src/Services/BookkeeperService.php
+
+		-
+			message: "#^Parameter \\#1 \\$first of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:compare\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
+			count: 2
+			path: src/Services/ConsistencyService.php
+
+		-
+			message: "#^Parameter \\#2 \\$second of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:add\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"
+			count: 1
+			path: src/Services/ConsistencyService.php
+
+		-
+			message: "#^Parameter \\#1 \\$first of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:sub\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
+			count: 1
+			path: src/Services/PrepareService.php
+
+		-
+			message: "#^Parameter \\#1 \\$number of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:negative\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
+			count: 1
+			path: src/Services/PrepareService.php
+
+		-
+			message: "#^Parameter \\#2 \\$second of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:add\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"
+			count: 1
+			path: src/Services/PrepareService.php
+
+		-
+			message: "#^Parameter \\#1 \\$first of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:add\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"
+			count: 1
+			path: src/Services/RegulatorService.php
+
+		-
+			message: "#^Parameter \\#1 \\$number of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:negative\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
+			count: 1
+			path: src/Services/RegulatorService.php
+
+		-
+			message: "#^PHPDoc tag @return with type string is incompatible with native type bool\\.$#"
+			count: 1
+			path: src/Services/RegulatorServiceInterface.php
+
+		-
+			message: "#^Parameter \\#1 \\$first of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:mul\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
+			count: 1
+			path: src/Services/TaxService.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method Bavix\\\\Wallet\\\\Services\\\\RegulatorServiceInterface\\:\\:increase\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"
+			count: 1
+			path: src/Services/TransactionService.php
 
 		-
 			message: "#^Parameter \\#1 \\$attributes of method Bavix\\\\Wallet\\\\Internal\\\\Repository\\\\WalletRepositoryInterface\\:\\:create\\(\\) expects array\\{holder_type\\: string, holder_id\\: int\\|string, name\\: string, slug\\?\\: string, uuid\\: string, description\\?\\: string, meta\\: array\\|null, balance\\?\\: int, \\.\\.\\.\\}, non\\-empty\\-array given\\.$#"

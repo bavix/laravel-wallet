@@ -17,6 +17,7 @@ return static function (ECSConfig $config): void {
 
     $config->skip([
         GeneralPhpdocAnnotationRemoveFixer::class,
+        \PhpCsFixer\Fixer\Import\FullyQualifiedStrictTypesFixer::class,
     ]);
 
     $config->sets([
