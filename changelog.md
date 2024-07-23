@@ -1,5 +1,17 @@
 # Changelog
 
+## 11.1.1 - 2024-07-23
+
+### What's Changed
+
+* Bump vitepress from 1.2.3 to 1.3.0 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/973
+* phpstan update baseline by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/975
+* Bump vitepress from 1.3.0 to 1.3.1 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/974
+* Add unit. Atomic rollback by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/977
+* doc(phpdoc): update phpdocs by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/978
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/11.1.0...11.1.1
+
 ## 11.1.0 - 2024-07-08
 
 ### What's Changed
