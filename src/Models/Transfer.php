@@ -16,15 +16,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property string $status
  * @property string $status_last
- * @property string $discount
+ * @property non-empty-string $discount
  * @property int $deposit_id
  * @property int $withdraw_id
  * @property Wallet $from
  * @property int $from_id
  * @property Wallet $to
  * @property int $to_id
- * @property string $uuid
- * @property string $fee
+ * @property non-empty-string $uuid
+ * @property non-empty-string $fee
  * @property ?array<mixed> $extra
  * @property Transaction $deposit
  * @property Transaction $withdraw

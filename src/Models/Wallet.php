@@ -32,15 +32,15 @@ use Illuminate\Support\Str;
  * Class Wallet.
  *
  * @property class-string $holder_type
- * @property int|string $holder_id
+ * @property int|non-empty-string $holder_id
  * @property string $name
  * @property string $slug
- * @property string $uuid
+ * @property non-empty-string $uuid
  * @property string $description
- * @property null|array $meta
+ * @property null|array<mixed> $meta
  * @property int $decimal_places
  * @property Model $holder
- * @property string $credit
+ * @property non-empty-string $credit
  * @property string $currency
  * @property DateTimeInterface $created_at
  * @property DateTimeInterface $updated_at

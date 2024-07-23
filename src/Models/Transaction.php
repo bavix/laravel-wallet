@@ -22,13 +22,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property class-string $payable_type
  * @property int|string $payable_id
  * @property int $wallet_id
- * @property string $uuid
+ * @property non-empty-string $uuid
  * @property string $type
- * @property string $amount
+ * @property non-empty-string $amount
  * @property int $amountInt
- * @property string $amountFloat
+ * @property non-empty-string $amountFloat
  * @property bool $confirmed
- * @property array $meta
+ * @property array<mixed> $meta
  * @property Wallet $payable
  * @property WalletModel $wallet
  * @property DateTimeInterface $created_at

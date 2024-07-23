@@ -11,6 +11,11 @@ parameters:
 			path: tests/Infra/Models/Item.php
 
 		-
+			message: "#^Parameter \\#2 \\$currency of class Bavix\\\\Wallet\\\\Test\\\\Infra\\\\Values\\\\Money constructor expects string, mixed given\\.$#"
+			count: 1
+			path: tests/Infra/PackageModels/TransactionMoney.php
+
+		-
 			message: "#^Parameter \\#1 \\$first of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:mul\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
 			count: 1
 			path: tests/Infra/Services/ExchangeUsdToBtcService.php

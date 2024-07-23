@@ -136,11 +136,6 @@ parameters:
 			path: src/Models/Transaction.php
 
 		-
-			message: "#^Parameter \\#1 \\$first of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:div\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"
-			count: 1
-			path: src/Models/Transaction.php
-
-		-
 			message: "#^Parameter \\#1 \\$first of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:mul\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
 			count: 1
 			path: src/Models/Transaction.php
@@ -202,11 +197,16 @@ parameters:
 
 		-
 			message: "#^Cannot cast mixed to string\\.$#"
-			count: 1
+			count: 2
 			path: src/Models/Wallet.php
 
 		-
 			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:getBalanceFloatAttribute\\(\\) should return non\\-empty\\-string but returns string\\.$#"
+			count: 1
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:getCurrencyAttribute\\(\\) should return string but returns mixed\\.$#"
 			count: 1
 			path: src/Models/Wallet.php
 
@@ -256,11 +256,6 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
-			message: "#^Parameter \\#1 \\$number of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:negative\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"
-			count: 1
-			path: src/Models/Wallet.php
-
-		-
 			message: "#^Parameter \\#1 \\$related of method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:hasMany\\(\\) expects class\\-string\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>, mixed given\\.$#"
 			count: 6
 			path: src/Models/Wallet.php
@@ -292,11 +287,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$second of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathService\\:\\:mul\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"
-			count: 1
-			path: src/Models/Wallet.php
-
-		-
-			message: "#^Parameter \\#2 \\$value of method Bavix\\\\Wallet\\\\Services\\\\RegulatorService\\:\\:increase\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"
 			count: 1
 			path: src/Models/Wallet.php
 
@@ -361,11 +351,6 @@ parameters:
 			path: src/Services/BookkeeperService.php
 
 		-
-			message: "#^Parameter \\#1 \\$uuid of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageServiceInterface\\:\\:forget\\(\\) expects non\\-empty\\-string, string given\\.$#"
-			count: 1
-			path: src/Services/BookkeeperService.php
-
-		-
 			message: "#^Parameter \\#1 \\$uuids of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageServiceInterface\\:\\:multiGet\\(\\) expects non\\-empty\\-array\\<non\\-empty\\-string\\>, non\\-empty\\-array\\<int, string\\> given\\.$#"
 			count: 2
 			path: src/Services/BookkeeperService.php
@@ -418,26 +403,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$number of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:negative\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
 			count: 1
-			path: src/Services/RegulatorService.php
-
-		-
-			message: "#^Parameter \\#1 \\$uuid of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageServiceInterface\\:\\:forget\\(\\) expects non\\-empty\\-string, string given\\.$#"
-			count: 1
-			path: src/Services/RegulatorService.php
-
-		-
-			message: "#^Parameter \\#1 \\$uuid of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageServiceInterface\\:\\:get\\(\\) expects non\\-empty\\-string, string given\\.$#"
-			count: 1
-			path: src/Services/RegulatorService.php
-
-		-
-			message: "#^Parameter \\#1 \\$uuid of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageServiceInterface\\:\\:increase\\(\\) expects non\\-empty\\-string, string given\\.$#"
-			count: 1
-			path: src/Services/RegulatorService.php
-
-		-
-			message: "#^Parameter \\#1 \\$uuid of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\StorageServiceInterface\\:\\:sync\\(\\) expects non\\-empty\\-string, string given\\.$#"
-			count: 2
 			path: src/Services/RegulatorService.php
 
 		-
