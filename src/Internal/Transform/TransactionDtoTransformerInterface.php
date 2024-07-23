@@ -12,11 +12,11 @@ interface TransactionDtoTransformerInterface
     /**
      * @return array{
      *     uuid: string,
-     *     payable_type: string,
+     *     payable_type: class-string,
      *     payable_id: int|string,
      *     wallet_id: int,
      *     type: string,
-     *     amount: float|int|string,
+     *     amount: float|int|non-empty-string,
      *     confirmed: bool,
      *     meta: array<mixed>|null,
      *     created_at: DateTimeImmutable,

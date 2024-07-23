@@ -138,14 +138,24 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
 
     public function getOriginalBalanceAttribute(): string
     {
-        return (string) $this->getRawOriginal('balance', 0);
+        $balance = (string) $this->getRawOriginal('balance', 0);
+
+        // Perform assertion to check if balance is not an empty string
+        assert($balance != '', 'Balance should not be an empty string');
+
+        return $balance;
     }
 
     public function getAvailableBalanceAttribute(): float|int|string
     {
-        return $this->walletTransactions()
+        $balance = $this->walletTransactions()
             ->where('confirmed', true)
             ->sum('amount');
+
+        // Perform assertion to check if balance is not an empty string
+        assert($balance != '', 'Balance should not be an empty string');
+
+        return $balance;
     }
 
     /**
@@ -158,7 +168,25 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
 
     public function getCreditAttribute(): string
     {
-        return (string) ($this->meta['credit'] ?? '0');
+        $credit = (string) ($this->meta['credit'] ?? '0');
+
+        /**
+         * Assert that the credit attribute is not an empty string.
+         *
+         * This is to ensure that the credit attribute always has a value.
+         * If the credit attribute is empty, it can cause issues with the math service.
+         *
+         * @throws \AssertionError If the credit attribute is an empty string.
+         */
+        // Assert that credit is not an empty string
+        // This is to ensure that the credit attribute always has a value
+        // If the credit attribute is empty, it can cause issues with the math service
+        assert(
+            $credit != '',
+            'Credit should not be an empty string. It can cause issues with the math service.'
+        );
+
+        return $credit;
     }
 
     public function getCurrencyAttribute(): string

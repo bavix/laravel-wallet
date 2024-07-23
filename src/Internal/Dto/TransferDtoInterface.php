@@ -10,6 +10,8 @@ interface TransferDtoInterface
 {
     /**
      * Get the UUID of the transfer.
+     * 
+     * @return non-empty-string
      */
     public function getUuid(): string;
 
@@ -45,6 +47,8 @@ interface TransferDtoInterface
 
     /**
      * Get the fee amount of the transfer.
+     * 
+     * @return non-empty-string
      */
     public function getFee(): string;
 

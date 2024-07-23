@@ -13,7 +13,7 @@ interface ProductInterface extends Wallet
      * by the given customer. The amount can be an integer or a string.
      *
      * @param Customer $customer The customer to get the amount for.
-     * @return int|string The amount of the product that can be purchased.
+     * @return int|non-empty-string The amount of the product that can be purchased.
      */
     public function getAmountProduct(Customer $customer): int|string;
 

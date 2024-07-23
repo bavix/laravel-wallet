@@ -10,11 +10,15 @@ interface TransactionDtoInterface
 {
     /**
      * Get the UUID of the transaction.
+     * 
+     * @return non-empty-string
      */
     public function getUuid(): string;
 
     /**
      * Get the type of the payable.
+     * 
+     * @return class-string
      */
     public function getPayableType(): string;
 
@@ -35,6 +39,8 @@ interface TransactionDtoInterface
 
     /**
      * Get the amount of the transaction.
+     * 
+     * @return float|int|non-empty-string
      */
     public function getAmount(): float|int|string;
 

@@ -18,8 +18,8 @@ interface StateServiceInterface
      * If any of the wallets have been modified since the transaction began, a `WalletStateConsistencyException`
      * exception will be thrown.
      *
-     * @param string[] $uuids The UUIDs of the wallets to be forked.
-     * @param callable(): array<string, string> $value A callback function that performs a series of operations on the
+     * @param non-empty-string[] $uuids The UUIDs of the wallets to be forked.
+     * @param callable(): array<non-empty-string, non-empty-string> $value A callback function that performs a series of operations on the
      *                                                  wallets and returns an associative array of the new state of the wallets.
      *                                                  The keys of the array should be the UUIDs of the wallets, and the values
      *                                                  should be the new state of the wallets.
@@ -29,8 +29,8 @@ interface StateServiceInterface
     /**
      * Get the state of a wallet.
      *
-     * @param string $uuid The UUID of the wallet to retrieve the state of.
-     * @return string|null The state of the wallet, or null if the wallet does not exist.
+     * @param non-empty-string $uuid The UUID of the wallet to retrieve the state of.
+     * @return non-empty-string|null The state of the wallet, or null if the wallet does not exist.
      */
     public function get(string $uuid): ?string;
 
@@ -39,7 +39,7 @@ interface StateServiceInterface
      *
      * This method is used to remove the state of a wallet from the storage.
      *
-     * @param string $uuid The UUID of the wallet to delete the state of.
+     * @param non-empty-string $uuid The UUID of the wallet to delete the state of.
      */
     public function drop(string $uuid): void;
 }

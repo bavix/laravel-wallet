@@ -19,6 +19,8 @@ interface ItemDtoInterface extends Countable
 
     /**
      * Returns the price per item in the DTO.
+     * 
+     * @return int|non-empty-string|null
      */
     public function getPricePerItem(): int|string|null;
 

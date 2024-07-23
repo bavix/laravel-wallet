@@ -18,14 +18,14 @@ interface BalanceUpdatedEventInterface extends EventInterface
     /**
      * Returns the UUID of the wallet that was updated.
      *
-     * @return string The UUID of the wallet.
+     * @return non-empty-string The UUID of the wallet.
      */
     public function getWalletUuid(): string;
 
     /**
      * Returns the balance of the wallet after the update.
      *
-     * @return string The balance of the wallet.
+     * @return non-empty-string The balance of the wallet.
      */
     public function getBalance(): string;
 

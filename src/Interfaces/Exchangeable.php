@@ -19,7 +19,7 @@ interface Exchangeable
      * Exchange currency from this wallet to another wallet.
      *
      * @param Wallet $to The wallet to exchange the currency to.
-     * @param int|string $amount The amount to exchange.
+     * @param int|non-empty-string $amount The amount to exchange.
      * @param ExtraDtoInterface|array<mixed>|null $meta The extra data for the transaction.
      * @return Transfer The created transfer.
      *
@@ -38,7 +38,7 @@ interface Exchangeable
      * If an error occurs during the process, null is returned.
      *
      * @param Wallet $to The wallet to exchange the currency to.
-     * @param int|string $amount The amount to exchange.
+     * @param int|non-empty-string $amount The amount to exchange.
      * @param ExtraDtoInterface|array<mixed>|null $meta The extra data for the transaction.
      * @return null|Transfer The created transfer, or null if an error occurred.
      */
@@ -54,7 +54,7 @@ interface Exchangeable
      * This method will throw an exception if the exchange is not possible.
      *
      * @param Wallet $to The wallet to exchange the currency to.
-     * @param int|string $amount The amount to exchange.
+     * @param int|non-empty-string $amount The amount to exchange.
      * @param ExtraDtoInterface|array<mixed>|null $meta The extra data for the transaction.
      * @return Transfer The created transfer.
      *

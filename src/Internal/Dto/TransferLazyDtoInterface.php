@@ -25,6 +25,8 @@ interface TransferLazyDtoInterface
 
     /**
      * Get the fee amount of the transfer.
+     * 
+     * @return non-empty-string
      */
     public function getFee(): string;
 
@@ -45,6 +47,8 @@ interface TransferLazyDtoInterface
 
     /**
      * Get the UUID of the transfer.
+     * 
+     * @return non-empty-string|null
      */
     public function getUuid(): ?string;
 
