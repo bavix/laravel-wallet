@@ -57,32 +57,49 @@ trait CartPay
      */
     public function payFreeCart(CartInterface $cart): array
     {
+        $atomicService = app(AtomicServiceInterface::class);
+        $eagerLoaderService = app(EagerLoaderServiceInterface::class);
+        $basketService = app(BasketServiceInterface::class);
+        $availabilityAssembler = app(AvailabilityDtoAssemblerInterface::class);
+        $translator = app(TranslatorServiceInterface::class);
+        $consistencyService = app(ConsistencyServiceInterface::class);
+        $castService = app(CastServiceInterface::class);
+        $prepareService = app(PrepareServiceInterface::class);
+        $assistantService = app(AssistantServiceInterface::class);
+        $transferService = app(TransferServiceInterface::class);
+
         // Perform the payment for all products in the cart without any payment.
-        return app(AtomicServiceInterface::class)->block($this, function () use ($cart) {
+        return $atomicService->block($this, function () use (
+            $cart,
+            $eagerLoaderService,
+            $basketService,
+            $availabilityAssembler,
+            $translator,
+            $consistencyService,
+            $castService,
+            $prepareService,
+            $assistantService,
+            $transferService
+        ) {
             // Get the basket DTO containing the products in the cart.
             $basketDto = $cart->getBasketDto();
 
             // Load the wallets for the products in the cart.
-            $basketService = app(BasketServiceInterface::class);
-            $availabilityAssembler = app(AvailabilityDtoAssemblerInterface::class);
-            app(EagerLoaderServiceInterface::class)->loadWalletsByBasket($this, $basketDto);
+            $eagerLoaderService->loadWalletsByBasket($this, $basketDto);
 
             // Check if the products are available.
             if (! $basketService->availability($availabilityAssembler->create($this, $basketDto, false))) {
                 throw new ProductEnded(
-                    app(TranslatorServiceInterface::class)->get('wallet::errors.product_stock'),
+                    $translator->get('wallet::errors.product_stock'),
                     ExceptionInterface::PRODUCT_ENDED
                 );
             }
 
             // Check if the wallet has sufficient funds.
-            app(ConsistencyServiceInterface::class)->checkPotential($this, 0, true);
+            $consistencyService->checkPotential($this, 0, true);
 
             // Prepare the transfers for the products in the cart.
             $transfers = [];
-            $castService = app(CastServiceInterface::class);
-            $prepareService = app(PrepareServiceInterface::class);
-            $assistantService = app(AssistantServiceInterface::class);
 
             // Iterate over the items in the cart.
             foreach ($basketDto->items() as $item) {
@@ -104,10 +121,16 @@ trait CartPay
             }
 
             // Ensure that at least one transfer was prepared.
-            assert($transfers !== []);
+            // If the above code executes without throwing an exception,
+            // we can safely assume that at least one transfer was prepared.
+            // This assertion is used to ensure that this assumption holds true.
+            // If the assertion fails, it means that the assumption is incorrect,
+            // which means that the code execution path leading to this assertion
+            // is incorrect and should be investigated.
+            assert($transfers !== [], 'At least one transfer must be prepared.');
 
             // Apply the transfers.
-            return app(TransferServiceInterface::class)->apply($transfers);
+            return $transferService->apply($transfers);
         });
     }
 
@@ -143,17 +166,16 @@ trait CartPay
      * @param bool $force Whether to force the purchase. Defaults to false.
      * @return non-empty-array<Transfer> An array of Transfer instances representing the successfully paid items.
      *
-     * @throws ProductEnded
-     * @throws BalanceIsEmpty
-     * @throws InsufficientFunds
-     * @throws RecordNotFoundException
-     * @throws RecordsNotFoundException
-     * @throws TransactionFailedException
-     * @throws ExceptionInterface
+     * @throws ProductEnded If the product is ended.
+     * @throws BalanceIsEmpty If the balance of the wallet is empty.
+     * @throws InsufficientFunds If there are insufficient funds in the wallet.
+     * @throws RecordNotFoundException If the record is not found.
+     * @throws RecordsNotFoundException If the records are not found.
+     * @throws TransactionFailedException If the transaction fails.
+     * @throws ExceptionInterface If an exception occurs.
      */
     public function payCart(CartInterface $cart, bool $force = false): array
     {
-        // Get the required services.
         $atomicService = app(AtomicServiceInterface::class);
         $basketService = app(BasketServiceInterface::class);
         $availabilityAssembler = app(AvailabilityDtoAssemblerInterface::class);
@@ -162,6 +184,8 @@ trait CartPay
         $prepareService = app(PrepareServiceInterface::class);
         $assistantService = app(AssistantServiceInterface::class);
         $transferService = app(TransferServiceInterface::class);
+        $translator = app(TranslatorServiceInterface::class);
+        $consistencyService = app(ConsistencyServiceInterface::class);
 
         // Wrap the code in an atomic block to ensure consistency.
         return $atomicService->block($this, function () use (
@@ -173,7 +197,9 @@ trait CartPay
             $castService,
             $prepareService,
             $assistantService,
-            $transferService
+            $transferService,
+            $translator,
+            $consistencyService
         ) {
             // Get the items in the cart.
             $basketDto = $cart->getBasketDto();
@@ -184,7 +210,7 @@ trait CartPay
             // Check if the products are available.
             if (! $basketService->availability($availabilityAssembler->create($this, $basketDto, $force))) {
                 throw new ProductEnded(
-                    app(TranslatorServiceInterface::class)->get('wallet::errors.product_stock'),
+                    $translator->get('wallet::errors.product_stock'),
                     ExceptionInterface::PRODUCT_ENDED
                 );
             }
@@ -219,8 +245,12 @@ trait CartPay
 
             // Check that the transfers are consistent if the payment is not forced.
             if (! $force) {
-                app(ConsistencyServiceInterface::class)->checkTransfer($transfers);
+                $consistencyService->checkTransfer($transfers);
             }
+            // Assert that the $transfers array is not empty.
+            // This is necessary to avoid a potential PHP warning
+            // when calling $transferService->apply() with an empty array.
+            assert($transfers !== [], 'The $transfers array must not be empty.');
 
             // Apply the transfers.
             return $transferService->apply($transfers);
@@ -298,6 +328,7 @@ trait CartPay
      */
     public function refundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool
     {
+        // Get the required services.
         $atomicService = app(AtomicServiceInterface::class);
         $basketDto = $cart->getBasketDto();
         $eagerLoaderService = app(EagerLoaderServiceInterface::class);
@@ -308,6 +339,7 @@ trait CartPay
         $consistencyService = app(ConsistencyServiceInterface::class);
         $transferService = app(TransferServiceInterface::class);
 
+        // Wrap the code in an atomic block to ensure consistency.
         return $atomicService->block($this, function () use (
             $force,
             $gifts,
@@ -320,18 +352,21 @@ trait CartPay
             $consistencyService,
             $transferService
         ) {
+            // Load wallets by basket.
             $eagerLoaderService->loadWalletsByBasket($this, $basketDto);
+
+            // Get already processed transfers.
             $transfers = $purchaseService->already($this, $basketDto, $gifts);
 
+            // Check if the count of transfers is equal to the total items in the basket.
             if (count($transfers) !== $basketDto->total()) {
                 throw new ModelNotFoundException(
-                    "No query results for model [{$this->transfers()
-                        ->getModel()
-                        ->getMorphClass()}]",
+                    "No query results for model [{$this->transfers()->getModel()->getMorphClass()}]",
                     ExceptionInterface::MODEL_NOT_FOUND
                 );
             }
 
+            // Prepare transfers for refund.
             $index = 0;
             $objects = []; // Array to store the prepared transfers.
             $transferIds = []; // Array to store the IDs of the transfers.
@@ -354,12 +389,23 @@ trait CartPay
                 }
             }
 
+            // Perform consistency check if force is false.
             if (! $force) {
                 $consistencyService->checkTransfer($objects);
             }
 
+            // Ensure there are prepared transfers.
+            // Assert that the array of prepared transfers is not empty.
+            // If the array is empty, it means that there are no transfers to be refunded,
+            // which is not expected and should not happen.
+            // The assertion is added to ensure that the refund process is not executed
+            // without any transfers to be refunded.
+            assert($objects !== [], 'Array of prepared transfers is empty. There are no transfers to be refunded.');
+
+            // Apply refunds.
             $transferService->apply($objects);
 
+            // Update transfer status to refund.
             return $transferService
                 ->updateStatusByIds(Transfer::STATUS_REFUND, $transferIds);
         });

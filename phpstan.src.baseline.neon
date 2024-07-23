@@ -176,11 +176,6 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
-			message: "#^Parameter \\#1 \\$objects of method Bavix\\\\Wallet\\\\Services\\\\TransferService\\:\\:apply\\(\\) expects non\\-empty\\-array\\<Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransferLazyDtoInterface\\>, array\\<int\\<0, max\\>, Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransferLazyDtoInterface\\> given\\.$#"
-			count: 2
-			path: src/Models/Wallet.php
-
-		-
 			message: "#^Parameter \\#1 \\$related of method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:hasMany\\(\\) expects class\\-string\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>, mixed given\\.$#"
 			count: 6
 			path: src/Models/Wallet.php
