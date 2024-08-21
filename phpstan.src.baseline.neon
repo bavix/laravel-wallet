@@ -196,7 +196,7 @@ parameters:
 			path: src/Models/Transaction.php
 
 		-
-			message: "#^Property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$table \\(string\\) does not accept mixed\\.$#"
+			message: "#^Property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$table \\(string\\|null\\) does not accept mixed\\.$#"
 			count: 1
 			path: src/Models/Transaction.php
 
@@ -231,7 +231,7 @@ parameters:
 			path: src/Models/Transfer.php
 
 		-
-			message: "#^Property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$table \\(string\\) does not accept mixed\\.$#"
+			message: "#^Property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$table \\(string\\|null\\) does not accept mixed\\.$#"
 			count: 1
 			path: src/Models/Transfer.php
 
@@ -271,7 +271,7 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
-			message: "#^Property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$table \\(string\\) does not accept mixed\\.$#"
+			message: "#^Property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$table \\(string\\|null\\) does not accept mixed\\.$#"
 			count: 1
 			path: src/Models/Wallet.php
 
