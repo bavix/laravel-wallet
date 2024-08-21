@@ -75,7 +75,9 @@ final class ConfirmTest extends TestCase
 
         self::assertSame(0, $wallet->balanceInt);
 
-        $transaction = $wallet->forceWithdraw(1000, ['desc' => 'confirmed']);
+        $transaction = $wallet->forceWithdraw(1000, [
+            'desc' => 'confirmed',
+        ]);
 
         self::assertSame(-1000, $wallet->balanceInt);
         self::assertTrue($transaction->confirmed);
@@ -238,9 +240,9 @@ final class ConfirmTest extends TestCase
 
     public function testSafeUnconfirmedWalletOwnerInvalid(): void
     {
-        /** 
-         * @var Buyer $buyer1 
-         * @var Buyer $buyer2 
+        /**
+         * @var Buyer $buyer1
+         * @var Buyer $buyer2
          **/
         [$buyer1, $buyer2] = BuyerFactory::times(2)->create();
         $wallet1 = $buyer1->wallet;

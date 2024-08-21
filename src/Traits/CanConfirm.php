@@ -50,7 +50,7 @@ trait CanConfirm
             // Check if the transaction is already confirmed.
             // If it is, throw an exception.
             if ($transaction->confirmed) {
-                // Why is there a check here without calling refresh? 
+                // Why is there a check here without calling refresh?
                 // It's because this check can be performed in force confirm again.
                 throw new ConfirmedInvalid(
                     // Get the error message from the translator service.
