@@ -89,7 +89,11 @@ final class EagerLoadingTest extends TestCase
         $user = UserMulti::with('wallets.walletTransactions')->find($multi->getKey());
         self::assertTrue($user->relationLoaded('wallets'));
         self::assertNotEmpty($user->wallets);
-        self::assertTrue($user->wallets[0]?->relationLoaded('walletTransactions'));
+
+        foreach ($user->wallets as $wallet) {
+            self::assertTrue($wallet->relationLoaded('walletTransactions'));
+        }
+
         self::assertNotNull($user->getWallet('hello'));
         self::assertNotNull($user->getWallet('world'));
         self::assertTrue($user->getWallet('hello')->relationLoaded('holder'));
