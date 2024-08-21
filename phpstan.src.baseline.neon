@@ -196,6 +196,11 @@ parameters:
 			path: src/Models/Transaction.php
 
 		-
+			message: "#^Property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$table \\(string\\) does not accept mixed\\.$#"
+			count: 1
+			path: src/Models/Transaction.php
+
+		-
 			message: "#^Unable to resolve the template type TRelatedModel in call to method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:belongsTo\\(\\)$#"
 			count: 1
 			path: src/Models/Transaction.php
@@ -223,6 +228,11 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$related of method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:belongsTo\\(\\) expects class\\-string\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>, mixed given\\.$#"
 			count: 4
+			path: src/Models/Transfer.php
+
+		-
+			message: "#^Property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$table \\(string\\) does not accept mixed\\.$#"
+			count: 1
 			path: src/Models/Transfer.php
 
 		-
@@ -258,6 +268,11 @@ parameters:
 		-
 			message: "#^Parameter \\#2 \\$amount of method Bavix\\\\Wallet\\\\Interfaces\\\\Wallet\\:\\:forceTransfer\\(\\) expects int\\|non\\-empty\\-string, int\\|string given\\.$#"
 			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$table \\(string\\) does not accept mixed\\.$#"
+			count: 1
 			path: src/Models/Wallet.php
 
 		-
