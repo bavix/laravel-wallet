@@ -45,19 +45,33 @@ trait CanConfirm
      */
     public function confirm(Transaction $transaction): bool
     {
-        // Check if the wallet has enough money
+        // Execute the confirmation process within an atomic block to ensure data consistency.
         return app(AtomicServiceInterface::class)->block($this, function () use ($transaction): bool {
+            // Check if the transaction is already confirmed.
+            // If it is, throw an exception.
+            if ($transaction->confirmed) {
+                // Why is there a check here without calling refresh? 
+                // It's because this check can be performed in force confirm again.
+                throw new ConfirmedInvalid(
+                    // Get the error message from the translator service.
+                    app(TranslatorServiceInterface::class)->get('wallet::errors.confirmed_invalid'),
+                    // Set the error code to CONFIRMED_INVALID.
+                    ExceptionInterface::CONFIRMED_INVALID
+                );
+            }
+
+            // Check if the transaction type is withdrawal.
             if ($transaction->type === Transaction::TYPE_WITHDRAW) {
-                // Check if the wallet has enough money
+                // Check if the wallet has enough money to cover the withdrawal amount.
                 app(ConsistencyServiceInterface::class)->checkPotential(
-                // Get the wallet
+                    // Get the wallet.
                     app(CastServiceInterface::class)->getWallet($this),
-                    // Negative amount
+                    // Negate the withdrawal amount to check for sufficient funds.
                     app(MathServiceInterface::class)->negative($transaction->amount)
                 );
             }
 
-            // Force confirm the transaction
+            // Force confirm the transaction.
             return $this->forceConfirm($transaction);
         });
     }
@@ -118,7 +132,7 @@ trait CanConfirm
         // Reset the confirmation of the transaction in a single database transaction
         return app(AtomicServiceInterface::class)->block($this, function () use ($transaction) {
             // Check if the transaction is already confirmed
-            if (! $transaction->confirmed) {
+            if (! $transaction->refresh()->confirmed) {
                 throw new UnconfirmedInvalid(
                 // If the transaction is not confirmed, throw an `UnconfirmedInvalid` exception
                     app(TranslatorServiceInterface::class)->get('wallet::errors.unconfirmed_invalid'),
@@ -195,7 +209,7 @@ trait CanConfirm
         // Attempt to confirm the transaction in a single database transaction
         return app(AtomicServiceInterface::class)->block($this, function () use ($transaction) {
             // Check if the transaction is already confirmed
-            if ($transaction->confirmed) {
+            if ($transaction->refresh()->confirmed) {
                 throw new ConfirmedInvalid(
                     app(TranslatorServiceInterface::class)->get('wallet::errors.confirmed_invalid'),
                     ExceptionInterface::CONFIRMED_INVALID

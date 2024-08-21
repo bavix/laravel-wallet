@@ -67,6 +67,25 @@ final class ConfirmTest extends TestCase
         self::assertFalse($transaction->confirmed);
     }
 
+    public function testSafeConfirmedInvalid(): void
+    {
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        $wallet = $buyer->wallet;
+
+        self::assertSame(0, $wallet->balanceInt);
+
+        $transaction = $wallet->forceWithdraw(1000, ['desc' => 'confirmed']);
+
+        self::assertSame(-1000, $wallet->balanceInt);
+        self::assertTrue($transaction->confirmed);
+        self::assertTrue($transaction->getKey() > 0);
+
+        self::assertTrue($wallet->safeConfirm($transaction));
+        self::assertSame(-1000, $wallet->balanceInt);
+        self::assertTrue($transaction->confirmed);
+    }
+
     public function testSafeResetConfirm(): void
     {
         /** @var Buyer $buyer */
@@ -125,6 +144,25 @@ final class ConfirmTest extends TestCase
         $wallet->forceConfirm($transaction);
         self::assertSame($transaction->amountInt, $wallet->balanceInt);
         self::assertTrue($transaction->confirmed);
+    }
+
+    public function testForceConfirmedInvalid(): void
+    {
+        $this->expectException(ConfirmedInvalid::class);
+        $this->expectExceptionCode(ExceptionInterface::CONFIRMED_INVALID);
+        $this->expectExceptionMessageStrict(trans('wallet::errors.confirmed_invalid'));
+
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        $wallet = $buyer->wallet;
+
+        self::assertSame(0, $wallet->balanceInt);
+
+        $transaction = $wallet->forceWithdraw(1000);
+        self::assertSame(-1000, $wallet->balanceInt);
+        self::assertTrue($transaction->confirmed);
+
+        $wallet->forceConfirm($transaction);
     }
 
     public function testUnconfirmed(): void
@@ -198,6 +236,31 @@ final class ConfirmTest extends TestCase
         self::assertTrue($wallet->safeResetConfirm($transaction));
     }
 
+    public function testSafeUnconfirmedWalletOwnerInvalid(): void
+    {
+        /** 
+         * @var Buyer $buyer1 
+         * @var Buyer $buyer2 
+         **/
+        [$buyer1, $buyer2] = BuyerFactory::times(2)->create();
+        $wallet1 = $buyer1->wallet;
+        $wallet2 = $buyer2->wallet;
+
+        self::assertTrue($wallet1->saveOrFail());
+        self::assertTrue($wallet2->saveOrFail());
+
+        self::assertSame(0, $wallet1->balanceInt);
+        self::assertSame(0, $wallet2->balanceInt);
+
+        $transaction1 = $wallet1->deposit(1000, null, true);
+        self::assertSame(1000, $wallet1->balanceInt);
+        self::assertTrue($transaction1->confirmed);
+
+        self::assertFalse($wallet2->safeResetConfirm($transaction1));
+        self::assertSame(1000, $wallet1->balanceInt);
+        self::assertTrue($transaction1->confirmed);
+    }
+
     public function testWalletOwnerInvalid(): void
     {
         $this->expectException(WalletOwnerInvalid::class);
@@ -221,6 +284,31 @@ final class ConfirmTest extends TestCase
         self::assertFalse($transaction->confirmed);
 
         $secondWallet->confirm($transaction);
+    }
+
+    public function testForceWalletOwnerInvalid(): void
+    {
+        $this->expectException(WalletOwnerInvalid::class);
+        $this->expectExceptionCode(ExceptionInterface::WALLET_OWNER_INVALID);
+        $this->expectExceptionMessageStrict(trans('wallet::errors.owner_invalid'));
+
+        /**
+         * @var Buyer $first
+         * @var Buyer $second
+         */
+        [$first, $second] = BuyerFactory::times(2)->create();
+        $firstWallet = $first->wallet;
+        $secondWallet = $second->wallet;
+
+        self::assertSame(0, $firstWallet->balanceInt);
+
+        $transaction = $firstWallet->deposit(1000, [
+            'desc' => 'unconfirmed',
+        ], false);
+        self::assertSame(0, $firstWallet->balanceInt);
+        self::assertFalse($transaction->confirmed);
+
+        $secondWallet->forceConfirm($transaction);
     }
 
     public function testUserConfirm(): void
