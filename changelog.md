@@ -1,5 +1,18 @@
 # Changelog
 
+## 11.2.0 - 2024-08-21
+
+### What's Changed
+
+* Bump bavix/.github from 0.3.0 to 0.3.1 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/979
+* Bump bavix/.github from 0.3.1 to 0.3.2 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/981
+* Bump bavix/.github from 0.3.2 to 0.3.3 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/982
+* Bump vitepress from 1.3.1 to 1.3.2 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/983
+* Bump vitepress from 1.3.2 to 1.3.3 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/985
+* [11.2] Improvements to confirm by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/987
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/11.1.1...11.2.0
+
 ## 11.1.1 - 2024-07-23
 
 ### What's Changed
