@@ -40,7 +40,12 @@ return new class() extends Migration
 
     public function down(): void
     {
-        Schema::dropColumns($this->table(), ['uuid']);
+        Schema::table($this->table(), function (Blueprint $table) {
+            if (Schema::hasColumn($this->table(), 'uuid')) {
+                $table->dropIndex('wallets_uuid_unique');
+                $table->dropColumn('uuid');
+            }
+        });
     }
 
     private function table(): string
