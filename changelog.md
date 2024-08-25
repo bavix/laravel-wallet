@@ -1,5 +1,17 @@
 # Changelog
 
+## 11.2.1 - 2024-08-25
+
+### What's Changed
+
+* [11.x] Fix UUID Drop on migration rollback by [@MarJose123](https://github.com/MarJose123) in https://github.com/bavix/laravel-wallet/pull/988
+
+### New Contributors
+
+* [@MarJose123](https://github.com/MarJose123) made their first contribution in https://github.com/bavix/laravel-wallet/pull/988
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/11.2.0...11.2.1
+
 ## 11.2.0 - 2024-08-21
 
 ### What's Changed
