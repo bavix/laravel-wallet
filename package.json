@@ -19,6 +19,6 @@
     "build": "vitepress build docs"
   },
   "dependencies": {
-    "vitepress": "^1.3.3"
+    "vitepress": "^1.3.4"
   }
 }
