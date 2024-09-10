@@ -148,7 +148,7 @@ trait HasWalletFloat
     public function getBalanceFloatAttribute(): string
     {
         $math = app(MathServiceInterface::class);
-        $wallet = app(CastServiceInterface::class)->getWallet($this);
+        $wallet = app(CastServiceInterface::class)->getWallet($this, false);
         $decimalPlacesValue = $wallet->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);
 

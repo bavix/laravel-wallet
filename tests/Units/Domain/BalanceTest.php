@@ -19,6 +19,25 @@ use function app;
  */
 final class BalanceTest extends TestCase
 {
+    public function testBalanceWalletNotExists()
+    {
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        self::assertFalse($buyer->relationLoaded('wallet'));
+
+        self::assertSame(0, (int) $buyer->wallet->balance);
+        self::assertFalse($buyer->wallet->exists);
+
+        self::assertSame(0, $buyer->wallet->balanceInt);
+        self::assertFalse($buyer->wallet->exists);
+
+        self::assertSame(0., (float)$buyer->wallet->balanceFloat);
+        self::assertFalse($buyer->wallet->exists);
+
+        self::assertSame(0., $buyer->wallet->balanceFloatNum);
+        self::assertFalse($buyer->wallet->exists);
+    }
+
     public function testDepositWalletExists(): void
     {
         /** @var Buyer $buyer */
