@@ -1,5 +1,16 @@
 # Changelog
 
+## 11.2.2 - 2024-09-10
+
+### What's Changed
+
+* Bump vitepress from 1.3.3 to 1.3.4 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/989
+* [11.x] fixed automatic wallet creation when calling float balance by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/992
+
+Many thanks to the guys for finding the bug [@ISNewton](https://github.com/ISNewton) [@usmanjdn7](https://github.com/usmanjdn7)
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/11.2.1...11.2.2
+
 ## 11.2.1 - 2024-08-25
 
 ### What's Changed
