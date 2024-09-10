@@ -19,7 +19,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 final class BalanceTest extends TestCase
 {
-    public function testBalanceWalletNotExists()
+    public function testBalanceWalletNotExists(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
