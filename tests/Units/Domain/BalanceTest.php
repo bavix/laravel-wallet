@@ -31,7 +31,7 @@ final class BalanceTest extends TestCase
         self::assertSame(0, $buyer->wallet->balanceInt);
         self::assertFalse($buyer->wallet->exists);
 
-        self::assertSame(0., (float)$buyer->wallet->balanceFloat);
+        self::assertSame(0., (float) $buyer->wallet->balanceFloat);
         self::assertFalse($buyer->wallet->exists);
 
         self::assertSame(0., $buyer->wallet->balanceFloatNum);
