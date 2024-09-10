@@ -317,7 +317,7 @@ trait HasWalletFloat
     public function getBalanceFloatAttribute(): string
     {
         // Get the wallet.
-        $wallet = app(CastServiceInterface::class)->getWallet($this);
+        $wallet = app(CastServiceInterface::class)->getWallet($this, false);
 
         // Get the wallet balance.
         /** @var non-empty-string $balance */
