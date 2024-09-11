@@ -10,7 +10,7 @@ use Bavix\Wallet\Internal\Events\WalletCreatedEventInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Service\ClockServiceInterface;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
-use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
+use Bavix\Wallet\Internal\Service\IdentifierFactoryServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\PurchaseServiceInterface;
@@ -96,8 +96,8 @@ final class EventTest extends TestCase
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
 
-        $uuidFactoryService = app(UuidFactoryServiceInterface::class);
-        $buyer->wallet->uuid = $uuidFactoryService->uuid4();
+        $uuidFactoryService = app(IdentifierFactoryServiceInterface::class);
+        $buyer->wallet->uuid = $uuidFactoryService->generate();
 
         $holderType = $buyer->getMorphClass();
         $uuid = $buyer->wallet->uuid;
@@ -121,8 +121,8 @@ final class EventTest extends TestCase
         /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
 
-        $uuidFactoryService = app(UuidFactoryServiceInterface::class);
-        $uuid = $uuidFactoryService->uuid4();
+        $uuidFactoryService = app(IdentifierFactoryServiceInterface::class);
+        $uuid = $uuidFactoryService->generate();
 
         $holderType = $user->getMorphClass();
         $createdAt = app(ClockServiceInterface::class)->now()->format(DateTimeInterface::ATOM);

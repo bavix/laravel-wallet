@@ -50,7 +50,7 @@ public function __invoke(CreateWalletCommandMessage $message): void
 }
 ```
 
-You receive requests to create a wallet on the backend, and you create them asynchronously. UUID4 is generated on the client side and the client already knows it. You will not be able to create two wallets with one uuid, because the column in the database is unique.
+You receive requests to create a wallet on the backend, and you create them asynchronously. UUID is generated on the client side and the client already knows it. You will not be able to create two wallets with one uuid, because the column in the database is unique.
 
 The user no longer needs to wait for the creation of a wallet, it is enough to know the uuid. You get the most stable application.
 

@@ -51,6 +51,8 @@ use Bavix\Wallet\Internal\Service\DatabaseService;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Internal\Service\DispatcherService;
 use Bavix\Wallet\Internal\Service\DispatcherServiceInterface;
+use Bavix\Wallet\Internal\Service\IdentifierFactoryService;
+use Bavix\Wallet\Internal\Service\IdentifierFactoryServiceInterface;
 use Bavix\Wallet\Internal\Service\JsonService;
 use Bavix\Wallet\Internal\Service\JsonServiceInterface;
 use Bavix\Wallet\Internal\Service\LockService;
@@ -253,6 +255,10 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         $this->app->singleton(StateServiceInterface::class, $configure['state'] ?? StateService::class);
         $this->app->singleton(TranslatorServiceInterface::class, $configure['translator'] ?? TranslatorService::class);
         $this->app->singleton(UuidFactoryServiceInterface::class, $configure['uuid'] ?? UuidFactoryService::class);
+        $this->app->singleton(
+            IdentifierFactoryServiceInterface::class,
+            $configure['identifier'] ?? IdentifierFactoryService::class
+        );
     }
 
     /**
@@ -451,6 +457,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
             StateServiceInterface::class,
             TranslatorServiceInterface::class,
             UuidFactoryServiceInterface::class,
+            IdentifierFactoryServiceInterface::class,
         ];
     }
 

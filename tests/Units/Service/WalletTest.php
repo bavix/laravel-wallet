@@ -6,7 +6,7 @@ namespace Bavix\Wallet\Test\Units\Service;
 
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
-use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
+use Bavix\Wallet\Internal\Service\IdentifierFactoryServiceInterface;
 use Bavix\Wallet\Services\WalletServiceInterface;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Factories\UserMultiFactory;
@@ -24,10 +24,10 @@ final class WalletTest extends TestCase
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
 
-        $uuidFactoryService = app(UuidFactoryServiceInterface::class);
+        $uuidFactoryService = app(IdentifierFactoryServiceInterface::class);
         $walletService = app(WalletServiceInterface::class);
 
-        $uuid = $uuidFactoryService->uuid4();
+        $uuid = $uuidFactoryService->generate();
 
         self::assertNull($walletService->findBySlug($buyer, 'default'));
         self::assertNull($walletService->findByUuid($uuid));
@@ -66,10 +66,10 @@ final class WalletTest extends TestCase
         /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
 
-        $uuidFactoryService = app(UuidFactoryServiceInterface::class);
+        $uuidFactoryService = app(IdentifierFactoryServiceInterface::class);
 
         /** @var string[] $uuids */
-        $uuids = array_map(static fn () => $uuidFactoryService->uuid4(), range(1, 10));
+        $uuids = array_map(static fn () => $uuidFactoryService->generate(), range(1, 10));
 
         foreach ($uuids as $uuid) {
             $user->createWallet([
@@ -87,8 +87,8 @@ final class WalletTest extends TestCase
         $this->expectException(ModelNotFoundException::class);
         $this->expectExceptionCode(ExceptionInterface::MODEL_NOT_FOUND);
 
-        $uuidFactoryService = app(UuidFactoryServiceInterface::class);
+        $uuidFactoryService = app(IdentifierFactoryServiceInterface::class);
 
-        app(WalletServiceInterface::class)->getByUuid($uuidFactoryService->uuid4());
+        app(WalletServiceInterface::class)->getByUuid($uuidFactoryService->generate());
     }
 }

@@ -6,7 +6,7 @@ namespace Bavix\Wallet\Test\Units\Domain;
 
 use Bavix\Wallet\External\Dto\Extra;
 use Bavix\Wallet\External\Dto\Option;
-use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
+use Bavix\Wallet\Internal\Service\IdentifierFactoryServiceInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Factories\UserMultiFactory;
@@ -71,10 +71,10 @@ final class ExtraTest extends TestCase
         $user1->deposit(1000);
         self::assertSame(1000, $user1->balanceInt);
 
-        $uuidFactory = app(UuidFactoryServiceInterface::class);
-        $depositUuid = $uuidFactory->uuid4();
-        $withdrawUuid = $uuidFactory->uuid4();
-        $transferUuid = $uuidFactory->uuid4();
+        $uuidFactory = app(IdentifierFactoryServiceInterface::class);
+        $depositUuid = $uuidFactory->generate();
+        $withdrawUuid = $uuidFactory->generate();
+        $transferUuid = $uuidFactory->generate();
 
         $transfer = $user1->transfer(
             $user2,
@@ -219,10 +219,10 @@ final class ExtraTest extends TestCase
         self::assertSame(10_000, $rub->balanceInt);
         self::assertSame(0, $usd->balanceInt);
 
-        $uuidFactory = app(UuidFactoryServiceInterface::class);
-        $depositUuid = $uuidFactory->uuid4();
-        $withdrawUuid = $uuidFactory->uuid4();
-        $transferUuid = $uuidFactory->uuid4();
+        $uuidFactory = app(IdentifierFactoryServiceInterface::class);
+        $depositUuid = $uuidFactory->generate();
+        $withdrawUuid = $uuidFactory->generate();
+        $transferUuid = $uuidFactory->generate();
 
         $transfer = $rub->exchange($usd, 10000, new Extra(
             deposit: new Option(
