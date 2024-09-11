@@ -1,5 +1,13 @@
 # Changelog
 
+## 11.3.0 - 2024-09-11
+
+### What's Changed
+
+* [11.3] UUID7. IdentifierFactoryServiceInterface by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/994
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/11.2.2...11.3.0
+
 ## 11.2.2 - 2024-09-10
 
 ### What's Changed
