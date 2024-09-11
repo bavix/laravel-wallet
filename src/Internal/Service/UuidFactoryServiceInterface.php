@@ -7,7 +7,7 @@ namespace Bavix\Wallet\Internal\Service;
 /**
  * @deprecated use IdentifierFactoryServiceInterface instead.
  * @see IdentifierFactoryServiceInterface
- * @since 11.2.3
+ * @since 11.3.0
  */
 interface UuidFactoryServiceInterface
 {
