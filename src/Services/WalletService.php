@@ -8,7 +8,7 @@ use Bavix\Wallet\Internal\Assembler\WalletCreatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Internal\Repository\WalletRepositoryInterface;
 use Bavix\Wallet\Internal\Service\DispatcherServiceInterface;
-use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
+use Bavix\Wallet\Internal\Service\IdentifierFactoryServiceInterface;
 use Bavix\Wallet\Models\Wallet;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,7 +19,7 @@ final readonly class WalletService implements WalletServiceInterface
 {
     public function __construct(
         private WalletCreatedEventAssemblerInterface $walletCreatedEventAssembler,
-        private UuidFactoryServiceInterface $uuidFactoryService,
+        private IdentifierFactoryServiceInterface $identifierFactoryService,
         private DispatcherServiceInterface $dispatcherService,
         private WalletRepositoryInterface $walletRepository
     ) {
@@ -30,7 +30,7 @@ final readonly class WalletService implements WalletServiceInterface
         $wallet = $this->walletRepository->create(array_merge(
             config('wallet.wallet.creating', []),
             [
-                'uuid' => $this->uuidFactoryService->uuid4(),
+                'uuid' => $this->identifierFactoryService->generate(),
             ],
             $data,
             [

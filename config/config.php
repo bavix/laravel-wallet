@@ -22,6 +22,7 @@ use Bavix\Wallet\Internal\Service\ClockService;
 use Bavix\Wallet\Internal\Service\ConnectionService;
 use Bavix\Wallet\Internal\Service\DatabaseService;
 use Bavix\Wallet\Internal\Service\DispatcherService;
+use Bavix\Wallet\Internal\Service\IdentifierFactoryService;
 use Bavix\Wallet\Internal\Service\JsonService;
 use Bavix\Wallet\Internal\Service\LockService;
 use Bavix\Wallet\Internal\Service\MathService;
@@ -209,8 +210,18 @@ return [
          * The service for generating UUIDs.
          *
          * @var string
+         *
+         * @deprecated use identifier.
+         * @see IdentifierFactoryService
          */
         'uuid' => UuidFactoryService::class,
+
+        /**
+         * The service for generating identifiers.
+         *
+         * @var string
+         */
+        'identifier' => IdentifierFactoryService::class,
     ],
 
     /**

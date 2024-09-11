@@ -10,7 +10,7 @@ use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
-use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
+use Bavix\Wallet\Internal\Service\IdentifierFactoryServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\BookkeeperServiceInterface;
@@ -441,7 +441,7 @@ final class MultiWalletTest extends TestCase
         $secondWallet = $user->getWalletOrFail('test');
         self::assertSame($secondWallet->getKey(), $firstWallet->getKey());
 
-        $uuid = app(UuidFactoryServiceInterface::class)->uuid4();
+        $uuid = app(IdentifierFactoryServiceInterface::class)->generate();
         $test2 = $user->wallets()
             ->create([
                 'name' => 'Test2',

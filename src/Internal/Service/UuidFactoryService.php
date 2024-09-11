@@ -6,6 +6,9 @@ namespace Bavix\Wallet\Internal\Service;
 
 use Ramsey\Uuid\UuidFactory;
 
+/**
+ * @codeCoverageIgnore
+ */
 final readonly class UuidFactoryService implements UuidFactoryServiceInterface
 {
     public function __construct(

@@ -7,13 +7,13 @@ namespace Bavix\Wallet\Internal\Assembler;
 use Bavix\Wallet\Internal\Dto\TransferDto;
 use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
 use Bavix\Wallet\Internal\Service\ClockServiceInterface;
-use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
+use Bavix\Wallet\Internal\Service\IdentifierFactoryServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 
 final readonly class TransferDtoAssembler implements TransferDtoAssemblerInterface
 {
     public function __construct(
-        private UuidFactoryServiceInterface $uuidService,
+        private IdentifierFactoryServiceInterface $identifierFactoryService,
         private ClockServiceInterface $clockService,
     ) {
     }
@@ -33,7 +33,7 @@ final readonly class TransferDtoAssembler implements TransferDtoAssemblerInterfa
         ?array $extra,
     ): TransferDtoInterface {
         return new TransferDto(
-            $uuid ?? $this->uuidService->uuid4(),
+            $uuid ?? $this->identifierFactoryService->generate(),
             $depositId,
             $withdrawId,
             $status,

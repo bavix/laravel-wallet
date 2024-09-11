@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Service;
 
+/**
+ * @deprecated use IdentifierFactoryServiceInterface instead.
+ * @see IdentifierFactoryServiceInterface
+ * @since 11.3.0
+ */
 interface UuidFactoryServiceInterface
 {
     /**

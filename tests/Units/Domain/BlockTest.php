@@ -6,7 +6,7 @@ namespace Bavix\Wallet\Test\Units\Domain;
 
 use Bavix\Wallet\External\Dto\Extra;
 use Bavix\Wallet\External\Dto\Option;
-use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
+use Bavix\Wallet\Internal\Service\IdentifierFactoryServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
@@ -26,8 +26,8 @@ final class BlockTest extends TestCase
         /** @var Buyer $buyer1 */
         /** @var Buyer $buyer2 */
         [$buyer1, $buyer2] = BuyerFactory::times(2)->create();
-        $uuidFactory = app(UuidFactoryServiceInterface::class);
-        $idempotent = $uuidFactory->uuid4();
+        $uuidFactory = app(IdentifierFactoryServiceInterface::class);
+        $idempotent = $uuidFactory->generate();
 
         $transfer = $buyer1->forceTransfer($buyer2, 500, new Extra(
             deposit: new Option(
