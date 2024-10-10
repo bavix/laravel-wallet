@@ -123,7 +123,6 @@ use Illuminate\Database\Events\TransactionCommitting;
 use Illuminate\Database\Events\TransactionRolledBack;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-use Laravel\Cashier\Tax;
 
 final class WalletServiceProvider extends ServiceProvider implements DeferrableProvider
 {
@@ -288,7 +287,10 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         $this->app->singleton(FormatterServiceInterface::class, $configure['formatter'] ?? FormatterService::class);
         $this->app->singleton(PrepareServiceInterface::class, $configure['prepare'] ?? PrepareService::class);
         $this->app->singleton(PurchaseServiceInterface::class, $configure['purchase'] ?? PurchaseService::class);
-        $this->app->singleton(TaxCollectionServiceInterface::class, $configure['tax_collection'] ?? TaxCollectionService::class);
+        $this->app->singleton(
+            TaxCollectionServiceInterface::class,
+            $configure['tax_collection'] ?? TaxCollectionService::class
+        );
         $this->app->singleton(TaxServiceInterface::class, $configure['tax'] ?? TaxService::class);
         $this->app->singleton(
             TransactionServiceInterface::class,

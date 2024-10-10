@@ -14,6 +14,7 @@ use Bavix\Wallet\Internal\Service\MathServiceInterface;
 
 /**
  * @internal
+ *
  * @deprecated use TaxCollectionServiceInterface instead.
  * @see TaxCollectionServiceInterface
  */
@@ -29,11 +30,7 @@ final readonly class TaxService implements TaxServiceInterface
     public function getFee(Wallet $wallet, float|int|string $amount): string
     {
         if ($wallet instanceof TaxInterface) {
-            return $this->taxCollectionService->calculate(
-                TransactionType::Withdraw,
-                $wallet, 
-                $amount,
-            );
+            return $this->taxCollectionService->calculate(TransactionType::Withdraw, $wallet, $amount);
         }
 
         // backward compatibility
