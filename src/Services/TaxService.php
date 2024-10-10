@@ -4,25 +4,39 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\External\Enums\TransactionType;
 use Bavix\Wallet\Interfaces\MaximalTaxable;
 use Bavix\Wallet\Interfaces\MinimalTaxable;
 use Bavix\Wallet\Interfaces\Taxable;
+use Bavix\Wallet\Interfaces\TaxInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 
 /**
  * @internal
+ * @deprecated use TaxCollectionServiceInterface instead.
+ * @see TaxCollectionServiceInterface
  */
 final readonly class TaxService implements TaxServiceInterface
 {
     public function __construct(
         private MathServiceInterface $mathService,
-        private CastServiceInterface $castService
+        private CastServiceInterface $castService,
+        private TaxCollectionServiceInterface $taxCollectionService
     ) {
     }
 
     public function getFee(Wallet $wallet, float|int|string $amount): string
     {
+        if ($wallet instanceof TaxInterface) {
+            return $this->taxCollectionService->calculate(
+                TransactionType::Withdraw,
+                $wallet, 
+                $amount,
+            );
+        }
+
+        // backward compatibility
         $fee = 0;
         if ($wallet instanceof Taxable) {
             $fee = $this->mathService->floor(

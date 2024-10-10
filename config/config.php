@@ -49,6 +49,7 @@ use Bavix\Wallet\Services\FormatterService;
 use Bavix\Wallet\Services\PrepareService;
 use Bavix\Wallet\Services\PurchaseService;
 use Bavix\Wallet\Services\RegulatorService;
+use Bavix\Wallet\Services\TaxCollectionService;
 use Bavix\Wallet\Services\TaxService;
 use Bavix\Wallet\Services\TransactionService;
 use Bavix\Wallet\Services\TransferService;
@@ -265,6 +266,8 @@ return [
         'purchase' => PurchaseService::class,
         // Service for handling tax operations.
         'tax' => TaxService::class,
+        // Service for handling tax collection operations.
+        'tax_collection' => TaxCollectionService::class,
         // Service for handling transaction operations.
         'transaction' => TransactionService::class,
         // Service for handling transfer operations.

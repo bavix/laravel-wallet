@@ -10,6 +10,9 @@ use Bavix\Wallet\Interfaces\TaxInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 
+/**
+ * @internal
+ */
 final readonly class TaxCollectionService implements TaxCollectionServiceInterface
 {
     public function __construct(
