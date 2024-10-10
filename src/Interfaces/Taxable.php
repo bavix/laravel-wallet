@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Interfaces;
 
+/**
+ * @deprecated Use TaxInterface.
+ * @see TaxInterface
+ */
 interface Taxable
 {
     /**
