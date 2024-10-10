@@ -9,9 +9,5 @@ use Bavix\Wallet\Interfaces\Wallet;
 
 interface TaxCollectionServiceInterface
 {
-    public function calculate(
-        TransactionType $type,
-        Wallet $wallet, 
-        float|int|string $amount,
-    ): string;
+    public function calculate(TransactionType $type, Wallet $wallet, float|int|string $amount): string;
 }

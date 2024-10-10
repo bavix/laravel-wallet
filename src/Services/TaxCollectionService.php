@@ -18,11 +18,8 @@ final readonly class TaxCollectionService implements TaxCollectionServiceInterfa
     ) {
     }
 
-    public function calculate(
-        TransactionType $type,
-        Wallet $wallet, 
-        float|int|string $amount,
-    ): string {
+    public function calculate(TransactionType $type, Wallet $wallet, float|int|string $amount): string
+    {
         $feePercent = null;
         if ($wallet instanceof TaxInterface) {
             $feePercent = $wallet->getTaxPercent($type);
