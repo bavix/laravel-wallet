@@ -10,7 +10,7 @@ use Bavix\Wallet\Interfaces\TaxInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 
-class TaxCollectionService implements TaxCollectionServiceInterface
+final readonly class TaxCollectionService implements TaxCollectionServiceInterface
 {
     public function __construct(
         private MathServiceInterface $mathService,
@@ -35,7 +35,7 @@ class TaxCollectionService implements TaxCollectionServiceInterface
             $feeMaximum = $wallet->getMaximumTax($type);
         }
 
-        $fee = '0';
+        $fee = 0;
         if ($feePercent !== null) {
             $fee = $this->mathService->floor(
                 $this->mathService->div(
@@ -55,6 +55,6 @@ class TaxCollectionService implements TaxCollectionServiceInterface
             $fee = $feeMaximum;
         }
 
-        return $fee;
+        return (string) $fee;
     }
 }
