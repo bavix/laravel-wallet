@@ -102,6 +102,8 @@ use Bavix\Wallet\Services\PurchaseService;
 use Bavix\Wallet\Services\PurchaseServiceInterface;
 use Bavix\Wallet\Services\RegulatorService;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
+use Bavix\Wallet\Services\TaxCollectionService;
+use Bavix\Wallet\Services\TaxCollectionServiceInterface;
 use Bavix\Wallet\Services\TaxService;
 use Bavix\Wallet\Services\TaxServiceInterface;
 use Bavix\Wallet\Services\TransactionService;
@@ -285,6 +287,10 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         $this->app->singleton(FormatterServiceInterface::class, $configure['formatter'] ?? FormatterService::class);
         $this->app->singleton(PrepareServiceInterface::class, $configure['prepare'] ?? PrepareService::class);
         $this->app->singleton(PurchaseServiceInterface::class, $configure['purchase'] ?? PurchaseService::class);
+        $this->app->singleton(
+            TaxCollectionServiceInterface::class,
+            $configure['tax_collection'] ?? TaxCollectionService::class
+        );
         $this->app->singleton(TaxServiceInterface::class, $configure['tax'] ?? TaxService::class);
         $this->app->singleton(
             TransactionServiceInterface::class,
@@ -479,6 +485,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
             FormatterServiceInterface::class,
             PrepareServiceInterface::class,
             PurchaseServiceInterface::class,
+            TaxCollectionServiceInterface::class,
             TaxServiceInterface::class,
             TransactionServiceInterface::class,
             TransferServiceInterface::class,
