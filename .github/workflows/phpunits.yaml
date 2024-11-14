@@ -165,7 +165,7 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         if: ${{ steps.codeclimate-check.outputs.execute == 'true' }}
 
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
         if: ${{ steps.codeclimate-check.outputs.execute == 'true' }}
