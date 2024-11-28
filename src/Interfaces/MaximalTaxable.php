@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Interfaces;
 
+/**
+ * @deprecated Use TaxConstraintsInterface.
+ * @see TaxConstraintsInterface
+ */
 interface MaximalTaxable extends Taxable
 {
     /**
