@@ -1,6 +1,11 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Generic type Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Bavix\\\\Wallet\\\\Models\\\\Transfer\\> in PHPDoc tag @return does not specify all template types of class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\: TRelatedModel, TDeclaringModel$#"
+			count: 1
+			path: tests/Infra/Models/Item.php
+
+		-
 			message: "#^Parameter \\#2 \\$currency of class Bavix\\\\Wallet\\\\Test\\\\Infra\\\\Values\\\\Money constructor expects string, mixed given\\.$#"
 			count: 1
 			path: tests/Infra/PackageModels/TransactionMoney.php
@@ -34,6 +39,21 @@ parameters:
 			message: "#^Method Bavix\\\\Wallet\\\\Test\\\\Infra\\\\TestCase\\:\\:setUp\\(\\) is not final, but since the containing class is abstract, it should be\\.$#"
 			count: 1
 			path: tests/Infra/TestCase.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$balanceInt\\.$#"
+			count: 1
+			path: tests/Units/Domain/MultiWalletTest.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$slug\\.$#"
+			count: 1
+			path: tests/Units/Domain/MultiWalletTest.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$uuid\\.$#"
+			count: 1
+			path: tests/Units/Domain/MultiWalletTest.php
 
 		-
 			message: "#^Parameter \\#1 \\$number of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:abs\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"
