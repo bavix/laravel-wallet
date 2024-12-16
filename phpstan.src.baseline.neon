@@ -21,6 +21,21 @@ parameters:
 			path: src/External/Dto/Option.php
 
 		-
+			message: "#^Generic type Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Bavix\\\\Wallet\\\\Models\\\\Transaction\\> in PHPDoc tag @return does not specify all template types of class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\: TRelatedModel, TDeclaringModel$#"
+			count: 1
+			path: src/Interfaces/Wallet.php
+
+		-
+			message: "#^Generic type Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Bavix\\\\Wallet\\\\Models\\\\Transfer\\> in PHPDoc tag @return does not specify all template types of class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\: TRelatedModel, TDeclaringModel$#"
+			count: 2
+			path: src/Interfaces/Wallet.php
+
+		-
+			message: "#^Generic type Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\<Bavix\\\\Wallet\\\\Models\\\\Transaction\\> in PHPDoc tag @return does not specify all template types of class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\: TRelatedModel, TDeclaringModel$#"
+			count: 1
+			path: src/Interfaces/Wallet.php
+
+		-
 			message: "#^Parameter \\#3 \\$payableId of class Bavix\\\\Wallet\\\\Internal\\\\Dto\\\\TransactionDto constructor expects int\\|string, mixed given\\.$#"
 			count: 1
 			path: src/Internal/Assembler/TransactionDtoAssembler.php
@@ -186,7 +201,12 @@ parameters:
 			path: src/Internal/Service/StorageService.php
 
 		-
-			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Transaction\\:\\:wallet\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<Bavix\\\\Wallet\\\\Models\\\\Wallet, Bavix\\\\Wallet\\\\Models\\\\Transaction\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, \\$this\\(Bavix\\\\Wallet\\\\Models\\\\Transaction\\)\\>\\.$#"
+			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Transaction\\:\\:payable\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphTo\\<Illuminate\\\\Database\\\\Eloquent\\\\Model, Bavix\\\\Wallet\\\\Models\\\\Transaction\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphTo\\<Illuminate\\\\Database\\\\Eloquent\\\\Model, \\$this\\(Bavix\\\\Wallet\\\\Models\\\\Transaction\\)\\>\\.$#"
+			count: 1
+			path: src/Models/Transaction.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Transaction\\:\\:wallet\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<Bavix\\\\Wallet\\\\Models\\\\Wallet, Bavix\\\\Wallet\\\\Models\\\\Transaction\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<Illuminate\\\\Database\\\\Eloquent\\\\Model, \\$this\\(Bavix\\\\Wallet\\\\Models\\\\Transaction\\)\\>\\.$#"
 			count: 1
 			path: src/Models/Transaction.php
 
@@ -206,22 +226,22 @@ parameters:
 			path: src/Models/Transaction.php
 
 		-
-			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Transfer\\:\\:deposit\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<Bavix\\\\Wallet\\\\Models\\\\Transaction, Bavix\\\\Wallet\\\\Models\\\\Transfer\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, \\$this\\(Bavix\\\\Wallet\\\\Models\\\\Transfer\\)\\>\\.$#"
+			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Transfer\\:\\:deposit\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<Bavix\\\\Wallet\\\\Models\\\\Transaction, Bavix\\\\Wallet\\\\Models\\\\Transfer\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<Illuminate\\\\Database\\\\Eloquent\\\\Model, \\$this\\(Bavix\\\\Wallet\\\\Models\\\\Transfer\\)\\>\\.$#"
 			count: 1
 			path: src/Models/Transfer.php
 
 		-
-			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Transfer\\:\\:from\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<Bavix\\\\Wallet\\\\Models\\\\Wallet, Bavix\\\\Wallet\\\\Models\\\\Transfer\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, \\$this\\(Bavix\\\\Wallet\\\\Models\\\\Transfer\\)\\>\\.$#"
+			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Transfer\\:\\:from\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<Bavix\\\\Wallet\\\\Models\\\\Wallet, Bavix\\\\Wallet\\\\Models\\\\Transfer\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<Illuminate\\\\Database\\\\Eloquent\\\\Model, \\$this\\(Bavix\\\\Wallet\\\\Models\\\\Transfer\\)\\>\\.$#"
 			count: 1
 			path: src/Models/Transfer.php
 
 		-
-			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Transfer\\:\\:to\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<Bavix\\\\Wallet\\\\Models\\\\Wallet, Bavix\\\\Wallet\\\\Models\\\\Transfer\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, \\$this\\(Bavix\\\\Wallet\\\\Models\\\\Transfer\\)\\>\\.$#"
+			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Transfer\\:\\:to\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<Bavix\\\\Wallet\\\\Models\\\\Wallet, Bavix\\\\Wallet\\\\Models\\\\Transfer\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<Illuminate\\\\Database\\\\Eloquent\\\\Model, \\$this\\(Bavix\\\\Wallet\\\\Models\\\\Transfer\\)\\>\\.$#"
 			count: 1
 			path: src/Models/Transfer.php
 
 		-
-			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Transfer\\:\\:withdraw\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<Bavix\\\\Wallet\\\\Models\\\\Transaction, Bavix\\\\Wallet\\\\Models\\\\Transfer\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, \\$this\\(Bavix\\\\Wallet\\\\Models\\\\Transfer\\)\\>\\.$#"
+			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Transfer\\:\\:withdraw\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<Bavix\\\\Wallet\\\\Models\\\\Transaction, Bavix\\\\Wallet\\\\Models\\\\Transfer\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<Illuminate\\\\Database\\\\Eloquent\\\\Model, \\$this\\(Bavix\\\\Wallet\\\\Models\\\\Transfer\\)\\>\\.$#"
 			count: 1
 			path: src/Models/Transfer.php
 
@@ -251,7 +271,32 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
+			message: "#^Generic type Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Bavix\\\\Wallet\\\\Models\\\\Transaction\\> in PHPDoc tag @return does not specify all template types of class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\: TRelatedModel, TDeclaringModel$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Generic type Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Bavix\\\\Wallet\\\\Models\\\\Transfer\\> in PHPDoc tag @return does not specify all template types of class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\: TRelatedModel, TDeclaringModel$#"
+			count: 4
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Generic type Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\<Bavix\\\\Wallet\\\\Models\\\\Transaction\\> in PHPDoc tag @return does not specify all template types of class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\: TRelatedModel, TDeclaringModel$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Generic type Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphOne\\<Bavix\\\\Wallet\\\\Models\\\\Wallet\\> in PHPDoc tag @return does not specify all template types of class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphOne\\: TRelatedModel, TDeclaringModel$#"
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
 			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:getCurrencyAttribute\\(\\) should return string but returns mixed\\.$#"
+			count: 1
+			path: src/Models/Wallet.php
+
+		-
+			message: "#^Method Bavix\\\\Wallet\\\\Models\\\\Wallet\\:\\:holder\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphTo\\<Illuminate\\\\Database\\\\Eloquent\\\\Model, Bavix\\\\Wallet\\\\Models\\\\Wallet\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphTo\\<Illuminate\\\\Database\\\\Eloquent\\\\Model, \\$this\\(Bavix\\\\Wallet\\\\Models\\\\Wallet\\)\\>\\.$#"
 			count: 1
 			path: src/Models/Wallet.php
 
