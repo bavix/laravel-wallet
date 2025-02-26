@@ -51,7 +51,7 @@ return new class() extends Migration
 
     public function down(): void
     {
-        Schema::drop($this->table());
+        Schema::dropIfExists($this->table());
     }
 
     private function table(): string

@@ -1,61 +1,631 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Generic type Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Bavix\\\\Wallet\\\\Models\\\\Transfer\\> in PHPDoc tag @return does not specify all template types of class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\: TRelatedModel, TDeclaringModel$#"
+			message: '#^Generic type Illuminate\\Database\\Eloquent\\Relations\\HasMany\<Bavix\\Wallet\\Models\\Transfer\> in PHPDoc tag @return does not specify all template types of class Illuminate\\Database\\Eloquent\\Relations\\HasMany\: TRelatedModel, TDeclaringModel$#'
+			identifier: generics.lessTypes
 			count: 1
 			path: tests/Infra/Models/Item.php
 
 		-
-			message: "#^Parameter \\#2 \\$currency of class Bavix\\\\Wallet\\\\Test\\\\Infra\\\\Values\\\\Money constructor expects string, mixed given\\.$#"
+			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\Item\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: tests/Infra/Models/Item.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\ItemDiscount\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: tests/Infra/Models/ItemDiscount.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\ItemDiscountTax\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: tests/Infra/Models/ItemDiscountTax.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\ItemMaxTax\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: tests/Infra/Models/ItemMaxTax.php
+
+		-
+			message: '#^Method Bavix\\Wallet\\Test\\Infra\\Models\\ItemMeta\:\:getMetaProduct\(\) never returns null so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: tests/Infra/Models/ItemMeta.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\ItemMeta\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: tests/Infra/Models/ItemMeta.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\ItemMinTax\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: tests/Infra/Models/ItemMinTax.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\ItemMultiPrice\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: tests/Infra/Models/ItemMultiPrice.php
+
+		-
+			message: '#^Method Bavix\\Wallet\\Test\\Infra\\Models\\ItemTax\:\:getFeePercent\(\) never returns int so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: tests/Infra/Models/ItemTax.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\ItemTax\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: tests/Infra/Models/ItemTax.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\ItemWallet\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: tests/Infra/Models/ItemWallet.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\Manager\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: tests/Infra/Models/Manager.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\User\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: tests/Infra/Models/User.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\UserConfirm\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: tests/Infra/Models/UserConfirm.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\UserDynamic\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: tests/Infra/Models/UserDynamic.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\UserFloat\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: tests/Infra/Models/UserFloat.php
+
+		-
+			message: '#^Parameter \#2 \$currency of class Bavix\\Wallet\\Test\\Infra\\Values\\Money constructor expects string, mixed given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Infra/PackageModels/TransactionMoney.php
 
 		-
-			message: "#^Parameter \\#1 \\$first of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:mul\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
+			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:mul\(\) expects float\|int\|non\-empty\-string, float\|int\|string given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Infra/Services/ExchangeUsdToBtcService.php
 
 		-
-			message: "#^Parameter \\#1 \\$first of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:mul\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
+			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:mul\(\) expects float\|int\|non\-empty\-string, float\|int\|string given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Infra/Services/MyExchangeService.php
 
 		-
-			message: "#^Parameter \\#2 \\$second of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:div\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
+			message: '#^Parameter \#2 \$second of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:div\(\) expects float\|int\|non\-empty\-string, float\|int\|string given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Infra/Services/MyExchangeService.php
 
 		-
-			message: "#^Parameter \\#2 \\$second of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:mul\\(\\) expects float\\|int\\|non\\-empty\\-string, float\\|int\\|string given\\.$#"
+			message: '#^Parameter \#2 \$second of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:mul\(\) expects float\|int\|non\-empty\-string, float\|int\|string given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Infra/Services/MyExchangeService.php
 
 		-
-			message: "#^Class Bavix\\\\Wallet\\\\Test\\\\Infra\\\\TestCase is not final\\.$#"
+			message: '#^Class Bavix\\Wallet\\Test\\Infra\\TestCase is not final\.$#'
+			identifier: ergebnis.final
 			count: 1
 			path: tests/Infra/TestCase.php
 
 		-
-			message: "#^Method Bavix\\\\Wallet\\\\Test\\\\Infra\\\\TestCase\\:\\:setUp\\(\\) is not final, but since the containing class is abstract, it should be\\.$#"
+			message: '#^Method Bavix\\Wallet\\Test\\Infra\\TestCase\:\:setUp\(\) is not final, but since the containing class is abstract, it should be\.$#'
+			identifier: ergebnis.finalInAbstractClass
 			count: 1
 			path: tests/Infra/TestCase.php
 
 		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$balanceInt\\.$#"
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Api/TransferHandlerTest.php
+
+		-
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Api/TransferHandlerTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertIsInt\(\) with int will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: tests/Units/Domain/BalanceTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertIsString\(\) with non\-empty\-string will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: tests/Units/Domain/BalanceTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transaction will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: tests/Units/Domain/BalanceTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertEmpty\(\) with non\-empty\-array\<int\|string, Bavix\\Wallet\\Internal\\Dto\\ItemDtoInterface\> will always evaluate to false\.$#'
+			identifier: staticMethod.impossibleType
+			count: 1
+			path: tests/Units/Domain/BasketTest.php
+
+		-
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Domain/BlockTest.php
+
+		-
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Domain/BlockTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transaction will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: tests/Units/Domain/CartReceivingTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNull\(\) with string will always evaluate to false\.$#'
+			identifier: staticMethod.impossibleType
+			count: 1
+			path: tests/Units/Domain/CartReceivingTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transaction will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 5
+			path: tests/Units/Domain/CartTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNull\(\) with string will always evaluate to false\.$#'
+			identifier: staticMethod.impossibleType
+			count: 1
+			path: tests/Units/Domain/CartTest.php
+
+		-
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 3
+			path: tests/Units/Domain/ConfirmTest.php
+
+		-
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\User\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 2
+			path: tests/Units/Domain/ConfirmTest.php
+
+		-
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 3
+			path: tests/Units/Domain/ConfirmTest.php
+
+		-
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\User\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 2
+			path: tests/Units/Domain/ConfirmTest.php
+
+		-
+			message: '#^Binary operation "\-" between mixed and 1000 results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: tests/Units/Domain/CreditWalletTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transaction will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 3
+			path: tests/Units/Domain/CreditWalletTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transfer will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 4
+			path: tests/Units/Domain/DiscountTaxTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transfer will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 5
+			path: tests/Units/Domain/DiscountTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotEmpty\(\) with Illuminate\\Support\\Collection&iterable\<Bavix\\Wallet\\Models\\Wallet\> will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: tests/Units/Domain/EagerLoadingTest.php
+
+		-
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Domain/EagerLoadingTest.php
+
+		-
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Domain/EagerLoadingTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transaction will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 5
+			path: tests/Units/Domain/EventTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transfer will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 4
+			path: tests/Units/Domain/ExtraTest.php
+
+		-
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 4
+			path: tests/Units/Domain/ExtraTest.php
+
+		-
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 4
+			path: tests/Units/Domain/ExtraTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transfer will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: tests/Units/Domain/GiftDiscountTaxTest.php
+
+		-
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 2
+			path: tests/Units/Domain/GiftDiscountTaxTest.php
+
+		-
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 2
+			path: tests/Units/Domain/GiftDiscountTaxTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transfer will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: tests/Units/Domain/GiftDiscountTest.php
+
+		-
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 2
+			path: tests/Units/Domain/GiftDiscountTest.php
+
+		-
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 2
+			path: tests/Units/Domain/GiftDiscountTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transfer will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: tests/Units/Domain/GiftTest.php
+
+		-
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 2
+			path: tests/Units/Domain/GiftTest.php
+
+		-
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 2
+			path: tests/Units/Domain/GiftTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transfer will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: tests/Units/Domain/MinTaxTest.php
+
+		-
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\User\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Domain/ModelTableTest.php
+
+		-
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\User\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Domain/ModelTableTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transaction will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: tests/Units/Domain/MultiWalletGiftTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transfer will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: tests/Units/Domain/MultiWalletGiftTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Wallet will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: tests/Units/Domain/MultiWalletGiftTest.php
+
+		-
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\UserMulti\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\UserMulti\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Domain/MultiWalletGiftTest.php
+
+		-
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\UserMulti\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\UserMulti\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Domain/MultiWalletGiftTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertIsObject\(\) with Bavix\\Wallet\\Models\\Wallet will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
 			count: 1
 			path: tests/Units/Domain/MultiWalletTest.php
 
 		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$slug\\.$#"
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transfer will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: tests/Units/Domain/MultiWalletTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Wallet will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 5
+			path: tests/Units/Domain/MultiWalletTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertTrue\(\) with true will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 4
+			path: tests/Units/Domain/MultiWalletTest.php
+
+		-
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\UserMulti\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\UserMulti\>\.$#'
+			identifier: offsetAccess.notFound
 			count: 1
 			path: tests/Units/Domain/MultiWalletTest.php
 
 		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$uuid\\.$#"
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\UserMulti\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\UserMulti\>\.$#'
+			identifier: offsetAccess.notFound
 			count: 1
 			path: tests/Units/Domain/MultiWalletTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$number of method Bavix\\\\Wallet\\\\Internal\\\\Service\\\\MathServiceInterface\\:\\:abs\\(\\) expects float\\|int\\|non\\-empty\\-string, string given\\.$#"
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transfer will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 4
+			path: tests/Units/Domain/ProductTest.php
+
+		-
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Item\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Item\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Domain/ProductTest.php
+
+		-
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Item\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Item\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Domain/ProductTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transaction will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: tests/Units/Domain/SilentlyDiscardingTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transfer will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: tests/Units/Domain/SilentlyDiscardingTest.php
+
+		-
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\User\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Domain/SilentlyDiscardingTest.php
+
+		-
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\User\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Domain/SilentlyDiscardingTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transfer will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: tests/Units/Domain/SoftDeletesTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with DateTimeInterface will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: tests/Units/Domain/SoftDeletesTest.php
+
+		-
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 2
+			path: tests/Units/Domain/SoftDeletesTest.php
+
+		-
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 2
+			path: tests/Units/Domain/SoftDeletesTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transfer will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: tests/Units/Domain/TaxTest.php
+
+		-
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 2
+			path: tests/Units/Domain/TaxTest.php
+
+		-
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 2
+			path: tests/Units/Domain/TaxTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transaction will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: tests/Units/Domain/TransactionAmountFloatAccessorTest.php
+
+		-
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Domain/TransactionsFilterTest.php
+
+		-
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Domain/TransactionsFilterTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transfer will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: tests/Units/Domain/WalletFloatTest.php
+
+		-
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\UserFloat\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\UserFloat\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Domain/WalletFloatTest.php
+
+		-
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\UserFloat\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\UserFloat\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Domain/WalletFloatTest.php
+
+		-
+			message: '#^Parameter \#1 \$expected of static method PHPUnit\\Framework\\Assert\:\:assertSame\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: tests/Units/Domain/WalletFloatTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transaction will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 3
+			path: tests/Units/Domain/WalletTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transfer will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 3
+			path: tests/Units/Domain/WalletTest.php
+
+		-
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\User\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 2
+			path: tests/Units/Domain/WalletTest.php
+
+		-
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\User\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 2
+			path: tests/Units/Domain/WalletTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertTrue\(\) with false will always evaluate to false\.$#'
+			identifier: method.impossibleType
+			count: 1
+			path: tests/Units/Service/AtomicServiceTest.php
+
+		-
+			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Service/AtomicServiceTest.php
+
+		-
+			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Service/AtomicServiceTest.php
+
+		-
+			message: '#^Assign by reference should not be used\.$#'
+			identifier: ergebnis.noAssignByReference
+			count: 1
+			path: tests/Units/Service/JsonServiceTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertTrue\(\) with true will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 3
+			path: tests/Units/Service/LockServiceTest.php
+
+		-
+			message: '#^Parameter \#1 \$number of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:abs\(\) expects float\|int\|non\-empty\-string, string given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Units/Service/MathTest.php

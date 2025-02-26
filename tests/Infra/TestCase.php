@@ -61,8 +61,6 @@ abstract class TestCase extends OrchestraTestCase
         // database
         $config->set('database.connections.testing.prefix', 'tests');
         $config->set('database.connections.pgsql.prefix', 'tests');
-        $config->set('database.connections.mysql.prefix', 'tests');
-        $config->set('database.connections.mariadb.prefix', 'tests');
         $config->set('database.connections.mariadb.port', 3307);
 
         // new table name's

@@ -4,5 +4,6 @@ includes:
 
 parameters:
     level: 9
+    reportUnmatchedIgnoredErrors: false
     fileExtensions:
         - php
