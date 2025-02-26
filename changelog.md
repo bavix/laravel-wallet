@@ -1,5 +1,28 @@
 # Changelog
 
+## 11.4.0 - 2025-02-26
+
+### What's Changed
+
+* Bump JetBrains/qodana-action from 2024.1 to 2024.2 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/997
+* Bump vite from 5.4.1 to 5.4.6 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/996
+* Bump rollup from 4.21.0 to 4.22.4 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/1001
+* Bump vitepress from 1.3.4 to 1.4.0 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/1002
+* Bump vitepress from 1.4.0 to 1.4.1 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/1004
+* phpstan baseline upgrade by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1010
+* Bump nanoid from 3.3.7 to 3.3.8 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/1012
+* Bump vite from 5.4.8 to 5.4.14 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/1017
+* Bump vitepress from 1.4.1 to 1.6.2 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/1018
+* Bump vitepress from 1.6.2 to 1.6.3 by [@dependabot](https://github.com/dependabot) in https://github.com/bavix/laravel-wallet/pull/1019
+* [11.x] Laravel 12 by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1025
+* Laravel 12.x Compatibility by [@laravel-shift](https://github.com/laravel-shift) in https://github.com/bavix/laravel-wallet/pull/1024
+
+### New Contributors
+
+* [@laravel-shift](https://github.com/laravel-shift) made their first contribution in https://github.com/bavix/laravel-wallet/pull/1024
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/11.3.0...11.4.0
+
 ## 11.3.0 - 2024-09-11
 
 ### What's Changed
