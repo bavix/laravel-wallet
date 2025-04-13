@@ -15,8 +15,6 @@ interface StateServiceInterface
      * an associative array where the keys are the UUIDs of the wallets and the values are the new state of the wallets.
      *
      * The state of each wallet is validated against the state of the wallet at the beginning of the transaction.
-     * If any of the wallets have been modified since the transaction began, a `WalletStateConsistencyException`
-     * exception will be thrown.
      *
      * @param non-empty-string[] $uuids The UUIDs of the wallets to be forked.
      * @param callable(): array<non-empty-string, non-empty-string> $value A callback function that performs a series of operations on the
