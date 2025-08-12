@@ -88,7 +88,7 @@ jobs:
     steps:
       - name: Checkout
         id: git-checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup PHP
         id: php-install
