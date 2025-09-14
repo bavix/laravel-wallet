@@ -11,8 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 interface TransactionDtoAssemblerInterface
 {
     /**
-     * Create TransactionDto
-     *
      * @param null|array<mixed> $meta
      */
     public function create(
