@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\External\Api;
 
+use Bavix\Wallet\Enums\TransactionType;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Services\CastServiceInterface;
 use Bavix\Wallet\Services\FormatterServiceInterface;
@@ -13,11 +14,10 @@ final readonly class TransactionFloatQuery implements TransactionQueryInterface
     private string $amount;
 
     /**
-     * @param self::TYPE_DEPOSIT|self::TYPE_WITHDRAW $type
      * @param array<mixed>|null $meta
      */
     private function __construct(
-        private string $type,
+        private TransactionType $type,
         private Wallet $wallet,
         float|int|string $amount,
         private ?array $meta,
@@ -40,7 +40,7 @@ final readonly class TransactionFloatQuery implements TransactionQueryInterface
         bool $confirmed = true,
         ?string $uuid = null
     ): self {
-        return new self(self::TYPE_DEPOSIT, $wallet, $amount, $meta, $confirmed, $uuid);
+        return new self(TransactionType::Deposit, $wallet, $amount, $meta, $confirmed, $uuid);
     }
 
     /**
@@ -53,13 +53,10 @@ final readonly class TransactionFloatQuery implements TransactionQueryInterface
         bool $confirmed = true,
         ?string $uuid = null
     ): self {
-        return new self(self::TYPE_WITHDRAW, $wallet, $amount, $meta, $confirmed, $uuid);
+        return new self(TransactionType::Withdraw, $wallet, $amount, $meta, $confirmed, $uuid);
     }
 
-    /**
-     * @return self::TYPE_DEPOSIT|self::TYPE_WITHDRAW
-     */
-    public function getType(): string
+    public function getType(): TransactionType
     {
         return $this->type;
     }

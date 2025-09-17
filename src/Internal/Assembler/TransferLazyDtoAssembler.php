@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Assembler;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferLazyDto;
@@ -21,7 +22,7 @@ final class TransferLazyDtoAssembler implements TransferLazyDtoAssemblerInterfac
         string $fee,
         TransactionDtoInterface $withdrawDto,
         TransactionDtoInterface $depositDto,
-        string $status,
+        TransferStatus $status,
         ?string $uuid,
         ?array $extra,
     ): TransferLazyDtoInterface {

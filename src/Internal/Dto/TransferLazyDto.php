@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Dto;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Interfaces\Wallet;
 
 /** @immutable */
@@ -19,7 +20,7 @@ final readonly class TransferLazyDto implements TransferLazyDtoInterface
         private string $fee,
         private TransactionDtoInterface $withdrawDto,
         private TransactionDtoInterface $depositDto,
-        private string $status,
+        private TransferStatus $status,
         private ?string $uuid,
         private ?array $extra,
     ) {
@@ -61,7 +62,7 @@ final readonly class TransferLazyDto implements TransferLazyDtoInterface
         return $this->depositDto;
     }
 
-    public function getStatus(): string
+    public function getStatus(): TransferStatus
     {
         return $this->status;
     }

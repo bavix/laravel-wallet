@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Traits;
 
 use function app;
+use Bavix\Wallet\Enums\TransactionType;
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Interfaces\MerchantFeeDeductible;
@@ -14,7 +16,6 @@ use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
-use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\AtmServiceInterface;
 use Bavix\Wallet\Services\AtomicServiceInterface;
@@ -140,13 +141,13 @@ trait HasGift
             // Create withdraw and deposit transactions
             $withdraw = $transactionService->makeOne(
                 $this,
-                Transaction::TYPE_WITHDRAW,
+                TransactionType::Withdraw,
                 $withdrawAmount,
                 $product->getMetaProduct()
             );
             $deposit = $transactionService->makeOne(
                 $product,
-                Transaction::TYPE_DEPOSIT,
+                TransactionType::Deposit,
                 $merchantDepositAmount,
                 $product->getMetaProduct()
             );
@@ -155,7 +156,7 @@ trait HasGift
             $transfer = $transferDtoAssembler->create(
                 $deposit->getKey(),
                 $withdraw->getKey(),
-                Transfer::STATUS_GIFT,
+                TransferStatus::Gift,
                 $castService->getWallet($to),
                 $castService->getWallet($product),
                 $discount,

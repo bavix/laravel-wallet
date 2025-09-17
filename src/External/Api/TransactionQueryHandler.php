@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\External\Api;
 
+use Bavix\Wallet\Enums\TransactionType;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Services\AssistantServiceInterface;
 use Bavix\Wallet\Services\AtomicServiceInterface;
@@ -31,14 +32,14 @@ final readonly class TransactionQueryHandler implements TransactionQueryHandlerI
 
         $values = array_map(
             fn (TransactionQueryInterface $query) => match ($query->getType()) {
-                TransactionQueryInterface::TYPE_DEPOSIT => $this->prepareService->deposit(
+                TransactionType::Deposit => $this->prepareService->deposit(
                     $query->getWallet(),
                     $query->getAmount(),
                     $query->getMeta(),
                     $query->isConfirmed(),
                     $query->getUuid(),
                 ),
-                TransactionQueryInterface::TYPE_WITHDRAW => $this->prepareService->withdraw(
+                TransactionType::Withdraw => $this->prepareService->withdraw(
                     $query->getWallet(),
                     $query->getAmount(),
                     $query->getMeta(),

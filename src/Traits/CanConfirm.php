@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Enums\TransactionType;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\ConfirmedInvalid;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
@@ -60,7 +61,7 @@ trait CanConfirm
             }
 
             // Check if the transaction type is withdrawal.
-            if ($transaction->type === Transaction::TYPE_WITHDRAW) {
+            if ($transaction->type === TransactionType::Withdraw) {
                 // Check if the wallet has enough money to cover the withdrawal amount.
                 app(ConsistencyServiceInterface::class)->checkPotential(
                     // Get the wallet.
