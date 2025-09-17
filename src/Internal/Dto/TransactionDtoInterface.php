@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Dto;
 
+use Bavix\Wallet\Enums\TransactionType;
 use DateTimeImmutable;
 
 interface TransactionDtoInterface
@@ -35,7 +36,7 @@ interface TransactionDtoInterface
     /**
      * Get the type of the transaction.
      */
-    public function getType(): string;
+    public function getType(): TransactionType;
 
     /**
      * Get the amount of the transaction.

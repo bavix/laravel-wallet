@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Assembler;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,7 +15,7 @@ interface TransferDtoAssemblerInterface
      *
      * @param int $depositId ID of deposit transaction
      * @param int $withdrawId ID of withdraw transaction
-     * @param string $status Status of transfer
+     * @param TransferStatus $status Status of transfer
      * @param Model $fromModel From wallet model
      * @param Model $toModel To wallet model
      * @param int $discount Discount of transfer
@@ -25,7 +26,7 @@ interface TransferDtoAssemblerInterface
     public function create(
         int $depositId,
         int $withdrawId,
-        string $status,
+        TransferStatus $status,
         Model $fromModel,
         Model $toModel,
         int $discount,

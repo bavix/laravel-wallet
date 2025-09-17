@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Events;
 
+use Bavix\Wallet\Enums\TransactionType;
 use DateTimeImmutable;
 
 interface TransactionCreatedEventInterface extends EventInterface
@@ -18,9 +19,9 @@ interface TransactionCreatedEventInterface extends EventInterface
     /**
      * Returns the type of the transaction.
      *
-     * @return string The transaction type.
+     * @return TransactionType The transaction type.
      */
-    public function getType(): string;
+    public function getType(): TransactionType;
 
     /**
      * Returns the ID of the wallet associated with the transaction.
