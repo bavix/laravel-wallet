@@ -15,7 +15,7 @@ final class TransactionDtoTransformer implements TransactionDtoTransformerInterf
             'payable_type' => $dto->getPayableType(),
             'payable_id' => $dto->getPayableId(),
             'wallet_id' => $dto->getWalletId(),
-            'type' => $dto->getType(),
+            'type' => $dto->getType()->value,
             'amount' => $dto->getAmount(),
             'confirmed' => $dto->isConfirmed(),
             'meta' => $dto->getMeta(),

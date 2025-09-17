@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Events;
 
+use Bavix\Wallet\Enums\TransactionType;
 use DateTimeImmutable;
 
 final readonly class TransactionCreatedEvent implements TransactionCreatedEventInterface
 {
     public function __construct(
         private int $id,
-        private string $type,
+        private TransactionType $type,
         private int $walletId,
         private DateTimeImmutable $createdAt,
     ) {
@@ -21,7 +22,7 @@ final readonly class TransactionCreatedEvent implements TransactionCreatedEventI
         return $this->id;
     }
 
-    public function getType(): string
+    public function getType(): TransactionType
     {
         return $this->type;
     }

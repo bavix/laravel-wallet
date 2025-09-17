@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Models;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Internal\Observers\TransferObserver;
 use function config;
 use DateTimeInterface;
@@ -14,8 +15,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Class Transfer.
  *
- * @property string $status
- * @property string $status_last
+ * @property TransferStatus $status
+ * @property ?TransferStatus $status_last
  * @property non-empty-string $discount
  * @property int $deposit_id
  * @property int $withdraw_id
@@ -37,16 +38,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Transfer extends Model
 {
     use SoftDeletes;
-
-    final public const string STATUS_EXCHANGE = 'exchange';
-
-    final public const string STATUS_TRANSFER = 'transfer';
-
-    final public const string STATUS_PAID = 'paid';
-
-    final public const string STATUS_REFUND = 'refund';
-
-    final public const string STATUS_GIFT = 'gift';
 
     /**
      * @var array<int, string>
@@ -75,6 +66,8 @@ class Transfer extends Model
             'deposit_id' => 'int',
             'withdraw_id' => 'int',
             'extra' => 'json',
+            'status' => TransferStatus::class,
+            'status_last' => TransferStatus::class,
         ];
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Repository;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
 use Bavix\Wallet\Internal\Query\TransferQueryInterface;
 use Bavix\Wallet\Models\Transfer;
@@ -41,9 +42,9 @@ interface TransferRepositoryInterface
      * in the provided array. The method returns the number of transfers
      * that were updated.
      *
-     * @param string $status The new status to set for the specified transfers.
+     * @param TransferStatus $status The new status to set for the specified transfers.
      * @param non-empty-array<int> $ids A non-empty array of transfer IDs to update.
      * @return int The number of transfers whose status was updated.
      */
-    public function updateStatusByIds(string $status, array $ids): int;
+    public function updateStatusByIds(TransferStatus $status, array $ids): int;
 }
