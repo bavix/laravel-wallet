@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\External\Contracts\ExtraDtoInterface;
@@ -196,7 +197,7 @@ trait CanExchange
                 $fee,
                 $withdrawDto,
                 $depositDto,
-                Transfer::STATUS_EXCHANGE,
+                TransferStatus::Exchange,
                 $extraDto->getUuid(),
                 $extraDto->getExtra()
             );
