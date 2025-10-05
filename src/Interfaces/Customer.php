@@ -370,16 +370,4 @@ interface Customer extends Wallet
      * @throws ExceptionInterface If an unexpected error occurs.
      */
     public function forceRefundGiftCart(CartInterface $cart): bool;
-
-    /**
-     * Checks acquired product your wallet.
-     *
-     * Deprecated: This method is slow and will be removed in the future.
-     * Instead, use the `PurchaseServiceInterface` interface.
-     * With it, you can check the availability of all products with one request,
-     * there will be no N-queries in the database.
-     *
-     * @see PurchaseServiceInterface
-     */
-    public function paid(ProductInterface $product, bool $gifts = false): ?Transfer;
 }
