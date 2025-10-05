@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Interfaces\CartInterface;
-use Bavix\Wallet\Interfaces\ProductInterface;
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
@@ -16,7 +16,6 @@ use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\AssistantServiceInterface;
 use Bavix\Wallet\Services\AtomicServiceInterface;
 use Bavix\Wallet\Services\BasketServiceInterface;
@@ -113,7 +112,7 @@ trait CartPay
                         $castService->getWallet(
                             $item->getReceiving() ?? $product
                         ), // The wallet to receive the payment.
-                        Transfer::STATUS_PAID, // The status of the transfer.
+                        TransferStatus::Paid, // The status of the transfer.
                         0, // The amount of the transfer.
                         $assistantService->getMeta($basketDto, $product) // The metadata of the transfer.
                     );
@@ -236,7 +235,7 @@ trait CartPay
                         $castService->getWallet(
                             $item->getReceiving() ?? $product
                         ), // The wallet to receive the payment.
-                        Transfer::STATUS_PAID, // The status of the transfer.
+                        TransferStatus::Paid, // The status of the transfer.
                         $pricePerItem, // The amount of the transfer.
                         $assistantService->getMeta($basketDto, $product) // The metadata of the transfer.
                     );
@@ -382,7 +381,7 @@ trait CartPay
                         $castService->getWallet($itemDto->getReceiving() ?? $product),
                         $transfers[$index]->withdraw->wallet,
                         $transfers[$index]->withdraw->wallet,
-                        Transfer::STATUS_TRANSFER,
+                        TransferStatus::Transfer,
                         $transfers[$index]->deposit->amount,
                         $assistantService->getMeta($basketDto, $product)
                     );
@@ -409,7 +408,7 @@ trait CartPay
 
             // Update transfer status to refund.
             return $transferService
-                ->updateStatusByIds(Transfer::STATUS_REFUND, $transferIds);
+                ->updateStatusByIds(TransferStatus::Refund, $transferIds);
         });
     }
 
@@ -522,38 +521,5 @@ trait CartPay
         // Call the refundGiftCart method with the force flag set to true.
         // This allows the refund to be performed even if the balance is empty.
         return $this->refundGiftCart($cart, true);
-    }
-
-    /**
-     * Checks if the given product has been acquired by the customer's wallet.
-     *
-     * This method is a convenience method that wraps a call to the PurchaseServiceInterface
-     * to check if the given product has been acquired by the customer's wallet.
-     *
-     * @param ProductInterface $product The product to check.
-     * @param bool $gifts Whether to include gifts in the search.
-     * @return Transfer|null The associated Transfer object, or null if none exists.
-     *
-     * @deprecated The method is slow and will be removed in the future.
-     * @see PurchaseServiceInterface
-     */
-    public function paid(ProductInterface $product, bool $gifts = false): ?Transfer
-    {
-        // Retrieve the cart with the given product.
-        // The withItem method adds the given product to the cart.
-        $cart = app(Cart::class)->withItem($product);
-
-        // Use the PurchaseServiceInterface to find the associated Transfer object.
-        // The PurchaseServiceInterface is responsible for finding the transfers associated
-        // with a given basket.
-        // The already method is used to find the transfers that are already done.
-        // The basket is obtained from the cart.
-        // The $gifts parameter is used to specify whether to include gifts in the search.
-        $purchases = app(PurchaseServiceInterface::class)
-            ->already($this, $cart->getBasketDto(), $gifts);
-
-        // Return the first Transfer object in the array of purchases, or null if the array is empty.
-        // This is a convenience method and will be removed in the future.
-        return current($purchases) ?: null;
     }
 }
