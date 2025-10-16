@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: [8.2, 8.3, 8.4]
+        php-versions: [8.3, 8.4]
         databases: [testing, pgsql, mysql, mariadb]
         caches: [array, redis, memcached, database]
         locks: [redis, memcached]
@@ -72,7 +72,7 @@ jobs:
           - 3306:3306
 
       mariadb:
-        image: mariadb:10.10-alpine
+        image: mariadb:10.10 # https://github.com/laravel/framework/pull/48455
         env:
           MYSQL_ROOT_PASSWORD: wallet
           MYSQL_DATABASE: wallet
@@ -89,6 +89,21 @@ jobs:
         id: git-checkout
         uses: actions/checkout@v4
 
+      - name: Setup cache environment
+        id: extcache
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, pgsql, mysql, sqlite, redis, memcached, bcmath
+          key: ${{ runner.os }}-php-extensions-${{ matrix.php-versions }}-${{ hashFiles('**/composer.lock') }}
+
+      - name: Cache extensions
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.extcache.outputs.dir }}
+          key: ${{ steps.extcache.outputs.key }}
+          restore-keys: ${{ steps.extcache.outputs.key }}
+
       - name: Setup PHP
         id: php-install
         uses: shivammathur/setup-php@v2
@@ -103,6 +118,10 @@ jobs:
         id: composer-validate
         run: composer validate --strict
 
+      - name: Get Composer cache directory
+        id: composer-cache-dir
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
       - name: Cache Composer packages
         id: composer-cache
         uses: actions/cache@v4
@@ -111,6 +130,14 @@ jobs:
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
+
+      - name: Cache Composer cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-composer-cache-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-cache-
 
       - name: Install dependencies
         id: composer-dependencies
