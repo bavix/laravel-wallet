@@ -149,7 +149,7 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          file: build/clover.xml
+          file: build/coverage.xml
           format: cobertura
           flag-name: run-${{ matrix.php-versions }}-${{ matrix.databases }}-${{ matrix.caches }}-${{ matrix.locks }}
           parallel: true

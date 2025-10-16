@@ -10,6 +10,7 @@
       <clover outputFile="./build/clover.xml"/>
       <html outputDirectory="./build/html/"/>
       <xml outputDirectory="./build/"/>
+      <cobertura outputFile="./build/coverage.xml"/>
     </report>
   </coverage>
   <testsuites>
