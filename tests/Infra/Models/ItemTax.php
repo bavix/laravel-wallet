@@ -62,7 +62,7 @@ final class ItemTax extends Model implements ProductLimitedInterface, Taxable
      *
      * Minimum 0; Maximum 100 Example: return 7.5; // 7.5%
      */
-    public function getFeePercent(): float|int
+    public function getFeePercent(): float
     {
         return 7.5;
     }

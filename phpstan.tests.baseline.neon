@@ -7,8 +7,20 @@ parameters:
 			path: tests/Infra/Models/Item.php
 
 		-
+			message: '#^Method Bavix\\Wallet\\Test\\Infra\\Models\\Item\:\:boughtGoods\(\) should return Illuminate\\Database\\Eloquent\\Relations\\HasMany\<Bavix\\Wallet\\Models\\Transfer\> but returns Illuminate\\Database\\Eloquent\\Relations\\HasMany\<Illuminate\\Database\\Eloquent\\Model, Bavix\\Wallet\\Models\\Wallet\>\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Infra/Models/Item.php
+
+		-
 			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\Item\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
 			identifier: property.phpDocType
+			count: 1
+			path: tests/Infra/Models/Item.php
+
+		-
+			message: '#^Parameter \#1 \$related of method Illuminate\\Database\\Eloquent\\Model\:\:hasMany\(\) expects class\-string\<Illuminate\\Database\\Eloquent\\Model\>, class\-string given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Infra/Models/Item.php
 
@@ -31,12 +43,6 @@ parameters:
 			path: tests/Infra/Models/ItemMaxTax.php
 
 		-
-			message: '#^Method Bavix\\Wallet\\Test\\Infra\\Models\\ItemMeta\:\:getMetaProduct\(\) never returns null so it can be removed from the return type\.$#'
-			identifier: return.unusedType
-			count: 1
-			path: tests/Infra/Models/ItemMeta.php
-
-		-
 			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\ItemMeta\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
 			identifier: property.phpDocType
 			count: 1
@@ -53,12 +59,6 @@ parameters:
 			identifier: property.phpDocType
 			count: 1
 			path: tests/Infra/Models/ItemMultiPrice.php
-
-		-
-			message: '#^Method Bavix\\Wallet\\Test\\Infra\\Models\\ItemTax\:\:getFeePercent\(\) never returns int so it can be removed from the return type\.$#'
-			identifier: return.unusedType
-			count: 1
-			path: tests/Infra/Models/ItemTax.php
 
 		-
 			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\ItemTax\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
@@ -175,10 +175,22 @@ parameters:
 			path: tests/Units/Domain/BalanceTest.php
 
 		-
-			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertEmpty\(\) with non\-empty\-array\<int\|string, Bavix\\Wallet\\Internal\\Dto\\ItemDtoInterface\> will always evaluate to false\.$#'
-			identifier: staticMethod.impossibleType
+			message: '#^Constructor of Bavix\\Wallet\\External\\Dto\\Extra is invoked with named argument for parameter \$deposit\.$#'
+			identifier: ergebnis.noNamedArgument
 			count: 1
-			path: tests/Units/Domain/BasketTest.php
+			path: tests/Units/Domain/BlockTest.php
+
+		-
+			message: '#^Constructor of Bavix\\Wallet\\External\\Dto\\Extra is invoked with named argument for parameter \$withdraw\.$#'
+			identifier: ergebnis.noNamedArgument
+			count: 1
+			path: tests/Units/Domain/BlockTest.php
+
+		-
+			message: '#^Constructor of Bavix\\Wallet\\External\\Dto\\Option is invoked with named argument for parameter \$confirmed\.$#'
+			identifier: ergebnis.noNamedArgument
+			count: 1
+			path: tests/Units/Domain/BlockTest.php
 
 		-
 			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
@@ -205,6 +217,18 @@ parameters:
 			path: tests/Units/Domain/CartReceivingTest.php
 
 		-
+			message: '#^Method Bavix\\Wallet\\Objects\\Cart\:\:withItem\(\) is invoked with named argument for parameter \$pricePerItem\.$#'
+			identifier: ergebnis.noNamedArgument
+			count: 1
+			path: tests/Units/Domain/CartReceivingTest.php
+
+		-
+			message: '#^Method Bavix\\Wallet\\Objects\\Cart\:\:withItem\(\) is invoked with named argument for parameter \$receiving\.$#'
+			identifier: ergebnis.noNamedArgument
+			count: 2
+			path: tests/Units/Domain/CartReceivingTest.php
+
+		-
 			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transaction will always evaluate to true\.$#'
 			identifier: staticMethod.alreadyNarrowedType
 			count: 5
@@ -214,6 +238,12 @@ parameters:
 			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNull\(\) with string will always evaluate to false\.$#'
 			identifier: staticMethod.impossibleType
 			count: 1
+			path: tests/Units/Domain/CartTest.php
+
+		-
+			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:compare\(\) expects float\|int\|non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 2
 			path: tests/Units/Domain/CartTest.php
 
 		-
@@ -265,12 +295,6 @@ parameters:
 			path: tests/Units/Domain/DiscountTest.php
 
 		-
-			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotEmpty\(\) with Illuminate\\Support\\Collection&iterable\<Bavix\\Wallet\\Models\\Wallet\> will always evaluate to true\.$#'
-			identifier: staticMethod.alreadyNarrowedType
-			count: 1
-			path: tests/Units/Domain/EagerLoadingTest.php
-
-		-
 			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
 			identifier: offsetAccess.notFound
 			count: 1
@@ -289,9 +313,57 @@ parameters:
 			path: tests/Units/Domain/EventTest.php
 
 		-
+			message: '#^Constructor of Bavix\\Wallet\\External\\Dto\\Extra is invoked with named argument for parameter \$deposit\.$#'
+			identifier: ergebnis.noNamedArgument
+			count: 1
+			path: tests/Units/Domain/ExchangeTest.php
+
+		-
+			message: '#^Constructor of Bavix\\Wallet\\External\\Dto\\Extra is invoked with named argument for parameter \$withdraw\.$#'
+			identifier: ergebnis.noNamedArgument
+			count: 1
+			path: tests/Units/Domain/ExchangeTest.php
+
+		-
 			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transfer will always evaluate to true\.$#'
 			identifier: staticMethod.alreadyNarrowedType
 			count: 4
+			path: tests/Units/Domain/ExtraTest.php
+
+		-
+			message: '#^Constructor of Bavix\\Wallet\\External\\Dto\\Extra is invoked with named argument for parameter \$deposit\.$#'
+			identifier: ergebnis.noNamedArgument
+			count: 7
+			path: tests/Units/Domain/ExtraTest.php
+
+		-
+			message: '#^Constructor of Bavix\\Wallet\\External\\Dto\\Extra is invoked with named argument for parameter \$extra\.$#'
+			identifier: ergebnis.noNamedArgument
+			count: 1
+			path: tests/Units/Domain/ExtraTest.php
+
+		-
+			message: '#^Constructor of Bavix\\Wallet\\External\\Dto\\Extra is invoked with named argument for parameter \$uuid\.$#'
+			identifier: ergebnis.noNamedArgument
+			count: 2
+			path: tests/Units/Domain/ExtraTest.php
+
+		-
+			message: '#^Constructor of Bavix\\Wallet\\External\\Dto\\Extra is invoked with named argument for parameter \$withdraw\.$#'
+			identifier: ergebnis.noNamedArgument
+			count: 7
+			path: tests/Units/Domain/ExtraTest.php
+
+		-
+			message: '#^Constructor of Bavix\\Wallet\\External\\Dto\\Option is invoked with named argument for parameter \$confirmed\.$#'
+			identifier: ergebnis.noNamedArgument
+			count: 1
+			path: tests/Units/Domain/ExtraTest.php
+
+		-
+			message: '#^Constructor of Bavix\\Wallet\\External\\Dto\\Option is invoked with named argument for parameter \$uuid\.$#'
+			identifier: ergebnis.noNamedArgument
+			count: 2
 			path: tests/Units/Domain/ExtraTest.php
 
 		-
@@ -451,6 +523,12 @@ parameters:
 			path: tests/Units/Domain/ProductTest.php
 
 		-
+			message: '#^Method Bavix\\Wallet\\Objects\\Cart\:\:withItem\(\) is invoked with named argument for parameter \$pricePerItem\.$#'
+			identifier: ergebnis.noNamedArgument
+			count: 1
+			path: tests/Units/Domain/ProductTest.php
+
+		-
 			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Item\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Item\>\.$#'
 			identifier: offsetAccess.notFound
 			count: 1
@@ -471,6 +549,12 @@ parameters:
 		-
 			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transfer will always evaluate to true\.$#'
 			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: tests/Units/Domain/SilentlyDiscardingTest.php
+
+		-
+			message: '#^Method Bavix\\Wallet\\Test\\Units\\Domain\\SilentlyDiscardingTest\:\:tearDown\(\) does not invoke parent\:\:tearDown\(\) after all other statements\.$#'
+			identifier: ergebnis.invokeParentHookMethod
 			count: 1
 			path: tests/Units/Domain/SilentlyDiscardingTest.php
 
@@ -535,6 +619,12 @@ parameters:
 			path: tests/Units/Domain/TransactionAmountFloatAccessorTest.php
 
 		-
+			message: '#^Method Illuminate\\Database\\Eloquent\\Builder\:\:paginate\(\) is invoked with named argument for parameter \$page\.$#'
+			identifier: ergebnis.noNamedArgument
+			count: 6
+			path: tests/Units/Domain/TransactionsFilterTest.php
+
+		-
 			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
 			identifier: offsetAccess.notFound
 			count: 1
@@ -595,12 +685,6 @@ parameters:
 			path: tests/Units/Domain/WalletTest.php
 
 		-
-			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertTrue\(\) with false will always evaluate to false\.$#'
-			identifier: method.impossibleType
-			count: 1
-			path: tests/Units/Service/AtomicServiceTest.php
-
-		-
 			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
 			identifier: offsetAccess.notFound
 			count: 1
@@ -609,6 +693,12 @@ parameters:
 		-
 			message: '#^Offset 1 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
 			identifier: offsetAccess.notFound
+			count: 1
+			path: tests/Units/Service/AtomicServiceTest.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
 			count: 1
 			path: tests/Units/Service/AtomicServiceTest.php
 

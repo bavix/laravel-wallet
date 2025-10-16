@@ -47,12 +47,12 @@ final readonly class TransferDto implements TransferDtoInterface
         return $this->status;
     }
 
-    public function getFromId(): int|string
+    public function getFromId(): int
     {
         return $this->fromId;
     }
 
-    public function getToId(): int|string
+    public function getToId(): int
     {
         return $this->toId;
     }

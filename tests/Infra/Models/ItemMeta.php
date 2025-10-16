@@ -56,7 +56,7 @@ final class ItemMeta extends Model implements ProductLimitedInterface
     /**
      * @return array{name: string, price: int}
      */
-    public function getMetaProduct(): ?array
+    public function getMetaProduct(): array
     {
         return [
             'name' => $this->name,

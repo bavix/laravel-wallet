@@ -109,18 +109,6 @@ parameters:
 			path: src/Internal/Dto/TransferDto.php
 
 		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Dto\\TransferDto\:\:getFromId\(\) never returns string so it can be removed from the return type\.$#'
-			identifier: return.unusedType
-			count: 1
-			path: src/Internal/Dto/TransferDto.php
-
-		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Dto\\TransferDto\:\:getToId\(\) never returns string so it can be removed from the return type\.$#'
-			identifier: return.unusedType
-			count: 1
-			path: src/Internal/Dto/TransferDto.php
-
-		-
 			message: '#^Method Bavix\\Wallet\\Internal\\Dto\\TransferDto\:\:getUuid\(\) should return non\-empty\-string but returns string\.$#'
 			identifier: return.type
 			count: 1
@@ -169,7 +157,7 @@ parameters:
 			path: src/Internal/Repository/WalletRepository.php
 
 		-
-			message: '#^Parameter \#1 \$name of method Illuminate\\Database\\ConnectionResolverInterface\:\:connection\(\) expects string\|null, mixed given\.$#'
+			message: '#^Parameter \#1 \$name of method Illuminate\\Database\\ConnectionResolverInterface\:\:connection\(\) expects string\|UnitEnum\|null, mixed given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Internal/Service/ConnectionService.php
@@ -179,66 +167,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Internal/Service/LockService.php
-
-		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:abs\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Service/MathService.php
-
-		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:add\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Service/MathService.php
-
-		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:ceil\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Service/MathService.php
-
-		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:div\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Service/MathService.php
-
-		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:floor\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Service/MathService.php
-
-		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:mul\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Service/MathService.php
-
-		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:negative\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Service/MathService.php
-
-		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:pow\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Service/MathService.php
-
-		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:round\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Service/MathService.php
-
-		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:sub\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Service/MathService.php
 
 		-
 			message: '#^Binary operation "\." between ''wallet_f\:\:'' and mixed results in an error\.$#'
@@ -319,6 +247,12 @@ parameters:
 			path: src/Models/Transaction.php
 
 		-
+			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:mul\(\) expects float\|int\|non\-empty\-string, float\|int\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Models/Transaction.php
+
+		-
 			message: '#^Parameter \#1 \$related of method Illuminate\\Database\\Eloquent\\Model\:\:belongsTo\(\) expects class\-string\<Illuminate\\Database\\Eloquent\\Model\>, mixed given\.$#'
 			identifier: argument.type
 			count: 1
@@ -385,15 +319,15 @@ parameters:
 			path: src/Models/Transfer.php
 
 		-
-			message: '#^Call to function assert\(\) with true and ''Balance should not…'' will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
+			message: '#^Binary operation "\." between literal\-string&non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
 			count: 1
 			path: src/Models/Wallet.php
 
 		-
-			message: '#^Cannot call method getDynamicDefaultSlug\(\) on class\-string\|object\.$#'
-			identifier: method.nonObject
-			count: 2
+			message: '#^Call to function assert\(\) with true and ''Balance should not…'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
 			path: src/Models/Wallet.php
 
 		-
@@ -427,6 +361,12 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
+			message: '#^Method Bavix\\Wallet\\Models\\Wallet\:\:getBalanceFloatAttribute\(\) should return non\-empty\-string but returns string\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Models/Wallet.php
+
+		-
 			message: '#^Method Bavix\\Wallet\\Models\\Wallet\:\:getCurrencyAttribute\(\) should return string but returns mixed\.$#'
 			identifier: return.type
 			count: 1
@@ -436,6 +376,36 @@ parameters:
 			message: '#^Method Bavix\\Wallet\\Models\\Wallet\:\:holder\(\) should return Illuminate\\Database\\Eloquent\\Relations\\MorphTo\<Illuminate\\Database\\Eloquent\\Model, Bavix\\Wallet\\Models\\Wallet\> but returns Illuminate\\Database\\Eloquent\\Relations\\MorphTo\<Illuminate\\Database\\Eloquent\\Model, \$this\(Bavix\\Wallet\\Models\\Wallet\)\>\.$#'
 			identifier: return.type
 			count: 1
+			path: src/Models/Wallet.php
+
+		-
+			message: '#^Method Bavix\\Wallet\\Models\\Wallet\:\:receivedTransfers\(\) should return Illuminate\\Database\\Eloquent\\Relations\\HasMany\<Bavix\\Wallet\\Models\\Transfer\> but returns Illuminate\\Database\\Eloquent\\Relations\\HasMany\<Illuminate\\Database\\Eloquent\\Model, Bavix\\Wallet\\Models\\Wallet\>\.$#'
+			identifier: return.type
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: '#^Method Bavix\\Wallet\\Models\\Wallet\:\:transactions\(\) should return Illuminate\\Database\\Eloquent\\Relations\\MorphMany\<Bavix\\Wallet\\Models\\Transaction\> but returns Illuminate\\Database\\Eloquent\\Relations\\MorphMany\<Illuminate\\Database\\Eloquent\\Model, Illuminate\\Database\\Eloquent\\Model\>\.$#'
+			identifier: return.type
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: '#^Method Bavix\\Wallet\\Models\\Wallet\:\:transfers\(\) should return Illuminate\\Database\\Eloquent\\Relations\\HasMany\<Bavix\\Wallet\\Models\\Transfer\> but returns Illuminate\\Database\\Eloquent\\Relations\\HasMany\<Illuminate\\Database\\Eloquent\\Model, Bavix\\Wallet\\Models\\Wallet\>\.$#'
+			identifier: return.type
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: '#^Method Bavix\\Wallet\\Models\\Wallet\:\:wallet\(\) should return Illuminate\\Database\\Eloquent\\Relations\\MorphOne\<Bavix\\Wallet\\Models\\Wallet\> but returns Illuminate\\Database\\Eloquent\\Relations\\MorphOne\<Bavix\\Wallet\\Models\\Wallet, Illuminate\\Database\\Eloquent\\Model\>\.$#'
+			identifier: return.type
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: '#^Method Bavix\\Wallet\\Models\\Wallet\:\:walletTransactions\(\) should return Illuminate\\Database\\Eloquent\\Relations\\HasMany\<Bavix\\Wallet\\Models\\Transaction\> but returns Illuminate\\Database\\Eloquent\\Relations\\HasMany\<Illuminate\\Database\\Eloquent\\Model, Bavix\\Wallet\\Models\\Wallet\>\.$#'
+			identifier: return.type
+			count: 2
 			path: src/Models/Wallet.php
 
 		-
@@ -457,6 +427,42 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
+			message: '#^Parameter \#1 \$attributes of method Illuminate\\Database\\Eloquent\\Model\:\:forceFill\(\) expects array\<string, mixed\>, array\<mixed, mixed\> given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
+			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:add\(\) expects float\|int\|non\-empty\-string, int\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Models/Wallet.php
+
+		-
+			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:mul\(\) expects float\|int\|non\-empty\-string, float\|int\|string given\.$#'
+			identifier: argument.type
+			count: 7
+			path: src/Models/Wallet.php
+
+		-
+			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:mul\(\) expects float\|int\|non\-empty\-string, int\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Models/Wallet.php
+
+		-
+			message: '#^Parameter \#1 \$related of method Illuminate\\Database\\Eloquent\\Model\:\:hasMany\(\) expects class\-string\<Illuminate\\Database\\Eloquent\\Model\>, mixed given\.$#'
+			identifier: argument.type
+			count: 6
+			path: src/Models/Wallet.php
+
+		-
+			message: '#^Parameter \#1 \$related of method Illuminate\\Database\\Eloquent\\Model\:\:morphMany\(\) expects class\-string\<Illuminate\\Database\\Eloquent\\Model\>, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Models/Wallet.php
+
+		-
 			message: '#^Parameter \#1 \.\.\.\$arrays of function array_merge expects array, mixed given\.$#'
 			identifier: argument.type
 			count: 2
@@ -469,6 +475,30 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
+			message: '#^Parameter \#2 \$second of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:add\(\) expects float\|int\|non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 5
+			path: src/Models/Wallet.php
+
+		-
+			message: '#^Parameter \#2 \$second of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:compare\(\) expects float\|int\|non\-empty\-string, float\|int\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Models/Wallet.php
+
+		-
+			message: '#^Parameter \#2 \$second of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:mul\(\) expects float\|int\|non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Models/Wallet.php
+
+		-
+			message: '#^Parameter \#2 \$value of method Bavix\\Wallet\\Services\\RegulatorServiceInterface\:\:sync\(\) expects float\|int\|non\-empty\-string, float\|int\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Models/Wallet.php
+
+		-
 			message: '#^Property Illuminate\\Database\\Eloquent\\Model\:\:\$table \(string\|null\) does not accept mixed\.$#'
 			identifier: assign.propertyType
 			count: 1
@@ -478,6 +508,18 @@ parameters:
 			message: '#^Strict comparison using \!\=\= between float\|int\|numeric\-string and '''' will always evaluate to true\.$#'
 			identifier: notIdentical.alwaysTrue
 			count: 1
+			path: src/Models/Wallet.php
+
+		-
+			message: '#^Unable to resolve the template type TRelatedModel in call to method Illuminate\\Database\\Eloquent\\Model\:\:hasMany\(\)$#'
+			identifier: argument.templateType
+			count: 6
+			path: src/Models/Wallet.php
+
+		-
+			message: '#^Unable to resolve the template type TRelatedModel in call to method Illuminate\\Database\\Eloquent\\Model\:\:morphMany\(\)$#'
+			identifier: argument.templateType
+			count: 2
 			path: src/Models/Wallet.php
 
 		-
@@ -543,11 +585,17 @@ parameters:
 		-
 			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:compare\(\) expects float\|int\|non\-empty\-string, float\|int\|string given\.$#'
 			identifier: argument.type
-			count: 2
+			count: 4
 			path: src/Services/ConsistencyService.php
 
 		-
 			message: '#^Parameter \#2 \$second of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:add\(\) expects float\|int\|non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Services/ConsistencyService.php
+
+		-
+			message: '#^Parameter \#2 \$second of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:compare\(\) expects float\|int\|non\-empty\-string, float\|int\|string given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Services/ConsistencyService.php
