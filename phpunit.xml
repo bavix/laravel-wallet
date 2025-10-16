@@ -9,6 +9,7 @@
     <report>
       <clover outputFile="./build/clover.xml"/>
       <html outputDirectory="./build/html/"/>
+      <xml outputDirectory="./build/"/>
     </report>
   </coverage>
   <testsuites>

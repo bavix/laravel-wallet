@@ -124,7 +124,7 @@ jobs:
       - name: Prepare run test suite
         id: unit-prepare
         run: |
-          mkdir -p build/logs
+          mkdir -p build
 
       - name: Run test suite
         id: unit-run
