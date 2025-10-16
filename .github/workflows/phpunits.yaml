@@ -35,7 +35,7 @@ jobs:
           - 6379:6379
 
       memcached:
-        image: memcached:1.6-alpine
+        image: memcached:1.6.39-alpine3.22
         options: >-
           --health-cmd "timeout 3 bash -c 'cat < /dev/null > /dev/udp/127.0.0.1/11211'"
           --health-interval 5s
