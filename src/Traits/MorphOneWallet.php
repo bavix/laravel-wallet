@@ -31,7 +31,7 @@ trait MorphOneWallet
          * Get the related wallet model class name from the configuration.
          * If not found, use the default wallet model class name.
          *
-         * @var class-string<WalletModel> $related
+         * @var class-string<WalletModel>
          */
         $related = config('wallet.wallet.model', WalletModel::class);
 
@@ -79,7 +79,7 @@ trait MorphOneWallet
         /**
          * Retrieve the wallet model associated with the related model.
          *
-         * @var WalletModel|null $wallet
+         * @var WalletModel|null
          */
         $wallet = $this->getRelationValue('wallet');
 

@@ -6,7 +6,6 @@ use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector;
 use Rector\Set\ValueObject\SetList;
 use RectorLaravel\Rector\ClassMethod\MigrateToSimplifiedAttributeRector;
-use RectorLaravel\Rector\StaticCall\MinutesToSecondsInCacheRector;
 use RectorLaravel\Set\LaravelLevelSetList;
 
 return static function (RectorConfig $config): void {
@@ -19,7 +18,6 @@ return static function (RectorConfig $config): void {
     // remove it in next version
     $config->skip([
         MigrateToSimplifiedAttributeRector::class,
-        MinutesToSecondsInCacheRector::class,
         RemoveDeadZeroAndOneOperationRector::class,
     ]);
 

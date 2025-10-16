@@ -59,7 +59,7 @@ jobs:
           - 5432:5432
 
       mysql:
-        image: bitnami/mysql:8.0
+        image: bitnamilegacy/mysql:8.0
         env:
           MYSQL_AUTHENTICATION_PLUGIN: mysql_native_password
           MYSQL_ROOT_PASSWORD: wallet
