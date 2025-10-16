@@ -18,57 +18,56 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: [8.2, 8.3, 8.4]
+        php-versions: [8.3, 8.4]
         databases: [testing, pgsql, mysql, mariadb]
         caches: [array, redis, memcached, database]
         locks: [redis, memcached]
 
     services:
       redis:
-        image: redis
+        image: redis:7-alpine
         options: >-
           --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
         ports:
           - 6379:6379
 
       memcached:
-        image: memcached
+        image: memcached:1.6
         options: >-
           --health-cmd "timeout 5 bash -c 'cat < /dev/null > /dev/udp/127.0.0.1/11211'"
           --health-interval 10s
           --health-timeout 5s
-          --health-retries 10
+          --health-retries 3
         ports:
           - 11211:11211
 
       pgsql:
-        image: postgres
+        image: postgres:15-alpine
         env:
           POSTGRES_USER: root
           POSTGRES_PASSWORD: wallet
           POSTGRES_DB: wallet
         options: >-
           --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
         ports:
           - 5432:5432
 
       mysql:
-        image: bitnamilegacy/mysql:8.0
+        image: mysql:8.0
         env:
-          MYSQL_AUTHENTICATION_PLUGIN: mysql_native_password
           MYSQL_ROOT_PASSWORD: wallet
           MYSQL_DATABASE: wallet
         options: >-
           --health-cmd="mysqladmin ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
         ports:
           - 3306:3306
 
@@ -79,9 +78,9 @@ jobs:
           MYSQL_DATABASE: wallet
         options: >-
           --health-cmd="mysqladmin ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
         ports:
           - 3307:3306
 
@@ -89,6 +88,21 @@ jobs:
       - name: Checkout
         id: git-checkout
         uses: actions/checkout@v4
+
+      - name: Setup cache environment
+        id: extcache
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, pgsql, mysql, sqlite, redis, memcached, bcmath
+          key: ${{ runner.os }}-php-extensions-${{ matrix.php-versions }}-${{ hashFiles('**/composer.lock') }}
+
+      - name: Cache extensions
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.extcache.outputs.dir }}
+          key: ${{ steps.extcache.outputs.key }}
+          restore-keys: ${{ steps.extcache.outputs.key }}
 
       - name: Setup PHP
         id: php-install
@@ -104,6 +118,10 @@ jobs:
         id: composer-validate
         run: composer validate --strict
 
+      - name: Get Composer cache directory
+        id: composer-cache-dir
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
       - name: Cache Composer packages
         id: composer-cache
         uses: actions/cache@v4
@@ -112,6 +130,14 @@ jobs:
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
+
+      - name: Cache Composer cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-composer-cache-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-cache-
 
       - name: Install dependencies
         id: composer-dependencies
