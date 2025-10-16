@@ -124,7 +124,7 @@ jobs:
       - name: Prepare run test suite
         id: unit-prepare
         run: |
-          mkdir build
+          mkdir -p build/logs
 
       - name: Run test suite
         id: unit-run
@@ -149,7 +149,7 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          file: build/logs/clover.xml
+          file: build/clover.xml
           format: cobertura
           flag-name: run-${{ matrix.php-versions }}-${{ matrix.databases }}-${{ matrix.caches }}-${{ matrix.locks }}
           parallel: true

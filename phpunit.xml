@@ -7,7 +7,7 @@
          cacheDirectory=".phpunit.cache" backupStaticProperties="false">
   <coverage>
     <report>
-      <clover outputFile="./build/logs/clover.xml"/>
+      <clover outputFile="./build/clover.xml"/>
       <html outputDirectory="./build/html/"/>
     </report>
   </coverage>
