@@ -25,63 +25,62 @@ jobs:
 
     services:
       redis:
-        image: redis
+        image: redis:7-alpine
         options: >-
           --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
         ports:
           - 6379:6379
 
       memcached:
-        image: memcached
+        image: memcached:1.6-alpine
         options: >-
-          --health-cmd "timeout 5 bash -c 'cat < /dev/null > /dev/udp/127.0.0.1/11211'"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
+          --health-cmd "timeout 3 bash -c 'cat < /dev/null > /dev/udp/127.0.0.1/11211'"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
         ports:
           - 11211:11211
 
       pgsql:
-        image: postgres
+        image: postgres:15-alpine
         env:
           POSTGRES_USER: root
           POSTGRES_PASSWORD: wallet
           POSTGRES_DB: wallet
         options: >-
           --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
         ports:
           - 5432:5432
 
       mysql:
-        image: bitnamilegacy/mysql:8.0
+        image: mysql:8.0
         env:
-          MYSQL_AUTHENTICATION_PLUGIN: mysql_native_password
           MYSQL_ROOT_PASSWORD: wallet
           MYSQL_DATABASE: wallet
         options: >-
           --health-cmd="mysqladmin ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
         ports:
           - 3306:3306
 
       mariadb:
-        image: mariadb:10.10 # https://github.com/laravel/framework/pull/48455
+        image: mariadb:10.10-alpine
         env:
           MYSQL_ROOT_PASSWORD: wallet
           MYSQL_DATABASE: wallet
         options: >-
           --health-cmd="mysqladmin ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
         ports:
           - 3307:3306
 
