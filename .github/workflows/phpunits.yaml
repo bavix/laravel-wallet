@@ -117,17 +117,9 @@ jobs:
         id: composer-dependencies
         run: composer install --prefer-dist --no-progress
 
-      - name: Check codeclimate
-        id: codeclimate-check
+      - name: Check coveralls
+        id: coveralls-check
         run: echo "execute=${{ matrix.php-versions == '8.3' && matrix.caches == 'array' && matrix.locks == 'redis' && matrix.databases == 'testing' }}" >> $GITHUB_OUTPUT
-
-      - name: Prepare codeclimate
-        id: codeclimate-prepare
-        run: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-          chmod +x ./cc-test-reporter
-          ./cc-test-reporter before-build
-        if: ${{ steps.codeclimate-check.outputs.execute == 'true' }}
 
       - name: Prepare run test suite
         id: unit-prepare
@@ -151,21 +143,21 @@ jobs:
           WALLET_LOCK_DRIVER: ${{ matrix.locks }}
           DB_CONNECTION: ${{ matrix.databases }}
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
-        if: ${{ steps.codeclimate-check.outputs.execute == 'true' }}
+        if: ${{ steps.coveralls-check.outputs.execute == 'true' }}
 
-      - name: Send coverage
-        id: codeclimate-send
-        uses: nick-fields/retry@v3
+      - name: Coveralls
+        uses: coverallsapp/github-action@v2
         with:
-          timeout_seconds: 15
-          max_attempts: 3
-          command: >-
-            ./cc-test-reporter after-build --coverage-input-type clover --exit-code 0
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        if: ${{ steps.codeclimate-check.outputs.execute == 'true' }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          file: build/coverage-xml/index.xml
+          format: cobertura
+          flag-name: run-${{ matrix.php-versions }}-${{ matrix.databases }}-${{ matrix.caches }}-${{ matrix.locks }}
+          parallel: true
+        if: ${{ steps.coveralls-check.outputs.execute == 'true' }}
 
-      - uses: codecov/codecov-action@v4
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@v2
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-        if: ${{ steps.codeclimate-check.outputs.execute == 'true' }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
+        if: ${{ steps.coveralls-check.outputs.execute == 'true' }}
