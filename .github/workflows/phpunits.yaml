@@ -37,7 +37,7 @@ jobs:
       memcached:
         image: memcached:1.6
         options: >-
-          --health-cmd "echo stats | nc localhost 11211 || exit 1"
+          --health-cmd "timeout 5 bash -c 'cat < /dev/null > /dev/udp/127.0.0.1/11211'"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 3
