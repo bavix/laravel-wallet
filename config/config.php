@@ -9,11 +9,13 @@ use Bavix\Wallet\Internal\Assembler\OptionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionCreatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionQueryAssembler;
+use Bavix\Wallet\Internal\Assembler\TransferCreatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferQueryAssembler;
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEvent;
 use Bavix\Wallet\Internal\Events\TransactionCreatedEvent;
+use Bavix\Wallet\Internal\Events\TransferCreatedEvent;
 use Bavix\Wallet\Internal\Events\WalletCreatedEvent;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
@@ -29,7 +31,6 @@ use Bavix\Wallet\Internal\Service\MathService;
 use Bavix\Wallet\Internal\Service\StateService;
 use Bavix\Wallet\Internal\Service\StorageService;
 use Bavix\Wallet\Internal\Service\TranslatorService;
-use Bavix\Wallet\Internal\Service\UuidFactoryService;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
 use Bavix\Wallet\Internal\Transform\TransferDtoTransformer;
 use Bavix\Wallet\Models\Transaction;
@@ -207,16 +208,6 @@ return [
         'translator' => TranslatorService::class,
 
         /**
-         * The service for generating UUIDs.
-         *
-         * @var string
-         *
-         * @deprecated use identifier.
-         * @see IdentifierFactoryService
-         */
-        'uuid' => UuidFactoryService::class,
-
-        /**
          * The service for generating identifiers.
          *
          * @var string
@@ -367,6 +358,10 @@ return [
          */
         'transaction_query' => TransactionQueryAssembler::class,
         /**
+         * Assembler for creating Transfer Created Event DTO.
+         */
+        'transfer_created_event' => TransferCreatedEventAssembler::class,
+        /**
          * Assembler for creating Transfer Query DTO.
          */
         'transfer_query' => TransferQueryAssembler::class,
@@ -392,6 +387,11 @@ return [
          * The event triggered when a transaction is created.
          */
         'transaction_created' => TransactionCreatedEvent::class,
+
+        /**
+         * The event triggered when a transfer is created.
+         */
+        'transfer_created' => TransferCreatedEvent::class,
     ],
 
     /**
