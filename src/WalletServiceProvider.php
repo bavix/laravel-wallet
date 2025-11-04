@@ -6,6 +6,8 @@ namespace Bavix\Wallet;
 
 use Bavix\Wallet\External\Api\TransactionQueryHandler;
 use Bavix\Wallet\External\Api\TransactionQueryHandlerInterface;
+use Bavix\Wallet\External\Api\PurchaseQueryHandler;
+use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 use Bavix\Wallet\External\Api\TransferQueryHandler;
 use Bavix\Wallet\External\Api\TransferQueryHandlerInterface;
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssembler;
@@ -18,6 +20,8 @@ use Bavix\Wallet\Internal\Assembler\OptionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\OptionDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionCreatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionCreatedEventAssemblerInterface;
+use Bavix\Wallet\Internal\Assembler\TransferCreatedEventAssembler;
+use Bavix\Wallet\Internal\Assembler\TransferCreatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionQueryAssembler;
@@ -35,6 +39,8 @@ use Bavix\Wallet\Internal\Events\BalanceUpdatedEvent;
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEventInterface;
 use Bavix\Wallet\Internal\Events\TransactionCreatedEvent;
 use Bavix\Wallet\Internal\Events\TransactionCreatedEventInterface;
+use Bavix\Wallet\Internal\Events\TransferCreatedEvent;
+use Bavix\Wallet\Internal\Events\TransferCreatedEventInterface;
 use Bavix\Wallet\Internal\Events\WalletCreatedEvent;
 use Bavix\Wallet\Internal\Events\WalletCreatedEventInterface;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
@@ -65,8 +71,6 @@ use Bavix\Wallet\Internal\Service\StorageService;
 use Bavix\Wallet\Internal\Service\StorageServiceInterface;
 use Bavix\Wallet\Internal\Service\TranslatorService;
 use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
-use Bavix\Wallet\Internal\Service\UuidFactoryService;
-use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
 use Bavix\Wallet\Internal\Transform\TransferDtoTransformer;
@@ -256,7 +260,6 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         $this->app->singleton(MathServiceInterface::class, $configure['math'] ?? MathService::class);
         $this->app->singleton(StateServiceInterface::class, $configure['state'] ?? StateService::class);
         $this->app->singleton(TranslatorServiceInterface::class, $configure['translator'] ?? TranslatorService::class);
-        $this->app->singleton(UuidFactoryServiceInterface::class, $configure['uuid'] ?? UuidFactoryService::class);
         $this->app->singleton(
             IdentifierFactoryServiceInterface::class,
             $configure['identifier'] ?? IdentifierFactoryService::class
@@ -386,6 +389,11 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
             TransactionCreatedEventAssemblerInterface::class,
             $configure['transaction_created_event'] ?? TransactionCreatedEventAssembler::class
         );
+
+        $this->app->singleton(
+            TransferCreatedEventAssemblerInterface::class,
+            $configure['transfer_created_event'] ?? TransferCreatedEventAssembler::class
+        );
     }
 
     /**
@@ -423,6 +431,11 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
             TransactionCreatedEventInterface::class,
             $configure['transaction_created'] ?? TransactionCreatedEvent::class
         );
+
+        $this->app->bind(
+            TransferCreatedEventInterface::class,
+            $configure['transfer_created'] ?? TransferCreatedEvent::class
+        );
     }
 
     /**
@@ -441,6 +454,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         // api
         $this->app->bind(TransactionQueryHandlerInterface::class, TransactionQueryHandler::class);
         $this->app->bind(TransferQueryHandlerInterface::class, TransferQueryHandler::class);
+        $this->app->bind(PurchaseQueryHandlerInterface::class, PurchaseQueryHandler::class);
     }
 
     /**
@@ -458,7 +472,6 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
             MathServiceInterface::class,
             StateServiceInterface::class,
             TranslatorServiceInterface::class,
-            UuidFactoryServiceInterface::class,
             IdentifierFactoryServiceInterface::class,
         ];
     }
@@ -520,6 +533,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
             TransferQueryAssemblerInterface::class,
             WalletCreatedEventAssemblerInterface::class,
             TransactionCreatedEventAssemblerInterface::class,
+            TransferCreatedEventAssemblerInterface::class,
         ];
     }
 
@@ -540,6 +554,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
             BalanceUpdatedEventInterface::class,
             WalletCreatedEventInterface::class,
             TransactionCreatedEventInterface::class,
+            TransferCreatedEventInterface::class,
         ];
     }
 
@@ -548,6 +563,10 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
      */
     private function bindObjectsProviders(): array
     {
-        return [TransactionQueryHandlerInterface::class, TransferQueryHandlerInterface::class];
+        return [
+            TransactionQueryHandlerInterface::class,
+            TransferQueryHandlerInterface::class,
+            PurchaseQueryHandlerInterface::class,
+        ];
     }
 }

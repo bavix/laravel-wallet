@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
-use Bavix\Wallet\Models\Transfer;
 
 /**
  * @internal
@@ -21,36 +21,37 @@ final readonly class PurchaseService implements PurchaseServiceInterface
     public function already(Customer $customer, BasketDtoInterface $basketDto, bool $gifts = false): array
     {
         $status = $gifts
-            ? [Transfer::STATUS_PAID, Transfer::STATUS_GIFT]
-            : [Transfer::STATUS_PAID];
+            ? [TransferStatus::Paid->value, TransferStatus::Gift->value]
+            : [TransferStatus::Paid->value];
 
-        $arrays = [];
-        $wallets = [];
         $productCounts = [];
-        $query = $customer->transfers();
+        $total = 0;
         foreach ($basketDto->items() as $itemDto) {
             $wallet = $this->castService->getWallet($itemDto->getReceiving() ?? $itemDto->getProduct());
-            $wallets[$wallet->uuid] = $wallet;
-
-            $productCounts[$wallet->uuid] = ($productCounts[$wallet->uuid] ?? 0) + count($itemDto);
+            $walletId = $wallet->getKey();
+            $productCounts[$walletId] = ($productCounts[$walletId] ?? 0) + count($itemDto);
+            $total += count($itemDto);
         }
 
-        foreach ($wallets as $wallet) {
-            /**
-             * As part of my work, "with" was added, it gives a 50x boost for a huge number of returns. In this case,
-             * it's a crutch. It is necessary to come up with a more correct implementation of the internal and external
-             * interface for "purchases".
-             */
-            $arrays[] = (clone $query)
-                ->with(['deposit', 'withdraw.wallet'])
-                ->where('to_id', $wallet->getKey())
-                ->whereIn('status', $status)
-                ->orderBy('id', 'desc')
-                ->limit($productCounts[$wallet->uuid])
-                ->get()
-                ->all();
+        $transfers = $customer->transfers()
+            ->with(['deposit', 'withdraw.wallet'])
+            ->whereIn('to_id', array_keys($productCounts))
+            ->whereIn('status', $status)
+            ->orderBy('id', 'desc')
+            ->limit($total)
+            ->get();
+
+        $selected = [];
+        foreach ($transfers as $transfer) {
+            $toId = $transfer->to_id;
+            if (! array_key_exists($toId, $productCounts) || $productCounts[$toId] <= 0) {
+                continue;
+            }
+
+            $selected[] = $transfer;
+            $productCounts[$toId]--;
         }
 
-        return array_merge(...$arrays);
+        return $selected;
     }
 }
