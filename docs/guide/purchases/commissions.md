@@ -169,4 +169,22 @@ $user->safePay($item); // failed, 100 (product) + 5 (minimal fee) = 105
 $user->balance; // 103
 ```
 
+## Alternative: Merchant Fee Deductible
+
+By default, the `Taxable` interface adds fees to the customer's payment. If you want to deduct fees from the merchant's payout instead (so customers pay only the product price), you can use the `MerchantFeeDeductible` interface.
+
+**With Taxable (default behavior):**
+- Product price: $100
+- Fee: 5%
+- Customer pays: $105 ($100 + $5 fee)
+- Merchant receives: $100
+
+**With MerchantFeeDeductible:**
+- Product price: $100
+- Fee: 5%
+- Customer pays: $100
+- Merchant receives: $95 ($100 - $5 fee)
+
+For more information, see the [Merchant Fee Deductible](/guide/purchases/merchant-fee-deductible) documentation.
+
 It's simple!
