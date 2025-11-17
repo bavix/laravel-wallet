@@ -7,6 +7,7 @@ namespace Bavix\Wallet\Traits;
 use function app;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
+use Bavix\Wallet\Interfaces\MerchantFeeDeductible;
 use Bavix\Wallet\Interfaces\ProductInterface;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
@@ -106,25 +107,47 @@ trait HasGift
             $amount = $mathService->sub($product->getAmountProduct($this), $discount);
 
             // Get the fee for the transaction
+            /** @var non-empty-string $fee */
             $fee = $taxService->getFee($product, $amount);
+
+            // Check if fee should be deducted from merchant's payout instead of added to customer's payment
+            $isMerchantFeeDeductible = $product instanceof MerchantFeeDeductible;
 
             // Check if the gift can be forced without checking the balance
             if (! $force) {
-                // Check the consistency of the potential transaction
-                $consistencyService->checkPotential($this, $mathService->add($amount, $fee));
+                // If merchant fee is deductible, customer only needs to pay the amount (no fee)
+                // Otherwise, customer needs to pay amount + fee
+                $requiredAmount = $isMerchantFeeDeductible ? $amount : $mathService->add($amount, $fee);
+                $consistencyService->checkPotential($this, $requiredAmount);
+            }
+
+            // Calculate withdraw and deposit amounts based on fee deduction type
+            if ($isMerchantFeeDeductible) {
+                // Fee is deducted from merchant's deposit
+                $withdrawAmount = $amount;
+                $merchantDepositAmount = $mathService->sub($amount, $fee);
+                // Ensure merchant deposit amount is not negative
+                $merchantDepositAmount = $mathService->compare(
+                    $merchantDepositAmount,
+                    0
+                ) === -1 ? '0' : $merchantDepositAmount;
+            } else {
+                // Fee is added to customer's withdrawal (current behavior)
+                $withdrawAmount = $mathService->add($amount, $fee);
+                $merchantDepositAmount = $amount;
             }
 
             // Create withdraw and deposit transactions
             $withdraw = $transactionService->makeOne(
                 $this,
                 Transaction::TYPE_WITHDRAW,
-                $mathService->add($amount, $fee),
+                $withdrawAmount,
                 $product->getMetaProduct()
             );
             $deposit = $transactionService->makeOne(
                 $product,
                 Transaction::TYPE_DEPOSIT,
-                $amount,
+                $merchantDepositAmount,
                 $product->getMetaProduct()
             );
 
