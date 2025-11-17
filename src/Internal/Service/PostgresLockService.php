@@ -10,6 +10,7 @@ use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Models\Wallet;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
+use Illuminate\Database\QueryException;
 
 final class PostgresLockService implements LockServiceInterface
 {
@@ -97,26 +98,32 @@ final class PostgresLockService implements LockServiceInterface
             // - Just set FOR UPDATE lock on existing transaction
             // - Lock will be released automatically by PostgreSQL on commit/rollback
             // - lockedKeys will be cleared via releases() after TransactionCommitted/RolledBack event
+            // - If wallets are already locked in this transaction, PostgreSQL will return them anyway
+            //   (FOR UPDATE on already locked row in same transaction is safe and returns the row)
             $this->lockWallets($uuids, $sortedKeys);
 
             return $callback();
         }
 
         // PostgresLockService creates transaction
-        // Clear lockedKeys in finally to prevent accumulation in Octane
-        return $connection->transaction(function () use ($uuids, $sortedKeys, $callback) {
-            $this->lockWallets($uuids, $sortedKeys);
-
-            try {
+        // Clear lockedKeys after transaction completes to prevent accumulation in Octane
+        try {
+            return $connection->transaction(function () use ($uuids, $sortedKeys, $callback) {
+                $this->lockWallets($uuids, $sortedKeys);
                 return $callback();
-            } finally {
-                // CRITICAL for Octane: clear lockedKeys immediately after transaction
-                // This prevents accumulation in long-lived processes
-                foreach ($sortedKeys as $key) {
-                    $this->lockedKeys->delete(self::INNER_KEYS.$key);
+            });
+        } finally {
+            // CRITICAL for Octane: clear lockedKeys after transaction completes
+            // This prevents accumulation in long-lived processes
+            // Clear both original key and normalized UUID formats
+            foreach ($sortedKeys as $key) {
+                $this->lockedKeys->delete(self::INNER_KEYS.$key);
+                $uuid = $this->extractUuid($key);
+                if ($uuid !== '' && $uuid !== $key) {
+                    $this->lockedKeys->delete(self::INNER_KEYS.$uuid);
                 }
             }
-        });
+        }
     }
 
     public function releases(array $keys): void
@@ -174,16 +181,31 @@ final class PostgresLockService implements LockServiceInterface
         // OPTIMIZATION: Single query to lock all wallets at once
         // SELECT * FROM wallets WHERE uuid IN (?, ?, ...) FOR UPDATE
         $uuidList = array_values($uuids);
-        $wallets = Wallet::query()
-            ->whereIn('uuid', $uuidList)
-            ->lockForUpdate()
-            ->get()
-            ->keyBy('uuid');
+        
+        try {
+            $wallets = Wallet::query()
+                ->whereIn('uuid', $uuidList)
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('uuid');
+        } catch (QueryException $e) {
+            // PostgreSQL throws QueryException for invalid UUID format
+            // Convert it to ModelNotFoundException for consistency
+            throw new ModelNotFoundException(
+                'Invalid wallet UUID or wallet not found: '.implode(', ', $uuidList),
+                ExceptionInterface::MODEL_NOT_FOUND,
+                $e
+            );
+        }
 
         // Check if all wallets were found
+        // Note: If wallet is already locked in this transaction, PostgreSQL will still return it
+        // (FOR UPDATE on already locked row in same transaction is safe and returns the row)
+        // So if it's missing, it truly doesn't exist
         $foundUuids = $wallets->keys()
             ->all();
         $missingUuids = array_diff($uuidList, $foundUuids);
+        
         if ($missingUuids !== []) {
             throw new ModelNotFoundException(
                 'Wallets not found: '.implode(', ', $missingUuids),

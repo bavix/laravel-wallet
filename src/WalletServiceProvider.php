@@ -233,10 +233,14 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
      */
     private function internal(array $configure): void
     {
-        $this->app->alias($configure['storage'] ?? StorageService::class, 'wallet.internal.storage');
-        $this->app->when($configure['storage'] ?? StorageService::class)
+        $storageServiceClass = $configure['storage'] ?? StorageService::class;
+        $this->app->alias($storageServiceClass, 'wallet.internal.storage');
+        $this->app->when($storageServiceClass)
             ->needs('$ttl')
             ->giveConfig('wallet.cache.ttl');
+        
+        // Register StorageServiceInterface binding so it can be injected
+        $this->app->bind(StorageServiceInterface::class, $storageServiceClass);
 
         $this->app->singleton(ClockServiceInterface::class, $configure['clock'] ?? ClockService::class);
         $this->app->singleton(ConnectionServiceInterface::class, $configure['connection'] ?? ConnectionService::class);
@@ -244,7 +248,12 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         $this->app->singleton(DispatcherServiceInterface::class, $configure['dispatcher'] ?? DispatcherService::class);
         $this->app->singleton(JsonServiceInterface::class, $configure['json'] ?? JsonService::class);
 
-        $lockServiceClass = $configure['lock'] ?? $this->resolveLockService();
+        // Resolve LockService class: if lock.driver = database, automatically select
+        // PostgresLockService when db = pgsql, otherwise use config or default
+        $lockServiceClass = config('wallet.lock.driver', 'array') === 'database'
+            ? $this->resolveLockService()
+            : ($configure['lock'] ?? $this->resolveLockService());
+
         $this->app->when($lockServiceClass)
             ->needs('$seconds')
             ->giveConfig('wallet.lock.seconds', 1);
@@ -562,21 +571,17 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
      */
     private function resolveLockService(): string
     {
-        // If user explicitly specified their LockService in config - don't override
+        // Early return if lock driver is not 'database'
         if (config('wallet.lock.driver', 'array') !== 'database') {
             return LockService::class;
         }
 
-        // Check that DB = PostgreSQL
-        // Get connection name from wallet config or use default
+        // Check if database driver is PostgreSQL
         $connectionName = config('wallet.database.connection', config('database.default'));
-        $driver = config('database.connections.'.$connectionName.'.driver');
-
-        if ($driver === 'pgsql') {
+        if (config('database.connections.'.$connectionName.'.driver') === 'pgsql') {
             return PostgresLockService::class;
         }
 
-        // For all other cases - standard LockService
         return LockService::class;
     }
 

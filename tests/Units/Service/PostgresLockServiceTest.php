@@ -168,6 +168,10 @@ final class PostgresLockServiceTest extends TestCase
         /** @var User $user1 */
         /** @var User $user2 */
         [$user1, $user2] = UserFactory::times(2)->create();
+        
+        // Ensure wallets are created in database before transaction
+        $user1->deposit(0);
+        $user2->deposit(0);
 
         $lock = app(LockServiceInterface::class);
         $keys = ['wallet_lock::'.$user1->wallet->uuid, 'wallet_lock::'.$user2->wallet->uuid];
@@ -193,6 +197,9 @@ final class PostgresLockServiceTest extends TestCase
 
         /** @var User $user */
         $user = UserFactory::new()->create();
+        
+        // Ensure wallet is created in database before transaction
+        $user->deposit(0);
 
         $lock = app(LockServiceInterface::class);
         $key = 'wallet_lock::'.$user->wallet->uuid;
@@ -275,15 +282,17 @@ final class PostgresLockServiceTest extends TestCase
     private function skipIfNotPostgresLockService(): void
     {
         // Check database driver
-        $dbDriver = config('database.connections.'.config('database.default').'.driver');
-        if ($dbDriver !== 'pgsql') {
-            $this->markTestSkipped('PostgresLockService tests require PostgreSQL database (pgsql)');
+        $dbDriver = config('database.default');
+        $dbDriverActual = config('database.connections.'.$dbDriver.'.driver');
+        
+        if ($dbDriver !== 'pgsql' || $dbDriverActual !== 'pgsql') {
+            $this->markTestSkipped('PostgresLockService tests require PostgreSQL database (pgsql). Current: '.$dbDriver.'/'.$dbDriverActual);
         }
 
         // Check lock driver
-        $lockDriver = config('wallet.lock.driver', 'array');
+        $lockDriver = config('wallet.lock.driver');
         if ($lockDriver !== 'database') {
-            $this->markTestSkipped('PostgresLockService tests require wallet.lock.driver = database');
+            $this->markTestSkipped('PostgresLockService tests require wallet.lock.driver = database. Current: '.($lockDriver ?: 'empty'));
         }
 
         // Verify that PostgresLockService is actually used
