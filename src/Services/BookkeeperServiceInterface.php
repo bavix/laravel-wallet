@@ -26,14 +26,6 @@ interface BookkeeperServiceInterface
     public function forget(Wallet $wallet): bool;
 
     /**
-     * Retrieves the current balance of the specified wallet.
-     *
-     * This method returns the current balance of the specified wallet as a string.
-     * The balance is always returned as a string to preserve the accuracy of the decimal value.
-     *
-     * @param Wallet $wallet The wallet to retrieve the balance from.
-     * @return string The current balance of the wallet as a string.
-     *
      * @throws RecordNotFoundException If the wallet does not exist in the database.
      */
     public function amount(Wallet $wallet): string;
@@ -48,7 +40,6 @@ interface BookkeeperServiceInterface
      *
      * @param Wallet $wallet The wallet whose balance needs to be synchronized.
      * @param float|int|string $value The new balance value for the wallet.
-     * @return bool Returns `true` on successful synchronization, `false` otherwise.
      *
      * @throws RecordNotFoundException If the wallet does not exist.
      */

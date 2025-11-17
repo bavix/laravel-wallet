@@ -59,13 +59,18 @@ final readonly class StateService implements StateServiceInterface
         $this->store->setMultiple($values);
     }
 
+    /**
+     * @return non-empty-string|null
+     */
     public function get(string $uuid): ?string
     {
+        /** @var non-empty-string|null $value */
         $value = $this->store->get(self::PREFIX_STATE.$uuid);
         if ($value !== null) {
             return $value;
         }
 
+        /** @var string|null $forkId */
         $forkId = $this->store->pull(self::PREFIX_FORK_ID.$uuid);
         if ($forkId === null) {
             return null;
@@ -93,13 +98,17 @@ final readonly class StateService implements StateServiceInterface
         // delete callables by uuids
         $this->store->deleteMultiple($deleteKeys);
 
-        return $results[$uuid] ?? null;
+        /** @var non-empty-string|null $result */
+        $result = $results[$uuid] ?? null;
+
+        return $result;
     }
 
     public function drop(string $uuid): void
     {
         $deleteKeys = [self::PREFIX_STATE.$uuid];
 
+        /** @var string|null $forkId */
         $forkId = $this->store->pull(self::PREFIX_FORK_ID.$uuid);
         if ($forkId !== null) {
             $deleteKeys[] = self::PREFIX_FORK_REF.$forkId;

@@ -24,6 +24,7 @@ use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Services\TransactionServiceInterface;
 use Bavix\Wallet\Services\TransferServiceInterface;
 use function config;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\RecordsNotFoundException;
@@ -141,7 +142,7 @@ trait HasWallet
      * The transaction model class is retrieved from the configuration using `config('wallet.transaction.model', Transaction::class)`.
      * The relationship is defined using the `wallet_id` foreign key.
      *
-     * @return HasMany<Transaction> Returns a `HasMany` relationship of transactions related to the wallet.
+     * @return HasMany<Transaction, WalletModel> Returns a `HasMany` relationship of transactions related to the wallet.
      */
     public function walletTransactions(): HasMany
     {
@@ -152,7 +153,10 @@ trait HasWallet
         // Retrieve all transactions related to the wallet using the `hasMany` method on the wallet instance.
         // The transaction model class is retrieved from the configuration using `config('wallet.transaction.model', Transaction::class)`.
         // The relationship is defined using the `wallet_id` foreign key.
-        $transactions = $wallet->hasMany(config('wallet.transaction.model', Transaction::class), 'wallet_id');
+        /** @var class-string<Transaction> $model */
+        $model = config('wallet.transaction.model', Transaction::class);
+        /** @var HasMany<Transaction, WalletModel> $transactions */
+        $transactions = $wallet->hasMany($model, 'wallet_id');
 
         return $transactions;
     }
@@ -166,7 +170,7 @@ trait HasWallet
      * The transaction model class is retrieved from the configuration using `config('wallet.transaction.model', Transaction::class)`.
      * The relationship is defined using the `payable` foreign key.
      *
-     * @return MorphMany<Transaction> The `MorphMany` relationship object representing all user actions on the wallet.
+     * @return MorphMany<Transaction, Model> The `MorphMany` relationship object representing all user actions on the wallet.
      */
     public function transactions(): MorphMany
     {
@@ -180,10 +184,15 @@ trait HasWallet
         // The transaction model class is retrieved from the configuration using `config('wallet.transaction.model', Transaction::class)`.
         // The relationship is defined using the `payable` foreign key.
         // The `payable` foreign key is used to associate the transactions with the wallet.
-        return $wallet->morphMany(
-            config('wallet.transaction.model', Transaction::class),
+        /** @var class-string<Transaction> $model */
+        $model = config('wallet.transaction.model', Transaction::class);
+        /** @var MorphMany<Transaction, Model> $morphMany */
+        $morphMany = $wallet->morphMany(
+            $model,
             'payable' // The name of the polymorphic relation column.
         );
+
+        return $morphMany;
     }
 
     /**
@@ -315,7 +324,6 @@ trait HasWallet
      *
      * @param int|string $amount The amount to be withdrawn.
      * @param bool $allowZero Flag to allow zero balance for withdrawal. Defaults to false.
-     * @return bool Returns true if the withdrawal is possible; otherwise, false.
      */
     public function canWithdraw(int|string $amount, bool $allowZero = false): bool
     {
@@ -352,10 +360,13 @@ trait HasWallet
         // Wrap the transaction creation in an atomic block to ensure atomicity and consistency.
         // The atomic block ensures that the creation of the transaction is atomic,
         // meaning that either the entire transaction is created or none of it is.
+        /** @var int|non-empty-string $amountValue */
+        $amountValue = $amount;
+
         return app(AtomicServiceInterface::class)->block(
         // The wallet instance
             $this,
-            function () use ($amount, $meta, $confirmed): Transaction {
+            function () use ($amountValue, $meta, $confirmed): Transaction {
                 // Create a new withdrawal transaction.
                 return app(TransactionServiceInterface::class)->makeOne(
                 // The wallet instance
@@ -363,7 +374,7 @@ trait HasWallet
                     // The transaction type
                     Transaction::TYPE_WITHDRAW,
                     // The amount to withdraw
-                    $amount,
+                    $amountValue,
                     // Additional information for the transaction
                     $meta,
                     // Whether the transaction is confirmed
@@ -400,14 +411,21 @@ trait HasWallet
         // Wrap the transfer creation in an atomic block to ensure atomicity and consistency.
         // The atomic block ensures that the creation of the transfer is atomic,
         // meaning that either the entire transfer is created or none of it is.
-        return app(AtomicServiceInterface::class)->block($this, function () use ($wallet, $amount, $meta): Transfer {
+        /** @var int|non-empty-string $amountValue */
+        $amountValue = $amount;
+
+        return app(AtomicServiceInterface::class)->block($this, function () use (
+            $wallet,
+            $amountValue,
+            $meta
+        ): Transfer {
             // Create a new transfer transaction.
             // The transfer transaction is created using the PrepareServiceInterface.
             // The transfer status is set to Transfer::STATUS_TRANSFER.
             // The additional information for the transaction is passed as an argument.
             // The created transfer transaction is stored in the $transferLazyDto variable.
             $transferLazyDto = app(PrepareServiceInterface::class)
-                ->transferLazy($this, $wallet, Transfer::STATUS_TRANSFER, $amount, $meta);
+                ->transferLazy($this, $wallet, Transfer::STATUS_TRANSFER, $amountValue, $meta);
 
             // Apply the transfer transaction.
             // The transfer transaction is applied using the TransferServiceInterface.
@@ -432,7 +450,7 @@ trait HasWallet
      * The transfer model class is retrieved from the configuration using `config('wallet.transfer.model', Transfer::class)`.
      * The relationship is defined using the `from_id` foreign key.
      *
-     * @return HasMany<Transfer> The `HasMany` relationship object representing all transfers related to the wallet.
+     * @return HasMany<Transfer, WalletModel> The `HasMany` relationship object representing all transfers related to the wallet.
      */
     public function transfers(): HasMany
     {
@@ -446,15 +464,20 @@ trait HasWallet
         // The `hasMany` method is used on the wallet instance to retrieve all transfers related to the wallet.
         // The transfer model class is retrieved from the configuration using `config('wallet.transfer.model', Transfer::class)`.
         // The relationship is defined using the `from_id` foreign key.
-        return $wallet
+        /** @var class-string<Transfer> $model */
+        $model = config('wallet.transfer.model', Transfer::class);
+        /** @var HasMany<Transfer, WalletModel> $hasMany */
+        $hasMany = $wallet
             ->hasMany(
             // Retrieve the transfer model class from the configuration.
             // The default value is `Transfer::class`.
-                config('wallet.transfer.model', Transfer::class),
+                $model,
                 // Define the foreign key for the relationship.
                 // The foreign key is `from_id`.
                 'from_id'
             );
+
+        return $hasMany;
     }
 
     /**
@@ -467,7 +490,7 @@ trait HasWallet
      * The transfer model class is retrieved from the configuration using `config('wallet.transfer.model', Transfer::class)`.
      * The relationship is defined using the `to_id` foreign key.
      *
-     * @return HasMany<Transfer> The `HasMany` relationship object representing all receiving transfers related to the wallet.
+     * @return HasMany<Transfer, WalletModel> The `HasMany` relationship object representing all receiving transfers related to the wallet.
      */
     public function receivedTransfers(): HasMany
     {
@@ -481,14 +504,19 @@ trait HasWallet
         // The `hasMany` method is used on the wallet instance to retrieve all receiving transfers related to the wallet.
         // The transfer model class is retrieved from the configuration using `config('wallet.transfer.model', Transfer::class)`.
         // The relationship is defined using the `to_id` foreign key.
-        return $wallet
+        /** @var class-string<Transfer> $model */
+        $model = config('wallet.transfer.model', Transfer::class);
+        /** @var HasMany<Transfer, WalletModel> $hasMany */
+        $hasMany = $wallet
             ->hasMany(
             // Retrieve the transfer model class from the configuration.
             // The default value is `Transfer::class`.
-                config('wallet.transfer.model', Transfer::class),
+                $model,
                 // Define the foreign key for the relationship.
                 // The foreign key is `to_id`.
                 'to_id'
             );
+
+        return $hasMany;
     }
 }

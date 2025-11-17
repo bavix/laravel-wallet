@@ -31,6 +31,7 @@
         "ramsey/uuid": "^4.0"
     },
     "require-dev": {
+        "deptrac/deptrac": "^4.2",
         "driftingly/rector-laravel": "^2.0",
         "ergebnis/phpstan-rules": "^2.1",
         "infection/infection": "~0.27",
@@ -77,7 +78,8 @@
         "ecs-fix": "@php vendor/bin/ecs check --fix",
         "ecs-cc": "@php vendor/bin/ecs --clear-cache",
         "rector": "@php vendor/bin/rector process --dry-run",
-        "rector-fix": "@php vendor/bin/rector process"
+        "rector-fix": "@php vendor/bin/rector process",
+        "deptrac": "@php vendor/bin/deptrac analyse"
     },
     "extra": {
         "laravel": {

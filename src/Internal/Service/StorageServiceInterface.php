@@ -50,7 +50,6 @@ interface StorageServiceInterface
      *
      * @param non-empty-string $uuid The UUID of the stored value.
      * @param float|int|non-empty-string $value The value to synchronize.
-     * @return bool Returns `true` if the synchronization was successful, `false` otherwise.
      */
     public function sync(string $uuid, float|int|string $value): bool;
 
@@ -91,7 +90,6 @@ interface StorageServiceInterface
      * @param non-empty-array<non-empty-string, float|int|non-empty-string> $inputs An associative array
      *                                                          where the keys are UUIDs and the values are the corresponding
      *                                                          stored values.
-     * @return bool Returns `true` if the synchronization was successful, `false` otherwise.
      *
      * @throws RecordNotFoundException If any of the values with the given UUIDs are not found.
      */

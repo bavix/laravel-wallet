@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Traits;
 
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\CastServiceInterface;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
@@ -20,7 +21,7 @@ trait MorphOneWallet
     /**
      * Get default Wallet. This method is used for Eager Loading.
      *
-     * @return MorphOne<WalletModel>
+     * @return MorphOne<WalletModel, Model>
      */
     public function wallet(): MorphOne
     {
@@ -36,11 +37,15 @@ trait MorphOneWallet
         $related = config('wallet.wallet.model', WalletModel::class);
 
         // Eager load the wallet for the related model.
-        return $castService
+        /** @var MorphOne<WalletModel, Model> $morphOne */
+        $morphOne = $castService
             ->getHolder($this) // Get the related holder model.
             ->morphOne($related, 'holder') // Define the Eloquent relationship.
             ->withTrashed() // Include soft deleted wallets.
-            ->where('slug', config('wallet.wallet.default.slug', 'default')) // Filter by the default wallet slug.
+            ->where(
+                'slug',
+                (string) config('wallet.wallet.default.slug', 'default')
+            ) // Filter by the default wallet slug.
             ->withDefault(static function (WalletModel $wallet, object $holder) use (
                 $castService
             ) { // Define the default wallet values.
@@ -55,18 +60,26 @@ trait MorphOneWallet
                     : config('wallet.wallet.default.slug', 'default');
 
                 // Fill the default wallet attributes.
-                $wallet->forceFill(array_merge(config('wallet.wallet.creating', []), [
-                    'name' => config('wallet.wallet.default.name', 'Default Wallet'), // Default wallet name.
+                /** @var array<string, mixed> $creating */
+                $creating = config('wallet.wallet.creating', []);
+                /** @var array<string, mixed> $defaultMeta */
+                $defaultMeta = config('wallet.wallet.default.meta', []);
+                /** @var array<string, mixed> $attributes */
+                $attributes = array_merge($creating, [
+                    'name' => (string) config('wallet.wallet.default.name', 'Default Wallet'), // Default wallet name.
                     'slug' => $slug, // Default wallet slug.
-                    'meta' => config('wallet.wallet.default.meta', []), // Default wallet metadata.
+                    'meta' => $defaultMeta, // Default wallet metadata.
                     'balance' => 0, // Default wallet balance.
-                ]));
+                ]);
+                $wallet->forceFill($attributes);
 
                 if ($model->exists) {
                     // Set the related model on the wallet.
                     $wallet->setRelation('holder', $model->withoutRelations());
                 }
             });
+
+        return $morphOne;
     }
 
     /**

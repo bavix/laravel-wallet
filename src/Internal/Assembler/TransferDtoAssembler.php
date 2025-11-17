@@ -32,13 +32,20 @@ final readonly class TransferDtoAssembler implements TransferDtoAssemblerInterfa
         ?string $uuid,
         ?array $extra,
     ): TransferDtoInterface {
+        // Wallet models always have int keys
+        /** @var int $fromId */
+        $fromId = $fromModel->getKey();
+
+        /** @var int $toId */
+        $toId = $toModel->getKey();
+
         return new TransferDto(
             $uuid ?? $this->identifierFactoryService->generate(),
             $depositId,
             $withdrawId,
             $status,
-            $fromModel->getKey(),
-            $toModel->getKey(),
+            $fromId,
+            $toId,
             $discount,
             $fee,
             $extra,

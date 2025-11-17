@@ -77,7 +77,9 @@ class Transaction extends Model
     public function getTable(): string
     {
         if ((string) $this->table === '') {
-            $this->table = config('wallet.transaction.table', 'transactions');
+            /** @var string $table */
+            $table = config('wallet.transaction.table', 'transactions');
+            $this->table = $table;
         }
 
         return parent::getTable();
@@ -96,7 +98,12 @@ class Transaction extends Model
      */
     public function wallet(): BelongsTo
     {
-        return $this->belongsTo(config('wallet.wallet.model', WalletModel::class));
+        /** @var class-string<WalletModel> $model */
+        $model = config('wallet.wallet.model', WalletModel::class);
+        /** @var BelongsTo<WalletModel, self> $belongsTo */
+        $belongsTo = $this->belongsTo($model);
+
+        return $belongsTo;
     }
 
     public function getAmountIntAttribute(): int
@@ -122,8 +129,12 @@ class Transaction extends Model
             ->getWallet($this->wallet)
             ->decimal_places;
         $decimalPlaces = $math->powTen($decimalPlacesValue);
+        /** @var float|int|non-empty-string $amountValue */
+        $amountValue = $amount;
+        $multiplied = $math->mul($amountValue, $decimalPlaces, $decimalPlacesValue);
+        $rounded = $math->round($multiplied);
 
-        $this->amount = $math->round($math->mul($amount, $decimalPlaces));
+        $this->amount = $rounded;
     }
 
     #[\Override]

@@ -52,6 +52,12 @@ final readonly class StorageServiceLockDecorator implements StorageServiceInterf
         ]));
     }
 
+    /**
+     * @param non-empty-array<non-empty-string> $uuids
+     * @return non-empty-array<non-empty-string, non-empty-string>
+     *
+     * @throws RecordNotFoundException
+     */
     public function multiGet(array $uuids): array
     {
         $missingKeys = [];
@@ -74,8 +80,7 @@ final readonly class StorageServiceLockDecorator implements StorageServiceInterf
             }
         }
 
-        assert($results !== []);
-
+        /** @var non-empty-array<non-empty-string, non-empty-string> $results */
         return $results;
     }
 
@@ -90,13 +95,16 @@ final readonly class StorageServiceLockDecorator implements StorageServiceInterf
             $multiGet = $this->multiGet(array_keys($inputs));
             $results = [];
             foreach ($multiGet as $uuid => $item) {
-                $value = $this->mathService->add($item, $inputs[$uuid]);
-                $results[$uuid] = $this->mathService->round($value);
+                /** @var non-empty-string $itemValue */
+                $itemValue = $item;
+                /** @var float|int|non-empty-string $inputValue */
+                $inputValue = $inputs[$uuid];
+                $added = $this->mathService->add($itemValue, $inputValue);
+                $rounded = $this->mathService->round($added);
+                $results[$uuid] = $rounded;
             }
 
             $this->multiSync($results);
-
-            assert($results !== []);
 
             return $results;
         });

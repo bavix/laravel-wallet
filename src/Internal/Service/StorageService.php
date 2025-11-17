@@ -45,13 +45,18 @@ final readonly class StorageService implements StorageServiceInterface
     }
 
     /**
+     * @return non-empty-string
+     *
      * @throws RecordNotFoundException
      */
     public function increase(string $uuid, float|int|string $value): string
     {
-        return current($this->multiIncrease([
+        /** @var non-empty-string $result */
+        $result = current($this->multiIncrease([
             $uuid => $value,
         ]));
+
+        return $result;
     }
 
     /**
@@ -89,7 +94,10 @@ final readonly class StorageService implements StorageServiceInterface
                 continue;
             }
 
-            $results[$uuid] = $this->mathService->round($value);
+            /** @var float|int|non-empty-string $valueToRound */
+            $valueToRound = $value;
+            $rounded = $this->mathService->round($valueToRound);
+            $results[$uuid] = $rounded;
         }
 
         if ($missingKeys !== []) {
@@ -112,7 +120,10 @@ final readonly class StorageService implements StorageServiceInterface
     {
         $values = [];
         foreach ($inputs as $uuid => $value) {
-            $values[self::PREFIX.$uuid] = $this->mathService->round($value);
+            /** @var float|int|non-empty-string $valueToRound */
+            $valueToRound = $value;
+            $rounded = $this->mathService->round($valueToRound);
+            $values[self::PREFIX.$uuid] = $rounded;
         }
 
         if (count($values) === 1) {
@@ -133,16 +144,22 @@ final readonly class StorageService implements StorageServiceInterface
     public function multiIncrease(array $inputs): array
     {
         $newInputs = [];
+        /** @var non-empty-array<non-empty-string> $uuids */
         $uuids = array_keys($inputs);
         $multiGet = $this->multiGet($uuids);
         foreach ($uuids as $uuid) {
-            $newInputs[$uuid] = $this->mathService->round($this->mathService->add($multiGet[$uuid], $inputs[$uuid]));
+            /** @var non-empty-string $multiGetValue */
+            $multiGetValue = $multiGet[$uuid];
+            /** @var float|int|non-empty-string $inputValue */
+            $inputValue = $inputs[$uuid];
+            $added = $this->mathService->add($multiGetValue, $inputValue);
+            $rounded = $this->mathService->round($added);
+            $newInputs[$uuid] = $rounded;
         }
 
         $this->multiSync($newInputs);
 
-        assert($newInputs !== []);
-
+        /** @var non-empty-array<key-of<T>, non-empty-string> $newInputs */
         return $newInputs;
     }
 }

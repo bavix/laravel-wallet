@@ -81,7 +81,9 @@ class Transfer extends Model
     public function getTable(): string
     {
         if ((string) $this->table === '') {
-            $this->table = config('wallet.transfer.table', 'transfers');
+            /** @var string $table */
+            $table = config('wallet.transfer.table', 'transfers');
+            $this->table = $table;
         }
 
         return parent::getTable();
@@ -92,7 +94,12 @@ class Transfer extends Model
      */
     public function from(): BelongsTo
     {
-        return $this->belongsTo(config('wallet.wallet.model', Wallet::class), 'from_id');
+        /** @var class-string<Wallet> $model */
+        $model = config('wallet.wallet.model', Wallet::class);
+        /** @var BelongsTo<Wallet, self> $belongsTo */
+        $belongsTo = $this->belongsTo($model, 'from_id');
+
+        return $belongsTo;
     }
 
     /**
@@ -100,7 +107,12 @@ class Transfer extends Model
      */
     public function to(): BelongsTo
     {
-        return $this->belongsTo(config('wallet.wallet.model', Wallet::class), 'to_id');
+        /** @var class-string<Wallet> $model */
+        $model = config('wallet.wallet.model', Wallet::class);
+        /** @var BelongsTo<Wallet, self> $belongsTo */
+        $belongsTo = $this->belongsTo($model, 'to_id');
+
+        return $belongsTo;
     }
 
     /**
@@ -108,7 +120,12 @@ class Transfer extends Model
      */
     public function deposit(): BelongsTo
     {
-        return $this->belongsTo(config('wallet.transaction.model', Transaction::class), 'deposit_id');
+        /** @var class-string<Transaction> $model */
+        $model = config('wallet.transaction.model', Transaction::class);
+        /** @var BelongsTo<Transaction, self> $belongsTo */
+        $belongsTo = $this->belongsTo($model, 'deposit_id');
+
+        return $belongsTo;
     }
 
     /**
@@ -116,7 +133,12 @@ class Transfer extends Model
      */
     public function withdraw(): BelongsTo
     {
-        return $this->belongsTo(config('wallet.transaction.model', Transaction::class), 'withdraw_id');
+        /** @var class-string<Transaction> $model */
+        $model = config('wallet.transaction.model', Transaction::class);
+        /** @var BelongsTo<Transaction, self> $belongsTo */
+        $belongsTo = $this->belongsTo($model, 'withdraw_id');
+
+        return $belongsTo;
     }
 
     #[\Override]

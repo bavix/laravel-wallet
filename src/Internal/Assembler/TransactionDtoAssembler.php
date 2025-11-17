@@ -27,10 +27,13 @@ final readonly class TransactionDtoAssembler implements TransactionDtoAssemblerI
         ?array $meta,
         ?string $uuid
     ): TransactionDtoInterface {
+        /** @var int|string $payableId */
+        $payableId = $payable->getKey();
+
         return new TransactionDto(
             $uuid ?? $this->identifierFactoryService->generate(),
             $payable->getMorphClass(),
-            $payable->getKey(),
+            $payableId,
             $walletId,
             $type,
             $amount,

@@ -27,9 +27,15 @@ final readonly class WalletCreatedEvent implements WalletCreatedEventInterface
         return $this->holderId;
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getWalletUuid(): string
     {
-        return $this->walletUuid;
+        /** @var non-empty-string $walletUuid */
+        $walletUuid = $this->walletUuid;
+
+        return $walletUuid;
     }
 
     public function getWalletId(): int

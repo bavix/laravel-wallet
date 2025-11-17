@@ -32,7 +32,6 @@ trait CanConfirm
      * This method confirms the given transaction if it is not already confirmed.
      *
      * @param Transaction $transaction The transaction to confirm.
-     * @return bool Returns true if the transaction was confirmed, false otherwise.
      *
      * @throws BalanceIsEmpty          If the balance is empty.
      * @throws InsufficientFunds       If there are insufficient funds.
@@ -85,7 +84,6 @@ trait CanConfirm
      * If the transaction was not found, a `RecordNotFoundException` will be thrown.
      *
      * @param Transaction $transaction The transaction to confirm.
-     * @return bool Returns true if the transaction was confirmed, false otherwise.
      *
      * @throws ConfirmedInvalid         If the transaction is already confirmed.
      * @throws WalletOwnerInvalid       If the transaction does not belong to the wallet.
@@ -118,7 +116,6 @@ trait CanConfirm
      * If an exception occurred, a `TransactionFailedException` or `ExceptionInterface` will be thrown.
      *
      * @param Transaction $transaction The transaction to reset.
-     * @return bool Returns true if the confirmation was reset, false otherwise.
      *
      * @throws UnconfirmedInvalid       If the transaction is not confirmed.
      * @throws WalletOwnerInvalid       If the transaction does not belong to the wallet.
@@ -162,16 +159,6 @@ trait CanConfirm
         });
     }
 
-    /**
-     * Safely reset the confirmation of the transaction.
-     *
-     * This method attempts to reset the confirmation of the given transaction. If an exception occurs during the
-     * confirmation process, it will be caught and handled. If the confirmation is successfully reset, true will be
-     * returned. If an exception occurs, false will be returned.
-     *
-     * @param Transaction $transaction The transaction to reset.
-     * @return bool Returns true if the confirmation was reset, false otherwise.
-     */
     public function safeResetConfirm(Transaction $transaction): bool
     {
         try {
@@ -195,7 +182,6 @@ trait CanConfirm
      * returned.
      *
      * @param Transaction $transaction The transaction to confirm.
-     * @return bool Returns true if the confirmation was reset, false otherwise.
      *
      * @throws ConfirmedInvalid If the transaction is already confirmed.
      * @throws WalletOwnerInvalid If the transaction does not belong to the wallet.

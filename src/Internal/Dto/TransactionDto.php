@@ -26,14 +26,26 @@ final readonly class TransactionDto implements TransactionDtoInterface
     ) {
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getUuid(): string
     {
-        return $this->uuid;
+        /** @var non-empty-string $uuid */
+        $uuid = $this->uuid;
+
+        return $uuid;
     }
 
+    /**
+     * @return class-string
+     */
     public function getPayableType(): string
     {
-        return $this->payableType;
+        /** @var class-string $payableType */
+        $payableType = $this->payableType;
+
+        return $payableType;
     }
 
     public function getPayableId(): int|string
@@ -51,9 +63,15 @@ final readonly class TransactionDto implements TransactionDtoInterface
         return $this->type;
     }
 
+    /**
+     * @return float|int|non-empty-string
+     */
     public function getAmount(): float|int|string
     {
-        return $this->amount;
+        /** @var float|int|non-empty-string $amount */
+        $amount = $this->amount;
+
+        return $amount;
     }
 
     public function isConfirmed(): bool

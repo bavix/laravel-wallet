@@ -27,9 +27,15 @@ final readonly class TransferDto implements TransferDtoInterface
     ) {
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getUuid(): string
     {
-        return $this->uuid;
+        /** @var non-empty-string $uuid */
+        $uuid = $this->uuid;
+
+        return $uuid;
     }
 
     public function getDepositId(): int
@@ -62,9 +68,15 @@ final readonly class TransferDto implements TransferDtoInterface
         return $this->discount;
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getFee(): string
     {
-        return $this->fee;
+        /** @var non-empty-string $fee */
+        $fee = $this->fee;
+
+        return $fee;
     }
 
     /**
