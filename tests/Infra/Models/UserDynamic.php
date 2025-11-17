@@ -23,6 +23,7 @@ final class UserDynamic extends Model implements Wallet
      */
     protected $fillable = ['name', 'email'];
 
+    #[\Override]
     public function getTable(): string
     {
         return 'users';

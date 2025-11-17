@@ -41,9 +41,9 @@ class Transaction extends Model
 {
     use SoftDeletes;
 
-    final public const TYPE_DEPOSIT = 'deposit';
+    final public const string TYPE_DEPOSIT = 'deposit';
 
-    final public const TYPE_WITHDRAW = 'withdraw';
+    final public const string TYPE_WITHDRAW = 'withdraw';
 
     /**
      * @var array<int, string>
@@ -73,6 +73,7 @@ class Transaction extends Model
         ];
     }
 
+    #[\Override]
     public function getTable(): string
     {
         if ((string) $this->table === '') {
@@ -125,6 +126,7 @@ class Transaction extends Model
         $this->amount = $math->round($math->mul($amount, $decimalPlaces));
     }
 
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();

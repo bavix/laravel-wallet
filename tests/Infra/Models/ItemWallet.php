@@ -29,6 +29,7 @@ final class ItemWallet extends Model implements ProductLimitedInterface
      */
     protected $fillable = ['name', 'quantity', 'price'];
 
+    #[\Override]
     public function getTable(): string
     {
         return 'items';

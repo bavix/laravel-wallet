@@ -38,15 +38,15 @@ class Transfer extends Model
 {
     use SoftDeletes;
 
-    final public const STATUS_EXCHANGE = 'exchange';
+    final public const string STATUS_EXCHANGE = 'exchange';
 
-    final public const STATUS_TRANSFER = 'transfer';
+    final public const string STATUS_TRANSFER = 'transfer';
 
-    final public const STATUS_PAID = 'paid';
+    final public const string STATUS_PAID = 'paid';
 
-    final public const STATUS_REFUND = 'refund';
+    final public const string STATUS_REFUND = 'refund';
 
-    final public const STATUS_GIFT = 'gift';
+    final public const string STATUS_GIFT = 'gift';
 
     /**
      * @var array<int, string>
@@ -77,6 +77,7 @@ class Transfer extends Model
         ];
     }
 
+    #[\Override]
     public function getTable(): string
     {
         if ((string) $this->table === '') {
@@ -118,6 +119,7 @@ class Transfer extends Model
         return $this->belongsTo(config('wallet.transaction.model', Transaction::class), 'withdraw_id');
     }
 
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();

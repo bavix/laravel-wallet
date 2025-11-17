@@ -28,6 +28,7 @@ final class ItemTax extends Model implements ProductLimitedInterface, Taxable
      */
     protected $fillable = ['name', 'quantity', 'price'];
 
+    #[\Override]
     public function getTable(): string
     {
         return 'items';

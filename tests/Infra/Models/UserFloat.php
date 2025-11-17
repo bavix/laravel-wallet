@@ -24,6 +24,7 @@ final class UserFloat extends Model implements Wallet, WalletFloat
      */
     protected $fillable = ['name', 'email'];
 
+    #[\Override]
     public function getTable(): string
     {
         return 'users';

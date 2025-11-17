@@ -20,6 +20,7 @@ final class Buyer extends Model implements Customer
     use CanPay;
     use HasWallets;
 
+    #[\Override]
     public function getTable(): string
     {
         return 'users';

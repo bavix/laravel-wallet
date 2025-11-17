@@ -29,6 +29,7 @@ final class ItemDiscountTax extends Model implements ProductLimitedInterface, Di
      */
     protected $fillable = ['name', 'quantity', 'price'];
 
+    #[\Override]
     public function getTable(): string
     {
         return 'items';

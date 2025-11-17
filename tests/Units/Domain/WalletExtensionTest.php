@@ -17,6 +17,7 @@ use Bavix\Wallet\Test\Infra\Transform\TransactionDtoTransformerCustom;
  */
 final class WalletExtensionTest extends TestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -160,6 +160,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     /**
      * Register services.
      */
+    #[\Override]
     public function register(): void
     {
         $this->mergeConfigFrom(dirname(__DIR__).'/config/config.php', 'wallet');
@@ -194,6 +195,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     /**
      * @return class-string[]
      */
+    #[\Override]
     public function provides(): array
     {
         return array_merge(

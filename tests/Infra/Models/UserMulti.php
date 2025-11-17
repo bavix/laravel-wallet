@@ -21,6 +21,7 @@ final class UserMulti extends Model implements Wallet, WalletFloat
     use HasWalletFloat;
     use HasWallets;
 
+    #[\Override]
     public function getTable(): string
     {
         return 'users';
