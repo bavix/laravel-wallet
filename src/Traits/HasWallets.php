@@ -9,6 +9,7 @@ use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\WalletServiceInterface;
 use function config;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
 
@@ -99,19 +100,24 @@ trait HasWallets
      * 'wallet.model' key. If the key is not found, the default wallet model is
      * used.
      *
-     * @return MorphMany<WalletModel> The MorphMany relationship object.
+     * @return MorphMany<WalletModel, Model> The MorphMany relationship object.
      */
     public function wallets(): MorphMany
     {
         // Define a MorphMany relationship between the current model (the "holder")
         // and the wallet model.
-        return $this
+        /** @var class-string<WalletModel> $model */
+        $model = config('wallet.wallet.model', WalletModel::class);
+        /** @var MorphMany<WalletModel, Model> $morphMany */
+        $morphMany = $this
             ->morphMany(
                 // Get the wallet model from the configuration.
-                config('wallet.wallet.model', WalletModel::class),
+                $model,
                 // Specify the name of the polymorphic relation.
                 'holder'
             );
+
+        return $morphMany;
     }
 
     /**
@@ -161,7 +167,6 @@ trait HasWallets
      * This method checks if a wallet with the given slug exists for the current model.
      *
      * @param string $slug The slug of the wallet.
-     * @return bool Returns true if the wallet exists, false otherwise.
      */
     public function hasWallet(string $slug): bool
     {

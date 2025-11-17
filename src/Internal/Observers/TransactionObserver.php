@@ -21,7 +21,6 @@ final class TransactionObserver
      * It safely resets the confirmation of the transaction.
      *
      * @param Transaction $model The transaction model being deleted.
-     * @return bool Returns true if the confirmation was reset, false otherwise.
      *
      * @throws UnconfirmedInvalid If the transaction is not confirmed.
      * @throws WalletOwnerInvalid If the transaction does not belong to the wallet.

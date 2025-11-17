@@ -45,8 +45,16 @@ use Illuminate\Support\Str;
  * @property DateTimeInterface $created_at
  * @property DateTimeInterface $updated_at
  * @property DateTimeInterface $deleted_at
+ * @property \Illuminate\Database\Eloquent\Relations\HasMany<Transaction, self> $walletTransactions
+ * @property \Illuminate\Database\Eloquent\Relations\MorphMany<Transaction, Model> $transactions
+ * @property \Illuminate\Database\Eloquent\Relations\HasMany<Transfer, self> $transfers
+ * @property \Illuminate\Database\Eloquent\Relations\HasMany<Transfer, self> $receivedTransfers
  *
  * @method int getKey()
+ * @method \Illuminate\Database\Eloquent\Relations\HasMany<Transaction, self> walletTransactions()
+ * @method \Illuminate\Database\Eloquent\Relations\MorphMany<Transaction, Model> transactions()
+ * @method \Illuminate\Database\Eloquent\Relations\HasMany<Transfer, self> transfers()
+ * @method \Illuminate\Database\Eloquent\Relations\HasMany<Transfer, self> receivedTransfers()
  */
 class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchangeable
 {
@@ -96,7 +104,9 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     public function getTable(): string
     {
         if ((string) $this->table === '') {
-            $this->table = config('wallet.wallet.table', 'wallets');
+            /** @var string $table */
+            $table = config('wallet.wallet.table', 'wallets');
+            $this->table = $table;
         }
 
         return parent::getTable();
@@ -114,7 +124,9 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         if (array_key_exists('slug', $this->attributes)) {
             return;
         }
-        $this->attributes['slug'] = Str::slug($name);
+        /** @var string $slug */
+        $slug = Str::slug($name);
+        $this->attributes['slug'] = $slug;
     }
 
     /**
@@ -127,8 +139,12 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     public function refreshBalance(): bool
     {
         return app(AtomicServiceInterface::class)->block($this, function () {
+            /** @var non-empty-string $whatIs */
             $whatIs = $this->getBalanceAttribute();
-            $balance = $this->getAvailableBalanceAttribute();
+            /** @var float|int|non-empty-string $balanceRaw */
+            $balanceRaw = $this->getAvailableBalanceAttribute();
+            /** @var non-empty-string $balance */
+            $balance = is_string($balanceRaw) ? $balanceRaw : (string) $balanceRaw;
             if (app(MathServiceInterface::class)->compare($whatIs, $balance) === 0) {
                 return true;
             }
@@ -139,7 +155,9 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
 
     public function getOriginalBalanceAttribute(): string
     {
-        $balance = (string) $this->getRawOriginal('balance', 0);
+        /** @var int|string|null $rawBalance */
+        $rawBalance = $this->getRawOriginal('balance', 0);
+        $balance = (string) $rawBalance;
 
         // Perform assertion to check if balance is not an empty string
         assert($balance !== '', 'Balance should not be an empty string');
@@ -149,11 +167,15 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
 
     public function getAvailableBalanceAttribute(): float|int|string
     {
+        /** @var float|int|string|null $balance */
         $balance = $this->walletTransactions()
             ->where('confirmed', true)
             ->sum('amount');
 
         // Perform assertion to check if balance is not an empty string
+        if ($balance === null) {
+            $balance = '0';
+        }
         assert($balance !== '', 'Balance should not be an empty string');
 
         return $balance;
@@ -189,7 +211,16 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
 
     public function getCurrencyAttribute(): string
     {
-        return $this->meta['currency'] ?? Str::upper($this->slug);
+        /** @var string|null $currency */
+        $currency = $this->meta['currency'] ?? null;
+        if ($currency !== null) {
+            return $currency;
+        }
+
+        /** @var string $slug */
+        $slug = $this->slug;
+
+        return Str::upper($slug);
     }
 
     protected function initializeMorphOneWallet(): void

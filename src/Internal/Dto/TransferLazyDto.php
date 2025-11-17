@@ -40,9 +40,15 @@ final readonly class TransferLazyDto implements TransferLazyDtoInterface
         return $this->discount;
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getFee(): string
     {
-        return $this->fee;
+        /** @var non-empty-string $fee */
+        $fee = $this->fee;
+
+        return $fee;
     }
 
     public function getWithdrawDto(): TransactionDtoInterface
@@ -60,9 +66,15 @@ final readonly class TransferLazyDto implements TransferLazyDtoInterface
         return $this->status;
     }
 
+    /**
+     * @return non-empty-string|null
+     */
     public function getUuid(): ?string
     {
-        return $this->uuid;
+        /** @var non-empty-string|null $uuid */
+        $uuid = $this->uuid;
+
+        return $uuid;
     }
 
     /**

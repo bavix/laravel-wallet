@@ -27,7 +27,6 @@ final readonly class TransferObserver
      * It safely resets the confirmation of the transfer.
      *
      * @param Transfer $model The transfer model being deleted.
-     * @return bool Returns true if the confirmation was reset, false otherwise.
      *
      * @throws UnconfirmedInvalid If the transfer is not confirmed.
      * @throws WalletOwnerInvalid If the transfer does not belong to the wallet.

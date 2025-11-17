@@ -127,17 +127,15 @@ final readonly class WalletRepository implements WalletRepositoryInterface
     }
 
     /**
-     * @param array<string, int|string> $attributes
+     * @param non-empty-array<string, int|string> $attributes
      */
     private function getBy(array $attributes): Wallet
     {
-        assert($attributes !== []);
-
         try {
+            /** @var Wallet $wallet */
             $wallet = $this->wallet->newQuery()
                 ->where($attributes)
                 ->firstOrFail();
-            assert($wallet instanceof Wallet);
 
             return $wallet;
         } catch (EloquentModelNotFoundException $exception) {

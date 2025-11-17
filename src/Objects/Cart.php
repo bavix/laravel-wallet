@@ -120,32 +120,44 @@ final class Cart implements Countable, CartInterface
         $items = [];
         foreach ($this->items as $item) {
             foreach ($item as $datum) {
-                $items[] = $datum->getItems();
+                /** @var ProductInterface[] $datumItems */
+                $datumItems = $datum->getItems();
+                $items[] = $datumItems;
             }
         }
 
+        /** @var array<ProductInterface[]> $items */
         return array_merge(...$items);
     }
 
     public function getTotal(Customer $customer): string
     {
-        $result = 0;
+        /** @var non-empty-string $result */
+        $result = '0';
         $prices = [];
         foreach ($this->items as $productId => $_items) {
             foreach ($_items as $item) {
                 $product = $item->getProduct();
                 $pricePerItem = $item->getPricePerItem();
                 if ($pricePerItem === null) {
-                    $prices[$productId] ??= $product->getAmountProduct($customer);
+                    /** @var non-empty-string $productPrice */
+                    $productPrice = $product->getAmountProduct($customer);
+                    $prices[$productId] ??= $productPrice;
+                    /** @var int|non-empty-string $pricePerItem */
                     $pricePerItem = $prices[$productId];
                 }
 
-                $price = $this->math->mul(count($item), $pricePerItem);
-                $result = $this->math->add($result, $price);
+                /** @var int<0, max> $itemCount */
+                $itemCount = count($item);
+                /** @var int|non-empty-string $pricePerItemValue */
+                $pricePerItemValue = $pricePerItem;
+                $price = $this->math->mul($itemCount, $pricePerItemValue);
+                $newResult = $this->math->add($result, $price);
+                $result = $newResult;
             }
         }
 
-        return (string) $result;
+        return $result;
     }
 
     public function count(): int
@@ -169,7 +181,10 @@ final class Cart implements Countable, CartInterface
      */
     public function getBasketDto(): BasketDtoInterface
     {
-        $items = array_merge(...array_values($this->items));
+        /** @var array<ItemDtoInterface[]> $itemsValues */
+        $itemsValues = array_values($this->items);
+        /** @var array<ItemDtoInterface> $items */
+        $items = array_merge(...$itemsValues);
 
         if ($items === []) {
             throw new CartEmptyException('Cart is empty', ExceptionInterface::CART_EMPTY);

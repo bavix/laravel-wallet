@@ -44,13 +44,6 @@ interface ConsistencyServiceInterface
     /**
      * Checks if the given balance can be safely withdrawn by the specified amount.
      *
-     * This method returns true if the balance can be withdrawn, and false otherwise.
-     *
-     * @param float|int|string $balance The balance to check.
-     * @param float|int|string $amount The amount to withdraw.
-     * @param bool $allowZero Whether to allow zero amounts. Defaults to false.
-     * @return bool Returns true if the balance can be withdrawn, false otherwise.
-     *
      * @throws AmountInvalid If the given balance or amount is not positive.
      */
     public function canWithdraw(float|int|string $balance, float|int|string $amount, bool $allowZero = false): bool;

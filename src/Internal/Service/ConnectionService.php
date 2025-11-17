@@ -16,7 +16,9 @@ final readonly class ConnectionService implements ConnectionServiceInterface
 
     public function __construct(ConnectionResolverInterface $connectionResolver)
     {
-        $this->connection = $connectionResolver->connection(config('wallet.database.connection'));
+        /** @var string|null $connectionName */
+        $connectionName = config('wallet.database.connection');
+        $this->connection = $connectionResolver->connection($connectionName);
     }
 
     public function get(): ConnectionInterface

@@ -26,9 +26,15 @@ final readonly class ItemDto implements ItemDtoInterface
         return array_fill(0, $this->quantity, $this->product);
     }
 
+    /**
+     * @return int|non-empty-string|null
+     */
     public function getPricePerItem(): int|string|null
     {
-        return $this->pricePerItem;
+        /** @var int|non-empty-string|null $pricePerItem */
+        $pricePerItem = $this->pricePerItem;
+
+        return $pricePerItem;
     }
 
     public function getProduct(): ProductInterface
@@ -36,9 +42,15 @@ final readonly class ItemDto implements ItemDtoInterface
         return $this->product;
     }
 
+    /**
+     * @return int<0, max>
+     */
     public function count(): int
     {
-        return $this->quantity;
+        /** @var int<0, max> $quantity */
+        $quantity = $this->quantity;
+
+        return $quantity;
     }
 
     public function getReceiving(): ?Wallet
