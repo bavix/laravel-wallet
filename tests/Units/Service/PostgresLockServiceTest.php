@@ -19,32 +19,10 @@ use Illuminate\Support\Facades\DB;
  */
 final class PostgresLockServiceTest extends TestCase
 {
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // Check conditions: lock.driver = database AND database = pgsql
-        $lockDriver = config('wallet.lock.driver', 'array');
-        $dbDriver = config('database.connections.'.config('database.default').'.driver');
-
-        if ($lockDriver !== 'database') {
-            $this->markTestSkipped('PostgresLockService tests require wallet.lock.driver = database');
-        }
-
-        if ($dbDriver !== 'pgsql') {
-            $this->markTestSkipped('PostgresLockService tests require PostgreSQL database (pgsql)');
-        }
-
-        // Verify that PostgresLockService is actually used
-        $lock = app(LockServiceInterface::class);
-        if (! ($lock instanceof PostgresLockService)) {
-            $this->markTestSkipped('PostgresLockService is not being used. LockService: '.get_class($lock));
-        }
-    }
-
     public function testBlockSingleWallet(): void
     {
+        $this->skipIfNotPostgresLockService();
+
         /** @var User $user */
         $user = UserFactory::new()->create();
         $user->deposit(1000);
@@ -62,6 +40,8 @@ final class PostgresLockServiceTest extends TestCase
 
     public function testBlocksMultipleWallets(): void
     {
+        $this->skipIfNotPostgresLockService();
+
         /** @var User $user1 */
         /** @var User $user2 */
         /** @var User $user3 */
@@ -94,6 +74,8 @@ final class PostgresLockServiceTest extends TestCase
 
     public function testBlockInTransaction(): void
     {
+        $this->skipIfNotPostgresLockService();
+
         /** @var User $user */
         $user = UserFactory::new()->create();
         $user->deposit(1000);
@@ -118,6 +100,8 @@ final class PostgresLockServiceTest extends TestCase
 
     public function testBlocksInTransaction(): void
     {
+        $this->skipIfNotPostgresLockService();
+
         /** @var User $user1 */
         /** @var User $user2 */
         [$user1, $user2] = UserFactory::times(2)->create();
@@ -147,6 +131,8 @@ final class PostgresLockServiceTest extends TestCase
 
     public function testAutomaticLockingViaBookkeeperService(): void
     {
+        $this->skipIfNotPostgresLockService();
+
         /** @var User $user */
         $user = UserFactory::new()->create();
         $user->deposit(1000);
@@ -177,6 +163,8 @@ final class PostgresLockServiceTest extends TestCase
 
     public function testReleases(): void
     {
+        $this->skipIfNotPostgresLockService();
+
         /** @var User $user1 */
         /** @var User $user2 */
         [$user1, $user2] = UserFactory::times(2)->create();
@@ -201,6 +189,8 @@ final class PostgresLockServiceTest extends TestCase
 
     public function testBlockedKeyPreventsDoubleLock(): void
     {
+        $this->skipIfNotPostgresLockService();
+
         /** @var User $user */
         $user = UserFactory::new()->create();
 
@@ -226,6 +216,8 @@ final class PostgresLockServiceTest extends TestCase
 
     public function testNonExistentWalletThrowsException(): void
     {
+        $this->skipIfNotPostgresLockService();
+
         $lock = app(LockServiceInterface::class);
         $key = 'wallet_lock::non-existent-uuid';
 
@@ -237,6 +229,8 @@ final class PostgresLockServiceTest extends TestCase
 
     public function testCacheSyncAfterLock(): void
     {
+        $this->skipIfNotPostgresLockService();
+
         /** @var User $user */
         $user = UserFactory::new()->create();
         $user->deposit(1000);
@@ -254,6 +248,8 @@ final class PostgresLockServiceTest extends TestCase
 
     public function testMultipleWalletsCacheSync(): void
     {
+        $this->skipIfNotPostgresLockService();
+
         /** @var User $user1 */
         /** @var User $user2 */
         [$user1, $user2] = UserFactory::times(2)->create();
@@ -270,5 +266,30 @@ final class PostgresLockServiceTest extends TestCase
         // Balances should be accessible from cache
         self::assertSame(1000, $user1->wallet->balanceInt);
         self::assertSame(2000, $user2->wallet->balanceInt);
+    }
+
+    /**
+     * Skip test if PostgresLockService conditions are not met.
+     * Checks: database = pgsql AND lock.driver = database AND PostgresLockService is used.
+     */
+    private function skipIfNotPostgresLockService(): void
+    {
+        // Check database driver
+        $dbDriver = config('database.connections.'.config('database.default').'.driver');
+        if ($dbDriver !== 'pgsql') {
+            $this->markTestSkipped('PostgresLockService tests require PostgreSQL database (pgsql)');
+        }
+
+        // Check lock driver
+        $lockDriver = config('wallet.lock.driver', 'array');
+        if ($lockDriver !== 'database') {
+            $this->markTestSkipped('PostgresLockService tests require wallet.lock.driver = database');
+        }
+
+        // Verify that PostgresLockService is actually used
+        $lock = app(LockServiceInterface::class);
+        if (! ($lock instanceof PostgresLockService)) {
+            $this->markTestSkipped('PostgresLockService is not being used. LockService: '.get_class($lock));
+        }
     }
 }
