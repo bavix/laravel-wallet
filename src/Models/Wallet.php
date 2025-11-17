@@ -144,7 +144,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
             /** @var float|int|non-empty-string $balanceRaw */
             $balanceRaw = $this->getAvailableBalanceAttribute();
             /** @var non-empty-string $balance */
-            $balance = is_string($balanceRaw) ? $balanceRaw : (string) $balanceRaw;
+            $balance = (string) $balanceRaw;
             if (app(MathServiceInterface::class)->compare($whatIs, $balance) === 0) {
                 return true;
             }
