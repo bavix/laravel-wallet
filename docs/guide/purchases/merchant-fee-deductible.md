@@ -222,7 +222,7 @@ $item->balance; // 0
 
 ## Direct Transfers
 
-When transferring directly to a wallet that implements `MerchantFeeDeductible`, the fee is deducted from the recipient's deposit.
+When transferring directly to a product that implements `MerchantFeeDeductible`, the fee is deducted from the recipient's deposit.
 
 ```php
 $user = User::first();

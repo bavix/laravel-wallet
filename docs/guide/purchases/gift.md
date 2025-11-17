@@ -115,7 +115,8 @@ $item->balance; // 0
 
 The first user buys the product and gives it.
 
-> If the product uses the `Taxable` interface, then Santa will pay tax
+> If the product uses the `Taxable` interface, then Santa will pay tax.  
+> If the product uses the `MerchantFeeDeductible` interface, the fee is deducted from the merchant's payout instead.
 
 ```php
 $first->gift($last, $item);
