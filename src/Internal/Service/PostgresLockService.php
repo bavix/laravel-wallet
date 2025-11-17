@@ -39,7 +39,7 @@ final class PostgresLockService implements LockServiceInterface
         // Filter out already blocked keys
         $keysToLock = [];
         foreach ($keys as $key) {
-            if (!$this->isBlocked($key)) {
+            if (! $this->isBlocked($key)) {
                 $keysToLock[] = $key;
             }
         }
@@ -51,7 +51,7 @@ final class PostgresLockService implements LockServiceInterface
 
         // Sort keys to prevent deadlock
         $sortedKeys = $this->sortKeys($keysToLock);
-        
+
         // Extract UUIDs from keys
         $uuids = [];
         foreach ($sortedKeys as $key) {
@@ -86,6 +86,7 @@ final class PostgresLockService implements LockServiceInterface
             // - Lock will be released automatically by PostgreSQL on commit/rollback
             // - lockedKeys will be cleared via releases() after TransactionCommitted/RolledBack event
             $this->lockWallets($uuids, $sortedKeys);
+
             return $callback();
         }
 
@@ -93,7 +94,7 @@ final class PostgresLockService implements LockServiceInterface
         // Clear lockedKeys in finally to prevent accumulation in Octane
         return $connection->transaction(function () use ($uuids, $sortedKeys, $callback) {
             $this->lockWallets($uuids, $sortedKeys);
-            
+
             try {
                 return $callback();
             } finally {
@@ -124,11 +125,11 @@ final class PostgresLockService implements LockServiceInterface
 
     /**
      * Lock multiple wallets with FOR UPDATE and sync their balances to cache.
-     * 
+     *
      * CRITICAL: This method MUST read balance from DB before locking and sync it to state transaction.
      * The balance is read with FOR UPDATE lock, then synced to StorageService (which uses array cache
      * when PostgresLockService is active). This ensures balance is always fresh from DB within transaction.
-     * 
+     *
      * Optimized: single query for all wallets, single multiSync, single multiGet for verification.
      *
      * @param array<string, string> $uuids Array of key => uuid pairs
@@ -152,7 +153,8 @@ final class PostgresLockService implements LockServiceInterface
             ->keyBy('uuid');
 
         // Check if all wallets were found
-        $foundUuids = $wallets->keys()->all();
+        $foundUuids = $wallets->keys()
+            ->all();
         $missingUuids = array_diff($uuidList, $foundUuids);
         if ($missingUuids !== []) {
             throw new ModelNotFoundException(
@@ -166,10 +168,7 @@ final class PostgresLockService implements LockServiceInterface
         foreach ($uuidList as $uuid) {
             $wallet = $wallets->get($uuid);
             if ($wallet === null) {
-                throw new ModelNotFoundException(
-                    "Wallet not found: {$uuid}",
-                    ExceptionInterface::MODEL_NOT_FOUND
-                );
+                throw new ModelNotFoundException("Wallet not found: {$uuid}", ExceptionInterface::MODEL_NOT_FOUND);
             }
             $balances[$uuid] = $wallet->getOriginalBalanceAttribute();
         }
@@ -195,9 +194,9 @@ final class PostgresLockService implements LockServiceInterface
 
             if ($cachedBalance !== $expectedBalance) {
                 throw new TransactionFailedException(
-                    "CRITICAL: Cache sync failed for wallet {$uuid}. " .
-                    "Expected: {$expectedBalance}, Got: {$cachedBalance}. " .
-                    "This may cause financial inconsistencies!",
+                    "CRITICAL: Cache sync failed for wallet {$uuid}. ".
+                    "Expected: {$expectedBalance}, Got: {$cachedBalance}. ".
+                    'This may cause financial inconsistencies!',
                     ExceptionInterface::TRANSACTION_FAILED
                 );
             }
@@ -217,7 +216,7 @@ final class PostgresLockService implements LockServiceInterface
         // Sort to prevent deadlock
         $sorted = $keys;
         sort($sorted);
+
         return $sorted;
     }
 }
-

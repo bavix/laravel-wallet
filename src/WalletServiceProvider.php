@@ -57,9 +57,9 @@ use Bavix\Wallet\Internal\Service\JsonService;
 use Bavix\Wallet\Internal\Service\JsonServiceInterface;
 use Bavix\Wallet\Internal\Service\LockService;
 use Bavix\Wallet\Internal\Service\LockServiceInterface;
-use Bavix\Wallet\Internal\Service\PostgresLockService;
 use Bavix\Wallet\Internal\Service\MathService;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
+use Bavix\Wallet\Internal\Service\PostgresLockService;
 use Bavix\Wallet\Internal\Service\StateService;
 use Bavix\Wallet\Internal\Service\StateServiceInterface;
 use Bavix\Wallet\Internal\Service\StorageService;
@@ -183,7 +183,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         $configure = config('wallet', []);
 
         $this->internal($configure['internal'] ?? []);
-        $this->services($configure['services'] ?? [], $configure['cache'] ?? []);
+        $this->services($configure['services'] ?? []);
 
         $this->repositories($configure['repositories'] ?? []);
         $this->transformers($configure['transformers'] ?? []);
@@ -267,9 +267,8 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
 
     /**
      * @param array<class-string|null> $configure
-     * @param array{driver?: string|null} $cache
      */
-    private function services(array $configure, array $cache): void
+    private function services(array $configure): void
     {
         $this->app->singleton(AssistantServiceInterface::class, $configure['assistant'] ?? AssistantService::class);
         $this->app->singleton(AtmServiceInterface::class, $configure['atm'] ?? AtmService::class);
@@ -300,9 +299,10 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         // bookkeepper service
         $this->app->when(StorageServiceLockDecorator::class)
             ->needs(StorageServiceInterface::class)
-            ->give(function () use ($cache) {
+            ->give(function () {
                 // Force array cache when PostgresLockService is used
                 $cacheDriver = $this->resolveCacheDriver();
+
                 return $this->app->make(
                     'wallet.internal.storage',
                     [
@@ -571,7 +571,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         // Get connection name from wallet config or use default
         $connectionName = config('wallet.database.connection', config('database.default'));
         $driver = config('database.connections.'.$connectionName.'.driver');
-        
+
         if ($driver === 'pgsql') {
             return PostgresLockService::class;
         }
@@ -582,8 +582,6 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
 
     /**
      * Resolve the appropriate cache driver for StorageService.
-     *
-     * @return string
      */
     private function resolveCacheDriver(): string
     {
@@ -594,7 +592,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         // 3. External cache (database, redis, memcached) would be redundant and could cause inconsistencies
         // 4. Array cache is in-memory and ensures balance is always fresh from DB within transaction
         $lockServiceClass = $this->resolveLockService();
-        
+
         if ($lockServiceClass === PostgresLockService::class) {
             return 'array';
         }
