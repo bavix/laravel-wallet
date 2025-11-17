@@ -11,4 +11,3 @@ return [
     'unconfirmed_invalid' => 'A confirmação já foi redefinida',
     'owner_invalid' => 'Você não é o proprietário da carteira',
 ];
-

@@ -11,4 +11,3 @@ return [
     'unconfirmed_invalid' => 'La confirmation a déjà été réinitialisée',
     'owner_invalid' => 'Vous n\'êtes pas le propriétaire du portefeuille',
 ];
-

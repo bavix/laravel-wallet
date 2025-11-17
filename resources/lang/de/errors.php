@@ -11,4 +11,3 @@ return [
     'unconfirmed_invalid' => 'Die Bestätigung wurde bereits zurückgesetzt',
     'owner_invalid' => 'Sie sind nicht der Eigentümer der Brieftasche',
 ];
-

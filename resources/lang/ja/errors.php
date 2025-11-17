@@ -11,4 +11,3 @@ return [
     'unconfirmed_invalid' => '確認は既にリセットされています',
     'owner_invalid' => 'あなたはウォレットの所有者ではありません',
 ];
-

@@ -11,4 +11,3 @@ return [
     'unconfirmed_invalid' => 'Potwierdzenie zostało już zresetowane',
     'owner_invalid' => 'Nie jesteś właścicielem portfela',
 ];
-

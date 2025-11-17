@@ -11,4 +11,3 @@ return [
     'unconfirmed_invalid' => 'La conferma è già stata reimpostata',
     'owner_invalid' => 'Non sei il proprietario del portafoglio',
 ];
-

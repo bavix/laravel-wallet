@@ -11,4 +11,3 @@ return [
     'unconfirmed_invalid' => 'Onay zaten sıfırlandı',
     'owner_invalid' => 'Bu cüzdanın sahibi değilsiniz',
 ];
-
