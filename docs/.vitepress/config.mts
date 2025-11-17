@@ -97,6 +97,7 @@ export default defineConfig({
           { text: 'Gift', link: '/guide/purchases/gift' },
           { text: 'Cart', link: '/guide/purchases/cart' },
           { text: 'Commissions', link: '/guide/purchases/commissions' },
+          { text: 'Merchant Fee Deductible', link: '/guide/purchases/merchant-fee-deductible' },
           { text: 'Customize receiving', link: '/guide/purchases/receiving' },
         ],
         collapsed: false,
