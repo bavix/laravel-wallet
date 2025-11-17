@@ -1,5 +1,22 @@
 # Changelog
 
+## 11.4.3 - 2025-11-17
+
+### What's Changed
+
+* Adds PHP 8.4 support to the workflow by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1030
+* Bump vite from 5.4.14 to 5.4.18 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1031
+* Refactor PHPStan baseline and update type hints by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1045
+* Update Docker images and health check configurations in GitHub Action… by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1046
+* Bump vite from 5.4.18 to 5.4.21 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1047
+* Update PHP versions in GitHub Actions workflow to include 8.5 by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1051
+* Refactor PHPDoc comments and improve type hints across multiple interfaces and models by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1052
+* Fix Spanish and Chinese error messages for grammatical accuracy by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1054
+* Implement merchant fee deduction logic in PrepareService and HasGift trait by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1053
+* Merchant docs by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1055
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/11.4.2...11.4.3
+
 ## 11.4.0 - 2025-02-26
 
 ### What's Changed
