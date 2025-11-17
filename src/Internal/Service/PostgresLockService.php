@@ -53,12 +53,24 @@ final class PostgresLockService implements LockServiceInterface
         $sortedKeys = $this->sortKeys($keysToLock);
 
         // Extract UUIDs from keys
+        // Keys can be in two formats:
+        // 1. "wallet_lock::uuid" - full format (from AtomicService, tests)
+        // 2. "uuid" - just UUID (from BookkeeperService::multiAmount)
         $uuids = [];
         foreach ($sortedKeys as $key) {
             $uuid = $this->extractUuid($key);
+            // UUID should not be empty - if it is, it will cause ModelNotFoundException
             if ($uuid !== '') {
                 $uuids[$key] = $uuid;
             }
+        }
+
+        // If no valid UUIDs found, throw exception
+        if ($uuids === []) {
+            throw new ModelNotFoundException(
+                'No valid wallet UUIDs found in lock keys',
+                ExceptionInterface::MODEL_NOT_FOUND
+            );
         }
 
         $connection = $this->connectionService->get();
@@ -113,14 +125,28 @@ final class PostgresLockService implements LockServiceInterface
         foreach ($keys as $key) {
             if ($this->isBlocked($key)) {
                 // Clear lockedKeys - DB locks already released by PostgreSQL
+                // Delete both original key and normalized UUID
                 $this->lockedKeys->delete(self::INNER_KEYS.$key);
+                $uuid = $this->extractUuid($key);
+                if ($uuid !== '' && $uuid !== $key) {
+                    $this->lockedKeys->delete(self::INNER_KEYS.$uuid);
+                }
             }
         }
     }
 
     public function isBlocked(string $key): bool
     {
-        return $this->lockedKeys->get(self::INNER_KEYS.$key) === true;
+        // Normalize key - extract UUID if key has prefix
+        $normalizedKey = $this->extractUuid($key);
+        // If extraction failed (empty), use original key
+        if ($normalizedKey === '') {
+            $normalizedKey = $key;
+        }
+        
+        // Check both formats: with prefix and without
+        return $this->lockedKeys->get(self::INNER_KEYS.$key) === true
+            || $this->lockedKeys->get(self::INNER_KEYS.$normalizedKey) === true;
     }
 
     /**
@@ -174,8 +200,15 @@ final class PostgresLockService implements LockServiceInterface
         }
 
         // Mark all keys as locked (single operation per key, but done in batch)
+        // Normalize keys to UUID format for consistent storage
         foreach ($keys as $key) {
+            $uuid = $this->extractUuid($key);
+            $normalizedKey = $uuid !== '' ? $uuid : $key;
+            // Store both original key and normalized UUID for compatibility
             $this->lockedKeys->put(self::INNER_KEYS.$key, true, $this->seconds);
+            if ($normalizedKey !== $key) {
+                $this->lockedKeys->put(self::INNER_KEYS.$normalizedKey, true, $this->seconds);
+            }
         }
 
         // CRITICAL: Sync balances to StorageService (state transaction)
@@ -205,10 +238,17 @@ final class PostgresLockService implements LockServiceInterface
 
     private function extractUuid(string $key): string
     {
-        // Simple UUID extraction - if key is invalid, empty string will be returned
-        // This is safer than throwing an exception, as the key may be in an unexpected format
-        // If UUID is empty, repository will throw ModelNotFoundException when trying to lock
-        return str_replace(self::LOCK_KEY, '', $key);
+        // Extract UUID from key
+        // Keys can be in two formats:
+        // 1. "wallet_lock::uuid" - full format (from AtomicService, tests)
+        // 2. "uuid" - just UUID (from BookkeeperService::multiAmount)
+        // Remove prefix if present, otherwise return key as-is (assuming it's a UUID)
+        if (str_starts_with($key, self::LOCK_KEY)) {
+            return str_replace(self::LOCK_KEY, '', $key);
+        }
+
+        // Key is already a UUID (from BookkeeperService)
+        return $key;
     }
 
     private function sortKeys(array $keys): array

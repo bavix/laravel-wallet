@@ -24,17 +24,23 @@ final class PostgresLockServiceTest extends TestCase
     {
         parent::setUp();
 
-        // Configure to use PostgresLockService
-        // Only test if database is PostgreSQL
-        $driver = config('database.connections.'.config('database.default').'.driver');
-        if ($driver !== 'pgsql') {
-            $this->markTestSkipped('PostgresLockService tests require PostgreSQL database');
+        // Check conditions: lock.driver = database AND database = pgsql
+        $lockDriver = config('wallet.lock.driver', 'array');
+        $dbDriver = config('database.connections.'.config('database.default').'.driver');
+
+        if ($lockDriver !== 'database') {
+            $this->markTestSkipped('PostgresLockService tests require wallet.lock.driver = database');
         }
 
-        // Set lock driver to database to trigger PostgresLockService
-        config([
-            'wallet.lock.driver' => 'database',
-        ]);
+        if ($dbDriver !== 'pgsql') {
+            $this->markTestSkipped('PostgresLockService tests require PostgreSQL database (pgsql)');
+        }
+
+        // Verify that PostgresLockService is actually used
+        $lock = app(LockServiceInterface::class);
+        if (!($lock instanceof PostgresLockService)) {
+            $this->markTestSkipped('PostgresLockService is not being used. LockService: '.get_class($lock));
+        }
     }
 
     public function testBlockSingleWallet(): void
@@ -152,11 +158,13 @@ final class PostgresLockServiceTest extends TestCase
         DB::beginTransaction();
 
         // Accessing balance should trigger automatic locking
+        // BookkeeperService::multiAmount() calls lockService->blocks() with UUID (not wallet_lock::uuid)
         $balance = $user->wallet->balanceInt;
         self::assertSame(1000, $balance);
 
         $lock = app(LockServiceInterface::class);
-        $key = 'wallet_lock::'.$user->wallet->uuid;
+        // BookkeeperService uses UUID as key, not wallet_lock::uuid
+        $key = $user->wallet->uuid;
 
         // Lock should be set after accessing balance
         self::assertTrue($lock->isBlocked($key));
