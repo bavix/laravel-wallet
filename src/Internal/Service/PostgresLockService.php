@@ -143,10 +143,12 @@ final class PostgresLockService implements LockServiceInterface
         if ($normalizedKey === '') {
             $normalizedKey = $key;
         }
-        
         // Check both formats: with prefix and without
-        return $this->lockedKeys->get(self::INNER_KEYS.$key) === true
-            || $this->lockedKeys->get(self::INNER_KEYS.$normalizedKey) === true;
+        if ($this->lockedKeys->get(self::INNER_KEYS.$key) === true) {
+            return true;
+        }
+
+        return $this->lockedKeys->get(self::INNER_KEYS.$normalizedKey) === true;
     }
 
     /**

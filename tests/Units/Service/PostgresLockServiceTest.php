@@ -38,7 +38,7 @@ final class PostgresLockServiceTest extends TestCase
 
         // Verify that PostgresLockService is actually used
         $lock = app(LockServiceInterface::class);
-        if (!($lock instanceof PostgresLockService)) {
+        if (! ($lock instanceof PostgresLockService)) {
             $this->markTestSkipped('PostgresLockService is not being used. LockService: '.get_class($lock));
         }
     }
