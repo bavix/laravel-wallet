@@ -28,6 +28,7 @@ final class ItemMinTax extends Model implements ProductLimitedInterface, Minimal
      */
     protected $fillable = ['name', 'quantity', 'price'];
 
+    #[\Override]
     public function getTable(): string
     {
         return 'items';

@@ -26,6 +26,7 @@ final class UserConfirm extends Model implements Wallet, Confirmable
      */
     protected $fillable = ['name', 'email'];
 
+    #[\Override]
     public function getTable(): string
     {
         return 'users';

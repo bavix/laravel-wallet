@@ -20,12 +20,14 @@ use Illuminate\Database\Eloquent\Model;
  */
 final class SilentlyDiscardingTest extends TestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
         Model::preventSilentlyDiscardingAttributes();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

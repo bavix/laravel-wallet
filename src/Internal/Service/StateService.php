@@ -9,27 +9,27 @@ use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 final readonly class StateService implements StateServiceInterface
 {
-    private const RANDOM_BYTES = 3;
+    private const int RANDOM_BYTES = 3;
 
     /**
      * Keeps the state of balance
      */
-    private const PREFIX_STATE = 'wallet_s::';
+    private const string PREFIX_STATE = 'wallet_s::';
 
     /**
      * Stores a callback reference
      */
-    private const PREFIX_FORK_REF = 'wallet_f::';
+    private const string PREFIX_FORK_REF = 'wallet_f::';
 
     /**
      * Stores a pair of uuid with forkId
      */
-    private const PREFIX_FORK_ID = 'wallet_fc::';
+    private const string PREFIX_FORK_ID = 'wallet_fc::';
 
     /**
      * Stores all uuids for a particular forkId
      */
-    private const PREFIX_HASHMAP = 'wallet_hm::';
+    private const string PREFIX_HASHMAP = 'wallet_hm::';
 
     private CacheRepository $store;
 

@@ -28,6 +28,7 @@ final class ItemMaxTax extends Model implements ProductLimitedInterface, Maximal
      */
     protected $fillable = ['name', 'quantity', 'price'];
 
+    #[\Override]
     public function getTable(): string
     {
         return 'items';

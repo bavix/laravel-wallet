@@ -29,5 +29,5 @@ return static function (RectorConfig $config): void {
     $config->import(SetList::INSTANCEOF);
     $config->import(SetList::CODE_QUALITY);
     $config->import(SetList::DEAD_CODE);
-    $config->import(SetList::PHP_82);
+    $config->import(SetList::PHP_83);
 };

@@ -92,6 +92,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         ];
     }
 
+    #[\Override]
     public function getTable(): string
     {
         if ((string) $this->table === '') {

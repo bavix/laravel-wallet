@@ -21,6 +21,7 @@ final class UserCashier extends Model
     use HasWallets;
     use MorphOneWallet;
 
+    #[\Override]
     public function getTable(): string
     {
         return 'users';

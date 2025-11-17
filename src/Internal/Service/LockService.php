@@ -10,9 +10,9 @@ use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 final class LockService implements LockServiceInterface
 {
-    private const LOCK_KEY = 'wallet_lock::';
+    private const string LOCK_KEY = 'wallet_lock::';
 
-    private const INNER_KEYS = 'inner_keys::';
+    private const string INNER_KEYS = 'inner_keys::';
 
     private ?LockProvider $lockProvider = null;
 

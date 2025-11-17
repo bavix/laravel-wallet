@@ -22,6 +22,7 @@ abstract class TestCase extends OrchestraTestCase
 {
     use RefreshDatabase;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

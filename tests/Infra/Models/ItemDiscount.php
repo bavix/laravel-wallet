@@ -28,6 +28,7 @@ final class ItemDiscount extends Model implements ProductLimitedInterface, Disco
      */
     protected $fillable = ['name', 'quantity', 'price'];
 
+    #[\Override]
     public function getTable(): string
     {
         return 'items';

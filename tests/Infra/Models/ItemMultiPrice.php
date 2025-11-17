@@ -29,6 +29,7 @@ final class ItemMultiPrice extends Model implements ProductLimitedInterface
      */
     protected $fillable = ['name', 'quantity', 'price', 'prices'];
 
+    #[\Override]
     public function getTable(): string
     {
         return 'items';
