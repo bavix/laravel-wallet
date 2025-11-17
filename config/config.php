@@ -84,6 +84,13 @@ return [
         /**
          * The driver for the cache.
          *
+         * Note: When using PostgreSQL with 'database' lock driver, the package
+         * automatically forces 'array' cache driver. This is CRITICAL because:
+         * 1. Before locking, balance MUST be read from DB with FOR UPDATE
+         * 2. This balance is synced to StorageService (state transaction) via multiSync()
+         * 3. External cache (database, redis, memcached) would be redundant and could cause inconsistencies
+         * 4. Array cache ensures balance is always fresh from DB within transaction
+         *
          * @var string
          */
         'driver' => env('WALLET_CACHE_DRIVER', 'array'),
@@ -113,6 +120,11 @@ return [
          * - redis
          * - memcached
          * - database
+         *
+         * When using 'database' driver with PostgreSQL, the package automatically
+         * uses PostgreSQL-specific row-level locks (SELECT ... FOR UPDATE) for
+         * better performance and consistency. For other databases, standard
+         * Laravel database locks are used.
          *
          * @var string
          */

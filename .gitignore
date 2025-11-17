@@ -7,3 +7,5 @@ build/
 node_modules/
 .deptrac.cache
 .phpunit.cache/
+./PLAN.md
+./READMAP.md
