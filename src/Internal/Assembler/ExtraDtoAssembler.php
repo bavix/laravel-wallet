@@ -22,6 +22,6 @@ final readonly class ExtraDtoAssembler implements ExtraDtoAssemblerInterface
 
         $option = $this->optionDtoAssembler->create($data);
 
-        return new Extra($option, $option, null);
+        return new Extra($option, $option);
     }
 }
