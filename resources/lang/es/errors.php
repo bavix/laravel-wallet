@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 return [
     'price_positive' => 'El precio debe ser un valor positivo',
-    'product_stock' => 'El producto no esta disponible en el inventario',
-    'wallet_empty' => 'La cartera esta vacía',
+    'product_stock' => 'El producto no está disponible en el inventario',
+    'wallet_empty' => 'La cartera está vacía',
     'insufficient_funds' => 'Fondos Insuficientes',
     'confirmed_invalid' => 'La transferencia ya fue confirmada',
     'unconfirmed_invalid' => 'La confirmación ya fue restablecida',
