@@ -110,6 +110,7 @@ final class PostgresLockService implements LockServiceInterface
         try {
             return $connection->transaction(function () use ($uuids, $sortedKeys, $callback) {
                 $this->lockWallets($uuids, $sortedKeys);
+
                 return $callback();
             });
         } finally {
@@ -181,7 +182,7 @@ final class PostgresLockService implements LockServiceInterface
         // OPTIMIZATION: Single query to lock all wallets at once
         // SELECT * FROM wallets WHERE uuid IN (?, ?, ...) FOR UPDATE
         $uuidList = array_values($uuids);
-        
+
         try {
             $wallets = Wallet::query()
                 ->whereIn('uuid', $uuidList)
@@ -205,7 +206,7 @@ final class PostgresLockService implements LockServiceInterface
         $foundUuids = $wallets->keys()
             ->all();
         $missingUuids = array_diff($uuidList, $foundUuids);
-        
+
         if ($missingUuids !== []) {
             throw new ModelNotFoundException(
                 'Wallets not found: '.implode(', ', $missingUuids),

@@ -168,7 +168,7 @@ final class PostgresLockServiceTest extends TestCase
         /** @var User $user1 */
         /** @var User $user2 */
         [$user1, $user2] = UserFactory::times(2)->create();
-        
+
         // Ensure wallets are created in database before transaction
         $user1->deposit(0);
         $user2->deposit(0);
@@ -197,7 +197,7 @@ final class PostgresLockServiceTest extends TestCase
 
         /** @var User $user */
         $user = UserFactory::new()->create();
-        
+
         // Ensure wallet is created in database before transaction
         $user->deposit(0);
 
@@ -284,15 +284,19 @@ final class PostgresLockServiceTest extends TestCase
         // Check database driver
         $dbDriver = config('database.default');
         $dbDriverActual = config('database.connections.'.$dbDriver.'.driver');
-        
+
         if ($dbDriver !== 'pgsql' || $dbDriverActual !== 'pgsql') {
-            $this->markTestSkipped('PostgresLockService tests require PostgreSQL database (pgsql). Current: '.$dbDriver.'/'.$dbDriverActual);
+            $this->markTestSkipped(
+                'PostgresLockService tests require PostgreSQL database (pgsql). Current: '.$dbDriver.'/'.$dbDriverActual
+            );
         }
 
         // Check lock driver
         $lockDriver = config('wallet.lock.driver');
         if ($lockDriver !== 'database') {
-            $this->markTestSkipped('PostgresLockService tests require wallet.lock.driver = database. Current: '.($lockDriver ?: 'empty'));
+            $this->markTestSkipped(
+                'PostgresLockService tests require wallet.lock.driver = database. Current: '.($lockDriver ?: 'empty')
+            );
         }
 
         // Verify that PostgresLockService is actually used

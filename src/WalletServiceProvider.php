@@ -238,7 +238,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         $this->app->when($storageServiceClass)
             ->needs('$ttl')
             ->giveConfig('wallet.cache.ttl');
-        
+
         // Register StorageServiceInterface binding so it can be injected
         $this->app->bind(StorageServiceInterface::class, $storageServiceClass);
 
