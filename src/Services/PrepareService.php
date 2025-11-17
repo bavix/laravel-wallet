@@ -118,25 +118,28 @@ final readonly class PrepareService implements PrepareServiceInterface
 
         $amountWithoutDiscount = $this->mathService->sub($amount, $discount, $toWallet->decimal_places);
         $depositAmount = $this->mathService->compare($amountWithoutDiscount, 0) === -1 ? '0' : $amountWithoutDiscount;
-        
+
         // Check if fee should be deducted from merchant's payout instead of added to customer's payment
         // This follows the exact same pattern as TaxService::getFee() which checks $wallet instanceof Taxable
         // The $to parameter is the product model that implements Wallet through HasWallet trait
         // We can check $to directly since it's the model that implements the interface
         $isMerchantFeeDeductible = $to instanceof MerchantFeeDeductible;
-        
+
         if ($isMerchantFeeDeductible) {
             // Fee is deducted from merchant's deposit
             $withdrawAmount = $depositAmount;
             $merchantDepositAmount = $this->mathService->sub($depositAmount, $fee, $toWallet->decimal_places);
             // Ensure merchant deposit amount is not negative
-            $merchantDepositAmount = $this->mathService->compare($merchantDepositAmount, 0) === -1 ? '0' : $merchantDepositAmount;
+            $merchantDepositAmount = $this->mathService->compare(
+                $merchantDepositAmount,
+                0
+            ) === -1 ? '0' : $merchantDepositAmount;
         } else {
             // Fee is added to customer's withdrawal (current behavior)
             $withdrawAmount = $this->mathService->add($depositAmount, $fee, $fromWallet->decimal_places);
             $merchantDepositAmount = $depositAmount;
         }
-        
+
         $extra = $this->extraDtoAssembler->create($meta);
         $withdrawOption = $extra->getWithdrawOption();
         $depositOption = $extra->getDepositOption();

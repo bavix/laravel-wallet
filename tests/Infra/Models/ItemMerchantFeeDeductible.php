@@ -24,7 +24,7 @@ final class ItemMerchantFeeDeductible extends Model implements ProductLimitedInt
     use HasWallet;
 
     /**
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = ['name', 'quantity', 'price'];
 
@@ -69,4 +69,3 @@ final class ItemMerchantFeeDeductible extends Model implements ProductLimitedInt
         return 5.0;
     }
 }
-

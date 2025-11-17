@@ -36,7 +36,7 @@ final class MerchantFeeDeductibleTest extends TestCase
         // With MerchantFeeDeductible, customer pays only the product price (no fee added)
         $productPrice = $product->getAmountProduct($buyer);
         $fee = (int) $math->div($math->mul($productPrice, $product->getFeePercent()), 100);
-        
+
         // Customer only needs to deposit the product price
         $balance = $productPrice;
 
@@ -45,7 +45,6 @@ final class MerchantFeeDeductibleTest extends TestCase
 
         self::assertNotSame(0, $buyer->balanceInt);
         $transfer = $buyer->pay($product);
-        self::assertNotNull($transfer);
 
         $withdraw = $transfer->withdraw;
         $deposit = $transfer->deposit;
@@ -73,11 +72,12 @@ final class MerchantFeeDeductibleTest extends TestCase
 
     public function testGift(): void
     {
-        /**
-         * @var Buyer $santa
-         * @var Buyer $child
-         */
-        [$santa, $child] = BuyerFactory::times(2)->create();
+        /** @var \Illuminate\Database\Eloquent\Collection<int, Buyer> $buyers */
+        $buyers = BuyerFactory::times(2)->create();
+        /** @var Buyer $santa */
+        $santa = $buyers[0];
+        /** @var Buyer $child */
+        $child = $buyers[1];
         /** @var ItemMerchantFeeDeductible $product */
         $product = ItemMerchantFeeDeductibleFactory::new()->create([
             'quantity' => 1,
@@ -88,7 +88,7 @@ final class MerchantFeeDeductibleTest extends TestCase
 
         $productPrice = $product->getAmountProduct($santa);
         $fee = (int) $math->div($math->mul($productPrice, $product->getFeePercent()), 100);
-        
+
         // With MerchantFeeDeductible, customer pays only the product price
         $balance = $productPrice;
 
@@ -99,7 +99,6 @@ final class MerchantFeeDeductibleTest extends TestCase
         self::assertNotSame($santa->balanceInt, 0);
         self::assertSame($child->balanceInt, 0);
         $transfer = $santa->wallet->gift($child, $product);
-        self::assertNotNull($transfer);
 
         $withdraw = $transfer->withdraw;
         $deposit = $transfer->deposit;
@@ -131,11 +130,12 @@ final class MerchantFeeDeductibleTest extends TestCase
         $this->expectExceptionCode(ExceptionInterface::INSUFFICIENT_FUNDS);
         $this->expectExceptionMessageStrict(trans('wallet::errors.insufficient_funds'));
 
-        /**
-         * @var Buyer $santa
-         * @var Buyer $child
-         */
-        [$santa, $child] = BuyerFactory::times(2)->create();
+        /** @var \Illuminate\Database\Eloquent\Collection<int, Buyer> $buyers */
+        $buyers = BuyerFactory::times(2)->create();
+        /** @var Buyer $santa */
+        $santa = $buyers[0];
+        /** @var Buyer $child */
+        $child = $buyers[1];
         /** @var ItemMerchantFeeDeductible $product */
         $product = ItemMerchantFeeDeductibleFactory::new()->create([
             'price' => 200,
@@ -173,12 +173,11 @@ final class MerchantFeeDeductibleTest extends TestCase
         $buyer->deposit($productPrice);
         self::assertSame($buyer->balanceInt, $productPrice);
 
-        $transfer = $buyer->pay($product);
-        self::assertNotNull($transfer);
+        $buyer->pay($product);
 
         // Customer balance should be 0 after payment
         self::assertSame($buyer->balanceInt, 0);
-        
+
         // Merchant should receive product price minus fee
         $expectedMerchantAmount = $productPrice - $fee;
         self::assertSame($product->balanceInt, $expectedMerchantAmount);
@@ -216,19 +215,17 @@ final class MerchantFeeDeductibleTest extends TestCase
 
         // Pay from first wallet
         $transfer1 = $wallet1->pay($product);
-        self::assertNotNull($transfer1);
         self::assertSame($transfer1->status, Transfer::STATUS_PAID);
         self::assertSame($wallet1->balanceInt, 0);
-        
+
         $expectedMerchantAmount1 = $productPrice1 - $fee1;
         self::assertSame($product->balanceInt, $expectedMerchantAmount1);
 
         // Pay from second wallet
         $transfer2 = $wallet2->pay($product);
-        self::assertNotNull($transfer2);
         self::assertSame($transfer2->status, Transfer::STATUS_PAID);
         self::assertSame($wallet2->balanceInt, 0);
-        
+
         $expectedMerchantAmount2 = $productPrice2 - $fee2;
         self::assertSame($product->balanceInt, $expectedMerchantAmount1 + $expectedMerchantAmount2);
 
@@ -247,11 +244,12 @@ final class MerchantFeeDeductibleTest extends TestCase
 
     public function testTransfer(): void
     {
-        /**
-         * @var Buyer $from
-         * @var Buyer $to
-         */
-        [$from, $to] = BuyerFactory::times(2)->create();
+        /** @var \Illuminate\Database\Eloquent\Collection<int, Buyer> $buyers */
+        $buyers = BuyerFactory::times(2)->create();
+        /** @var Buyer $from */
+        $from = $buyers[0];
+        /** @var Buyer $to */
+        $to = $buyers[1];
 
         $math = app(MathServiceInterface::class);
         $amount = 100;
@@ -274,22 +272,19 @@ final class MerchantFeeDeductibleTest extends TestCase
         // Transfer from buyer to product (merchant)
         // With MerchantFeeDeductible, the merchant receives amount minus fee
         $transfer = $from->transfer($product, $amount);
-        self::assertNotNull($transfer);
         self::assertSame($transfer->status, Transfer::STATUS_TRANSFER);
 
         // From wallet should be empty
         self::assertSame($from->balanceInt, 0);
-        
+
         // Product (merchant) should receive amount minus fee
         $expectedMerchantAmount = $amount - $fee;
         self::assertSame($product->balanceInt, $expectedMerchantAmount);
         self::assertSame((int) $transfer->fee, $fee);
 
         // Transfer back from product to buyer
-        $transferBack = $product->transfer($from, $product->balanceInt);
-        self::assertNotNull($transferBack);
+        $product->transfer($from, $product->balanceInt);
         self::assertSame($from->balanceInt, $expectedMerchantAmount);
         self::assertSame($product->balanceInt, 0);
     }
 }
-

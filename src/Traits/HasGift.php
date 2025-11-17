@@ -127,7 +127,10 @@ trait HasGift
                 $withdrawAmount = $amount;
                 $merchantDepositAmount = $mathService->sub($amount, $fee);
                 // Ensure merchant deposit amount is not negative
-                $merchantDepositAmount = $mathService->compare($merchantDepositAmount, 0) === -1 ? '0' : $merchantDepositAmount;
+                $merchantDepositAmount = $mathService->compare(
+                    $merchantDepositAmount,
+                    0
+                ) === -1 ? '0' : $merchantDepositAmount;
             } else {
                 // Fee is added to customer's withdrawal (current behavior)
                 $withdrawAmount = $mathService->add($amount, $fee);
