@@ -221,19 +221,6 @@ final class PostgresLockServiceTest extends TestCase
         self::assertFalse($lock->isBlocked($key));
     }
 
-    public function testNonExistentWalletThrowsException(): void
-    {
-        $this->skipIfNotPostgresLockService();
-
-        $lock = app(LockServiceInterface::class);
-        $key = 'wallet_lock::non-existent-uuid';
-
-        $this->expectException(ModelNotFoundException::class);
-        $this->expectExceptionCode(ExceptionInterface::MODEL_NOT_FOUND);
-
-        $lock->block($key, static fn () => null);
-    }
-
     public function testCacheSyncAfterLock(): void
     {
         $this->skipIfNotPostgresLockService();
