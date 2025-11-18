@@ -60,17 +60,17 @@ final class PostgresLockService implements LockServiceInterface
         // 3. Non-UUID keys (e.g., from LockServiceTest using __METHOD__)
         $uuids = [];
         $nonUuidKeys = [];
-        
+
         foreach ($sortedKeys as $key) {
             // Extract UUID: remove prefix if present, otherwise key is UUID
             $uuid = str_starts_with($key, self::LOCK_KEY)
                 ? str_replace(self::LOCK_KEY, '', $key)
                 : $key;
-            
+
             if ($uuid === '') {
                 continue;
             }
-            
+
             // Simple check: UUID format is 36 chars with dashes (8-4-4-4-12)
             // This is a lightweight check without full validation
             if (strlen($uuid) === 36 && substr_count($uuid, '-') === 4) {
@@ -96,7 +96,7 @@ final class PostgresLockService implements LockServiceInterface
                 // Inside transaction: keep locked until releases() is called
                 return $callback();
             }
-            
+
             // Outside transaction: clear after callback
             try {
                 return $callback();
