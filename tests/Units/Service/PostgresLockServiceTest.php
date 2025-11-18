@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Service;
 
-use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
-use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Internal\Service\LockServiceInterface;
 use Bavix\Wallet\Internal\Service\PostgresLockService;
 use Bavix\Wallet\Services\BookkeeperServiceInterface;

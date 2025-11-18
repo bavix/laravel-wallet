@@ -63,7 +63,7 @@ final class PostgresLockService implements LockServiceInterface
             $uuid = str_starts_with($key, self::LOCK_KEY)
                 ? str_replace(self::LOCK_KEY, '', $key)
                 : $key;
-            
+
             if ($uuid !== '') {
                 $uuids[] = $uuid;
             }
@@ -75,6 +75,7 @@ final class PostgresLockService implements LockServiceInterface
             foreach ($sortedKeys as $key) {
                 $this->lockedKeys->put(self::INNER_KEYS.$key, true, $this->seconds);
             }
+
             return $callback();
         }
 
@@ -114,6 +115,7 @@ final class PostgresLockService implements LockServiceInterface
         try {
             return $connection->transaction(function () use ($uuids, $callback) {
                 $this->lockWallets($uuids);
+
                 return $callback();
             });
         } finally {
@@ -133,7 +135,7 @@ final class PostgresLockService implements LockServiceInterface
             $uuid = str_starts_with($key, self::LOCK_KEY)
                 ? str_replace(self::LOCK_KEY, '', $key)
                 : $key;
-            
+
             if ($uuid !== '' && $this->lockedKeys->get(self::INNER_KEYS.$uuid) === true) {
                 // Clear lockedKeys - DB locks already released by PostgreSQL
                 $this->lockedKeys->delete(self::INNER_KEYS.$uuid);
@@ -147,7 +149,7 @@ final class PostgresLockService implements LockServiceInterface
         $uuid = str_starts_with($key, self::LOCK_KEY)
             ? str_replace(self::LOCK_KEY, '', $key)
             : $key;
-        
+
         if ($uuid === '') {
             return false;
         }
