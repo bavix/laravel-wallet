@@ -57,30 +57,56 @@ final class PostgresLockService implements LockServiceInterface
         // Keys can be in two formats:
         // 1. "wallet_lock::uuid" - full format (from AtomicService, tests)
         // 2. "uuid" - just UUID (from BookkeeperService::multiAmount)
+        // 3. Non-UUID keys (e.g., from LockServiceTest using __METHOD__)
         $uuids = [];
+        $nonUuidKeys = [];
+        
         foreach ($sortedKeys as $key) {
             // Extract UUID: remove prefix if present, otherwise key is UUID
             $uuid = str_starts_with($key, self::LOCK_KEY)
                 ? str_replace(self::LOCK_KEY, '', $key)
                 : $key;
-
-            if ($uuid !== '') {
+            
+            if ($uuid === '') {
+                continue;
+            }
+            
+            // Simple check: UUID format is 36 chars with dashes (8-4-4-4-12)
+            // This is a lightweight check without full validation
+            if (strlen($uuid) === 36 && substr_count($uuid, '-') === 4) {
                 $uuids[] = $uuid;
+            } else {
+                $nonUuidKeys[] = $key;
             }
         }
 
-        // If no valid UUIDs found, mark keys as blocked and execute callback
-        // This handles non-UUID keys (e.g., from LockServiceTest)
-        if ($uuids === []) {
-            foreach ($sortedKeys as $key) {
-                $this->lockedKeys->put(self::INNER_KEYS.$key, true, $this->seconds);
-            }
-
-            return $callback();
+        // Handle non-UUID keys: mark as blocked and execute callback without DB query
+        foreach ($nonUuidKeys as $key) {
+            $this->lockedKeys->put(self::INNER_KEYS.$key, true, $this->seconds);
         }
 
         $connection = $this->connectionService->get();
         $inTransaction = $connection->transactionLevel() > 0;
+
+        // If no UUIDs found, just execute callback
+        // For non-UUID keys inside transaction: keep locked until releases() (like UUID keys)
+        // For non-UUID keys outside transaction: clear in finally block
+        if ($uuids === []) {
+            if ($inTransaction) {
+                // Inside transaction: keep locked until releases() is called
+                return $callback();
+            }
+            
+            // Outside transaction: clear after callback
+            try {
+                return $callback();
+            } finally {
+                // Clear non-UUID keys after callback (similar to UUID keys in finally block)
+                foreach ($nonUuidKeys as $key) {
+                    $this->lockedKeys->delete(self::INNER_KEYS.$key);
+                }
+            }
+        }
 
         if ($inTransaction) {
             // ⚠️ CRITICAL: We are already inside a transaction!
