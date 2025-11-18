@@ -21,7 +21,7 @@ jobs:
         php-versions: [8.3, 8.4, 8.5]
         databases: [testing, pgsql, mysql, mariadb]
         caches: [array, redis, memcached, database]
-        locks: [redis, memcached]
+        locks: [redis, memcached, database]
 
     services:
       redis:
