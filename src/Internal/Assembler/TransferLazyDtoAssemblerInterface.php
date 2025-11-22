@@ -12,18 +12,7 @@ use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 interface TransferLazyDtoAssemblerInterface
 {
     /**
-     * Create transfer lazy dto.
-     *
-     * @param Wallet $fromWallet The source wallet.
-     * @param Wallet $toWallet The destination wallet.
-     * @param int $discount The discount amount.
-     * @param string $fee The fee amount.
-     * @param TransactionDtoInterface $withdrawDto The withdrawal transaction DTO.
-     * @param TransactionDtoInterface $depositDto The deposit transaction DTO.
-     * @param TransferStatus $status The transfer status.
-     * @param string|null $uuid The transfer UUID.
-     * @param array<mixed>|null $extra The extra data.
-     * @return TransferLazyDtoInterface The transfer lazy DTO.
+     * @param array<mixed>|null $extra
      */
     public function create(
         Wallet $fromWallet,
