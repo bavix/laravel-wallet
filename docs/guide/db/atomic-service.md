@@ -20,7 +20,7 @@ What's going on here?
 We block the wallet and raise the ad in the transaction (yes, atomic immediately starts the transaction - this is the main difference from LockServiceInterface).
 We raise the ad and deduct the amount from the wallet. If there are not enough funds to raise the ad, the error will complete the atomic operation and the transaction will roll back, and the lock on the wallet will be removed.
 
-There is also an opportunity to block a lot of wallets. The operation is expensive, it generates N requests to the lock service. Maybe I'll optimize it in the future, but that's not for sure.
+There is also an opportunity to block a lot of wallets. When using PostgreSQL with `lock.driver = 'database'`, the operation is optimized: all wallets are locked in a single database query (`SELECT ... FOR UPDATE`), significantly improving performance compared to multiple individual lock requests.
 
 ---
 
