@@ -21,7 +21,7 @@ jobs:
         php-versions: [8.3, 8.4, 8.5]
         databases: [testing, pgsql, mysql, mariadb]
         caches: [array, redis, memcached, database]
-        locks: [redis, memcached]
+        locks: [redis, memcached, database]
 
     services:
       redis:
@@ -145,7 +145,8 @@ jobs:
 
       - name: Check coveralls
         id: coveralls-check
-        run: echo "execute=${{ matrix.php-versions == '8.3' && matrix.caches == 'array' && matrix.locks == 'redis' && matrix.databases == 'testing' }}" >> $GITHUB_OUTPUT
+        run: |
+          echo "execute=true" >> "$GITHUB_OUTPUT"
 
       - name: Prepare run test suite
         id: unit-prepare
