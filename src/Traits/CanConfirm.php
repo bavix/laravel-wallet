@@ -28,20 +28,16 @@ use Illuminate\Database\RecordsNotFoundException;
 trait CanConfirm
 {
     /**
-     * Confirm transaction.
+     * Confirms an unconfirmed transaction.
      *
-     * This method confirms the given transaction if it is not already confirmed.
-     *
-     * @param Transaction $transaction The transaction to confirm.
-     *
-     * @throws BalanceIsEmpty          If the balance is empty.
-     * @throws InsufficientFunds       If there are insufficient funds.
-     * @throws ConfirmedInvalid         If the transaction is already confirmed.
-     * @throws WalletOwnerInvalid      If the transaction does not belong to the wallet.
-     * @throws RecordNotFoundException If the transaction was not found.
-     * @throws RecordsNotFoundException If no transactions were found.
-     * @throws TransactionFailedException If the transaction failed.
-     * @throws ExceptionInterface       If an exception occurred.
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws ConfirmedInvalid
+     * @throws WalletOwnerInvalid
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function confirm(Transaction $transaction): bool
     {
@@ -77,21 +73,14 @@ trait CanConfirm
     }
 
     /**
-     * Force confirm the transaction.
+     * Confirms transaction and returns false on non-critical failures.
      *
-     * This method forces the confirmation of the given transaction even if it is already confirmed.
-     * If the transaction is already confirmed, a `ConfirmedInvalid` exception will be thrown.
-     * If the transaction does not belong to the wallet, a `WalletOwnerInvalid` exception will be thrown.
-     * If the transaction was not found, a `RecordNotFoundException` will be thrown.
-     *
-     * @param Transaction $transaction The transaction to confirm.
-     *
-     * @throws ConfirmedInvalid         If the transaction is already confirmed.
-     * @throws WalletOwnerInvalid       If the transaction does not belong to the wallet.
-     * @throws RecordNotFoundException If the transaction was not found.
-     * @throws RecordsNotFoundException If no transactions were found.
-     * @throws TransactionFailedException If the transaction failed.
-     * @throws ExceptionInterface       If an exception occurred.
+     * @throws ConfirmedInvalid
+     * @throws WalletOwnerInvalid
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function safeConfirm(Transaction $transaction): bool
     {
@@ -108,22 +97,14 @@ trait CanConfirm
     }
 
     /**
-     * Removal of confirmation (forced), use at your own peril and risk.
+     * Resets confirmation flag for a confirmed transaction.
      *
-     * This method is used to remove the confirmation from a transaction.
-     * If the transaction is already confirmed, a `UnconfirmedInvalid` exception will be thrown.
-     * If the transaction does not belong to the wallet, a `WalletOwnerInvalid` exception will be thrown.
-     * If the transaction was not found, a `RecordNotFoundException` will be thrown.
-     * If an exception occurred, a `TransactionFailedException` or `ExceptionInterface` will be thrown.
-     *
-     * @param Transaction $transaction The transaction to reset.
-     *
-     * @throws UnconfirmedInvalid       If the transaction is not confirmed.
-     * @throws WalletOwnerInvalid       If the transaction does not belong to the wallet.
-     * @throws RecordNotFoundException  If the transaction was not found.
-     * @throws RecordsNotFoundException If no transactions were found.
-     * @throws TransactionFailedException If the transaction failed.
-     * @throws ExceptionInterface        If an exception occurred.
+     * @throws UnconfirmedInvalid
+     * @throws WalletOwnerInvalid
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function resetConfirm(Transaction $transaction): bool
     {
@@ -175,21 +156,14 @@ trait CanConfirm
     }
 
     /**
-     * Forces the confirmation of a transaction.
+     * Confirms transaction without pre-checking transaction type.
      *
-     * This method attempts to confirm a transaction by decreasing the wallet's balance by the transaction's amount.
-     * If the transaction is already confirmed or does not belong to the wallet, an exception will be thrown.
-     * If the confirmation is successfully reset, true will be returned. If an exception occurs, false will be
-     * returned.
-     *
-     * @param Transaction $transaction The transaction to confirm.
-     *
-     * @throws ConfirmedInvalid If the transaction is already confirmed.
-     * @throws WalletOwnerInvalid If the transaction does not belong to the wallet.
-     * @throws RecordNotFoundException If the transaction was not found.
-     * @throws RecordsNotFoundException If no transactions were found.
-     * @throws TransactionFailedException If the transaction failed.
-     * @throws ExceptionInterface If an exception occurred.
+     * @throws ConfirmedInvalid
+     * @throws WalletOwnerInvalid
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function forceConfirm(Transaction $transaction): bool
     {
