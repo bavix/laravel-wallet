@@ -40,10 +40,9 @@ final class PostgresLockServiceTest extends TestCase
     {
         $this->skipIfNotPostgresLockService();
 
-        /** @var User $user1 */
-        /** @var User $user2 */
-        /** @var User $user3 */
-        [$user1, $user2, $user3] = UserFactory::times(3)->create();
+        $users = UserFactory::times(3)->create()->all();
+        /** @var array{0: User, 1: User, 2: User} $users */
+        [$user1, $user2, $user3] = $users;
 
         $user1->deposit(1000);
         $user2->deposit(2000);
@@ -100,9 +99,9 @@ final class PostgresLockServiceTest extends TestCase
     {
         $this->skipIfNotPostgresLockService();
 
-        /** @var User $user1 */
-        /** @var User $user2 */
-        [$user1, $user2] = UserFactory::times(2)->create();
+        $users = UserFactory::times(2)->create()->all();
+        /** @var array{0: User, 1: User} $users */
+        [$user1, $user2] = $users;
 
         $user1->deposit(1000);
         $user2->deposit(2000);
@@ -163,9 +162,9 @@ final class PostgresLockServiceTest extends TestCase
     {
         $this->skipIfNotPostgresLockService();
 
-        /** @var User $user1 */
-        /** @var User $user2 */
-        [$user1, $user2] = UserFactory::times(2)->create();
+        $users = UserFactory::times(2)->create()->all();
+        /** @var array{0: User, 1: User} $users */
+        [$user1, $user2] = $users;
 
         // Ensure wallets are created in database before transaction
         $user1->deposit(0);
@@ -242,9 +241,9 @@ final class PostgresLockServiceTest extends TestCase
     {
         $this->skipIfNotPostgresLockService();
 
-        /** @var User $user1 */
-        /** @var User $user2 */
-        [$user1, $user2] = UserFactory::times(2)->create();
+        $users = UserFactory::times(2)->create()->all();
+        /** @var array{0: User, 1: User} $users */
+        [$user1, $user2] = $users;
 
         $user1->deposit(1000);
         $user2->deposit(2000);
@@ -268,7 +267,14 @@ final class PostgresLockServiceTest extends TestCase
     {
         // Check database driver
         $dbDriver = config('database.default');
+        if (! is_string($dbDriver) || $dbDriver === '') {
+            $dbDriver = 'database';
+        }
+
         $dbDriverActual = config('database.connections.'.$dbDriver.'.driver');
+        if (! is_string($dbDriverActual) || $dbDriverActual === '') {
+            $dbDriverActual = 'unknown';
+        }
 
         if ($dbDriver !== 'pgsql' || $dbDriverActual !== 'pgsql') {
             $this->markTestSkipped(
@@ -277,10 +283,11 @@ final class PostgresLockServiceTest extends TestCase
         }
 
         // Check lock driver
-        $lockDriver = config('wallet.lock.driver');
+        /** @var string $lockDriver */
+        $lockDriver = config('wallet.lock.driver', '');
         if ($lockDriver !== 'database') {
             $this->markTestSkipped(
-                'PostgresLockService tests require wallet.lock.driver = database. Current: '.($lockDriver ?: 'empty')
+                'PostgresLockService tests require wallet.lock.driver = database. Current: '.$lockDriver
             );
         }
 

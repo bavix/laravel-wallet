@@ -578,7 +578,11 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
 
         // Check if database driver is PostgreSQL
         $connectionName = config('wallet.database.connection', config('database.default'));
-        if (config('database.connections.'.$connectionName.'.driver') === 'pgsql') {
+        /** @var string $connectionName */
+        $connectionName = is_string($connectionName) ? $connectionName : '';
+
+        $driver = config('database.connections.'.$connectionName.'.driver');
+        if ($driver === 'pgsql') {
             return PostgresLockService::class;
         }
 
@@ -602,7 +606,10 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
             return 'array';
         }
 
-        // For all other cases - use configured cache driver
-        return config('wallet.cache.driver', 'array');
+        // For all other cases - use configured cache driver (trust client config)
+        /** @var string $cacheDriver */
+        $cacheDriver = config('wallet.cache.driver', 'array');
+
+        return $cacheDriver;
     }
 }

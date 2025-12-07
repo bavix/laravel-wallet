@@ -7,7 +7,7 @@ namespace Bavix\Wallet\Internal\Service;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
-use Bavix\Wallet\Models\Wallet;
+use function config;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Database\QueryException;
@@ -192,7 +192,7 @@ final class PostgresLockService implements LockServiceInterface
      *
      * Optimized: single query for all wallets, single multiSync, single multiGet for verification.
      *
-     * @param string[] $uuids Array of normalized UUIDs (already normalized, no prefix)
+     * @param array<non-empty-string> $uuids Array of normalized UUIDs (already normalized, no prefix)
      */
     private function lockWallets(array $uuids): void
     {
@@ -203,21 +203,32 @@ final class PostgresLockService implements LockServiceInterface
         // CRITICAL: Read balance from DB with FOR UPDATE lock BEFORE syncing to state transaction
         // This ensures we always have the latest balance from database, not from external cache
         // OPTIMIZATION: Single query to lock all wallets at once
-        // SELECT * FROM wallets WHERE uuid IN (?, ?, ...) FOR UPDATE
+        // SELECT uuid, balance FROM wallets WHERE uuid IN (?, ?, ...) FOR UPDATE
+        $connection = $this->connectionService->get();
+        $table = config('wallet.wallet.table', 'wallets');
+        if (! is_string($table) || $table === '') {
+            throw new TransactionFailedException('Invalid wallet table name for locking');
+        }
+
         try {
-            $wallets = Wallet::query()
+            $wallets = $connection->table($table)
+                ->select(['uuid', 'balance'])
                 ->whereIn('uuid', $uuids)
                 ->lockForUpdate()
                 ->get()
                 ->keyBy('uuid');
         } catch (QueryException $e) {
-            // PostgreSQL throws QueryException for invalid UUID format or other database errors
-            // Convert to ModelNotFoundException for consistency
-            throw new ModelNotFoundException(
-                'Invalid wallet UUID or wallet not found: '.implode(', ', $uuids),
-                ExceptionInterface::MODEL_NOT_FOUND,
-                $e
-            );
+            // Only map invalid UUID format to ModelNotFoundException, rethrow everything else
+            $sqlState = $e->errorInfo[0] ?? null;
+            if ($sqlState === '22P02') {
+                throw new ModelNotFoundException(
+                    'Invalid wallet UUID or wallet not found: '.implode(', ', $uuids),
+                    ExceptionInterface::MODEL_NOT_FOUND,
+                    $e
+                );
+            }
+
+            throw $e;
         }
 
         // Extract balances from locked wallets (fresh from DB, not from cache)
@@ -226,15 +237,15 @@ final class PostgresLockService implements LockServiceInterface
         foreach ($uuids as $uuid) {
             $wallet = $wallets->get($uuid);
             if ($wallet !== null) {
-                // Wallet exists in DB - use balance from DB
-                $balances[$uuid] = $wallet->getOriginalBalanceAttribute();
+                $balance = (string) ($wallet->balance ?? '0');
+                assert($balance !== '', 'Balance should not be an empty string');
+                $balances[$uuid] = $balance;
             } else {
                 // Wallet doesn't exist in DB yet (lazy creation) - use balance 0
                 // This is normal for new wallets that haven't been saved yet
                 $balances[$uuid] = '0';
             }
         }
-
         // Mark all UUIDs as locked (store only UUID, already normalized)
         foreach ($uuids as $uuid) {
             $this->lockedKeys->put(self::INNER_KEYS.$uuid, true, $this->seconds);
@@ -265,6 +276,10 @@ final class PostgresLockService implements LockServiceInterface
         }
     }
 
+    /**
+     * @param list<string> $keys
+     * @return list<string>
+     */
     private function sortKeys(array $keys): array
     {
         // Sort to prevent deadlock
