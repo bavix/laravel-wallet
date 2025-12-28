@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\External\Api\PurchaseQuery;
+use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Factories\ItemFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
@@ -37,11 +40,11 @@ final class GiftTest extends TestCase
         $transfer = $first->wallet->gift($second, $product);
         self::assertSame(0, $first->balanceInt);
         self::assertSame(0, $second->balanceInt);
-        self::assertNull($first->paid($product, true));
-        self::assertNotNull($second->paid($product, true));
-        self::assertNull($second->wallet->paid($product));
-        self::assertNotNull($second->wallet->paid($product, true));
-        self::assertSame(Transfer::STATUS_GIFT, $transfer->status);
+        self::assertNull(app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($first, $product, true)));
+        self::assertNotNull(app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($second, $product, true)));
+        self::assertNull(app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($second->wallet, $product)));
+        self::assertNotNull(app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($second->wallet, $product, true)));
+        self::assertSame(TransferStatus::Gift, $transfer->status);
     }
 
     public function testRefund(): void
@@ -65,7 +68,7 @@ final class GiftTest extends TestCase
         $transfer = $first->wallet->gift($second, $product);
         self::assertSame($first->balanceInt, 0);
         self::assertSame($second->balanceInt, 0);
-        self::assertSame($transfer->status, Transfer::STATUS_GIFT);
+        self::assertSame($transfer->status, TransferStatus::Gift);
 
         self::assertFalse($second->wallet->safeRefund($product));
         self::assertTrue($second->wallet->refundGift($product));
@@ -77,7 +80,7 @@ final class GiftTest extends TestCase
 
         $transfer = $second->wallet->forceGift($first, $product);
         self::assertNotNull($transfer);
-        self::assertSame($transfer->status, Transfer::STATUS_GIFT);
+        self::assertSame($transfer->status, TransferStatus::Gift);
 
         self::assertSame($second->balanceInt, -$product->getAmountProduct($second));
 
