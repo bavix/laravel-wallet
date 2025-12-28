@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
+use Bavix\Wallet\Enums\TransactionType;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
@@ -48,11 +49,11 @@ final class WalletTest extends TestCase
         self::assertSame(0, $user->balanceInt);
 
         self::assertSame(3, $user->transactions()->where([
-            'type' => Transaction::TYPE_DEPOSIT,
+            'type' => TransactionType::Deposit->value,
         ])->count());
 
         self::assertSame(1, $user->transactions()->where([
-            'type' => Transaction::TYPE_WITHDRAW,
+            'type' => TransactionType::Withdraw->value,
         ])->count());
 
         self::assertSame(4, $user->transactions()->count());

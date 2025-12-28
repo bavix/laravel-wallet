@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\PurchaseServiceInterface;
@@ -125,7 +126,7 @@ final class CartReceivingTest extends TestCase
         self::assertSame(0, $payment->balanceInt);
 
         foreach ($transfers as $transfer) {
-            self::assertSame(Transfer::STATUS_PAID, $transfer->status);
+            self::assertSame(TransferStatus::Paid, $transfer->status);
             self::assertNull($transfer->status_last);
         }
 
@@ -137,8 +138,8 @@ final class CartReceivingTest extends TestCase
         self::assertTrue($payment->refundCart($cart));
         foreach ($transfers as $transfer) {
             $transfer->refresh();
-            self::assertSame(Transfer::STATUS_REFUND, $transfer->status);
-            self::assertSame(Transfer::STATUS_PAID, $transfer->status_last);
+            self::assertSame(TransferStatus::Refund, $transfer->status);
+            self::assertSame(TransferStatus::Paid, $transfer->status_last);
         }
 
         self::assertSame(10, $payment->balanceInt);

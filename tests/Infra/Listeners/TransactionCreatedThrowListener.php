@@ -15,7 +15,7 @@ final class TransactionCreatedThrowListener
         $createdAt = $transactionCreatedEvent->getCreatedAt()
             ->format(\DateTimeInterface::ATOM);
 
-        $message = hash('sha256', $type.$createdAt);
+        $message = hash('sha256', $type->value.$createdAt);
 
         throw new UnknownEventException($message, $transactionCreatedEvent->getId());
     }
