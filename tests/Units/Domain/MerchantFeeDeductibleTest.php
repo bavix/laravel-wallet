@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
@@ -215,7 +216,7 @@ final class MerchantFeeDeductibleTest extends TestCase
 
         // Pay from first wallet
         $transfer1 = $wallet1->pay($product);
-        self::assertSame($transfer1->status, Transfer::STATUS_PAID);
+        self::assertSame($transfer1->status, TransferStatus::Paid);
         self::assertSame($wallet1->balanceInt, 0);
 
         $expectedMerchantAmount1 = $productPrice1 - $fee1;
@@ -223,7 +224,7 @@ final class MerchantFeeDeductibleTest extends TestCase
 
         // Pay from second wallet
         $transfer2 = $wallet2->pay($product);
-        self::assertSame($transfer2->status, Transfer::STATUS_PAID);
+        self::assertSame($transfer2->status, TransferStatus::Paid);
         self::assertSame($wallet2->balanceInt, 0);
 
         $expectedMerchantAmount2 = $productPrice2 - $fee2;
@@ -272,7 +273,7 @@ final class MerchantFeeDeductibleTest extends TestCase
         // Transfer from buyer to product (merchant)
         // With MerchantFeeDeductible, the merchant receives amount minus fee
         $transfer = $from->transfer($product, $amount);
-        self::assertSame($transfer->status, Transfer::STATUS_TRANSFER);
+        self::assertSame($transfer->status, TransferStatus::Transfer);
 
         // From wallet should be empty
         self::assertSame($from->balanceInt, 0);

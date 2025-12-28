@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Internal\Exceptions\CartEmptyException;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
@@ -155,7 +156,7 @@ final class CartTest extends TestCase
         self::assertSame(0, $buyer->balanceInt);
 
         foreach ($transfers as $transfer) {
-            self::assertSame(Transfer::STATUS_PAID, $transfer->status);
+            self::assertSame(TransferStatus::Paid, $transfer->status);
             self::assertNull($transfer->status_last);
         }
 
@@ -167,8 +168,8 @@ final class CartTest extends TestCase
         self::assertTrue($buyer->refundCart($cart));
         foreach ($transfers as $transfer) {
             $transfer->refresh();
-            self::assertSame(Transfer::STATUS_REFUND, $transfer->status);
-            self::assertSame(Transfer::STATUS_PAID, $transfer->status_last);
+            self::assertSame(TransferStatus::Refund, $transfer->status);
+            self::assertSame(TransferStatus::Paid, $transfer->status_last);
         }
     }
 
@@ -203,7 +204,7 @@ final class CartTest extends TestCase
         self::assertTrue($buyer->refundCart($cart));
         foreach ($transfers as $transfer) {
             $transfer->refresh();
-            self::assertSame(Transfer::STATUS_REFUND, $transfer->status);
+            self::assertSame(TransferStatus::Refund, $transfer->status);
         }
     }
 
@@ -308,7 +309,7 @@ final class CartTest extends TestCase
         self::assertSame(0, $buyer->balanceInt);
 
         foreach ($transfers as $transfer) {
-            self::assertSame(Transfer::STATUS_PAID, $transfer->status);
+            self::assertSame(TransferStatus::Paid, $transfer->status);
         }
 
         foreach ($cart->getItems() as $product) {
@@ -322,7 +323,7 @@ final class CartTest extends TestCase
 
         foreach ($transfers as $transfer) {
             $transfer->refresh();
-            self::assertSame(Transfer::STATUS_REFUND, $transfer->status);
+            self::assertSame(TransferStatus::Refund, $transfer->status);
         }
 
         $withdraw = $buyer->withdraw($buyer->balance); // problem place... withdrawal
