@@ -20,6 +20,7 @@ laravel-wallet - It's easy to work with a virtual wallet.
 
 | Version    | Laravel        | PHP             | Release date | End of improvements | End of support |
 |------------|----------------|-----------------|--------------|---------------------|----------------|
+| 12.x       | ^12.0, ^13.0   | 8.3,8.4,8.5     | —            | —                   | —              |
 | 11.x [LTS] | ^11.0, ^12.0   | 8.3,8.4,8.5     | Mar 14, 2024 | May 1, 2026         | Sep 6, 2026    |
 
 ### Upgrade Guide
@@ -121,6 +122,8 @@ Example with a limited number of products:
 use Bavix\Wallet\Traits\HasWallet;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\ProductLimitedInterface;
+use Bavix\Wallet\External\Api\PurchaseQuery;
+use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 
 class Item extends Model implements ProductLimitedInterface
 {
@@ -132,7 +135,7 @@ class Item extends Model implements ProductLimitedInterface
          * This is where you implement the constraint logic. 
          * 
          * If the service can be purchased once, then
-         *  return !$customer->paid($this);
+         *  return ! app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($customer, $this));
          */
         return true; 
     }
@@ -170,10 +173,10 @@ if ($user->safePay($item)) {
   // try to buy again
 }
 
-var_dump((bool)$user->paid($item)); // bool(true)
+var_dump((bool) app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($user, $item))); // bool(true)
 
 var_dump($user->refund($item)); // bool(true)
-var_dump((bool)$user->paid($item)); // bool(false)
+var_dump((bool) app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($user, $item))); // bool(false)
 ```
 
 ### Eager Loading

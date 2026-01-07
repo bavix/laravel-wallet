@@ -78,6 +78,8 @@ Example with a limited number of products:
 use Bavix\Wallet\Traits\HasWallet;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\ProductLimitedInterface;
+use Bavix\Wallet\External\Api\PurchaseQuery;
+use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 
 class Item extends Model implements ProductLimitedInterface
 {
@@ -89,7 +91,7 @@ class Item extends Model implements ProductLimitedInterface
          * This is where you implement the constraint logic. 
          * 
          * If the service can be purchased once, then
-         *  return !$customer->paid($this);
+         *  return ! app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($customer, $this));
          */
         return true; 
     }
@@ -127,10 +129,10 @@ if ($user->safePay($item)) {
   // try to buy again )
 }
 
-var_dump((bool)$user->paid($item)); // bool(true)
+var_dump((bool) app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($user, $item))); // bool(true)
 
 var_dump($user->refund($item)); // bool(true)
-var_dump((bool)$user->paid($item)); // bool(false)
+var_dump((bool) app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($user, $item))); // bool(false)
 ```
 
 <!--@include: ../../_include/eager_loading.md -->

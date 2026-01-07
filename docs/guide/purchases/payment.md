@@ -56,6 +56,8 @@ Example with a limited number of products:
 use Bavix\Wallet\Traits\HasWallet;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\ProductLimitedInterface;
+use Bavix\Wallet\External\Api\PurchaseQuery;
+use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 
 class Item extends Model implements ProductLimitedInterface
 {
@@ -67,7 +69,7 @@ class Item extends Model implements ProductLimitedInterface
          * This is where you implement the constraint logic. 
          * 
          * If the service can be purchased once, then
-         *  return !$customer->paid($this);
+         *  return ! app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($customer, $this));
          */
         return true; 
     }
@@ -126,7 +128,7 @@ $user->pay($item);
 The question arises, how do you know that the product is purchased?
 
 ```php
-(bool)$user->paid($item); // bool(true)
+(bool) app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($user, $item)); // bool(true)
 ```
 
 ## Safe Pay
