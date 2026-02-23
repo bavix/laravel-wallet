@@ -26,8 +26,8 @@
         "ext-json": "*",
         "ext-pdo": "*",
         "brick/math": "~0.10",
-        "illuminate/contracts": "^11.0|^12.0",
-        "illuminate/database": "^11.0|^12.0",
+        "illuminate/contracts": "^11.0|^12.0|^13.0",
+        "illuminate/database": "^11.0|^12.0|^13.0",
         "ramsey/uuid": "^4.0"
     },
     "require-dev": {
@@ -35,12 +35,12 @@
         "driftingly/rector-laravel": "^2.0",
         "ergebnis/phpstan-rules": "^2.1",
         "infection/infection": "~0.27",
-        "larastan/larastan": "^3.0",
+        "larastan/larastan": "^3.0|dev-l13",
         "laravel/cashier": "^15.0",
         "nunomaduro/collision": "^8.0",
-        "orchestra/testbench": "^10.0",
+        "orchestra/testbench": "^10.0|^11.0",
         "phpstan/phpstan": "^2.1",
-        "phpunit/phpunit": "^11.0",
+        "phpunit/phpunit": "^11.0|^12.5.12",
         "rector/rector": "^2.0",
         "symplify/easy-coding-standard": "^13.0"
     },
