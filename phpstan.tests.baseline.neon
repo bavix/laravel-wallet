@@ -709,6 +709,12 @@ parameters:
 			path: tests/Units/Service/JsonServiceTest.php
 
 		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertTrue\(\) with false will always evaluate to false\.$#'
+			identifier: staticMethod.impossibleType
+			count: 5
+			path: tests/Units/Service/LockServiceTest.php
+
+		-
 			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertTrue\(\) with true will always evaluate to true\.$#'
 			identifier: staticMethod.alreadyNarrowedType
 			count: 3
