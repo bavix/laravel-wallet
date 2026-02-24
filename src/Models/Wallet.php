@@ -92,6 +92,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     /**
      * @return array<string, string>
      */
+    #[\Override]
     public function casts(): array
     {
         return [

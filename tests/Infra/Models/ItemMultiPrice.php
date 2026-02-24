@@ -66,6 +66,7 @@ final class ItemMultiPrice extends Model implements ProductLimitedInterface
     /**
      * @return array<string, string>
      */
+    #[\Override]
     protected function casts(): array
     {
         return [

@@ -64,6 +64,7 @@ class Transaction extends Model
     /**
      * @return array<string, string>
      */
+    #[\Override]
     public function casts(): array
     {
         return [
