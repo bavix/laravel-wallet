@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test\Units\Domain;
 
 use Bavix\Wallet\Enums\TransferStatus;
-use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\External\Api\PurchaseQuery;
 use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
+use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Test\Infra\Factories\ItemFactory;
 use Bavix\Wallet\Test\Infra\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Infra\Models\Item;
@@ -68,11 +67,21 @@ final class MultiWalletGiftTest extends TestCase
         self::assertInstanceOf(UserMulti::class, $transfer->from->holder);
 
         self::assertFalse((bool) app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($wallet, $item)));
-        self::assertFalse((bool) app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($first->wallet, $item)));
-        self::assertFalse((bool) app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($second->wallet, $item)));
+        self::assertFalse(
+            (bool) app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($first->wallet, $item))
+        );
+        self::assertFalse(
+            (bool) app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($second->wallet, $item))
+        );
 
-        self::assertFalse((bool) app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($wallet, $item, true)));
-        self::assertFalse((bool) app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($first->wallet, $item, true)));
-        self::assertTrue((bool) app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($second->wallet, $item, true)));
+        self::assertFalse(
+            (bool) app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($wallet, $item, true))
+        );
+        self::assertFalse(
+            (bool) app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($first->wallet, $item, true))
+        );
+        self::assertTrue(
+            (bool) app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($second->wallet, $item, true))
+        );
     }
 }
