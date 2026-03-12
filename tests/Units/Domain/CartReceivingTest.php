@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test\Units\Domain;
 
 use Bavix\Wallet\Enums\TransferStatus;
+use Bavix\Wallet\External\Api\PurchaseQuery;
+use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\PurchaseServiceInterface;
@@ -143,5 +145,46 @@ final class CartReceivingTest extends TestCase
         }
 
         self::assertSame(10, $payment->balanceInt);
+    }
+
+    public function testPurchaseQueryWithReceivingWallet(): void
+    {
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        /** @var Item $product */
+        $product = ItemFactory::new()->create([
+            'quantity' => 1,
+            'price' => 100,
+        ]);
+
+        $payment = $buyer->createWallet([
+            'name' => 'Dollar',
+            'meta' => [
+                'currency' => 'USD',
+            ],
+        ]);
+
+        $receiving = $product->createWallet([
+            'name' => 'Dollar',
+            'meta' => [
+                'currency' => 'USD',
+            ],
+        ]);
+
+        $cart = app(Cart::class)
+            ->withItem($product, 1, null, $receiving);
+
+        $payment->deposit($cart->getTotal($buyer));
+        $transfers = $payment->payCart($cart);
+        self::assertCount(1, $transfers);
+
+        $handler = app(PurchaseQueryHandlerInterface::class);
+
+        $withoutReceiving = $handler->one(PurchaseQuery::create($payment, $product));
+        self::assertNull($withoutReceiving);
+
+        $withReceiving = $handler->one(PurchaseQuery::create($payment, $product, false, $receiving));
+        self::assertInstanceOf(Transfer::class, $withReceiving);
+        self::assertSame($transfers[0]->getKey(), $withReceiving->getKey());
     }
 }
