@@ -107,9 +107,7 @@ final readonly class TransferService implements TransferServiceInterface
             foreach ($models as $model) {
                 $model->setRelations($links[$model->uuid] ?? []);
 
-                $this->dispatcherService->dispatch(
-                    $this->transferCreatedEventAssembler->create($model)
-                );
+                $this->dispatcherService->dispatch($this->transferCreatedEventAssembler->create($model));
             }
 
             $this->dispatcherService->lazyFlush();
