@@ -10,7 +10,6 @@ use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
-use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Test\Infra\Factories\UserFloatFactory;
 use Bavix\Wallet\Test\Infra\Models\UserFloat;
 use Bavix\Wallet\Test\Infra\Models\UserFloat as User;
