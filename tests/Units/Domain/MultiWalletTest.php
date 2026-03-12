@@ -4,22 +4,20 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
-use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Enums\TransactionType;
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
+use Bavix\Wallet\External\Api\PurchaseQuery;
+use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Internal\Service\IdentifierFactoryServiceInterface;
-use Bavix\Wallet\Models\Transaction;
-use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\BookkeeperServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Test\Infra\Exceptions\PriceNotSetException;
-use Bavix\Wallet\External\Api\PurchaseQuery;
-use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 use Bavix\Wallet\Test\Infra\Factories\ItemFactory;
 use Bavix\Wallet\Test\Infra\Factories\ItemMultiPriceFactory;
 use Bavix\Wallet\Test\Infra\Factories\UserCashierFactory;
