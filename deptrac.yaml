@@ -267,6 +267,7 @@ deptrac:
       - QueryInterface
       - DtoInterface
       - Model
+      - Enum
     Repository:
       - RepositoryInterface
       - TransformInterface

@@ -4,28 +4,32 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet;
 
-use Bavix\Wallet\External\Api\TransactionQueryHandler;
-use Bavix\Wallet\External\Api\TransactionQueryHandlerInterface;
 use Bavix\Wallet\External\Api\PurchaseQueryHandler;
 use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
+use Bavix\Wallet\External\Api\TransactionQueryHandler;
+use Bavix\Wallet\External\Api\TransactionQueryHandlerInterface;
 use Bavix\Wallet\External\Api\TransferQueryHandler;
 use Bavix\Wallet\External\Api\TransferQueryHandlerInterface;
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssemblerInterface;
+use Bavix\Wallet\Internal\Assembler\BalanceCommittingEventAssembler;
+use Bavix\Wallet\Internal\Assembler\BalanceCommittingEventAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\ExtraDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\ExtraDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\OptionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\OptionDtoAssemblerInterface;
+use Bavix\Wallet\Internal\Assembler\TransactionCommittingEventAssembler;
+use Bavix\Wallet\Internal\Assembler\TransactionCommittingEventAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionCreatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionCreatedEventAssemblerInterface;
-use Bavix\Wallet\Internal\Assembler\TransferCreatedEventAssembler;
-use Bavix\Wallet\Internal\Assembler\TransferCreatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionQueryAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionQueryAssemblerInterface;
+use Bavix\Wallet\Internal\Assembler\TransferCreatedEventAssembler;
+use Bavix\Wallet\Internal\Assembler\TransferCreatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
@@ -35,8 +39,12 @@ use Bavix\Wallet\Internal\Assembler\TransferQueryAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\WalletCreatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\WalletCreatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Decorator\StorageServiceLockDecorator;
+use Bavix\Wallet\Internal\Events\BalanceCommittingEvent;
+use Bavix\Wallet\Internal\Events\BalanceCommittingEventInterface;
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEvent;
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEventInterface;
+use Bavix\Wallet\Internal\Events\TransactionCommittingEvent;
+use Bavix\Wallet\Internal\Events\TransactionCommittingEventInterface;
 use Bavix\Wallet\Internal\Events\TransactionCreatedEvent;
 use Bavix\Wallet\Internal\Events\TransactionCreatedEventInterface;
 use Bavix\Wallet\Internal\Events\TransferCreatedEvent;
@@ -344,6 +352,11 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         );
 
         $this->app->singleton(
+            BalanceCommittingEventAssemblerInterface::class,
+            $configure['balance_committing_event'] ?? BalanceCommittingEventAssembler::class
+        );
+
+        $this->app->singleton(
             BalanceUpdatedEventAssemblerInterface::class,
             $configure['balance_updated_event'] ?? BalanceUpdatedEventAssembler::class
         );
@@ -391,6 +404,11 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         );
 
         $this->app->singleton(
+            TransactionCommittingEventAssemblerInterface::class,
+            $configure['transaction_committing_event'] ?? TransactionCommittingEventAssembler::class
+        );
+
+        $this->app->singleton(
             TransferCreatedEventAssemblerInterface::class,
             $configure['transfer_created_event'] ?? TransferCreatedEventAssembler::class
         );
@@ -418,6 +436,11 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     private function events(array $configure): void
     {
         $this->app->bind(
+            BalanceCommittingEventInterface::class,
+            $configure['balance_committing'] ?? BalanceCommittingEvent::class
+        );
+
+        $this->app->bind(
             BalanceUpdatedEventInterface::class,
             $configure['balance_updated'] ?? BalanceUpdatedEvent::class
         );
@@ -430,6 +453,11 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         $this->app->bind(
             TransactionCreatedEventInterface::class,
             $configure['transaction_created'] ?? TransactionCreatedEvent::class
+        );
+
+        $this->app->bind(
+            TransactionCommittingEventInterface::class,
+            $configure['transaction_committing'] ?? TransactionCommittingEvent::class
         );
 
         $this->app->bind(
@@ -523,6 +551,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     {
         return [
             AvailabilityDtoAssemblerInterface::class,
+            BalanceCommittingEventAssemblerInterface::class,
             BalanceUpdatedEventAssemblerInterface::class,
             ExtraDtoAssemblerInterface::class,
             OptionDtoAssemblerInterface::class,
@@ -533,6 +562,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
             TransferQueryAssemblerInterface::class,
             WalletCreatedEventAssemblerInterface::class,
             TransactionCreatedEventAssemblerInterface::class,
+            TransactionCommittingEventAssemblerInterface::class,
             TransferCreatedEventAssemblerInterface::class,
         ];
     }
@@ -552,8 +582,10 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     {
         return [
             BalanceUpdatedEventInterface::class,
+            BalanceCommittingEventInterface::class,
             WalletCreatedEventInterface::class,
             TransactionCreatedEventInterface::class,
+            TransactionCommittingEventInterface::class,
             TransferCreatedEventInterface::class,
         ];
     }
