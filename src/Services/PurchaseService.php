@@ -24,32 +24,43 @@ final readonly class PurchaseService implements PurchaseServiceInterface
             ? [TransferStatus::Paid->value, TransferStatus::Gift->value]
             : [TransferStatus::Paid->value];
 
-        $productCounts = [];
-        $total = 0;
+        $walletIds = [];
         foreach ($basketDto->items() as $itemDto) {
             $wallet = $this->castService->getWallet($itemDto->getReceiving() ?? $itemDto->getProduct());
             $walletId = $wallet->getKey();
-            $productCounts[$walletId] = ($productCounts[$walletId] ?? 0) + count($itemDto);
-            $total += count($itemDto);
+            $walletIds[$walletId] = true;
         }
 
+        /** @var array<int, array<int, \Bavix\Wallet\Models\Transfer>> $groupedByWallet */
+        $groupedByWallet = [];
         $transfers = $customer->transfers()
             ->with(['deposit', 'withdraw.wallet'])
-            ->whereIn('to_id', array_keys($productCounts))
+            ->whereIn('to_id', array_keys($walletIds))
             ->whereIn('status', $status)
             ->orderBy('id', 'desc')
-            ->limit($total)
             ->get();
+        foreach ($transfers as $transfer) {
+            $groupedByWallet[$transfer->to_id] ??= [];
+            $groupedByWallet[$transfer->to_id][] = $transfer;
+        }
 
         $selected = [];
-        foreach ($transfers as $transfer) {
-            $toId = $transfer->to_id;
-            if (! array_key_exists($toId, $productCounts) || $productCounts[$toId] <= 0) {
-                continue;
-            }
+        foreach ($basketDto->items() as $itemDto) {
+            $wallet = $this->castService->getWallet($itemDto->getReceiving() ?? $itemDto->getProduct());
+            $walletId = $wallet->getKey();
 
-            $selected[] = $transfer;
-            $productCounts[$toId]--;
+            foreach ($itemDto->getItems() as $_product) {
+                if (! array_key_exists($walletId, $groupedByWallet)) {
+                    continue;
+                }
+                if ($groupedByWallet[$walletId] === []) {
+                    continue;
+                }
+
+                /** @var \Bavix\Wallet\Models\Transfer $transfer */
+                $transfer = array_shift($groupedByWallet[$walletId]);
+                $selected[] = $transfer;
+            }
         }
 
         return $selected;
