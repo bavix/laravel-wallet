@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test\Units\Domain;
 
 use Bavix\Wallet\Enums\TransferStatus;
-use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\External\Api\PurchaseQuery;
 use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
@@ -41,9 +40,15 @@ final class GiftTest extends TestCase
         self::assertSame(0, $first->balanceInt);
         self::assertSame(0, $second->balanceInt);
         self::assertNull(app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($first, $product, true)));
-        self::assertNotNull(app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($second, $product, true)));
-        self::assertNull(app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($second->wallet, $product)));
-        self::assertNotNull(app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($second->wallet, $product, true)));
+        self::assertNotNull(
+            app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($second, $product, true))
+        );
+        self::assertNull(
+            app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($second->wallet, $product))
+        );
+        self::assertNotNull(
+            app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($second->wallet, $product, true))
+        );
         self::assertSame(TransferStatus::Gift, $transfer->status);
     }
 
