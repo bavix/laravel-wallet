@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Infra\Models;
 
+use Bavix\Wallet\External\Api\PurchaseQuery;
+use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\MerchantFeeDeductible;
 use Bavix\Wallet\Interfaces\ProductLimitedInterface;
-use Bavix\Wallet\External\Api\PurchaseQuery;
-use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\CastService;
 use Bavix\Wallet\Traits\HasWallet;
@@ -44,7 +44,9 @@ final class ItemMerchantFeeDeductible extends Model implements ProductLimitedInt
             return $result;
         }
 
-        return $result && ! app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($customer, $this)) instanceof \Bavix\Wallet\Models\Transfer;
+        return $result && ! app(PurchaseQueryHandlerInterface::class)->one(
+            PurchaseQuery::create($customer, $this)
+        ) instanceof \Bavix\Wallet\Models\Transfer;
     }
 
     public function getAmountProduct(Customer $customer): int
