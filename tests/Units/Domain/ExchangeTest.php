@@ -6,7 +6,6 @@ namespace Bavix\Wallet\Test\Units\Domain;
 
 use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\External\Dto\Extra;
-use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\ExchangeService;
 use Bavix\Wallet\Services\ExchangeServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
