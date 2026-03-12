@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
+use Bavix\Wallet\Internal\Events\BalanceCommittingEventInterface;
+use Bavix\Wallet\Internal\Events\TransactionCommittingEventInterface;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
+use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Infra\Listeners\TransactionStateProjectorListener;
 use Bavix\Wallet\Test\Infra\Listeners\WalletStateProjectorListener;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\PackageModels\Transaction;
@@ -13,7 +17,6 @@ use Bavix\Wallet\Test\Infra\PackageModels\TransactionMoney;
 use Bavix\Wallet\Test\Infra\PackageModels\Wallet;
 use Bavix\Wallet\Test\Infra\TestCase;
 use Bavix\Wallet\Test\Infra\Transform\TransactionDtoTransformerCustom;
-use Illuminate\Database\Events\TransactionCommitting;
 use Illuminate\Support\Facades\Event;
 
 /**
@@ -74,27 +77,120 @@ final class WalletExtensionTest extends TestCase
         self::assertNull($transaction->bank_method);
     }
 
-    public function testWalletStateProjectionViaTransactionCommitting(): void
+    public function testWalletStateProjectionViaBalanceCommittingEvent(): void
     {
-        Event::listen(TransactionCommitting::class, WalletStateProjectorListener::class);
+        // Arrange: subscribe to the committing event projection.
+        $this->enableWalletStateProjection();
 
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
 
+        // Act: apply two confirmed operations.
         $buyer->deposit(150);
 
-        /** @var Wallet $wallet */
-        $wallet = Wallet::query()->findOrFail($buyer->wallet->getKey());
-        self::assertSame('150', $wallet->final_balance);
-        self::assertSame('0', $wallet->frozen_balance);
-        self::assertSame(hash('sha256', $wallet->uuid.':150:0'), $wallet->checksum);
+        // Assert: final state is projected for the wallet after deposit.
+        $this->assertWalletState($buyer->wallet, '150', '0');
 
         $buyer->withdraw(50);
 
+        // Assert: projection reflects the new balance after withdraw.
+        $this->assertWalletState($buyer->wallet, '100', '0');
+    }
+
+    public function testWalletStateProjectionPreservesFrozenBalance(): void
+    {
+        $this->enableWalletStateProjection();
+
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+
+        $wallet = $buyer->wallet;
+        $wallet->forceFill([
+            'frozen_balance' => '25',
+        ])->saveQuietly();
+
+        $buyer->deposit(75);
+        $this->assertWalletState($wallet, '75', '25');
+    }
+
+    public function testWalletStateProjectionUpdatesBothSidesOnTransfer(): void
+    {
+        $this->enableWalletStateProjection();
+
+        /** @var Buyer $from */
+        $from = BuyerFactory::new()->create();
+        /** @var Buyer $to */
+        $to = BuyerFactory::new()->create();
+
+        $from->deposit(200);
+        $from->transfer($to, 70);
+
+        $this->assertWalletState($from->wallet, '130', '0');
+        $this->assertWalletState($to->wallet, '70', '0');
+    }
+
+    public function testWalletStateChecksumChangesWhenBalanceChanges(): void
+    {
+        $this->enableWalletStateProjection();
+
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+
+        $buyer->deposit(50);
         /** @var Wallet $wallet */
         $wallet = Wallet::query()->findOrFail($buyer->wallet->getKey());
-        self::assertSame('100', $wallet->final_balance);
-        self::assertSame('0', $wallet->frozen_balance);
-        self::assertSame(hash('sha256', $wallet->uuid.':100:0'), $wallet->checksum);
+        $checksumAfterDeposit = $wallet->checksum;
+
+        $buyer->deposit(20);
+
+        /** @var Wallet $wallet */
+        $wallet = Wallet::query()->findOrFail($buyer->wallet->getKey());
+        self::assertNotNull($checksumAfterDeposit);
+        self::assertNotSame($checksumAfterDeposit, $wallet->checksum);
+        $this->assertWalletState($wallet, '70', '0');
+    }
+
+    public function testTransactionStateProjectionViaTransactionCommittingEvent(): void
+    {
+        // Arrange: subscribe to transaction committing projection.
+        Event::listen(TransactionCommittingEventInterface::class, TransactionStateProjectorListener::class);
+
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+
+        // Act: create a deposit and then a withdraw.
+        /** @var Transaction $deposit */
+        $deposit = $buyer->deposit(100);
+        /** @var Transaction $withdraw */
+        $withdraw = $buyer->withdraw(30);
+
+        /** @var Transaction $deposit */
+        $deposit = Transaction::query()->findOrFail($deposit->getKey());
+        /** @var Transaction $withdraw */
+        $withdraw = Transaction::query()->findOrFail($withdraw->getKey());
+
+        // Assert: each transaction stores projected final balance and checksum.
+        self::assertSame('100', $deposit->final_balance);
+        self::assertSame(hash('sha256', $deposit->id.':'.$deposit->amount.':100'), $deposit->checksum);
+
+        self::assertSame('70', $withdraw->final_balance);
+        self::assertSame(hash('sha256', $withdraw->id.':'.$withdraw->amount.':70'), $withdraw->checksum);
+    }
+
+    private function enableWalletStateProjection(): void
+    {
+        Event::listen(BalanceCommittingEventInterface::class, WalletStateProjectorListener::class);
+    }
+
+    private function assertWalletState(WalletModel $wallet, string $finalBalance, string $frozenBalance): void
+    {
+        /** @var Wallet $freshWallet */
+        $freshWallet = Wallet::query()->findOrFail($wallet->getKey());
+        self::assertSame($finalBalance, $freshWallet->final_balance);
+        self::assertSame($frozenBalance, $freshWallet->frozen_balance);
+        self::assertSame(
+            hash('sha256', $freshWallet->uuid.':'.$finalBalance.':'.$frozenBalance),
+            $freshWallet->checksum
+        );
     }
 }
