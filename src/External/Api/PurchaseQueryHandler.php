@@ -26,8 +26,10 @@ final readonly class PurchaseQueryHandler implements PurchaseQueryHandlerInterfa
         $toIds = [];
 
         foreach ($objects as $index => $object) {
-            $fromId = $this->castService->getWallet($object->getCustomer())->getKey();
-            $toId = $this->castService->getWallet($object->getReceiving() ?? $object->getProduct())->getKey();
+            $fromId = $this->castService->getWallet($object->getCustomer())
+                ->getKey();
+            $toId = $this->castService->getWallet($object->getReceiving() ?? $object->getProduct())
+                ->getKey();
 
             $fromIds[$fromId] = true;
             $toIds[$toId] = true;
