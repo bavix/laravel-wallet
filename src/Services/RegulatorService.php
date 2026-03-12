@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Internal\Assembler\BalanceCommittingEventAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Repository\WalletRepositoryInterface;
@@ -29,6 +30,7 @@ final class RegulatorService implements RegulatorServiceInterface
     private array $multiIncrease = [];
 
     public function __construct(
+        private readonly BalanceCommittingEventAssemblerInterface $balanceCommittingEventAssembler,
         private readonly BalanceUpdatedEventAssemblerInterface $balanceUpdatedEventAssembler,
         private readonly BookkeeperServiceInterface $bookkeeperService,
         private readonly DispatcherServiceInterface $dispatcherService,
@@ -110,6 +112,16 @@ final class RegulatorService implements RegulatorServiceInterface
         if ($balances === [] || $incrementValues === [] || $this->wallets === []) {
             return;
         }
+
+        /** @var array<int, Wallet> $walletsById */
+        $walletsById = [];
+        foreach ($this->wallets as $wallet) {
+            $walletsById[$wallet->getKey()] = $wallet;
+        }
+
+        $this->dispatcherService->dispatchNow(
+            $this->balanceCommittingEventAssembler->create($balances, $walletsById)
+        );
 
         $this->walletRepository->updateBalances($balances);
         $this->multiIncrease = $this->bookkeeperService->multiIncrease($this->wallets, $incrementValues);
