@@ -185,6 +185,8 @@ final class CartReceivingTest extends TestCase
 
         $withReceiving = $handler->one(PurchaseQuery::create($payment, $product, false, $receiving));
         self::assertInstanceOf(Transfer::class, $withReceiving);
-        self::assertSame($transfers[0]->getKey(), $withReceiving->getKey());
+        $firstTransfer = reset($transfers);
+        self::assertInstanceOf(Transfer::class, $firstTransfer);
+        self::assertSame($firstTransfer->getKey(), $withReceiving->getKey());
     }
 }
