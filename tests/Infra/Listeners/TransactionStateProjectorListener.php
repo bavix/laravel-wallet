@@ -4,33 +4,28 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Infra\Listeners;
 
-use Bavix\Wallet\Internal\Events\BalanceCommittingEventInterface;
-use Bavix\Wallet\Test\Infra\PackageModels\Wallet as WalletModel;
+use Bavix\Wallet\Internal\Events\TransactionCommittingEventInterface;
+use Bavix\Wallet\Test\Infra\PackageModels\Transaction;
 use Illuminate\Support\Facades\DB;
 
-final readonly class WalletStateProjectorListener
+final readonly class TransactionStateProjectorListener
 {
-    public function handle(BalanceCommittingEventInterface $event): void
+    public function handle(TransactionCommittingEventInterface $event): void
     {
-        $balances = $event->getBalances();
-        if ($balances === []) {
-            return;
-        }
-
-        $walletStates = $event->getWalletStates();
+        $transactions = $event->getTransactions();
+        $finalBalances = $event->getFinalBalances();
 
         $rows = [];
-        foreach ($balances as $walletId => $finalBalance) {
-            $walletState = $walletStates[$walletId] ?? null;
-            if (! is_array($walletState)) {
+        foreach ($transactions as $transaction) {
+            $finalBalance = $finalBalances[$transaction['id']] ?? null;
+            if ($finalBalance === null) {
                 continue;
             }
 
             $rows[] = [
-                'id' => $walletId,
+                'id' => $transaction['id'],
                 'final_balance' => $finalBalance,
-                'frozen_balance' => $walletState['frozen_balance'],
-                'checksum' => hash('sha256', $walletState['uuid'].':'.$finalBalance.':'.$walletState['frozen_balance']),
+                'checksum' => hash('sha256', $transaction['id'].':'.$transaction['amount'].':'.$finalBalance),
             ];
         }
 
@@ -41,11 +36,10 @@ final readonly class WalletStateProjectorListener
         if (count($rows) === 1) {
             $row = $rows[0];
 
-            WalletModel::query()
+            Transaction::query()
                 ->whereKey($row['id'])
                 ->update([
                     'final_balance' => $row['final_balance'],
-                    'frozen_balance' => $row['frozen_balance'],
                     'checksum' => $row['checksum'],
                 ]);
 
@@ -54,7 +48,6 @@ final readonly class WalletStateProjectorListener
 
         $ids = [];
         $finalBalanceCases = [];
-        $frozenBalanceCases = [];
         $checksumCases = [];
         $pdo = DB::getPdo();
 
@@ -63,15 +56,13 @@ final readonly class WalletStateProjectorListener
             $ids[] = $id;
 
             $finalBalanceCases[] = 'WHEN '.$id.' THEN '.$pdo->quote($row['final_balance']);
-            $frozenBalanceCases[] = 'WHEN '.$id.' THEN '.$pdo->quote($row['frozen_balance']);
             $checksumCases[] = 'WHEN '.$id.' THEN '.$pdo->quote($row['checksum']);
         }
 
-        DB::table((new WalletModel())->getTable())
+        DB::table((new Transaction())->getTable())
             ->whereIn('id', $ids)
             ->update([
                 'final_balance' => DB::raw('CASE id '.implode(' ', $finalBalanceCases).' END'),
-                'frozen_balance' => DB::raw('CASE id '.implode(' ', $frozenBalanceCases).' END'),
                 'checksum' => DB::raw('CASE id '.implode(' ', $checksumCases).' END'),
             ]);
     }
