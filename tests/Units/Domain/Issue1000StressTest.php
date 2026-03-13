@@ -6,12 +6,7 @@ namespace Bavix\Wallet\Test\Units\Domain;
 
 use Bavix\Wallet\External\Api\PurchaseQuery;
 use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
-use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\PurchaseServiceInterface;
-use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
-use Bavix\Wallet\Test\Infra\Factories\ItemFactory;
-use Bavix\Wallet\Test\Infra\Models\Buyer;
-use Bavix\Wallet\Test\Infra\Models\Item;
 use Bavix\Wallet\Test\Infra\PackageModels\Transfer;
 use Bavix\Wallet\Test\Infra\TestCase;
 
@@ -20,42 +15,28 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class Issue1000StressTest extends TestCase
 {
+    use StressTestSetupTrait;
+
     public function testIssue1000OnMultipleWalletsAndProducts(): void
     {
         $queryHandler = app(PurchaseQueryHandlerInterface::class);
         $legacyPurchaseService = app(PurchaseServiceInterface::class);
 
         for ($walletIndex = 0; $walletIndex < 10; $walletIndex++) {
-            /** @var Buyer $buyer */
-            $buyer = BuyerFactory::new()->create();
+            $buyer = $this->createBuyerWithPaymentWallet($walletIndex);
+            $payment = $buyer->wallet;
 
-            $payment = $buyer->createWallet([
-                'name' => 'Dollar '.$walletIndex,
-                'meta' => [
-                    'currency' => 'USD',
-                ],
-            ]);
-
-            $productsCount = 3 + $walletIndex % 3;
-            $cart = app(Cart::class);
+            $productsCount = $this->getProductsCountForWallet($walletIndex);
+            $cart = $this->createCartWithProductsAndReceivingWallets($walletIndex, $buyer);
             $expectedTransferByReceiving = [];
 
-            for ($productIndex = 0; $productIndex < $productsCount; $productIndex++) {
-                /** @var Item $product */
-                $product = ItemFactory::new()->create([
-                    'quantity' => 1,
-                    'price' => 100 + $walletIndex * 10 + $productIndex,
-                ]);
+            foreach ($cart->getBasketDto()->items() as $itemDto) {
+                $product = $itemDto->getProduct();
+                $receiving = $itemDto->getReceiving();
+                self::assertInstanceOf(\Bavix\Wallet\Test\Infra\Models\Item::class, $product);
+                self::assertInstanceOf(\Bavix\Wallet\Test\Infra\PackageModels\Wallet::class, $receiving);
 
-                $receiving = $product->createWallet([
-                    'name' => 'Dollar '.$walletIndex.'-'.$productIndex,
-                    'meta' => [
-                        'currency' => 'USD',
-                    ],
-                ]);
-
-                $cart = $cart->withItem($product, 1, null, $receiving);
-                $expectedTransferByReceiving[$receiving->getKey()] = [
+                $expectedTransferByReceiving[$receiving->id] = [
                     'product' => $product,
                     'receiving' => $receiving,
                 ];
@@ -72,7 +53,6 @@ final class Issue1000StressTest extends TestCase
             }
 
             foreach ($expectedTransferByReceiving as $receivingId => $pair) {
-                /** @var Item $product */
                 $product = $pair['product'];
                 $receiving = $pair['receiving'];
 
