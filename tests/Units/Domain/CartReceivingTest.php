@@ -8,6 +8,7 @@ use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\External\Api\PurchaseQuery;
 use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\PurchaseServiceInterface;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
@@ -38,19 +39,7 @@ final class CartReceivingTest extends TestCase
 
         $expected = 'pay';
 
-        $payment = $buyer->createWallet([
-            'name' => 'Dollar',
-            'meta' => [
-                'currency' => 'USD',
-            ],
-        ]);
-
-        $receiving = $product->createWallet([
-            'name' => 'Dollar',
-            'meta' => [
-                'currency' => 'USD',
-            ],
-        ]);
+        [$payment, $receiving] = $this->createUsdWallets($buyer, $product);
 
         $cart = app(Cart::class)
             ->withItem($product, receiving: $receiving)
@@ -158,19 +147,7 @@ final class CartReceivingTest extends TestCase
             'price' => 100,
         ]);
 
-        $payment = $buyer->createWallet([
-            'name' => 'Dollar',
-            'meta' => [
-                'currency' => 'USD',
-            ],
-        ]);
-
-        $receiving = $product->createWallet([
-            'name' => 'Dollar',
-            'meta' => [
-                'currency' => 'USD',
-            ],
-        ]);
+        [$payment, $receiving] = $this->createUsdWallets($buyer, $product);
 
         $cart = app(Cart::class)
             ->withItem($product, 1, null, $receiving);
@@ -201,19 +178,7 @@ final class CartReceivingTest extends TestCase
             'price' => 100,
         ]);
 
-        $payment = $buyer->createWallet([
-            'name' => 'Dollar',
-            'meta' => [
-                'currency' => 'USD',
-            ],
-        ]);
-
-        $receiving = $product->createWallet([
-            'name' => 'Dollar',
-            'meta' => [
-                'currency' => 'USD',
-            ],
-        ]);
+        [$payment, $receiving] = $this->createUsdWallets($buyer, $product);
 
         $cart = app(Cart::class)
             ->withItem($product, 1, null, $receiving);
@@ -245,19 +210,7 @@ final class CartReceivingTest extends TestCase
             'price' => 100,
         ]);
 
-        $payment = $buyer->createWallet([
-            'name' => 'Dollar',
-            'meta' => [
-                'currency' => 'USD',
-            ],
-        ]);
-
-        $receiving = $product->createWallet([
-            'name' => 'Dollar',
-            'meta' => [
-                'currency' => 'USD',
-            ],
-        ]);
+        [$payment, $receiving] = $this->createUsdWallets($buyer, $product);
 
         $singleCart = app(Cart::class)
             ->withItem($product, 1, null, $receiving);
@@ -285,19 +238,7 @@ final class CartReceivingTest extends TestCase
             'price' => 100,
         ]);
 
-        $payment = $buyer->createWallet([
-            'name' => 'Dollar',
-            'meta' => [
-                'currency' => 'USD',
-            ],
-        ]);
-
-        $receiving = $product->createWallet([
-            'name' => 'Dollar',
-            'meta' => [
-                'currency' => 'USD',
-            ],
-        ]);
+        [$payment, $receiving] = $this->createUsdWallets($buyer, $product);
 
         $cart = app(Cart::class)
             ->withItem($product, 1, null, $receiving);
@@ -352,5 +293,29 @@ final class CartReceivingTest extends TestCase
         $firstTransfer->refresh();
         self::assertSame(TransferStatus::Refund, $firstTransfer->status);
         self::assertSame(TransferStatus::Paid, $firstTransfer->status_last);
+    }
+
+    /**
+     * Creates a USD Dollar wallet for both buyer and product.
+     *
+     * @return array{0: WalletModel, 1: WalletModel}
+     */
+    private function createUsdWallets(Buyer $buyer, Item|ItemMeta $product): array
+    {
+        $payment = $buyer->createWallet([
+            'name' => 'Dollar',
+            'meta' => [
+                'currency' => 'USD',
+            ],
+        ]);
+
+        $receiving = $product->createWallet([
+            'name' => 'Dollar',
+            'meta' => [
+                'currency' => 'USD',
+            ],
+        ]);
+
+        return [$payment, $receiving];
     }
 }
