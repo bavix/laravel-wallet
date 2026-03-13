@@ -93,7 +93,6 @@ final readonly class PurchaseQueryHandler implements PurchaseQueryHandlerInterfa
      */
     private function matchByPurchases(array $fromIds, array $toIds): array
     {
-        $matchedTransferIds = [];
         $purchases = $this->purchase->newQuery()
             ->select(['id', 'transfer_id', 'from_id', 'to_id', 'status'])
             ->whereIn('from_id', array_keys($fromIds))
@@ -102,15 +101,57 @@ final readonly class PurchaseQueryHandler implements PurchaseQueryHandlerInterfa
             ->orderByDesc('id')
             ->get();
 
+        return $this->processPurchaseMatches($purchases);
+    }
+
+    /**
+     * @param iterable<Purchase> $purchases
+     * @return array<string, int>
+     */
+    private function processPurchaseMatches(iterable $purchases): array
+    {
+        $matchedTransferIds = [];
+
         foreach ($purchases as $purchase) {
             $strictKey = $this->key($purchase->from_id, $purchase->to_id, false);
-            if ($purchase->status === TransferStatus::Paid && ! array_key_exists($strictKey, $matchedTransferIds)) {
+            if (
+                $purchase->status === TransferStatus::Paid
+                && ! array_key_exists($strictKey, $matchedTransferIds)
+            ) {
                 $matchedTransferIds[$strictKey] = $purchase->transfer_id;
             }
 
             $giftsKey = $this->key($purchase->from_id, $purchase->to_id, true);
             if (! array_key_exists($giftsKey, $matchedTransferIds)) {
                 $matchedTransferIds[$giftsKey] = $purchase->transfer_id;
+            }
+        }
+
+        return $matchedTransferIds;
+    }
+
+    /**
+     * @param iterable<Transfer> $transfers
+     * @param array<string, true> $filterKeys
+     * @return array<string, int>
+     */
+    private function processTransferMatches(iterable $transfers, array $filterKeys): array
+    {
+        $matchedTransferIds = [];
+
+        foreach ($transfers as $transfer) {
+            $strictKey = $this->key($transfer->from_id, $transfer->to_id, false);
+            if (
+                $transfer->status === TransferStatus::Paid
+                && array_key_exists($strictKey, $filterKeys)
+                && ! array_key_exists($strictKey, $matchedTransferIds)
+            ) {
+                $matchedTransferIds[$strictKey] = $transfer->getKey();
+            }
+
+            $giftsKey = $this->key($transfer->from_id, $transfer->to_id, true);
+            if (array_key_exists($giftsKey, $filterKeys) && ! array_key_exists($giftsKey, $matchedTransferIds)) {
+                $matchedTransferIds[$giftsKey] = $transfer->getKey();
             }
         }
 
@@ -161,23 +202,9 @@ final readonly class PurchaseQueryHandler implements PurchaseQueryHandlerInterfa
             ->orderByDesc($this->transfer->getKeyName())
             ->get();
 
-        foreach ($transfers as $transfer) {
-            $strictKey = $this->key($transfer->from_id, $transfer->to_id, false);
-            if (
-                $transfer->status === TransferStatus::Paid
-                && array_key_exists($strictKey, $needFallback)
-                && ! array_key_exists($strictKey, $matchedTransferIds)
-            ) {
-                $matchedTransferIds[$strictKey] = $transfer->getKey();
-            }
+        $newMatches = $this->processTransferMatches($transfers, $needFallback);
 
-            $giftsKey = $this->key($transfer->from_id, $transfer->to_id, true);
-            if (array_key_exists($giftsKey, $needFallback) && ! array_key_exists($giftsKey, $matchedTransferIds)) {
-                $matchedTransferIds[$giftsKey] = $transfer->getKey();
-            }
-        }
-
-        return $matchedTransferIds;
+        return array_merge($matchedTransferIds, $newMatches);
     }
 
     /**
