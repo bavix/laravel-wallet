@@ -8,12 +8,7 @@ use Bavix\Wallet\Internal\Events\BalanceCommittingEventInterface;
 use Bavix\Wallet\Internal\Events\TransactionCommittingEventInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
-use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\TransactionServiceInterface;
-use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
-use Bavix\Wallet\Test\Infra\Factories\ItemFactory;
-use Bavix\Wallet\Test\Infra\Models\Buyer;
-use Bavix\Wallet\Test\Infra\Models\Item;
 use Bavix\Wallet\Test\Infra\PackageModels\TransactionState;
 use Bavix\Wallet\Test\Infra\PackageModels\Transfer;
 use Bavix\Wallet\Test\Infra\Services\ProjectedTransactionService;
@@ -27,6 +22,8 @@ use Override;
  */
 final class Issue1015StressTest extends TestCase
 {
+    use StressTestSetupTrait;
+
     #[Override]
     protected function setUp(): void
     {
@@ -54,35 +51,10 @@ final class Issue1015StressTest extends TestCase
         $walletExpectedBalances = [];
 
         for ($walletIndex = 0; $walletIndex < 10; $walletIndex++) {
-            /** @var Buyer $buyer */
-            $buyer = BuyerFactory::new()->create();
-
-            $payment = $buyer->createWallet([
-                'name' => 'Dollar '.$walletIndex,
-                'meta' => [
-                    'currency' => 'USD',
-                ],
-            ]);
-
-            $productsCount = 3 + $walletIndex % 3;
-            $cart = app(Cart::class);
-
-            for ($productIndex = 0; $productIndex < $productsCount; $productIndex++) {
-                /** @var Item $product */
-                $product = ItemFactory::new()->create([
-                    'quantity' => 1,
-                    'price' => 100 + $walletIndex * 10 + $productIndex,
-                ]);
-
-                $receiving = $product->createWallet([
-                    'name' => 'Dollar '.$walletIndex.'-'.$productIndex,
-                    'meta' => [
-                        'currency' => 'USD',
-                    ],
-                ]);
-
-                $cart = $cart->withItem($product, 1, null, $receiving);
-            }
+            $buyer = $this->createBuyerWithPaymentWallet($walletIndex);
+            $payment = $buyer->wallet;
+            $cart = $this->createCartWithProductsAndReceivingWallets($walletIndex, $buyer);
+            $productsCount = $this->getProductsCountForWallet($walletIndex);
 
             /** @var TransactionState $warmupDeposit */
             $warmupDeposit = $payment->deposit(1000);
@@ -103,6 +75,40 @@ final class Issue1015StressTest extends TestCase
             $warmupWithdrawExpected = $math->round($math->add($warmupWithdrawPrevious, $warmupWithdraw->amount));
             $expectedFinalBalances[$warmupWithdraw->getKey()] = $warmupWithdrawExpected;
             $walletExpectedBalances[$warmupWithdrawWalletId] = $warmupWithdrawExpected;
+
+            $fundingTransaction = $payment->deposit($cart->getTotal($buyer));
+            $transactionIds[] = $fundingTransaction->getKey();
+
+            $fundingWalletId = $fundingTransaction->wallet_id;
+            $fundingPrevious = $walletExpectedBalances[$fundingWalletId] ?? '0';
+            $fundingExpected = $math->round($math->add($fundingPrevious, $fundingTransaction->amount));
+            $expectedFinalBalances[$fundingTransaction->getKey()] = $fundingExpected;
+            $walletExpectedBalances[$fundingWalletId] = $fundingExpected;
+
+            $transfers = $payment->payCart($cart);
+            self::assertCount($productsCount, $transfers);
+
+            foreach ($transfers as $transfer) {
+                self::assertInstanceOf(Transfer::class, $transfer);
+                $transactionIds[] = $transfer->deposit_id;
+                $transactionIds[] = $transfer->withdraw_id;
+
+                $withdraw = $transfer->withdraw;
+                self::assertInstanceOf(TransactionState::class, $withdraw);
+                $withdrawWalletId = $withdraw->wallet_id;
+                $withdrawPrevious = $walletExpectedBalances[$withdrawWalletId] ?? '0';
+                $withdrawExpected = $math->round($math->add($withdrawPrevious, $withdraw->amount));
+                $expectedFinalBalances[$withdraw->getKey()] = $withdrawExpected;
+                $walletExpectedBalances[$withdrawWalletId] = $withdrawExpected;
+
+                $deposit = $transfer->deposit;
+                self::assertInstanceOf(TransactionState::class, $deposit);
+                $depositWalletId = $deposit->wallet_id;
+                $depositPrevious = $walletExpectedBalances[$depositWalletId] ?? '0';
+                $depositExpected = $math->round($math->add($depositPrevious, $deposit->amount));
+                $expectedFinalBalances[$deposit->getKey()] = $depositExpected;
+                $walletExpectedBalances[$depositWalletId] = $depositExpected;
+            }
 
             $fundingTransaction = $payment->deposit($cart->getTotal($buyer));
             $transactionIds[] = $fundingTransaction->getKey();
