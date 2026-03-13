@@ -20,6 +20,7 @@ use Bavix\Wallet\Test\Infra\PackageModels\Transaction;
 use Bavix\Wallet\Test\Infra\TestCase;
 use function count;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @internal
@@ -147,7 +148,7 @@ final class CartReceivingTest extends TestCase
         self::assertSame(10, $payment->balanceInt);
     }
 
-    public function testPurchaseQueryWithReceivingWallet(): void
+    public function testIssue1000PurchaseQueryWithReceivingWallet(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -188,5 +189,128 @@ final class CartReceivingTest extends TestCase
         $firstTransfer = reset($transfers);
         self::assertInstanceOf(Transfer::class, $firstTransfer);
         self::assertSame($firstTransfer->getKey(), $withReceiving->getKey());
+    }
+
+    public function testIssue1000LegacyPurchaseServiceWithReceivingWallet(): void
+    {
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        /** @var Item $product */
+        $product = ItemFactory::new()->create([
+            'quantity' => 1,
+            'price' => 100,
+        ]);
+
+        $payment = $buyer->createWallet([
+            'name' => 'Dollar',
+            'meta' => [
+                'currency' => 'USD',
+            ],
+        ]);
+
+        $receiving = $product->createWallet([
+            'name' => 'Dollar',
+            'meta' => [
+                'currency' => 'USD',
+            ],
+        ]);
+
+        $cart = app(Cart::class)
+            ->withItem($product, 1, null, $receiving);
+
+        $payment->deposit($cart->getTotal($buyer));
+        $transfers = $payment->payCart($cart);
+        self::assertCount(1, $transfers);
+
+        $legacy = app(PurchaseServiceInterface::class)
+            ->already($payment, $cart->getBasketDto(), false);
+
+        self::assertCount(1, $legacy);
+
+        $firstTransfer = reset($transfers);
+        $legacyTransfer = reset($legacy);
+
+        self::assertInstanceOf(Transfer::class, $firstTransfer);
+        self::assertInstanceOf(Transfer::class, $legacyTransfer);
+        self::assertSame($firstTransfer->getKey(), $legacyTransfer->getKey());
+    }
+
+    public function testPurchaseQueryFallbackToTransfersWhenLedgerMissing(): void
+    {
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        /** @var Item $product */
+        $product = ItemFactory::new()->create([
+            'quantity' => 1,
+            'price' => 100,
+        ]);
+
+        $payment = $buyer->createWallet([
+            'name' => 'Dollar',
+            'meta' => [
+                'currency' => 'USD',
+            ],
+        ]);
+
+        $receiving = $product->createWallet([
+            'name' => 'Dollar',
+            'meta' => [
+                'currency' => 'USD',
+            ],
+        ]);
+
+        $cart = app(Cart::class)
+            ->withItem($product, 1, null, $receiving);
+
+        $payment->deposit($cart->getTotal($buyer));
+        $transfers = $payment->payCart($cart);
+        self::assertCount(1, $transfers);
+
+        $firstTransfer = reset($transfers);
+        self::assertInstanceOf(Transfer::class, $firstTransfer);
+
+        /** @var string $purchaseTable */
+        $purchaseTable = config('wallet.purchase.table', 'purchase');
+        DB::table($purchaseTable)
+            ->where('transfer_id', $firstTransfer->getKey())
+            ->delete();
+
+        $queryHandler = app(PurchaseQueryHandlerInterface::class);
+        $matched = $queryHandler->one(PurchaseQuery::create($payment, $product, false, $receiving));
+
+        self::assertInstanceOf(Transfer::class, $matched);
+        self::assertSame($firstTransfer->getKey(), $matched->getKey());
+    }
+
+    public function testRefundSucceedsWhenPurchaseLedgerRecordMissing(): void
+    {
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        /** @var Item $product */
+        $product = ItemFactory::new()->create([
+            'quantity' => 1,
+            'price' => 100,
+        ]);
+
+        $cart = app(Cart::class)->withItem($product);
+
+        $buyer->deposit($cart->getTotal($buyer));
+        $transfers = $buyer->payCart($cart);
+        self::assertCount(1, $transfers);
+
+        $firstTransfer = reset($transfers);
+        self::assertInstanceOf(Transfer::class, $firstTransfer);
+
+        /** @var string $purchaseTable */
+        $purchaseTable = config('wallet.purchase.table', 'purchase');
+        DB::table($purchaseTable)
+            ->where('transfer_id', $firstTransfer->getKey())
+            ->delete();
+
+        self::assertTrue($buyer->refundCart($cart));
+
+        $firstTransfer->refresh();
+        self::assertSame(TransferStatus::Refund, $firstTransfer->status);
+        self::assertSame(TransferStatus::Paid, $firstTransfer->status_last);
     }
 }

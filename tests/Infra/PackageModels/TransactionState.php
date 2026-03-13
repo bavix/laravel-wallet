@@ -7,17 +7,14 @@ namespace Bavix\Wallet\Test\Infra\PackageModels;
 use Override;
 
 /**
- * Class Transaction.
- *
- * @property null|string $bank_method
  * @property null|string $final_balance
  * @property null|string $checksum
  */
-final class Transaction extends \Bavix\Wallet\Models\Transaction
+final class TransactionState extends \Bavix\Wallet\Models\Transaction
 {
     #[Override]
     public function getFillable(): array
     {
-        return array_merge($this->fillable, ['bank_method']);
+        return array_merge($this->fillable, ['final_balance', 'checksum']);
     }
 }

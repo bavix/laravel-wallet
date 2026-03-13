@@ -276,6 +276,8 @@ Replace `Bavix\Wallet\Interfaces\Product` to `Bavix\Wallet\Interfaces\ProductLim
    - `wallet.internal.uuid` config key;
 5. `Customer::paid()` / `CartPay::paid()` were removed.
    Use `PurchaseQuery` + `PurchaseQueryHandlerInterface` for purchase checks.
+6. `PurchaseServiceInterface` is now a legacy extension point and will be removed in v14.
+   New integrations should use `PurchaseQueryHandlerInterface`.
 
 Example migration for purchase checks:
 

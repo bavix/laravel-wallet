@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Test\Infra\Listeners;
 
 use Bavix\Wallet\Internal\Events\TransactionCommittingEventInterface;
 use Bavix\Wallet\Test\Infra\PackageModels\Transaction;
+use Illuminate\Contracts\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
 
 final readonly class TransactionStateProjectorListener
@@ -47,23 +48,29 @@ final readonly class TransactionStateProjectorListener
         }
 
         $ids = [];
-        $finalBalanceCases = [];
-        $checksumCases = [];
-        $pdo = DB::getPdo();
-
         foreach ($rows as $row) {
-            $id = $row['id'];
-            $ids[] = $id;
-
-            $finalBalanceCases[] = 'WHEN '.$id.' THEN '.$pdo->quote($row['final_balance']);
-            $checksumCases[] = 'WHEN '.$id.' THEN '.$pdo->quote($row['checksum']);
+            $ids[] = $row['id'];
         }
 
-        DB::table((new Transaction())->getTable())
+        Transaction::query()
             ->whereIn('id', $ids)
             ->update([
-                'final_balance' => DB::raw('CASE id '.implode(' ', $finalBalanceCases).' END'),
-                'checksum' => DB::raw('CASE id '.implode(' ', $checksumCases).' END'),
+                'final_balance' => $this->buildCase($rows, 'final_balance'),
+                'checksum' => $this->buildCase($rows, 'checksum'),
             ]);
+    }
+
+    /**
+     * @param list<array{id: int, final_balance: string, checksum: string}> $rows
+     */
+    private function buildCase(array $rows, string $column): Expression
+    {
+        $pdo = DB::getPdo();
+        $cases = [];
+        foreach ($rows as $row) {
+            $cases[] = 'WHEN '.$row['id'].' THEN '.$pdo->quote((string) $row[$column]);
+        }
+
+        return DB::raw('CASE id '.implode(' ', $cases).' END');
     }
 }

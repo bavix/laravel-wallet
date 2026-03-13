@@ -11,6 +11,7 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Override;
 
 /**
  * Class Transfer.
@@ -59,7 +60,7 @@ class Transfer extends Model
     /**
      * @return array<string, string>
      */
-    #[\Override]
+    #[Override]
     public function casts(): array
     {
         return [
@@ -71,7 +72,7 @@ class Transfer extends Model
         ];
     }
 
-    #[\Override]
+    #[Override]
     public function getTable(): string
     {
         if ((string) $this->table === '') {
@@ -135,11 +136,9 @@ class Transfer extends Model
         return $belongsTo;
     }
 
-    #[\Override]
-    protected static function boot(): void
+    #[Override]
+    protected static function booted(): void
     {
-        parent::boot();
-
         static::observe(TransferObserver::class);
     }
 }

@@ -21,6 +21,7 @@ use Bavix\Wallet\Internal\Events\TransactionCommittingEvent;
 use Bavix\Wallet\Internal\Events\TransactionCreatedEvent;
 use Bavix\Wallet\Internal\Events\TransferCreatedEvent;
 use Bavix\Wallet\Internal\Events\WalletCreatedEvent;
+use Bavix\Wallet\Internal\Repository\PurchaseRepository;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
 use Bavix\Wallet\Internal\Repository\WalletRepository;
@@ -37,6 +38,7 @@ use Bavix\Wallet\Internal\Service\StorageService;
 use Bavix\Wallet\Internal\Service\TranslatorService;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
 use Bavix\Wallet\Internal\Transform\TransferDtoTransformer;
+use Bavix\Wallet\Models\Purchase;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
@@ -285,6 +287,10 @@ return [
          */
         'transaction' => TransactionRepository::class,
         /**
+         * Repository for fetching purchase ledger data.
+         */
+        'purchase' => PurchaseRepository::class,
+        /**
          * Repository for fetching transfer data.
          *
          * @see \Bavix\Wallet\Interfaces\Transfer
@@ -466,6 +472,21 @@ return [
          * @see Transfer
          */
         'model' => Transfer::class,
+    ],
+
+    /**
+     * Base model 'purchase'.
+     */
+    'purchase' => [
+        /**
+         * The table name for purchases ledger.
+         */
+        'table' => env('WALLET_PURCHASE_TABLE_NAME', 'wallet_purchases'),
+
+        /**
+         * The model class for purchases ledger.
+         */
+        'model' => Purchase::class,
     ],
 
     /**
