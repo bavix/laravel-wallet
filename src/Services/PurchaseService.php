@@ -10,6 +10,8 @@ use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
 
 /**
  * @internal
+ *
+ * @deprecated Use PurchaseQueryHandlerInterface; will be removed in v14.
  */
 final readonly class PurchaseService implements PurchaseServiceInterface
 {

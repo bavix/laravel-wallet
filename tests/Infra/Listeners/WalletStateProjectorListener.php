@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Test\Infra\Listeners;
 
 use Bavix\Wallet\Internal\Events\BalanceCommittingEventInterface;
 use Bavix\Wallet\Test\Infra\PackageModels\Wallet as WalletModel;
+use Illuminate\Contracts\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
 
 final readonly class WalletStateProjectorListener
@@ -53,26 +54,30 @@ final readonly class WalletStateProjectorListener
         }
 
         $ids = [];
-        $finalBalanceCases = [];
-        $frozenBalanceCases = [];
-        $checksumCases = [];
-        $pdo = DB::getPdo();
-
         foreach ($rows as $row) {
-            $id = $row['id'];
-            $ids[] = $id;
-
-            $finalBalanceCases[] = 'WHEN '.$id.' THEN '.$pdo->quote($row['final_balance']);
-            $frozenBalanceCases[] = 'WHEN '.$id.' THEN '.$pdo->quote($row['frozen_balance']);
-            $checksumCases[] = 'WHEN '.$id.' THEN '.$pdo->quote($row['checksum']);
+            $ids[] = $row['id'];
         }
 
-        DB::table((new WalletModel())->getTable())
+        WalletModel::query()
             ->whereIn('id', $ids)
             ->update([
-                'final_balance' => DB::raw('CASE id '.implode(' ', $finalBalanceCases).' END'),
-                'frozen_balance' => DB::raw('CASE id '.implode(' ', $frozenBalanceCases).' END'),
-                'checksum' => DB::raw('CASE id '.implode(' ', $checksumCases).' END'),
+                'final_balance' => $this->buildCase($rows, 'final_balance'),
+                'frozen_balance' => $this->buildCase($rows, 'frozen_balance'),
+                'checksum' => $this->buildCase($rows, 'checksum'),
             ]);
+    }
+
+    /**
+     * @param list<array{id: int, final_balance: string, frozen_balance: string, checksum: string}> $rows
+     */
+    private function buildCase(array $rows, string $column): Expression
+    {
+        $pdo = DB::getPdo();
+        $cases = [];
+        foreach ($rows as $row) {
+            $cases[] = 'WHEN '.$row['id'].' THEN '.$pdo->quote((string) $row[$column]);
+        }
+
+        return DB::raw('CASE id '.implode(' ', $cases).' END');
     }
 }
