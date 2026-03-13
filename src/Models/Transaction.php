@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Override;
 
 /**
  * Class Transaction.
@@ -61,7 +62,7 @@ class Transaction extends Model
     /**
      * @return array<string, string>
      */
-    #[\Override]
+    #[Override]
     public function casts(): array
     {
         return [
@@ -72,7 +73,7 @@ class Transaction extends Model
         ];
     }
 
-    #[\Override]
+    #[Override]
     public function getTable(): string
     {
         if ((string) $this->table === '') {
@@ -136,11 +137,9 @@ class Transaction extends Model
         $this->amount = $rounded;
     }
 
-    #[\Override]
-    protected static function boot(): void
+    #[Override]
+    protected static function booted(): void
     {
-        parent::boot();
-
         static::observe(TransactionObserver::class);
     }
 }

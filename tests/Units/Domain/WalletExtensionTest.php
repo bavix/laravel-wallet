@@ -8,23 +8,28 @@ use Bavix\Wallet\Internal\Events\BalanceCommittingEventInterface;
 use Bavix\Wallet\Internal\Events\TransactionCommittingEventInterface;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
 use Bavix\Wallet\Models\Wallet as WalletModel;
+use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
+use Bavix\Wallet\Test\Infra\Factories\ItemFactory;
 use Bavix\Wallet\Test\Infra\Listeners\TransactionStateProjectorListener;
 use Bavix\Wallet\Test\Infra\Listeners\WalletStateProjectorListener;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
+use Bavix\Wallet\Test\Infra\Models\Item;
 use Bavix\Wallet\Test\Infra\PackageModels\Transaction;
 use Bavix\Wallet\Test\Infra\PackageModels\TransactionMoney;
+use Bavix\Wallet\Test\Infra\PackageModels\Transfer;
 use Bavix\Wallet\Test\Infra\PackageModels\Wallet;
 use Bavix\Wallet\Test\Infra\TestCase;
 use Bavix\Wallet\Test\Infra\Transform\TransactionDtoTransformerCustom;
 use Illuminate\Support\Facades\Event;
+use Override;
 
 /**
  * @internal
  */
 final class WalletExtensionTest extends TestCase
 {
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -79,21 +84,17 @@ final class WalletExtensionTest extends TestCase
 
     public function testWalletStateProjectionViaBalanceCommittingEvent(): void
     {
-        // Arrange: subscribe to the committing event projection.
         $this->enableWalletStateProjection();
 
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
 
-        // Act: apply two confirmed operations.
         $buyer->deposit(150);
 
-        // Assert: final state is projected for the wallet after deposit.
         $this->assertWalletState($buyer->wallet, '150', '0');
 
         $buyer->withdraw(50);
 
-        // Assert: projection reflects the new balance after withdraw.
         $this->assertWalletState($buyer->wallet, '100', '0');
     }
 
@@ -152,13 +153,11 @@ final class WalletExtensionTest extends TestCase
 
     public function testTransactionStateProjectionViaTransactionCommittingEvent(): void
     {
-        // Arrange: subscribe to transaction committing projection.
         Event::listen(TransactionCommittingEventInterface::class, TransactionStateProjectorListener::class);
 
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
 
-        // Act: create a deposit and then a withdraw.
         /** @var Transaction $deposit */
         $deposit = $buyer->deposit(100);
         /** @var Transaction $withdraw */
@@ -169,12 +168,95 @@ final class WalletExtensionTest extends TestCase
         /** @var Transaction $withdraw */
         $withdraw = Transaction::query()->findOrFail($withdraw->getKey());
 
-        // Assert: each transaction stores projected final balance and checksum.
         self::assertSame('100', $deposit->final_balance);
         self::assertSame(hash('sha256', $deposit->id.':'.$deposit->amount.':100'), $deposit->checksum);
 
         self::assertSame('70', $withdraw->final_balance);
         self::assertSame(hash('sha256', $withdraw->id.':'.$withdraw->amount.':70'), $withdraw->checksum);
+    }
+
+    public function testIssue1015ExtensionViaCommittingEvents(): void
+    {
+        Event::listen(BalanceCommittingEventInterface::class, WalletStateProjectorListener::class);
+        Event::listen(TransactionCommittingEventInterface::class, TransactionStateProjectorListener::class);
+
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+
+        $buyer->wallet->forceFill([
+            'frozen_balance' => '30',
+        ])->saveQuietly();
+
+        /** @var Transaction $deposit */
+        $deposit = $buyer->deposit(120);
+        /** @var Transaction $withdraw */
+        $withdraw = $buyer->withdraw(20);
+
+        /** @var Wallet $wallet */
+        $wallet = Wallet::query()->findOrFail($buyer->wallet->getKey());
+        /** @var Transaction $deposit */
+        $deposit = Transaction::query()->findOrFail($deposit->getKey());
+        /** @var Transaction $withdraw */
+        $withdraw = Transaction::query()->findOrFail($withdraw->getKey());
+
+        self::assertSame('100', $wallet->final_balance);
+        self::assertSame('30', $wallet->frozen_balance);
+        self::assertSame(hash('sha256', $wallet->uuid.':100:30'), $wallet->checksum);
+
+        self::assertSame('120', $deposit->final_balance);
+        self::assertSame(hash('sha256', $deposit->id.':'.$deposit->amount.':120'), $deposit->checksum);
+        self::assertSame('100', $withdraw->final_balance);
+        self::assertSame(hash('sha256', $withdraw->id.':'.$withdraw->amount.':100'), $withdraw->checksum);
+    }
+
+    public function testIssue1015TransactionProjectionWorksForCartBatch(): void
+    {
+        Event::listen(TransactionCommittingEventInterface::class, TransactionStateProjectorListener::class);
+
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        /** @var Item $firstProduct */
+        $firstProduct = ItemFactory::new()->create([
+            'quantity' => 1,
+            'price' => 100,
+        ]);
+        /** @var Item $secondProduct */
+        $secondProduct = ItemFactory::new()->create([
+            'quantity' => 1,
+            'price' => 200,
+        ]);
+
+        $cart = app(Cart::class)
+            ->withItem($firstProduct)
+            ->withItem($secondProduct);
+
+        $buyer->deposit($cart->getTotal($buyer));
+        $transfers = $buyer->payCart($cart);
+        self::assertCount(2, $transfers);
+
+        $transactionIds = [];
+        foreach ($transfers as $transfer) {
+            self::assertInstanceOf(Transfer::class, $transfer);
+            $transactionIds[] = $transfer->deposit_id;
+            $transactionIds[] = $transfer->withdraw_id;
+        }
+
+        /** @var array<int, Transaction> $transactions */
+        $transactions = Transaction::query()
+            ->whereIn('id', $transactionIds)
+            ->get()
+            ->all();
+
+        self::assertCount(4, $transactions);
+
+        foreach ($transactions as $transaction) {
+            self::assertNotNull($transaction->final_balance);
+            self::assertNotNull($transaction->checksum);
+            self::assertSame(
+                hash('sha256', $transaction->id.':'.$transaction->amount.':'.$transaction->final_balance),
+                $transaction->checksum
+            );
+        }
     }
 
     private function enableWalletStateProjection(): void

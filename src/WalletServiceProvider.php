@@ -51,6 +51,8 @@ use Bavix\Wallet\Internal\Events\TransferCreatedEvent;
 use Bavix\Wallet\Internal\Events\TransferCreatedEventInterface;
 use Bavix\Wallet\Internal\Events\WalletCreatedEvent;
 use Bavix\Wallet\Internal\Events\WalletCreatedEventInterface;
+use Bavix\Wallet\Internal\Repository\PurchaseRepository;
+use Bavix\Wallet\Internal\Repository\PurchaseRepositoryInterface;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransactionRepositoryInterface;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
@@ -83,6 +85,7 @@ use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
 use Bavix\Wallet\Internal\Transform\TransferDtoTransformer;
 use Bavix\Wallet\Internal\Transform\TransferDtoTransformerInterface;
+use Bavix\Wallet\Models\Purchase;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
@@ -133,6 +136,7 @@ use Illuminate\Database\Events\TransactionCommitting;
 use Illuminate\Database\Events\TransactionRolledBack;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Override;
 
 final class WalletServiceProvider extends ServiceProvider implements DeferrableProvider
 {
@@ -172,7 +176,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     /**
      * Register services.
      */
-    #[\Override]
+    #[Override]
     public function register(): void
     {
         $this->mergeConfigFrom(dirname(__DIR__).'/config/config.php', 'wallet');
@@ -186,6 +190,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
          *     transformers?: array<class-string|null>,
          *     assemblers?: array<class-string|null>,
          *     events?: array<class-string|null>,
+         *     purchase?: array{model?: class-string|null},
          *     transaction?: array{model?: class-string|null},
          *     transfer?: array{model?: class-string|null},
          *     wallet?: array{model?: class-string|null},
@@ -207,7 +212,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     /**
      * @return class-string[]
      */
-    #[\Override]
+    #[Override]
     public function provides(): array
     {
         return array_merge(
@@ -229,6 +234,11 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         $this->app->singleton(
             TransactionRepositoryInterface::class,
             $configure['transaction'] ?? TransactionRepository::class
+        );
+
+        $this->app->singleton(
+            PurchaseRepositoryInterface::class,
+            $configure['purchase'] ?? PurchaseRepository::class
         );
 
         $this->app->singleton(
@@ -468,6 +478,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
 
     /**
      * @param array{
+     *     purchase?: array{model?: class-string|null},
      *     transaction?: array{model?: class-string|null},
      *     transfer?: array{model?: class-string|null},
      *     wallet?: array{model?: class-string|null},
@@ -475,6 +486,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
      */
     private function bindObjects(array $configure): void
     {
+        $this->app->bind(Purchase::class, $configure['purchase']['model'] ?? null);
         $this->app->bind(Transaction::class, $configure['transaction']['model'] ?? null);
         $this->app->bind(Transfer::class, $configure['transfer']['model'] ?? null);
         $this->app->bind(Wallet::class, $configure['wallet']['model'] ?? null);
@@ -539,6 +551,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     {
         return [
             TransactionRepositoryInterface::class,
+            PurchaseRepositoryInterface::class,
             TransferRepositoryInterface::class,
             WalletRepositoryInterface::class,
         ];

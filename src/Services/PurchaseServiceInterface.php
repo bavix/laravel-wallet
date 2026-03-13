@@ -10,6 +10,8 @@ use Bavix\Wallet\Models\Transfer;
 
 /**
  * @api
+ *
+ * @deprecated Use PurchaseQueryHandlerInterface; will be removed in v14.
  */
 interface PurchaseServiceInterface
 {
