@@ -235,6 +235,46 @@ final class CartReceivingTest extends TestCase
         self::assertSame($firstTransfer->getKey(), $legacyTransfer->getKey());
     }
 
+    public function testIssue1000LegacyPurchaseServiceSkipsWhenWalletTransfersExhausted(): void
+    {
+        /** @var Buyer $buyer */
+        $buyer = BuyerFactory::new()->create();
+        /** @var Item $product */
+        $product = ItemFactory::new()->create([
+            'quantity' => 2,
+            'price' => 100,
+        ]);
+
+        $payment = $buyer->createWallet([
+            'name' => 'Dollar',
+            'meta' => [
+                'currency' => 'USD',
+            ],
+        ]);
+
+        $receiving = $product->createWallet([
+            'name' => 'Dollar',
+            'meta' => [
+                'currency' => 'USD',
+            ],
+        ]);
+
+        $singleCart = app(Cart::class)
+            ->withItem($product, 1, null, $receiving);
+
+        $payment->deposit($singleCart->getTotal($buyer));
+        $transfers = $payment->payCart($singleCart);
+        self::assertCount(1, $transfers);
+
+        $legacyCart = app(Cart::class)
+            ->withItem($product, 2, null, $receiving);
+
+        $legacy = app(PurchaseServiceInterface::class)
+            ->already($payment, $legacyCart->getBasketDto(), false);
+
+        self::assertCount(1, $legacy);
+    }
+
     public function testPurchaseQueryFallbackToTransfersWhenLedgerMissing(): void
     {
         /** @var Buyer $buyer */

@@ -12,6 +12,7 @@ use Bavix\Wallet\Test\Infra\Factories\ItemFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\Models\Item;
 use Bavix\Wallet\Test\Infra\TestCase;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @internal
@@ -105,5 +106,30 @@ final class GiftTest extends TestCase
         self::assertSame($second->balanceInt, $product->getAmountProduct($second));
         $second->withdraw($second->balance);
         self::assertSame($second->balanceInt, 0);
+    }
+
+    public function testGiftFallbackToTransfersWhenLedgerMissing(): void
+    {
+        /** @var Buyer $first */
+        $first = BuyerFactory::new()->create();
+        /** @var Buyer $second */
+        $second = BuyerFactory::new()->create();
+        /** @var Item $product */
+        $product = ItemFactory::new()->create([
+            'quantity' => 1,
+        ]);
+
+        $first->deposit($product->getAmountProduct($first));
+        $transfer = $first->wallet->gift($second, $product);
+
+        /** @var string $purchaseTable */
+        $purchaseTable = config('wallet.purchase.table', 'purchase');
+        DB::table($purchaseTable)
+            ->where('transfer_id', $transfer->getKey())
+            ->delete();
+
+        $matched = app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($second, $product, true));
+        self::assertNotNull($matched);
+        self::assertSame($transfer->getKey(), $matched->getKey());
     }
 }

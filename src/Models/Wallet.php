@@ -168,15 +168,14 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
 
     public function getAvailableBalanceAttribute(): float|int|string
     {
-        /** @var float|int|string|null $balance */
-        $balance = $this->walletTransactions()
+        /** @var float|int|string $rawBalance */
+        $rawBalance = $this->walletTransactions()
             ->where('confirmed', true)
             ->sum('amount');
 
+        $balance = (string) $rawBalance;
+
         // Perform assertion to check if balance is not an empty string
-        if ($balance === null) {
-            $balance = '0';
-        }
         assert($balance !== '', 'Balance should not be an empty string');
 
         return $balance;

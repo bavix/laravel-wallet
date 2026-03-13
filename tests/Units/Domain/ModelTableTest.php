@@ -68,4 +68,30 @@ final class ModelTableTest extends TestCase
         $purchaseTable = config('wallet.purchase.table', 'purchase');
         self::assertFalse(DB::table($purchaseTable)->where('transfer_id', $transfer->getKey())->exists());
     }
+
+    public function testPurchaseModelCastsAndRelations(): void
+    {
+        /** @var User $buyer */
+        $buyer = UserFactory::new()->create();
+        /** @var User $seller */
+        $seller = UserFactory::new()->create();
+
+        $buyer->deposit(50);
+        $transfer = $buyer->transfer($seller, 10);
+
+        app(Purchase::class)->newQuery()->create([
+            'transfer_id' => $transfer->getKey(),
+            'from_id' => $transfer->from_id,
+            'to_id' => $transfer->to_id,
+            'status' => $transfer->status,
+        ]);
+
+        /** @var Purchase $purchase */
+        $purchase = app(Purchase::class)->newQuery()->firstOrFail();
+
+        self::assertSame($transfer->getKey(), $purchase->transfer->getKey());
+        self::assertSame($transfer->from_id, $purchase->from->getKey());
+        self::assertSame($transfer->to_id, $purchase->to->getKey());
+        self::assertSame($transfer->status, $purchase->status);
+    }
 }
