@@ -57,44 +57,35 @@ final class Purchase extends Model
     }
 
     /**
-     * @return BelongsTo<Transfer, self>
+     * @return BelongsTo<Transfer, $this>
      */
     public function transfer(): BelongsTo
     {
         /** @var class-string<Transfer> $model */
         $model = config('wallet.transfer.model', Transfer::class);
 
-        /** @var BelongsTo<Transfer, self> $belongsTo */
-        $belongsTo = $this->belongsTo($model, 'transfer_id');
-
-        return $belongsTo;
+        return $this->belongsTo($model, 'transfer_id');
     }
 
     /**
-     * @return BelongsTo<Wallet, self>
+     * @return BelongsTo<Wallet, $this>
      */
     public function from(): BelongsTo
     {
         /** @var class-string<Wallet> $model */
         $model = config('wallet.wallet.model', Wallet::class);
 
-        /** @var BelongsTo<Wallet, self> $belongsTo */
-        $belongsTo = $this->belongsTo($model, 'from_id');
-
-        return $belongsTo;
+        return $this->belongsTo($model, 'from_id');
     }
 
     /**
-     * @return BelongsTo<Wallet, self>
+     * @return BelongsTo<Wallet, $this>
      */
     public function to(): BelongsTo
     {
         /** @var class-string<Wallet> $model */
         $model = config('wallet.wallet.model', Wallet::class);
 
-        /** @var BelongsTo<Wallet, self> $belongsTo */
-        $belongsTo = $this->belongsTo($model, 'to_id');
-
-        return $belongsTo;
+        return $this->belongsTo($model, 'to_id');
     }
 }

@@ -51,7 +51,7 @@ final readonly class PurchaseService implements PurchaseServiceInterface
             $wallet = $this->castService->getWallet($itemDto->getReceiving() ?? $itemDto->getProduct());
             $walletId = $wallet->getKey();
 
-            foreach ($itemDto->getItems() as $_product) {
+            for ($position = 0; $position < $itemDto->count(); $position++) {
                 if (! array_key_exists($walletId, $groupedByWallet)) {
                     continue;
                 }
