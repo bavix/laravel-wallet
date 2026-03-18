@@ -37,6 +37,12 @@ parameters:
 			path: src/Interfaces/Wallet.php
 
 		-
+			message: '#^Parameter \#1 \$value of method Illuminate\\Database\\Connection\:\:raw\(\) expects float\|int\|literal\-string, non\-falsy\-string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/Repository/WalletRepository.php
+
+		-
 			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:abs\(\) should return non\-empty\-string but returns string\.$#'
 			identifier: return.type
 			count: 1
