@@ -11,16 +11,18 @@ You can implement this as an extension, without changing package internals:
 ```php
 use App\Models\Transaction;
 use Bavix\Wallet\Internal\Events\TransactionCommittingEventInterface;
+use Illuminate\Contracts\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
 
 final class TransactionStateProjectorListener
 {
     public function handle(TransactionCommittingEventInterface $event): void
     {
-        $rows = [];
+        $transactions = $event->getTransactions();
         $finalBalances = $event->getFinalBalances();
 
-        foreach ($event->getTransactions() as $transaction) {
+        $rows = [];
+        foreach ($transactions as $transaction) {
             $finalBalance = $finalBalances[$transaction['id']] ?? null;
             if ($finalBalance === null) {
                 continue;
@@ -33,24 +35,49 @@ final class TransactionStateProjectorListener
             ];
         }
 
-        $ids = [];
-        $finalCases = [];
-        $checksumCases = [];
-        $pdo = DB::getPdo();
-
-        foreach ($rows as $row) {
-            $id = (int) $row['id'];
-            $ids[] = $id;
-            $finalCases[] = 'WHEN '.$id.' THEN '.$pdo->quote($row['final_balance']);
-            $checksumCases[] = 'WHEN '.$id.' THEN '.$pdo->quote($row['checksum']);
+        if ($rows === []) {
+            return;
         }
 
-        DB::table((new Transaction())->getTable())
+        if (count($rows) === 1) {
+            $row = $rows[0];
+
+            Transaction::query()
+                ->whereKey($row['id'])
+                ->update([
+                    'final_balance' => $row['final_balance'],
+                    'checksum' => $row['checksum'],
+                ]);
+
+            return;
+        }
+
+        $ids = [];
+        foreach ($rows as $row) {
+            $ids[] = $row['id'];
+        }
+
+        Transaction::query()
             ->whereIn('id', $ids)
             ->update([
-                'final_balance' => DB::raw('CASE id '.implode(' ', $finalCases).' END'),
-                'checksum' => DB::raw('CASE id '.implode(' ', $checksumCases).' END'),
+                'final_balance' => $this->buildCase($rows, 'final_balance'),
+                'checksum' => $this->buildCase($rows, 'checksum'),
             ]);
+    }
+
+    /**
+     * @param list<array{id: int, final_balance: string, checksum: string}> $rows
+     */
+    private function buildCase(array $rows, string $column): Expression
+    {
+        $pdo = DB::getPdo();
+        $cases = [];
+
+        foreach ($rows as $row) {
+            $cases[] = 'WHEN '.$row['id'].' THEN '.$pdo->quote((string) $row[$column]);
+        }
+
+        return DB::raw('CASE id '.implode(' ', $cases).' END');
     }
 }
 ```
