@@ -50,6 +50,9 @@ return new class() extends Migration
 
     private function table(): string
     {
-        return (new Wallet())->getTable();
+        /** @var string $table */
+        $table = config('wallet.wallet.table', 'wallets');
+
+        return $table;
     }
 };

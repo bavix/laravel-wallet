@@ -187,3 +187,97 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true
         if: ${{ steps.coveralls-check.outputs.execute == 'true' }}
+
+  compatibility:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - php-version: 8.3
+            laravel-version: ^11.0
+            testbench-version: ^9.0
+          - php-version: 8.3
+            laravel-version: ^12.0
+            testbench-version: ^10.0
+          - php-version: 8.3
+            laravel-version: ^13.0
+            testbench-version: ^11.0
+
+    services:
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup cache environment
+        id: extcache-compatibility
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, sqlite, redis, bcmath
+          key: ${{ runner.os }}-compatibility-php-extensions-${{ matrix.php-version }}-${{ hashFiles('**/composer.lock') }}
+
+      - name: Cache extensions
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.extcache-compatibility.outputs.dir }}
+          key: ${{ steps.extcache-compatibility.outputs.key }}
+          restore-keys: ${{ steps.extcache-compatibility.outputs.key }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, sqlite, redis, bcmath
+          coverage: pcov
+        env:
+          runner: self-hosted
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Get Composer cache directory
+        id: composer-cache-dir-compatibility
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-compatibility-${{ matrix.php-version }}-${{ matrix.laravel-version }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-compatibility-${{ matrix.php-version }}-
+
+      - name: Cache Composer cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache-dir-compatibility.outputs.dir }}
+          key: ${{ runner.os }}-composer-cache-compatibility-${{ matrix.php-version }}-${{ matrix.laravel-version }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-cache-compatibility-${{ matrix.php-version }}-
+
+      - name: Install dependencies for compatibility matrix
+        run: >-
+          composer update
+          --prefer-dist
+          --no-progress
+          --with "illuminate/contracts:${{ matrix.laravel-version }}"
+          --with "illuminate/database:${{ matrix.laravel-version }}"
+          --with "orchestra/testbench:${{ matrix.testbench-version }}"
+
+      - name: Run compatibility test suite
+        run: composer parabench
+        env:
+          DB_CONNECTION: testing
+          WALLET_CACHE_DRIVER: array
+          WALLET_LOCK_DRIVER: redis
