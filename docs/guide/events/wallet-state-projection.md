@@ -29,52 +29,80 @@ protected $listen = [
 ```php
 use App\Models\Wallet;
 use Bavix\Wallet\Internal\Events\BalanceCommittingEventInterface;
+use Illuminate\Contracts\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
 
 final class WalletStateProjectorListener
 {
     public function handle(BalanceCommittingEventInterface $event): void
     {
-        $rows = [];
+        $balances = $event->getBalances();
+        if ($balances === []) {
+            return;
+        }
+
         $walletStates = $event->getWalletStates();
 
-        foreach ($event->getBalances() as $walletId => $finalBalance) {
+        $rows = [];
+        foreach ($balances as $walletId => $finalBalance) {
             $walletState = $walletStates[$walletId] ?? null;
             if (! is_array($walletState)) {
                 continue;
             }
 
-            $frozenBalance = $walletState['frozen_balance'];
-
             $rows[] = [
                 'id' => $walletId,
                 'final_balance' => $finalBalance,
-                'frozen_balance' => $frozenBalance,
-                'checksum' => hash('sha256', $walletState['uuid'].':'.$finalBalance.':'.$frozenBalance),
+                'frozen_balance' => $walletState['frozen_balance'],
+                'checksum' => hash('sha256', $walletState['uuid'].':'.$finalBalance.':'.$walletState['frozen_balance']),
             ];
         }
 
-        $ids = [];
-        $finalCases = [];
-        $frozenCases = [];
-        $checksumCases = [];
-        $pdo = DB::getPdo();
-
-        foreach ($rows as $row) {
-            $id = (int) $row['id'];
-            $ids[] = $id;
-            $finalCases[] = 'WHEN '.$id.' THEN '.$pdo->quote($row['final_balance']);
-            $frozenCases[] = 'WHEN '.$id.' THEN '.$pdo->quote($row['frozen_balance']);
-            $checksumCases[] = 'WHEN '.$id.' THEN '.$pdo->quote($row['checksum']);
+        if ($rows === []) {
+            return;
         }
 
-        DB::table((new Wallet())->getTable())
+        if (count($rows) === 1) {
+            $row = $rows[0];
+
+            Wallet::query()
+                ->whereKey($row['id'])
+                ->update([
+                    'final_balance' => $row['final_balance'],
+                    'frozen_balance' => $row['frozen_balance'],
+                    'checksum' => $row['checksum'],
+                ]);
+
+            return;
+        }
+
+        $ids = [];
+        foreach ($rows as $row) {
+            $ids[] = $row['id'];
+        }
+
+        Wallet::query()
             ->whereIn('id', $ids)
             ->update([
-                'final_balance' => DB::raw('CASE id '.implode(' ', $finalCases).' END'),
-                'frozen_balance' => DB::raw('CASE id '.implode(' ', $frozenCases).' END'),
-                'checksum' => DB::raw('CASE id '.implode(' ', $checksumCases).' END'),
+                'final_balance' => $this->buildCase($rows, 'final_balance'),
+                'frozen_balance' => $this->buildCase($rows, 'frozen_balance'),
+                'checksum' => $this->buildCase($rows, 'checksum'),
             ]);
+    }
+
+    /**
+     * @param list<array{id: int, final_balance: string, frozen_balance: string, checksum: string}> $rows
+     */
+    private function buildCase(array $rows, string $column): Expression
+    {
+        $pdo = DB::getPdo();
+        $cases = [];
+
+        foreach ($rows as $row) {
+            $cases[] = 'WHEN '.$row['id'].' THEN '.$pdo->quote((string) $row[$column]);
+        }
+
+        return DB::raw('CASE id '.implode(' ', $cases).' END');
     }
 }
 ```
