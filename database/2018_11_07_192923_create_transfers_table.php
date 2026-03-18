@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Bavix\Wallet\Models\Transaction;
-use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -56,11 +54,17 @@ return new class() extends Migration
 
     private function table(): string
     {
-        return (new Transfer())->getTable();
+        /** @var string $table */
+        $table = config('wallet.transfer.table', 'transfers');
+
+        return $table;
     }
 
     private function transactionTable(): string
     {
-        return (new Transaction())->getTable();
+        /** @var string $table */
+        $table = config('wallet.transaction.table', 'transactions');
+
+        return $table;
     }
 };
