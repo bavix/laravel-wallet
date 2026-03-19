@@ -11,15 +11,14 @@ final readonly class BalanceCommittingEventAssembler implements BalanceCommittin
 {
     public function create(array $balances, array $walletsById): BalanceCommittingEventInterface
     {
-        $walletStates = [];
+        $walletSnapshots = [];
         foreach ($walletsById as $walletId => $wallet) {
-            $frozenValue = $wallet->getAttribute('frozen_balance');
-            $walletStates[$walletId] = [
+            $walletSnapshots[$walletId] = [
                 'uuid' => $wallet->uuid,
-                'frozen_balance' => is_string($frozenValue) ? $frozenValue : '0',
+                'attributes' => $wallet->getAttributes(),
             ];
         }
 
-        return new BalanceCommittingEvent($balances, $walletStates);
+        return new BalanceCommittingEvent($balances, $walletSnapshots);
     }
 }

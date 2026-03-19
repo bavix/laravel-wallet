@@ -96,8 +96,8 @@ final readonly class ProjectedTransactionService implements TransactionServiceIn
             $transactionAmount = $this->mathService->round($dto->getAmount());
 
             $meta = $dto->getMeta() ?? [];
-            $meta['final_balance'] = $nextBalance;
-            $meta['checksum'] = hash('sha256', $dto->getUuid().':'.$transactionAmount.':'.$nextBalance);
+            $meta['balance_after'] = $nextBalance;
+            $meta['state_hash'] = hash('sha256', $dto->getUuid().':'.$transactionAmount.':'.$nextBalance);
 
             $projectedDtos[] = new ProjectedTransactionDto($dto, $meta);
             $currentBalances[$walletId] = $nextBalance;

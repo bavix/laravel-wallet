@@ -9,7 +9,7 @@ use Bavix\Wallet\Internal\Events\TransactionCommittingEventInterface;
 
 final readonly class TransactionCommittingEventAssembler implements TransactionCommittingEventAssemblerInterface
 {
-    public function create(array $transactions, array $finalBalances): TransactionCommittingEventInterface
+    public function create(array $transactions, array $resultingBalances): TransactionCommittingEventInterface
     {
         $items = [];
         foreach ($transactions as $uuid => $transaction) {
@@ -19,6 +19,6 @@ final readonly class TransactionCommittingEventAssembler implements TransactionC
             ];
         }
 
-        return new TransactionCommittingEvent($items, $finalBalances);
+        return new TransactionCommittingEvent($items, $resultingBalances);
     }
 }
