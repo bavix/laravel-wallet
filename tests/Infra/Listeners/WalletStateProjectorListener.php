@@ -29,7 +29,10 @@ final readonly class WalletStateProjectorListener
 
             $uuid = $walletSnapshot['uuid'] ?? null;
             $attributes = $walletSnapshot['attributes'] ?? null;
-            if (! is_string($uuid) || ! is_array($attributes)) {
+            if (! is_string($uuid)) {
+                continue;
+            }
+            if (! is_array($attributes)) {
                 continue;
             }
 
