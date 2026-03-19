@@ -12,7 +12,7 @@ interface BalanceCommittingEventInterface extends EventInterface
     public function getBalances(): array;
 
     /**
-     * @return array<int, array{uuid: string, frozen_balance: string}>
+     * @return array<int, array{uuid: string, attributes: array<string, mixed>}>
      */
-    public function getWalletStates(): array;
+    public function getWalletSnapshots(): array;
 }

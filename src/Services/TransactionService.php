@@ -77,7 +77,7 @@ final readonly class TransactionService implements TransactionServiceInterface
             $currentBalances[$walletId] = $this->regulatorService->amount($object);
         }
 
-        $transactionFinalBalances = [];
+        $resultingBalancesByTransactionId = [];
         foreach ($objects as $dto) {
             $walletId = $dto->getWalletId();
             if (! array_key_exists($walletId, $currentBalances)) {
@@ -96,13 +96,13 @@ final readonly class TransactionService implements TransactionServiceInterface
 
             $transaction = $transactions[$dto->getUuid()] ?? null;
             assert($transaction instanceof Transaction);
-            $transactionFinalBalances[$transaction->getKey()] = $nextBalance;
+            $resultingBalancesByTransactionId[$transaction->getKey()] = $nextBalance;
 
             $currentBalances[$walletId] = $nextBalance;
         }
 
         $this->dispatcherService->dispatchNow(
-            $this->transactionCommittingEventAssembler->create($transactions, $transactionFinalBalances)
+            $this->transactionCommittingEventAssembler->create($transactions, $resultingBalancesByTransactionId)
         );
 
         foreach ($totals as $walletId => $total) {

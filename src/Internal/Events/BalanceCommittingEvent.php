@@ -8,11 +8,11 @@ final readonly class BalanceCommittingEvent implements BalanceCommittingEventInt
 {
     /**
      * @param array<int, string> $balances
-     * @param array<int, array{uuid: string, frozen_balance: string}> $walletStates
+     * @param array<int, array{uuid: string, attributes: array<string, mixed>}> $walletSnapshots
      */
     public function __construct(
         private array $balances,
-        private array $walletStates,
+        private array $walletSnapshots,
     ) {
     }
 
@@ -21,8 +21,8 @@ final readonly class BalanceCommittingEvent implements BalanceCommittingEventInt
         return $this->balances;
     }
 
-    public function getWalletStates(): array
+    public function getWalletSnapshots(): array
     {
-        return $this->walletStates;
+        return $this->walletSnapshots;
     }
 }

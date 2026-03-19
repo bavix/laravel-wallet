@@ -14,5 +14,5 @@ interface TransactionCommittingEventInterface extends EventInterface
     /**
      * @return array<int, string>
      */
-    public function getFinalBalances(): array;
+    public function getResultingBalances(): array;
 }

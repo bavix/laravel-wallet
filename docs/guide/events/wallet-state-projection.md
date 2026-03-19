@@ -1,9 +1,9 @@
 # Wallet state projection
 
-If you need custom wallet state fields (for example `frozen_balance`, `final_balance`, `checksum`),
+If you need custom wallet state fields (for example `held_balance`, `balance_after`, `state_hash`),
 you can implement them in your app without changing package internals.
 
-If you need `final_balance` and `checksum` on transactions (issue #1015),
+If you need `balance_after` and `state_hash` on transactions (issue #1015),
 use [Transaction State Projection](/guide/events/transaction-state-projection).
 
 Use `BalanceCommittingEventInterface` for batch-safe projection inside a commit cycle.
@@ -41,20 +41,28 @@ final class WalletStateProjectorListener
             return;
         }
 
-        $walletStates = $event->getWalletStates();
+        $walletSnapshots = $event->getWalletSnapshots();
 
         $rows = [];
-        foreach ($balances as $walletId => $finalBalance) {
-            $walletState = $walletStates[$walletId] ?? null;
-            if (! is_array($walletState)) {
+        foreach ($balances as $walletId => $resultingBalance) {
+            $walletSnapshot = $walletSnapshots[$walletId] ?? null;
+            if (! is_array($walletSnapshot)) {
                 continue;
             }
 
+            $uuid = $walletSnapshot['uuid'] ?? null;
+            $attributes = $walletSnapshot['attributes'] ?? null;
+            if (! is_string($uuid) || ! is_array($attributes)) {
+                continue;
+            }
+
+            $heldBalance = (string) ($attributes['held_balance'] ?? '0');
+
             $rows[] = [
                 'id' => $walletId,
-                'final_balance' => $finalBalance,
-                'frozen_balance' => $walletState['frozen_balance'],
-                'checksum' => hash('sha256', $walletState['uuid'].':'.$finalBalance.':'.$walletState['frozen_balance']),
+                'balance_after' => $resultingBalance,
+                'held_balance' => $heldBalance,
+                'state_hash' => hash('sha256', $uuid.':'.$resultingBalance.':'.$heldBalance),
             ];
         }
 
@@ -68,9 +76,9 @@ final class WalletStateProjectorListener
             Wallet::query()
                 ->whereKey($row['id'])
                 ->update([
-                    'final_balance' => $row['final_balance'],
-                    'frozen_balance' => $row['frozen_balance'],
-                    'checksum' => $row['checksum'],
+                    'balance_after' => $row['balance_after'],
+                    'held_balance' => $row['held_balance'],
+                    'state_hash' => $row['state_hash'],
                 ]);
 
             return;
@@ -84,14 +92,14 @@ final class WalletStateProjectorListener
         Wallet::query()
             ->whereIn('id', $ids)
             ->update([
-                'final_balance' => $this->buildCase($rows, 'final_balance'),
-                'frozen_balance' => $this->buildCase($rows, 'frozen_balance'),
-                'checksum' => $this->buildCase($rows, 'checksum'),
+                'balance_after' => $this->buildCase($rows, 'balance_after'),
+                'held_balance' => $this->buildCase($rows, 'held_balance'),
+                'state_hash' => $this->buildCase($rows, 'state_hash'),
             ]);
     }
 
     /**
-     * @param list<array{id: int, final_balance: string, frozen_balance: string, checksum: string}> $rows
+     * @param list<array{id: int, balance_after: string, held_balance: string, state_hash: string}> $rows
      */
     private function buildCase(array $rows, string $column): Expression
     {
