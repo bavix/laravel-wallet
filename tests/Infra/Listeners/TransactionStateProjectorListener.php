@@ -20,8 +20,10 @@ final readonly class TransactionStateProjectorListener
         foreach ($transactions as $transaction) {
             $transactionId = $transaction['id'] ?? null;
             $transactionAmount = $transaction['amount'] ?? null;
-
-            if (! is_int($transactionId) || ! is_string($transactionAmount)) {
+            if (! is_int($transactionId)) {
+                continue;
+            }
+            if (! is_string($transactionAmount)) {
                 continue;
             }
 
