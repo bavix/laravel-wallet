@@ -10,8 +10,6 @@ use Override;
  * Class Transaction.
  *
  * @property null|string $bank_method
- * @property null|string $final_balance
- * @property null|string $checksum
  */
 final class Transaction extends \Bavix\Wallet\Models\Transaction
 {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test\Infra\Listeners;
 
 use Bavix\Wallet\Internal\Events\BalanceCommittingEventInterface;
-use Bavix\Wallet\Test\Infra\PackageModels\Wallet as WalletModel;
+use Bavix\Wallet\Test\Infra\PackageModels\WalletState;
 use Illuminate\Contracts\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
 
@@ -18,57 +18,65 @@ final readonly class WalletStateProjectorListener
             return;
         }
 
-        $walletStates = $event->getWalletStates();
+        $walletSnapshots = $event->getWalletSnapshots();
 
-        $rows = [];
-        foreach ($balances as $walletId => $finalBalance) {
-            $walletState = $walletStates[$walletId] ?? null;
-            if (! is_array($walletState)) {
+        $projectionRows = [];
+        foreach ($balances as $walletId => $resultingBalance) {
+            $walletSnapshot = $walletSnapshots[$walletId] ?? null;
+            if (! is_array($walletSnapshot)) {
                 continue;
             }
 
-            $rows[] = [
+            $uuid = $walletSnapshot['uuid'] ?? null;
+            $attributes = $walletSnapshot['attributes'] ?? null;
+            if (! is_string($uuid) || ! is_array($attributes)) {
+                continue;
+            }
+
+            $heldBalance = (string) ($attributes['held_balance'] ?? '0');
+
+            $projectionRows[] = [
                 'id' => $walletId,
-                'final_balance' => $finalBalance,
-                'frozen_balance' => $walletState['frozen_balance'],
-                'checksum' => hash('sha256', $walletState['uuid'].':'.$finalBalance.':'.$walletState['frozen_balance']),
+                'balance_after' => $resultingBalance,
+                'held_balance' => $heldBalance,
+                'state_hash' => hash('sha256', $uuid.':'.$resultingBalance.':'.$heldBalance),
             ];
         }
 
-        if ($rows === []) {
+        if ($projectionRows === []) {
             return;
         }
 
-        if (count($rows) === 1) {
-            $row = $rows[0];
+        if (count($projectionRows) === 1) {
+            $row = $projectionRows[0];
 
-            WalletModel::query()
+            WalletState::query()
                 ->whereKey($row['id'])
                 ->update([
-                    'final_balance' => $row['final_balance'],
-                    'frozen_balance' => $row['frozen_balance'],
-                    'checksum' => $row['checksum'],
+                    'balance_after' => $row['balance_after'],
+                    'held_balance' => $row['held_balance'],
+                    'state_hash' => $row['state_hash'],
                 ]);
 
             return;
         }
 
         $ids = [];
-        foreach ($rows as $row) {
+        foreach ($projectionRows as $row) {
             $ids[] = $row['id'];
         }
 
-        WalletModel::query()
+        WalletState::query()
             ->whereIn('id', $ids)
             ->update([
-                'final_balance' => $this->buildCase($rows, 'final_balance'),
-                'frozen_balance' => $this->buildCase($rows, 'frozen_balance'),
-                'checksum' => $this->buildCase($rows, 'checksum'),
+                'balance_after' => $this->buildCase($projectionRows, 'balance_after'),
+                'held_balance' => $this->buildCase($projectionRows, 'held_balance'),
+                'state_hash' => $this->buildCase($projectionRows, 'state_hash'),
             ]);
     }
 
     /**
-     * @param list<array{id: int, final_balance: string, frozen_balance: string, checksum: string}> $rows
+     * @param list<array{id: int, balance_after: string, held_balance: string, state_hash: string}> $rows
      */
     private function buildCase(array $rows, string $column): Expression
     {

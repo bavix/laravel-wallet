@@ -8,11 +8,11 @@ final readonly class TransactionCommittingEvent implements TransactionCommitting
 {
     /**
      * @param array<string, array{id: int, amount: string}> $transactions
-     * @param array<int, string> $finalBalances
+     * @param array<int, string> $resultingBalances
      */
     public function __construct(
         private array $transactions,
-        private array $finalBalances,
+        private array $resultingBalances,
     ) {
     }
 
@@ -21,8 +21,8 @@ final readonly class TransactionCommittingEvent implements TransactionCommitting
         return $this->transactions;
     }
 
-    public function getFinalBalances(): array
+    public function getResultingBalances(): array
     {
-        return $this->finalBalances;
+        return $this->resultingBalances;
     }
 }

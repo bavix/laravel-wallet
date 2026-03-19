@@ -12,7 +12,7 @@ use Bavix\Wallet\Services\TransactionServiceInterface;
 use Bavix\Wallet\Test\Infra\PackageModels\TransactionState;
 use Bavix\Wallet\Test\Infra\PackageModels\Transfer;
 use Bavix\Wallet\Test\Infra\Services\ProjectedTransactionService;
-use Bavix\Wallet\Test\Infra\TestCase;
+use Bavix\Wallet\Test\Infra\ProjectionTestCase;
 use Bavix\Wallet\Test\Infra\Transform\TransactionDtoTransformerStateProjection;
 use Illuminate\Support\Facades\Event;
 use Override;
@@ -20,7 +20,7 @@ use Override;
 /**
  * @internal
  */
-final class Issue1015StressTest extends TestCase
+final class Issue1015StressTest extends ProjectionTestCase
 {
     use StressTestSetupTrait;
 
@@ -28,10 +28,6 @@ final class Issue1015StressTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        config()
-            ->set('wallet.transaction.model', TransactionState::class);
-        $this->app?->bind(\Bavix\Wallet\Models\Transaction::class, TransactionState::class);
 
         $this->app?->singleton(
             TransactionDtoTransformerInterface::class,
@@ -160,23 +156,23 @@ final class Issue1015StressTest extends TestCase
         $walletRunningBalances = [];
 
         foreach ($transactions as $transaction) {
-            self::assertNotNull($transaction->final_balance);
-            self::assertNotNull($transaction->checksum);
+            self::assertNotNull($transaction->balance_after);
+            self::assertNotNull($transaction->state_hash);
 
             $expectedFinalBalance = $expectedFinalBalances[$transaction->getKey()] ?? null;
             self::assertIsString($expectedFinalBalance);
-            self::assertSame($expectedFinalBalance, $transaction->final_balance);
+            self::assertSame($expectedFinalBalance, $transaction->balance_after);
 
             self::assertSame(
                 hash('sha256', $transaction->uuid.':'.$transaction->amount.':'.$expectedFinalBalance),
-                $transaction->checksum
+                $transaction->state_hash
             );
 
             $walletId = $transaction->wallet_id;
             $previousBalance = $walletRunningBalances[$walletId] ?? '0';
             $expectedBalance = $math->round($math->add($previousBalance, $transaction->amount));
 
-            self::assertSame($expectedBalance, $transaction->final_balance);
+            self::assertSame($expectedBalance, $transaction->balance_after);
             $walletRunningBalances[$walletId] = $expectedBalance;
         }
     }

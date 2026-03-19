@@ -17,16 +17,16 @@ final readonly class TransactionDtoTransformerStateProjection implements Transac
 
     public function extract(TransactionDtoInterface $dto): array
     {
-        $finalBalance = null;
-        $checksum = null;
+        $balanceAfter = null;
+        $stateHash = null;
         if ($dto->getMeta() !== null) {
-            $finalBalance = $dto->getMeta()['final_balance'] ?? null;
-            $checksum = $dto->getMeta()['checksum'] ?? null;
+            $balanceAfter = $dto->getMeta()['balance_after'] ?? null;
+            $stateHash = $dto->getMeta()['state_hash'] ?? null;
         }
 
         return array_merge($this->transactionDtoTransformer->extract($dto), [
-            'final_balance' => $finalBalance,
-            'checksum' => $checksum,
+            'balance_after' => $balanceAfter,
+            'state_hash' => $stateHash,
         ]);
     }
 }

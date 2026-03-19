@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test\Infra\Listeners;
 
 use Bavix\Wallet\Internal\Events\TransactionCommittingEventInterface;
-use Bavix\Wallet\Test\Infra\PackageModels\Transaction;
+use Bavix\Wallet\Test\Infra\PackageModels\TransactionState;
 use Illuminate\Contracts\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
 
@@ -14,54 +14,61 @@ final readonly class TransactionStateProjectorListener
     public function handle(TransactionCommittingEventInterface $event): void
     {
         $transactions = $event->getTransactions();
-        $finalBalances = $event->getFinalBalances();
+        $resultingBalances = $event->getResultingBalances();
 
-        $rows = [];
+        $projectionRows = [];
         foreach ($transactions as $transaction) {
-            $finalBalance = $finalBalances[$transaction['id']] ?? null;
-            if ($finalBalance === null) {
+            $transactionId = $transaction['id'] ?? null;
+            $transactionAmount = $transaction['amount'] ?? null;
+
+            if (! is_int($transactionId) || ! is_string($transactionAmount)) {
                 continue;
             }
 
-            $rows[] = [
-                'id' => $transaction['id'],
-                'final_balance' => $finalBalance,
-                'checksum' => hash('sha256', $transaction['id'].':'.$transaction['amount'].':'.$finalBalance),
+            $resultingBalance = $resultingBalances[$transactionId] ?? null;
+            if ($resultingBalance === null) {
+                continue;
+            }
+
+            $projectionRows[] = [
+                'id' => $transactionId,
+                'balance_after' => $resultingBalance,
+                'state_hash' => hash('sha256', $transactionId.':'.$transactionAmount.':'.$resultingBalance),
             ];
         }
 
-        if ($rows === []) {
+        if ($projectionRows === []) {
             return;
         }
 
-        if (count($rows) === 1) {
-            $row = $rows[0];
+        if (count($projectionRows) === 1) {
+            $row = $projectionRows[0];
 
-            Transaction::query()
+            TransactionState::query()
                 ->whereKey($row['id'])
                 ->update([
-                    'final_balance' => $row['final_balance'],
-                    'checksum' => $row['checksum'],
+                    'balance_after' => $row['balance_after'],
+                    'state_hash' => $row['state_hash'],
                 ]);
 
             return;
         }
 
         $ids = [];
-        foreach ($rows as $row) {
+        foreach ($projectionRows as $row) {
             $ids[] = $row['id'];
         }
 
-        Transaction::query()
+        TransactionState::query()
             ->whereIn('id', $ids)
             ->update([
-                'final_balance' => $this->buildCase($rows, 'final_balance'),
-                'checksum' => $this->buildCase($rows, 'checksum'),
+                'balance_after' => $this->buildCase($projectionRows, 'balance_after'),
+                'state_hash' => $this->buildCase($projectionRows, 'state_hash'),
             ]);
     }
 
     /**
-     * @param list<array{id: int, final_balance: string, checksum: string}> $rows
+     * @param list<array{id: int, balance_after: string, state_hash: string}> $rows
      */
     private function buildCase(array $rows, string $column): Expression
     {

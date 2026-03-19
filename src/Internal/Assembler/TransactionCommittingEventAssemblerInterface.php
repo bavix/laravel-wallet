@@ -11,7 +11,7 @@ interface TransactionCommittingEventAssemblerInterface
 {
     /**
      * @param array<string, Transaction> $transactions
-     * @param array<int, string> $finalBalances
+     * @param array<int, string> $resultingBalances
      */
-    public function create(array $transactions, array $finalBalances): TransactionCommittingEventInterface;
+    public function create(array $transactions, array $resultingBalances): TransactionCommittingEventInterface;
 }

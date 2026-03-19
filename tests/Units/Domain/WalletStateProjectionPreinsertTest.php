@@ -13,11 +13,10 @@ use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Factories\ItemFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\Models\Item;
-use Bavix\Wallet\Test\Infra\PackageModels\Transaction;
 use Bavix\Wallet\Test\Infra\PackageModels\TransactionState;
 use Bavix\Wallet\Test\Infra\PackageModels\Transfer;
+use Bavix\Wallet\Test\Infra\ProjectionTestCase;
 use Bavix\Wallet\Test\Infra\Services\ProjectedTransactionService;
-use Bavix\Wallet\Test\Infra\TestCase;
 use Bavix\Wallet\Test\Infra\Transform\TransactionDtoTransformerStateProjection;
 use Illuminate\Support\Facades\Event;
 use Override;
@@ -25,16 +24,12 @@ use Override;
 /**
  * @internal
  */
-final class WalletStateProjectionPreinsertTest extends TestCase
+final class WalletStateProjectionPreinsertTest extends ProjectionTestCase
 {
     #[Override]
     protected function setUp(): void
     {
         parent::setUp();
-
-        config()
-            ->set('wallet.transaction.model', TransactionState::class);
-        $this->app?->bind(\Bavix\Wallet\Models\Transaction::class, TransactionState::class);
 
         $this->app?->singleton(
             TransactionDtoTransformerInterface::class,
@@ -52,21 +47,21 @@ final class WalletStateProjectionPreinsertTest extends TestCase
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
 
-        /** @var Transaction $deposit */
+        /** @var TransactionState $deposit */
         $deposit = $buyer->deposit(120);
-        /** @var Transaction $withdraw */
+        /** @var TransactionState $withdraw */
         $withdraw = $buyer->withdraw(20);
 
-        /** @var Transaction $deposit */
-        $deposit = Transaction::query()->findOrFail($deposit->getKey());
-        /** @var Transaction $withdraw */
-        $withdraw = Transaction::query()->findOrFail($withdraw->getKey());
+        /** @var TransactionState $deposit */
+        $deposit = TransactionState::query()->findOrFail($deposit->getKey());
+        /** @var TransactionState $withdraw */
+        $withdraw = TransactionState::query()->findOrFail($withdraw->getKey());
 
-        self::assertSame('120', $deposit->final_balance);
-        self::assertSame(hash('sha256', $deposit->uuid.':'.$deposit->amount.':120'), $deposit->checksum);
+        self::assertSame('120', $deposit->balance_after);
+        self::assertSame(hash('sha256', $deposit->uuid.':'.$deposit->amount.':120'), $deposit->state_hash);
 
-        self::assertSame('100', $withdraw->final_balance);
-        self::assertSame(hash('sha256', $withdraw->uuid.':'.$withdraw->amount.':100'), $withdraw->checksum);
+        self::assertSame('100', $withdraw->balance_after);
+        self::assertSame(hash('sha256', $withdraw->uuid.':'.$withdraw->amount.':100'), $withdraw->state_hash);
     }
 
     public function testPreinsertProjectionForCartBatch(): void
@@ -99,8 +94,8 @@ final class WalletStateProjectionPreinsertTest extends TestCase
             $transactionIds[] = $transfer->withdraw_id;
         }
 
-        /** @var array<int, Transaction> $transactions */
-        $transactions = Transaction::query()
+        /** @var array<int, TransactionState> $transactions */
+        $transactions = TransactionState::query()
             ->whereIn('id', $transactionIds)
             ->get()
             ->all();
@@ -108,11 +103,11 @@ final class WalletStateProjectionPreinsertTest extends TestCase
         self::assertCount(4, $transactions);
 
         foreach ($transactions as $transaction) {
-            self::assertNotNull($transaction->final_balance);
-            self::assertNotNull($transaction->checksum);
+            self::assertNotNull($transaction->balance_after);
+            self::assertNotNull($transaction->state_hash);
             self::assertSame(
-                hash('sha256', $transaction->uuid.':'.$transaction->amount.':'.$transaction->final_balance),
-                $transaction->checksum
+                hash('sha256', $transaction->uuid.':'.$transaction->amount.':'.$transaction->balance_after),
+                $transaction->state_hash
             );
         }
     }

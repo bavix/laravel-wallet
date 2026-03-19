@@ -1,6 +1,6 @@
 # Transaction state projection
 
-Issue #1015 asks for `final_balance` and `checksum` in the `transactions` table.
+Issue #1015 asks for `balance_after` and `state_hash` in the `transactions` table.
 
 You can implement this as an extension, without changing package internals:
 
@@ -19,19 +19,26 @@ final class TransactionStateProjectorListener
     public function handle(TransactionCommittingEventInterface $event): void
     {
         $transactions = $event->getTransactions();
-        $finalBalances = $event->getFinalBalances();
+        $resultingBalances = $event->getResultingBalances();
 
         $rows = [];
         foreach ($transactions as $transaction) {
-            $finalBalance = $finalBalances[$transaction['id']] ?? null;
-            if ($finalBalance === null) {
+            $transactionId = $transaction['id'] ?? null;
+            $transactionAmount = $transaction['amount'] ?? null;
+
+            if (! is_int($transactionId) || ! is_string($transactionAmount)) {
+                continue;
+            }
+
+            $resultingBalance = $resultingBalances[$transactionId] ?? null;
+            if ($resultingBalance === null) {
                 continue;
             }
 
             $rows[] = [
-                'id' => $transaction['id'],
-                'final_balance' => $finalBalance,
-                'checksum' => hash('sha256', $transaction['id'].':'.$transaction['amount'].':'.$finalBalance),
+                'id' => $transactionId,
+                'balance_after' => $resultingBalance,
+                'state_hash' => hash('sha256', $transactionId.':'.$transactionAmount.':'.$resultingBalance),
             ];
         }
 
@@ -45,8 +52,8 @@ final class TransactionStateProjectorListener
             Transaction::query()
                 ->whereKey($row['id'])
                 ->update([
-                    'final_balance' => $row['final_balance'],
-                    'checksum' => $row['checksum'],
+                    'balance_after' => $row['balance_after'],
+                    'state_hash' => $row['state_hash'],
                 ]);
 
             return;
@@ -60,13 +67,13 @@ final class TransactionStateProjectorListener
         Transaction::query()
             ->whereIn('id', $ids)
             ->update([
-                'final_balance' => $this->buildCase($rows, 'final_balance'),
-                'checksum' => $this->buildCase($rows, 'checksum'),
+                'balance_after' => $this->buildCase($rows, 'balance_after'),
+                'state_hash' => $this->buildCase($rows, 'state_hash'),
             ]);
     }
 
     /**
-     * @param list<array{id: int, final_balance: string, checksum: string}> $rows
+     * @param list<array{id: int, balance_after: string, state_hash: string}> $rows
      */
     private function buildCase(array $rows, string $column): Expression
     {
@@ -82,4 +89,4 @@ final class TransactionStateProjectorListener
 }
 ```
 
-For `frozen_balance` on wallets, use [Wallet State Projection](/guide/events/wallet-state-projection).
+For `held_balance` on wallets, use [Wallet State Projection](/guide/events/wallet-state-projection).
