@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Enums\TransactionType;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\Assembler\TransactionCommittingEventAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionCreatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Service\DispatcherServiceInterface;
+use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 
 /**
@@ -18,12 +21,14 @@ final readonly class TransactionService implements TransactionServiceInterface
 {
     public function __construct(
         private TransactionCreatedEventAssemblerInterface $transactionCreatedEventAssembler,
+        private TransactionCommittingEventAssemblerInterface $transactionCommittingEventAssembler,
         private DispatcherServiceInterface $dispatcherService,
         private AssistantServiceInterface $assistantService,
         private RegulatorServiceInterface $regulatorService,
         private PrepareServiceInterface $prepareService,
         private CastServiceInterface $castService,
         private AtmServiceInterface $atmService,
+        private MathServiceInterface $mathService,
     ) {
     }
 
@@ -32,14 +37,12 @@ final readonly class TransactionService implements TransactionServiceInterface
      */
     public function makeOne(
         Wallet $wallet,
-        string $type,
+        TransactionType $type,
         float|int|string $amount,
         ?array $meta,
         bool $confirmed = true
     ): Transaction {
-        assert(in_array($type, [Transaction::TYPE_DEPOSIT, Transaction::TYPE_WITHDRAW], true));
-
-        $dto = $type === Transaction::TYPE_DEPOSIT
+        $dto = $type === TransactionType::Deposit
             ? $this->prepareService->deposit($wallet, (string) $amount, $meta, $confirmed)
             : $this->prepareService->withdraw($wallet, (string) $amount, $meta, $confirmed);
 
@@ -62,6 +65,45 @@ final readonly class TransactionService implements TransactionServiceInterface
         $transactions = $this->atmService->makeTransactions($objects); // q1
         $totals = $this->assistantService->getSums($objects);
         assert(count($objects) === count($transactions));
+
+        $currentBalances = [];
+        foreach (array_keys($totals) as $walletId) {
+            $wallet = $wallets[$walletId] ?? null;
+            assert($wallet instanceof Wallet);
+
+            $object = $this->castService->getWallet($wallet);
+            assert($object->getKey() === $walletId);
+
+            $currentBalances[$walletId] = $this->regulatorService->amount($object);
+        }
+
+        $resultingBalancesByTransactionId = [];
+        foreach ($objects as $dto) {
+            $walletId = $dto->getWalletId();
+            if (! array_key_exists($walletId, $currentBalances)) {
+                $wallet = $wallets[$walletId] ?? null;
+                assert($wallet instanceof Wallet);
+
+                $object = $this->castService->getWallet($wallet);
+                assert($object->getKey() === $walletId);
+
+                $currentBalances[$walletId] = $this->regulatorService->amount($object);
+            }
+
+            $nextBalance = $this->mathService->round(
+                $this->mathService->add($currentBalances[$walletId], $dto->isConfirmed() ? $dto->getAmount() : '0')
+            );
+
+            $transaction = $transactions[$dto->getUuid()] ?? null;
+            assert($transaction instanceof Transaction);
+            $resultingBalancesByTransactionId[$transaction->getKey()] = $nextBalance;
+
+            $currentBalances[$walletId] = $nextBalance;
+        }
+
+        $this->dispatcherService->dispatchNow(
+            $this->transactionCommittingEventAssembler->create($transactions, $resultingBalancesByTransactionId)
+        );
 
         foreach ($totals as $walletId => $total) {
             $wallet = $wallets[$walletId] ?? null;

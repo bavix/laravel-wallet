@@ -31,3 +31,7 @@ class MyBalanceUpdatedListener
 ```
 
 It's simple!
+
+## Need batch wallet-state projection?
+
+Use the dedicated guide: [Wallet State Projection](/guide/events/wallet-state-projection).

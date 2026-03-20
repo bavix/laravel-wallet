@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
-use Bavix\Wallet\Models\Transfer;
+use Bavix\Wallet\Enums\TransferStatus;
+use Bavix\Wallet\External\Api\PurchaseQuery;
+use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Factories\ItemFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\Models\Item;
 use Bavix\Wallet\Test\Infra\TestCase;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @internal
@@ -37,11 +40,17 @@ final class GiftTest extends TestCase
         $transfer = $first->wallet->gift($second, $product);
         self::assertSame(0, $first->balanceInt);
         self::assertSame(0, $second->balanceInt);
-        self::assertNull($first->paid($product, true));
-        self::assertNotNull($second->paid($product, true));
-        self::assertNull($second->wallet->paid($product));
-        self::assertNotNull($second->wallet->paid($product, true));
-        self::assertSame(Transfer::STATUS_GIFT, $transfer->status);
+        self::assertNull(app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($first, $product, true)));
+        self::assertNotNull(
+            app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($second, $product, true))
+        );
+        self::assertNull(
+            app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($second->wallet, $product))
+        );
+        self::assertNotNull(
+            app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($second->wallet, $product, true))
+        );
+        self::assertSame(TransferStatus::Gift, $transfer->status);
     }
 
     public function testRefund(): void
@@ -65,7 +74,7 @@ final class GiftTest extends TestCase
         $transfer = $first->wallet->gift($second, $product);
         self::assertSame($first->balanceInt, 0);
         self::assertSame($second->balanceInt, 0);
-        self::assertSame($transfer->status, Transfer::STATUS_GIFT);
+        self::assertSame($transfer->status, TransferStatus::Gift);
 
         self::assertFalse($second->wallet->safeRefund($product));
         self::assertTrue($second->wallet->refundGift($product));
@@ -77,7 +86,7 @@ final class GiftTest extends TestCase
 
         $transfer = $second->wallet->forceGift($first, $product);
         self::assertNotNull($transfer);
-        self::assertSame($transfer->status, Transfer::STATUS_GIFT);
+        self::assertSame($transfer->status, TransferStatus::Gift);
 
         self::assertSame($second->balanceInt, -$product->getAmountProduct($second));
 
@@ -97,5 +106,30 @@ final class GiftTest extends TestCase
         self::assertSame($second->balanceInt, $product->getAmountProduct($second));
         $second->withdraw($second->balance);
         self::assertSame($second->balanceInt, 0);
+    }
+
+    public function testGiftFallbackToTransfersWhenLedgerMissing(): void
+    {
+        /** @var Buyer $first */
+        $first = BuyerFactory::new()->create();
+        /** @var Buyer $second */
+        $second = BuyerFactory::new()->create();
+        /** @var Item $product */
+        $product = ItemFactory::new()->create([
+            'quantity' => 1,
+        ]);
+
+        $first->deposit($product->getAmountProduct($first));
+        $transfer = $first->wallet->gift($second, $product);
+
+        /** @var string $purchaseTable */
+        $purchaseTable = config('wallet.purchase.table', 'purchase');
+        DB::table($purchaseTable)
+            ->where('transfer_id', $transfer->getKey())
+            ->delete();
+
+        $matched = app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($second, $product, true));
+        self::assertNotNull($matched);
+        self::assertSame($transfer->getKey(), $matched->getKey());
     }
 }

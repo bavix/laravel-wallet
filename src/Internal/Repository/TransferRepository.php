@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Repository;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
 use Bavix\Wallet\Internal\Query\TransferQueryInterface;
 use Bavix\Wallet\Internal\Service\JsonServiceInterface;
@@ -59,7 +60,7 @@ final readonly class TransferRepository implements TransferRepositoryInterface
     /**
      * @param non-empty-array<int> $ids
      */
-    public function updateStatusByIds(string $status, array $ids): int
+    public function updateStatusByIds(TransferStatus $status, array $ids): int
     {
         $connection = $this->transfer->getConnection();
 
@@ -68,7 +69,7 @@ final readonly class TransferRepository implements TransferRepositoryInterface
             ->whereIn($this->transfer->getKeyName(), $ids)
             ->update([
                 'status_last' => $connection->raw('status'),
-                'status' => $status,
+                'status' => $status->value,
             ]);
     }
 }

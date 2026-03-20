@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Traits;
 
 use function app;
+use Bavix\Wallet\Enums\TransactionType;
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
@@ -68,7 +70,7 @@ trait HasWallet
             $this,
             // Create a new deposit transaction.
             fn () => app(TransactionServiceInterface::class)
-                ->makeOne($this, Transaction::TYPE_DEPOSIT, $amount, $meta, $confirmed)
+                ->makeOne($this, TransactionType::Deposit, $amount, $meta, $confirmed)
         );
     }
 
@@ -372,7 +374,7 @@ trait HasWallet
                 // The wallet instance
                     $this,
                     // The transaction type
-                    Transaction::TYPE_WITHDRAW,
+                    TransactionType::Withdraw,
                     // The amount to withdraw
                     $amountValue,
                     // Additional information for the transaction
@@ -421,11 +423,11 @@ trait HasWallet
         ): Transfer {
             // Create a new transfer transaction.
             // The transfer transaction is created using the PrepareServiceInterface.
-            // The transfer status is set to Transfer::STATUS_TRANSFER.
+            // The transfer status is set to TransferStatus::Transfer.
             // The additional information for the transaction is passed as an argument.
             // The created transfer transaction is stored in the $transferLazyDto variable.
             $transferLazyDto = app(PrepareServiceInterface::class)
-                ->transferLazy($this, $wallet, Transfer::STATUS_TRANSFER, $amountValue, $meta);
+                ->transferLazy($this, $wallet, TransferStatus::Transfer, $amountValue, $meta);
 
             // Apply the transfer transaction.
             // The transfer transaction is applied using the TransferServiceInterface.

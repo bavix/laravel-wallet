@@ -22,12 +22,12 @@ return static function (RectorConfig $config): void {
     ]);
 
     // Define what rule sets will be applied
-    $config->import(LaravelLevelSetList::UP_TO_LARAVEL_110);
+    $config->import(LaravelLevelSetList::UP_TO_LARAVEL_120);
     $config->import(SetList::STRICT_BOOLEANS);
     $config->import(SetList::PRIVATIZATION);
     $config->import(SetList::EARLY_RETURN);
     $config->import(SetList::INSTANCEOF);
     $config->import(SetList::CODE_QUALITY);
     $config->import(SetList::DEAD_CODE);
-    $config->import(SetList::PHP_83);
+    $config->import(SetList::PHP_84);
 };

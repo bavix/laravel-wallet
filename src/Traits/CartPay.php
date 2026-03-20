@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Interfaces\CartInterface;
-use Bavix\Wallet\Interfaces\ProductInterface;
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
@@ -16,7 +16,6 @@ use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
 use Bavix\Wallet\Models\Transfer;
-use Bavix\Wallet\Objects\Cart;
 use Bavix\Wallet\Services\AssistantServiceInterface;
 use Bavix\Wallet\Services\AtomicServiceInterface;
 use Bavix\Wallet\Services\BasketServiceInterface;
@@ -39,21 +38,17 @@ trait CartPay
     use HasWallet;
 
     /**
-     * Pay for all products in the cart without any payment.
+     * Pays basket items without charging customer balance.
      *
-     * This method performs the payment for all products in the cart without any payment.
-     * It returns an array of Transfer instances representing the successfully paid items.
+     * @return non-empty-array<Transfer>
      *
-     * @param CartInterface $cart The cart containing the products to be paid.
-     * @return non-empty-array<Transfer> An array of Transfer instances representing the successfully paid items.
-     *
-     * @throws ProductEnded If the product is ended.
-     * @throws BalanceIsEmpty If the balance of the wallet is empty.
-     * @throws InsufficientFunds If there are insufficient funds in the wallet.
-     * @throws RecordNotFoundException If the record is not found.
-     * @throws RecordsNotFoundException If the records are not found.
-     * @throws TransactionFailedException If the transaction fails.
-     * @throws ExceptionInterface If an exception occurs.
+     * @throws ProductEnded
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function payFreeCart(CartInterface $cart): array
     {
@@ -113,7 +108,7 @@ trait CartPay
                         $castService->getWallet(
                             $item->getReceiving() ?? $product
                         ), // The wallet to receive the payment.
-                        Transfer::STATUS_PAID, // The status of the transfer.
+                        TransferStatus::Paid, // The status of the transfer.
                         0, // The amount of the transfer.
                         $assistantService->getMeta($basketDto, $product) // The metadata of the transfer.
                     );
@@ -135,14 +130,7 @@ trait CartPay
     }
 
     /**
-     * Safely pays for the items in the given cart.
-     *
-     * This method attempts to pay for all items in the provided cart. If the payment is successful,
-     * the method returns an array of Transfer instances. If the payment fails, an empty array is returned.
-     *
-     * @param CartInterface $cart The cart containing the items to be purchased.
-     * @param bool $force Whether to force the purchase. Defaults to false.
-     * @return Transfer[] An array of Transfer instances representing the successfully paid items, or an empty array if the payment failed.
+     * Safe wrapper around payCart.
      */
     public function safePayCart(CartInterface $cart, bool $force = false): array
     {
@@ -157,22 +145,17 @@ trait CartPay
     }
 
     /**
-     * Pays for the items in the given cart.
+     * Pays all basket items.
      *
-     * This method pays for all items in the provided cart. If the payment is successful,
-     * the method returns an array of Transfer instances. If the payment fails, the method throws an exception.
+     * @return non-empty-array<Transfer>
      *
-     * @param CartInterface $cart The cart containing the items to be purchased.
-     * @param bool $force Whether to force the purchase. Defaults to false.
-     * @return non-empty-array<Transfer> An array of Transfer instances representing the successfully paid items.
-     *
-     * @throws ProductEnded If the product is ended.
-     * @throws BalanceIsEmpty If the balance of the wallet is empty.
-     * @throws InsufficientFunds If there are insufficient funds in the wallet.
-     * @throws RecordNotFoundException If the record is not found.
-     * @throws RecordsNotFoundException If the records are not found.
-     * @throws TransactionFailedException If the transaction fails.
-     * @throws ExceptionInterface If an exception occurs.
+     * @throws ProductEnded
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function payCart(CartInterface $cart, bool $force = false): array
     {
@@ -236,7 +219,7 @@ trait CartPay
                         $castService->getWallet(
                             $item->getReceiving() ?? $product
                         ), // The wallet to receive the payment.
-                        Transfer::STATUS_PAID, // The status of the transfer.
+                        TransferStatus::Paid, // The status of the transfer.
                         $pricePerItem, // The amount of the transfer.
                         $assistantService->getMeta($basketDto, $product) // The metadata of the transfer.
                     );
@@ -258,20 +241,15 @@ trait CartPay
     }
 
     /**
-     * Forcefully pays for the items in the given cart.
+     * Forces payCart execution.
      *
-     * This method attempts to pay for all items in the provided cart by calling the payCart method with force set to true.
-     * If the payment is successful, an array of Transfer instances is returned.
-     * If the payment fails, appropriate exceptions are thrown.
+     * @return non-empty-array<Transfer>
      *
-     * @param CartInterface $cart The cart to pay for.
-     * @return non-empty-array<Transfer> Array of Transfer instances if payment is successful.
-     *
-     * @throws ProductEnded If a product has ended.
-     * @throws RecordNotFoundException If a record is not found.
-     * @throws RecordsNotFoundException If multiple records are not found.
-     * @throws TransactionFailedException If a transaction fails.
-     * @throws ExceptionInterface If an exception occurs.
+     * @throws ProductEnded
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ExceptionInterface
      */
     public function forcePayCart(CartInterface $cart): array
     {
@@ -283,16 +261,7 @@ trait CartPay
     }
 
     /**
-     * Safely attempts to refund all items in the given cart.
-     *
-     * This method safely attempts to refund all items in the provided cart.
-     * If the refund is successful, the method returns true.
-     * If the refund fails, the method returns false instead of throwing an exception.
-     *
-     * @param CartInterface $cart The cart to refund items from.
-     * @param bool $force Whether to force the refund even if the balance is empty.
-     * @param bool $gifts Whether to refund gifts as well.
-     * @return bool True if the refund is successful, false otherwise.
+     * Safe wrapper around refundCart.
      */
     public function safeRefundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool
     {
@@ -307,24 +276,15 @@ trait CartPay
     }
 
     /**
-     * Safely refunds all items in the given cart.
+     * Refunds cart purchases.
      *
-     * This method safely attempts to refund all items in the provided cart.
-     * If the refund is successful, it returns true.
-     * If the refund fails, it returns false instead of throwing an exception.
-     *
-     * @param CartInterface $cart The cart to refund items from.
-     * @param bool $force Whether to force the refund even if the balance is empty.
-     * @param bool $gifts Whether to refund gifts as well.
-     * @return bool True if the refund is successful, false otherwise.
-     *
-     * @throws BalanceIsEmpty If the balance of a wallet is empty.
-     * @throws InsufficientFunds If there are insufficient funds in a wallet.
-     * @throws RecordNotFoundException If a record is not found.
-     * @throws RecordsNotFoundException If multiple records are not found.
-     * @throws TransactionFailedException If a transaction fails.
-     * @throws ModelNotFoundException If a model is not found.
-     * @throws ExceptionInterface If an exception occurs.
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
      */
     public function refundCart(CartInterface $cart, bool $force = false, bool $gifts = false): bool
     {
@@ -382,7 +342,7 @@ trait CartPay
                         $castService->getWallet($itemDto->getReceiving() ?? $product),
                         $transfers[$index]->withdraw->wallet,
                         $transfers[$index]->withdraw->wallet,
-                        Transfer::STATUS_TRANSFER,
+                        TransferStatus::Transfer,
                         $transfers[$index]->deposit->amount,
                         $assistantService->getMeta($basketDto, $product)
                     );
@@ -409,28 +369,18 @@ trait CartPay
 
             // Update transfer status to refund.
             return $transferService
-                ->updateStatusByIds(Transfer::STATUS_REFUND, $transferIds);
+                ->updateStatusByIds(TransferStatus::Refund, $transferIds);
         });
     }
 
     /**
-     * Forcefully refunds all items in the cart.
+     * Forces refundCart execution.
      *
-     * This method forcefully attempts to refund all items in the provided cart.
-     * If the refund is successful, it returns true. If the refund fails due to
-     * insufficient funds or empty balance, it throws an exception. If the refund
-     * fails due to a reason other than the above, it throws a more specific
-     * exception.
-     *
-     * @param CartInterface $cart The cart containing the items to be refunded.
-     * @param bool $gifts Whether to refund gifts as well.
-     * @return bool True if the refund is successful, false otherwise.
-     *
-     * @throws RecordNotFoundException If the cart or its items are not found.
-     * @throws RecordsNotFoundException If the records for the refund are not found.
-     * @throws TransactionFailedException If the transaction fails for any reason.
-     * @throws ModelNotFoundException If the wallet or the transfer is not found.
-     * @throws ExceptionInterface If the refund fails for any other reason.
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
      */
     public function forceRefundCart(CartInterface $cart, bool $gifts = false): bool
     {
@@ -442,15 +392,7 @@ trait CartPay
     }
 
     /**
-     * Safely refunds all gifts in the given cart.
-     *
-     * This method attempts to refund all gifts in the provided cart safely.
-     * If the refund is successful, the method returns true. If the refund
-     * fails, the method returns false.
-     *
-     * @param CartInterface $cart The cart containing the gifts to be refunded.
-     * @param bool $force Whether to force the refund even if the balance is empty.
-     * @return bool True if the refund is successful, false otherwise.
+     * Safe wrapper around refundGiftCart.
      */
     public function safeRefundGiftCart(CartInterface $cart, bool $force = false): bool
     {
@@ -465,24 +407,15 @@ trait CartPay
     }
 
     /**
-     * Refunds all gifts in the given cart.
+     * Refunds gifted purchases.
      *
-     * This method attempts to refund all gifts in the provided cart.
-     * If the refund is successful, the method returns true. If the refund
-     * fails, the method throws an exception.
-     *
-     * @param CartInterface $cart The cart containing the gifts to be refunded.
-     * @param bool $force Whether to force the refund even if the balance is empty.
-     *                    Defaults to false.
-     * @return bool True if the refund was successful, false otherwise.
-     *
-     * @throws BalanceIsEmpty If the balance of the customer is empty and $force is false.
-     * @throws InsufficientFunds If the balance of the customer is insufficient to cover the refund.
-     * @throws RecordNotFoundException If the cart or its items are not found.
-     * @throws RecordsNotFoundException If the records for the refund are not found.
-     * @throws TransactionFailedException If the transaction fails for any reason.
-     * @throws ModelNotFoundException If the wallet or the transfer is not found.
-     * @throws ExceptionInterface If any other exception occurs during the refund process.
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
      */
     public function refundGiftCart(CartInterface $cart, bool $force = false): bool
     {
@@ -493,67 +426,20 @@ trait CartPay
     }
 
     /**
-     * Forcefully refunds all gifts in the cart.
+     * Forces refundGiftCart execution.
      *
-     * This method forcefully attempts to refund all gifts in the provided cart.
-     * If the refund is successful, it returns true. If the refund fails due to
-     * insufficient funds or empty balance, it throws an exception. If the refund
-     * fails due to a reason other than the above, it throws a more specific
-     * exception.
-     *
-     * This method is a convenience method that calls the refundGiftCart method
-     * with the force flag set to true. This allows the caller to not have to
-     * worry about the force flag and just call a single method to perform the
-     * refund.
-     *
-     * @param CartInterface $cart The cart containing the gifts to be refunded.
-     * @return bool True if the gift refund was successful, false otherwise.
-     *
-     * @throws BalanceIsEmpty If the balance of the customer is empty and the force flag is false.
-     * @throws InsufficientFunds If the balance of the customer is insufficient to cover the refund.
-     * @throws RecordNotFoundException If the cart or its items are not found.
-     * @throws RecordsNotFoundException If the records for the refund are not found.
-     * @throws TransactionFailedException If the refund transaction fails.
-     * @throws ModelNotFoundException If the model used in the refund is not found.
-     * @throws ExceptionInterface If the refund fails for any other reason.
+     * @throws BalanceIsEmpty
+     * @throws InsufficientFunds
+     * @throws RecordNotFoundException
+     * @throws RecordsNotFoundException
+     * @throws TransactionFailedException
+     * @throws ModelNotFoundException
+     * @throws ExceptionInterface
      */
     public function forceRefundGiftCart(CartInterface $cart): bool
     {
         // Call the refundGiftCart method with the force flag set to true.
         // This allows the refund to be performed even if the balance is empty.
         return $this->refundGiftCart($cart, true);
-    }
-
-    /**
-     * Checks if the given product has been acquired by the customer's wallet.
-     *
-     * This method is a convenience method that wraps a call to the PurchaseServiceInterface
-     * to check if the given product has been acquired by the customer's wallet.
-     *
-     * @param ProductInterface $product The product to check.
-     * @param bool $gifts Whether to include gifts in the search.
-     * @return Transfer|null The associated Transfer object, or null if none exists.
-     *
-     * @deprecated The method is slow and will be removed in the future.
-     * @see PurchaseServiceInterface
-     */
-    public function paid(ProductInterface $product, bool $gifts = false): ?Transfer
-    {
-        // Retrieve the cart with the given product.
-        // The withItem method adds the given product to the cart.
-        $cart = app(Cart::class)->withItem($product);
-
-        // Use the PurchaseServiceInterface to find the associated Transfer object.
-        // The PurchaseServiceInterface is responsible for finding the transfers associated
-        // with a given basket.
-        // The already method is used to find the transfers that are already done.
-        // The basket is obtained from the cart.
-        // The $gifts parameter is used to specify whether to include gifts in the search.
-        $purchases = app(PurchaseServiceInterface::class)
-            ->already($this, $cart->getBasketDto(), $gifts);
-
-        // Return the first Transfer object in the array of purchases, or null if the array is empty.
-        // This is a convenience method and will be removed in the future.
-        return current($purchases) ?: null;
     }
 }

@@ -2,6 +2,11 @@ deptrac:
   paths:
     - ./src
   layers:
+    - name: Enum
+      collectors:
+        - type: classLike
+          value: ^Bavix\\Wallet\\Enums\\.*
+
     - name: Legacy
       collectors:
         - type: classLike
@@ -163,23 +168,28 @@ deptrac:
           value: ^Illuminate\\Contracts\\Cache\\Repository$
 
   ruleset:
+    Enum:
+
     Contract:
       - InternalException
       - DtoInterface
       - UIException
       - Model
       - EloquentModel
+      - Enum
 
     ApiQuery:
       - Api
       - Model
       - Contract
       - ServiceInterface
+      - Enum
 
     Api:
       - Model
       - Contract
       - InternalException
+      - Enum
 
     ApiHandler:
       - Api
@@ -188,6 +198,7 @@ deptrac:
       - Contract
       - ServiceInterface
       - InternalException
+      - Enum
 
     UI:
       - AssemblerDtoInterface # delete as soon as possible
@@ -198,6 +209,7 @@ deptrac:
       - Model
       - EloquentModel
       - Legacy # delete as soon as possible
+      - Enum
 
     UIException:
       - InternalException
@@ -214,14 +226,18 @@ deptrac:
       - ServiceInterface
 
     EventInterface:
+      - Enum
     Event:
       - EventInterface
+      - Enum
 
     DtoInterface:
       - Contract
+      - Enum
     Dto:
       - DtoInterface
       - Contract
+      - Enum
 
     Model:
       - AssemblerDtoInterface
@@ -232,12 +248,15 @@ deptrac:
       - Contract
       - Legacy
       - UI
+      - Enum
 
     TransformInterface:
       - DtoInterface
+      - Enum
     Transform:
       - TransformInterface
       - DtoInterface
+      - Enum
 
     QueryInterface:
     Query:
@@ -248,6 +267,7 @@ deptrac:
       - QueryInterface
       - DtoInterface
       - Model
+      - Enum
     Repository:
       - RepositoryInterface
       - TransformInterface
@@ -257,6 +277,7 @@ deptrac:
       - DtoInterface
       - UIException
       - Model
+      - Enum
 
     InternalListener:
       - ServiceInterface
@@ -269,6 +290,7 @@ deptrac:
       - UIException
       - Contract
       - Model
+      - Enum
     Service:
       - AssemblerDtoInterface
       - RepositoryInterface
@@ -279,11 +301,13 @@ deptrac:
       - UIException
       - Contract
       - Model
+      - Enum
 
     AssemblerDtoInterface:
       - EloquentModel
       - DtoInterface
       - Contract
+      - Enum
     AssemblerDto:
       - AssemblerDtoInterface
       - QueryInterface
@@ -292,6 +316,7 @@ deptrac:
       - DtoInterface
       - Contract
       - Dto
+      - Enum
 
     Legacy:
       - InternalException

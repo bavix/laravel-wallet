@@ -27,6 +27,8 @@ use Bavix\Wallet\Traits\HasWallet;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\Taxable;
 use Bavix\Wallet\Interfaces\ProductLimitedInterface;
+use Bavix\Wallet\External\Api\PurchaseQuery;
+use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 
 class Item extends Model implements ProductLimitedInterface, Taxable
 {
@@ -36,7 +38,7 @@ class Item extends Model implements ProductLimitedInterface, Taxable
     {
         /**
          * If the service can be purchased once, then
-         *  return !$customer->paid($this);
+         *  return ! app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($customer, $this));
          */
         return true; 
     }

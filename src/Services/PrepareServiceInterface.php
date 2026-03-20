@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\External\Contracts\ExtraDtoInterface;
 use Bavix\Wallet\Interfaces\Wallet;
@@ -62,7 +63,7 @@ interface PrepareServiceInterface
      *
      * @param Wallet $from The wallet from which funds are transferred.
      * @param Wallet $to The wallet to which funds are transferred.
-     * @param string $status The status of the transfer.
+     * @param TransferStatus $status The status of the transfer.
      * @param float|int|string $amount The amount of funds to transfer.
      * @param ExtraDtoInterface|array<mixed>|null $meta Additional information for the transfer.
      * @return TransferLazyDtoInterface The transfer DTO.
@@ -72,7 +73,7 @@ interface PrepareServiceInterface
     public function transferLazy(
         Wallet $from,
         Wallet $to,
-        string $status,
+        TransferStatus $status,
         float|int|string $amount,
         ExtraDtoInterface|array|null $meta = null
     ): TransferLazyDtoInterface;
@@ -84,7 +85,7 @@ interface PrepareServiceInterface
      * @param WalletModel $fromWallet The model of the wallet from which funds are transferred.
      * @param Wallet $to The wallet to which funds are transferred.
      * @param WalletModel $toWallet The model of the wallet to which funds are transferred.
-     * @param string $status The status of the transfer.
+     * @param TransferStatus $status The status of the transfer.
      * @param float|int|string $amount The amount of funds to transfer.
      * @param ExtraDtoInterface|array<mixed>|null $meta Additional information for the transfer.
      * @return TransferLazyDtoInterface The transfer lazy DTO.
@@ -96,7 +97,7 @@ interface PrepareServiceInterface
         WalletModel $fromWallet,
         Wallet $to,
         WalletModel $toWallet,
-        string $status,
+        TransferStatus $status,
         float|int|string $amount,
         ExtraDtoInterface|array|null $meta = null
     ): TransferLazyDtoInterface;

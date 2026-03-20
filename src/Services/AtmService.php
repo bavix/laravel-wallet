@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Internal\Assembler\TransactionQueryAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferQueryAssemblerInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
+use Bavix\Wallet\Internal\Repository\PurchaseRepositoryInterface;
 use Bavix\Wallet\Internal\Repository\TransactionRepositoryInterface;
 use Bavix\Wallet\Internal\Repository\TransferRepositoryInterface;
 use Bavix\Wallet\Models\Transaction;
@@ -21,6 +23,7 @@ final readonly class AtmService implements AtmServiceInterface
     public function __construct(
         private TransactionQueryAssemblerInterface $transactionQueryAssembler,
         private TransferQueryAssemblerInterface $transferQueryAssembler,
+        private PurchaseRepositoryInterface $purchaseRepository,
         private TransactionRepositoryInterface $transactionRepository,
         private TransferRepositoryInterface $transferRepository,
         private AssistantServiceInterface $assistantService
@@ -68,6 +71,17 @@ final readonly class AtmService implements AtmServiceInterface
         }
 
         assert($items !== []);
+
+        $purchaseTransfers = [];
+        foreach ($items as $item) {
+            if ($item->status === TransferStatus::Paid || $item->status === TransferStatus::Gift) {
+                $purchaseTransfers[] = $item;
+            }
+        }
+
+        if ($purchaseTransfers !== []) {
+            $this->purchaseRepository->syncByTransfers($purchaseTransfers);
+        }
 
         $results = [];
         foreach ($items as $item) {

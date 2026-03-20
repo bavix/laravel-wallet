@@ -261,3 +261,32 @@ Replace `Bavix\Wallet\Interfaces\Product` to `Bavix\Wallet\Interfaces\ProductLim
 4. Obsolete columns `from_type`, `to_type` in the transfers table have been physically removed. Make sure you don't use them;
 5. An `extra` column has been added to the transfers table. Don't forget to apply all new migrations;
 6. The `Bavix\Wallet\Interfaces\Wallet` contract has been extended with the receivedTransfers method. If you overridden the implementation, then implement the new method;
+
+## 11.x.x → 12.0.x
+
+1. Minimum Laravel version is now `^12.0`;
+2. Deprecated constants were removed:
+   - `Transaction::TYPE_DEPOSIT`, `Transaction::TYPE_WITHDRAW`;
+   - `Transfer::STATUS_EXCHANGE`, `Transfer::STATUS_TRANSFER`, `Transfer::STATUS_PAID`, `Transfer::STATUS_REFUND`, `Transfer::STATUS_GIFT`;
+3. Use enums instead:
+   - `Bavix\Wallet\Enums\TransactionType`;
+   - `Bavix\Wallet\Enums\TransferStatus`;
+4. Deprecated UUID factory support was removed:
+   - `UuidFactoryServiceInterface`, `UuidFactoryService`;
+   - `wallet.internal.uuid` config key;
+5. `Customer::paid()` / `CartPay::paid()` were removed.
+   Use `PurchaseQuery` + `PurchaseQueryHandlerInterface` for purchase checks.
+6. `PurchaseServiceInterface` is now a legacy extension point and will be removed in v14.
+   New integrations should use `PurchaseQueryHandlerInterface`.
+
+Example migration for purchase checks:
+
+```php
+use Bavix\Wallet\External\Api\PurchaseQuery;
+use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
+
+$transfer = app(PurchaseQueryHandlerInterface::class)
+    ->one(PurchaseQuery::create($customer, $product));
+
+$isPurchased = (bool) $transfer;
+```
