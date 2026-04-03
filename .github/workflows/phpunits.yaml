@@ -45,7 +45,7 @@ jobs:
           - 11211:11211
 
       pgsql:
-        image: postgres:15-alpine
+        image: postgres:18.3-alpine
         env:
           POSTGRES_USER: root
           POSTGRES_PASSWORD: wallet
@@ -59,7 +59,7 @@ jobs:
           - 5432:5432
 
       mysql:
-        image: mysql:8.0
+        image: mysql:9.6
         env:
           MYSQL_ROOT_PASSWORD: wallet
           MYSQL_DATABASE: wallet
@@ -72,15 +72,16 @@ jobs:
           - 3306:3306
 
       mariadb:
-        image: mariadb:10.10 # https://github.com/laravel/framework/pull/48455
+        image: mariadb:12.2
         env:
           MYSQL_ROOT_PASSWORD: wallet
           MYSQL_DATABASE: wallet
         options: >-
-          --health-cmd="mysqladmin ping"
+          --health-cmd="mariadb-admin ping -h 127.0.0.1 -uroot -pwallet"
+          --health-start-period 30s
           --health-interval 5s
           --health-timeout 3s
-          --health-retries 5
+          --health-retries 10
         ports:
           - 3307:3306
 
