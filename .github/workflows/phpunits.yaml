@@ -72,7 +72,7 @@ jobs:
           - 3306:3306
 
       mariadb:
-        image: mariadb:12.3
+        image: mariadb:12.2
         env:
           MYSQL_ROOT_PASSWORD: wallet
           MYSQL_DATABASE: wallet
