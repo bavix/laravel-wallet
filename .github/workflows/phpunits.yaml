@@ -21,13 +21,13 @@ jobs:
         php-versions: [8.3, 8.4, 8.5]
         databases: [testing, pgsql, mysql, mariadb]
         caches: [array, redis, memcached, database]
-        locks: [redis, memcached]
+        locks: [redis]
 
     services:
       redis:
-        image: redis:7-alpine
+        image: valkey/valkey:9-alpine
         options: >-
-          --health-cmd "redis-cli ping"
+          --health-cmd "valkey-cli ping"
           --health-interval 5s
           --health-timeout 3s
           --health-retries 5
