@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PhpCsFixer\Fixer\Import\FullyQualifiedStrictTypesFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
@@ -17,7 +18,7 @@ return static function (ECSConfig $config): void {
 
     $config->skip([
         GeneralPhpdocAnnotationRemoveFixer::class,
-        \PhpCsFixer\Fixer\Import\FullyQualifiedStrictTypesFixer::class,
+        FullyQualifiedStrictTypesFixer::class,
     ]);
 
     $config->sets([
