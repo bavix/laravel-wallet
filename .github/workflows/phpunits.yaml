@@ -77,10 +77,11 @@ jobs:
           MYSQL_ROOT_PASSWORD: wallet
           MYSQL_DATABASE: wallet
         options: >-
-          --health-cmd="mysqladmin ping"
+          --health-cmd="mariadb-admin ping -h 127.0.0.1 -uroot -pwallet"
+          --health-start-period 30s
           --health-interval 5s
           --health-timeout 3s
-          --health-retries 5
+          --health-retries 10
         ports:
           - 3307:3306
 
