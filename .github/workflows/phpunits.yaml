@@ -20,11 +20,11 @@ jobs:
       matrix:
         php-versions: [8.3, 8.4, 8.5]
         databases: [testing, pgsql, mysql, mariadb]
-        caches: [array, valkey, memcached, database]
-        locks: [valkey]
+        caches: [array, redis, memcached, database]
+        locks: [redis]
 
     services:
-      valkey:
+      redis:
         image: valkey/valkey:9-alpine
         options: >-
           --health-cmd "valkey-cli ping"
@@ -145,7 +145,7 @@ jobs:
 
       - name: Check coveralls
         id: coveralls-check
-        run: echo "execute=${{ matrix.php-versions == '8.3' && matrix.caches == 'array' && matrix.locks == 'valkey' && matrix.databases == 'testing' }}" >> $GITHUB_OUTPUT
+        run: echo "execute=${{ matrix.php-versions == '8.3' && matrix.caches == 'array' && matrix.locks == 'redis' && matrix.databases == 'testing' }}" >> $GITHUB_OUTPUT
 
       - name: Prepare run test suite
         id: unit-prepare
