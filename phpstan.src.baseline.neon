@@ -277,6 +277,12 @@ parameters:
 			path: src/Services/ConsistencyService.php
 
 		-
+			message: '#^Parameter \#1 \$array of function array_unique expects an array of values castable to string, array\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Services/EagerLoaderService.php
+
+		-
 			message: '#^Parameter \#2 \$holderIds of method Bavix\\Wallet\\Internal\\Repository\\WalletRepositoryInterface\:\:findDefaultAll\(\) expects array\<int\|string\>, array\<mixed\> given\.$#'
 			identifier: argument.type
 			count: 1
