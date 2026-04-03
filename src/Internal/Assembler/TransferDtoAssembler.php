@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Assembler;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Internal\Dto\TransferDto;
 use Bavix\Wallet\Internal\Dto\TransferDtoInterface;
 use Bavix\Wallet\Internal\Service\ClockServiceInterface;
@@ -24,7 +25,7 @@ final readonly class TransferDtoAssembler implements TransferDtoAssemblerInterfa
     public function create(
         int $depositId,
         int $withdrawId,
-        string $status,
+        TransferStatus $status,
         Model $fromModel,
         Model $toModel,
         int $discount,

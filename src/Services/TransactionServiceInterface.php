@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Enums\TransactionType;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
@@ -18,7 +19,7 @@ interface TransactionServiceInterface
      * Create a new transaction.
      *
      * @param Wallet $wallet The wallet associated with the transaction.
-     * @param string $type The type of the transaction.
+     * @param TransactionType $type The type of the transaction.
      * @param float|int|string $amount The amount of the transaction.
      * @param null|array<mixed> $meta Additional information for the transaction.
      * @param bool $confirmed Whether the transaction is confirmed or not.
@@ -28,7 +29,7 @@ interface TransactionServiceInterface
      */
     public function makeOne(
         Wallet $wallet,
-        string $type,
+        TransactionType $type,
         float|int|string $amount,
         ?array $meta,
         bool $confirmed = true

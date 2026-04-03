@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Dto;
 
+use Bavix\Wallet\Enums\TransactionType;
 use DateTimeImmutable;
 
 /** @immutable */
@@ -17,7 +18,7 @@ final readonly class TransactionDto implements TransactionDtoInterface
         private string $payableType,
         private int|string $payableId,
         private int $walletId,
-        private string $type,
+        private TransactionType $type,
         private float|int|string $amount,
         private bool $confirmed,
         private ?array $meta,
@@ -58,7 +59,7 @@ final readonly class TransactionDto implements TransactionDtoInterface
         return $this->walletId;
     }
 
-    public function getType(): string
+    public function getType(): TransactionType
     {
         return $this->type;
     }

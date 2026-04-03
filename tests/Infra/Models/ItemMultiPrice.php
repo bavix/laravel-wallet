@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Infra\Models;
 
+use Bavix\Wallet\External\Api\PurchaseQuery;
+use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\ProductLimitedInterface;
 use Bavix\Wallet\Models\Wallet;
@@ -43,7 +45,9 @@ final class ItemMultiPrice extends Model implements ProductLimitedInterface
             return $result;
         }
 
-        return $result && ! $customer->paid($this) instanceof \Bavix\Wallet\Models\Transfer;
+        return $result && ! app(PurchaseQueryHandlerInterface::class)->one(
+            PurchaseQuery::create($customer, $this)
+        ) instanceof \Bavix\Wallet\Models\Transfer;
     }
 
     public function getAmountProduct(Customer $customer): int
@@ -55,7 +59,7 @@ final class ItemMultiPrice extends Model implements ProductLimitedInterface
             return $this->prices[$wallet->currency];
         }
 
-        throw new PriceNotSetException("Price not set for {$wallet->currency} currency");
+        throw new PriceNotSetException(sprintf('Price not set for %s currency', $wallet->currency));
     }
 
     public function getMetaProduct(): ?array

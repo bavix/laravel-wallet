@@ -3,18 +3,25 @@
 declare(strict_types=1);
 
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\BalanceCommittingEventAssembler;
 use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\ExtraDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\OptionDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\TransactionCommittingEventAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionCreatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionQueryAssembler;
+use Bavix\Wallet\Internal\Assembler\TransferCreatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferQueryAssembler;
+use Bavix\Wallet\Internal\Events\BalanceCommittingEvent;
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEvent;
+use Bavix\Wallet\Internal\Events\TransactionCommittingEvent;
 use Bavix\Wallet\Internal\Events\TransactionCreatedEvent;
+use Bavix\Wallet\Internal\Events\TransferCreatedEvent;
 use Bavix\Wallet\Internal\Events\WalletCreatedEvent;
+use Bavix\Wallet\Internal\Repository\PurchaseRepository;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
 use Bavix\Wallet\Internal\Repository\WalletRepository;
@@ -29,9 +36,9 @@ use Bavix\Wallet\Internal\Service\MathService;
 use Bavix\Wallet\Internal\Service\StateService;
 use Bavix\Wallet\Internal\Service\StorageService;
 use Bavix\Wallet\Internal\Service\TranslatorService;
-use Bavix\Wallet\Internal\Service\UuidFactoryService;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
 use Bavix\Wallet\Internal\Transform\TransferDtoTransformer;
+use Bavix\Wallet\Models\Purchase;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
@@ -207,16 +214,6 @@ return [
         'translator' => TranslatorService::class,
 
         /**
-         * The service for generating UUIDs.
-         *
-         * @var string
-         *
-         * @deprecated use identifier.
-         * @see IdentifierFactoryService
-         */
-        'uuid' => UuidFactoryService::class,
-
-        /**
          * The service for generating identifiers.
          *
          * @var string
@@ -290,6 +287,10 @@ return [
          */
         'transaction' => TransactionRepository::class,
         /**
+         * Repository for fetching purchase ledger data.
+         */
+        'purchase' => PurchaseRepository::class,
+        /**
          * Repository for fetching transfer data.
          *
          * @see \Bavix\Wallet\Interfaces\Transfer
@@ -335,6 +336,10 @@ return [
          */
         'availability' => AvailabilityDtoAssembler::class,
         /**
+         * Assembler for creating Balance Committing Event DTO.
+         */
+        'balance_committing_event' => BalanceCommittingEventAssembler::class,
+        /**
          * Assembler for creating Balance Updated Event DTO.
          */
         'balance_updated_event' => BalanceUpdatedEventAssembler::class,
@@ -363,9 +368,17 @@ return [
          */
         'transaction_created_event' => TransactionCreatedEventAssembler::class,
         /**
+         * Assembler for creating Transaction Committing Event DTO.
+         */
+        'transaction_committing_event' => TransactionCommittingEventAssembler::class,
+        /**
          * Assembler for creating Transaction Query DTO.
          */
         'transaction_query' => TransactionQueryAssembler::class,
+        /**
+         * Assembler for creating Transfer Created Event DTO.
+         */
+        'transfer_created_event' => TransferCreatedEventAssembler::class,
         /**
          * Assembler for creating Transfer Query DTO.
          */
@@ -378,6 +391,11 @@ return [
      * @var array<string, class-string>
      */
     'events' => [
+        /**
+         * The event triggered before balances are persisted in a transaction commit.
+         */
+        'balance_committing' => BalanceCommittingEvent::class,
+
         /**
          * The event triggered when the balance is updated.
          */
@@ -392,6 +410,16 @@ return [
          * The event triggered when a transaction is created.
          */
         'transaction_created' => TransactionCreatedEvent::class,
+
+        /**
+         * The event triggered before transaction side effects are committed.
+         */
+        'transaction_committing' => TransactionCommittingEvent::class,
+
+        /**
+         * The event triggered when a transfer is created.
+         */
+        'transfer_created' => TransferCreatedEvent::class,
     ],
 
     /**
@@ -444,6 +472,21 @@ return [
          * @see Transfer
          */
         'model' => Transfer::class,
+    ],
+
+    /**
+     * Base model 'purchase'.
+     */
+    'purchase' => [
+        /**
+         * The table name for purchases ledger.
+         */
+        'table' => env('WALLET_PURCHASE_TABLE_NAME', 'wallet_purchases'),
+
+        /**
+         * The model class for purchases ledger.
+         */
+        'model' => Purchase::class,
     ],
 
     /**

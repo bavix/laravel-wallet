@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Infra\Models;
 
+use Bavix\Wallet\External\Api\PurchaseQuery;
+use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\MaximalTaxable;
 use Bavix\Wallet\Interfaces\ProductLimitedInterface;
@@ -42,7 +44,9 @@ final class ItemMaxTax extends Model implements ProductLimitedInterface, Maximal
             return $result;
         }
 
-        return $result && ! $customer->paid($this) instanceof \Bavix\Wallet\Models\Transfer;
+        return $result && ! app(PurchaseQueryHandlerInterface::class)->one(
+            PurchaseQuery::create($customer, $this)
+        ) instanceof \Bavix\Wallet\Models\Transfer;
     }
 
     public function getAmountProduct(Customer $customer): int

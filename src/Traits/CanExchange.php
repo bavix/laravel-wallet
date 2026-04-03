@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Traits;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
 use Bavix\Wallet\External\Contracts\ExtraDtoInterface;
@@ -85,7 +86,7 @@ trait CanExchange
             // Execute the exchange operation and return the created transfer.
             // If an error occurs during the process, an exception is thrown.
             return $this->exchange($to, $amount, $meta);
-        } catch (ExceptionInterface $e) {
+        } catch (ExceptionInterface) {
             // If an exception occurs during the exchange process, return null.
             return null;
         }
@@ -196,7 +197,7 @@ trait CanExchange
                 $fee,
                 $withdrawDto,
                 $depositDto,
-                Transfer::STATUS_EXCHANGE,
+                TransferStatus::Exchange,
                 $extraDto->getUuid(),
                 $extraDto->getExtra()
             );

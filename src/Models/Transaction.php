@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Models;
 
+use Bavix\Wallet\Enums\TransactionType;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Observers\TransactionObserver;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Override;
 
 /**
  * Class Transaction.
@@ -23,7 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int|string $payable_id
  * @property int $wallet_id
  * @property non-empty-string $uuid
- * @property string $type
+ * @property TransactionType $type
  * @property non-empty-string $amount
  * @property int $amountInt
  * @property non-empty-string $amountFloat
@@ -41,10 +43,6 @@ class Transaction extends Model
 {
     use SoftDeletes;
 
-    final public const string TYPE_DEPOSIT = 'deposit';
-
-    final public const string TYPE_WITHDRAW = 'withdraw';
-
     /**
      * @var array<int, string>
      */
@@ -61,20 +59,7 @@ class Transaction extends Model
         'updated_at',
     ];
 
-    /**
-     * @return array<string, string>
-     */
-    #[\Override]
-    public function casts(): array
-    {
-        return [
-            'wallet_id' => 'int',
-            'confirmed' => 'bool',
-            'meta' => 'json',
-        ];
-    }
-
-    #[\Override]
+    #[Override]
     public function getTable(): string
     {
         if ((string) $this->table === '') {
@@ -138,11 +123,23 @@ class Transaction extends Model
         $this->amount = $rounded;
     }
 
-    #[\Override]
-    protected static function boot(): void
+    /**
+     * @return array<string, string>
+     */
+    #[Override]
+    protected function casts(): array
     {
-        parent::boot();
+        return [
+            'wallet_id' => 'int',
+            'confirmed' => 'bool',
+            'meta' => 'json',
+            'type' => TransactionType::class,
+        ];
+    }
 
+    #[Override]
+    protected static function booted(): void
+    {
         static::observe(TransactionObserver::class);
     }
 }

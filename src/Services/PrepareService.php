@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Enums\TransactionType;
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\External\Contracts\ExtraDtoInterface;
 use Bavix\Wallet\Interfaces\MerchantFeeDeductible;
@@ -14,7 +16,6 @@ use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
-use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 
 /**
@@ -50,7 +51,7 @@ final readonly class PrepareService implements PrepareServiceInterface
             $this->castService->getHolder($wallet),
             $this->castService->getWallet($wallet)
                 ->getKey(),
-            Transaction::TYPE_DEPOSIT,
+            TransactionType::Deposit,
             $amount,
             $confirmed,
             $meta,
@@ -74,7 +75,7 @@ final readonly class PrepareService implements PrepareServiceInterface
             $this->castService->getHolder($wallet),
             $this->castService->getWallet($wallet)
                 ->getKey(),
-            Transaction::TYPE_WITHDRAW,
+            TransactionType::Withdraw,
             $this->mathService->negative($amount),
             $confirmed,
             $meta,
@@ -88,7 +89,7 @@ final readonly class PrepareService implements PrepareServiceInterface
     public function transferLazy(
         Wallet $from,
         Wallet $to,
-        string $status,
+        TransferStatus $status,
         float|int|string $amount,
         ExtraDtoInterface|array|null $meta = null
     ): TransferLazyDtoInterface {
@@ -108,7 +109,7 @@ final readonly class PrepareService implements PrepareServiceInterface
         WalletModel $fromWallet,
         Wallet $to,
         WalletModel $toWallet,
-        string $status,
+        TransferStatus $status,
         float|int|string $amount,
         ExtraDtoInterface|array|null $meta = null
     ): TransferLazyDtoInterface {

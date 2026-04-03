@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Dto;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use DateTimeImmutable;
 
 /** @immutable */
@@ -16,7 +17,7 @@ final readonly class TransferDto implements TransferDtoInterface
         private string $uuid,
         private int $depositId,
         private int $withdrawId,
-        private string $status,
+        private TransferStatus $status,
         private int $fromId,
         private int $toId,
         private int $discount,
@@ -48,7 +49,7 @@ final readonly class TransferDto implements TransferDtoInterface
         return $this->withdrawId;
     }
 
-    public function getStatus(): string
+    public function getStatus(): TransferStatus
     {
         return $this->status;
     }

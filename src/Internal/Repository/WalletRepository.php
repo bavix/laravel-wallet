@@ -138,11 +138,11 @@ final readonly class WalletRepository implements WalletRepositoryInterface
                 ->firstOrFail();
 
             return $wallet;
-        } catch (EloquentModelNotFoundException $exception) {
+        } catch (EloquentModelNotFoundException $eloquentModelNotFoundException) {
             throw new ModelNotFoundException(
-                $exception->getMessage(),
+                $eloquentModelNotFoundException->getMessage(),
                 ExceptionInterface::MODEL_NOT_FOUND,
-                $exception
+                $eloquentModelNotFoundException
             );
         }
     }

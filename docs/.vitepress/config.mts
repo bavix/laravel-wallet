@@ -115,6 +115,8 @@ export default defineConfig({
         text: 'Events',
         items: [
           { text: 'Balance Updated', link: '/guide/events/balance-updated-event' },
+          { text: 'Wallet State Projection', link: '/guide/events/wallet-state-projection' },
+          { text: 'Transaction State Projection', link: '/guide/events/transaction-state-projection' },
           { text: 'Wallet Created', link: '/guide/events/wallet-created-event' },
           { text: 'Transaction Created', link: '/guide/events/transaction-created-event' },
           { text: 'Customize', link: '/guide/events/customize' },
