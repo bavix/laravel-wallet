@@ -89,18 +89,6 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         'decimal_places' => 2,
     ];
 
-    /**
-     * @return array<string, string>
-     */
-    #[\Override]
-    public function casts(): array
-    {
-        return [
-            'decimal_places' => 'int',
-            'meta' => 'json',
-        ];
-    }
-
     #[\Override]
     public function getTable(): string
     {
@@ -122,9 +110,11 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         if ($this->exists) {
             return;
         }
+
         if (array_key_exists('slug', $this->attributes)) {
             return;
         }
+
         /** @var string $slug */
         $slug = Str::slug($name);
         $this->attributes['slug'] = $slug;
@@ -221,6 +211,18 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         $slug = $this->slug;
 
         return Str::upper($slug);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    #[\Override]
+    protected function casts(): array
+    {
+        return [
+            'decimal_places' => 'int',
+            'meta' => 'json',
+        ];
     }
 
     protected function initializeMorphOneWallet(): void

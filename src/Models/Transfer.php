@@ -57,21 +57,6 @@ class Transfer extends Model
         'updated_at',
     ];
 
-    /**
-     * @return array<string, string>
-     */
-    #[Override]
-    public function casts(): array
-    {
-        return [
-            'deposit_id' => 'int',
-            'withdraw_id' => 'int',
-            'extra' => 'json',
-            'status' => TransferStatus::class,
-            'status_last' => TransferStatus::class,
-        ];
-    }
-
     #[Override]
     public function getTable(): string
     {
@@ -134,6 +119,21 @@ class Transfer extends Model
         $belongsTo = $this->belongsTo($model, 'withdraw_id');
 
         return $belongsTo;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    #[Override]
+    protected function casts(): array
+    {
+        return [
+            'deposit_id' => 'int',
+            'withdraw_id' => 'int',
+            'extra' => 'json',
+            'status' => TransferStatus::class,
+            'status_last' => TransferStatus::class,
+        ];
     }
 
     #[Override]

@@ -138,7 +138,7 @@ trait CartPay
         try {
             // If the payment is successful, return the array of Transfer instances.
             return $this->payCart($cart, $force);
-        } catch (ExceptionInterface $exception) {
+        } catch (ExceptionInterface) {
             // If the payment fails, return an empty array.
             return [];
         }
@@ -230,6 +230,7 @@ trait CartPay
             if (! $force) {
                 $consistencyService->checkTransfer($transfers);
             }
+
             // Assert that the $transfers array is not empty.
             // This is necessary to avoid a potential PHP warning
             // when calling $transferService->apply() with an empty array.
@@ -268,7 +269,7 @@ trait CartPay
         try {
             // Try to refund all items in the provided cart.
             return $this->refundCart($cart, $force, $gifts);
-        } catch (ExceptionInterface $e) {
+        } catch (ExceptionInterface) {
             // Return false if an exception occurs during the refund process.
             // This is a safe refund method, so we do not rethrow the exception.
             return false;
@@ -321,9 +322,7 @@ trait CartPay
             // Check if the count of transfers is equal to the total items in the basket.
             if (count($transfers) !== $basketDto->total()) {
                 throw new ModelNotFoundException(
-                    "No query results for model [{$this->transfers()
-                        ->getModel()
-                        ->getMorphClass()}]",
+                    sprintf('No query results for model [%s]', $this->transfers()->getModel()->getMorphClass()),
                     ExceptionInterface::MODEL_NOT_FOUND
                 );
             }
@@ -399,7 +398,7 @@ trait CartPay
         try {
             // Attempt to refund all gifts in the provided cart.
             return $this->refundGiftCart($cart, $force);
-        } catch (ExceptionInterface $e) {
+        } catch (ExceptionInterface) {
             // Return false if an exception occurs during the refund process.
             // This is a safe refund method, so we do not rethrow the exception.
             return false;

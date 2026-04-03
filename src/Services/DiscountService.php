@@ -18,6 +18,7 @@ final class DiscountService implements DiscountServiceInterface
         if (! $customer instanceof Customer) {
             return 0;
         }
+
         if (! $product instanceof Discount) {
             return 0;
         }

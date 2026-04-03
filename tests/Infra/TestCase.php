@@ -34,7 +34,7 @@ abstract class TestCase extends OrchestraTestCase
     {
         assert(is_string($message));
 
-        $this->expectExceptionMessageMatches("~^{$message}$~");
+        $this->expectExceptionMessageMatches(sprintf('~^%s$~', $message));
     }
 
     /**

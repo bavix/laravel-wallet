@@ -59,7 +59,7 @@ final class ItemMultiPrice extends Model implements ProductLimitedInterface
             return $this->prices[$wallet->currency];
         }
 
-        throw new PriceNotSetException("Price not set for {$wallet->currency} currency");
+        throw new PriceNotSetException(sprintf('Price not set for %s currency', $wallet->currency));
     }
 
     public function getMetaProduct(): ?array

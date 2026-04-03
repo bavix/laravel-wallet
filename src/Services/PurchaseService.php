@@ -55,6 +55,7 @@ final readonly class PurchaseService implements PurchaseServiceInterface
                 if (! array_key_exists($walletId, $groupedByWallet)) {
                     continue;
                 }
+
                 if ($groupedByWallet[$walletId] === []) {
                     continue;
                 }

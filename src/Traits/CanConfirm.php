@@ -87,10 +87,10 @@ trait CanConfirm
         try {
             // Attempt to confirm the transaction
             return $this->confirm($transaction);
-        } catch (ConfirmedInvalid $e) {
+        } catch (ConfirmedInvalid) {
             // If the transaction is already confirmed, return true
             return true;
-        } catch (ExceptionInterface $e) {
+        } catch (ExceptionInterface) {
             // If an exception occurred, return false
             return false;
         }
@@ -146,10 +146,10 @@ trait CanConfirm
         try {
             // Attempt to reset the confirmation of the transaction
             return $this->resetConfirm($transaction);
-        } catch (UnconfirmedInvalid $e) {
+        } catch (UnconfirmedInvalid) {
             // If the transaction is not confirmed, simply return true
             return true;
-        } catch (ExceptionInterface $e) {
+        } catch (ExceptionInterface) {
             // If an exception occurs, return false
             return false;
         }

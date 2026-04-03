@@ -30,20 +30,6 @@ final class Purchase extends Model
      */
     protected $fillable = ['transfer_id', 'from_id', 'to_id', 'status', 'created_at', 'updated_at'];
 
-    /**
-     * @return array<string, string>
-     */
-    #[Override]
-    public function casts(): array
-    {
-        return [
-            'transfer_id' => 'int',
-            'from_id' => 'int',
-            'to_id' => 'int',
-            'status' => TransferStatus::class,
-        ];
-    }
-
     #[Override]
     public function getTable(): string
     {
@@ -87,5 +73,19 @@ final class Purchase extends Model
         $model = config('wallet.wallet.model', Wallet::class);
 
         return $this->belongsTo($model, 'to_id');
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    #[Override]
+    protected function casts(): array
+    {
+        return [
+            'transfer_id' => 'int',
+            'from_id' => 'int',
+            'to_id' => 'int',
+            'status' => TransferStatus::class,
+        ];
     }
 }

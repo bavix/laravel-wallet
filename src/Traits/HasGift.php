@@ -51,7 +51,7 @@ trait HasGift
         try {
             // Attempt to give the goods to the specified wallet
             return $this->gift($to, $product, $force);
-        } catch (ExceptionInterface $exception) {
+        } catch (ExceptionInterface) {
             // If an exception occurs, return null
             return null;
         }

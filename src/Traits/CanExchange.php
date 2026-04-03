@@ -86,7 +86,7 @@ trait CanExchange
             // Execute the exchange operation and return the created transfer.
             // If an error occurs during the process, an exception is thrown.
             return $this->exchange($to, $amount, $meta);
-        } catch (ExceptionInterface $e) {
+        } catch (ExceptionInterface) {
             // If an exception occurs during the exchange process, return null.
             return null;
         }

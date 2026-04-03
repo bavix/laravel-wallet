@@ -228,7 +228,7 @@ trait HasWallet
             // The `transfer` method is responsible for performing the actual transfer of funds.
             // If an error occurs during the process, an exception is thrown.
             return $this->transfer($wallet, $amount, $meta);
-        } catch (ExceptionInterface $e) {
+        } catch (ExceptionInterface) {
             return null;
         }
     }
@@ -368,21 +368,20 @@ trait HasWallet
         return app(AtomicServiceInterface::class)->block(
         // The wallet instance
             $this,
-            function () use ($amountValue, $meta, $confirmed): Transaction {
+
                 // Create a new withdrawal transaction.
-                return app(TransactionServiceInterface::class)->makeOne(
-                // The wallet instance
-                    $this,
-                    // The transaction type
-                    TransactionType::Withdraw,
-                    // The amount to withdraw
-                    $amountValue,
-                    // Additional information for the transaction
-                    $meta,
-                    // Whether the transaction is confirmed
-                    $confirmed
-                );
-            }
+                fn (): Transaction => app(TransactionServiceInterface::class)->makeOne(
+            // The wallet instance
+                $this,
+                // The transaction type
+                TransactionType::Withdraw,
+                // The amount to withdraw
+                $amountValue,
+                // Additional information for the transaction
+                $meta,
+                // Whether the transaction is confirmed
+                $confirmed
+            )
         );
     }
 

@@ -59,20 +59,6 @@ class Transaction extends Model
         'updated_at',
     ];
 
-    /**
-     * @return array<string, string>
-     */
-    #[Override]
-    public function casts(): array
-    {
-        return [
-            'wallet_id' => 'int',
-            'confirmed' => 'bool',
-            'meta' => 'json',
-            'type' => TransactionType::class,
-        ];
-    }
-
     #[Override]
     public function getTable(): string
     {
@@ -135,6 +121,20 @@ class Transaction extends Model
         $rounded = $math->round($multiplied);
 
         $this->amount = $rounded;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    #[Override]
+    protected function casts(): array
+    {
+        return [
+            'wallet_id' => 'int',
+            'confirmed' => 'bool',
+            'meta' => 'json',
+            'type' => TransactionType::class,
+        ];
     }
 
     #[Override]

@@ -32,6 +32,7 @@ final readonly class WalletStateProjectorListener
             if (! is_string($uuid)) {
                 continue;
             }
+
             if (! is_array($attributes)) {
                 continue;
             }

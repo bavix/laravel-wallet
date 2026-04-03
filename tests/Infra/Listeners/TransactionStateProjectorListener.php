@@ -23,6 +23,7 @@ final readonly class TransactionStateProjectorListener
             if (! is_int($transactionId)) {
                 continue;
             }
+
             if (! is_string($transactionAmount)) {
                 continue;
             }
