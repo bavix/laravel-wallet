@@ -157,6 +157,24 @@ parameters:
 			path: tests/Infra/TestCase.php
 
 		-
+			message: '#^Method Bavix\\Wallet\\Test\\Infra\\TestCase\:\:getPackageProviders\(\) is not final, but since the containing class is abstract, it should be\.$#'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: tests/Infra/TestCase.php
+
+		-
+			message: '#^Method Bavix\\Wallet\\Test\\Infra\\TestCase\:\:getEnvironmentSetUp\(\) is not final, but since the containing class is abstract, it should be\.$#'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: tests/Infra/TestCase.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: tests/Infra/Projectors/WalletStateBatchProjector.php
+
+		-
 			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
 			identifier: offsetAccess.notFound
 			count: 1

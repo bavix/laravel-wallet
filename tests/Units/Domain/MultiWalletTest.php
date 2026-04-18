@@ -675,6 +675,7 @@ final class MultiWalletTest extends TestCase
             self::assertSame(0, (int) app(RegulatorServiceInterface::class)->diff($wallet));
         }
 
+        $insufficientFunds = null;
         try {
             app(DatabaseServiceInterface::class)->transaction(function () use ($wallets) {
                 foreach ($wallets as $key => $wallet) {
@@ -697,7 +698,7 @@ final class MultiWalletTest extends TestCase
             self::assertSame(ExceptionInterface::INSUFFICIENT_FUNDS, $insufficientFunds->getCode());
         }
 
-        self::assertNotNull($insufficientFunds);
+        self::assertInstanceOf(InsufficientFunds::class, $insufficientFunds);
         foreach ($wallets as $wallet) {
             self::assertSame(0, $wallet->balanceInt);
             self::assertSame(0, (int) app(RegulatorServiceInterface::class)->diff($wallet));

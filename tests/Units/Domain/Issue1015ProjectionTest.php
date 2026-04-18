@@ -51,22 +51,28 @@ final class Issue1015ProjectionTest extends TestCase
         $prepareService = app(PrepareServiceInterface::class);
         $transactionService = app(TransactionServiceInterface::class);
 
+        $uuidA1 = '11111111-1111-1111-1111-111111111111';
+        $uuidB1 = '22222222-2222-2222-2222-222222222222';
+        $uuidA2 = '33333333-3333-3333-3333-333333333333';
+        $uuidB2 = '44444444-4444-4444-4444-444444444444';
+        $uuidA3 = '55555555-5555-5555-5555-555555555555';
+
         $objects = [
             $prepareService->deposit($buyerA, 10, [
                 'case' => 'batch',
-            ], true, 'batch-a-1'),
+            ], true, $uuidA1),
             $prepareService->deposit($buyerB, 20, [
                 'case' => 'batch',
-            ], true, 'batch-b-1'),
+            ], true, $uuidB1),
             $prepareService->deposit($buyerA, 5, [
                 'case' => 'batch',
-            ], false, 'batch-a-2-unconfirmed'),
+            ], false, $uuidA2),
             $prepareService->deposit($buyerB, 7, [
                 'case' => 'batch',
-            ], true, 'batch-b-2'),
+            ], true, $uuidB2),
             $prepareService->deposit($buyerA, 2, [
                 'case' => 'batch',
-            ], true, 'batch-a-3'),
+            ], true, $uuidA3),
         ];
 
         $transactionService->apply([
@@ -76,7 +82,7 @@ final class Issue1015ProjectionTest extends TestCase
 
         /** @var list<TransactionState> $rows */
         $rows = TransactionState::query()
-            ->whereIn('uuid', ['batch-a-1', 'batch-b-1', 'batch-a-2-unconfirmed', 'batch-b-2', 'batch-a-3'])
+            ->whereIn('uuid', [$uuidA1, $uuidB1, $uuidA2, $uuidB2, $uuidA3])
             ->get()
             ->all();
 
@@ -87,20 +93,20 @@ final class Issue1015ProjectionTest extends TestCase
             $byUuid[$row->uuid] = $row;
         }
 
-        self::assertSame('0', $byUuid['batch-a-1']->balance_before);
-        self::assertSame('10', $byUuid['batch-a-1']->balance_after);
+        self::assertSame('0', $byUuid[$uuidA1]->balance_before);
+        self::assertSame('10', $byUuid[$uuidA1]->balance_after);
 
-        self::assertSame('0', $byUuid['batch-b-1']->balance_before);
-        self::assertSame('20', $byUuid['batch-b-1']->balance_after);
+        self::assertSame('0', $byUuid[$uuidB1]->balance_before);
+        self::assertSame('20', $byUuid[$uuidB1]->balance_after);
 
-        self::assertSame('10', $byUuid['batch-a-2-unconfirmed']->balance_before);
-        self::assertSame('10', $byUuid['batch-a-2-unconfirmed']->balance_after);
+        self::assertSame('10', $byUuid[$uuidA2]->balance_before);
+        self::assertSame('10', $byUuid[$uuidA2]->balance_after);
 
-        self::assertSame('20', $byUuid['batch-b-2']->balance_before);
-        self::assertSame('27', $byUuid['batch-b-2']->balance_after);
+        self::assertSame('20', $byUuid[$uuidB2]->balance_before);
+        self::assertSame('27', $byUuid[$uuidB2]->balance_after);
 
-        self::assertSame('10', $byUuid['batch-a-3']->balance_before);
-        self::assertSame('12', $byUuid['batch-a-3']->balance_after);
+        self::assertSame('10', $byUuid[$uuidA3]->balance_before);
+        self::assertSame('12', $byUuid[$uuidA3]->balance_after);
 
         foreach ($byUuid as $transaction) {
             self::assertNotNull($transaction->state_hash);
