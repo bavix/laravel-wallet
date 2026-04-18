@@ -18,6 +18,8 @@ use Bavix\Wallet\Internal\Assembler\ExtraDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\ExtraDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\OptionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\OptionDtoAssemblerInterface;
+use Bavix\Wallet\Internal\Assembler\StateAwareTransactionDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\StateAwareTransactionDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionCreatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionCreatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
@@ -369,6 +371,11 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         );
 
         $this->app->singleton(
+            StateAwareTransactionDtoAssemblerInterface::class,
+            $configure['state_aware_transaction'] ?? StateAwareTransactionDtoAssembler::class
+        );
+
+        $this->app->singleton(
             TransferLazyDtoAssemblerInterface::class,
             $configure['transfer_lazy'] ?? TransferLazyDtoAssembler::class
         );
@@ -539,6 +546,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
             ExtraDtoAssemblerInterface::class,
             OptionDtoAssemblerInterface::class,
             TransactionDtoAssemblerInterface::class,
+            StateAwareTransactionDtoAssemblerInterface::class,
             TransferLazyDtoAssemblerInterface::class,
             TransferDtoAssemblerInterface::class,
             TransactionQueryAssemblerInterface::class,

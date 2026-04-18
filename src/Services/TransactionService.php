@@ -6,8 +6,9 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Enums\TransactionType;
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Internal\Assembler\StateAwareTransactionDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionCreatedEventAssemblerInterface;
-use Bavix\Wallet\Internal\Dto\StateAwareTransactionDto;
+use Bavix\Wallet\Internal\Dto\StateAwareTransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Service\DispatcherServiceInterface;
@@ -21,6 +22,7 @@ final readonly class TransactionService implements TransactionServiceInterface
 {
     public function __construct(
         private TransactionCreatedEventAssemblerInterface $transactionCreatedEventAssembler,
+        private StateAwareTransactionDtoAssemblerInterface $stateAwareTransactionDtoAssembler,
         private DispatcherServiceInterface $dispatcherService,
         private AssistantServiceInterface $assistantService,
         private RegulatorServiceInterface $regulatorService,
@@ -63,6 +65,36 @@ final readonly class TransactionService implements TransactionServiceInterface
     {
         $totals = $this->assistantService->getSums($objects);
 
+        $transactions = $this->stateAwareRequested($objects)
+            ? $this->atmService->makeTransactions($this->stateAwareTransactions($wallets, $totals, $objects)) // q1
+            : $this->atmService->makeTransactions($objects); // q1
+        assert(count($objects) === count($transactions));
+
+        foreach ($totals as $walletId => $total) {
+            $wallet = $wallets[$walletId] ?? null;
+            assert($wallet instanceof Wallet);
+
+            $object = $this->castService->getWallet($wallet);
+            assert($object->getKey() === $walletId);
+
+            $this->regulatorService->increase($object, $total);
+        }
+
+        foreach ($transactions as $transaction) {
+            $this->dispatcherService->dispatch($this->transactionCreatedEventAssembler->create($transaction));
+        }
+
+        return $transactions;
+    }
+
+    /**
+     * @param non-empty-array<int, Wallet> $wallets
+     * @param array<int, string> $totals
+     * @param non-empty-array<int, TransactionDtoInterface> $objects
+     * @return non-empty-array<int, TransactionDtoInterface>
+     */
+    private function stateAwareTransactions(array $wallets, array $totals, array $objects): array
+    {
         $currentBalances = [];
         foreach (array_keys($totals) as $walletId) {
             $wallet = $wallets[$walletId] ?? null;
@@ -92,29 +124,25 @@ final readonly class TransactionService implements TransactionServiceInterface
                 $this->mathService->add($beforeBalance, $dto->isConfirmed() ? $dto->getAmount() : '0')
             );
 
-            $uuid = $dto->getUuid();
-
-            $stateAwareTransactions[$uuid] = new StateAwareTransactionDto($dto, $beforeBalance, $nextBalance);
+            $stateAwareTransactions[] = $this->stateAwareTransactionDtoAssembler
+                ->create($dto, $beforeBalance, $nextBalance);
             $currentBalances[$walletId] = $nextBalance;
         }
 
-        $transactions = $this->atmService->makeTransactions(array_values($stateAwareTransactions)); // q1
-        assert(count($objects) === count($transactions));
+        return $stateAwareTransactions;
+    }
 
-        foreach ($totals as $walletId => $total) {
-            $wallet = $wallets[$walletId] ?? null;
-            assert($wallet instanceof Wallet);
-
-            $object = $this->castService->getWallet($wallet);
-            assert($object->getKey() === $walletId);
-
-            $this->regulatorService->increase($object, $total);
+    /**
+     * @param non-empty-array<int, TransactionDtoInterface> $objects
+     */
+    private function stateAwareRequested(array $objects): bool
+    {
+        foreach ($objects as $dto) {
+            if ($dto instanceof StateAwareTransactionDtoInterface) {
+                return true;
+            }
         }
 
-        foreach ($transactions as $transaction) {
-            $this->dispatcherService->dispatch($this->transactionCreatedEventAssembler->create($transaction));
-        }
-
-        return $transactions;
+        return false;
     }
 }

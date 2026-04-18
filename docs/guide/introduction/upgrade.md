@@ -280,6 +280,7 @@ Replace `Bavix\Wallet\Interfaces\Product` to `Bavix\Wallet\Interfaces\ProductLim
    They are now legacy extension points and will be removed in v14.
    New integrations should use `PurchaseQueryHandlerInterface`.
 7. For transaction state projections (for example issue #1015), use transformer extension point:
+   - implement custom `TransactionDtoAssemblerInterface` and return `StateAwareTransactionDto`;
    - implement custom `TransactionDtoTransformerInterface`;
    - read `StateAwareTransactionDtoInterface` and map `balance_before` / `balance_after`;
    - compute `state_hash` in your app code (business rule stays outside package core).

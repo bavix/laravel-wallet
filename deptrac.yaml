@@ -72,12 +72,7 @@ deptrac:
     - name: Dto
       collectors:
         - type: classLike
-          value: ^Bavix\\.*\\Internal\\Dto\\(?!StateAwareTransactionDto$).*Dto$
-
-    - name: StateAwareDto
-      collectors:
-        - type: classLike
-          value: ^Bavix\\Wallet\\Internal\\Dto\\StateAwareTransactionDto$
+          value: ^Bavix\\.*\\Internal\\Dto\\.*Dto$
 
     - name: DtoInterface
       collectors:
@@ -244,10 +239,6 @@ deptrac:
       - Contract
       - Enum
 
-    StateAwareDto:
-      - DtoInterface
-      - Enum
-
     Model:
       - AssemblerDtoInterface
       - InternalException
@@ -307,7 +298,6 @@ deptrac:
       - ServiceInterface
       - EloquentModel
       - DtoInterface
-      - StateAwareDto
       - UIException
       - Contract
       - Model

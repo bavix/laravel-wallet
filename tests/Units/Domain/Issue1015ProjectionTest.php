@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
+use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
+use Bavix\Wallet\Internal\Assembler\TransactionDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Projector\WalletBatchProjectorInterface;
 use Bavix\Wallet\Internal\Repository\TransactionRepositoryInterface;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
@@ -11,6 +13,7 @@ use Bavix\Wallet\Services\AtmServiceInterface;
 use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Services\TransactionServiceInterface;
+use Bavix\Wallet\Test\Infra\Assembler\TransactionDtoAssemblerStateAware;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\PackageModels\TransactionState;
@@ -35,6 +38,7 @@ final class Issue1015ProjectionTest extends TestCase
         $this->app?->singleton(TransactionDtoTransformerInterface::class, TransactionStateDtoTransformer::class);
         $this->app?->singleton(WalletBatchProjectorInterface::class, WalletStateBatchProjector::class);
 
+        $this->app?->forgetInstance(PrepareServiceInterface::class);
         $this->app?->forgetInstance(TransactionRepositoryInterface::class);
         $this->app?->forgetInstance(AtmServiceInterface::class);
         $this->app?->forgetInstance(TransactionServiceInterface::class);
@@ -43,6 +47,8 @@ final class Issue1015ProjectionTest extends TestCase
 
     public function testTransactionStateColumnsCorrectForBatchAcrossWallets(): void
     {
+        $this->enableStateAwareAssembler();
+
         /** @var Buyer $buyerA */
         $buyerA = BuyerFactory::new()->create();
         /** @var Buyer $buyerB */
@@ -126,6 +132,56 @@ final class Issue1015ProjectionTest extends TestCase
         self::assertSame(27, $buyerB->balanceInt);
     }
 
+    public function testTransactionStateColumnsRemainNullWithoutStateAwareAssembler(): void
+    {
+        $this->disableStateAwareAssembler();
+
+        /** @var Buyer $buyerA */
+        $buyerA = BuyerFactory::new()->create();
+        /** @var Buyer $buyerB */
+        $buyerB = BuyerFactory::new()->create();
+
+        $prepareService = app(PrepareServiceInterface::class);
+        $transactionService = app(TransactionServiceInterface::class);
+
+        $uuidA1 = '66666666-6666-6666-6666-666666666666';
+        $uuidB1 = '77777777-7777-7777-7777-777777777777';
+
+        $objects = [
+            $prepareService->deposit($buyerA, 10, [
+                'case' => 'off',
+            ], true, $uuidA1),
+            $prepareService->deposit($buyerB, 20, [
+                'case' => 'off',
+            ], true, $uuidB1),
+        ];
+
+        $transactionService->apply([
+            $buyerA->wallet->getKey() => $buyerA,
+            $buyerB->wallet->getKey() => $buyerB,
+        ], $objects);
+
+        /** @var list<TransactionState> $rows */
+        $rows = TransactionState::query()
+            ->whereIn('uuid', [$uuidA1, $uuidB1])
+            ->get()
+            ->all();
+
+        self::assertCount(2, $rows);
+
+        foreach ($rows as $row) {
+            self::assertNull($row->balance_before);
+            self::assertNull($row->balance_after);
+            self::assertNull($row->state_hash);
+        }
+
+        $buyerA->refresh();
+        $buyerB->refresh();
+
+        self::assertSame(10, $buyerA->balanceInt);
+        self::assertSame(20, $buyerB->balanceInt);
+    }
+
     public function testWalletStateColumnsFilledInBalanceUpdatePath(): void
     {
         /** @var Buyer $buyer */
@@ -160,5 +216,21 @@ final class Issue1015ProjectionTest extends TestCase
         $providers[] = ProjectionTestServiceProvider::class;
 
         return $providers;
+    }
+
+    private function enableStateAwareAssembler(): void
+    {
+        $this->app?->singleton(TransactionDtoAssemblerInterface::class, TransactionDtoAssemblerStateAware::class);
+
+        $this->app?->forgetInstance(PrepareServiceInterface::class);
+        $this->app?->forgetInstance(TransactionServiceInterface::class);
+    }
+
+    private function disableStateAwareAssembler(): void
+    {
+        $this->app?->singleton(TransactionDtoAssemblerInterface::class, TransactionDtoAssembler::class);
+
+        $this->app?->forgetInstance(PrepareServiceInterface::class);
+        $this->app?->forgetInstance(TransactionServiceInterface::class);
     }
 }
