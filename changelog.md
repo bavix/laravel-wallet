@@ -1,5 +1,26 @@
 # Changelog
 
+## 12.0.0 - 2026-04-18
+
+### What's Changed
+
+* Bump actions/checkout from 4 to 6 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1057
+* Bump bavix/.github/.github/workflows/changelog.yml from 0.3.3 to 0.4.1 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1059
+* Bump bavix/.github/.github/workflows/php-semgrep.yml from 0.3.3 to 0.4.1 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1058
+* Bump mdast-util-to-hast from 13.2.0 to 13.2.1 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1061
+* PHPUnit 12 Shift by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1065
+* Bump dependencies for Laravel 13 by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1066
+* Bump rollup from 4.31.0 to 4.59.0 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1067
+* Bump crazy-max/ghaction-import-gpg from 6 to 7 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1068
+* phpstan fix by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1080
+* valkey by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1081
+* Bump db by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1082
+* fix by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1083
+* v12: improve purchase architecture and transaction extensibility (#1000, #1015) by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1069
+* Bump actions/upload-pages-artifact from 3 to 5 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1084
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/11.4.3...12.0.0
+
 ## 11.4.3 - 2025-11-17
 
 ### What's Changed
