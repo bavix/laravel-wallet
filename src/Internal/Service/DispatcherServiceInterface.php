@@ -22,11 +22,6 @@ interface DispatcherServiceInterface
     public function dispatch(EventInterface $event): void;
 
     /**
-     * Dispatches an event immediately, without queued flush semantics.
-     */
-    public function dispatchNow(EventInterface $event): void;
-
-    /**
      * Removes all events from the dispatcher.
      *
      * This method clears all events from the dispatcher. After calling this method,
