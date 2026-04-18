@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Infra\Transform;
 
-use Bavix\Wallet\Internal\Dto\StateAwareTransactionDtoInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
+use Bavix\Wallet\Internal\Service\TransactionStateServiceInterface;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
 
@@ -14,6 +14,7 @@ final readonly class TransactionStateDtoTransformer implements TransactionDtoTra
 {
     public function __construct(
         private TransactionDtoTransformer $transactionDtoTransformer,
+        private TransactionStateServiceInterface $transactionStateService,
         private MathServiceInterface $mathService,
     ) {
     }
@@ -22,16 +23,19 @@ final readonly class TransactionStateDtoTransformer implements TransactionDtoTra
     {
         $result = $this->transactionDtoTransformer->extract($dto);
 
-        if (! $dto instanceof StateAwareTransactionDtoInterface) {
+        if (! $this->transactionStateService->has($dto->getUuid())) {
             return $result;
         }
 
-        $result['balance_before'] = $dto->getBalanceBefore();
-        $result['balance_after'] = $dto->getBalanceAfter();
+        $before = $this->transactionStateService->before($dto->getUuid());
+        $after = $this->transactionStateService->after($dto->getUuid());
+
+        $result['balance_before'] = $before['balance'];
+        $result['balance_after'] = $after['balance'];
         $amount = $this->mathService->round($dto->getAmount());
         $result['state_hash'] = hash(
             'sha256',
-            $dto->getUuid().':'.$amount.':'.$dto->getBalanceBefore().':'.$dto->getBalanceAfter()
+            $dto->getUuid().':'.$amount.':'.$before['balance'].':'.$after['balance']
         );
 
         return $result;

@@ -277,13 +277,55 @@ Replace `Bavix\Wallet\Interfaces\Product` to `Bavix\Wallet\Interfaces\ProductLim
 5. `Customer::paid()` / `CartPay::paid()` were removed.
     Use `PurchaseQuery` + `PurchaseQueryHandlerInterface` for purchase checks.
 6. `PurchaseServiceInterface::already()` and `PurchaseService` are deprecated.
-   They are now legacy extension points and will be removed in v14.
-   New integrations should use `PurchaseQueryHandlerInterface`.
-7. For transaction state projections (for example issue #1015), use transformer extension point:
-   - implement custom `TransactionDtoAssemblerInterface` and return `StateAwareTransactionDto`;
-   - implement custom `TransactionDtoTransformerInterface`;
-   - read `StateAwareTransactionDtoInterface` and map `balance_before` / `balance_after`;
-   - compute `state_hash` in your app code (business rule stays outside package core).
+They are now legacy extension points and will be removed in v14.
+New integrations should use `PurchaseQueryHandlerInterface`.
+
+7. For transaction state projections (for example issue #1015), use custom Assembler pattern:
+   - Create custom `TransactionDtoAssemblerInterface` implementation
+   - Use `TransactionStateService` (from `Internal\Service\TransactionStateService`) to track state
+   - Use `MathServiceInterface` for arithmetic (add/sub)
+   - Implement custom `TransactionDtoTransformerInterface` to persist state columns
+   - Compute `state_hash` in your app code (business rule stays outside package core)
+
+Example:
+```php
+// Custom assembler with state tracking
+final class StateAwareAssembler implements TransactionDtoAssemblerInterface
+{
+    public function __construct(
+        private TransactionDtoAssembler $base,
+        private TransactionStateService $stateService,  // Your instance
+        private RegulatorServiceInterface $regulator,
+        private MathServiceInterface $mathService,
+    ) {}
+
+    public function create(...): TransactionDtoInterface
+    {
+        $dto = $this->base->create(...);
+
+        $before = $this->regulator->amount($payable);
+        $after = $ confirmado
+            ? $this->mathService->add($before, $amount)  // or sub for withdraw
+            : $before;
+
+        $this->stateService->push($dto->getUuid(), $walletId, [
+            'balance' => $before,
+        ], [
+            'balance' => $after,
+        ]);
+
+        return $dto;
+    }
+}
+```
+
+Register in config:
+```php
+'assemblers' => [
+    'transaction' => \App\Wallet\StateAwareAssembler::class,
+],
+```
+
 8. For wallet state projections, use `WalletBatchProjectorInterface`.
    Projector adds custom wallet columns in same balance update flow.
 

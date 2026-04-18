@@ -6,7 +6,6 @@ use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\ExtraDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\OptionDtoAssembler;
-use Bavix\Wallet\Internal\Assembler\StateAwareTransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionCreatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionQueryAssembler;
@@ -357,10 +356,6 @@ return [
          * Assembler for creating Transaction DTO.
          */
         'transaction' => TransactionDtoAssembler::class,
-        /**
-         * Assembler for wrapping transaction DTO with state context.
-         */
-        'state_aware_transaction' => StateAwareTransactionDtoAssembler::class,
         /**
          * Assembler for creating Transfer Lazy DTO.
          */
