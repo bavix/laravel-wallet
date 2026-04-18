@@ -196,9 +196,6 @@ jobs:
       matrix:
         include:
           - php-version: 8.3
-            laravel-version: ^12.0
-            testbench-version: ^10.0
-          - php-version: 8.3
             laravel-version: ^13.0
             testbench-version: ^11.0
 
