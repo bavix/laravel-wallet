@@ -11,13 +11,14 @@ use Bavix\Wallet\Test\Infra\PackageModels\Transaction;
 use Bavix\Wallet\Test\Infra\PackageModels\TransactionMoney;
 use Bavix\Wallet\Test\Infra\TestCase;
 use Bavix\Wallet\Test\Infra\Transform\TransactionDtoTransformerCustom;
+use Override;
 
 /**
  * @internal
  */
 final class WalletExtensionTest extends TestCase
 {
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

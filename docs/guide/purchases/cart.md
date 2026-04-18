@@ -56,6 +56,8 @@ Example with a limited number of products:
 use Bavix\Wallet\Traits\HasWallet;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\ProductLimitedInterface;
+use Bavix\Wallet\External\Api\PurchaseQuery;
+use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 
 class Item extends Model implements ProductLimitedInterface
 {
@@ -67,7 +69,7 @@ class Item extends Model implements ProductLimitedInterface
          * This is where you implement the constraint logic. 
          * 
          * If the service can be purchased once, then
-         *  return !$customer->paid($this);
+         *  return ! app(PurchaseQueryHandlerInterface::class)->one(PurchaseQuery::create($customer, $this));
          */
         return true; 
     }
@@ -88,8 +90,8 @@ class Item extends Model implements ProductLimitedInterface
 ```
 
 I do not recommend using the limited interface when working with a shopping cart.
-If you are working with a shopping cart, then you should override the `PurchaseServiceInterface` interface.
-With it, you can check the availability of all products with one request, there will be no N-queries in the database.
+For shopping cart checks, use `PurchaseQuery` + `PurchaseQueryHandlerInterface` as the primary API.
+`PurchaseServiceInterface` remains available as a legacy extension point until v14.
 
 ## Fill the cart
 

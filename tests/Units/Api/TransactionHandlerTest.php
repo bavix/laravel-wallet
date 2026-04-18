@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test\Units\Api;
 
 use function app;
+use Bavix\Wallet\Enums\TransactionType;
 use Bavix\Wallet\External\Api\TransactionFloatQuery;
 use Bavix\Wallet\External\Api\TransactionQuery;
 use Bavix\Wallet\External\Api\TransactionQueryHandlerInterface;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
-use Bavix\Wallet\Test\Infra\PackageModels\Transaction;
 use Bavix\Wallet\Test\Infra\TestCase;
 
 /**
@@ -43,11 +43,11 @@ final class TransactionHandlerTest extends TestCase
 
         self::assertCount(
             5,
-            array_filter($transactions, static fn ($t) => $t->type === Transaction::TYPE_DEPOSIT),
+            array_filter($transactions, static fn ($t) => $t->type === TransactionType::Deposit),
         );
         self::assertCount(
             2,
-            array_filter($transactions, static fn ($t) => $t->type === Transaction::TYPE_WITHDRAW),
+            array_filter($transactions, static fn ($t) => $t->type === TransactionType::Withdraw),
         );
     }
 }

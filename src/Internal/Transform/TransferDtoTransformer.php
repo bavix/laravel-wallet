@@ -14,7 +14,8 @@ final class TransferDtoTransformer implements TransferDtoTransformerInterface
             'uuid' => $dto->getUuid(),
             'deposit_id' => $dto->getDepositId(),
             'withdraw_id' => $dto->getWithdrawId(),
-            'status' => $dto->getStatus(),
+            'status' => $dto->getStatus()
+                ->value,
             'from_id' => $dto->getFromId(),
             'to_id' => $dto->getToId(),
             'discount' => $dto->getDiscount(),

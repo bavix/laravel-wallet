@@ -15,6 +15,8 @@ use Bavix\Wallet\Internal\Assembler\TransferQueryAssembler;
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEvent;
 use Bavix\Wallet\Internal\Events\TransactionCreatedEvent;
 use Bavix\Wallet\Internal\Events\WalletCreatedEvent;
+use Bavix\Wallet\Internal\Projector\WalletBatchProjector;
+use Bavix\Wallet\Internal\Repository\PurchaseRepository;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
 use Bavix\Wallet\Internal\Repository\WalletRepository;
@@ -29,9 +31,9 @@ use Bavix\Wallet\Internal\Service\MathService;
 use Bavix\Wallet\Internal\Service\StateService;
 use Bavix\Wallet\Internal\Service\StorageService;
 use Bavix\Wallet\Internal\Service\TranslatorService;
-use Bavix\Wallet\Internal\Service\UuidFactoryService;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
 use Bavix\Wallet\Internal\Transform\TransferDtoTransformer;
+use Bavix\Wallet\Models\Purchase;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
@@ -207,16 +209,6 @@ return [
         'translator' => TranslatorService::class,
 
         /**
-         * The service for generating UUIDs.
-         *
-         * @var string
-         *
-         * @deprecated use identifier.
-         * @see IdentifierFactoryService
-         */
-        'uuid' => UuidFactoryService::class,
-
-        /**
          * The service for generating identifiers.
          *
          * @var string
@@ -290,6 +282,10 @@ return [
          */
         'transaction' => TransactionRepository::class,
         /**
+         * Repository for fetching purchase ledger data.
+         */
+        'purchase' => PurchaseRepository::class,
+        /**
          * Repository for fetching transfer data.
          *
          * @see \Bavix\Wallet\Interfaces\Transfer
@@ -324,6 +320,16 @@ return [
          * involving the movement of funds or assets between accounts or entities.
          */
         'transfer' => TransferDtoTransformer::class,
+    ],
+
+    /**
+     * Projectors allow enriching rows before write.
+     */
+    'projectors' => [
+        /**
+         * Project additional wallet columns in balance update query.
+         */
+        'wallet' => WalletBatchProjector::class,
     ],
 
     /**
@@ -444,6 +450,21 @@ return [
          * @see Transfer
          */
         'model' => Transfer::class,
+    ],
+
+    /**
+     * Base model 'purchase'.
+     */
+    'purchase' => [
+        /**
+         * The table name for purchases ledger.
+         */
+        'table' => env('WALLET_PURCHASE_TABLE_NAME', 'wallet_purchases'),
+
+        /**
+         * The model class for purchases ledger.
+         */
+        'model' => Purchase::class,
     ],
 
     /**

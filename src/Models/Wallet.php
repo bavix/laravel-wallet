@@ -56,6 +56,19 @@ use Illuminate\Support\Str;
  * @method \Illuminate\Database\Eloquent\Relations\HasMany<Transfer, self> transfers()
  * @method \Illuminate\Database\Eloquent\Relations\HasMany<Transfer, self> receivedTransfers()
  */
+#[\Illuminate\Database\Eloquent\Attributes\Fillable([
+    'holder_type',
+    'holder_id',
+    'name',
+    'slug',
+    'uuid',
+    'description',
+    'meta',
+    'balance',
+    'decimal_places',
+    'created_at',
+    'updated_at',
+])]
 class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchangeable
 {
     use CanConfirm;
@@ -65,41 +78,12 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     use SoftDeletes;
 
     /**
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'holder_type',
-        'holder_id',
-        'name',
-        'slug',
-        'uuid',
-        'description',
-        'meta',
-        'balance',
-        'decimal_places',
-        'created_at',
-        'updated_at',
-    ];
-
-    /**
      * @var array<string, int|string>
      */
     protected $attributes = [
         'balance' => 0,
         'decimal_places' => 2,
     ];
-
-    /**
-     * @return array<string, string>
-     */
-    #[\Override]
-    public function casts(): array
-    {
-        return [
-            'decimal_places' => 'int',
-            'meta' => 'json',
-        ];
-    }
 
     #[\Override]
     public function getTable(): string
@@ -122,9 +106,11 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         if ($this->exists) {
             return;
         }
+
         if (array_key_exists('slug', $this->attributes)) {
             return;
         }
+
         /** @var string $slug */
         $slug = Str::slug($name);
         $this->attributes['slug'] = $slug;
@@ -168,15 +154,14 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
 
     public function getAvailableBalanceAttribute(): float|int|string
     {
-        /** @var float|int|string|null $balance */
-        $balance = $this->walletTransactions()
+        /** @var float|int|string $rawBalance */
+        $rawBalance = $this->walletTransactions()
             ->where('confirmed', true)
             ->sum('amount');
 
+        $balance = (string) $rawBalance;
+
         // Perform assertion to check if balance is not an empty string
-        if ($balance === null) {
-            $balance = '0';
-        }
         assert($balance !== '', 'Balance should not be an empty string');
 
         return $balance;
@@ -222,6 +207,18 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         $slug = $this->slug;
 
         return Str::upper($slug);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    #[\Override]
+    protected function casts(): array
+    {
+        return [
+            'decimal_places' => 'int',
+            'meta' => 'json',
+        ];
     }
 
     protected function initializeMorphOneWallet(): void

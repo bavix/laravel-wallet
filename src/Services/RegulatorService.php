@@ -6,6 +6,7 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
+use Bavix\Wallet\Internal\Projector\WalletBatchProjectorInterface;
 use Bavix\Wallet\Internal\Repository\WalletRepositoryInterface;
 use Bavix\Wallet\Internal\Service\DispatcherServiceInterface;
 use Bavix\Wallet\Internal\Service\LockServiceInterface;
@@ -30,6 +31,7 @@ final class RegulatorService implements RegulatorServiceInterface
 
     public function __construct(
         private readonly BalanceUpdatedEventAssemblerInterface $balanceUpdatedEventAssembler,
+        private readonly WalletBatchProjectorInterface $walletBatchProjector,
         private readonly BookkeeperServiceInterface $bookkeeperService,
         private readonly DispatcherServiceInterface $dispatcherService,
         private readonly StorageServiceInterface $storageService,
@@ -111,7 +113,14 @@ final class RegulatorService implements RegulatorServiceInterface
             return;
         }
 
-        $this->walletRepository->updateBalances($balances);
+        /** @var array<int, Wallet> $walletsById */
+        $walletsById = [];
+        foreach ($this->wallets as $wallet) {
+            $walletsById[$wallet->getKey()] = $wallet;
+        }
+
+        $columnsByWalletId = $this->walletBatchProjector->project($balances, $walletsById);
+        $this->walletRepository->updateBalances($balances, $columnsByWalletId);
         $this->multiIncrease = $this->bookkeeperService->multiIncrease($this->wallets, $incrementValues);
     }
 

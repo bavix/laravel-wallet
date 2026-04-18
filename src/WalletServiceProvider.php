@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet;
 
+use Bavix\Wallet\External\Api\PurchaseQueryHandler;
+use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 use Bavix\Wallet\External\Api\TransactionQueryHandler;
 use Bavix\Wallet\External\Api\TransactionQueryHandlerInterface;
 use Bavix\Wallet\External\Api\TransferQueryHandler;
@@ -37,6 +39,10 @@ use Bavix\Wallet\Internal\Events\TransactionCreatedEvent;
 use Bavix\Wallet\Internal\Events\TransactionCreatedEventInterface;
 use Bavix\Wallet\Internal\Events\WalletCreatedEvent;
 use Bavix\Wallet\Internal\Events\WalletCreatedEventInterface;
+use Bavix\Wallet\Internal\Projector\WalletBatchProjector;
+use Bavix\Wallet\Internal\Projector\WalletBatchProjectorInterface;
+use Bavix\Wallet\Internal\Repository\PurchaseRepository;
+use Bavix\Wallet\Internal\Repository\PurchaseRepositoryInterface;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransactionRepositoryInterface;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
@@ -65,12 +71,11 @@ use Bavix\Wallet\Internal\Service\StorageService;
 use Bavix\Wallet\Internal\Service\StorageServiceInterface;
 use Bavix\Wallet\Internal\Service\TranslatorService;
 use Bavix\Wallet\Internal\Service\TranslatorServiceInterface;
-use Bavix\Wallet\Internal\Service\UuidFactoryService;
-use Bavix\Wallet\Internal\Service\UuidFactoryServiceInterface;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
 use Bavix\Wallet\Internal\Transform\TransferDtoTransformer;
 use Bavix\Wallet\Internal\Transform\TransferDtoTransformerInterface;
+use Bavix\Wallet\Models\Purchase;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
@@ -121,6 +126,7 @@ use Illuminate\Database\Events\TransactionCommitting;
 use Illuminate\Database\Events\TransactionRolledBack;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Override;
 
 final class WalletServiceProvider extends ServiceProvider implements DeferrableProvider
 {
@@ -140,6 +146,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         if (! $this->app->runningInConsole()) {
             return;
         }
+
         // @codeCoverageIgnoreEnd
 
         if (WalletConfigure::isRunsMigrations()) {
@@ -160,7 +167,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     /**
      * Register services.
      */
-    #[\Override]
+    #[Override]
     public function register(): void
     {
         $this->mergeConfigFrom(dirname(__DIR__).'/config/config.php', 'wallet');
@@ -172,8 +179,10 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
          *     cache?: array{driver: string|null},
          *     repositories?: array<class-string|null>,
          *     transformers?: array<class-string|null>,
+         *     projectors?: array<class-string|null>,
          *     assemblers?: array<class-string|null>,
          *     events?: array<class-string|null>,
+         *     purchase?: array{model?: class-string|null},
          *     transaction?: array{model?: class-string|null},
          *     transfer?: array{model?: class-string|null},
          *     wallet?: array{model?: class-string|null},
@@ -187,6 +196,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         $this->repositories($configure['repositories'] ?? []);
         $this->transformers($configure['transformers'] ?? []);
         $this->assemblers($configure['assemblers'] ?? []);
+        $this->projectors($configure['projectors'] ?? []);
         $this->events($configure['events'] ?? []);
 
         $this->bindObjects($configure);
@@ -195,7 +205,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     /**
      * @return class-string[]
      */
-    #[\Override]
+    #[Override]
     public function provides(): array
     {
         return array_merge(
@@ -204,6 +214,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
             $this->repositoriesProviders(),
             $this->transformersProviders(),
             $this->assemblersProviders(),
+            $this->projectorsProviders(),
             $this->eventsProviders(),
             $this->bindObjectsProviders(),
         );
@@ -217,6 +228,11 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         $this->app->singleton(
             TransactionRepositoryInterface::class,
             $configure['transaction'] ?? TransactionRepository::class
+        );
+
+        $this->app->singleton(
+            PurchaseRepositoryInterface::class,
+            $configure['purchase'] ?? PurchaseRepository::class
         );
 
         $this->app->singleton(
@@ -256,7 +272,6 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         $this->app->singleton(MathServiceInterface::class, $configure['math'] ?? MathService::class);
         $this->app->singleton(StateServiceInterface::class, $configure['state'] ?? StateService::class);
         $this->app->singleton(TranslatorServiceInterface::class, $configure['translator'] ?? TranslatorService::class);
-        $this->app->singleton(UuidFactoryServiceInterface::class, $configure['uuid'] ?? UuidFactoryService::class);
         $this->app->singleton(
             IdentifierFactoryServiceInterface::class,
             $configure['identifier'] ?? IdentifierFactoryService::class
@@ -298,15 +313,13 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         // bookkeepper service
         $this->app->when(StorageServiceLockDecorator::class)
             ->needs(StorageServiceInterface::class)
-            ->give(function () use ($cache) {
-                return $this->app->make(
-                    'wallet.internal.storage',
-                    [
-                        'cacheRepository' => $this->app->get(CacheFactory::class)
-                            ->store($cache['driver'] ?? 'array'),
-                    ],
-                );
-            });
+            ->give(fn () => $this->app->make(
+                'wallet.internal.storage',
+                [
+                    'cacheRepository' => $this->app->get(CacheFactory::class)
+                        ->store($cache['driver'] ?? 'array'),
+                ],
+            ));
 
         $this->app->when($configure['bookkeeper'] ?? BookkeeperService::class)
             ->needs(StorageServiceInterface::class)
@@ -317,15 +330,13 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         // regulator service
         $this->app->when($configure['regulator'] ?? RegulatorService::class)
             ->needs(StorageServiceInterface::class)
-            ->give(function () {
-                return $this->app->make(
-                    'wallet.internal.storage',
-                    [
-                        'cacheRepository' => clone $this->app->make(CacheFactory::class)
-                            ->store('array'),
-                    ],
-                );
-            });
+            ->give(fn () => $this->app->make(
+                'wallet.internal.storage',
+                [
+                    'cacheRepository' => clone $this->app->make(CacheFactory::class)
+                        ->store('array'),
+                ],
+            ));
 
         $this->app->singleton(RegulatorServiceInterface::class, $configure['regulator'] ?? RegulatorService::class);
     }
@@ -407,6 +418,17 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     /**
      * @param array<class-string|null> $configure
      */
+    private function projectors(array $configure): void
+    {
+        $this->app->singleton(
+            WalletBatchProjectorInterface::class,
+            $configure['wallet'] ?? WalletBatchProjector::class
+        );
+    }
+
+    /**
+     * @param array<class-string|null> $configure
+     */
     private function events(array $configure): void
     {
         $this->app->bind(
@@ -427,6 +449,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
 
     /**
      * @param array{
+     *     purchase?: array{model?: class-string|null},
      *     transaction?: array{model?: class-string|null},
      *     transfer?: array{model?: class-string|null},
      *     wallet?: array{model?: class-string|null},
@@ -434,6 +457,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
      */
     private function bindObjects(array $configure): void
     {
+        $this->app->bind(Purchase::class, $configure['purchase']['model'] ?? null);
         $this->app->bind(Transaction::class, $configure['transaction']['model'] ?? null);
         $this->app->bind(Transfer::class, $configure['transfer']['model'] ?? null);
         $this->app->bind(Wallet::class, $configure['wallet']['model'] ?? null);
@@ -441,6 +465,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         // api
         $this->app->bind(TransactionQueryHandlerInterface::class, TransactionQueryHandler::class);
         $this->app->bind(TransferQueryHandlerInterface::class, TransferQueryHandler::class);
+        $this->app->bind(PurchaseQueryHandlerInterface::class, PurchaseQueryHandler::class);
     }
 
     /**
@@ -458,7 +483,6 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
             MathServiceInterface::class,
             StateServiceInterface::class,
             TranslatorServiceInterface::class,
-            UuidFactoryServiceInterface::class,
             IdentifierFactoryServiceInterface::class,
         ];
     }
@@ -498,6 +522,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     {
         return [
             TransactionRepositoryInterface::class,
+            PurchaseRepositoryInterface::class,
             TransferRepositoryInterface::class,
             WalletRepositoryInterface::class,
         ];
@@ -534,6 +559,14 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     /**
      * @return class-string[]
      */
+    private function projectorsProviders(): array
+    {
+        return [WalletBatchProjectorInterface::class];
+    }
+
+    /**
+     * @return class-string[]
+     */
     private function eventsProviders(): array
     {
         return [
@@ -548,6 +581,10 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
      */
     private function bindObjectsProviders(): array
     {
-        return [TransactionQueryHandlerInterface::class, TransferQueryHandlerInterface::class];
+        return [
+            TransactionQueryHandlerInterface::class,
+            TransferQueryHandlerInterface::class,
+            PurchaseQueryHandlerInterface::class,
+        ];
     }
 }

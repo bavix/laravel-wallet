@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Traits;
 
 use function app;
+use Bavix\Wallet\Enums\TransactionType;
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Exceptions\AmountInvalid;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
 use Bavix\Wallet\Exceptions\InsufficientFunds;
@@ -68,7 +70,7 @@ trait HasWallet
             $this,
             // Create a new deposit transaction.
             fn () => app(TransactionServiceInterface::class)
-                ->makeOne($this, Transaction::TYPE_DEPOSIT, $amount, $meta, $confirmed)
+                ->makeOne($this, TransactionType::Deposit, $amount, $meta, $confirmed)
         );
     }
 
@@ -226,7 +228,7 @@ trait HasWallet
             // The `transfer` method is responsible for performing the actual transfer of funds.
             // If an error occurs during the process, an exception is thrown.
             return $this->transfer($wallet, $amount, $meta);
-        } catch (ExceptionInterface $e) {
+        } catch (ExceptionInterface) {
             return null;
         }
     }
@@ -364,23 +366,21 @@ trait HasWallet
         $amountValue = $amount;
 
         return app(AtomicServiceInterface::class)->block(
-        // The wallet instance
+            // The wallet instance
             $this,
-            function () use ($amountValue, $meta, $confirmed): Transaction {
-                // Create a new withdrawal transaction.
-                return app(TransactionServiceInterface::class)->makeOne(
+            // Create a new withdrawal transaction.
+            fn (): Transaction => app(TransactionServiceInterface::class)->makeOne(
                 // The wallet instance
-                    $this,
-                    // The transaction type
-                    Transaction::TYPE_WITHDRAW,
-                    // The amount to withdraw
-                    $amountValue,
-                    // Additional information for the transaction
-                    $meta,
-                    // Whether the transaction is confirmed
-                    $confirmed
-                );
-            }
+                $this,
+                // The transaction type
+                TransactionType::Withdraw,
+                // The amount to withdraw
+                $amountValue,
+                // Additional information for the transaction
+                $meta,
+                // Whether the transaction is confirmed
+                $confirmed
+            )
         );
     }
 
@@ -421,11 +421,11 @@ trait HasWallet
         ): Transfer {
             // Create a new transfer transaction.
             // The transfer transaction is created using the PrepareServiceInterface.
-            // The transfer status is set to Transfer::STATUS_TRANSFER.
+            // The transfer status is set to TransferStatus::Transfer.
             // The additional information for the transaction is passed as an argument.
             // The created transfer transaction is stored in the $transferLazyDto variable.
             $transferLazyDto = app(PrepareServiceInterface::class)
-                ->transferLazy($this, $wallet, Transfer::STATUS_TRANSFER, $amountValue, $meta);
+                ->transferLazy($this, $wallet, TransferStatus::Transfer, $amountValue, $meta);
 
             // Apply the transfer transaction.
             // The transfer transaction is applied using the TransferServiceInterface.

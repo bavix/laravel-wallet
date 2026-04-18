@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Models;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Internal\Observers\TransferObserver;
 use function config;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Override;
 
 /**
  * Class Transfer.
  *
- * @property string $status
- * @property string $status_last
+ * @property TransferStatus $status
+ * @property ?TransferStatus $status_last
  * @property non-empty-string $discount
  * @property int $deposit_id
  * @property int $withdraw_id
@@ -34,51 +36,24 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @method int getKey()
  */
+#[\Illuminate\Database\Eloquent\Attributes\Fillable([
+    'status',
+    'discount',
+    'deposit_id',
+    'withdraw_id',
+    'from_id',
+    'to_id',
+    'uuid',
+    'fee',
+    'extra',
+    'created_at',
+    'updated_at',
+])]
 class Transfer extends Model
 {
     use SoftDeletes;
 
-    final public const string STATUS_EXCHANGE = 'exchange';
-
-    final public const string STATUS_TRANSFER = 'transfer';
-
-    final public const string STATUS_PAID = 'paid';
-
-    final public const string STATUS_REFUND = 'refund';
-
-    final public const string STATUS_GIFT = 'gift';
-
-    /**
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'status',
-        'discount',
-        'deposit_id',
-        'withdraw_id',
-        'from_id',
-        'to_id',
-        'uuid',
-        'fee',
-        'extra',
-        'created_at',
-        'updated_at',
-    ];
-
-    /**
-     * @return array<string, string>
-     */
-    #[\Override]
-    public function casts(): array
-    {
-        return [
-            'deposit_id' => 'int',
-            'withdraw_id' => 'int',
-            'extra' => 'json',
-        ];
-    }
-
-    #[\Override]
+    #[Override]
     public function getTable(): string
     {
         if ((string) $this->table === '') {
@@ -142,11 +117,24 @@ class Transfer extends Model
         return $belongsTo;
     }
 
-    #[\Override]
-    protected static function boot(): void
+    /**
+     * @return array<string, string>
+     */
+    #[Override]
+    protected function casts(): array
     {
-        parent::boot();
+        return [
+            'deposit_id' => 'int',
+            'withdraw_id' => 'int',
+            'extra' => 'json',
+            'status' => TransferStatus::class,
+            'status_last' => TransferStatus::class,
+        ];
+    }
 
+    #[Override]
+    protected static function booted(): void
+    {
         static::observe(TransferObserver::class);
     }
 }

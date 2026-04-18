@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\External\Api;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Services\AssistantServiceInterface;
 use Bavix\Wallet\Services\AtomicServiceInterface;
 use Bavix\Wallet\Services\PrepareServiceInterface;
@@ -34,7 +34,7 @@ final readonly class TransferQueryHandler implements TransferQueryHandlerInterfa
             fn (TransferQueryInterface $query) => $this->prepareService->transferLazy(
                 $query->getFrom(),
                 $query->getTo(),
-                Transfer::STATUS_TRANSFER,
+                TransferStatus::Transfer,
                 $query->getAmount(),
                 $query->getMeta(),
             ),

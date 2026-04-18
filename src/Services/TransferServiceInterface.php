@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
@@ -24,11 +25,11 @@ interface TransferServiceInterface
      * in the provided array. The method returns `true` if at least one
      * transfer was updated, or `false` if no transfers were updated.
      *
-     * @param string $status The new status to set for the specified transfers.
+     * @param TransferStatus $status The new status to set for the specified transfers.
      * @param int[] $ids A non-empty array of transfer IDs to update.
      * @return bool `true` if at least one transfer was updated, `false` otherwise.
      */
-    public function updateStatusByIds(string $status, array $ids): bool;
+    public function updateStatusByIds(TransferStatus $status, array $ids): bool;
 
     /**
      * Applies a set of transfer operations in a single database transaction.

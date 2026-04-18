@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Internal\Dto;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use DateTimeImmutable;
 
 interface TransferDtoInterface
@@ -28,7 +29,7 @@ interface TransferDtoInterface
     /**
      * Get the status of the transfer.
      */
-    public function getStatus(): string;
+    public function getStatus(): TransferStatus;
 
     /**
      * Get the ID of the wallet that the transfer is from.

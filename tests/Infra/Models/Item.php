@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Infra\Models;
 
+use Bavix\Wallet\Enums\TransferStatus;
+use Bavix\Wallet\External\Api\PurchaseQuery;
+use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\ProductLimitedInterface;
 use Bavix\Wallet\Models\Transfer;
@@ -23,15 +26,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @method int getKey()
  */
+#[\Illuminate\Database\Eloquent\Attributes\Fillable(['name', 'quantity', 'price'])]
 final class Item extends Model implements ProductLimitedInterface
 {
     use HasWallet;
     use HasWallets;
-
-    /**
-     * @var array<int, string>
-     */
-    protected $fillable = ['name', 'quantity', 'price'];
 
     public function canBuy(Customer $customer, int $quantity = 1, bool $force = false): bool
     {
@@ -41,7 +40,9 @@ final class Item extends Model implements ProductLimitedInterface
             return $result;
         }
 
-        return $result && ! $customer->paid($this) instanceof Transfer;
+        return $result && ! app(PurchaseQueryHandlerInterface::class)->one(
+            PurchaseQuery::create($customer, $this)
+        ) instanceof Transfer;
     }
 
     public function getAmountProduct(Customer $customer): int
@@ -66,7 +67,7 @@ final class Item extends Model implements ProductLimitedInterface
         return app(CastServiceInterface::class)
             ->getWallet($this)
             ->hasMany(Config::classString('wallet.transfer.model', Transfer::class), 'to_id')
-            ->where('status', Transfer::STATUS_PAID)
+            ->where('status', TransferStatus::Paid->value)
             ->whereIn('from_id', $walletIds);
     }
 }

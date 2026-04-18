@@ -16,15 +16,11 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @method int getKey()
  */
+#[\Illuminate\Database\Eloquent\Attributes\Fillable(['name', 'email'])]
 final class UserConfirm extends Model implements Wallet, Confirmable
 {
     use HasWallet;
     use CanConfirm;
-
-    /**
-     * @var array<int, string>
-     */
-    protected $fillable = ['name', 'email'];
 
     #[\Override]
     public function getTable(): string

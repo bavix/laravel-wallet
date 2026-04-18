@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
+use Bavix\Wallet\Enums\TransactionType;
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Exceptions\ProductEnded;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Models\Transaction;
-use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\DiscountServiceInterface;
 use Bavix\Wallet\Services\TaxServiceInterface;
@@ -36,7 +37,7 @@ final class DiscountTaxTest extends TestCase
         self::assertSame($buyer->balanceInt, $product->getAmountProduct($buyer) + $fee);
         $transfer = $buyer->pay($product);
         self::assertNotNull($transfer);
-        self::assertSame(Transfer::STATUS_PAID, $transfer->status);
+        self::assertSame(TransferStatus::Paid, $transfer->status);
 
         self::assertSame($buyer->balanceInt, $product->getPersonalDiscount($buyer));
 
@@ -82,7 +83,7 @@ final class DiscountTaxTest extends TestCase
         self::assertSame($buyer->balanceInt, (int) ($product->getAmountProduct($buyer) + $fee - $discount));
         $transfer = $buyer->pay($product);
         self::assertNotNull($transfer);
-        self::assertSame($transfer->status, Transfer::STATUS_PAID);
+        self::assertSame($transfer->status, TransferStatus::Paid);
 
         self::assertSame((int) $transfer->discount, $product->getPersonalDiscount($buyer));
 
@@ -97,7 +98,7 @@ final class DiscountTaxTest extends TestCase
         self::assertSame($product->balanceInt, 0);
 
         $transfer->refresh();
-        self::assertSame($transfer->status, Transfer::STATUS_REFUND);
+        self::assertSame($transfer->status, TransferStatus::Refund);
 
         self::assertFalse($buyer->safeRefund($product));
         self::assertSame(
@@ -115,7 +116,7 @@ final class DiscountTaxTest extends TestCase
             $product->getAmountProduct($buyer) - $product->getPersonalDiscount($buyer)
         );
 
-        self::assertSame($transfer->status, Transfer::STATUS_PAID);
+        self::assertSame($transfer->status, TransferStatus::Paid);
 
         self::assertTrue($buyer->refund($product));
         self::assertSame(
@@ -126,7 +127,7 @@ final class DiscountTaxTest extends TestCase
         self::assertSame($product->balanceInt, 0);
 
         $transfer->refresh();
-        self::assertSame($transfer->status, Transfer::STATUS_REFUND);
+        self::assertSame($transfer->status, TransferStatus::Refund);
     }
 
     public function testForceRefund(): void
@@ -226,8 +227,8 @@ final class DiscountTaxTest extends TestCase
         self::assertSame($buyer->balanceInt, 0);
 
         $transfer = $buyer->payFree($product);
-        self::assertSame($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
-        self::assertSame($transfer->withdraw->type, Transaction::TYPE_WITHDRAW);
+        self::assertSame($transfer->deposit->type, TransactionType::Deposit);
+        self::assertSame($transfer->withdraw->type, TransactionType::Withdraw);
 
         self::assertSame($buyer->balanceInt, 0);
         self::assertSame($product->balanceInt, 0);
@@ -250,8 +251,8 @@ final class DiscountTaxTest extends TestCase
         self::assertSame($buyer->balanceInt, -1000);
 
         $transfer = $buyer->payFree($product);
-        self::assertSame($transfer->deposit->type, Transaction::TYPE_DEPOSIT);
-        self::assertSame($transfer->withdraw->type, Transaction::TYPE_WITHDRAW);
+        self::assertSame($transfer->deposit->type, TransactionType::Deposit);
+        self::assertSame($transfer->withdraw->type, TransactionType::Withdraw);
 
         self::assertSame((int) $transfer->discount, $product->getPersonalDiscount($buyer));
 

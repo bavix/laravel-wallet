@@ -1,0 +1,83 @@
+<?php
+
+declare(strict_types=1);
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class() extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('transaction_state_iso', static function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->morphs('payable');
+            $table->unsignedBigInteger('wallet_id');
+            $table->enum('type', ['deposit', 'withdraw'])->index();
+            $table->decimal('amount', 64, 0);
+            $table->boolean('confirmed');
+            $table->json('meta')
+                ->nullable();
+            $table->uuid('uuid')
+                ->unique();
+            $table->timestamps();
+            $table->softDeletesTz();
+
+            $table->string('balance_before')
+                ->nullable();
+            $table->string('balance_after')
+                ->nullable();
+            $table->string('state_hash', 64)
+                ->nullable();
+
+            $table->index(['payable_type', 'payable_id'], 'iso_payable_type_payable_id_ind');
+            $table->index(['payable_type', 'payable_id', 'type'], 'iso_payable_type_ind');
+            $table->index(['payable_type', 'payable_id', 'confirmed'], 'iso_payable_confirmed_ind');
+            $table->index(['payable_type', 'payable_id', 'type', 'confirmed'], 'iso_payable_type_confirmed_ind');
+        });
+
+        Schema::create('wallet_state_iso', static function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->morphs('holder');
+            $table->string('name');
+            $table->string('slug')
+                ->index();
+            $table->uuid('uuid')
+                ->unique();
+            $table->string('description')
+                ->nullable();
+            $table->json('meta')
+                ->nullable();
+            $table->decimal('balance', 64, 0)
+                ->default(0);
+            $table->unsignedSmallInteger('decimal_places')
+                ->default(2);
+            $table->timestamps();
+            $table->softDeletesTz();
+
+            $table->string('held_balance')
+                ->nullable();
+            $table->string('balance_after')
+                ->nullable();
+            $table->string('state_hash', 64)
+                ->nullable();
+
+            $table->unique(['holder_type', 'holder_id', 'slug']);
+        });
+
+        Schema::table('transaction_state_iso', function (Blueprint $table) {
+            $table->foreign('wallet_id')
+                ->references('id')
+                ->on('wallet_state_iso')
+                ->onDelete('cascade');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('transaction_state_iso');
+        Schema::dropIfExists('wallet_state_iso');
+    }
+};

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\External\Dto\Extra;
 use Bavix\Wallet\External\Dto\Option;
 use Bavix\Wallet\Internal\Service\IdentifierFactoryServiceInterface;
-use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Factories\UserMultiFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
@@ -188,7 +188,7 @@ final class ExtraTest extends TestCase
         self::assertSame(147, $usd->balanceInt);
         self::assertSame(1.47, (float) $usd->balanceFloat); // $1.47
         self::assertSame(0, (int) $transfer->fee);
-        self::assertSame(Transfer::STATUS_EXCHANGE, $transfer->status);
+        self::assertSame(TransferStatus::Exchange, $transfer->status);
         self::assertSame([
             'message' => 'We credit to the dollar account',
         ], $transfer->deposit->meta);
@@ -249,7 +249,7 @@ final class ExtraTest extends TestCase
         self::assertSame(147, $usd->balanceInt);
         self::assertSame(1.47, (float) $usd->balanceFloat); // $1.47
         self::assertSame(0, (int) $transfer->fee);
-        self::assertSame(Transfer::STATUS_EXCHANGE, $transfer->status);
+        self::assertSame(TransferStatus::Exchange, $transfer->status);
         self::assertSame([
             'message' => 'We credit to the dollar account',
         ], $transfer->deposit->meta);
@@ -295,7 +295,7 @@ final class ExtraTest extends TestCase
         self::assertSame(0, $rub->balanceInt);
         self::assertSame(0, $usd->balanceInt);
         self::assertSame(0, (int) $transfer->fee);
-        self::assertSame(Transfer::STATUS_EXCHANGE, $transfer->status);
+        self::assertSame(TransferStatus::Exchange, $transfer->status);
         self::assertSame([
             'message' => 'We credit to the dollar account',
         ], $transfer->deposit->meta);

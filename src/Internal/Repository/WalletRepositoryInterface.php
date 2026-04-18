@@ -30,9 +30,10 @@ interface WalletRepositoryInterface
      * Update the balances of wallets based on the provided data.
      *
      * @param non-empty-array<int, string|float|int> $data An array containing wallet IDs as keys and new balances as values.
+     * @param array<int, array<string, null|bool|float|int|string>> $columnsByWalletId
      * @return int The number of wallets whose balances were successfully updated.
      */
-    public function updateBalances(array $data): int;
+    public function updateBalances(array $data, array $columnsByWalletId = []): int;
 
     /**
      * Find a wallet by its ID.

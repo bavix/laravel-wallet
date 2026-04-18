@@ -10,6 +10,8 @@ use Bavix\Wallet\Models\Transfer;
 
 /**
  * @api
+ *
+ * @deprecated Use PurchaseQueryHandlerInterface; will be removed in v14.
  */
 interface PurchaseServiceInterface
 {
@@ -24,5 +26,6 @@ interface PurchaseServiceInterface
      * @param bool $gifts [optional] Whether to only retrieve gift transfers or not. Default is false.
      * @return Transfer[] An array of already purchased transfers.
      */
+    #[\Deprecated(message: 'Use PurchaseQueryHandlerInterface; will be removed in v14.', since: '12.0.0')]
     public function already(Customer $customer, BasketDtoInterface $basketDto, bool $gifts = false): array;
 }

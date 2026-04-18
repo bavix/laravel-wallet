@@ -14,14 +14,10 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @method int getKey()
  */
+#[\Illuminate\Database\Eloquent\Attributes\Fillable(['name', 'email'])]
 final class UserDynamic extends Model implements Wallet
 {
     use HasWallet;
-
-    /**
-     * @var array<int, string>
-     */
-    protected $fillable = ['name', 'email'];
 
     #[\Override]
     public function getTable(): string

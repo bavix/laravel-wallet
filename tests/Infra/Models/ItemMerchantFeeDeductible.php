@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Infra\Models;
 
+use Bavix\Wallet\External\Api\PurchaseQuery;
+use Bavix\Wallet\External\Api\PurchaseQueryHandlerInterface;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Interfaces\MerchantFeeDeductible;
 use Bavix\Wallet\Interfaces\ProductLimitedInterface;
@@ -19,14 +21,10 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @method int getKey()
  */
+#[\Illuminate\Database\Eloquent\Attributes\Fillable(['name', 'quantity', 'price'])]
 final class ItemMerchantFeeDeductible extends Model implements ProductLimitedInterface, MerchantFeeDeductible
 {
     use HasWallet;
-
-    /**
-     * @var list<string>
-     */
-    protected $fillable = ['name', 'quantity', 'price'];
 
     #[\Override]
     public function getTable(): string
@@ -42,7 +40,9 @@ final class ItemMerchantFeeDeductible extends Model implements ProductLimitedInt
             return $result;
         }
 
-        return $result && ! $customer->paid($this) instanceof \Bavix\Wallet\Models\Transfer;
+        return $result && ! app(PurchaseQueryHandlerInterface::class)->one(
+            PurchaseQuery::create($customer, $this)
+        ) instanceof \Bavix\Wallet\Models\Transfer;
     }
 
     public function getAmountProduct(Customer $customer): int

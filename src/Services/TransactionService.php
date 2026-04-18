@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Enums\TransactionType;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Internal\Assembler\TransactionCreatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
@@ -32,14 +33,12 @@ final readonly class TransactionService implements TransactionServiceInterface
      */
     public function makeOne(
         Wallet $wallet,
-        string $type,
+        TransactionType $type,
         float|int|string $amount,
         ?array $meta,
         bool $confirmed = true
     ): Transaction {
-        assert(in_array($type, [Transaction::TYPE_DEPOSIT, Transaction::TYPE_WITHDRAW], true));
-
-        $dto = $type === Transaction::TYPE_DEPOSIT
+        $dto = $type === TransactionType::Deposit
             ? $this->prepareService->deposit($wallet, (string) $amount, $meta, $confirmed)
             : $this->prepareService->withdraw($wallet, (string) $amount, $meta, $confirmed);
 
@@ -59,8 +58,9 @@ final readonly class TransactionService implements TransactionServiceInterface
      */
     public function apply(array $wallets, array $objects): array
     {
-        $transactions = $this->atmService->makeTransactions($objects); // q1
         $totals = $this->assistantService->getSums($objects);
+
+        $transactions = $this->atmService->makeTransactions($objects);
         assert(count($objects) === count($transactions));
 
         foreach ($totals as $walletId => $total) {

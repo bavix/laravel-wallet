@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Interfaces\Customer;
 use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
-use Bavix\Wallet\Models\Transfer;
 
 /**
  * @internal
+ *
+ * @deprecated Use PurchaseQueryHandlerInterface; will be removed in v14.
  */
 final readonly class PurchaseService implements PurchaseServiceInterface
 {
@@ -21,36 +23,49 @@ final readonly class PurchaseService implements PurchaseServiceInterface
     public function already(Customer $customer, BasketDtoInterface $basketDto, bool $gifts = false): array
     {
         $status = $gifts
-            ? [Transfer::STATUS_PAID, Transfer::STATUS_GIFT]
-            : [Transfer::STATUS_PAID];
+            ? [TransferStatus::Paid->value, TransferStatus::Gift->value]
+            : [TransferStatus::Paid->value];
 
-        $arrays = [];
-        $wallets = [];
-        $productCounts = [];
-        $query = $customer->transfers();
+        $walletIds = [];
         foreach ($basketDto->items() as $itemDto) {
             $wallet = $this->castService->getWallet($itemDto->getReceiving() ?? $itemDto->getProduct());
-            $wallets[$wallet->uuid] = $wallet;
-
-            $productCounts[$wallet->uuid] = ($productCounts[$wallet->uuid] ?? 0) + count($itemDto);
+            $walletId = $wallet->getKey();
+            $walletIds[$walletId] = true;
         }
 
-        foreach ($wallets as $wallet) {
-            /**
-             * As part of my work, "with" was added, it gives a 50x boost for a huge number of returns. In this case,
-             * it's a crutch. It is necessary to come up with a more correct implementation of the internal and external
-             * interface for "purchases".
-             */
-            $arrays[] = (clone $query)
-                ->with(['deposit', 'withdraw.wallet'])
-                ->where('to_id', $wallet->getKey())
-                ->whereIn('status', $status)
-                ->orderBy('id', 'desc')
-                ->limit($productCounts[$wallet->uuid])
-                ->get()
-                ->all();
+        /** @var array<int, array<int, \Bavix\Wallet\Models\Transfer>> $groupedByWallet */
+        $groupedByWallet = [];
+        $transfers = $customer->transfers()
+            ->with(['deposit', 'withdraw.wallet'])
+            ->whereIn('to_id', array_keys($walletIds))
+            ->whereIn('status', $status)
+            ->orderBy('id', 'desc')
+            ->get();
+        foreach ($transfers as $transfer) {
+            $groupedByWallet[$transfer->to_id] ??= [];
+            $groupedByWallet[$transfer->to_id][] = $transfer;
         }
 
-        return array_merge(...$arrays);
+        $selected = [];
+        foreach ($basketDto->items() as $itemDto) {
+            $wallet = $this->castService->getWallet($itemDto->getReceiving() ?? $itemDto->getProduct());
+            $walletId = $wallet->getKey();
+
+            for ($position = 0; $position < $itemDto->count(); $position++) {
+                if (! array_key_exists($walletId, $groupedByWallet)) {
+                    continue;
+                }
+
+                if ($groupedByWallet[$walletId] === []) {
+                    continue;
+                }
+
+                /** @var \Bavix\Wallet\Models\Transfer $transfer */
+                $transfer = array_shift($groupedByWallet[$walletId]);
+                $selected[] = $transfer;
+            }
+        }
+
+        return $selected;
     }
 }

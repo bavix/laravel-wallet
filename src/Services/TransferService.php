@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Services;
 
+use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
+use Bavix\Wallet\Internal\Repository\PurchaseRepositoryInterface;
 use Bavix\Wallet\Internal\Repository\TransferRepositoryInterface;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Models\Transaction;
@@ -22,6 +24,7 @@ final readonly class TransferService implements TransferServiceInterface
 {
     public function __construct(
         private TransferDtoAssemblerInterface $transferDtoAssembler,
+        private PurchaseRepositoryInterface $purchaseRepository,
         private TransferRepositoryInterface $transferRepository,
         private TransactionServiceInterface $transactionService,
         private DatabaseServiceInterface $databaseService,
@@ -33,9 +36,20 @@ final readonly class TransferService implements TransferServiceInterface
     /**
      * @param int[] $ids
      */
-    public function updateStatusByIds(string $status, array $ids): bool
+    public function updateStatusByIds(TransferStatus $status, array $ids): bool
     {
-        return $ids !== [] && count($ids) === $this->transferRepository->updateStatusByIds($status, $ids);
+        if ($ids === []) {
+            return false;
+        }
+
+        $updatedTransfers = $this->transferRepository->updateStatusByIds($status, $ids);
+        if (count($ids) !== $updatedTransfers) {
+            return false;
+        }
+
+        $this->purchaseRepository->updateStatusByTransferIds($status, $ids);
+
+        return $updatedTransfers > 0;
     }
 
     /**
@@ -99,6 +113,7 @@ final readonly class TransferService implements TransferServiceInterface
             }
 
             $models = $this->atmService->makeTransfers($transfers);
+
             foreach ($models as $model) {
                 $model->setRelations($links[$model->uuid] ?? []);
             }

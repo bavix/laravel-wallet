@@ -1,6 +1,18 @@
 parameters:
 	ignoreErrors:
 		-
+			message: '#^Parameter \#1 \$value of static method Illuminate\\Database\\Connection\:\:raw\(\) expects float\|int\|literal\-string, non\-falsy\-string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Infra/Listeners/TransactionStateProjectorListener.php
+
+		-
+			message: '#^Parameter \#1 \$value of static method Illuminate\\Database\\Connection\:\:raw\(\) expects float\|int\|literal\-string, non\-falsy\-string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Infra/Listeners/WalletStateProjectorListener.php
+
+		-
 			message: '#^Generic type Illuminate\\Database\\Eloquent\\Relations\\HasMany\<Bavix\\Wallet\\Models\\Transfer\> in PHPDoc tag @return does not specify all template types of class Illuminate\\Database\\Eloquent\\Relations\\HasMany\: TRelatedModel, TDeclaringModel$#'
 			identifier: generics.lessTypes
 			count: 1
@@ -145,6 +157,24 @@ parameters:
 			path: tests/Infra/TestCase.php
 
 		-
+			message: '#^Method Bavix\\Wallet\\Test\\Infra\\TestCase\:\:getPackageProviders\(\) is not final, but since the containing class is abstract, it should be\.$#'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: tests/Infra/TestCase.php
+
+		-
+			message: '#^Method Bavix\\Wallet\\Test\\Infra\\TestCase\:\:getEnvironmentSetUp\(\) is not final, but since the containing class is abstract, it should be\.$#'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: tests/Infra/TestCase.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: tests/Infra/Projectors/WalletStateBatchProjector.php
+
+		-
 			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
 			identifier: offsetAccess.notFound
 			count: 1
@@ -211,12 +241,6 @@ parameters:
 			path: tests/Units/Domain/CartReceivingTest.php
 
 		-
-			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNull\(\) with string will always evaluate to false\.$#'
-			identifier: staticMethod.impossibleType
-			count: 1
-			path: tests/Units/Domain/CartReceivingTest.php
-
-		-
 			message: '#^Method Bavix\\Wallet\\Objects\\Cart\:\:withItem\(\) is invoked with named argument for parameter \$pricePerItem\.$#'
 			identifier: ergebnis.noNamedArgument
 			count: 1
@@ -232,12 +256,6 @@ parameters:
 			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transaction will always evaluate to true\.$#'
 			identifier: staticMethod.alreadyNarrowedType
 			count: 5
-			path: tests/Units/Domain/CartTest.php
-
-		-
-			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNull\(\) with string will always evaluate to false\.$#'
-			identifier: staticMethod.impossibleType
-			count: 1
 			path: tests/Units/Domain/CartTest.php
 
 		-
