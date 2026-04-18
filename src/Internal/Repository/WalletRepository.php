@@ -7,7 +7,7 @@ namespace Bavix\Wallet\Internal\Repository;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Models\Wallet;
-use Illuminate\Database\Eloquent\ModelNotFoundException as exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException as EloquentModelNotFoundException;
 
 final readonly class WalletRepository implements WalletRepositoryInterface
 {
@@ -181,7 +181,7 @@ final readonly class WalletRepository implements WalletRepositoryInterface
                 ->firstOrFail();
 
             return $wallet;
-        } catch (exception $exception) {
+        } catch (EloquentModelNotFoundException $exception) {
             throw new ModelNotFoundException(
                 $exception->getMessage(),
                 ExceptionInterface::MODEL_NOT_FOUND,
