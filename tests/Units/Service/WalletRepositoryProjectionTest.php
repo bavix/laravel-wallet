@@ -53,10 +53,10 @@ final class WalletRepositoryProjectionTest extends TestCase
         self::assertSame(111, $firstWallet->balanceInt);
         self::assertSame(222, $secondWallet->balanceInt);
 
-        self::assertJsonStringEqualsJsonString(
-            '{"projection":true}',
-            (string) $firstWallet->getRawOriginal('meta')
-        );
+        $meta = $firstWallet->getRawOriginal('meta');
+        self::assertIsString($meta);
+
+        self::assertJsonStringEqualsJsonString('{"projection":true}', $meta);
         self::assertNull($secondWallet->getRawOriginal('meta'));
     }
 }
