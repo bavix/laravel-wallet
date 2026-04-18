@@ -1,27 +1,9 @@
-# Wallet State Projection
+<?php
 
-If you need custom wallet fields (`held_balance`, `balance_after`, `state_hash`),
-use `WalletBatchProjectorInterface`.
+declare(strict_types=1);
 
-Package provides hook only. Projection rules stay in your app code.
+namespace Bavix\Wallet\Test\Infra\Projectors;
 
-This keeps updates in same `UPDATE wallets ...` query.
-
-## 1) Add columns
-
-Add custom columns to `wallets` in your app migration.
-
-## 2) Register projector
-
-```php
-'projectors' => [
-    'wallet' => \App\Wallet\WalletStateBatchProjector::class,
-],
-```
-
-## 3) Implement projector
-
-```php
 use Bavix\Wallet\Internal\Projector\WalletBatchProjectorInterface;
 
 final readonly class WalletStateBatchProjector implements WalletBatchProjectorInterface
@@ -46,6 +28,3 @@ final readonly class WalletStateBatchProjector implements WalletBatchProjectorIn
         return $rows;
     }
 }
-```
-
-For transaction columns, see [Transaction State Projection](/guide/events/transaction-state-projection).

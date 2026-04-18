@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Enums\TransferStatus;
-use Bavix\Wallet\Internal\Assembler\TransferCreatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
@@ -14,7 +13,6 @@ use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Internal\Repository\PurchaseRepositoryInterface;
 use Bavix\Wallet\Internal\Repository\TransferRepositoryInterface;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
-use Bavix\Wallet\Internal\Service\DispatcherServiceInterface;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\RecordsNotFoundException;
@@ -30,8 +28,6 @@ final readonly class TransferService implements TransferServiceInterface
         private TransferRepositoryInterface $transferRepository,
         private TransactionServiceInterface $transactionService,
         private DatabaseServiceInterface $databaseService,
-        private DispatcherServiceInterface $dispatcherService,
-        private TransferCreatedEventAssemblerInterface $transferCreatedEventAssembler,
         private CastServiceInterface $castService,
         private AtmServiceInterface $atmService,
     ) {
@@ -120,11 +116,7 @@ final readonly class TransferService implements TransferServiceInterface
 
             foreach ($models as $model) {
                 $model->setRelations($links[$model->uuid] ?? []);
-
-                $this->dispatcherService->dispatch($this->transferCreatedEventAssembler->create($model));
             }
-
-            $this->dispatcherService->lazyFlush();
 
             return $models;
         });

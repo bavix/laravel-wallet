@@ -21,6 +21,9 @@ interface TransactionDtoTransformerInterface
      *     meta: array<mixed>|null,
      *     created_at: DateTimeImmutable,
      *     updated_at: DateTimeImmutable,
+     *     balance_before?: string,
+     *     balance_after?: string,
+     *     state_hash?: string,
      * }
      */
     public function extract(TransactionDtoInterface $dto): array;

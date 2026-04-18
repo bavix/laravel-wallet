@@ -3,28 +3,23 @@
 declare(strict_types=1);
 
 use Bavix\Wallet\Internal\Assembler\AvailabilityDtoAssembler;
-use Bavix\Wallet\Internal\Assembler\BalanceCommittingEventAssembler;
 use Bavix\Wallet\Internal\Assembler\BalanceUpdatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\ExtraDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\OptionDtoAssembler;
-use Bavix\Wallet\Internal\Assembler\TransactionCommittingEventAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionCreatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransactionQueryAssembler;
-use Bavix\Wallet\Internal\Assembler\TransferCreatedEventAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferLazyDtoAssembler;
 use Bavix\Wallet\Internal\Assembler\TransferQueryAssembler;
-use Bavix\Wallet\Internal\Events\BalanceCommittingEvent;
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEvent;
-use Bavix\Wallet\Internal\Events\TransactionCommittingEvent;
 use Bavix\Wallet\Internal\Events\TransactionCreatedEvent;
-use Bavix\Wallet\Internal\Events\TransferCreatedEvent;
 use Bavix\Wallet\Internal\Events\WalletCreatedEvent;
 use Bavix\Wallet\Internal\Repository\PurchaseRepository;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
 use Bavix\Wallet\Internal\Repository\WalletRepository;
+use Bavix\Wallet\Internal\Projector\WalletBatchProjector;
 use Bavix\Wallet\Internal\Service\ClockService;
 use Bavix\Wallet\Internal\Service\ConnectionService;
 use Bavix\Wallet\Internal\Service\DatabaseService;
@@ -328,6 +323,16 @@ return [
     ],
 
     /**
+     * Projectors allow enriching rows before write.
+     */
+    'projectors' => [
+        /**
+         * Project additional wallet columns in balance update query.
+         */
+        'wallet' => WalletBatchProjector::class,
+    ],
+
+    /**
      * Builder class, needed to create DTO.
      */
     'assemblers' => [
@@ -335,10 +340,6 @@ return [
          * Assembler for creating Availability DTO.
          */
         'availability' => AvailabilityDtoAssembler::class,
-        /**
-         * Assembler for creating Balance Committing Event DTO.
-         */
-        'balance_committing_event' => BalanceCommittingEventAssembler::class,
         /**
          * Assembler for creating Balance Updated Event DTO.
          */
@@ -368,17 +369,9 @@ return [
          */
         'transaction_created_event' => TransactionCreatedEventAssembler::class,
         /**
-         * Assembler for creating Transaction Committing Event DTO.
-         */
-        'transaction_committing_event' => TransactionCommittingEventAssembler::class,
-        /**
          * Assembler for creating Transaction Query DTO.
          */
         'transaction_query' => TransactionQueryAssembler::class,
-        /**
-         * Assembler for creating Transfer Created Event DTO.
-         */
-        'transfer_created_event' => TransferCreatedEventAssembler::class,
         /**
          * Assembler for creating Transfer Query DTO.
          */
@@ -391,11 +384,6 @@ return [
      * @var array<string, class-string>
      */
     'events' => [
-        /**
-         * The event triggered before balances are persisted in a transaction commit.
-         */
-        'balance_committing' => BalanceCommittingEvent::class,
-
         /**
          * The event triggered when the balance is updated.
          */
@@ -411,15 +399,6 @@ return [
          */
         'transaction_created' => TransactionCreatedEvent::class,
 
-        /**
-         * The event triggered before transaction side effects are committed.
-         */
-        'transaction_committing' => TransactionCommittingEvent::class,
-
-        /**
-         * The event triggered when a transfer is created.
-         */
-        'transfer_created' => TransferCreatedEvent::class,
     ],
 
     /**

@@ -6,8 +6,8 @@ namespace Bavix\Wallet\Services;
 
 use Bavix\Wallet\Enums\TransactionType;
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Internal\Assembler\TransactionCommittingEventAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransactionCreatedEventAssemblerInterface;
+use Bavix\Wallet\Internal\Dto\StateAwareTransactionDto;
 use Bavix\Wallet\Internal\Dto\TransactionDtoInterface;
 use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Service\DispatcherServiceInterface;
@@ -21,7 +21,6 @@ final readonly class TransactionService implements TransactionServiceInterface
 {
     public function __construct(
         private TransactionCreatedEventAssemblerInterface $transactionCreatedEventAssembler,
-        private TransactionCommittingEventAssemblerInterface $transactionCommittingEventAssembler,
         private DispatcherServiceInterface $dispatcherService,
         private AssistantServiceInterface $assistantService,
         private RegulatorServiceInterface $regulatorService,
@@ -62,9 +61,7 @@ final readonly class TransactionService implements TransactionServiceInterface
      */
     public function apply(array $wallets, array $objects): array
     {
-        $transactions = $this->atmService->makeTransactions($objects); // q1
         $totals = $this->assistantService->getSums($objects);
-        assert(count($objects) === count($transactions));
 
         $currentBalances = [];
         foreach (array_keys($totals) as $walletId) {
@@ -77,7 +74,7 @@ final readonly class TransactionService implements TransactionServiceInterface
             $currentBalances[$walletId] = $this->regulatorService->amount($object);
         }
 
-        $resultingBalancesByTransactionId = [];
+        $stateAwareTransactions = [];
         foreach ($objects as $dto) {
             $walletId = $dto->getWalletId();
             if (! array_key_exists($walletId, $currentBalances)) {
@@ -90,20 +87,23 @@ final readonly class TransactionService implements TransactionServiceInterface
                 $currentBalances[$walletId] = $this->regulatorService->amount($object);
             }
 
+            $beforeBalance = $currentBalances[$walletId];
             $nextBalance = $this->mathService->round(
-                $this->mathService->add($currentBalances[$walletId], $dto->isConfirmed() ? $dto->getAmount() : '0')
+                $this->mathService->add($beforeBalance, $dto->isConfirmed() ? $dto->getAmount() : '0')
             );
 
-            $transaction = $transactions[$dto->getUuid()] ?? null;
-            assert($transaction instanceof Transaction);
-            $resultingBalancesByTransactionId[$transaction->getKey()] = $nextBalance;
+            $uuid = $dto->getUuid();
 
+            $stateAwareTransactions[$uuid] = new StateAwareTransactionDto(
+                $dto,
+                $beforeBalance,
+                $nextBalance,
+            );
             $currentBalances[$walletId] = $nextBalance;
         }
 
-        $this->dispatcherService->dispatchNow(
-            $this->transactionCommittingEventAssembler->create($transactions, $resultingBalancesByTransactionId)
-        );
+        $transactions = $this->atmService->makeTransactions(array_values($stateAwareTransactions)); // q1
+        assert(count($objects) === count($transactions));
 
         foreach ($totals as $walletId => $total) {
             $wallet = $wallets[$walletId] ?? null;

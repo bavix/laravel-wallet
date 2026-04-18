@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Test\Units\Service;
 
 use Bavix\Wallet\Enums\TransferStatus;
-use Bavix\Wallet\Internal\Assembler\TransferCreatedEventAssemblerInterface;
 use Bavix\Wallet\Internal\Assembler\TransferDtoAssemblerInterface;
 use Bavix\Wallet\Internal\Repository\PurchaseRepositoryInterface;
 use Bavix\Wallet\Internal\Repository\TransferRepositoryInterface;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
-use Bavix\Wallet\Internal\Service\DispatcherServiceInterface;
 use Bavix\Wallet\Services\AtmServiceInterface;
 use Bavix\Wallet\Services\CastServiceInterface;
 use Bavix\Wallet\Services\TransactionServiceInterface;
@@ -68,8 +66,6 @@ final class TransferServiceTest extends TestCase
             $transferRepository,
             $this->createMock(TransactionServiceInterface::class),
             $this->createMock(DatabaseServiceInterface::class),
-            $this->createMock(DispatcherServiceInterface::class),
-            $this->createMock(TransferCreatedEventAssemblerInterface::class),
             $this->createMock(CastServiceInterface::class),
             $this->createMock(AtmServiceInterface::class),
         );

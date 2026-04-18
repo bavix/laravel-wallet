@@ -26,16 +26,36 @@ final readonly class WalletRepository implements WalletRepositoryInterface
 
     /**
      * @param non-empty-array<int, string|float|int> $data
+     * @param array<int, array<string, null|bool|float|int|string>> $columnsByWalletId
      */
-    public function updateBalances(array $data): int
+    public function updateBalances(array $data, array $columnsByWalletId = []): int
     {
+        $filteredProjectedAttributes = [];
+        foreach ($columnsByWalletId as $walletId => $columns) {
+            if (! array_key_exists($walletId, $data)) {
+                continue;
+            }
+
+            foreach ($columns as $column => $value) {
+                $filteredProjectedAttributes[$walletId][$column] = $value;
+            }
+        }
+
         // One element gives x10 speedup, on some data
         if (count($data) === 1) {
+            $walletId = key($data);
+            $updatePayload = [
+                'balance' => current($data),
+            ];
+
+            $projected = $filteredProjectedAttributes[$walletId]
+                ?? $filteredProjectedAttributes[(int) $walletId]
+                ?? [];
+            $updatePayload = array_merge($updatePayload, $projected);
+
             return $this->wallet->newQuery()
-                ->whereKey(key($data))
-                ->update([
-                    'balance' => current($data),
-                ]);
+                ->whereKey($walletId)
+                ->update($updatePayload);
         }
 
         $cases = [];
@@ -43,14 +63,39 @@ final readonly class WalletRepository implements WalletRepositoryInterface
             $cases[] = 'WHEN id = '.$walletId.' THEN '.$balance;
         }
 
-        $buildQuery = $this->wallet->getConnection()
-            ->raw('CASE '.implode(' ', $cases).' END');
+        $connection = $this->wallet->getConnection();
+        $pdo = $connection->getPdo();
+
+        $updatePayload = [
+            'balance' => $connection->raw('CASE '.implode(' ', $cases).' END'),
+        ];
+
+        $columns = [];
+        foreach ($filteredProjectedAttributes as $attributes) {
+            foreach (array_keys($attributes) as $column) {
+                $columns[$column] = true;
+            }
+        }
+
+        foreach (array_keys($columns) as $column) {
+            $columnCases = [];
+            foreach ($data as $walletId => $balance) {
+                $value = $filteredProjectedAttributes[$walletId][$column] ?? null;
+                $valueSql = $value === null
+                    ? 'NULL'
+                    : $pdo->quote((string) $value);
+
+                $columnCases[] = 'WHEN id = '.$walletId.' THEN '.$valueSql;
+            }
+
+            $updatePayload[$column] = $connection->raw(
+                'CASE '.implode(' ', $columnCases).' ELSE '.$column.' END'
+            );
+        }
 
         return $this->wallet->newQuery()
             ->whereIn('id', array_keys($data))
-            ->update([
-                'balance' => $buildQuery,
-            ]);
+            ->update($updatePayload);
     }
 
     public function findById(int $id): ?Wallet
