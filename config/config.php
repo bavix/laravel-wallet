@@ -15,11 +15,11 @@ use Bavix\Wallet\Internal\Assembler\TransferQueryAssembler;
 use Bavix\Wallet\Internal\Events\BalanceUpdatedEvent;
 use Bavix\Wallet\Internal\Events\TransactionCreatedEvent;
 use Bavix\Wallet\Internal\Events\WalletCreatedEvent;
+use Bavix\Wallet\Internal\Projector\WalletBatchProjector;
 use Bavix\Wallet\Internal\Repository\PurchaseRepository;
 use Bavix\Wallet\Internal\Repository\TransactionRepository;
 use Bavix\Wallet\Internal\Repository\TransferRepository;
 use Bavix\Wallet\Internal\Repository\WalletRepository;
-use Bavix\Wallet\Internal\Projector\WalletBatchProjector;
 use Bavix\Wallet\Internal\Service\ClockService;
 use Bavix\Wallet\Internal\Service\ConnectionService;
 use Bavix\Wallet\Internal\Service\DatabaseService;
@@ -398,7 +398,6 @@ return [
          * The event triggered when a transaction is created.
          */
         'transaction_created' => TransactionCreatedEvent::class,
-
     ],
 
     /**

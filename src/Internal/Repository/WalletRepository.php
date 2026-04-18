@@ -79,7 +79,7 @@ final readonly class WalletRepository implements WalletRepositoryInterface
 
         foreach (array_keys($columns) as $column) {
             $columnCases = [];
-            foreach ($data as $walletId => $balance) {
+            foreach (array_keys($data) as $walletId) {
                 $value = $filteredProjectedAttributes[$walletId][$column] ?? null;
                 $valueSql = $value === null
                     ? 'NULL'
@@ -88,9 +88,7 @@ final readonly class WalletRepository implements WalletRepositoryInterface
                 $columnCases[] = 'WHEN id = '.$walletId.' THEN '.$valueSql;
             }
 
-            $updatePayload[$column] = $connection->raw(
-                'CASE '.implode(' ', $columnCases).' ELSE '.$column.' END'
-            );
+            $updatePayload[$column] = $connection->raw('CASE '.implode(' ', $columnCases).' ELSE '.$column.' END');
         }
 
         return $this->wallet->newQuery()
