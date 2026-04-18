@@ -30,14 +30,14 @@ final readonly class WalletRepository implements WalletRepositoryInterface
      */
     public function updateBalances(array $data, array $columnsByWalletId = []): int
     {
-        $filteredProjectedAttributes = [];
+        $filteredColumnsByWalletId = [];
         foreach ($columnsByWalletId as $walletId => $columns) {
             if (! array_key_exists($walletId, $data)) {
                 continue;
             }
 
             foreach ($columns as $column => $value) {
-                $filteredProjectedAttributes[$walletId][$column] = $value;
+                $filteredColumnsByWalletId[$walletId][$column] = $value;
             }
         }
 
@@ -48,8 +48,8 @@ final readonly class WalletRepository implements WalletRepositoryInterface
                 'balance' => current($data),
             ];
 
-            $projected = $filteredProjectedAttributes[$walletId]
-                ?? $filteredProjectedAttributes[(int) $walletId]
+            $projected = $filteredColumnsByWalletId[$walletId]
+                ?? $filteredColumnsByWalletId[(int) $walletId]
                 ?? [];
             $updatePayload = array_merge($updatePayload, $projected);
 
@@ -71,7 +71,7 @@ final readonly class WalletRepository implements WalletRepositoryInterface
         ];
 
         $columns = [];
-        foreach ($filteredProjectedAttributes as $attributes) {
+        foreach ($filteredColumnsByWalletId as $attributes) {
             foreach (array_keys($attributes) as $column) {
                 $columns[$column] = true;
             }
@@ -80,7 +80,7 @@ final readonly class WalletRepository implements WalletRepositoryInterface
         foreach (array_keys($columns) as $column) {
             $columnCases = [];
             foreach (array_keys($data) as $walletId) {
-                $value = $filteredProjectedAttributes[$walletId][$column] ?? null;
+                $value = $filteredColumnsByWalletId[$walletId][$column] ?? null;
                 $valueSql = $value === null
                     ? 'NULL'
                     : $pdo->quote((string) $value);

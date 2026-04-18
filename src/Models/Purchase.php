@@ -23,13 +23,16 @@ use Override;
  * @property DateTimeInterface $updated_at
  * @property Transfer $transfer
  */
+#[\Illuminate\Database\Eloquent\Attributes\Fillable([
+    'transfer_id',
+    'from_id',
+    'to_id',
+    'status',
+    'created_at',
+    'updated_at',
+])]
 final class Purchase extends Model
 {
-    /**
-     * @var list<string>
-     */
-    protected $fillable = ['transfer_id', 'from_id', 'to_id', 'status', 'created_at', 'updated_at'];
-
     #[Override]
     public function getTable(): string
     {

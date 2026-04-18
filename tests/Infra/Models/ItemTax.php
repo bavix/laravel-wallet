@@ -21,14 +21,10 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @method int getKey()
  */
+#[\Illuminate\Database\Eloquent\Attributes\Fillable(['name', 'quantity', 'price'])]
 final class ItemTax extends Model implements ProductLimitedInterface, Taxable
 {
     use HasWallet;
-
-    /**
-     * @var array<int, string>
-     */
-    protected $fillable = ['name', 'quantity', 'price'];
 
     #[\Override]
     public function getTable(): string

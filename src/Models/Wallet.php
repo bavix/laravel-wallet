@@ -56,6 +56,19 @@ use Illuminate\Support\Str;
  * @method \Illuminate\Database\Eloquent\Relations\HasMany<Transfer, self> transfers()
  * @method \Illuminate\Database\Eloquent\Relations\HasMany<Transfer, self> receivedTransfers()
  */
+#[\Illuminate\Database\Eloquent\Attributes\Fillable([
+    'holder_type',
+    'holder_id',
+    'name',
+    'slug',
+    'uuid',
+    'description',
+    'meta',
+    'balance',
+    'decimal_places',
+    'created_at',
+    'updated_at',
+])]
 class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchangeable
 {
     use CanConfirm;
@@ -63,23 +76,6 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     use CanPayFloat;
     use HasGift;
     use SoftDeletes;
-
-    /**
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'holder_type',
-        'holder_id',
-        'name',
-        'slug',
-        'uuid',
-        'description',
-        'meta',
-        'balance',
-        'decimal_places',
-        'created_at',
-        'updated_at',
-    ];
 
     /**
      * @var array<string, int|string>

@@ -22,14 +22,10 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @method int getKey()
  */
+#[\Illuminate\Database\Eloquent\Attributes\Fillable(['name', 'quantity', 'price', 'prices'])]
 final class ItemMultiPrice extends Model implements ProductLimitedInterface
 {
     use HasWallet;
-
-    /**
-     * @var array<int, string>
-     */
-    protected $fillable = ['name', 'quantity', 'price', 'prices'];
 
     #[\Override]
     public function getTable(): string

@@ -15,14 +15,10 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @method int getKey()
  */
+#[\Illuminate\Database\Eloquent\Attributes\Fillable(['name', 'email'])]
 final class UserFloat extends Model implements Wallet, WalletFloat
 {
     use HasWalletFloat;
-
-    /**
-     * @var array<int, string>
-     */
-    protected $fillable = ['name', 'email'];
 
     #[\Override]
     public function getTable(): string

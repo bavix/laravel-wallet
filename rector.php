@@ -12,7 +12,7 @@ return RectorConfig::configure()
     ->withPaths([__DIR__.'/src', __DIR__.'/tests'])
     ->withRootFiles()
     ->withSkip([MigrateToSimplifiedAttributeRector::class, RemoveDeadZeroAndOneOperationRector::class])
-    ->withSets([LaravelLevelSetList::UP_TO_LARAVEL_120])
+    ->withSets([LaravelLevelSetList::UP_TO_LARAVEL_130])
     ->withPreparedSets(
         deadCode: true,
         codeQuality: true,

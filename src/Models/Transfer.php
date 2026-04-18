@@ -36,26 +36,22 @@ use Override;
  *
  * @method int getKey()
  */
+#[\Illuminate\Database\Eloquent\Attributes\Fillable([
+    'status',
+    'discount',
+    'deposit_id',
+    'withdraw_id',
+    'from_id',
+    'to_id',
+    'uuid',
+    'fee',
+    'extra',
+    'created_at',
+    'updated_at',
+])]
 class Transfer extends Model
 {
     use SoftDeletes;
-
-    /**
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'status',
-        'discount',
-        'deposit_id',
-        'withdraw_id',
-        'from_id',
-        'to_id',
-        'uuid',
-        'fee',
-        'extra',
-        'created_at',
-        'updated_at',
-    ];
 
     #[Override]
     public function getTable(): string

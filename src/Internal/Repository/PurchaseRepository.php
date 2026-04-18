@@ -5,18 +5,20 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Internal\Repository;
 
 use Bavix\Wallet\Enums\TransferStatus;
+use Bavix\Wallet\Internal\Service\ClockServiceInterface;
 use Bavix\Wallet\Models\Purchase;
 
 final readonly class PurchaseRepository implements PurchaseRepositoryInterface
 {
     public function __construct(
-        private Purchase $purchase
+        private Purchase $purchase,
+        private ClockServiceInterface $clockService,
     ) {
     }
 
     public function syncByTransfers(array $transfers): void
     {
-        $now = now();
+        $now = $this->clockService->now();
         $rows = [];
         foreach ($transfers as $transfer) {
             $rows[] = [
@@ -39,7 +41,7 @@ final readonly class PurchaseRepository implements PurchaseRepositoryInterface
             ->whereIn('transfer_id', $transferIds)
             ->update([
                 'status' => $status->value,
-                'updated_at' => now(),
+                'updated_at' => $this->clockService->now(),
             ]);
     }
 }

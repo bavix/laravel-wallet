@@ -21,14 +21,10 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @method int getKey()
  */
+#[\Illuminate\Database\Eloquent\Attributes\Fillable(['name', 'quantity', 'price'])]
 final class ItemMerchantFeeDeductible extends Model implements ProductLimitedInterface, MerchantFeeDeductible
 {
     use HasWallet;
-
-    /**
-     * @var list<string>
-     */
-    protected $fillable = ['name', 'quantity', 'price'];
 
     #[\Override]
     public function getTable(): string
