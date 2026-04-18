@@ -275,9 +275,16 @@ Replace `Bavix\Wallet\Interfaces\Product` to `Bavix\Wallet\Interfaces\ProductLim
    - `UuidFactoryServiceInterface`, `UuidFactoryService`;
    - `wallet.internal.uuid` config key;
 5. `Customer::paid()` / `CartPay::paid()` were removed.
-   Use `PurchaseQuery` + `PurchaseQueryHandlerInterface` for purchase checks.
-6. `PurchaseServiceInterface` is now a legacy extension point and will be removed in v14.
+    Use `PurchaseQuery` + `PurchaseQueryHandlerInterface` for purchase checks.
+6. `PurchaseServiceInterface::already()` and `PurchaseService` are deprecated.
+   They are now legacy extension points and will be removed in v14.
    New integrations should use `PurchaseQueryHandlerInterface`.
+7. For transaction state projections (for example issue #1015), use transformer extension point:
+   - implement custom `TransactionDtoTransformerInterface`;
+   - read `StateAwareTransactionDtoInterface` and map `balance_before` / `balance_after`;
+   - compute `state_hash` in your app code (business rule stays outside package core).
+8. For wallet state projections, use `WalletBatchProjectorInterface`.
+   Projector adds custom wallet columns in same balance update flow.
 
 Example migration for purchase checks:
 
