@@ -398,7 +398,6 @@ return [
          * The event triggered when a transaction is created.
          */
         'transaction_created' => TransactionCreatedEvent::class,
-
     ],
 
     /**
