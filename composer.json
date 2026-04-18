@@ -26,8 +26,8 @@
         "ext-json": "*",
         "ext-pdo": "*",
         "brick/math": "~0.10",
-        "illuminate/contracts": "^12.0|^13.0",
-        "illuminate/database": "^12.0|^13.0",
+        "illuminate/contracts": "^13.0",
+        "illuminate/database": "^13.0",
         "ramsey/uuid": "^4.0"
     },
     "require-dev": {
@@ -36,11 +36,11 @@
         "ergebnis/phpstan-rules": "^2.1",
         "infection/infection": "~0.27",
         "larastan/larastan": "^3.0",
-        "laravel/cashier": "^15.0|^16.0",
+        "laravel/cashier": "^16.0",
         "nunomaduro/collision": "^8.1",
-        "orchestra/testbench": "^10.0|^11.0",
+        "orchestra/testbench": "^11.0",
         "phpstan/phpstan": "^2.1",
-        "phpunit/phpunit": "^11.0|^12.0",
+        "phpunit/phpunit": "^12.0|^13.0",
         "rector/rector": "^2.0",
         "symplify/easy-coding-standard": "^13.0"
     },

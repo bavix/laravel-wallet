@@ -8,7 +8,6 @@ use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Models\Wallet;
 use Illuminate\Database\Eloquent\ModelNotFoundException as EloquentModelNotFoundException;
-use Illuminate\Database\Query\Expression;
 
 final readonly class WalletRepository implements WalletRepositoryInterface
 {
@@ -89,7 +88,7 @@ final readonly class WalletRepository implements WalletRepositoryInterface
                 $columnCases[] = 'WHEN id = '.$walletId.' THEN '.$valueSql;
             }
 
-            $updatePayload[$column] = new Expression('CASE '.implode(' ', $columnCases).' ELSE '.$column.' END');
+            $updatePayload[$column] = $connection->raw('CASE '.implode(' ', $columnCases).' ELSE '.$column.' END');
         }
 
         return $this->wallet->newQuery()
