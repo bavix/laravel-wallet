@@ -373,7 +373,10 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
             $configure['transfer_lazy'] ?? TransferLazyDtoAssembler::class
         );
 
-$this->app->singleton(TransferDtoAssemblerInterface::class, $configure['transfer'] ?? TransferDtoAssembler::class);
+        $this->app->singleton(
+            TransferDtoAssemblerInterface::class,
+            $configure['transfer'] ?? TransferDtoAssembler::class
+        );
 
         $this->app->singleton(
             TransactionQueryAssemblerInterface::class,
