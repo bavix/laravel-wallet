@@ -11,20 +11,39 @@ use Bavix\Wallet\Services\AtmServiceInterface;
 use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Services\TransactionServiceInterface;
+use Bavix\Wallet\Test\Infra\ProjectionTestServiceProvider;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\PackageModels\TransactionState;
 use Bavix\Wallet\Test\Infra\PackageModels\WalletState;
-use Bavix\Wallet\Test\Infra\ProjectionTestCase;
 use Bavix\Wallet\Test\Infra\Projectors\WalletStateBatchProjector;
+use Bavix\Wallet\Test\Infra\TestCase;
 use Bavix\Wallet\Test\Infra\Transform\TransactionStateDtoTransformer;
+use Illuminate\Foundation\Application;
 use Override;
 
 /**
  * @internal
  */
-final class Issue1015ProjectionTest extends ProjectionTestCase
+final class Issue1015ProjectionTest extends TestCase
 {
+    /**
+     * @param Application $app
+     * @return non-empty-array<int, string>
+     */
+    #[Override]
+    protected function getPackageProviders($app): array
+    {
+        $providers = parent::getPackageProviders($app);
+
+        $app['config']->set('wallet.transaction.model', TransactionState::class);
+        $app['config']->set('wallet.wallet.model', WalletState::class);
+
+        $providers[] = ProjectionTestServiceProvider::class;
+
+        return $providers;
+    }
+
     #[Override]
     protected function setUp(): void
     {

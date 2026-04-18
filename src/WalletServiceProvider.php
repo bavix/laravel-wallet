@@ -179,6 +179,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
          *     cache?: array{driver: string|null},
          *     repositories?: array<class-string|null>,
          *     transformers?: array<class-string|null>,
+         *     projectors?: array<class-string|null>,
          *     assemblers?: array<class-string|null>,
          *     events?: array<class-string|null>,
          *     purchase?: array{model?: class-string|null},
