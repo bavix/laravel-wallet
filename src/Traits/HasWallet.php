@@ -366,12 +366,11 @@ trait HasWallet
         $amountValue = $amount;
 
         return app(AtomicServiceInterface::class)->block(
-        // The wallet instance
-            $this,
-
-                // Create a new withdrawal transaction.
-                fn (): Transaction => app(TransactionServiceInterface::class)->makeOne(
             // The wallet instance
+            $this,
+            // Create a new withdrawal transaction.
+            fn (): Transaction => app(TransactionServiceInterface::class)->makeOne(
+                // The wallet instance
                 $this,
                 // The transaction type
                 TransactionType::Withdraw,
