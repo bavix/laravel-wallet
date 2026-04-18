@@ -94,11 +94,7 @@ final readonly class TransactionService implements TransactionServiceInterface
 
             $uuid = $dto->getUuid();
 
-            $stateAwareTransactions[$uuid] = new StateAwareTransactionDto(
-                $dto,
-                $beforeBalance,
-                $nextBalance,
-            );
+            $stateAwareTransactions[$uuid] = new StateAwareTransactionDto($dto, $beforeBalance, $nextBalance);
             $currentBalances[$walletId] = $nextBalance;
         }
 

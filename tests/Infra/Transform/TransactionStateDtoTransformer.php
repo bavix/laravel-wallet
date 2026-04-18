@@ -10,11 +10,11 @@ use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformer;
 use Bavix\Wallet\Internal\Transform\TransactionDtoTransformerInterface;
 
-final class TransactionStateDtoTransformer implements TransactionDtoTransformerInterface
+final readonly class TransactionStateDtoTransformer implements TransactionDtoTransformerInterface
 {
     public function __construct(
-        private readonly TransactionDtoTransformer $transactionDtoTransformer,
-        private readonly MathServiceInterface $mathService,
+        private TransactionDtoTransformer $transactionDtoTransformer,
+        private MathServiceInterface $mathService,
     ) {
     }
 

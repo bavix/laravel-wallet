@@ -24,8 +24,12 @@ final class WalletRepositoryProjectionTest extends TestCase
         $firstWallet = $first->wallet;
         $secondWallet = $second->wallet;
 
-        $firstWallet->forceFill(['meta' => null])->saveQuietly();
-        $secondWallet->forceFill(['meta' => null])->saveQuietly();
+        $firstWallet->forceFill([
+            'meta' => null,
+        ])->saveQuietly();
+        $secondWallet->forceFill([
+            'meta' => null,
+        ])->saveQuietly();
 
         $walletRepository = app(WalletRepositoryInterface::class);
         $walletRepository->updateBalances(
@@ -34,8 +38,12 @@ final class WalletRepositoryProjectionTest extends TestCase
                 $secondWallet->getKey() => '222',
             ],
             [
-                999_999 => ['name' => 'must-be-skipped'],
-                $firstWallet->getKey() => ['meta' => '{"projection":true}'],
+                999_999 => [
+                    'name' => 'must-be-skipped',
+                ],
+                $firstWallet->getKey() => [
+                    'meta' => '{"projection":true}',
+                ],
             ],
         );
 
