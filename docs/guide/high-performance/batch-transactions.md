@@ -1,4 +1,4 @@
-# Batch Transactions
+# Batch Transactions <VersionTag version="v9.5.0" />
 
 Sometimes situations arise when there is a need to make multiple changes to wallets.
 For example, we need to change the balance of many wallets at once. For example, the system administrator accrues a bonus for participating in some promotion. Previously, the code would look like this:
@@ -89,7 +89,7 @@ app(AtomicServiceInterface::class)->blocks($wallets, function () use ($wallets, 
 
 ---
 
-In version 10.x, it became possible to create transactions with a given uuid (generate on the client side).
+Since v10.0.0, you can create transactions with a provided UUID (generated on the client side).
 The main thing is to keep uniqueness.
 
 ```php

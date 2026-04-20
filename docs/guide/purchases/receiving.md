@@ -23,7 +23,7 @@ class User extends Model implements Customer
 Add the `HasWallet` trait and interface to `Item` model.
 If we want to achieve multi wallets for a product, then we need to add `HasWallets`.
 
-Starting from version 9.x there are two product interfaces:
+Since v9.0.0, there are two product interfaces:
 - For an unlimited number of products (`ProductInterface`);
 - For a limited number of products (`ProductLimitedInterface`);
 

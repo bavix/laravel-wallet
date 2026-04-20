@@ -1,4 +1,4 @@
-# Transaction Filter
+# Transaction Filter <VersionTag version="v7.3.0" />
 
 Often developers ask me about the `transactions` method.
 Yes, this method displays ALL transactions for the wallet owner.

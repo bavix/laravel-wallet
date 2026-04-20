@@ -1,4 +1,4 @@
-# Credit Limits
+# Credit Limits <VersionTag version="v7.3.0" />
 
 If you need the ability to have wallets have a credit limit, then this functionality is for you.
 

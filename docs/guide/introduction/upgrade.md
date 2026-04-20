@@ -60,7 +60,7 @@ Replace `Taxing` to `Taxable`.
 
 ## 3.1.x → 4.0.x
 
-> If you are using php 7.1, then version 4.0 is not available to you. 
+> If you are using PHP 7.1, then v4.0.0 is not available to you. 
 > You need to update php.
 
 Removed support for older versions of `laravel/cashier`. We support 7+.
@@ -190,7 +190,7 @@ The contract did not change globally, added more stringency and toned down the p
 On a basket of 150 products, the acceleration is a whopping 24x.
 
 All changes can be found in the [pull request](https://github.com/bavix/laravel-wallet/pull/407/files). 
-The kernel has changed globally, I would not recommend switching to version 7.0.0 at the very beginning, there may be bugs. 
+The kernel has changed globally; I do not recommend switching to v7.0.0 at the very beginning, because there may be bugs. 
 I advise you should at least 7.0.1.
 
 ## 7.x.x → 8.0.x
@@ -226,7 +226,7 @@ $cart = $cart->withItem($product);
 ## 8.1.x+ → 9.0.x
 
 > The logic of storing transfers between accounts has changed.
-> Previously, money could be credited to the user directly, but starting from version nine, all transactions go strictly between wallets. 
+> Previously, money could be credited to the user directly, but starting from v9.0.0, all transactions go strictly between wallets.
 > Thanks to this approach, finally, there will be full-fledged work with uuid identifiers in the project.
 
 To migrate to the correct structure, you need to run the command:

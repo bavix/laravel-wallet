@@ -7,7 +7,7 @@ The transfer takes place between wallets.
 
 ## User Model
 
-<!--@include: _include/models/user_simple_float.md -->
+<!--@include: ../../_include/models/user_simple_float.md -->
 
 ### Example contract
 

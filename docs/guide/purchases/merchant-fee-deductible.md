@@ -1,4 +1,4 @@
-# Merchant Fee Deductible
+# Merchant Fee Deductible <VersionTag version="v11.4.3" />
 
 The `MerchantFeeDeductible` interface allows you to deduct fees from the merchant's payout instead of adding them to the customer's payment. This means customers pay only the listed product price, while merchants receive the product price minus the fee.
 

@@ -8,7 +8,7 @@ For example, priority in search results.
 
 ## User Model
 
-<!--@include: _include/models/user_simple_float.md -->
+<!--@include: ../../_include/models/user_simple_float.md -->
 
 ## Make a Withdraw
 

@@ -1,4 +1,4 @@
-# Transaction
+# Transaction <VersionTag version="v7.1.0" />
 
 You definitely need to know the feature of transactions. The wallet is automatically blocked from the moment it is used until the end of the transaction. Therefore, it is necessary to use the wallet closer to the end of the transaction.
 

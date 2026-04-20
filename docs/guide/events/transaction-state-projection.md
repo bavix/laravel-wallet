@@ -1,4 +1,4 @@
-# Transaction State Projection
+# Transaction State Projection <VersionTag version="v12.0.0" />
 
 Issue [#1015](https://github.com/bavix/laravel-wallet/issues/1015) needs per-transaction state (`balance_before`, `balance_after`, `state_hash`) in one atomic batch.
 

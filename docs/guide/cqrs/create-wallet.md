@@ -1,4 +1,4 @@
-# Asynchronous wallet creation
+# Asynchronous wallet creation <VersionTag version="v9.2.0" />
 
 The idea is based on the division into teams for creating wallets, transactions, etc. The creation of a wallet can be accelerated if the client "generates a wallet himself".
 

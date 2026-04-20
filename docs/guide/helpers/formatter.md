@@ -1,4 +1,4 @@
-# Formatter
+# Formatter <VersionTag version="v11.0.0" />
 
 Sometimes you need to convert the balance to some format. A small and simple helper has appeared that will simplify the process a little.
 
