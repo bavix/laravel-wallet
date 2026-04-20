@@ -264,7 +264,7 @@ Replace `Bavix\Wallet\Interfaces\Product` to `Bavix\Wallet\Interfaces\ProductLim
 
 ## 11.x.x → 12.0.x
 
-1. Minimum Laravel version is now `^12.0`;
+1. Minimum Laravel version is now `^13.0`;
 2. Deprecated constants were removed:
    - `Transaction::TYPE_DEPOSIT`, `Transaction::TYPE_WITHDRAW`;
    - `Transfer::STATUS_EXCHANGE`, `Transfer::STATUS_TRANSFER`, `Transfer::STATUS_PAID`, `Transfer::STATUS_REFUND`, `Transfer::STATUS_GIFT`;
