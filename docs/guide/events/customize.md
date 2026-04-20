@@ -1,4 +1,4 @@
-# Customizing events
+# Customizing events <VersionTag version="v7.2.0" />
 
 Sometimes you want to modify the standard events of a package. This is done quite simply.
 

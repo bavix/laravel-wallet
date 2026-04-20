@@ -1,4 +1,4 @@
-# Wallet State Projection
+# Wallet State Projection <VersionTag version="v12.0.0" />
 
 If you need custom wallet fields (`held_balance`, `balance_after`, `state_hash`),
 use `WalletBatchProjectorInterface`.

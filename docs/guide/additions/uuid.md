@@ -1,8 +1,8 @@
-# Laravel Wallet UUID
+# Laravel Wallet UUID <VersionTag version="v9.0.0" />
 
 > Using uuid greatly reduces package performance. We recommend using int.
 
-Often there is a need to store an identifier in uuid/ulid. Since version 9.0 laravel-wallet supports string identifiers, you only need to perform the migration.
+If you need UUID/ULID identifiers, Laravel Wallet supports string identifiers since v9.0.0, so you only need to run the migration.
 
 To simplify the process, you can use a ready-made package.
 

@@ -1,4 +1,4 @@
-# Race Condition
+# Race Condition <VersionTag version="v7.1.0" />
 
 A common issue in the issue is about race conditions.
 

@@ -1,4 +1,4 @@
-# Batch Transfers
+# Batch Transfers <VersionTag version="v9.5.0" />
 
 If you need multiple transfers between wallets, you can use a high-performance handle. It is worth remembering that the pen does not check the balance of the wallet before transferring, you need to take care of this yourself.
 
@@ -30,7 +30,7 @@ The package will optimize queries and execute them in a single transaction. I st
 
 ---
 
-In version 10.x, it became possible to create transactions&transfers with a given uuid (generate on the client side).
+Since v10.0.0, you can create transactions and transfers with a provided UUID (generated on the client side).
 The main thing is to keep uniqueness.
 
 ```php

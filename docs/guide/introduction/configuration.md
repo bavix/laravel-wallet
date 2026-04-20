@@ -1,4 +1,4 @@
-# Configuration
+# Configuration <VersionTag version="v10.0.1" />
 
 Though this package is crafted to suit most of your needs by default, you can edit the configuration file to suit certain demands.
 
