@@ -1,4 +1,4 @@
-# Introduction <VersionTag version="v11.0.5" />
+# Introduction
 
 ---
 
