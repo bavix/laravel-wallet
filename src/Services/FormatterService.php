@@ -17,7 +17,7 @@ final readonly class FormatterService implements FormatterServiceInterface
         return (string) BigDecimal::ten()
             ->power($decimalPlaces)
             ->multipliedBy(BigDecimal::of($amount))
-            ->toScale(0, RoundingMode::DOWN);
+            ->toScale(0, RoundingMode::Down);
     }
 
     public function floatValue(string|int|float $amount, int $decimalPlaces): string
