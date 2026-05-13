@@ -7,7 +7,9 @@ namespace Bavix\Wallet\Internal\Dto;
 use Bavix\Wallet\Enums\TransactionType;
 use DateTimeImmutable;
 
-/** @immutable */
+/**
+ * @immutable
+ */
 final readonly class TransactionDto implements TransactionDtoInterface
 {
     /**

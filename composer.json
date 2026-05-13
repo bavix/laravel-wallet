@@ -25,7 +25,7 @@
         "php": "^8.3",
         "ext-json": "*",
         "ext-pdo": "*",
-        "brick/math": "~0.10",
+        "brick/math": ">=0.14.2 <1.0.0",
         "illuminate/contracts": "^13.0",
         "illuminate/database": "^13.0",
         "ramsey/uuid": "^4.0"

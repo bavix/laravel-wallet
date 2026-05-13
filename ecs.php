@@ -16,4 +16,4 @@ return ECSConfig::configure()
     ])
     ->withRootFiles()
     ->withSkip([GeneralPhpdocAnnotationRemoveFixer::class, FullyQualifiedStrictTypesFixer::class])
-    ->withPreparedSets(psr12: true, common: true, symplify: true, laravel: true, strict: true);
+    ->withPreparedSets(psr12: true, common: true, symplify: true, laravel: true);
