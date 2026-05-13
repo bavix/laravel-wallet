@@ -1,5 +1,20 @@
 # Changelog
 
+## 12.0.1 - 2026-05-13
+
+### What's Changed
+
+* tags by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1086
+* removed the unnecessary by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1087
+* Fix brick math 014 rounding mode by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1089
+* fix: use PascalCase RoundingMode cases for brick/math ^0.14 compatibility by [@bharb82](https://github.com/bharb82) in https://github.com/bavix/laravel-wallet/pull/1088
+
+### New Contributors
+
+* [@bharb82](https://github.com/bharb82) made their first contribution in https://github.com/bavix/laravel-wallet/pull/1088
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/12.0.0...12.0.1
+
 ## 12.0.0 - 2026-04-18
 
 ### What's Changed
