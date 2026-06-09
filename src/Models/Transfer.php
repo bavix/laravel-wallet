@@ -8,6 +8,7 @@ use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Internal\Observers\TransferObserver;
 use function config;
 use DateTimeInterface;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -49,6 +50,7 @@ use Override;
     'created_at',
     'updated_at',
 ])]
+#[ObservedBy(TransferObserver::class)]
 class Transfer extends Model
 {
     use SoftDeletes;
@@ -130,11 +132,5 @@ class Transfer extends Model
             'status' => TransferStatus::class,
             'status_last' => TransferStatus::class,
         ];
-    }
-
-    #[Override]
-    protected static function booted(): void
-    {
-        static::observe(TransferObserver::class);
     }
 }
