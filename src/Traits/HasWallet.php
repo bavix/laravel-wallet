@@ -156,7 +156,9 @@ trait HasWallet
         // The transaction model class is retrieved from the configuration using `config('wallet.transaction.model', Transaction::class)`.
         // The relationship is defined using the `wallet_id` foreign key.
         /** @var class-string<Transaction> $model */
-        $model = config('wallet.transaction.model', Transaction::class);
+        $model = config()
+            ->string('wallet.transaction.model', Transaction::class);
+
         /** @var HasMany<Transaction, WalletModel> $transactions */
         $transactions = $wallet->hasMany($model, 'wallet_id');
 
@@ -187,7 +189,9 @@ trait HasWallet
         // The relationship is defined using the `payable` foreign key.
         // The `payable` foreign key is used to associate the transactions with the wallet.
         /** @var class-string<Transaction> $model */
-        $model = config('wallet.transaction.model', Transaction::class);
+        $model = config()
+            ->string('wallet.transaction.model', Transaction::class);
+
         /** @var MorphMany<Transaction, Model> $morphMany */
         $morphMany = $wallet->morphMany(
             $model,
@@ -465,7 +469,9 @@ trait HasWallet
         // The transfer model class is retrieved from the configuration using `config('wallet.transfer.model', Transfer::class)`.
         // The relationship is defined using the `from_id` foreign key.
         /** @var class-string<Transfer> $model */
-        $model = config('wallet.transfer.model', Transfer::class);
+        $model = config()
+            ->string('wallet.transfer.model', Transfer::class);
+
         /** @var HasMany<Transfer, WalletModel> $hasMany */
         $hasMany = $wallet
             ->hasMany(
@@ -505,7 +511,9 @@ trait HasWallet
         // The transfer model class is retrieved from the configuration using `config('wallet.transfer.model', Transfer::class)`.
         // The relationship is defined using the `to_id` foreign key.
         /** @var class-string<Transfer> $model */
-        $model = config('wallet.transfer.model', Transfer::class);
+        $model = config()
+            ->string('wallet.transfer.model', Transfer::class);
+
         /** @var HasMany<Transfer, WalletModel> $hasMany */
         $hasMany = $wallet
             ->hasMany(

@@ -107,7 +107,9 @@ trait HasWallets
         // Define a MorphMany relationship between the current model (the "holder")
         // and the wallet model.
         /** @var class-string<WalletModel> $model */
-        $model = config('wallet.wallet.model', WalletModel::class);
+        $model = config()
+            ->string('wallet.wallet.model', WalletModel::class);
+
         /** @var MorphMany<WalletModel, Model> $morphMany */
         $morphMany = $this
             ->morphMany(

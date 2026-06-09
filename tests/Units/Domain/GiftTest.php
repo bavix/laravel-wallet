@@ -122,8 +122,9 @@ final class GiftTest extends TestCase
         $first->deposit($product->getAmountProduct($first));
         $transfer = $first->wallet->gift($second, $product);
 
-        /** @var string $purchaseTable */
-        $purchaseTable = config('wallet.purchase.table', 'purchase');
+        $purchaseTable = config()
+            ->string('wallet.purchase.table', 'purchase');
+
         DB::table($purchaseTable)
             ->where('transfer_id', $transfer->getKey())
             ->delete();

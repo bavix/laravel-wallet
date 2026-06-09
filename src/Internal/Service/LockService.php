@@ -25,8 +25,8 @@ final class LockService implements LockServiceInterface
         CacheFactory $cacheFactory,
         private readonly int $seconds
     ) {
-        /** @var string|null $lockDriver */
-        $lockDriver = config('wallet.lock.driver', 'array');
+        $lockDriver = config()
+            ->string('wallet.lock.driver', 'array');
         $this->cache = $cacheFactory->store($lockDriver);
         $this->lockedKeys = $cacheFactory->store('array');
     }

@@ -188,7 +188,8 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
          *     wallet?: array{model?: class-string|null},
          * } $configure
          */
-        $configure = config('wallet', []);
+        $configure = config()
+            ->array('wallet', []);
 
         $this->internal($configure['internal'] ?? []);
         $this->services($configure['services'] ?? [], $configure['cache'] ?? []);

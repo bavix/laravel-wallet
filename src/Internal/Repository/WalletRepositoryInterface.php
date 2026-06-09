@@ -19,7 +19,7 @@ interface WalletRepositoryInterface
      *     slug?: string,
      *     uuid: string,
      *     description?: string,
-     *     meta: array<mixed>|null,
+     *     meta?: array<mixed>|null,
      *     balance?: int,
      *     decimal_places?: int,
      * } $attributes
