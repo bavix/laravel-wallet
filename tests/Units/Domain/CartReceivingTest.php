@@ -250,8 +250,9 @@ final class CartReceivingTest extends TestCase
         $firstTransfer = reset($transfers);
         self::assertInstanceOf(Transfer::class, $firstTransfer);
 
-        /** @var string $purchaseTable */
-        $purchaseTable = config('wallet.purchase.table', 'purchase');
+        $purchaseTable = config()
+            ->string('wallet.purchase.table', 'purchase');
+
         DB::table($purchaseTable)
             ->where('transfer_id', $firstTransfer->getKey())
             ->delete();
@@ -282,8 +283,9 @@ final class CartReceivingTest extends TestCase
         $firstTransfer = reset($transfers);
         self::assertInstanceOf(Transfer::class, $firstTransfer);
 
-        /** @var string $purchaseTable */
-        $purchaseTable = config('wallet.purchase.table', 'purchase');
+        $purchaseTable = config()
+            ->string('wallet.purchase.table', 'purchase');
+
         DB::table($purchaseTable)
             ->where('transfer_id', $firstTransfer->getKey())
             ->delete();

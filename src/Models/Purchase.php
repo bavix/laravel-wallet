@@ -37,9 +37,8 @@ final class Purchase extends Model
     public function getTable(): string
     {
         if ((string) $this->table === '') {
-            /** @var string $table */
-            $table = config('wallet.purchase.table', 'wallet_purchases');
-            $this->table = $table;
+            $this->table = config()
+                ->string('wallet.purchase.table', 'wallet_purchases');
         }
 
         return parent::getTable();
@@ -51,7 +50,8 @@ final class Purchase extends Model
     public function transfer(): BelongsTo
     {
         /** @var class-string<Transfer> $model */
-        $model = config('wallet.transfer.model', Transfer::class);
+        $model = config()
+            ->string('wallet.transfer.model', Transfer::class);
 
         return $this->belongsTo($model, 'transfer_id');
     }
@@ -62,7 +62,8 @@ final class Purchase extends Model
     public function from(): BelongsTo
     {
         /** @var class-string<Wallet> $model */
-        $model = config('wallet.wallet.model', Wallet::class);
+        $model = config()
+            ->string('wallet.wallet.model', Wallet::class);
 
         return $this->belongsTo($model, 'from_id');
     }
@@ -73,7 +74,8 @@ final class Purchase extends Model
     public function to(): BelongsTo
     {
         /** @var class-string<Wallet> $model */
-        $model = config('wallet.wallet.model', Wallet::class);
+        $model = config()
+            ->string('wallet.wallet.model', Wallet::class);
 
         return $this->belongsTo($model, 'to_id');
     }

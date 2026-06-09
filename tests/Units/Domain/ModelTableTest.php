@@ -64,8 +64,8 @@ final class ModelTableTest extends TestCase
         $from->deposit(100);
         $transfer = $from->transfer($to, 30);
 
-        /** @var string $purchaseTable */
-        $purchaseTable = config('wallet.purchase.table', 'purchase');
+        $purchaseTable = config()
+            ->string('wallet.purchase.table', 'purchase');
         self::assertFalse(DB::table($purchaseTable)->where('transfer_id', $transfer->getKey())->exists());
     }
 

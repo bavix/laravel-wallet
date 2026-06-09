@@ -27,15 +27,31 @@ final readonly class WalletService implements WalletServiceInterface
 
     public function create(Model $model, array $data): Wallet
     {
+        /**
+         * @var array{
+         *     name?: string,
+         *     slug?: string,
+         *     description?: string,
+         *     meta?: array<mixed>|null,
+         *     balance?: int,
+         *     decimal_places?: int,
+         * }
+         */
+        $default = config()
+            ->array('wallet.wallet.creating', []);
+
+        /** @var string|int $holderId */
+        $holderId = $model->getKey();
+
         $wallet = $this->walletRepository->create(array_merge(
-            config('wallet.wallet.creating', []),
+            $default,
             [
                 'uuid' => $this->identifierFactoryService->generate(),
             ],
             $data,
             [
                 'holder_type' => $model->getMorphClass(),
-                'holder_id' => $model->getKey(),
+                'holder_id' => $holderId,
             ]
         ));
 

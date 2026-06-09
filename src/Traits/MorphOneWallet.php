@@ -34,7 +34,8 @@ trait MorphOneWallet
          *
          * @var class-string<WalletModel>
          */
-        $related = config('wallet.wallet.model', WalletModel::class);
+        $related = config()
+            ->string('wallet.wallet.model', WalletModel::class);
 
         // Eager load the wallet for the related model.
         /** @var MorphOne<WalletModel, Model> $morphOne */
@@ -44,7 +45,8 @@ trait MorphOneWallet
             ->withTrashed() // Include soft deleted wallets.
             ->where(
                 'slug',
-                (string) config('wallet.wallet.default.slug', 'default')
+                config()
+                    ->string('wallet.wallet.default.slug', 'default')
             ) // Filter by the default wallet slug.
             ->withDefault(static function (WalletModel $wallet, object $holder) use (
                 $castService
@@ -57,16 +59,20 @@ trait MorphOneWallet
                 /** @var string $slug */
                 $slug = method_exists($model, 'getDynamicDefaultSlug')
                     ? $model->getDynamicDefaultSlug()
-                    : config('wallet.wallet.default.slug', 'default');
+                    : config()
+                        ->string('wallet.wallet.default.slug', 'default');
 
                 // Fill the default wallet attributes.
                 /** @var array<string, mixed> $creating */
-                $creating = config('wallet.wallet.creating', []);
+                $creating = config()
+                    ->array('wallet.wallet.creating', []);
                 /** @var array<string, mixed> $defaultMeta */
-                $defaultMeta = config('wallet.wallet.default.meta', []);
+                $defaultMeta = config()
+                    ->array('wallet.wallet.default.meta', []);
                 /** @var array<string, mixed> $attributes */
                 $attributes = array_merge($creating, [
-                    'name' => (string) config('wallet.wallet.default.name', 'Default Wallet'), // Default wallet name.
+                    'name' => config()
+                        ->string('wallet.wallet.default.name', 'Default Wallet'), // Default wallet name.
                     'slug' => $slug, // Default wallet slug.
                     'meta' => $defaultMeta, // Default wallet metadata.
                     'balance' => 0, // Default wallet balance.

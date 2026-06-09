@@ -496,7 +496,14 @@ return [
         /**
          * The configuration options for creating wallets.
          *
-         * @var array<string, mixed>
+         * @var array{
+         *     name?: string,
+         *     slug?: string,
+         *     description?: string,
+         *     meta?: array<mixed>|null,
+         *     balance?: int,
+         *     decimal_places?: int,
+         * }
          */
         'creating' => [],
 
