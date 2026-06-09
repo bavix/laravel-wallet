@@ -12,6 +12,7 @@ use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\CastServiceInterface;
 use function config;
 use DateTimeInterface;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -51,6 +52,7 @@ use Override;
     'created_at',
     'updated_at',
 ])]
+#[ObservedBy(TransactionObserver::class)]
 class Transaction extends Model
 {
     use SoftDeletes;
@@ -131,11 +133,5 @@ class Transaction extends Model
             'meta' => 'json',
             'type' => TransactionType::class,
         ];
-    }
-
-    #[Override]
-    protected static function booted(): void
-    {
-        static::observe(TransactionObserver::class);
     }
 }
