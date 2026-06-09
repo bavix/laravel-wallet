@@ -1,5 +1,18 @@
 # Changelog
 
+## 12.0.2 - 2026-06-09
+
+### What's Changed
+
+* Avoid define observer within boot method of models by [@hosni](https://github.com/hosni) in https://github.com/bavix/laravel-wallet/pull/1090
+* Ensure data types of config values by [@hosni](https://github.com/hosni) in https://github.com/bavix/laravel-wallet/pull/1091
+
+### New Contributors
+
+* [@hosni](https://github.com/hosni) made their first contribution in https://github.com/bavix/laravel-wallet/pull/1090
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/12.0.1...12.0.2
+
 ## 12.0.1 - 2026-05-13
 
 ### What's Changed
