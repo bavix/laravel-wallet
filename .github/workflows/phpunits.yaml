@@ -88,7 +88,7 @@ jobs:
     steps:
       - name: Checkout
         id: git-checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup cache environment
         id: extcache
@@ -212,7 +212,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup cache environment
         id: extcache-compatibility
