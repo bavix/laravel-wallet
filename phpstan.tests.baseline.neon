@@ -1,18 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Parameter \#1 \$value of static method Illuminate\\Database\\Connection\:\:raw\(\) expects float\|int\|literal\-string, non\-falsy\-string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: tests/Infra/Listeners/TransactionStateProjectorListener.php
-
-		-
-			message: '#^Parameter \#1 \$value of static method Illuminate\\Database\\Connection\:\:raw\(\) expects float\|int\|literal\-string, non\-falsy\-string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: tests/Infra/Listeners/WalletStateProjectorListener.php
-
-		-
 			message: '#^Generic type Illuminate\\Database\\Eloquent\\Relations\\HasMany\<Bavix\\Wallet\\Models\\Transfer\> in PHPDoc tag @return does not specify all template types of class Illuminate\\Database\\Eloquent\\Relations\\HasMany\: TRelatedModel, TDeclaringModel$#'
 			identifier: generics.lessTypes
 			count: 1
@@ -25,100 +13,22 @@ parameters:
 			path: tests/Infra/Models/Item.php
 
 		-
-			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\Item\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: tests/Infra/Models/Item.php
-
-		-
 			message: '#^Parameter \#1 \$related of method Illuminate\\Database\\Eloquent\\Model\:\:hasMany\(\) expects class\-string\<Illuminate\\Database\\Eloquent\\Model\>, class\-string given\.$#'
 			identifier: argument.type
 			count: 1
 			path: tests/Infra/Models/Item.php
 
 		-
-			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\ItemDiscount\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: tests/Infra/Models/ItemDiscount.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\ItemDiscountTax\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: tests/Infra/Models/ItemDiscountTax.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\ItemMaxTax\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: tests/Infra/Models/ItemMaxTax.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\ItemMeta\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: tests/Infra/Models/ItemMeta.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\ItemMinTax\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: tests/Infra/Models/ItemMinTax.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\ItemMultiPrice\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: tests/Infra/Models/ItemMultiPrice.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\ItemTax\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: tests/Infra/Models/ItemTax.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\ItemWallet\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: tests/Infra/Models/ItemWallet.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\Manager\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: tests/Infra/Models/Manager.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\User\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: tests/Infra/Models/User.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\UserConfirm\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: tests/Infra/Models/UserConfirm.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\UserDynamic\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: tests/Infra/Models/UserDynamic.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Test\\Infra\\Models\\UserFloat\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: tests/Infra/Models/UserFloat.php
-
-		-
 			message: '#^Parameter \#2 \$currency of class Bavix\\Wallet\\Test\\Infra\\Values\\Money constructor expects string, mixed given\.$#'
 			identifier: argument.type
 			count: 1
 			path: tests/Infra/PackageModels/TransactionMoney.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: tests/Infra/Projectors/WalletStateBatchProjector.php
 
 		-
 			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:mul\(\) expects float\|int\|non\-empty\-string, float\|int\|string given\.$#'
@@ -151,7 +61,7 @@ parameters:
 			path: tests/Infra/TestCase.php
 
 		-
-			message: '#^Method Bavix\\Wallet\\Test\\Infra\\TestCase\:\:setUp\(\) is not final, but since the containing class is abstract, it should be\.$#'
+			message: '#^Method Bavix\\Wallet\\Test\\Infra\\TestCase\:\:getEnvironmentSetUp\(\) is not final, but since the containing class is abstract, it should be\.$#'
 			identifier: ergebnis.finalInAbstractClass
 			count: 1
 			path: tests/Infra/TestCase.php
@@ -163,16 +73,10 @@ parameters:
 			path: tests/Infra/TestCase.php
 
 		-
-			message: '#^Method Bavix\\Wallet\\Test\\Infra\\TestCase\:\:getEnvironmentSetUp\(\) is not final, but since the containing class is abstract, it should be\.$#'
+			message: '#^Method Bavix\\Wallet\\Test\\Infra\\TestCase\:\:setUp\(\) is not final, but since the containing class is abstract, it should be\.$#'
 			identifier: ergebnis.finalInAbstractClass
 			count: 1
 			path: tests/Infra/TestCase.php
-
-		-
-			message: '#^Cannot cast mixed to string\.$#'
-			identifier: cast.string
-			count: 1
-			path: tests/Infra/Projectors/WalletStateBatchProjector.php
 
 		-
 			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
