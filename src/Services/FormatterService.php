@@ -12,16 +12,30 @@ use Brick\Math\RoundingMode;
  */
 final readonly class FormatterService implements FormatterServiceInterface
 {
+    private RoundingMode $roundingDown;
+
+    public function __construct()
+    {
+        $this->roundingDown = enum_exists(RoundingMode::class)
+            ? RoundingMode::Down
+            : RoundingMode::DOWN;
+    }
+
     public function intValue(string|int|float $amount, int $decimalPlaces): string
     {
         return (string) BigDecimal::ten()
-            ->power($decimalPlaces)
-            ->multipliedBy(BigDecimal::of($amount))
-            ->toScale(0, RoundingMode::DOWN);
+            ->power(max(0, $decimalPlaces))
+            ->multipliedBy(BigDecimal::of($this->toBrick($amount)))
+            ->toScale(0, $this->roundingDown);
     }
 
     public function floatValue(string|int|float $amount, int $decimalPlaces): string
     {
-        return (string) BigDecimal::ofUnscaledValue($amount, $decimalPlaces);
+        return (string) BigDecimal::ofUnscaledValue($this->toBrick($amount), max(0, $decimalPlaces));
+    }
+
+    private function toBrick(float|int|string $value): int|string
+    {
+        return is_float($value) ? (string) $value : $value;
     }
 }

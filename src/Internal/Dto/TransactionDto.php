@@ -6,7 +6,9 @@ namespace Bavix\Wallet\Internal\Dto;
 
 use DateTimeImmutable;
 
-/** @immutable */
+/**
+ * @immutable
+ */
 final readonly class TransactionDto implements TransactionDtoInterface
 {
     /**

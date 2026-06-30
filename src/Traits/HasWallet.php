@@ -264,7 +264,6 @@ trait HasWallet
     {
         // Wrap the transfer in an atomic block to ensure consistency and prevent race conditions.
         return app(AtomicServiceInterface::class)->block($this, function () use ($wallet, $amount, $meta): Transfer {
-            /** @var Wallet $this */
             // Check if the transfer is possible before attempting it.
             app(ConsistencyServiceInterface::class)->checkPotential($this, $amount);
 
@@ -307,7 +306,6 @@ trait HasWallet
             $meta,
             $confirmed
         ): Transaction {
-            /** @var Wallet $this */
             // Check if the withdrawal is possible before attempting it.
             app(ConsistencyServiceInterface::class)->checkPotential($this, $amount);
 

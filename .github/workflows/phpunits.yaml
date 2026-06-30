@@ -274,6 +274,8 @@ jobs:
           --with "illuminate/contracts:${{ matrix.laravel-version }}"
           --with "illuminate/database:${{ matrix.laravel-version }}"
           --with "orchestra/testbench:${{ matrix.testbench-version }}"
+        env:
+          COMPOSER_POLICY_ADVISORIES_BLOCK: false
 
       - name: Run compatibility test suite
         run: composer parabench
