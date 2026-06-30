@@ -43,63 +43,27 @@ parameters:
 			path: src/Internal/Repository/WalletRepository.php
 
 		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:abs\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
+			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:toBrick\(\) never returns Brick\\Math\\BigNumber so it can be removed from the return type\.$#'
+			identifier: return.unusedType
 			count: 1
 			path: src/Internal/Service/MathService.php
 
 		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:add\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
+			message: '#^Parameter \#1 \$exponent of method Brick\\Math\\BigDecimal\:\:power\(\) expects int\<0, max\>, int given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Internal/Service/MathService.php
 
 		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:ceil\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
-			count: 1
+			message: '#^Parameter \#1 \$scale of method Brick\\Math\\BigDecimal\:\:toScale\(\) expects int\<0, max\>, int given\.$#'
+			identifier: argument.type
+			count: 4
 			path: src/Internal/Service/MathService.php
 
 		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:div\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Service/MathService.php
-
-		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:floor\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Service/MathService.php
-
-		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:mul\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Service/MathService.php
-
-		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:negative\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Service/MathService.php
-
-		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:pow\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Service/MathService.php
-
-		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:round\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Internal/Service/MathService.php
-
-		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:sub\(\) should return non\-empty\-string but returns string\.$#'
-			identifier: return.type
-			count: 1
+			message: '#^Parameter \#2 \$scale of method Brick\\Math\\BigDecimal\:\:dividedBy\(\) expects int\<0, max\>, int given\.$#'
+			identifier: argument.type
+			count: 2
 			path: src/Internal/Service/MathService.php
 
 		-
@@ -107,18 +71,6 @@ parameters:
 			identifier: return.type
 			count: 1
 			path: src/Models/Transaction.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Models\\Transaction\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: src/Models/Transaction.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Models\\Transfer\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: src/Models/Transfer.php
 
 		-
 			message: '#^Binary operation "\." between literal\-string&non\-falsy\-string and mixed results in an error\.$#'
@@ -129,7 +81,7 @@ parameters:
 		-
 			message: '#^Cannot cast mixed to string\.$#'
 			identifier: cast.string
-			count: 5
+			count: 1
 			path: src/Models/Wallet.php
 
 		-
@@ -142,12 +94,6 @@ parameters:
 			message: '#^PHPDoc tag @var with type Bavix\\Wallet\\Interfaces\\Wallet is not subtype of native type \$this\(Bavix\\Wallet\\Models\\Wallet\)\.$#'
 			identifier: varTag.nativeType
 			count: 4
-			path: src/Models/Wallet.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property Bavix\\Wallet\\Models\\Wallet\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
 			path: src/Models/Wallet.php
 
 		-
@@ -301,6 +247,18 @@ parameters:
 			path: src/Services/EagerLoaderService.php
 
 		-
+			message: '#^Method Bavix\\Wallet\\Services\\FormatterService\:\:toBrick\(\) never returns Brick\\Math\\BigNumber so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: src/Services/FormatterService.php
+
+		-
+			message: '#^Parameter \#1 \$exponent of method Brick\\Math\\BigDecimal\:\:power\(\) expects int\<0, max\>, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Services/FormatterService.php
+
+		-
 			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:sub\(\) expects float\|int\|non\-empty\-string, float\|int\|string given\.$#'
 			identifier: argument.type
 			count: 1
@@ -335,18 +293,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Services/TransactionService.php
-
-		-
-			message: '#^Parameter \#1 \$attributes of method Bavix\\Wallet\\Internal\\Repository\\WalletRepositoryInterface\:\:create\(\) expects array\{holder_type\: string, holder_id\: int\|string, name\: string, slug\?\: string, uuid\: string, description\?\: string, meta\: array\<mixed\>\|null, balance\?\: int, \.\.\.\}, non\-empty\-array\<mixed, mixed\> given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Services/WalletService.php
-
-		-
-			message: '#^Parameter \#1 \.\.\.\$arrays of function array_merge expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Services/WalletService.php
 
 		-
 			message: '#^Parameter \#2 \$holderId of method Bavix\\Wallet\\Internal\\Repository\\WalletRepositoryInterface\:\:findBySlug\(\) expects int\|string, mixed given\.$#'

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Internal\Service;
 
 use Brick\Math\BigDecimal;
-use Brick\Math\BigNumber;
 use Brick\Math\RoundingMode;
 
 final readonly class MathService implements MathServiceInterface
@@ -19,34 +18,34 @@ final readonly class MathService implements MathServiceInterface
     {
         return (string) BigDecimal::of($this->toBrick($first))
             ->plus(BigDecimal::of($this->toBrick($second)))
-            ->toScale($scale ?? $this->scale, RoundingMode::Down);
+            ->toScale($this->positiveScale($scale), RoundingMode::Down);
     }
 
     public function sub(float|int|string $first, float|int|string $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($this->toBrick($first))
             ->minus(BigDecimal::of($this->toBrick($second)))
-            ->toScale($scale ?? $this->scale, RoundingMode::Down);
+            ->toScale($this->positiveScale($scale), RoundingMode::Down);
     }
 
     public function div(float|int|string $first, float|int|string $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($this->toBrick($first))
-            ->dividedBy(BigDecimal::of($this->toBrick($second)), $scale ?? $this->scale, RoundingMode::Down);
+            ->dividedBy(BigDecimal::of($this->toBrick($second)), $this->positiveScale($scale), RoundingMode::Down);
     }
 
     public function mul(float|int|string $first, float|int|string $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($this->toBrick($first))
             ->multipliedBy(BigDecimal::of($this->toBrick($second)))
-            ->toScale($scale ?? $this->scale, RoundingMode::Down);
+            ->toScale($this->positiveScale($scale), RoundingMode::Down);
     }
 
     public function pow(float|int|string $first, float|int|string $second, ?int $scale = null): string
     {
         return (string) BigDecimal::of($this->toBrick($first))
-            ->power((int) $second)
-            ->toScale($scale ?? $this->scale, RoundingMode::Down);
+            ->power($this->positiveScale((int) $second))
+            ->toScale($this->positiveScale($scale), RoundingMode::Down);
     }
 
     public function powTen(float|int|string $number): string
@@ -87,7 +86,12 @@ final readonly class MathService implements MathServiceInterface
         return BigDecimal::of($this->toBrick($first))->compareTo(BigDecimal::of($this->toBrick($second)));
     }
 
-    private function toBrick(float|int|string $value): BigNumber|int|string
+    private function positiveScale(?int $scale): int
+    {
+        return max(0, $scale ?? $this->scale);
+    }
+
+    private function toBrick(float|int|string $value): int|string
     {
         return is_float($value) ? (string) $value : $value;
     }
