@@ -6,21 +6,19 @@ use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
-return static function (ECSConfig $config): void {
-    $config->paths([
+return ECSConfig::configure()
+    ->withPaths([
         __DIR__ . '/config',
         __DIR__ . '/database',
         __DIR__ . '/resources/lang',
         __DIR__ . '/src',
         __DIR__ . '/tests',
-    ]);
-
-    $config->skip([
+    ])
+    ->withSkip([
         GeneralPhpdocAnnotationRemoveFixer::class,
         \PhpCsFixer\Fixer\Import\FullyQualifiedStrictTypesFixer::class,
-    ]);
-
-    $config->sets([
+    ])
+    ->withSets([
         SetList::CLEAN_CODE,
         SetList::SYMPLIFY,
         SetList::ARRAY,
@@ -28,8 +26,5 @@ return static function (ECSConfig $config): void {
         SetList::PSR_12,
         SetList::CONTROL_STRUCTURES,
         SetList::NAMESPACES,
-        SetList::STRICT,
-        SetList::PHPUNIT,
         SetList::LARAVEL,
     ]);
-};

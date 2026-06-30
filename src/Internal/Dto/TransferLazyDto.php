@@ -6,7 +6,9 @@ namespace Bavix\Wallet\Internal\Dto;
 
 use Bavix\Wallet\Interfaces\Wallet;
 
-/** @immutable */
+/**
+ * @immutable
+ */
 final readonly class TransferLazyDto implements TransferLazyDtoInterface
 {
     /**
