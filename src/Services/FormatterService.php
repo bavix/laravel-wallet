@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Services;
 
 use Brick\Math\BigDecimal;
+use Brick\Math\BigNumber;
 use Brick\Math\RoundingMode;
 
 /**
@@ -16,12 +17,17 @@ final readonly class FormatterService implements FormatterServiceInterface
     {
         return (string) BigDecimal::ten()
             ->power($decimalPlaces)
-            ->multipliedBy(BigDecimal::of($amount))
+            ->multipliedBy(BigDecimal::of($this->toBrick($amount)))
             ->toScale(0, RoundingMode::Down);
     }
 
     public function floatValue(string|int|float $amount, int $decimalPlaces): string
     {
-        return (string) BigDecimal::ofUnscaledValue($amount, $decimalPlaces);
+        return (string) BigDecimal::ofUnscaledValue($this->toBrick($amount), $decimalPlaces);
+    }
+
+    private function toBrick(float|int|string $value): BigNumber|int|string
+    {
+        return is_float($value) ? (string) $value : $value;
     }
 }
