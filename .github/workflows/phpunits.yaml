@@ -99,7 +99,7 @@ jobs:
           key: ${{ runner.os }}-php-extensions-${{ matrix.php-versions }}-${{ hashFiles('**/composer.lock') }}
 
       - name: Cache extensions
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ steps.extcache.outputs.dir }}
           key: ${{ steps.extcache.outputs.key }}
@@ -125,7 +125,7 @@ jobs:
 
       - name: Cache Composer packages
         id: composer-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
@@ -133,7 +133,7 @@ jobs:
             ${{ runner.os }}-php-
 
       - name: Cache Composer cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ steps.composer-cache-dir.outputs.dir }}
           key: ${{ runner.os }}-composer-cache-${{ hashFiles('**/composer.lock') }}
@@ -223,7 +223,7 @@ jobs:
           key: ${{ runner.os }}-compatibility-php-extensions-${{ matrix.php-version }}-${{ hashFiles('**/composer.lock') }}
 
       - name: Cache extensions
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ steps.extcache-compatibility.outputs.dir }}
           key: ${{ steps.extcache-compatibility.outputs.key }}
@@ -246,7 +246,7 @@ jobs:
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache Composer packages
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: vendor
           key: ${{ runner.os }}-compatibility-${{ matrix.php-version }}-${{ matrix.laravel-version }}-${{ hashFiles('**/composer.lock') }}
@@ -254,7 +254,7 @@ jobs:
             ${{ runner.os }}-compatibility-${{ matrix.php-version }}-
 
       - name: Cache Composer cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ steps.composer-cache-dir-compatibility.outputs.dir }}
           key: ${{ runner.os }}-composer-cache-compatibility-${{ matrix.php-version }}-${{ matrix.laravel-version }}-${{ hashFiles('**/composer.lock') }}
