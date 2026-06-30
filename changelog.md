@@ -1,5 +1,13 @@
 # Changelog
 
+## 12.0.3 - 2026-06-30
+
+### What's Changed
+
+* [12.x] chore: bump brick/math by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1095
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/12.0.2...12.0.3
+
 ## 12.0.2 - 2026-06-09
 
 ### What's Changed
