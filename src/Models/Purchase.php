@@ -31,7 +31,7 @@ use Override;
     'created_at',
     'updated_at',
 ])]
-final class Purchase extends Model
+class Purchase extends Model
 {
     #[Override]
     public function getTable(): string
