@@ -1,5 +1,15 @@
 # Changelog
 
+## 12.0.4 - 2026-07-31
+
+### What's Changed
+
+* Bump actions/cache from 4 to 6 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1093
+* Bump vitepress from 2.0.0-alpha.17 to 2.0.0-alpha.18 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1097
+* remove final by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1103
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/12.0.3...12.0.4
+
 ## 12.0.3 - 2026-06-30
 
 ### What's Changed
