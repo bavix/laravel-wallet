@@ -304,7 +304,7 @@ final class StateAwareAssembler implements TransactionDtoAssemblerInterface
         $dto = $this->base->create(...);
 
         $before = $this->regulator->amount($payable);
-        $after = $ confirmado
+        $after = $confirmed
             ? $this->mathService->add($before, $amount)  // or sub for withdraw
             : $before;
 

@@ -10,7 +10,8 @@ Though this package is crafted to suit most of your needs by default, you can ed
 | `WALLET_CACHE_DRIVER`           | Cache for wallet balance      | array          |
 | `WALLET_CACHE_TTL`              | Cache TTL for wallet balance  | 24h            |
 | `WALLET_LOCK_DRIVER`            | Lock for wallets              | array          |
-| `WALLET_LOCK_TTL`               | Lock TTL for wallets          | 1s             |
+| `WALLET_LOCK_TTL`               | Lock wait timeout for wallets | 1s             |
+| `WALLET_LOCK_EXPIRATION`        | Lock lifetime for wallets     | `WALLET_LOCK_TTL` |
 | `WALLET_TRANSACTION_TABLE_NAME` | Transaction table name        | transactions   |
 | `WALLET_TRANSFER_TABLE_NAME`    | Transfer table name           | transfers      |
 | `WALLET_WALLET_TABLE_NAME`      | Wallet table name             | wallets        |

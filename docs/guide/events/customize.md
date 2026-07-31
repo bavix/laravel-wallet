@@ -17,7 +17,7 @@ final class MyUpdatedEvent implements BalanceUpdatedEventInterface, ShouldBroadc
     
     public function getWalletId(): int { return $this->wallet->getKey(); }
     public function getWalletUuid(): string { return $this->wallet->uuid; }
-    public function getBalance(): string { return $this->wallet->balanceInt; }
+    public function getBalance(): string { return $this->wallet->balance; }
     public function getUpdatedAt(): DateTimeImmutable { return $this->updatedAt; }
 
     public function broadcastOn(): array

@@ -117,7 +117,7 @@ $user->balance; // 0
 ```
 
 What happens if the user does not have the funds?
-The same as with the [withdrawal](../single/withdraw#failed).
+The same as with the [withdrawal](../single/withdraw#and-what-will-happen-if-the-money-is-not-enough).
 
 ```php
 $user->balance; // 0

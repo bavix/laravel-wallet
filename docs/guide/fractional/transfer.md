@@ -46,7 +46,7 @@ As the user uses `HasWalletFloat`, he will have `balance` property.
 Check the user's balance.
 
 ```php
-$fist->balanceFloatNum; // 100.00
+$first->balanceFloatNum; // 100.00
 $last->balanceFloatNum; // 0
 ```
 

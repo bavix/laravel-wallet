@@ -16,10 +16,13 @@ Previously, there was a vacuum package, but now it is a part of the core. You ju
     'lock' => [
         'driver' => 'array',
         'seconds' => 1,
+        'expiration' => null,
     ],
 ```
 
 To enable the fight against race conditions, you need to select a provider that supports work with locks. I recommend `redis`.
+
+`seconds` is how long a competing process waits to acquire the lock. `expiration` is how long an acquired lock lives; it defaults to `seconds`. If your atomic operations (database transactions) can run longer than `seconds`, set `expiration` higher than the duration of the slowest one — otherwise the lock expires mid-operation and mutual exclusion is lost.
 
 There is a setting for storing the state of the wallet, I recommend choosing `redis` here too.
 

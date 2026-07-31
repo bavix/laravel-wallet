@@ -51,7 +51,7 @@ new TransferQuery($from, $wallet, $amount, new \Bavix\Wallet\External\Dto\Extra(
 ));
 
 // float version
-new TransferFloatQuery($from, $wallet, $amountFlaot, new \Bavix\Wallet\External\Dto\Extra(
+new TransferFloatQuery($from, $wallet, $amountFloat, new \Bavix\Wallet\External\Dto\Extra(
     deposit: new \Bavix\Wallet\External\Dto\Option(
         null,
         uuid: '71cecafe-da10-464f-9e00-c80437bb4c3e', // deposit transaction
