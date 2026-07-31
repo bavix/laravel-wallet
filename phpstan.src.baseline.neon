@@ -187,6 +187,12 @@ parameters:
 			path: src/Services/BookkeeperService.php
 
 		-
+			message: '#^Parameter \#1 \$uuids of method Bavix\\Wallet\\Internal\\Service\\StorageServiceInterface\:\:multiGet\(\) expects non\-empty\-array\<non\-empty\-string\>, non\-empty\-array\<string\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Services/BookkeeperService.php
+
+		-
 			message: '#^Parameter \#1 \$uuids of method Bavix\\Wallet\\Internal\\Service\\StorageServiceInterface\:\:multiGet\(\) expects non\-empty\-array\<non\-empty\-string\>, non\-empty\-list\<string\> given\.$#'
 			identifier: argument.type
 			count: 2
@@ -241,7 +247,19 @@ parameters:
 			path: src/Services/PrepareService.php
 
 		-
+			message: '#^Language construct isset\(\) should not be used\.$#'
+			identifier: ergebnis.noIsset
+			count: 1
+			path: src/Services/RegulatorService.php
+
+		-
 			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:add\(\) expects float\|int\|non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Services/RegulatorService.php
+
+		-
+			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:sub\(\) expects float\|int\|non\-empty\-string, string given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Services/RegulatorService.php

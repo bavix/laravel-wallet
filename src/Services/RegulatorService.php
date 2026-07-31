@@ -29,6 +29,11 @@ final class RegulatorService implements RegulatorServiceInterface
      */
     private array $multiIncrease = [];
 
+    /**
+     * @var string[]
+     */
+    private array $pendingIncrementUuids = [];
+
     public function __construct(
         private readonly BalanceUpdatedEventAssemblerInterface $balanceUpdatedEventAssembler,
         private readonly WalletBatchProjectorInterface $walletBatchProjector,
@@ -71,7 +76,9 @@ final class RegulatorService implements RegulatorServiceInterface
         return $this->storageService->sync(
             $wallet->uuid,
             $this->mathService->round(
-                $this->mathService->negative($this->mathService->sub($this->amount($wallet), $value))
+                $this->mathService->negative(
+                    $this->mathService->sub($this->bookkeeperService->amount($wallet), $value)
+                )
             )
         );
     }
@@ -105,8 +112,10 @@ final class RegulatorService implements RegulatorServiceInterface
                 continue;
             }
 
-            $balances[$wallet->getKey()] = $this->amount($wallet);
-            $incrementValues[$wallet->uuid] = $this->diff($wallet);
+            $balances[$wallet->getKey()] = $this->mathService->round(
+                $this->mathService->add($this->bookkeeperService->amount($wallet), $diffValue)
+            );
+            $incrementValues[$wallet->uuid] = $diffValue;
         }
 
         if ($balances === [] || $incrementValues === [] || $this->wallets === []) {
@@ -122,10 +131,13 @@ final class RegulatorService implements RegulatorServiceInterface
         $columnsByWalletId = $this->walletBatchProjector->project($balances, $walletsById);
         $this->walletRepository->updateBalances($balances, $columnsByWalletId);
         $this->multiIncrease = $this->bookkeeperService->multiIncrease($this->wallets, $incrementValues);
+        $this->pendingIncrementUuids = array_keys($incrementValues);
     }
 
     public function committed(): void
     {
+        $this->pendingIncrementUuids = [];
+
         try {
             foreach ($this->multiIncrease as $uuid => $balance) {
                 $wallet = $this->wallets[$uuid];
@@ -148,6 +160,13 @@ final class RegulatorService implements RegulatorServiceInterface
         try {
             $this->lockService->releases(array_keys($this->wallets));
             $this->multiIncrease = [];
+            foreach ($this->pendingIncrementUuids as $uuid) {
+                if (isset($this->wallets[$uuid])) {
+                    $this->bookkeeperService->forget($this->wallets[$uuid]);
+                }
+            }
+
+            $this->pendingIncrementUuids = [];
             foreach ($this->wallets as $wallet) {
                 $this->forget($wallet);
             }

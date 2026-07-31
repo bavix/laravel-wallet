@@ -121,11 +121,22 @@ return [
         'driver' => env('WALLET_LOCK_DRIVER', 'array'),
 
         /**
-         * The time to live for the lock in seconds.
+         * How long a competing process waits to acquire the lock, in seconds.
          *
          * @var int
          */
         'seconds' => env('WALLET_LOCK_TTL', 1),
+
+        /**
+         * How long an acquired lock lives, in seconds.
+         *
+         * Must be longer than the slowest atomic operation (database transaction) in the
+         * application, otherwise the lock expires mid-operation and mutual exclusion is lost.
+         * Defaults to the "seconds" value for backward compatibility.
+         *
+         * @var int|null
+         */
+        'expiration' => env('WALLET_LOCK_EXPIRATION'),
     ],
 
     /**

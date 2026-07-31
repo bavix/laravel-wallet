@@ -89,7 +89,7 @@ final readonly class ConsistencyService implements ConsistencyServiceInterface
         foreach ($objects as $object) {
             $withdrawDto = $object->getWithdrawDto();
             $wallet = $this->castService->getWallet($object->getFromWallet(), false);
-            $wallets[] = $wallet;
+            $wallets[$wallet->uuid] = $wallet;
 
             $totalAmount[$wallet->uuid] = $this->mathService->sub(
                 ($totalAmount[$wallet->uuid] ?? 0),

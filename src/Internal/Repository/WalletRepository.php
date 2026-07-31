@@ -58,13 +58,13 @@ final readonly class WalletRepository implements WalletRepositoryInterface
                 ->update($updatePayload);
         }
 
-        $cases = [];
-        foreach ($data as $walletId => $balance) {
-            $cases[] = 'WHEN id = '.$walletId.' THEN '.$balance;
-        }
-
         $connection = $this->wallet->getConnection();
         $pdo = $connection->getPdo();
+
+        $cases = [];
+        foreach ($data as $walletId => $balance) {
+            $cases[] = 'WHEN id = '.$pdo->quote((string) $walletId).' THEN '.$pdo->quote((string) $balance);
+        }
 
         $updatePayload = [
             'balance' => $connection->raw('CASE '.implode(' ', $cases).' END'),
@@ -85,7 +85,7 @@ final readonly class WalletRepository implements WalletRepositoryInterface
                     ? 'NULL'
                     : $pdo->quote((string) $value);
 
-                $columnCases[] = 'WHEN id = '.$walletId.' THEN '.$valueSql;
+                $columnCases[] = 'WHEN id = '.$pdo->quote((string) $walletId).' THEN '.$valueSql;
             }
 
             $updatePayload[$column] = $connection->raw('CASE '.implode(' ', $columnCases).' ELSE '.$column.' END');

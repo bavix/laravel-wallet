@@ -20,6 +20,8 @@ final class LockService implements LockServiceInterface
 
     private readonly CacheRepository $cache;
 
+    private readonly int $expiration;
+
     public function __construct(
         private readonly ConnectionServiceInterface $connectionService,
         CacheFactory $cacheFactory,
@@ -29,6 +31,8 @@ final class LockService implements LockServiceInterface
             ->string('wallet.lock.driver', 'array');
         $this->cache = $cacheFactory->store($lockDriver);
         $this->lockedKeys = $cacheFactory->store('array');
+        $expiration = config('wallet.lock.expiration');
+        $this->expiration = is_numeric($expiration) ? (int) $expiration : $seconds;
     }
 
     public function block(string $key, callable $callback): mixed
@@ -38,19 +42,23 @@ final class LockService implements LockServiceInterface
         }
 
         $lock = $this->getLockProvider()
-            ->lock(self::LOCK_KEY.$key, $this->seconds);
-        $this->lockedKeys->put(self::INNER_KEYS.$key, true, $this->seconds);
+            ->lock(self::LOCK_KEY.$key, $this->expiration);
 
         // let's release the lock after the transaction, the fight against the race
         if ($this->connectionService->get()->transactionLevel() > 0) {
             $lock->block($this->seconds);
+            $this->lockedKeys->put(self::INNER_KEYS.$key, true, $this->expiration);
 
             return $callback();
         }
 
+        $lock->block($this->seconds);
+        $this->lockedKeys->put(self::INNER_KEYS.$key, true, $this->expiration);
+
         try {
-            return $lock->block($this->seconds, $callback);
+            return $callback();
         } finally {
+            $lock->release();
             $this->lockedKeys->delete(self::INNER_KEYS.$key);
         }
     }
@@ -64,6 +72,8 @@ final class LockService implements LockServiceInterface
      */
     public function blocks(array $keys, callable $callback): mixed
     {
+        rsort($keys);
+
         $callable = $callback;
         foreach ($keys as $key) {
             if (! $this->isBlocked($key)) {
@@ -84,7 +94,7 @@ final class LockService implements LockServiceInterface
             }
 
             $lockProvider
-                ->lock(self::LOCK_KEY.$key, $this->seconds)
+                ->lock(self::LOCK_KEY.$key, $this->expiration)
                 ->forceRelease();
 
             $this->lockedKeys->delete(self::INNER_KEYS.$key);

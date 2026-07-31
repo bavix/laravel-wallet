@@ -62,8 +62,18 @@ final readonly class BookkeeperService implements BookkeeperServiceInterface
             $this->lockService->blocks(
                 $recordNotFoundException->getMissingKeys(),
                 function () use ($wallets, $recordNotFoundException) {
+                    $missingKeys = $recordNotFoundException->getMissingKeys();
+
+                    try {
+                        $this->storageService->multiGet($missingKeys);
+
+                        return;
+                    } catch (RecordNotFoundException $stillMissingException) {
+                        $missingKeys = $stillMissingException->getMissingKeys();
+                    }
+
                     $balances = [];
-                    foreach ($recordNotFoundException->getMissingKeys() as $uuid) {
+                    foreach ($missingKeys as $uuid) {
                         $balances[$uuid] = $wallets[$uuid]->getOriginalBalanceAttribute();
                     }
 
