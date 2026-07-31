@@ -43,12 +43,6 @@ parameters:
 			path: src/Internal/Repository/WalletRepository.php
 
 		-
-			message: '#^Method Bavix\\Wallet\\Internal\\Service\\MathService\:\:toBrick\(\) never returns Brick\\Math\\BigNumber so it can be removed from the return type\.$#'
-			identifier: return.unusedType
-			count: 1
-			path: src/Internal/Service/MathService.php
-
-		-
 			message: '#^Parameter \#1 \$exponent of method Brick\\Math\\BigDecimal\:\:power\(\) expects int\<0, max\>, int given\.$#'
 			identifier: argument.type
 			count: 1
@@ -65,6 +59,12 @@ parameters:
 			identifier: argument.type
 			count: 2
 			path: src/Internal/Service/MathService.php
+
+		-
+			message: '#^Class Bavix\\Wallet\\Models\\Purchase is neither abstract nor final\.$#'
+			identifier: ergebnis.final
+			count: 1
+			path: src/Models/Purchase.php
 
 		-
 			message: '#^Method Bavix\\Wallet\\Models\\Transaction\:\:payable\(\) should return Illuminate\\Database\\Eloquent\\Relations\\MorphTo\<Illuminate\\Database\\Eloquent\\Model, Bavix\\Wallet\\Models\\Transaction\> but returns Illuminate\\Database\\Eloquent\\Relations\\MorphTo\<Illuminate\\Database\\Eloquent\\Model, \$this\(Bavix\\Wallet\\Models\\Transaction\)\>\.$#'
@@ -91,18 +91,6 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
-			message: '#^PHPDoc tag @var with type Bavix\\Wallet\\Interfaces\\Wallet is not subtype of native type \$this\(Bavix\\Wallet\\Models\\Wallet\)\.$#'
-			identifier: varTag.nativeType
-			count: 4
-			path: src/Models/Wallet.php
-
-		-
-			message: '#^Parameter \#1 \$amount of method Bavix\\Wallet\\Interfaces\\Wallet\:\:forceWithdraw\(\) expects int\|non\-empty\-string, int\|string given\.$#'
-			identifier: argument.type
-			count: 2
-			path: src/Models/Wallet.php
-
-		-
 			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:add\(\) expects float\|int\|non\-empty\-string, int\|string given\.$#'
 			identifier: argument.type
 			count: 1
@@ -112,12 +100,6 @@ parameters:
 			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:mul\(\) expects float\|int\|non\-empty\-string, int\|string given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/Models/Wallet.php
-
-		-
-			message: '#^Parameter \#2 \$amount of method Bavix\\Wallet\\Interfaces\\Wallet\:\:forceTransfer\(\) expects int\|non\-empty\-string, int\|string given\.$#'
-			identifier: argument.type
-			count: 2
 			path: src/Models/Wallet.php
 
 		-
@@ -245,18 +227,6 @@ parameters:
 			identifier: offsetAccess.invalidOffset
 			count: 1
 			path: src/Services/EagerLoaderService.php
-
-		-
-			message: '#^Method Bavix\\Wallet\\Services\\FormatterService\:\:toBrick\(\) never returns Brick\\Math\\BigNumber so it can be removed from the return type\.$#'
-			identifier: return.unusedType
-			count: 1
-			path: src/Services/FormatterService.php
-
-		-
-			message: '#^Parameter \#1 \$exponent of method Brick\\Math\\BigDecimal\:\:power\(\) expects int\<0, max\>, int given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Services/FormatterService.php
 
 		-
 			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:sub\(\) expects float\|int\|non\-empty\-string, float\|int\|string given\.$#'
