@@ -243,7 +243,7 @@ final class ConfirmTest extends TestCase
         /**
          * @var Buyer $buyer1
          * @var Buyer $buyer2
-         **/
+         */
         [$buyer1, $buyer2] = BuyerFactory::times(2)->create();
         $wallet1 = $buyer1->wallet;
         $wallet2 = $buyer2->wallet;
