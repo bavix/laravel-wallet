@@ -89,8 +89,6 @@ trait MorphOneWallet
     }
 
     /**
-     * Get the wallet attribute.
-     *
      * @return WalletModel|null The wallet model associated with the related model.
      */
     public function getWalletAttribute(): ?WalletModel

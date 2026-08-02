@@ -20,8 +20,6 @@ use Bavix\Wallet\Internal\Dto\BasketDtoInterface;
 interface EagerLoaderServiceInterface
 {
     /**
-     * Load wallets by basket.
-     *
      * This method is responsible for loading wallets by basket.
      * The Customer object represents the customer who created the basket.
      * The BasketDtoInterface object represents the basket.
