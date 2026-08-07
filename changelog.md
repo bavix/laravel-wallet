@@ -1,5 +1,20 @@
 # Changelog
 
+## 12.0.5 - 2026-08-07
+
+### What's Changed
+
+* bump ecs by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1106
+* Bump vitepress from 2.0.0-alpha.18 to 2.0.0-alpha.19 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1107
+* Allow zero decimal places in createWallet type by [@AdzerKI](https://github.com/AdzerKI) in https://github.com/bavix/laravel-wallet/pull/1108
+* Update rector/rector requirement from 2.5.9 to 2.6.1 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1109
+
+### New Contributors
+
+* [@AdzerKI](https://github.com/AdzerKI) made their first contribution in https://github.com/bavix/laravel-wallet/pull/1108
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/12.0.4...12.0.5
+
 ## 12.0.4 - 2026-07-31
 
 ### What's Changed
