@@ -145,7 +145,7 @@ trait HasWallets
      *     slug?: string,
      *     description?: string,
      *     meta?: array<mixed>|null,
-     *     decimal_places?: positive-int,
+     *     decimal_places?: int<0, max>,
      * } $data The data for the new wallet.
      * @return WalletModel The new wallet object.
      */
