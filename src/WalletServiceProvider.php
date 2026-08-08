@@ -298,15 +298,13 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         // bookkeepper service
         $this->app->when(StorageServiceLockDecorator::class)
             ->needs(StorageServiceInterface::class)
-            ->give(function () use ($cache) {
-                return $this->app->make(
-                    'wallet.internal.storage',
-                    [
-                        'cacheRepository' => $this->app->get(CacheFactory::class)
-                            ->store($cache['driver'] ?? 'array'),
-                    ],
-                );
-            });
+            ->give(fn () => $this->app->make(
+                'wallet.internal.storage',
+                [
+                    'cacheRepository' => $this->app->get(CacheFactory::class)
+                        ->store($cache['driver'] ?? 'array'),
+                ],
+            ));
 
         $this->app->when($configure['bookkeeper'] ?? BookkeeperService::class)
             ->needs(StorageServiceInterface::class)
@@ -317,15 +315,13 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
         // regulator service
         $this->app->when($configure['regulator'] ?? RegulatorService::class)
             ->needs(StorageServiceInterface::class)
-            ->give(function () {
-                return $this->app->make(
-                    'wallet.internal.storage',
-                    [
-                        'cacheRepository' => clone $this->app->make(CacheFactory::class)
-                            ->store('array'),
-                    ],
-                );
-            });
+            ->give(fn () => $this->app->make(
+                'wallet.internal.storage',
+                [
+                    'cacheRepository' => clone $this->app->make(CacheFactory::class)
+                        ->store('array'),
+                ],
+            ));
 
         $this->app->singleton(RegulatorServiceInterface::class, $configure['regulator'] ?? RegulatorService::class);
     }

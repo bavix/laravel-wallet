@@ -105,7 +105,7 @@ final class AtomicServiceTest extends TestCase
 
             // This should not be reached
             $this->assertTrue(false); // check
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             // Intentionally left empty
         }
 

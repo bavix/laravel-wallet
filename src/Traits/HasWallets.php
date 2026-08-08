@@ -44,7 +44,7 @@ trait HasWallets
         // Try to get the wallet with the given slug.
         try {
             return $this->getWalletOrFail($slug);
-        } catch (ModelNotFoundException $exception) {
+        } catch (ModelNotFoundException) {
             // If the wallet is not found, return null.
             return null;
         }

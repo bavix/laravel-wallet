@@ -69,7 +69,7 @@ final class WalletTest extends TestCase
         $uuidFactoryService = app(IdentifierFactoryServiceInterface::class);
 
         /** @var string[] $uuids */
-        $uuids = array_map(static fn () => $uuidFactoryService->generate(), range(1, 10));
+        $uuids = array_map($uuidFactoryService->generate(...), range(1, 10));
 
         foreach ($uuids as $uuid) {
             $user->createWallet([
