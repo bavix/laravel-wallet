@@ -42,13 +42,12 @@ final readonly class TransferObserver
         // If the transfer does not belong to the wallet, a WalletOwnerInvalid exception will be thrown.
         // If the transfer was not found, a RecordNotFoundException will be thrown.
         // Block both the wallet of the user who is sending the money and the wallet of the user who is receiving the money.
-        return $this->atomicService->blocks([$model->from, $model->to], function () use ($model) {
+        return $this->atomicService->blocks([$model->from, $model->to],
             // Reset confirmation of the transfer for the sender's wallet.
             // Returns true if the confirmation was reset, false otherwise.
-            return $model->from->safeResetConfirm($model->withdraw)
-                // Reset confirmation of the transfer for the receiver's wallet.
-                // Returns true if the confirmation was reset, false otherwise.
-                && $model->to->safeResetConfirm($model->deposit);
-        });
+            fn () => $model->from->safeResetConfirm($model->withdraw)
+            // Reset confirmation of the transfer for the receiver's wallet.
+            // Returns true if the confirmation was reset, false otherwise.
+            && $model->to->safeResetConfirm($model->deposit));
     }
 }

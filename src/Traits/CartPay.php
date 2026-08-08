@@ -150,7 +150,7 @@ trait CartPay
         try {
             // If the payment is successful, return the array of Transfer instances.
             return $this->payCart($cart, $force);
-        } catch (ExceptionInterface $exception) {
+        } catch (ExceptionInterface) {
             // If the payment fails, return an empty array.
             return [];
         }
@@ -299,7 +299,7 @@ trait CartPay
         try {
             // Try to refund all items in the provided cart.
             return $this->refundCart($cart, $force, $gifts);
-        } catch (ExceptionInterface $e) {
+        } catch (ExceptionInterface) {
             // Return false if an exception occurs during the refund process.
             // This is a safe refund method, so we do not rethrow the exception.
             return false;
@@ -457,7 +457,7 @@ trait CartPay
         try {
             // Attempt to refund all gifts in the provided cart.
             return $this->refundGiftCart($cart, $force);
-        } catch (ExceptionInterface $e) {
+        } catch (ExceptionInterface) {
             // Return false if an exception occurs during the refund process.
             // This is a safe refund method, so we do not rethrow the exception.
             return false;
