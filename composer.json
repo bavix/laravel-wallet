@@ -41,7 +41,7 @@
         "orchestra/testbench": "^11.0",
         "phpstan/phpstan": "2.2.8",
         "phpunit/phpunit": "^12.0|^13.0",
-        "rector/rector": "2.6.1",
+        "rector/rector": "2.6.2",
         "symplify/easy-coding-standard": "13.2.17"
     },
     "suggest": {
