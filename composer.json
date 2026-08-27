@@ -42,7 +42,7 @@
         "phpstan/phpstan": "2.2.8",
         "phpunit/phpunit": "^12.0|^13.0",
         "rector/rector": "2.6.2",
-        "symplify/easy-coding-standard": "13.2.17"
+        "symplify/easy-coding-standard": "13.2.18"
     },
     "suggest": {
         "bavix/laravel-wallet-swap": "Addition to the laravel-wallet library for quick setting of exchange rates",
