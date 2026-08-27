@@ -1,5 +1,50 @@
 # Changelog
 
+## 12.1.0 - 2026-08-27
+
+### What's Changed
+
+* Update phpstan/phpstan requirement from 2.2.7 to 2.2.8 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1113
+* Update rector/rector requirement from 2.6.1 to 2.6.2 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1116
+* Remove redundant indexes by [@jonhassall](https://github.com/jonhassall) in https://github.com/bavix/laravel-wallet/pull/1114
+* Feature/remove redundant indexes (narrower indexes) by [@jonhassall](https://github.com/jonhassall) in https://github.com/bavix/laravel-wallet/pull/1115
+* Update symplify/easy-coding-standard requirement from 13.2.17 to 13.2.18 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1118
+* Update phpstan/phpstan requirement from 2.2.8 to 2.2.9 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1119
+* docs: upgrade.md by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1120
+* Update rector/rector requirement from 2.6.2 to 2.6.3 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1117
+
+1. No code changes are required. Perform new package migrations;
+   
+2. Four redundant indexes are removed:
+   
+   - `transactions.payable_type_payable_id_ind` — a duplicate of the `morphs()` index;
+   - `transactions.payable_type_ind` — a prefix of `payable_type_confirmed_ind`;
+   - `transactions.transactions_payable_type_payable_id_index` — a prefix of `payable_type_confirmed_ind`;
+   - `wallets.wallets_holder_type_holder_id_index` — a prefix of the unique `(holder_type, holder_id, slug)`;
+   
+3. Every removed index was a duplicate or a leading prefix of a wider one, so no query loses its access path.
+   `EXPLAIN` on the hot wallet queries gives the same plans before and after (on mysql they are identical —
+   the optimizer used `payable_confirmed_ind` anyway). Measured on 1M transactions and 200k wallets:
+   
+   | | mysql | pgsql |
+   |---|---|---|
+   | index size | 685 → 329 MB (-52%) | 265 → 156 MB (-41%) |
+   | insert of 50k rows | -63% time | -32% time |
+   
+   The gain is in write throughput and disk footprint, reads stay the same;
+   
+4. If you have a highload project, drop the indexes yourself
+   ([pt-online-schema-change](https://www.percona.com/doc/percona-toolkit/3.0/pt-online-schema-change.html)
+   for mysql, `DROP INDEX CONCURRENTLY` for pgsql), then add both migration names to the `migrations` table
+   so they are not executed again. For a small project `php artisan migrate` is enough;
+   
+
+### New Contributors
+
+* [@jonhassall](https://github.com/jonhassall) made their first contribution in https://github.com/bavix/laravel-wallet/pull/1114
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/12.0.5...12.1.0
+
 ## 12.0.5 - 2026-08-07
 
 ### What's Changed
