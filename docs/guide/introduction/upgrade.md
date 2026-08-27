@@ -340,3 +340,28 @@ $transfer = app(PurchaseQueryHandlerInterface::class)
 
 $isPurchased = (bool) $transfer;
 ```
+
+## 12.0.x → 12.1.x
+
+1. No code changes are required. Perform new package migrations;
+2. Four redundant indexes are removed:
+   - `transactions.payable_type_payable_id_ind` — a duplicate of the `morphs()` index;
+   - `transactions.payable_type_ind` — a prefix of `payable_type_confirmed_ind`;
+   - `transactions.transactions_payable_type_payable_id_index` — a prefix of `payable_type_confirmed_ind`;
+   - `wallets.wallets_holder_type_holder_id_index` — a prefix of the unique `(holder_type, holder_id, slug)`;
+3. Every removed index was a duplicate or a leading prefix of a wider one, so no query loses its access path.
+   `EXPLAIN` on the hot wallet queries gives the same plans before and after (on mysql they are identical —
+   the optimizer used `payable_confirmed_ind` anyway). Measured on 1M transactions and 200k wallets:
+
+   | | mysql | pgsql |
+   |---|---|---|
+   | index size | 685 → 329 MB (-52%) | 265 → 156 MB (-41%) |
+   | insert of 50k rows | -63% time | -32% time |
+
+   The gain is in write throughput and disk footprint, reads stay the same;
+4. If you have a highload project, drop the indexes yourself
+   ([pt-online-schema-change](https://www.percona.com/doc/percona-toolkit/3.0/pt-online-schema-change.html)
+   for mysql, `DROP INDEX CONCURRENTLY` for pgsql), then add both migration names to the `migrations` table
+   so they are not executed again. For a small project `php artisan migrate` is enough;
+
+Thanks to [@jonhassall](https://github.com/jonhassall) for these changes.
