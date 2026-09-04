@@ -35,7 +35,7 @@
         "driftingly/rector-laravel": "2.5.0",
         "ergebnis/phpstan-rules": "2.13.1",
         "infection/infection": "~0.27",
-        "larastan/larastan": "3.10.0",
+        "larastan/larastan": "3.11.0",
         "laravel/cashier": "^16.0",
         "nunomaduro/collision": "^8.1",
         "orchestra/testbench": "^11.0",
