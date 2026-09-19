@@ -10,6 +10,6 @@ final class ProjectionTestServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        $this->loadMigrationsFrom([dirname(__DIR__).'/state-migrations']);
+        $this->loadMigrationsFrom([__DIR__.'/../state-migrations']);
     }
 }
