@@ -595,6 +595,12 @@ parameters:
 			path: tests/Units/Domain/WalletTest.php
 
 		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 1
+			path: tests/Units/Domain/WalletTest.php
+
+		-
 			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\User\>\.$#'
 			identifier: offsetAccess.notFound
 			count: 2
