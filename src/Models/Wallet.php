@@ -174,9 +174,7 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
             ->sum('amount');
 
         // Perform assertion to check if balance is not an empty string
-        if ($balance === null) {
-            $balance = '0';
-        }
+        $balance ??= '0';
         assert($balance !== '', 'Balance should not be an empty string');
 
         return $balance;

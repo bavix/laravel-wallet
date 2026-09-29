@@ -247,6 +247,18 @@ parameters:
 			path: tests/Units/Domain/CartTest.php
 
 		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertSame\(\) with 0 and 0 will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 6
+			path: tests/Units/Domain/ConfirmTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertSame\(\) with 100 and 100 will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: tests/Units/Domain/ConfirmTest.php
+
+		-
 			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\Buyer\>\.$#'
 			identifier: offsetAccess.notFound
 			count: 3
@@ -328,6 +340,12 @@ parameters:
 			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transfer will always evaluate to true\.$#'
 			identifier: staticMethod.alreadyNarrowedType
 			count: 4
+			path: tests/Units/Domain/ExtraTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertSame\(\) with 1000 and 1000 will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
 			path: tests/Units/Domain/ExtraTest.php
 
 		-
@@ -499,6 +517,12 @@ parameters:
 			path: tests/Units/Domain/MultiWalletTest.php
 
 		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertSame\(\) with int and 1 will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: tests/Units/Domain/MultiWalletTest.php
+
+		-
 			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertTrue\(\) with true will always evaluate to true\.$#'
 			identifier: staticMethod.alreadyNarrowedType
 			count: 4
@@ -643,6 +667,12 @@ parameters:
 			path: tests/Units/Domain/WalletFloatTest.php
 
 		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertSame\(\) with float and 1\.0 will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: tests/Units/Domain/WalletFloatTest.php
+
+		-
 			message: '#^Offset 0 might not exist on Bavix\\Wallet\\Test\\Infra\\Models\\UserFloat\|Illuminate\\Database\\Eloquent\\Collection\<int, Bavix\\Wallet\\Test\\Infra\\Models\\UserFloat\>\.$#'
 			identifier: offsetAccess.notFound
 			count: 1
@@ -670,6 +700,18 @@ parameters:
 			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with Bavix\\Wallet\\Models\\Transfer will always evaluate to true\.$#'
 			identifier: staticMethod.alreadyNarrowedType
 			count: 3
+			path: tests/Units/Domain/WalletTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertSame\(\) with 0 and 0 will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: tests/Units/Domain/WalletTest.php
+
+		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertSame\(\) with 1 and \*NEVER\* will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
 			path: tests/Units/Domain/WalletTest.php
 
 		-
