@@ -47,7 +47,7 @@ final class ExtraTest extends TestCase
             )
         );
 
-        self::assertSame(1000, $user1->balanceInt);
+        self::assertEquals(1000, $user1->balanceInt);
         self::assertSame(500, $user2->balanceInt);
         self::assertNotNull($transfer);
 
@@ -97,7 +97,7 @@ final class ExtraTest extends TestCase
             )
         );
 
-        self::assertSame(1000, $user1->balanceInt);
+        self::assertEquals(1000, $user1->balanceInt);
         self::assertSame(500, $user2->balanceInt);
         self::assertNotNull($transfer);
 

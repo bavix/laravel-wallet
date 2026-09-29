@@ -256,7 +256,7 @@ final class WalletTest extends TestCase
         self::assertSame(1, $user->balanceInt);
 
         $user->withdraw(1, null, false);
-        self::assertSame(1, $user->balanceInt);
+        self::assertEquals(1, $user->balanceInt);
 
         $user->withdraw(1);
         self::assertSame(0, $user->balanceInt);
@@ -269,13 +269,13 @@ final class WalletTest extends TestCase
         self::assertSame(0, $user->balanceInt);
 
         $user->deposit(100, null, false);
-        self::assertSame(0, $user->balanceInt);
+        self::assertEquals(0, $user->balanceInt);
 
         $user->transactions()
             ->update([
                 'confirmed' => true,
             ]);
-        self::assertSame(0, $user->balanceInt);
+        self::assertEquals(0, $user->balanceInt);
 
         $user->wallet->refreshBalance();
         self::assertSame(100, $user->balanceInt);

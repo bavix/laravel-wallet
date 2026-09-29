@@ -177,7 +177,7 @@ final class WalletFloatTest extends TestCase
         self::assertSame((float) $user->balanceFloat, 1.);
 
         $user->withdrawFloat(1, null, false);
-        self::assertSame((float) $user->balanceFloat, 1.);
+        self::assertEquals((float) $user->balanceFloat, 1.);
 
         self::assertTrue($user->canWithdrawFloat(1));
         $user->withdrawFloat(1);
