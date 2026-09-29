@@ -259,7 +259,7 @@ parameters:
 			path: src/Services/TaxService.php
 
 		-
-			message: '#^Parameter \#2 \$value of method Bavix\\Wallet\\Services\\RegulatorServiceInterface\:\:increase\(\) expects float\|int\|non\-empty\-string, string given\.$#'
+			message: '#^Parameter \#2 \$value of method Bavix\\Wallet\\Services\\RegulatorServiceInterface\:\:increase\(\) expects float\|int\|non\-empty\-string, 0\|string given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Services/TransactionService.php

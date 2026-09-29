@@ -16,9 +16,11 @@ use Bavix\Wallet\Test\Infra\Factories\UserDynamicFactory;
 use Bavix\Wallet\Test\Infra\Factories\UserFactory;
 use Bavix\Wallet\Test\Infra\Models\User;
 use Bavix\Wallet\Test\Infra\Models\UserDynamic;
+use Bavix\Wallet\Test\Infra\PackageModels\Transaction;
 use Bavix\Wallet\Test\Infra\PackageModels\Wallet;
 use Bavix\Wallet\Test\Infra\TestCase;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 use RuntimeException;
 use Throwable;
 
@@ -347,5 +349,65 @@ final class WalletTest extends TestCase
 
         self::assertSame(10000, $user->balanceInt);
         self::assertSame(0, (int) app(RegulatorServiceInterface::class)->diff($user->wallet));
+    }
+
+    /**
+     * @see https://github.com/bavix/laravel-wallet/issues/1139
+     */
+    public function testBalanceChangeNotPersisted(): void
+    {
+        /** @var User $user */
+        $user = UserFactory::new()->create();
+        $wallet = $user->wallet;
+
+        self::assertEquals(0, DB::transactionLevel());
+
+        $wallet->deposit(1000);
+        self::assertEquals(1000, $wallet->balanceInt);
+
+        DB::transaction(fn () => $wallet->deposit(100, null, false));
+        self::assertEquals(1000, $wallet->balanceInt);
+        self::assertEquals(0, DB::transactionLevel());
+
+        $wallet->withdraw(300);
+        self::assertEquals(700, $wallet->balanceInt);
+        self::assertEquals(0, DB::transactionLevel());
+
+        $wallet->refresh()
+            ->getRawOriginal('balance');
+        self::assertEquals(700, $wallet->balanceInt);
+
+        $balance = Transaction::where('wallet_id', $wallet->getKey())
+            ->where('confirmed', true)
+            ->sum('amount');
+        self::assertEquals(700, (int) $balance);
+    }
+
+    public function testStoredBalanceAfterTheSameSteps(): void
+    {
+        /** @var User $user */
+        $user = UserFactory::new()->create();
+        $wallet = $user->wallet;
+
+        $wallet->deposit(1000);
+        DB::transaction(fn () => $wallet->deposit(100, null, false));
+        $wallet->withdraw(300);
+
+        self::assertEquals(700, (int) $wallet->refresh()->getRawOriginal('balance'));
+    }
+
+    public function testBalanceIntOnceThePendingStateIsCleared(): void
+    {
+        /** @var User $user */
+        $user = UserFactory::new()->create();
+        $wallet = $user->wallet;
+
+        $wallet->deposit(1000);
+        DB::transaction(fn () => $wallet->deposit(100, null, false));
+        $wallet->withdraw(300);
+
+        DB::transaction(static fn () => null); // any later transaction: BEGIN at level 1 purges the diff
+
+        self::assertEquals(700, $wallet->balanceInt);
     }
 }
