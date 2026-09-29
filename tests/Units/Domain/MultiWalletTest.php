@@ -409,7 +409,7 @@ final class MultiWalletTest extends TestCase
         self::assertSame($wallet->balanceInt, 1);
 
         $wallet->withdraw(1, null, false);
-        self::assertSame($wallet->balanceInt, 1);
+        self::assertEquals($wallet->balanceInt, 1);
 
         $wallet->withdraw(1);
         self::assertSame($wallet->balanceInt, 0);

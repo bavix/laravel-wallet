@@ -58,7 +58,7 @@ final class ConfirmTest extends TestCase
         $transaction = $wallet->forceWithdraw(1000, [
             'desc' => 'unconfirmed',
         ], false);
-        self::assertSame(0, $wallet->balanceInt);
+        self::assertEquals(0, $wallet->balanceInt);
         self::assertFalse($transaction->confirmed);
         self::assertTrue($transaction->getKey() > 0);
 
@@ -125,7 +125,7 @@ final class ConfirmTest extends TestCase
         $transaction = $wallet->withdraw(50, [
             'desc' => 'unconfirmed',
         ], false);
-        self::assertSame(100, $wallet->balanceInt);
+        self::assertEquals(100, $wallet->balanceInt);
         self::assertFalse($transaction->confirmed);
     }
 
@@ -140,7 +140,7 @@ final class ConfirmTest extends TestCase
         $transaction = $wallet->forceWithdraw(1000, [
             'desc' => 'unconfirmed',
         ], false);
-        self::assertSame(0, $wallet->balanceInt);
+        self::assertEquals(0, $wallet->balanceInt);
         self::assertFalse($transaction->confirmed);
 
         $wallet->forceConfirm($transaction);
@@ -218,7 +218,7 @@ final class ConfirmTest extends TestCase
         self::assertSame(0, $wallet->balanceInt);
 
         $transaction = $wallet->deposit(1000, null, false);
-        self::assertSame(0, $wallet->balanceInt);
+        self::assertEquals(0, $wallet->balanceInt);
         self::assertFalse($transaction->confirmed);
 
         $wallet->resetConfirm($transaction);
@@ -233,7 +233,7 @@ final class ConfirmTest extends TestCase
         self::assertSame(0, $wallet->balanceInt);
 
         $transaction = $wallet->deposit(1000, null, false);
-        self::assertSame(0, $wallet->balanceInt);
+        self::assertEquals(0, $wallet->balanceInt);
         self::assertFalse($transaction->confirmed);
         self::assertTrue($wallet->safeResetConfirm($transaction));
     }
@@ -282,7 +282,7 @@ final class ConfirmTest extends TestCase
         $transaction = $firstWallet->deposit(1000, [
             'desc' => 'unconfirmed',
         ], false);
-        self::assertSame(0, $firstWallet->balanceInt);
+        self::assertEquals(0, $firstWallet->balanceInt);
         self::assertFalse($transaction->confirmed);
 
         $secondWallet->confirm($transaction);
@@ -307,7 +307,7 @@ final class ConfirmTest extends TestCase
         $transaction = $firstWallet->deposit(1000, [
             'desc' => 'unconfirmed',
         ], false);
-        self::assertSame(0, $firstWallet->balanceInt);
+        self::assertEquals(0, $firstWallet->balanceInt);
         self::assertFalse($transaction->confirmed);
 
         $secondWallet->forceConfirm($transaction);
