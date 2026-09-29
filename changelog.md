@@ -1,5 +1,28 @@
 # Changelog
 
+## 12.1.1 - 2026-09-29
+
+### What's Changed
+
+* Update symplify/easy-coding-standard requirement from 13.2.18 to 13.2.19 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1121
+* Update phpstan/phpstan requirement from 2.2.9 to 2.2.12 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1124
+* Update rector/rector requirement from 2.6.3 to 2.6.6 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1129
+* Bump vitepress from 2.0.0-alpha.19 to 2.0.0-alpha.20 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1126
+* Update phpstan/phpstan requirement from 2.2.12 to 2.2.13 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1127
+* Update symplify/easy-coding-standard requirement from 13.2.19 to 13.3.2 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1128
+* Update larastan/larastan requirement from 3.10.0 to 3.11.0 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1125
+* Update driftingly/rector-laravel requirement from 2.5.0 to 2.6.2 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1130
+* Update larastan/larastan requirement from 3.11.0 to 3.12.0 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1131
+* Update phpstan/phpstan requirement from 2.2.13 to 2.2.14 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1132
+* Update larastan/larastan requirement from 3.12.0 to 3.12.1 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1134
+* Update rector/rector requirement from 2.6.6 to 2.6.7 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1133
+* Update brick/math requirement from >=0.18.0 <1.0.0 to ^1.0.0 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1135
+* Update larastan/larastan requirement from 3.12.1 to 3.12.2 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1136
+* patch: Balance change not persisted when a level-0 operation follows an unconfirmed or failed operation inside a DB transaction by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1140
+* Balance change not persisted when a level-0 operation follows an unconfirmed or failed operation inside a DB transaction [@A-Moussa0](https://github.com/A-Moussa0) in https://github.com/bavix/laravel-wallet/issues/1139
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/12.1.0...12.1.1
+
 ## 12.1.0 - 2026-08-27
 
 ### What's Changed
