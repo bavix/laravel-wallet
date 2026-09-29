@@ -382,4 +382,32 @@ final class WalletTest extends TestCase
             ->sum('amount');
         self::assertEquals(700, (int) $balance);
     }
+
+    public function testStoredBalanceAfterTheSameSteps(): void
+    {
+        /** @var User $user */
+        $user = UserFactory::new()->create();
+        $wallet = $user->wallet;
+
+        $wallet->deposit(1000);
+        DB::transaction(fn () => $wallet->deposit(100, null, false));
+        $wallet->withdraw(300);
+
+        self::assertEquals(700, (int) $wallet->refresh()->getRawOriginal('balance'));
+    }
+
+    public function testBalanceIntOnceThePendingStateIsCleared(): void
+    {
+        /** @var User $user */
+        $user = UserFactory::new()->create();
+        $wallet = $user->wallet;
+
+        $wallet->deposit(1000);
+        DB::transaction(fn () => $wallet->deposit(100, null, false));
+        $wallet->withdraw(300);
+
+        DB::transaction(static fn () => null); // any later transaction: BEGIN at level 1 purges the diff
+
+        self::assertEquals(700, $wallet->balanceInt);
+    }
 }
