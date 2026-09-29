@@ -63,12 +63,9 @@ final readonly class TransactionService implements TransactionServiceInterface
         $totals = $this->assistantService->getSums($objects);
         assert(count($objects) === count($transactions));
 
-        foreach ($totals as $walletId => $total) {
-            $wallet = $wallets[$walletId] ?? null;
-            assert($wallet instanceof Wallet);
-
+        foreach ($wallets as $wallet) {
             $object = $this->castService->getWallet($wallet);
-            assert($object->getKey() === $walletId);
+            $total = $totals[$object->getKey()] ?? '0';
 
             $this->regulatorService->increase($object, $total);
         }

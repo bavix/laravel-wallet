@@ -188,6 +188,16 @@ final class WalletFloatTest extends TestCase
         self::assertSame((float) $user->balanceFloat, 0.);
     }
 
+    public function testCanWithdrawFloat(): void
+    {
+        /** @var User $user */
+        $user = UserFloatFactory::new()->create();
+        $user->depositFloat(20);
+
+        self::assertTrue($user->canWithdrawFloat(10.5));
+        self::assertFalse($user->canWithdrawFloat(20.01));
+    }
+
     public function testMantissa(): void
     {
         /** @var User $user */

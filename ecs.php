@@ -20,7 +20,6 @@ return ECSConfig::configure()
     ])
     ->withSets([
         SetList::CLEAN_CODE,
-        SetList::SYMPLIFY,
         SetList::ARRAY,
         SetList::COMMON,
         SetList::PSR_12,
