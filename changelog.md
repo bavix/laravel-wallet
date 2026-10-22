@@ -1,5 +1,18 @@
 # Changelog
 
+## 12.1.2 - 2026-10-22
+
+### What's Changed
+
+* bump phpstan by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1143
+* Update phpstan/phpstan requirement from 2.2.16 to 2.2.17 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1145
+* Update larastan/larastan requirement from 3.12.2 to 3.12.3 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1146
+* Bump source-map-js from 1.2.1 to 1.2.2 by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1147
+* Bump [@vue](https://github.com/vue)/server-renderer and vue by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/bavix/laravel-wallet/pull/1148
+* migrate:refresh fix by [@rez1dent3](https://github.com/rez1dent3) in https://github.com/bavix/laravel-wallet/pull/1156 (thank you [@RezaZkr](https://github.com/RezaZkr), #1154)
+
+**Full Changelog**: https://github.com/bavix/laravel-wallet/compare/12.1.1...12.1.2
+
 ## 12.1.1 - 2026-09-29
 
 ### What's Changed
