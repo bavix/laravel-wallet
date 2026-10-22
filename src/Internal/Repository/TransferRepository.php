@@ -17,11 +17,10 @@ final readonly class TransferRepository implements TransferRepositoryInterface
         private TransferDtoTransformerInterface $transformer,
         private JsonServiceInterface $jsonService,
         private Transfer $transfer
-    ) {
-    }
+    ) {}
 
     /**
-     * @param non-empty-array<int|string, TransferDtoInterface> $objects
+     * @param  non-empty-array<int|string, TransferDtoInterface>  $objects
      */
     public function insert(array $objects): void
     {
@@ -58,7 +57,7 @@ final readonly class TransferRepository implements TransferRepositoryInterface
     }
 
     /**
-     * @param non-empty-array<int> $ids
+     * @param  non-empty-array<int>  $ids
      */
     public function updateStatusByIds(TransferStatus $status, array $ids): int
     {

@@ -25,7 +25,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class ProductTest extends TestCase
 {
-    public function testPay(): void
+    public function test_pay(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -68,7 +68,7 @@ final class ProductTest extends TestCase
         self::assertNull($buyer->safePay($product));
     }
 
-    public function testRefund(): void
+    public function test_refund(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -109,7 +109,7 @@ final class ProductTest extends TestCase
         self::assertSame(TransferStatus::Refund, $transfer->status);
     }
 
-    public function testForceRefund(): void
+    public function test_force_refund(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -142,7 +142,7 @@ final class ProductTest extends TestCase
         self::assertSame(0, $buyer->balanceInt);
     }
 
-    public function testOutOfStock(): void
+    public function test_out_of_stock(): void
     {
         $this->expectException(ProductEnded::class);
         $this->expectExceptionCode(ExceptionInterface::PRODUCT_ENDED);
@@ -160,7 +160,7 @@ final class ProductTest extends TestCase
         $buyer->pay($product);
     }
 
-    public function testForcePay(): void
+    public function test_force_pay(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -178,7 +178,7 @@ final class ProductTest extends TestCase
         self::assertSame(0, $buyer->balanceInt);
     }
 
-    public function testPayFree(): void
+    public function test_pay_free(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -201,7 +201,7 @@ final class ProductTest extends TestCase
         self::assertSame(0, $product->balanceInt);
     }
 
-    public function testFreePay(): void
+    public function test_free_pay(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -225,7 +225,7 @@ final class ProductTest extends TestCase
         self::assertSame(0, $product->balanceInt);
     }
 
-    public function testPayFreeOutOfStock(): void
+    public function test_pay_free_out_of_stock(): void
     {
         $this->expectException(ProductEnded::class);
         $this->expectExceptionCode(ExceptionInterface::PRODUCT_ENDED);
@@ -242,7 +242,7 @@ final class ProductTest extends TestCase
         $buyer->payFree($product);
     }
 
-    public function testPayCustomPrice(): void
+    public function test_pay_custom_price(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -278,7 +278,7 @@ final class ProductTest extends TestCase
     /**
      * @see https://github.com/bavix/laravel-wallet/issues/237
      */
-    public function testProductMultiWallet(): void
+    public function test_product_multi_wallet(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();

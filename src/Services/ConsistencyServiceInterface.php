@@ -20,7 +20,7 @@ interface ConsistencyServiceInterface
      *
      * This method throws an AmountInvalid exception if the given amount is not positive.
      *
-     * @param float|int|string $amount The amount to check.
+     * @param  float|int|string  $amount  The amount to check.
      *
      * @throws AmountInvalid If the given amount is not positive.
      */
@@ -32,9 +32,9 @@ interface ConsistencyServiceInterface
      * This method throws a BalanceIsEmpty exception if the wallet's balance is empty.
      * It throws an InsufficientFunds exception if the amount exceeds the wallet's balance.
      *
-     * @param Wallet $object The wallet to check.
-     * @param float|int|string $amount The amount to check.
-     * @param bool $allowZero Whether to allow zero amounts. Defaults to false.
+     * @param  Wallet  $object  The wallet to check.
+     * @param  float|int|string  $amount  The amount to check.
+     * @param  bool  $allowZero  Whether to allow zero amounts. Defaults to false.
      *
      * @throws BalanceIsEmpty If the wallet's balance is empty.
      * @throws InsufficientFunds If the amount exceeds the wallet's balance.
@@ -55,7 +55,7 @@ interface ConsistencyServiceInterface
      * exceeding the wallet's balance. It throws a BalanceIsEmpty exception if any wallet's balance is empty.
      * It throws an InsufficientFunds exception if the total amount of the transfers exceeds any wallet's balance.
      *
-     * @param TransferLazyDtoInterface[] $objects An array of transfer objects.
+     * @param  TransferLazyDtoInterface[]  $objects  An array of transfer objects.
      *
      * @throws BalanceIsEmpty If any wallet's balance is empty.
      * @throws InsufficientFunds If the total amount of the transfers exceeds any wallet's balance.

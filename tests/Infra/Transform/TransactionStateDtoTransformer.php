@@ -16,8 +16,7 @@ final readonly class TransactionStateDtoTransformer implements TransactionDtoTra
         private TransactionDtoTransformer $transactionDtoTransformer,
         private TransactionStateServiceInterface $transactionStateService,
         private MathServiceInterface $mathService,
-    ) {
-    }
+    ) {}
 
     public function extract(TransactionDtoInterface $dto): array
     {

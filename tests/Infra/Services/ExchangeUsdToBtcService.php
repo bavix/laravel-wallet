@@ -20,8 +20,7 @@ final class ExchangeUsdToBtcService implements ExchangeServiceInterface
 
     public function __construct(
         private readonly MathServiceInterface $mathService
-    ) {
-    }
+    ) {}
 
     public function convertTo(string $fromCurrency, string $toCurrency, float|int|string $amount): string
     {

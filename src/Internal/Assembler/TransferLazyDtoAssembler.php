@@ -13,7 +13,7 @@ use Bavix\Wallet\Internal\Dto\TransferLazyDtoInterface;
 final class TransferLazyDtoAssembler implements TransferLazyDtoAssemblerInterface
 {
     /**
-     * @param array<mixed>|null $extra
+     * @param  array<mixed>|null  $extra
      */
     public function create(
         Wallet $fromWallet,

@@ -23,7 +23,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class DiscountTaxTest extends TestCase
 {
-    public function testPay(): void
+    public function test_pay(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -68,7 +68,7 @@ final class DiscountTaxTest extends TestCase
         self::assertSame($product->getKey(), $transfer->to->holder->getKey());
     }
 
-    public function testRefundPersonalDiscountAndTax(): void
+    public function test_refund_personal_discount_and_tax(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -130,7 +130,7 @@ final class DiscountTaxTest extends TestCase
         self::assertSame($transfer->status, TransferStatus::Refund);
     }
 
-    public function testForceRefund(): void
+    public function test_force_refund(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -174,7 +174,7 @@ final class DiscountTaxTest extends TestCase
         self::assertSame($buyer->balanceInt, 0);
     }
 
-    public function testOutOfStock(): void
+    public function test_out_of_stock(): void
     {
         $this->expectException(ProductEnded::class);
         $this->expectExceptionCode(ExceptionInterface::PRODUCT_ENDED);
@@ -193,7 +193,7 @@ final class DiscountTaxTest extends TestCase
         $buyer->pay($product);
     }
 
-    public function testForcePay(): void
+    public function test_force_pay(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -215,7 +215,7 @@ final class DiscountTaxTest extends TestCase
         self::assertSame($buyer->balanceInt, 0);
     }
 
-    public function testPayFreeAndRefund(): void
+    public function test_pay_free_and_refund(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -238,7 +238,7 @@ final class DiscountTaxTest extends TestCase
         self::assertSame($product->balanceInt, 0);
     }
 
-    public function testFreePay(): void
+    public function test_free_pay(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -266,7 +266,7 @@ final class DiscountTaxTest extends TestCase
         self::assertSame($product->balanceInt, 0);
     }
 
-    public function testPayFreeOutOfStock(): void
+    public function test_pay_free_out_of_stock(): void
     {
         $this->expectException(ProductEnded::class);
         $this->expectExceptionCode(ExceptionInterface::PRODUCT_ENDED);

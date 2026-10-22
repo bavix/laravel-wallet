@@ -17,10 +17,10 @@ final class TransactionStateServiceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->service = new TransactionStateService();
+        $this->service = new TransactionStateService;
     }
 
-    public function testPushAndHas(): void
+    public function test_push_and_has(): void
     {
         self::assertFalse($this->service->has('u1'));
 
@@ -33,7 +33,7 @@ final class TransactionStateServiceTest extends TestCase
         self::assertTrue($this->service->has('u1'));
     }
 
-    public function testBeforeReturnsState(): void
+    public function test_before_returns_state(): void
     {
         $this->service->push('u1', 1, [
             'balance' => '0',
@@ -46,7 +46,7 @@ final class TransactionStateServiceTest extends TestCase
         ], $this->service->before('u1'));
     }
 
-    public function testAfterReturnsState(): void
+    public function test_after_returns_state(): void
     {
         $this->service->push('u1', 1, [
             'balance' => '0',
@@ -59,21 +59,21 @@ final class TransactionStateServiceTest extends TestCase
         ], $this->service->after('u1'));
     }
 
-    public function testBeforeThrowsForMissingUuid(): void
+    public function test_before_throws_for_missing_uuid(): void
     {
         $this->expectException(StateNotFoundException::class);
 
         $this->service->before('nonexistent');
     }
 
-    public function testAfterThrowsForMissingUuid(): void
+    public function test_after_throws_for_missing_uuid(): void
     {
         $this->expectException(StateNotFoundException::class);
 
         $this->service->after('nonexistent');
     }
 
-    public function testCustomStateFields(): void
+    public function test_custom_state_fields(): void
     {
         $this->service->push('u1', 1, [
             'balance' => '0',
@@ -97,7 +97,7 @@ final class TransactionStateServiceTest extends TestCase
         self::assertSame('0', $after['frozen']);
     }
 
-    public function testMultipleEntries(): void
+    public function test_multiple_entries(): void
     {
         $this->service->push('u1', 1, [
             'balance' => '0',
@@ -125,7 +125,7 @@ final class TransactionStateServiceTest extends TestCase
         self::assertSame('0', $this->service->before('u3')['balance']);
     }
 
-    public function testSnapshotCapturesAllEntries(): void
+    public function test_snapshot_captures_all_entries(): void
     {
         $this->service->push('u1', 1, [
             'balance' => '0',
@@ -151,7 +151,7 @@ final class TransactionStateServiceTest extends TestCase
         self::assertSame(2, $snapshot['u2']['walletId']);
     }
 
-    public function testRollbackRestoresState(): void
+    public function test_rollback_restores_state(): void
     {
         $this->service->push('u1', 1, [
             'balance' => '0',
@@ -183,7 +183,7 @@ final class TransactionStateServiceTest extends TestCase
         self::assertSame('10', $this->service->after('u1')['balance']);
     }
 
-    public function testRollbackToEmptySnapshot(): void
+    public function test_rollback_to_empty_snapshot(): void
     {
         $this->service->push('u1', 1, [
             'balance' => '0',
@@ -198,7 +198,7 @@ final class TransactionStateServiceTest extends TestCase
         self::assertFalse($this->service->has('u1'));
     }
 
-    public function testResetClearsAll(): void
+    public function test_reset_clears_all(): void
     {
         $this->service->push('u1', 1, [
             'balance' => '0',
@@ -218,7 +218,7 @@ final class TransactionStateServiceTest extends TestCase
         self::assertSame([], $this->service->snapshot());
     }
 
-    public function testSnapshotAfterResetIsEmpty(): void
+    public function test_snapshot_after_reset_is_empty(): void
     {
         $this->service->push('u1', 1, [
             'balance' => '0',
@@ -230,7 +230,7 @@ final class TransactionStateServiceTest extends TestCase
         self::assertSame([], $this->service->snapshot());
     }
 
-    public function testMultipleSnapshotsWithRollbackChaining(): void
+    public function test_multiple_snapshots_with_rollback_chaining(): void
     {
         $this->service->push('u1', 1, [
             'balance' => '0',
@@ -264,7 +264,7 @@ final class TransactionStateServiceTest extends TestCase
         self::assertSame('10', $this->service->after('u1')['balance']);
     }
 
-    public function testPushOverwritesSameUuid(): void
+    public function test_push_overwrites_same_uuid(): void
     {
         $this->service->push('u1', 1, [
             'balance' => '0',

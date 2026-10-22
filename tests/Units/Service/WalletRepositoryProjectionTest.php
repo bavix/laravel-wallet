@@ -14,7 +14,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class WalletRepositoryProjectionTest extends TestCase
 {
-    public function testUpdateBalancesProjectsExtraColumnsForBatch(): void
+    public function test_update_balances_projects_extra_columns_for_batch(): void
     {
         /** @var Buyer $first */
         $first = BuyerFactory::new()->create();

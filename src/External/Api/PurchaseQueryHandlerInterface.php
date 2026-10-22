@@ -12,7 +12,7 @@ use Bavix\Wallet\Models\Transfer;
 interface PurchaseQueryHandlerInterface
 {
     /**
-     * @param non-empty-array<PurchaseQueryInterface> $objects
+     * @param  non-empty-array<PurchaseQueryInterface>  $objects
      * @return array<int, Transfer|null>
      */
     public function apply(array $objects): array;

@@ -37,7 +37,7 @@ use Illuminate\Support\Facades\Event;
  */
 final class EventTest extends TestCase
 {
-    public function testBalanceUpdatedThrowUuidListener(): void
+    public function test_balance_updated_throw_uuid_listener(): void
     {
         Event::listen(BalanceUpdatedEventInterface::class, BalanceUpdatedThrowUuidListener::class);
 
@@ -54,7 +54,7 @@ final class EventTest extends TestCase
         $buyer->deposit(123);
     }
 
-    public function testBalanceUpdatedThrowIdListener(): void
+    public function test_balance_updated_throw_id_listener(): void
     {
         Event::listen(BalanceUpdatedEventInterface::class, BalanceUpdatedThrowIdListener::class);
 
@@ -70,7 +70,7 @@ final class EventTest extends TestCase
         $buyer->deposit(456);
     }
 
-    public function testBalanceUpdatedThrowDateListener(): void
+    public function test_balance_updated_throw_date_listener(): void
     {
         $this->app?->bind(ClockServiceInterface::class, ClockFakeService::class);
 
@@ -87,7 +87,7 @@ final class EventTest extends TestCase
         $buyer->deposit(789);
     }
 
-    public function testWalletCreatedThrowListener(): void
+    public function test_wallet_created_throw_listener(): void
     {
         $this->app?->bind(ClockServiceInterface::class, ClockFakeService::class);
 
@@ -112,7 +112,7 @@ final class EventTest extends TestCase
         $buyer->withdraw(0);
     }
 
-    public function testMultiWalletCreatedThrowListener(): void
+    public function test_multi_wallet_created_throw_listener(): void
     {
         $this->app?->bind(ClockServiceInterface::class, ClockFakeService::class);
 
@@ -142,7 +142,7 @@ final class EventTest extends TestCase
     /**
      * @throws ExceptionInterface
      */
-    public function testBalanceNotChanged(): void
+    public function test_balance_not_changed(): void
     {
         Event::listen(BalanceUpdatedEventInterface::class, BalanceUpdatedThrowIdListener::class);
 
@@ -173,7 +173,7 @@ final class EventTest extends TestCase
     /**
      * @throws ExceptionInterface
      */
-    public function testTransactionCreatedThrowListener(): void
+    public function test_transaction_created_throw_listener(): void
     {
         $this->app?->bind(ClockServiceInterface::class, ClockFakeService::class);
 
@@ -199,7 +199,7 @@ final class EventTest extends TestCase
     /**
      * @throws ExceptionInterface
      */
-    public function testTransactionCreatedMultiListener(): void
+    public function test_transaction_created_multi_listener(): void
     {
         /** @var array<array<int, int>> $transactionIds */
         $transactionIds = [];

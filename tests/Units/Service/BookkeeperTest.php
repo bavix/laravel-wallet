@@ -14,7 +14,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class BookkeeperTest extends TestCase
 {
-    public function testSync(): void
+    public function test_sync(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -24,7 +24,7 @@ final class BookkeeperTest extends TestCase
         self::assertSame('42', $booker->amount($buyer->wallet));
     }
 
-    public function testAmount(): void
+    public function test_amount(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -36,7 +36,7 @@ final class BookkeeperTest extends TestCase
         self::assertSame('32', $booker->amount($buyer->wallet));
     }
 
-    public function testIncrease(): void
+    public function test_increase(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -47,7 +47,7 @@ final class BookkeeperTest extends TestCase
         self::assertSame('0', $booker->amount($buyer->wallet));
     }
 
-    public function testMultiIncrease(): void
+    public function test_multi_increase(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();

@@ -10,7 +10,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 final readonly class TransactionQuery implements TransactionQueryInterface
 {
     /**
-     * @param array<mixed>|null $meta
+     * @param  array<mixed>|null  $meta
      */
     private function __construct(
         private TransactionType $type,
@@ -19,11 +19,10 @@ final readonly class TransactionQuery implements TransactionQueryInterface
         private ?array $meta,
         private bool $confirmed,
         private ?string $uuid
-    ) {
-    }
+    ) {}
 
     /**
-     * @param array<mixed>|null $meta
+     * @param  array<mixed>|null  $meta
      */
     public static function createDeposit(
         Wallet $wallet,
@@ -36,7 +35,7 @@ final readonly class TransactionQuery implements TransactionQueryInterface
     }
 
     /**
-     * @param array<mixed>|null $meta
+     * @param  array<mixed>|null  $meta
      */
     public static function createWithdraw(
         Wallet $wallet,

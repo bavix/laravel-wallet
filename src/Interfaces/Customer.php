@@ -22,7 +22,7 @@ interface Customer extends Wallet
      * This method allows the user to purchase the provided product without any payment involved.
      * If the purchase is successful, the method returns the transfer object representing the purchase.
      *
-     * @param ProductInterface $product The product to be purchased.
+     * @param  ProductInterface  $product  The product to be purchased.
      * @return Transfer The transfer object representing the purchase.
      *
      * @throws ProductEnded If the product is ended.
@@ -44,8 +44,8 @@ interface Customer extends Wallet
      * empty balance, it returns null. If the purchase fails due to a reason
      * other than the above, it throws a more specific exception.
      *
-     * @param ProductInterface $product The product to be purchased.
-     * @param bool $force [optional] Whether to force the purchase. Defaults to false.
+     * @param  ProductInterface  $product  The product to be purchased.
+     * @param  bool  $force  [optional] Whether to force the purchase. Defaults to false.
      * @return Transfer|null The transfer object representing the purchase, or null if the purchase fails.
      *
      * @throws ProductEnded If the product is ended.
@@ -66,8 +66,8 @@ interface Customer extends Wallet
      * empty balance, it throws an exception. If the payment fails due to a reason
      * other than the above, it throws a more specific exception.
      *
-     * @param ProductInterface $product The product to pay for.
-     * @param bool $force [optional] Whether to force the payment. Defaults to false.
+     * @param  ProductInterface  $product  The product to pay for.
+     * @param  bool  $force  [optional] Whether to force the payment. Defaults to false.
      * @return Transfer The transfer object representing the payment.
      *
      * @throws ProductEnded If the product is ended.
@@ -104,9 +104,9 @@ interface Customer extends Wallet
      * empty balance, it returns false. If the refund fails due to a reason
      * other than the above, it throws a more specific exception.
      *
-     * @param ProductInterface $product The product to be refunded.
-     * @param bool $force Whether to force the refund.
-     * @param bool $gifts Whether to refund gifts.
+     * @param  ProductInterface  $product  The product to be refunded.
+     * @param  bool  $force  Whether to force the refund.
+     * @param  bool  $gifts  Whether to refund gifts.
      * @return bool Whether the refund was successful.
      *
      * @throws ProductEnded If the product is ended.
@@ -289,10 +289,10 @@ interface Customer extends Wallet
      * Please note that refunding a cart is a complex process and may
      * involve multiple transactions and database queries.
      *
-     * @param CartInterface $cart The cart containing the items to be refunded.
-     * @param bool $force Whether to force the refund even if the item is not
-     *                    refundable.
-     * @param bool $gifts Whether to refund gifts as well.
+     * @param  CartInterface  $cart  The cart containing the items to be refunded.
+     * @param  bool  $force  Whether to force the refund even if the item is not
+     *                       refundable.
+     * @param  bool  $gifts  Whether to refund gifts as well.
      *
      * @throws BalanceIsEmpty If the customer does not have enough balance.
      * @throws InsufficientFunds If the customer does not have enough balance to
@@ -312,8 +312,8 @@ interface Customer extends Wallet
      * If the refund is successful, the method returns true. If the refund
      * fails, the method returns false.
      *
-     * @param CartInterface $cart The cart containing the items to be refunded.
-     * @param bool $gifts Whether to refund gifts as well.
+     * @param  CartInterface  $cart  The cart containing the items to be refunded.
+     * @param  bool  $gifts  Whether to refund gifts as well.
      * @return bool True if the refund is successful, false otherwise.
      *
      * @throws RecordNotFoundException If the cart or any of its items are not found.
@@ -331,8 +331,8 @@ interface Customer extends Wallet
      * If the refund is successful, the method returns true. If the refund
      * fails, the method returns false.
      *
-     * @param CartInterface $cart The cart containing the gifts to be refunded.
-     * @param bool $force Whether to force the refund even if the balance is empty.
+     * @param  CartInterface  $cart  The cart containing the gifts to be refunded.
+     * @param  bool  $force  Whether to force the refund even if the balance is empty.
      */
     public function safeRefundGiftCart(CartInterface $cart, bool $force = false): bool;
 
@@ -343,8 +343,8 @@ interface Customer extends Wallet
      * If the refund is successful, the method returns true. If the refund
      * fails, the method throws an exception.
      *
-     * @param CartInterface $cart The cart containing the gifts to be refunded.
-     * @param bool $force Whether to force the refund even if the balance is empty.
+     * @param  CartInterface  $cart  The cart containing the gifts to be refunded.
+     * @param  bool  $force  Whether to force the refund even if the balance is empty.
      * @return bool True if the refund was successful, false otherwise.
      *
      * @throws BalanceIsEmpty If the balance of the customer is empty and $force is false.
@@ -360,7 +360,7 @@ interface Customer extends Wallet
     /**
      * Forcefully refunds all gifts in the cart.
      *
-     * @param CartInterface $cart The cart to refund gifts from.
+     * @param  CartInterface  $cart  The cart to refund gifts from.
      * @return bool True if the gift refund was successful, false otherwise.
      *
      * @throws RecordNotFoundException If the cart or its items are not found.

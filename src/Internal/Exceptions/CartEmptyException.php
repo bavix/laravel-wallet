@@ -6,6 +6,4 @@ namespace Bavix\Wallet\Internal\Exceptions;
 
 use InvalidArgumentException;
 
-final class CartEmptyException extends InvalidArgumentException implements InvalidArgumentExceptionInterface
-{
-}
+final class CartEmptyException extends InvalidArgumentException implements InvalidArgumentExceptionInterface {}

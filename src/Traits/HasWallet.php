@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Traits;
 
-use function app;
 use Bavix\Wallet\Enums\TransactionType;
 use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Exceptions\AmountInvalid;
@@ -25,11 +24,13 @@ use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Services\TransactionServiceInterface;
 use Bavix\Wallet\Services\TransferServiceInterface;
-use function config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\RecordsNotFoundException;
+
+use function app;
+use function config;
 
 /**
  * Trait HasWallet.
@@ -51,11 +52,11 @@ trait HasWallet
      *
      * This method executes the deposit transaction within an atomic block to ensure data consistency.
      *
-     * @param int|string $amount The amount to deposit.
-     * @param array<mixed>|null $meta Additional metadata for the transaction. This can be used to store
-     * information about the type of deposit, the source of the funds, or any other relevant details.
-     * @param bool $confirmed Whether the transaction is confirmed. This can be used to indicate whether the
-     * transaction has been verified and is considered final. Defaults to true.
+     * @param  int|string  $amount  The amount to deposit.
+     * @param  array<mixed>|null  $meta  Additional metadata for the transaction. This can be used to store
+     *                                   information about the type of deposit, the source of the funds, or any other relevant details.
+     * @param  bool  $confirmed  Whether the transaction is confirmed. This can be used to indicate whether the
+     *                           transaction has been verified and is considered final. Defaults to true.
      * @return Transaction The transaction object representing the deposit.
      *
      * @throws AmountInvalid If the amount is invalid (e.g. negative, not a number, too large).
@@ -207,11 +208,11 @@ trait HasWallet
      * This method attempts to transfer funds from this wallet to another wallet.
      * If an error occurs during the process, null is returned.
      *
-     * @param Wallet $wallet The wallet to transfer funds to.
-     * @param int|string $amount The amount to transfer.
-     * @param ExtraDtoInterface|array<mixed>|null $meta Additional information for the transaction.
-     *                                                This can be an instance of an ExtraDtoInterface
-     *                                                or an array of arbitrary data.
+     * @param  Wallet  $wallet  The wallet to transfer funds to.
+     * @param  int|string  $amount  The amount to transfer.
+     * @param  ExtraDtoInterface|array<mixed>|null  $meta  Additional information for the transaction.
+     *                                                     This can be an instance of an ExtraDtoInterface
+     *                                                     or an array of arbitrary data.
      * @return null|Transfer The created transaction, or null if an error occurred.
      *
      * @throws AmountInvalid If the amount is invalid.
@@ -244,11 +245,11 @@ trait HasWallet
      * It uses the `AtomicServiceInterface` to ensure atomicity and consistency of the transfer.
      * The `ConsistencyServiceInterface` is used to check if the transfer is possible before attempting it.
      *
-     * @param Wallet $wallet The wallet to transfer funds to.
-     * @param int|string $amount The amount to transfer.
-     * @param ExtraDtoInterface|array<mixed>|null $meta Additional information for the transaction.
-     *                                                This can be an instance of an ExtraDtoInterface
-     *                                                or an array of arbitrary data.
+     * @param  Wallet  $wallet  The wallet to transfer funds to.
+     * @param  int|string  $amount  The amount to transfer.
+     * @param  ExtraDtoInterface|array<mixed>|null  $meta  Additional information for the transaction.
+     *                                                     This can be an instance of an ExtraDtoInterface
+     *                                                     or an array of arbitrary data.
      * @return Transfer The created transaction.
      *
      * @throws AmountInvalid If the amount is invalid.
@@ -284,9 +285,9 @@ trait HasWallet
      * This method wraps the withdrawal in an atomic block to ensure atomicity and consistency of the withdrawal.
      * It checks if the withdrawal is possible before attempting it.
      *
-     * @param int|string $amount The amount to withdraw.
-     * @param array<mixed>|null $meta Additional information for the transaction.
-     * @param bool $confirmed Whether the withdrawal is confirmed.
+     * @param  int|string  $amount  The amount to withdraw.
+     * @param  array<mixed>|null  $meta  Additional information for the transaction.
+     * @param  bool  $confirmed  Whether the withdrawal is confirmed.
      * @return Transaction The created transaction.
      *
      * @throws AmountInvalid If the amount is invalid.
@@ -326,8 +327,8 @@ trait HasWallet
      * This method retrieves the math service instance and calculates the total balance of the wallet.
      * It then checks if the withdrawal is possible using the consistency service.
      *
-     * @param int|string $amount The amount to be withdrawn.
-     * @param bool $allowZero Flag to allow zero balance for withdrawal. Defaults to false.
+     * @param  int|string  $amount  The amount to be withdrawn.
+     * @param  bool  $allowZero  Flag to allow zero balance for withdrawal. Defaults to false.
      */
     public function canWithdraw(int|string $amount, bool $allowZero = false): bool
     {
@@ -349,9 +350,9 @@ trait HasWallet
      * This method creates a new withdrawal transaction and returns it. It wraps the transaction creation
      * in an atomic block to ensure atomicity and consistency.
      *
-     * @param int|string $amount The amount to withdraw.
-     * @param array<mixed>|null $meta Additional information for the transaction.
-     * @param bool $confirmed Whether the transaction is confirmed. Defaults to true.
+     * @param  int|string  $amount  The amount to withdraw.
+     * @param  array<mixed>|null  $meta  Additional information for the transaction.
+     * @param  bool  $confirmed  Whether the transaction is confirmed. Defaults to true.
      * @return Transaction The created transaction.
      *
      * @throws AmountInvalid If the amount is invalid.
@@ -393,11 +394,11 @@ trait HasWallet
      * the usual validation checks (e.g., sufficient funds, wallet status). It is critical to use this
      * method with caution as it can result in negative balances or other unintended consequences.
      *
-     * @param Wallet $wallet The wallet to transfer funds to.
-     * @param int|string $amount The amount to transfer.
-     * @param ExtraDtoInterface|array<mixed>|null $meta Additional information for the transaction.
-     *                                                This can be an instance of an ExtraDtoInterface
-     *                                                or an array of arbitrary data.
+     * @param  Wallet  $wallet  The wallet to transfer funds to.
+     * @param  int|string  $amount  The amount to transfer.
+     * @param  ExtraDtoInterface|array<mixed>|null  $meta  Additional information for the transaction.
+     *                                                     This can be an instance of an ExtraDtoInterface
+     *                                                     or an array of arbitrary data.
      * @return Transfer The created transfer.
      *
      * @throws AmountInvalid If the amount is invalid.
@@ -473,8 +474,8 @@ trait HasWallet
         /** @var HasMany<Transfer, WalletModel> $hasMany */
         $hasMany = $wallet
             ->hasMany(
-            // Retrieve the transfer model class from the configuration.
-            // The default value is `Transfer::class`.
+                // Retrieve the transfer model class from the configuration.
+                // The default value is `Transfer::class`.
                 $model,
                 // Define the foreign key for the relationship.
                 // The foreign key is `from_id`.
@@ -515,8 +516,8 @@ trait HasWallet
         /** @var HasMany<Transfer, WalletModel> $hasMany */
         $hasMany = $wallet
             ->hasMany(
-            // Retrieve the transfer model class from the configuration.
-            // The default value is `Transfer::class`.
+                // Retrieve the transfer model class from the configuration.
+                // The default value is `Transfer::class`.
                 $model,
                 // Define the foreign key for the relationship.
                 // The foreign key is `to_id`.

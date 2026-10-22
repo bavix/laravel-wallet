@@ -16,7 +16,7 @@ final class FormatterTest extends TestCase
     /**
      * @throws ExceptionInterface
      */
-    public function testFloatValueDP3(): void
+    public function test_float_value_d_p3(): void
     {
         $result = app(FormatterServiceInterface::class)->floatValue('12345', 3);
 
@@ -26,7 +26,7 @@ final class FormatterTest extends TestCase
     /**
      * @throws ExceptionInterface
      */
-    public function testFloatValueDP2(): void
+    public function test_float_value_d_p2(): void
     {
         $result = app(FormatterServiceInterface::class)->floatValue('12345', 2);
 
@@ -36,7 +36,7 @@ final class FormatterTest extends TestCase
     /**
      * @throws ExceptionInterface
      */
-    public function testIntValueDP3(): void
+    public function test_int_value_d_p3(): void
     {
         $result = app(FormatterServiceInterface::class)->intValue('12.345', 3);
 
@@ -46,7 +46,7 @@ final class FormatterTest extends TestCase
     /**
      * @throws ExceptionInterface
      */
-    public function testIntValueDP2(): void
+    public function test_int_value_d_p2(): void
     {
         $result = app(FormatterServiceInterface::class)->intValue('123.45', 2);
 

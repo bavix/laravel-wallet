@@ -17,7 +17,7 @@ final class Issue1000StressTest extends TestCase
 {
     use StressTestSetupTrait;
 
-    public function testIssue1000OnMultipleWalletsAndProducts(): void
+    public function test_issue1000_on_multiple_wallets_and_products(): void
     {
         $queryHandler = app(PurchaseQueryHandlerInterface::class);
         $legacyPurchaseService = app(PurchaseServiceInterface::class);

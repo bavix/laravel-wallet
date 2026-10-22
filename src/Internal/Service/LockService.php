@@ -58,8 +58,8 @@ final class LockService implements LockServiceInterface
     /**
      * @template T
      *
-     * @param string[] $keys
-     * @param callable(): T $callback
+     * @param  string[]  $keys
+     * @param  callable(): T  $callback
      * @return T
      */
     public function blocks(array $keys, callable $callback): mixed

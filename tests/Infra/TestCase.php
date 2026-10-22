@@ -38,7 +38,7 @@ abstract class TestCase extends OrchestraTestCase
     }
 
     /**
-     * @param Application $app
+     * @param  Application  $app
      * @return non-empty-array<int, string>
      */
     protected function getPackageProviders($app): array
@@ -53,7 +53,7 @@ abstract class TestCase extends OrchestraTestCase
     }
 
     /**
-     * @param Application $app
+     * @param  Application  $app
      */
     protected function getEnvironmentSetUp($app): void
     {

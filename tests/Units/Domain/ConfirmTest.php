@@ -24,7 +24,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class ConfirmTest extends TestCase
 {
-    public function testSimple(): void
+    public function test_simple(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -47,7 +47,7 @@ final class ConfirmTest extends TestCase
         self::assertTrue($transaction->confirmed);
     }
 
-    public function testSafe(): void
+    public function test_safe(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -67,7 +67,7 @@ final class ConfirmTest extends TestCase
         self::assertFalse($transaction->confirmed);
     }
 
-    public function testSafeConfirmedInvalid(): void
+    public function test_safe_confirmed_invalid(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -88,7 +88,7 @@ final class ConfirmTest extends TestCase
         self::assertTrue($transaction->confirmed);
     }
 
-    public function testSafeResetConfirm(): void
+    public function test_safe_reset_confirm(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -113,7 +113,7 @@ final class ConfirmTest extends TestCase
     /**
      * @see https://github.com/bavix/laravel-wallet/issues/134
      */
-    public function testWithdraw(): void
+    public function test_withdraw(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -129,7 +129,7 @@ final class ConfirmTest extends TestCase
         self::assertFalse($transaction->confirmed);
     }
 
-    public function testForce(): void
+    public function test_force(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -148,7 +148,7 @@ final class ConfirmTest extends TestCase
         self::assertTrue($transaction->confirmed);
     }
 
-    public function testForceConfirmedInvalid(): void
+    public function test_force_confirmed_invalid(): void
     {
         $this->expectException(ConfirmedInvalid::class);
         $this->expectExceptionCode(ExceptionInterface::CONFIRMED_INVALID);
@@ -167,7 +167,7 @@ final class ConfirmTest extends TestCase
         $wallet->forceConfirm($transaction);
     }
 
-    public function testUnconfirmed(): void
+    public function test_unconfirmed(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -186,7 +186,7 @@ final class ConfirmTest extends TestCase
         self::assertFalse($transaction->confirmed);
     }
 
-    public function testConfirmedInvalid(): void
+    public function test_confirmed_invalid(): void
     {
         $this->expectException(ConfirmedInvalid::class);
         $this->expectExceptionCode(ExceptionInterface::CONFIRMED_INVALID);
@@ -205,7 +205,7 @@ final class ConfirmTest extends TestCase
         $wallet->confirm($transaction);
     }
 
-    public function testUnconfirmedInvalid(): void
+    public function test_unconfirmed_invalid(): void
     {
         $this->expectException(UnconfirmedInvalid::class);
         $this->expectExceptionCode(ExceptionInterface::UNCONFIRMED_INVALID);
@@ -224,7 +224,7 @@ final class ConfirmTest extends TestCase
         $wallet->resetConfirm($transaction);
     }
 
-    public function testSafeUnconfirmed(): void
+    public function test_safe_unconfirmed(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -238,7 +238,7 @@ final class ConfirmTest extends TestCase
         self::assertTrue($wallet->safeResetConfirm($transaction));
     }
 
-    public function testSafeUnconfirmedWalletOwnerInvalid(): void
+    public function test_safe_unconfirmed_wallet_owner_invalid(): void
     {
         /**
          * @var Buyer $buyer1
@@ -263,7 +263,7 @@ final class ConfirmTest extends TestCase
         self::assertTrue($transaction1->confirmed);
     }
 
-    public function testWalletOwnerInvalid(): void
+    public function test_wallet_owner_invalid(): void
     {
         $this->expectException(WalletOwnerInvalid::class);
         $this->expectExceptionCode(ExceptionInterface::WALLET_OWNER_INVALID);
@@ -288,7 +288,7 @@ final class ConfirmTest extends TestCase
         $secondWallet->confirm($transaction);
     }
 
-    public function testForceWalletOwnerInvalid(): void
+    public function test_force_wallet_owner_invalid(): void
     {
         $this->expectException(WalletOwnerInvalid::class);
         $this->expectExceptionCode(ExceptionInterface::WALLET_OWNER_INVALID);
@@ -313,7 +313,7 @@ final class ConfirmTest extends TestCase
         $secondWallet->forceConfirm($transaction);
     }
 
-    public function testUserConfirm(): void
+    public function test_user_confirm(): void
     {
         /** @var UserConfirm $userConfirm */
         $userConfirm = UserConfirmFactory::new()->create();
@@ -327,7 +327,7 @@ final class ConfirmTest extends TestCase
         self::assertTrue($transaction->confirmed);
     }
 
-    public function testConfirmWithoutWallet(): void
+    public function test_confirm_without_wallet(): void
     {
         /** @var UserConfirm $userConfirm */
         $userConfirm = UserConfirmFactory::new()->create();
@@ -341,7 +341,7 @@ final class ConfirmTest extends TestCase
         self::assertSame(9000, $userConfirm->balanceInt);
     }
 
-    public function testUserConfirmByWallet(): void
+    public function test_user_confirm_by_wallet(): void
     {
         /** @var UserConfirm $userConfirm */
         $userConfirm = UserConfirmFactory::new()->create();
@@ -359,7 +359,7 @@ final class ConfirmTest extends TestCase
         self::assertTrue($transaction->confirmed);
     }
 
-    public function testTransactionResetConfirmWalletOwnerInvalid(): void
+    public function test_transaction_reset_confirm_wallet_owner_invalid(): void
     {
         $this->expectException(WalletOwnerInvalid::class);
         $this->expectExceptionCode(ExceptionInterface::WALLET_OWNER_INVALID);
@@ -378,7 +378,7 @@ final class ConfirmTest extends TestCase
         $user1->wallet->resetConfirm($transfer->deposit);
     }
 
-    public function testTransactionResetConfirmSuccess(): void
+    public function test_transaction_reset_confirm_success(): void
     {
         /**
          * @var User $user1

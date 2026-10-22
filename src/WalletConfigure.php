@@ -36,7 +36,7 @@ final class WalletConfigure
      * Indicates if Wallet migrations will be run.
      *
      * @return bool
-     *     True if the migrations will be run, false if they will be ignored.
+     *              True if the migrations will be run, false if they will be ignored.
      */
     public static function isRunsMigrations(): bool
     {

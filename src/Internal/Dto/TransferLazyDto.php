@@ -13,7 +13,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 final readonly class TransferLazyDto implements TransferLazyDtoInterface
 {
     /**
-     * @param array<mixed>|null $extra
+     * @param  array<mixed>|null  $extra
      */
     public function __construct(
         private Wallet $fromWallet,
@@ -25,8 +25,7 @@ final readonly class TransferLazyDto implements TransferLazyDtoInterface
         private TransferStatus $status,
         private ?string $uuid,
         private ?array $extra,
-    ) {
-    }
+    ) {}
 
     public function getFromWallet(): Wallet
     {

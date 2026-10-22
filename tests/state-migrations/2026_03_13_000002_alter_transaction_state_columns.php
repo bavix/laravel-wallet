@@ -7,11 +7,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class() extends Migration
+return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table((new TransactionState())->getTable(), static function (Blueprint $table) {
+        Schema::table((new TransactionState)->getTable(), static function (Blueprint $table) {
             $table->string('balance_before')
                 ->nullable();
 
@@ -25,7 +25,7 @@ return new class() extends Migration
 
     public function down(): void
     {
-        Schema::table((new TransactionState())->getTable(), static function (Blueprint $table) {
+        Schema::table((new TransactionState)->getTable(), static function (Blueprint $table) {
             $table->dropColumn(['balance_before', 'balance_after', 'state_hash']);
         });
     }

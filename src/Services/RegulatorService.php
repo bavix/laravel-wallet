@@ -38,8 +38,7 @@ final class RegulatorService implements RegulatorServiceInterface
         private readonly MathServiceInterface $mathService,
         private readonly LockServiceInterface $lockService,
         private readonly WalletRepositoryInterface $walletRepository
-    ) {
-    }
+    ) {}
 
     public function forget(Wallet $wallet): bool
     {

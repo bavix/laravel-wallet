@@ -13,7 +13,7 @@ use DateTimeImmutable;
 final readonly class TransferDto implements TransferDtoInterface
 {
     /**
-     * @param array<mixed>|null $extra
+     * @param  array<mixed>|null  $extra
      */
     public function __construct(
         private string $uuid,
@@ -27,8 +27,7 @@ final readonly class TransferDto implements TransferDtoInterface
         private ?array $extra,
         private DateTimeImmutable $createdAt,
         private DateTimeImmutable $updatedAt,
-    ) {
-    }
+    ) {}
 
     /**
      * @return non-empty-string

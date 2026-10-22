@@ -23,7 +23,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class DiscountTest extends TestCase
 {
-    public function testPay(): void
+    public function test_pay(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -65,7 +65,7 @@ final class DiscountTest extends TestCase
         self::assertSame($product->getKey(), $transfer->to->holder->getKey());
     }
 
-    public function testItemTransactions(): void
+    public function test_item_transactions(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -100,7 +100,7 @@ final class DiscountTest extends TestCase
         self::assertTrue($deposit->is($product->transactions()->latest()->first()));
     }
 
-    public function testRefund(): void
+    public function test_refund(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -147,7 +147,7 @@ final class DiscountTest extends TestCase
         self::assertSame(TransferStatus::Refund, $transfer->status);
     }
 
-    public function testForceRefund(): void
+    public function test_force_refund(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -190,7 +190,7 @@ final class DiscountTest extends TestCase
         self::assertSame(0, $buyer->balanceInt);
     }
 
-    public function testOutOfStock(): void
+    public function test_out_of_stock(): void
     {
         $this->expectException(ProductEnded::class);
         $this->expectExceptionCode(ExceptionInterface::PRODUCT_ENDED);
@@ -208,7 +208,7 @@ final class DiscountTest extends TestCase
         $buyer->pay($product);
     }
 
-    public function testForcePay(): void
+    public function test_force_pay(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -229,7 +229,7 @@ final class DiscountTest extends TestCase
         self::assertSame(0, $buyer->balanceInt);
     }
 
-    public function testPayFree(): void
+    public function test_pay_free(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -256,7 +256,7 @@ final class DiscountTest extends TestCase
         self::assertSame(0, $product->balanceInt);
     }
 
-    public function testFreePay(): void
+    public function test_free_pay(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -280,7 +280,7 @@ final class DiscountTest extends TestCase
         self::assertSame(0, $product->balanceInt);
     }
 
-    public function testPayFreeOutOfStock(): void
+    public function test_pay_free_out_of_stock(): void
     {
         $this->expectException(ProductEnded::class);
         $this->expectExceptionCode(ExceptionInterface::PRODUCT_ENDED);

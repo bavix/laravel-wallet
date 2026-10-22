@@ -22,8 +22,8 @@ interface AtomicServiceInterface
      *
      * @template T
      *
-     * @param Wallet $object The wallet object to lock the transaction.
-     * @param callable(): T $callback The callback function to execute atomically.
+     * @param  Wallet  $object  The wallet object to lock the transaction.
+     * @param  callable(): T  $callback  The callback function to execute atomically.
      * @return T The result of the callback function.
      *
      * @throws RecordsNotFoundException If the records are not found.
@@ -41,8 +41,8 @@ interface AtomicServiceInterface
      *
      * @template T
      *
-     * @param non-empty-array<Wallet> $objects The array of wallet objects to lock the transactions.
-     * @param callable(): T $callback The callback function to execute atomically.
+     * @param  non-empty-array<Wallet>  $objects  The array of wallet objects to lock the transactions.
+     * @param  callable(): T  $callback  The callback function to execute atomically.
      * @return T The result of the callback function.
      *
      * @throws RecordsNotFoundException If the records are not found.

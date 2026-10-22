@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Traits;
 
-use function app;
 use Bavix\Wallet\Enums\TransactionType;
 use Bavix\Wallet\Enums\TransferStatus;
 use Bavix\Wallet\Exceptions\BalanceIsEmpty;
@@ -26,6 +25,8 @@ use Bavix\Wallet\Services\TaxServiceInterface;
 use Bavix\Wallet\Services\TransactionServiceInterface;
 use Illuminate\Database\RecordsNotFoundException;
 
+use function app;
+
 /**
  * Trait HasGift.
  *
@@ -39,9 +40,9 @@ trait HasGift
      * This method attempts to give the goods to the specified wallet without throwing an exception.
      * If an exception occurs during the process, `null` is returned.
      *
-     * @param Wallet $to The wallet to which the goods will be given.
-     * @param ProductInterface $product The goods to be given.
-     * @param bool $force [optional] Whether to force the gift. Defaults to `false`.
+     * @param  Wallet  $to  The wallet to which the goods will be given.
+     * @param  ProductInterface  $product  The goods to be given.
+     * @param  bool  $force  [optional] Whether to force the gift. Defaults to `false`.
      * @return Transfer|null The transfer object representing the gift, or `null` if the gift fails.
      *
      * @throws ExceptionInterface If an exception occurs during the process of giving the goods.
@@ -64,9 +65,9 @@ trait HasGift
      * returns the transfer object. If the gift fails due to a reason other than the above, it throws a more
      * specific exception.
      *
-     * @param Wallet $to The wallet to which the goods will be given.
-     * @param ProductInterface $product The goods to be given.
-     * @param bool $force [optional] Whether to force the gift. Defaults to `false`.
+     * @param  Wallet  $to  The wallet to which the goods will be given.
+     * @param  ProductInterface  $product  The goods to be given.
+     * @param  bool  $force  [optional] Whether to force the gift. Defaults to `false`.
      * @return Transfer The transfer object representing the gift.
      *
      * @throws BalanceIsEmpty If the balance of the wallet is empty.
@@ -180,8 +181,8 @@ trait HasGift
      * If the gift is successful, the method returns the transfer object. If the gift fails due
      * to a reason other than the above, it throws a more specific exception.
      *
-     * @param Wallet $to The wallet to which the gift will be given.
-     * @param ProductInterface $product The product to be given.
+     * @param  Wallet  $to  The wallet to which the gift will be given.
+     * @param  ProductInterface  $product  The product to be given.
      * @return Transfer The transfer object representing the gift.
      *
      * @throws RecordsNotFoundException If the record is not found.

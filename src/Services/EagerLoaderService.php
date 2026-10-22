@@ -17,8 +17,7 @@ final readonly class EagerLoaderService implements EagerLoaderServiceInterface
     public function __construct(
         private CastServiceInterface $castService,
         private WalletRepositoryInterface $walletRepository
-    ) {
-    }
+    ) {}
 
     public function loadWalletsByBasket(Customer $customer, BasketDtoInterface $basketDto): void
     {

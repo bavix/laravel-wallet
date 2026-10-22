@@ -17,8 +17,8 @@ interface BasketServiceInterface
      * This method is used to quickly check the stock of products in the basket.
      * It allows batch checks, which is necessary for quick payments.
      *
-     * @param AvailabilityDtoInterface $availabilityDto The DTO containing the basket and customer information.
-     *                                                The DTO contains the basket DTO and the customer object.
+     * @param  AvailabilityDtoInterface  $availabilityDto  The DTO containing the basket and customer information.
+     *                                                     The DTO contains the basket DTO and the customer object.
      * @return bool True if all products are available, false otherwise.
      *              Returns true if all products in the basket are available, false otherwise.
      *              The method checks the availability of each product in the basket.

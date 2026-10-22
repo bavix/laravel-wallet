@@ -12,14 +12,14 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class JsonServiceTest extends TestCase
 {
-    public function testJsonEncodeSuccess(): void
+    public function test_json_encode_success(): void
     {
         $jsonService = app(JsonService::class);
         self::assertNull($jsonService->encode(null));
         self::assertJson((string) $jsonService->encode([1]));
     }
 
-    public function testJsonEncodeFailed(): void
+    public function test_json_encode_failed(): void
     {
         $jsonService = app(JsonService::class);
         $array = [1];

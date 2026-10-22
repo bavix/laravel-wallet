@@ -9,7 +9,7 @@ interface JsonServiceInterface
     /**
      * Encode an array of data into a JSON string.
      *
-     * @param array<mixed>|null $data The data to encode. If null, returns null.
+     * @param  array<mixed>|null  $data  The data to encode. If null, returns null.
      * @return string|null The JSON encoded string, or null if the input is null.
      *
      * @note The input data is expected to be an array of mixed type data.

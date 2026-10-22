@@ -17,8 +17,7 @@ final readonly class PurchaseService implements PurchaseServiceInterface
 {
     public function __construct(
         private CastServiceInterface $castService
-    ) {
-    }
+    ) {}
 
     public function already(Customer $customer, BasketDtoInterface $basketDto, bool $gifts = false): array
     {

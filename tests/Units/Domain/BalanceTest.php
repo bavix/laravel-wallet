@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
-use function app;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\BookkeeperServiceInterface;
 use Bavix\Wallet\Services\RegulatorServiceInterface;
@@ -14,12 +13,14 @@ use Bavix\Wallet\Test\Infra\TestCase;
 use PDOException;
 use PHPUnit\Framework\MockObject\MockObject;
 
+use function app;
+
 /**
  * @internal
  */
 final class BalanceTest extends TestCase
 {
-    public function testBalanceWalletNotExists(): void
+    public function test_balance_wallet_not_exists(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -38,7 +39,7 @@ final class BalanceTest extends TestCase
         self::assertFalse($buyer->wallet->exists);
     }
 
-    public function testDepositWalletExists(): void
+    public function test_deposit_wallet_exists(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -49,7 +50,7 @@ final class BalanceTest extends TestCase
         self::assertTrue($buyer->wallet->exists);
     }
 
-    public function testSetNameAttribute(): void
+    public function test_set_name_attribute(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -85,7 +86,7 @@ final class BalanceTest extends TestCase
         self::assertSame('test', $buyer->wallet->slug);
     }
 
-    public function testDecimalPlaces(): void
+    public function test_decimal_places(): void
     {
         config([
             'wallet.wallet.creating' => [
@@ -104,7 +105,7 @@ final class BalanceTest extends TestCase
     /**
      * @see https://github.com/bavix/laravel-wallet/issues/498
      */
-    public function testMetaModify(): void
+    public function test_meta_modify(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -118,7 +119,7 @@ final class BalanceTest extends TestCase
         self::assertTrue($transaction->save());
     }
 
-    public function testCheckType(): void
+    public function test_check_type(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -135,7 +136,7 @@ final class BalanceTest extends TestCase
         self::assertSame(1000, $buyer->balanceInt);
     }
 
-    public function testCanWithdraw(): void
+    public function test_can_withdraw(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -146,7 +147,7 @@ final class BalanceTest extends TestCase
         self::assertTrue($buyer->canWithdraw(0, true));
     }
 
-    public function testWithdrawWalletExists(): void
+    public function test_withdraw_wallet_exists(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -160,7 +161,7 @@ final class BalanceTest extends TestCase
         self::assertLessThan(0, $buyer->balanceInt);
     }
 
-    public function testSimple(): void
+    public function test_simple(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -211,7 +212,7 @@ final class BalanceTest extends TestCase
         self::assertSame(1, $wallet->balanceInt);
     }
 
-    public function testGetBalance(): void
+    public function test_get_balance(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -225,7 +226,7 @@ final class BalanceTest extends TestCase
         self::assertSame('0', app(BookkeeperServiceInterface::class)->amount($wallet));
     }
 
-    public function testThrowUpdate(): void
+    public function test_throw_update(): void
     {
         $this->expectException(PDOException::class);
 
@@ -243,7 +244,7 @@ final class BalanceTest extends TestCase
         $mockQuery->method('whereKey')
             ->willReturn($mockQuery);
         $mockQuery->method('update')
-            ->willThrowException(new PDOException());
+            ->willThrowException(new PDOException);
 
         /** @var MockObject&Wallet $mockWallet */
         $mockWallet = $this->createMock(Wallet::class);
@@ -261,7 +262,7 @@ final class BalanceTest extends TestCase
             ]);
     }
 
-    public function testEqualWallet(): void
+    public function test_equal_wallet(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();

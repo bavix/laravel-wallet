@@ -19,7 +19,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class WalletTest extends TestCase
 {
-    public function testFindBy(): void
+    public function test_find_by(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -41,7 +41,7 @@ final class WalletTest extends TestCase
         self::assertNotNull($walletService->findById($buyer->wallet->getKey()));
     }
 
-    public function testGetBySlug(): void
+    public function test_get_by_slug(): void
     {
         $this->expectException(ModelNotFoundException::class);
         $this->expectExceptionCode(ExceptionInterface::MODEL_NOT_FOUND);
@@ -53,7 +53,7 @@ final class WalletTest extends TestCase
         $walletService->getBySlug($buyer, 'default');
     }
 
-    public function testGetById(): void
+    public function test_get_by_id(): void
     {
         $this->expectException(ModelNotFoundException::class);
         $this->expectExceptionCode(ExceptionInterface::MODEL_NOT_FOUND);
@@ -61,7 +61,7 @@ final class WalletTest extends TestCase
         app(WalletServiceInterface::class)->getById(-1);
     }
 
-    public function testCreateWalletWithUuid(): void
+    public function test_create_wallet_with_uuid(): void
     {
         /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
@@ -82,7 +82,7 @@ final class WalletTest extends TestCase
         self::assertSame(10, $user->wallets()->whereIn('uuid', $uuids)->count());
     }
 
-    public function testGetByUuid(): void
+    public function test_get_by_uuid(): void
     {
         $this->expectException(ModelNotFoundException::class);
         $this->expectExceptionCode(ExceptionInterface::MODEL_NOT_FOUND);

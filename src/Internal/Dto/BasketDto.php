@@ -10,16 +10,15 @@ use Generator;
 final readonly class BasketDto implements BasketDtoInterface
 {
     /**
-     * @param non-empty-array<int|string, ItemDtoInterface> $items
-     * @param array<mixed> $meta
-     * @param array<mixed>|null $extra
+     * @param  non-empty-array<int|string, ItemDtoInterface>  $items
+     * @param  array<mixed>  $meta
+     * @param  array<mixed>|null  $extra
      */
     public function __construct(
         private array $items,
         private array $meta,
         private ?array $extra,
-    ) {
-    }
+    ) {}
 
     public function meta(): array
     {

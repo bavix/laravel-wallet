@@ -12,8 +12,7 @@ final readonly class TransactionDtoTransformerCustom implements TransactionDtoTr
 {
     public function __construct(
         private TransactionDtoTransformer $transactionDtoTransformer
-    ) {
-    }
+    ) {}
 
     public function extract(TransactionDtoInterface $dto): array
     {

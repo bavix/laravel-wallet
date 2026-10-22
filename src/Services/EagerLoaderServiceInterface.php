@@ -24,8 +24,8 @@ interface EagerLoaderServiceInterface
      * The Customer object represents the customer who created the basket.
      * The BasketDtoInterface object represents the basket.
      *
-     * @param Customer $customer The customer who created the basket.
-     * @param BasketDtoInterface $basketDto The basket.
+     * @param  Customer  $customer  The customer who created the basket.
+     * @param  BasketDtoInterface  $basketDto  The basket.
      */
     public function loadWalletsByBasket(Customer $customer, BasketDtoInterface $basketDto): void;
 }

@@ -14,7 +14,7 @@ final readonly class TransactionFloatQuery implements TransactionQueryInterface
     private string $amount;
 
     /**
-     * @param array<mixed>|null $meta
+     * @param  array<mixed>|null  $meta
      */
     private function __construct(
         private TransactionType $type,
@@ -31,7 +31,7 @@ final readonly class TransactionFloatQuery implements TransactionQueryInterface
     }
 
     /**
-     * @param array<mixed>|null $meta
+     * @param  array<mixed>|null  $meta
      */
     public static function createDeposit(
         Wallet $wallet,
@@ -44,7 +44,7 @@ final readonly class TransactionFloatQuery implements TransactionQueryInterface
     }
 
     /**
-     * @param array<mixed>|null $meta
+     * @param  array<mixed>|null  $meta
      */
     public static function createWithdraw(
         Wallet $wallet,

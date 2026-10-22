@@ -19,7 +19,7 @@ final class CreditWalletTest extends TestCase
     /**
      * @see https://github.com/bavix/laravel-wallet/issues/397
      */
-    public function testCreditLimit(): void
+    public function test_credit_limit(): void
     {
         /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
@@ -43,7 +43,7 @@ final class CreditWalletTest extends TestCase
         self::assertSame(-9000, $wallet->balanceInt);
     }
 
-    public function testCreditLimitBalanceZero(): void
+    public function test_credit_limit_balance_zero(): void
     {
         /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
@@ -64,7 +64,7 @@ final class CreditWalletTest extends TestCase
         self::assertSame(-10000, $wallet->balanceInt);
     }
 
-    public function testFrozenBalance(): void
+    public function test_frozen_balance(): void
     {
         /** @var Buyer $user */
         $user = BuyerFactory::new()->create();

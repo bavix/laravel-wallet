@@ -19,7 +19,7 @@ interface DatabaseServiceInterface
      *
      * @template T
      *
-     * @param callable(): T $callback The callback function containing the database operations.
+     * @param  callable(): T  $callback  The callback function containing the database operations.
      * @return T The result of the callback function.
      *
      * @throws RecordsNotFoundException If the queried records are not found.

@@ -21,7 +21,7 @@ final class BlockTest extends TestCase
      * @see https://github.com/bavix/laravel-wallet/issues/174
      * @see https://github.com/bavix/laravel-wallet/issues/416
      */
-    public function testBlockTransfer(): void
+    public function test_block_transfer(): void
     {
         /** @var Buyer $buyer1 */
         /** @var Buyer $buyer2 */

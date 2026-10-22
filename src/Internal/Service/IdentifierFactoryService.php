@@ -13,14 +13,13 @@ use Ramsey\Uuid\UuidFactory;
 final readonly class IdentifierFactoryService implements IdentifierFactoryServiceInterface
 {
     /**
-     * @param UuidFactory $uuidFactory Service for generating UUIDs.
-     * @param ClockServiceInterface $clockService Service for getting the current time.
+     * @param  UuidFactory  $uuidFactory  Service for generating UUIDs.
+     * @param  ClockServiceInterface  $clockService  Service for getting the current time.
      */
     public function __construct(
         private UuidFactory $uuidFactory,
         private ClockServiceInterface $clockService,
-    ) {
-    }
+    ) {}
 
     /**
      * Generate a ID string using the uuid7 algorithm.

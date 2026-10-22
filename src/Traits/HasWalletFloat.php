@@ -33,7 +33,7 @@ trait HasWalletFloat
     use HasWallet;
 
     /**
-     * @param null|array<mixed> $meta
+     * @param  null|array<mixed>  $meta
      *
      * @throws AmountInvalid If the amount is invalid.
      * @throws RecordsNotFoundException If the wallet is not found.
@@ -67,7 +67,7 @@ trait HasWalletFloat
     }
 
     /**
-     * @param null|array<mixed> $meta
+     * @param  null|array<mixed>  $meta
      *
      * @throws AmountInvalid If the amount is invalid.
      * @throws RecordsNotFoundException If the wallet is not found.
@@ -102,7 +102,7 @@ trait HasWalletFloat
     }
 
     /**
-     * @param null|array<mixed> $meta
+     * @param  null|array<mixed>  $meta
      *
      * @throws AmountInvalid If the amount is invalid.
      * @throws BalanceIsEmpty If the balance is empty.
@@ -169,14 +169,14 @@ trait HasWalletFloat
     }
 
     /**
-     * @param ExtraDtoInterface|array<mixed>|null $meta
+     * @param  ExtraDtoInterface|array<mixed>|null  $meta
      *
      * @throws AmountInvalid If the amount specified is invalid (e.g., negative values).
      * @throws BalanceIsEmpty If the balance of this wallet is empty.
      * @throws InsufficientFunds If the amount to be transferred exceeds the available balance in this wallet.
      * @throws RecordsNotFoundException If the target wallet cannot be found.
      * @throws TransactionFailedException If the transfer could not be completed due to a failure
-     *                                     in the underlying transaction system.
+     *                                    in the underlying transaction system.
      * @throws ExceptionInterface A generic exception interface catch-all for any other exceptions that
      *                            might occur during the execution of the transfer.
      */
@@ -209,7 +209,7 @@ trait HasWalletFloat
     }
 
     /**
-     * @param ExtraDtoInterface|array<mixed>|null $meta
+     * @param  ExtraDtoInterface|array<mixed>|null  $meta
      *
      * @throws AmountInvalid If the amount is invalid.
      */
@@ -239,14 +239,14 @@ trait HasWalletFloat
     }
 
     /**
-     * @param ExtraDtoInterface|array<mixed>|null $meta
+     * @param  ExtraDtoInterface|array<mixed>|null  $meta
      *
      * @throws AmountInvalid If the amount specified is invalid (e.g., negative values).
      * @throws RecordsNotFoundException If the target wallet cannot be found.
      * @throws TransactionFailedException If the transfer could not be completed due to a failure
-     * in the underlying transaction system.
+     *                                    in the underlying transaction system.
      * @throws ExceptionInterface A generic exception interface catch-all for any other exceptions that
-     * might occur during the execution of the transfer.
+     *                            might occur during the execution of the transfer.
      */
     public function forceTransferFloat(
         Wallet $wallet,
@@ -297,7 +297,7 @@ trait HasWalletFloat
         // Use the formatter service to format the balance as a float.
         /** @var non-empty-string $result */
         $result = app(FormatterServiceInterface::class)->floatValue(
-        // The balance of the wallet.
+            // The balance of the wallet.
             $balance,
 
             // The number of decimal places for the wallet.

@@ -32,8 +32,7 @@ final readonly class PrepareService implements PrepareServiceInterface
         private CastServiceInterface $castService,
         private MathServiceInterface $mathService,
         private TaxServiceInterface $taxService
-    ) {
-    }
+    ) {}
 
     /**
      * @throws AmountInvalid

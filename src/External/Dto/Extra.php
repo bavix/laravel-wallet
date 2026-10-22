@@ -14,9 +14,9 @@ final readonly class Extra implements ExtraDtoInterface
     private OptionDtoInterface $withdraw;
 
     /**
-     * @param OptionDtoInterface|array<mixed>|null $deposit
-     * @param OptionDtoInterface|array<mixed>|null $withdraw
-     * @param array<mixed>|null $extra
+     * @param  OptionDtoInterface|array<mixed>|null  $deposit
+     * @param  OptionDtoInterface|array<mixed>|null  $withdraw
+     * @param  array<mixed>|null  $extra
      */
     public function __construct(
         OptionDtoInterface|array|null $deposit,

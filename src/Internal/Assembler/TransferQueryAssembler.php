@@ -10,7 +10,7 @@ use Bavix\Wallet\Internal\Query\TransferQueryInterface;
 final class TransferQueryAssembler implements TransferQueryAssemblerInterface
 {
     /**
-     * @param non-empty-array<int|string, string> $uuids
+     * @param  non-empty-array<int|string, string>  $uuids
      */
     public function create(array $uuids): TransferQueryInterface
     {

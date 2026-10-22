@@ -16,11 +16,10 @@ final readonly class TransactionRepository implements TransactionRepositoryInter
         private TransactionDtoTransformerInterface $transformer,
         private JsonServiceInterface $jsonService,
         private Transaction $transaction
-    ) {
-    }
+    ) {}
 
     /**
-     * @param non-empty-array<int|string, TransactionDtoInterface> $objects
+     * @param  non-empty-array<int|string, TransactionDtoInterface>  $objects
      */
     public function insert(array $objects): void
     {

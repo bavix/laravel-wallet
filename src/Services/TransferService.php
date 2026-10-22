@@ -30,11 +30,10 @@ final readonly class TransferService implements TransferServiceInterface
         private DatabaseServiceInterface $databaseService,
         private CastServiceInterface $castService,
         private AtmServiceInterface $atmService,
-    ) {
-    }
+    ) {}
 
     /**
-     * @param int[] $ids
+     * @param  int[]  $ids
      */
     public function updateStatusByIds(TransferStatus $status, array $ids): bool
     {
@@ -53,7 +52,7 @@ final readonly class TransferService implements TransferServiceInterface
     }
 
     /**
-     * @param non-empty-array<TransferLazyDtoInterface> $objects
+     * @param  non-empty-array<TransferLazyDtoInterface>  $objects
      * @return non-empty-array<string, Transfer>
      *
      * @throws RecordNotFoundException

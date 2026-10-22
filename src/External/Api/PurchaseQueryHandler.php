@@ -18,8 +18,7 @@ final readonly class PurchaseQueryHandler implements PurchaseQueryHandlerInterfa
         private CastServiceInterface $castService,
         private Purchase $purchase,
         private Transfer $transfer
-    ) {
-    }
+    ) {}
 
     public function apply(array $objects): array
     {
@@ -50,7 +49,7 @@ final readonly class PurchaseQueryHandler implements PurchaseQueryHandlerInterfa
     }
 
     /**
-     * @param array<int, PurchaseQueryInterface> $objects
+     * @param  array<int, PurchaseQueryInterface>  $objects
      * @return array{
      *     queryMap: array<int, array{strict: string, gifts: string, includeGifts: bool}>,
      *     fromIds: array<int, true>,
@@ -87,8 +86,8 @@ final readonly class PurchaseQueryHandler implements PurchaseQueryHandlerInterfa
     }
 
     /**
-     * @param array<int, true> $fromIds
-     * @param array<int, true> $toIds
+     * @param  array<int, true>  $fromIds
+     * @param  array<int, true>  $toIds
      * @return array<string, int>
      */
     private function matchByPurchases(array $fromIds, array $toIds): array
@@ -105,7 +104,7 @@ final readonly class PurchaseQueryHandler implements PurchaseQueryHandlerInterfa
     }
 
     /**
-     * @param iterable<Purchase> $purchases
+     * @param  iterable<Purchase>  $purchases
      * @return array<string, int>
      */
     private function processPurchaseMatches(iterable $purchases): array
@@ -131,8 +130,8 @@ final readonly class PurchaseQueryHandler implements PurchaseQueryHandlerInterfa
     }
 
     /**
-     * @param iterable<Transfer> $transfers
-     * @param array<string, true> $filterKeys
+     * @param  iterable<Transfer>  $transfers
+     * @param  array<string, true>  $filterKeys
      * @return array<string, int>
      */
     private function processTransferMatches(iterable $transfers, array $filterKeys): array
@@ -159,8 +158,8 @@ final readonly class PurchaseQueryHandler implements PurchaseQueryHandlerInterfa
     }
 
     /**
-     * @param array<int, array{strict: string, gifts: string, includeGifts: bool}> $queryMap
-     * @param array<string, int> $matchedTransferIds
+     * @param  array<int, array{strict: string, gifts: string, includeGifts: bool}>  $queryMap
+     * @param  array<string, int>  $matchedTransferIds
      * @return array<string, true>
      */
     private function collectFallbackKeys(array $queryMap, array $matchedTransferIds): array
@@ -182,10 +181,10 @@ final readonly class PurchaseQueryHandler implements PurchaseQueryHandlerInterfa
     }
 
     /**
-     * @param array<int, true> $fromIds
-     * @param array<int, true> $toIds
-     * @param array<string, true> $needFallback
-     * @param array<string, int> $matchedTransferIds
+     * @param  array<int, true>  $fromIds
+     * @param  array<int, true>  $toIds
+     * @param  array<string, true>  $needFallback
+     * @param  array<string, int>  $matchedTransferIds
      * @return array<string, int>
      */
     private function matchByTransfersFallback(
@@ -208,7 +207,7 @@ final readonly class PurchaseQueryHandler implements PurchaseQueryHandlerInterfa
     }
 
     /**
-     * @param array<string, int> $matchedTransferIds
+     * @param  array<string, int>  $matchedTransferIds
      * @return array<int, Transfer>
      */
     private function loadMatchedTransfers(array $matchedTransferIds): array
@@ -232,9 +231,9 @@ final readonly class PurchaseQueryHandler implements PurchaseQueryHandlerInterfa
     }
 
     /**
-     * @param array<int, array{strict: string, gifts: string, includeGifts: bool}> $queryMap
-     * @param array<string, int> $matchedTransferIds
-     * @param array<int, Transfer> $matchedTransfers
+     * @param  array<int, array{strict: string, gifts: string, includeGifts: bool}>  $queryMap
+     * @param  array<string, int>  $matchedTransferIds
+     * @param  array<int, Transfer>  $matchedTransfers
      * @return array<int, Transfer|null>
      */
     private function buildResult(array $queryMap, array $matchedTransferIds, array $matchedTransfers): array

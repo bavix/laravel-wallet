@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Collection;
  */
 final class EagerLoadingTest extends TestCase
 {
-    public function testUuidDuplicate(): void
+    public function test_uuid_duplicate(): void
     {
         $expected = [];
 
@@ -53,7 +53,7 @@ final class EagerLoadingTest extends TestCase
         self::assertEquals($expected, $uuids);
     }
 
-    public function testTransferTransactions(): void
+    public function test_transfer_transactions(): void
     {
         /** @var Buyer $user1 */
         /** @var Buyer $user2 */
@@ -73,7 +73,7 @@ final class EagerLoadingTest extends TestCase
         self::assertTrue($user2->wallet->is($transfer->to));
     }
 
-    public function testMultiWallets(): void
+    public function test_multi_wallets(): void
     {
         /** @var UserMulti $multi */
         $multi = UserMultiFactory::new()->create();
@@ -100,7 +100,7 @@ final class EagerLoadingTest extends TestCase
         self::assertTrue($user->is($user->getWallet('hello')->holder));
     }
 
-    public function testEagerLoaderPay(): void
+    public function test_eager_loader_pay(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();

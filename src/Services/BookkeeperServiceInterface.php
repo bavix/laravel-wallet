@@ -18,7 +18,7 @@ interface BookkeeperServiceInterface
      * This method removes any data related to the specified wallet.
      * It is used to remove the wallet from the bookkeeper's records.
      *
-     * @param Wallet $wallet The wallet to forget.
+     * @param  Wallet  $wallet  The wallet to forget.
      * @return bool True if the wallet was successfully forgotten, false otherwise.
      *
      * @throws RecordNotFoundException If the wallet does not exist in the database.
@@ -38,8 +38,8 @@ interface BookkeeperServiceInterface
      * If the specified value is less than the current balance, the balance will be decreased.
      * If the specified value is equal to the current balance, the balance will remain unchanged.
      *
-     * @param Wallet $wallet The wallet whose balance needs to be synchronized.
-     * @param float|int|string $value The new balance value for the wallet.
+     * @param  Wallet  $wallet  The wallet whose balance needs to be synchronized.
+     * @param  float|int|string  $value  The new balance value for the wallet.
      *
      * @throws RecordNotFoundException If the wallet does not exist.
      */
@@ -53,8 +53,8 @@ interface BookkeeperServiceInterface
      * If the given value is negative, the balance will be decreased.
      * If the given value is zero, the balance will remain unchanged.
      *
-     * @param Wallet $wallet The wallet to increase the balance for.
-     * @param float|int|string $value The value to increase the balance by.
+     * @param  Wallet  $wallet  The wallet to increase the balance for.
+     * @param  float|int|string  $value  The value to increase the balance by.
      * @return string The new balance as a string.
      *
      * @throws RecordNotFoundException If the wallet does not exist.
@@ -69,9 +69,9 @@ interface BookkeeperServiceInterface
      *
      * @template T of non-empty-array<string, Wallet>
      *
-     * @param T $wallets An array of wallets.
+     * @param  T  $wallets  An array of wallets.
      * @return non-empty-array<key-of<T>, string> An associative array with the wallet UUIDs as keys
-     *                                             and their balance amounts as values.
+     *                                            and their balance amounts as values.
      */
     public function multiAmount(array $wallets): array;
 
@@ -91,8 +91,8 @@ interface BookkeeperServiceInterface
      * The method ensures that all specified wallets undergo the synchronization process, adhering to the given values,
      * and returns a boolean indicating the overall success of the operation.
      *
-     * @param non-empty-array<string, float|int|string> $balances An associative array mapping wallet UUIDs to their new balance values.
-     *                                                             Each entry specifies the target balance for a wallet identified by its UUID.
+     * @param  non-empty-array<string, float|int|string>  $balances  An associative array mapping wallet UUIDs to their new balance values.
+     *                                                               Each entry specifies the target balance for a wallet identified by its UUID.
      * @return bool True if all specified wallets were successfully synchronized with the given balances, false otherwise.
      *
      * @throws RecordNotFoundException Thrown if any of the specified wallets cannot be found in the system. This ensures
@@ -116,12 +116,12 @@ interface BookkeeperServiceInterface
      *
      * @template T of non-empty-array<string, float|int|string>
      *
-     * @param non-empty-array<key-of<T>, Wallet> $wallets An associative array of wallets.
-     *                                                    The keys are wallet UUIDs and the values are the wallet objects.
-     * @param T $incrementValues An associative array of increment values.
-     *                           The keys are wallet UUIDs and the values are the increment values.
+     * @param  non-empty-array<key-of<T>, Wallet>  $wallets  An associative array of wallets.
+     *                                                       The keys are wallet UUIDs and the values are the wallet objects.
+     * @param  T  $incrementValues  An associative array of increment values.
+     *                              The keys are wallet UUIDs and the values are the increment values.
      * @return non-empty-array<key-of<T>, string> An associative array with the new balance amounts of the wallets.
-     *                                           The keys are the wallet UUIDs and the values are the new balance amounts as strings.
+     *                                            The keys are the wallet UUIDs and the values are the new balance amounts as strings.
      *
      * @throws RecordNotFoundException If any of the wallets do not exist.
      */

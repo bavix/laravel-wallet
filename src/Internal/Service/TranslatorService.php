@@ -10,8 +10,7 @@ final readonly class TranslatorService implements TranslatorServiceInterface
 {
     public function __construct(
         private Translator $translator
-    ) {
-    }
+    ) {}
 
     public function get(string $key): string
     {

@@ -15,8 +15,7 @@ final readonly class AvailabilityDto implements AvailabilityDtoInterface
         private Customer $customer,
         private BasketDtoInterface $basketDto,
         private bool $force
-    ) {
-    }
+    ) {}
 
     public function getBasketDto(): BasketDtoInterface
     {

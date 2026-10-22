@@ -14,7 +14,7 @@ final readonly class TransferFloatQuery implements TransferQueryInterface
     private string $amount;
 
     /**
-     * @param array<mixed>|ExtraDtoInterface|null $meta
+     * @param  array<mixed>|ExtraDtoInterface|null  $meta
      */
     public function __construct(
         private Wallet $from,

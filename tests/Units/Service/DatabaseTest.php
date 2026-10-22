@@ -17,7 +17,7 @@ final class DatabaseTest extends TestCase
     /**
      * @throws ExceptionInterface
      */
-    public function testCheckCode(): void
+    public function test_check_code(): void
     {
         $this->expectException(TransactionFailedException::class);
         $this->expectExceptionCode(ExceptionInterface::TRANSACTION_FAILED);

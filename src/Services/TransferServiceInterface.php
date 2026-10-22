@@ -25,8 +25,8 @@ interface TransferServiceInterface
      * in the provided array. The method returns `true` if at least one
      * transfer was updated, or `false` if no transfers were updated.
      *
-     * @param TransferStatus $status The new status to set for the specified transfers.
-     * @param int[] $ids A non-empty array of transfer IDs to update.
+     * @param  TransferStatus  $status  The new status to set for the specified transfers.
+     * @param  int[]  $ids  A non-empty array of transfer IDs to update.
      * @return bool `true` if at least one transfer was updated, `false` otherwise.
      */
     public function updateStatusByIds(TransferStatus $status, array $ids): bool;
@@ -37,7 +37,7 @@ interface TransferServiceInterface
      * This method takes an array of transfer objects and applies them,
      * creating transfers and corresponding transactions.
      *
-     * @param non-empty-array<TransferLazyDtoInterface> $objects The array of transfer operations to apply.
+     * @param  non-empty-array<TransferLazyDtoInterface>  $objects  The array of transfer operations to apply.
      * @return non-empty-array<string, Transfer> An array of created transfers, indexed by their IDs.
      *
      * @throws RecordNotFoundException If a wallet referenced in the transfer operations is not found.

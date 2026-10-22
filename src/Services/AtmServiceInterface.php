@@ -24,14 +24,14 @@ interface AtmServiceInterface
      * The function returns an array of transaction objects. The keys are the transaction UUIDs
      * and the values are the transaction objects.
      *
-     * @param non-empty-array<array-key, TransactionDtoInterface> $objects
-     *      The array of objects that represent the transactions.
+     * @param  non-empty-array<array-key, TransactionDtoInterface>  $objects
+     *                                                                        The array of objects that represent the transactions.
      * @return non-empty-array<string, Transaction>
-     *      An array of transaction objects. The keys are the transaction UUIDs and the values are the transaction
-     *      objects.
+     *                                              An array of transaction objects. The keys are the transaction UUIDs and the values are the transaction
+     *                                              objects.
      *
      * @throws \Bavix\Wallet\Internal\Exceptions\ModelNotFoundException
-     *      If any of the objects does not have a wallet.
+     *                                                                  If any of the objects does not have a wallet.
      */
     public function makeTransactions(array $objects): array;
 
@@ -45,14 +45,14 @@ interface AtmServiceInterface
      * The function returns an array of transfer objects. The keys are the transfer UUIDs
      * and the values are the transfer objects.
      *
-     * @param non-empty-array<array-key, TransferDtoInterface> $objects
-     *      The array of objects that represent the transfers.
+     * @param  non-empty-array<array-key, TransferDtoInterface>  $objects
+     *                                                                     The array of objects that represent the transfers.
      * @return non-empty-array<string, Transfer>
-     *      An array of transfer objects. The keys are the transfer UUIDs and the values are the transfer
-     *      objects.
+     *                                           An array of transfer objects. The keys are the transfer UUIDs and the values are the transfer
+     *                                           objects.
      *
      * @throws \Bavix\Wallet\Internal\Exceptions\ModelNotFoundException
-     *      If any of the objects does not have a wallet.
+     *                                                                  If any of the objects does not have a wallet.
      */
     public function makeTransfers(array $objects): array;
 }

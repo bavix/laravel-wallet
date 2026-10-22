@@ -17,8 +17,7 @@ final readonly class ItemDto implements ItemDtoInterface
         private int $quantity,
         private int|string|null $pricePerItem,
         private ?Wallet $receiving,
-    ) {
-    }
+    ) {}
 
     /**
      * @return ProductInterface[]

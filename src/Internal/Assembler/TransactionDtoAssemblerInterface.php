@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 interface TransactionDtoAssemblerInterface
 {
     /**
-     * @param null|array<mixed> $meta
+     * @param  null|array<mixed>  $meta
      */
     public function create(
         Model $payable,

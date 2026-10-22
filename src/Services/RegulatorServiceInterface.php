@@ -24,12 +24,12 @@ interface RegulatorServiceInterface
     public function amount(Wallet $wallet): string;
 
     /**
-     * @param float|int|non-empty-string $value
+     * @param  float|int|non-empty-string  $value
      */
     public function sync(Wallet $wallet, float|int|string $value): bool;
 
     /**
-     * @param float|int|non-empty-string $value
+     * @param  float|int|non-empty-string  $value
      * @return non-empty-string
      */
     public function increase(Wallet $wallet, float|int|string $value): string;

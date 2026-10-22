@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method int getKey()
  */
 #[\Illuminate\Database\Eloquent\Attributes\Fillable(['name', 'quantity', 'price'])]
-final class ItemMerchantFeeDeductible extends Model implements ProductLimitedInterface, MerchantFeeDeductible
+final class ItemMerchantFeeDeductible extends Model implements MerchantFeeDeductible, ProductLimitedInterface
 {
     use HasWallet;
 

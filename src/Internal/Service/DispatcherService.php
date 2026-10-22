@@ -17,8 +17,7 @@ final class DispatcherService implements DispatcherServiceInterface
     public function __construct(
         private readonly Dispatcher $dispatcher,
         private readonly ConnectionServiceInterface $connectionService
-    ) {
-    }
+    ) {}
 
     public function dispatch(EventInterface $event): void
     {

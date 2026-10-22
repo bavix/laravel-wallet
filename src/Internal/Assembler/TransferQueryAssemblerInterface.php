@@ -11,7 +11,7 @@ interface TransferQueryAssemblerInterface
     /**
      * Create a new TransferQuery object with the given UUIDs.
      *
-     * @param non-empty-array<int|string, string> $uuids The UUIDs of the transfers.
+     * @param  non-empty-array<int|string, string>  $uuids  The UUIDs of the transfers.
      * @return TransferQueryInterface The newly created TransferQuery object.
      */
     public function create(array $uuids): TransferQueryInterface;

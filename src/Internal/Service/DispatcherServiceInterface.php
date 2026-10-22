@@ -17,7 +17,7 @@ interface DispatcherServiceInterface
      * This method sends the given event to all registered listeners.
      * The event object is passed to each listener's `handle` method.
      *
-     * @param EventInterface $event Event object to be dispatched
+     * @param  EventInterface  $event  Event object to be dispatched
      */
     public function dispatch(EventInterface $event): void;
 

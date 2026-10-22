@@ -17,8 +17,7 @@ final readonly class BookkeeperService implements BookkeeperServiceInterface
     public function __construct(
         private StorageServiceInterface $storageService,
         private LockServiceInterface $lockService
-    ) {
-    }
+    ) {}
 
     public function forget(Wallet $wallet): bool
     {

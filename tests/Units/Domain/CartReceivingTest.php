@@ -19,16 +19,17 @@ use Bavix\Wallet\Test\Infra\Models\Item;
 use Bavix\Wallet\Test\Infra\Models\ItemMeta;
 use Bavix\Wallet\Test\Infra\PackageModels\Transaction;
 use Bavix\Wallet\Test\Infra\TestCase;
-use function count;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+
+use function count;
 
 /**
  * @internal
  */
 final class CartReceivingTest extends TestCase
 {
-    public function testCartMeta(): void
+    public function test_cart_meta(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -72,7 +73,7 @@ final class CartReceivingTest extends TestCase
         self::assertSame('USD', $payment->currency);
     }
 
-    public function testPay(): void
+    public function test_pay(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -137,7 +138,7 @@ final class CartReceivingTest extends TestCase
         self::assertSame(10, $payment->balanceInt);
     }
 
-    public function testIssue1000PurchaseQueryWithReceivingWallet(): void
+    public function test_issue1000_purchase_query_with_receiving_wallet(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -168,7 +169,7 @@ final class CartReceivingTest extends TestCase
         self::assertSame($firstTransfer->getKey(), $withReceiving->getKey());
     }
 
-    public function testIssue1000LegacyPurchaseServiceWithReceivingWallet(): void
+    public function test_issue1000_legacy_purchase_service_with_receiving_wallet(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -200,7 +201,7 @@ final class CartReceivingTest extends TestCase
         self::assertSame($firstTransfer->getKey(), $legacyTransfer->getKey());
     }
 
-    public function testIssue1000LegacyPurchaseServiceSkipsWhenWalletTransfersExhausted(): void
+    public function test_issue1000_legacy_purchase_service_skips_when_wallet_transfers_exhausted(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -228,7 +229,7 @@ final class CartReceivingTest extends TestCase
         self::assertCount(1, $legacy);
     }
 
-    public function testPurchaseQueryFallbackToTransfersWhenLedgerMissing(): void
+    public function test_purchase_query_fallback_to_transfers_when_ledger_missing(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -264,7 +265,7 @@ final class CartReceivingTest extends TestCase
         self::assertSame($firstTransfer->getKey(), $matched->getKey());
     }
 
-    public function testRefundSucceedsWhenPurchaseLedgerRecordMissing(): void
+    public function test_refund_succeeds_when_purchase_ledger_record_missing(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();

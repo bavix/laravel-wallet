@@ -33,13 +33,13 @@ trait CanPayFloat
      * The methods are "excluded" using the `insteadof` keyword.
      * This allows us to use the `CanPay` trait without causing conflicts.
      */
-    use HasWalletFloat, CanPay {
+    use CanPay, HasWalletFloat {
         /**
          * Deposit a float amount of money into the wallet.
          *
-         * @param float|int|string $amount The amount to deposit.
-         * @param null|array<mixed> $meta Additional information for the transaction.
-         * @param bool $confirmed Whether the transaction is confirmed or not.
+         * @param  float|int|string  $amount  The amount to deposit.
+         * @param  null|array<mixed>  $meta  Additional information for the transaction.
+         * @param  bool  $confirmed  Whether the transaction is confirmed or not.
          * @return Transaction The created transaction.
          *
          * @throws AmountInvalid If the amount is invalid.
@@ -52,9 +52,9 @@ trait CanPayFloat
         /**
          * Withdraw the specified float amount of money from the wallet.
          *
-         * @param float|int|string $amount The amount to withdraw.
-         * @param array<mixed>|null $meta Additional information for the transaction.
-         * @param bool $confirmed Whether the transaction is confirmed or not.
+         * @param  float|int|string  $amount  The amount to withdraw.
+         * @param  array<mixed>|null  $meta  Additional information for the transaction.
+         * @param  bool  $confirmed  Whether the transaction is confirmed or not.
          * @return Transaction The created transaction.
          *
          * @throws AmountInvalid If the amount is invalid.
@@ -69,7 +69,7 @@ trait CanPayFloat
         /**
          * Check if the wallet can be withdrawn.
          *
-         * @param float|int|string $amount The amount to check.
+         * @param  float|int|string  $amount  The amount to check.
          * @return bool Whether the wallet can be withdrawn or not.
          */
         CanPay::canWithdraw insteadof HasWalletFloat;
@@ -77,9 +77,9 @@ trait CanPayFloat
         /**
          * Forced to withdraw funds from the wallet.
          *
-         * @param float|int|string $amount The amount to withdraw.
-         * @param null|array<mixed> $meta Additional information for the transaction.
-         * @param bool $confirmed Whether the transaction is confirmed or not.
+         * @param  float|int|string  $amount  The amount to withdraw.
+         * @param  null|array<mixed>  $meta  Additional information for the transaction.
+         * @param  bool  $confirmed  Whether the transaction is confirmed or not.
          * @return Transaction The created transaction.
          *
          * @throws AmountInvalid If the amount is invalid.
@@ -92,9 +92,9 @@ trait CanPayFloat
         /**
          * Transfer the specified float amount of money from the wallet to a customer.
          *
-         * @param Customer $customer The customer to transfer to.
-         * @param float|int|string $amount The amount to transfer.
-         * @param null|array<mixed> $meta Additional information for the transaction.
+         * @param  Customer  $customer  The customer to transfer to.
+         * @param  float|int|string  $amount  The amount to transfer.
+         * @param  null|array<mixed>  $meta  Additional information for the transaction.
          * @return Transfer The created transfer.
          *
          * @throws AmountInvalid If the amount is invalid.
@@ -109,9 +109,9 @@ trait CanPayFloat
         /**
          * Try to transfer the specified float amount of money from the wallet to a customer.
          *
-         * @param Customer $customer The customer to transfer to.
-         * @param float|int|string $amount The amount to transfer.
-         * @param null|array<mixed> $meta Additional information for the transaction.
+         * @param  Customer  $customer  The customer to transfer to.
+         * @param  float|int|string  $amount  The amount to transfer.
+         * @param  null|array<mixed>  $meta  Additional information for the transaction.
          * @return Transfer|null The created transfer or null if the transfer fails.
          */
         CanPay::safeTransfer insteadof HasWalletFloat;
@@ -119,9 +119,9 @@ trait CanPayFloat
         /**
          * Forced to transfer the specified float amount of money from the wallet to a customer.
          *
-         * @param Customer $customer The customer to transfer to.
-         * @param float|int|string $amount The amount to transfer.
-         * @param null|array<mixed> $meta Additional information for the transaction.
+         * @param  Customer  $customer  The customer to transfer to.
+         * @param  float|int|string  $amount  The amount to transfer.
+         * @param  null|array<mixed>  $meta  Additional information for the transaction.
          * @return Transfer The created transfer.
          *
          * @throws AmountInvalid If the amount is invalid.
@@ -148,7 +148,7 @@ trait CanPayFloat
         /**
          * Get or set the wallet.
          *
-         * @param Wallet|null $wallet The wallet to set or get.
+         * @param  Wallet|null  $wallet  The wallet to set or get.
          * @return Wallet The wallet.
          */
         CanPay::wallet insteadof HasWalletFloat;

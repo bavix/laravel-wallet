@@ -16,10 +16,11 @@ use Bavix\Wallet\Internal\Exceptions\CartEmptyException;
 use Bavix\Wallet\Internal\Exceptions\ExceptionInterface;
 use Bavix\Wallet\Internal\Service\MathServiceInterface;
 use Bavix\Wallet\Services\CastServiceInterface;
-use function count;
 use Countable;
 
-final class Cart implements Countable, CartInterface
+use function count;
+
+final class Cart implements CartInterface, Countable
 {
     /**
      * @var array<string, ItemDtoInterface[]>
@@ -39,8 +40,7 @@ final class Cart implements Countable, CartInterface
     public function __construct(
         private readonly CastServiceInterface $castService,
         private readonly MathServiceInterface $math
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<mixed>
@@ -51,7 +51,7 @@ final class Cart implements Countable, CartInterface
     }
 
     /**
-     * @param array<mixed> $meta
+     * @param  array<mixed>  $meta
      */
     public function withMeta(array $meta): self
     {
@@ -70,7 +70,7 @@ final class Cart implements Countable, CartInterface
     }
 
     /**
-     * @param array<mixed> $extra
+     * @param  array<mixed>  $extra
      */
     public function withExtra(array $extra): self
     {
@@ -81,7 +81,7 @@ final class Cart implements Countable, CartInterface
     }
 
     /**
-     * @param positive-int $quantity
+     * @param  positive-int  $quantity
      */
     public function withItem(
         ProductInterface $product,
@@ -100,7 +100,7 @@ final class Cart implements Countable, CartInterface
     }
 
     /**
-     * @param iterable<ProductInterface> $products
+     * @param  iterable<ProductInterface>  $products
      */
     public function withItems(iterable $products): self
     {

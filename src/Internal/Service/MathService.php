@@ -11,8 +11,7 @@ final readonly class MathService implements MathServiceInterface
 {
     public function __construct(
         private int $scale
-    ) {
-    }
+    ) {}
 
     public function add(float|int|string $first, float|int|string $second, ?int $scale = null): string
     {

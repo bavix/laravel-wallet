@@ -17,7 +17,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class MinTaxTest extends TestCase
 {
-    public function testPayMinimalTax(): void
+    public function test_pay_minimal_tax(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -56,7 +56,7 @@ final class MinTaxTest extends TestCase
         self::assertSame(0, $buyer->balanceInt);
     }
 
-    public function testPayMaximalTax(): void
+    public function test_pay_maximal_tax(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();

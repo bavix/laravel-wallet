@@ -21,8 +21,7 @@ final readonly class TransactionQueryHandler implements TransactionQueryHandlerI
         private AssistantServiceInterface $assistantService,
         private PrepareServiceInterface $prepareService,
         private AtomicServiceInterface $atomicService
-    ) {
-    }
+    ) {}
 
     public function apply(array $objects): array
     {

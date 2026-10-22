@@ -13,7 +13,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class SoftDeletesTest extends TestCase
 {
-    public function testDefaultWalletSoftDelete(): void
+    public function test_default_wallet_soft_delete(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -39,7 +39,7 @@ final class SoftDeletesTest extends TestCase
         self::assertSame(3, $buyer->balanceInt);
     }
 
-    public function testDefaultWalletForceDelete(): void
+    public function test_default_wallet_force_delete(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -65,7 +65,7 @@ final class SoftDeletesTest extends TestCase
         self::assertSame(2, $buyer->balanceInt);
     }
 
-    public function testTransactionDelete(): void
+    public function test_transaction_delete(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -84,7 +84,7 @@ final class SoftDeletesTest extends TestCase
         self::assertNotNull($transaction->deleted_at);
     }
 
-    public function testTransactionDeleteIfNotConfirmed(): void
+    public function test_transaction_delete_if_not_confirmed(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -103,7 +103,7 @@ final class SoftDeletesTest extends TestCase
         self::assertTrue($transaction->delete());
     }
 
-    public function testTransferDelete(): void
+    public function test_transfer_delete(): void
     {
         /** @var Buyer $user1 */
         /** @var Buyer $user2 */
@@ -136,7 +136,7 @@ final class SoftDeletesTest extends TestCase
         self::assertFalse($transfer->withdraw->confirmed);
     }
 
-    public function testTransferDeleteIfNotConfirmed(): void
+    public function test_transfer_delete_if_not_confirmed(): void
     {
         /** @var Buyer $user1 */
         /** @var Buyer $user2 */
