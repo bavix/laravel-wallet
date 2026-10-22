@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Bavix\Wallet\Models;
 
 use Bavix\Wallet\Enums\TransferStatus;
-use function config;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Override;
+
+use function config;
 
 /**
  * @property int $id

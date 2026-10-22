@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Domain;
 
-use function app;
 use Bavix\Wallet\Internal\Service\DatabaseServiceInterface;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\BookkeeperServiceInterface;
@@ -12,6 +11,8 @@ use Bavix\Wallet\Services\RegulatorServiceInterface;
 use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\TestCase;
+
+use function app;
 
 /**
  * @internal
@@ -21,7 +22,7 @@ final class StateTest extends TestCase
     /**
      * @see https://github.com/bavix/laravel-wallet/issues/49
      */
-    public function testForceUpdate(): void
+    public function test_force_update(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -71,7 +72,7 @@ final class StateTest extends TestCase
         self::assertSame(1000, (int) $rawOriginal);
     }
 
-    public function testTransactionRollback(): void
+    public function test_transaction_rollback(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -106,7 +107,7 @@ final class StateTest extends TestCase
         self::assertSame(1000, $wallet->balanceInt);
     }
 
-    public function testRefreshInTransaction(): void
+    public function test_refresh_in_transaction(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();

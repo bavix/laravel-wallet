@@ -39,8 +39,8 @@ final readonly class StateService implements StateServiceInterface
     }
 
     /**
-     * @param string[] $uuids
-     * @param callable(): array<string, string> $value
+     * @param  string[]  $uuids
+     * @param  callable(): array<string, string>  $value
      */
     public function multiFork(array $uuids, callable $value): void
     {

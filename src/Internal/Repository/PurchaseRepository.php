@@ -13,8 +13,7 @@ final readonly class PurchaseRepository implements PurchaseRepositoryInterface
     public function __construct(
         private Purchase $purchase,
         private ClockServiceInterface $clockService,
-    ) {
-    }
+    ) {}
 
     public function syncByTransfers(array $transfers): void
     {

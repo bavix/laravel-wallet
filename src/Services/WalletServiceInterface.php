@@ -16,7 +16,7 @@ interface WalletServiceInterface
     /**
      * Create a new wallet for the given model.
      *
-     * @param Model $model The model the wallet belongs to.
+     * @param  Model  $model  The model the wallet belongs to.
      * @param array{
      *     name: string,
      *     slug?: string,
@@ -31,8 +31,8 @@ interface WalletServiceInterface
     /**
      * Find a wallet by slug for the given model.
      *
-     * @param Model $model The model the wallet belongs to.
-     * @param string $slug The slug of the wallet.
+     * @param  Model  $model  The model the wallet belongs to.
+     * @param  string  $slug  The slug of the wallet.
      * @return Wallet|null The wallet with the given slug if found, otherwise null.
      */
     public function findBySlug(Model $model, string $slug): ?Wallet;
@@ -40,7 +40,7 @@ interface WalletServiceInterface
     /**
      * Find a wallet by UUID.
      *
-     * @param string $uuid The UUID of the wallet.
+     * @param  string  $uuid  The UUID of the wallet.
      * @return Wallet|null The wallet with the given UUID if found, otherwise null.
      */
     public function findByUuid(string $uuid): ?Wallet;
@@ -48,7 +48,7 @@ interface WalletServiceInterface
     /**
      * Find a wallet by ID.
      *
-     * @param int $id The ID of the wallet.
+     * @param  int  $id  The ID of the wallet.
      * @return Wallet|null The wallet with the given ID if found, otherwise null.
      */
     public function findById(int $id): ?Wallet;
@@ -56,8 +56,8 @@ interface WalletServiceInterface
     /**
      * Get a wallet by slug for the given model.
      *
-     * @param Model $model The model the wallet belongs to.
-     * @param string $slug The slug of the wallet.
+     * @param  Model  $model  The model the wallet belongs to.
+     * @param  string  $slug  The slug of the wallet.
      * @return Wallet The wallet with the given slug.
      *
      * @throws ModelNotFoundException If the wallet with the given slug is not found.
@@ -67,7 +67,7 @@ interface WalletServiceInterface
     /**
      * Get a wallet by UUID.
      *
-     * @param string $uuid The UUID of the wallet.
+     * @param  string  $uuid  The UUID of the wallet.
      * @return Wallet The wallet with the given UUID.
      *
      * @throws ModelNotFoundException If the wallet with the given UUID is not found.
@@ -77,7 +77,7 @@ interface WalletServiceInterface
     /**
      * Get a wallet by its ID.
      *
-     * @param int $id The ID of the wallet.
+     * @param  int  $id  The ID of the wallet.
      * @return Wallet The wallet with the given ID.
      *
      * @throws ModelNotFoundException If the wallet with the given ID is not found.

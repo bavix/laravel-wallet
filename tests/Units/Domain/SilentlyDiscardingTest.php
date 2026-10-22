@@ -34,7 +34,7 @@ final class SilentlyDiscardingTest extends TestCase
         Model::preventSilentlyDiscardingAttributes(false);
     }
 
-    public function testDepositSilentlyDiscarding(): void
+    public function test_deposit_silently_discarding(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -46,7 +46,7 @@ final class SilentlyDiscardingTest extends TestCase
         self::assertSame(1, $buyer->balanceInt);
     }
 
-    public function testTransferSilentlyDiscarding(): void
+    public function test_transfer_silently_discarding(): void
     {
         /**
          * @var User $first
@@ -63,7 +63,7 @@ final class SilentlyDiscardingTest extends TestCase
         self::assertSame(500, $second->balanceInt);
     }
 
-    public function testMultiWalletSilentlyDiscarding(): void
+    public function test_multi_wallet_silently_discarding(): void
     {
         $this->app?->bind(ClockServiceInterface::class, ClockFakeService::class);
 

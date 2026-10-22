@@ -25,7 +25,7 @@ final class WalletExtensionTest extends TestCase
         $this->app?->bind(TransactionDtoTransformerInterface::class, TransactionDtoTransformerCustom::class);
     }
 
-    public function testCustomAttribute(): void
+    public function test_custom_attribute(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -40,7 +40,7 @@ final class WalletExtensionTest extends TestCase
         self::assertSame('VietComBank', $transaction->bank_method);
     }
 
-    public function testTransactionMoneyAttribute(): void
+    public function test_transaction_money_attribute(): void
     {
         $this->app?->bind(\Bavix\Wallet\Models\Transaction::class, TransactionMoney::class);
 
@@ -59,7 +59,7 @@ final class WalletExtensionTest extends TestCase
         self::assertSame('EUR', $transaction->currency->currency);
     }
 
-    public function testNoCustomAttribute(): void
+    public function test_no_custom_attribute(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();

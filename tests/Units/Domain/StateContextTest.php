@@ -30,11 +30,11 @@ final class StateContextTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->state = new TransactionStateService();
+        $this->state = new TransactionStateService;
         $this->regulator = app(RegulatorServiceInterface::class);
     }
 
-    public function testBasicStateTracking(): void
+    public function test_basic_state_tracking(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -55,7 +55,7 @@ final class StateContextTest extends TestCase
         ], $this->state->before('test-1'));
     }
 
-    public function testStateTrackingSequence(): void
+    public function test_state_tracking_sequence(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -99,7 +99,7 @@ final class StateContextTest extends TestCase
         ], $this->state->after('seq-3'));
     }
 
-    public function testRollbackClearsState(): void
+    public function test_rollback_clears_state(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -127,7 +127,7 @@ final class StateContextTest extends TestCase
         self::assertFalse($this->state->has('rb-2'));
     }
 
-    public function testResetClearsAllState(): void
+    public function test_reset_clears_all_state(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -154,7 +154,7 @@ final class StateContextTest extends TestCase
         self::assertSame([], $this->state->snapshot());
     }
 
-    public function testNoStateLeakageBetweenSeparateWallets(): void
+    public function test_no_state_leakage_between_separate_wallets(): void
     {
         /** @var Buyer $buyer1 */
         $buyer1 = BuyerFactory::new()->create();
@@ -184,7 +184,7 @@ final class StateContextTest extends TestCase
         self::assertTrue($this->state->has('batch2'));
     }
 
-    public function testSnapshotPreservesOriginalState(): void
+    public function test_snapshot_preserves_original_state(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -211,7 +211,7 @@ final class StateContextTest extends TestCase
         self::assertFalse($this->state->has('snap-2'));
     }
 
-    public function testCustomFieldsSupported(): void
+    public function test_custom_fields_supported(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -240,14 +240,14 @@ final class StateContextTest extends TestCase
         self::assertSame('0', $after['frozen']);
     }
 
-    public function testEmptyStateThrowsOnMissingUuid(): void
+    public function test_empty_state_throws_on_missing_uuid(): void
     {
         $this->expectException(\Bavix\Wallet\Internal\Exceptions\StateNotFoundException::class);
 
         $this->state->before('nonexistent');
     }
 
-    public function testMultipleRollbacksChain(): void
+    public function test_multiple_rollbacks_chain(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();

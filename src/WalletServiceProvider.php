@@ -115,8 +115,6 @@ use Bavix\Wallet\Services\TransferService;
 use Bavix\Wallet\Services\TransferServiceInterface;
 use Bavix\Wallet\Services\WalletService;
 use Bavix\Wallet\Services\WalletServiceInterface;
-use function config;
-use function function_exists;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Database\Events\TransactionBeginning;
@@ -126,6 +124,9 @@ use Illuminate\Database\Events\TransactionRolledBack;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Override;
+
+use function config;
+use function function_exists;
 
 final class WalletServiceProvider extends ServiceProvider implements DeferrableProvider
 {
@@ -221,7 +222,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     }
 
     /**
-     * @param array<class-string|null> $configure
+     * @param  array<class-string|null>  $configure
      */
     private function repositories(array $configure): void
     {
@@ -244,7 +245,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     }
 
     /**
-     * @param array<class-string|null> $configure
+     * @param  array<class-string|null>  $configure
      */
     private function internal(array $configure): void
     {
@@ -279,8 +280,8 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     }
 
     /**
-     * @param array<class-string|null> $configure
-     * @param array{driver?: string|null} $cache
+     * @param  array<class-string|null>  $configure
+     * @param  array{driver?: string|null}  $cache
      */
     private function services(array $configure, array $cache): void
     {
@@ -342,7 +343,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     }
 
     /**
-     * @param array<class-string|null> $configure
+     * @param  array<class-string|null>  $configure
      */
     private function assemblers(array $configure): void
     {
@@ -400,7 +401,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     }
 
     /**
-     * @param array<class-string|null> $configure
+     * @param  array<class-string|null>  $configure
      */
     private function transformers(array $configure): void
     {
@@ -416,7 +417,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     }
 
     /**
-     * @param array<class-string|null> $configure
+     * @param  array<class-string|null>  $configure
      */
     private function projectors(array $configure): void
     {
@@ -427,7 +428,7 @@ final class WalletServiceProvider extends ServiceProvider implements DeferrableP
     }
 
     /**
-     * @param array<class-string|null> $configure
+     * @param  array<class-string|null>  $configure
      */
     private function events(array $configure): void
     {

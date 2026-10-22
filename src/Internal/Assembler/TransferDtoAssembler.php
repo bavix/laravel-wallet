@@ -16,11 +16,10 @@ final readonly class TransferDtoAssembler implements TransferDtoAssemblerInterfa
     public function __construct(
         private IdentifierFactoryServiceInterface $identifierFactoryService,
         private ClockServiceInterface $clockService,
-    ) {
-    }
+    ) {}
 
     /**
-     * @param array<mixed>|null $extra
+     * @param  array<mixed>|null  $extra
      */
     public function create(
         int $depositId,

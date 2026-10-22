@@ -14,7 +14,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class WalletTest extends TestCase
 {
-    public function testAddMethod(): void
+    public function test_add_method(): void
     {
         config([
             'wallet.wallet.model' => MyWallet::class,

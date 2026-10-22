@@ -17,8 +17,7 @@ final readonly class StorageServiceLockDecorator implements StorageServiceInterf
         private StateServiceInterface $stateService,
         private LockServiceInterface $lockService,
         private MathServiceInterface $mathService
-    ) {
-    }
+    ) {}
 
     public function flush(): bool
     {
@@ -53,7 +52,7 @@ final readonly class StorageServiceLockDecorator implements StorageServiceInterf
     }
 
     /**
-     * @param non-empty-array<non-empty-string> $uuids
+     * @param  non-empty-array<non-empty-string>  $uuids
      * @return non-empty-array<non-empty-string, non-empty-string>
      *
      * @throws RecordNotFoundException

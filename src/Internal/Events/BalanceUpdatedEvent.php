@@ -13,8 +13,7 @@ final readonly class BalanceUpdatedEvent implements BalanceUpdatedEventInterface
         private string $walletUuid,
         private string $balance,
         private DateTimeImmutable $updatedAt
-    ) {
-    }
+    ) {}
 
     public function getWalletId(): int
     {

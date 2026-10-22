@@ -18,8 +18,7 @@ final readonly class TaxService implements TaxServiceInterface
     public function __construct(
         private MathServiceInterface $mathService,
         private CastServiceInterface $castService
-    ) {
-    }
+    ) {}
 
     public function getFee(Wallet $wallet, float|int|string $amount): string
     {

@@ -14,8 +14,7 @@ final readonly class TransactionCreatedEvent implements TransactionCreatedEventI
         private TransactionType $type,
         private int $walletId,
         private DateTimeImmutable $createdAt,
-    ) {
-    }
+    ) {}
 
     public function getId(): int
     {

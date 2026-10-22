@@ -12,7 +12,7 @@ use Bavix\Wallet\WalletConfigure;
  */
 final class WalletConfigureTest extends TestCase
 {
-    public function testIgnoreMigrations(): void
+    public function test_ignore_migrations(): void
     {
         self::assertTrue(WalletConfigure::isRunsMigrations());
 

@@ -20,7 +20,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class TransferServiceTest extends TestCase
 {
-    public function testUpdateStatusByIdsReturnsFalseForEmptyIds(): void
+    public function test_update_status_by_ids_returns_false_for_empty_ids(): void
     {
         $transferRepository = $this->createMock(TransferRepositoryInterface::class);
         $transferRepository
@@ -37,7 +37,7 @@ final class TransferServiceTest extends TestCase
         self::assertFalse($service->updateStatusByIds(TransferStatus::Refund, []));
     }
 
-    public function testUpdateStatusByIdsReturnsFalseWhenTransferCountMismatch(): void
+    public function test_update_status_by_ids_returns_false_when_transfer_count_mismatch(): void
     {
         $transferRepository = $this->createMock(TransferRepositoryInterface::class);
         $transferRepository

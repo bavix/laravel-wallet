@@ -9,7 +9,7 @@ use Bavix\Wallet\External\Dto\Option;
 
 final class OptionDtoAssembler implements OptionDtoAssemblerInterface
 {
-    public function create(array|null $data): OptionDtoInterface
+    public function create(?array $data): OptionDtoInterface
     {
         return new Option($data);
     }

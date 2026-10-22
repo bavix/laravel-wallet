@@ -22,8 +22,7 @@ final readonly class WalletService implements WalletServiceInterface
         private IdentifierFactoryServiceInterface $identifierFactoryService,
         private DispatcherServiceInterface $dispatcherService,
         private WalletRepositoryInterface $walletRepository
-    ) {
-    }
+    ) {}
 
     public function create(Model $model, array $data): Wallet
     {

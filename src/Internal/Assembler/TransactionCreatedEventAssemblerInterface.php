@@ -12,7 +12,7 @@ interface TransactionCreatedEventAssemblerInterface
     /**
      * Creates a new instance of the TransactionCreatedEventInterface from the given Transaction model.
      *
-     * @param Transaction $transaction The transaction model to create the event from.
+     * @param  Transaction  $transaction  The transaction model to create the event from.
      * @return TransactionCreatedEventInterface The created event.
      */
     public function create(Transaction $transaction): TransactionCreatedEventInterface;

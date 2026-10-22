@@ -15,9 +15,9 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class BasketTest extends TestCase
 {
-    public function testCount(): void
+    public function test_count(): void
     {
-        $item = new Item();
+        $item = new Item;
         $productDto1 = new ItemDto($item, 24, null, null);
         $productDto2 = new ItemDto($item, 26, null, null);
         $basket = new BasketDto([$productDto1, $productDto2], [], null);
@@ -34,7 +34,7 @@ final class BasketTest extends TestCase
         self::assertSame(1, key($items));
     }
 
-    public function testMeta(): void
+    public function test_meta(): void
     {
         /** @var non-empty-array<ItemDtoInterface> $items */
         $items = [];
@@ -50,7 +50,7 @@ final class BasketTest extends TestCase
         ], $basket2->meta());
     }
 
-    public function testExtra(): void
+    public function test_extra(): void
     {
         /** @var non-empty-array<ItemDtoInterface> $items */
         $items = [];
@@ -66,7 +66,7 @@ final class BasketTest extends TestCase
         ], $basket2->extra());
     }
 
-    public function testEmpty(): void
+    public function test_empty(): void
     {
         /** @var non-empty-array<ItemDtoInterface> $items */
         $items = [];

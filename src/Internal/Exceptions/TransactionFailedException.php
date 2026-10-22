@@ -6,6 +6,4 @@ namespace Bavix\Wallet\Internal\Exceptions;
 
 use LogicException;
 
-final class TransactionFailedException extends LogicException implements LogicExceptionInterface
-{
-}
+final class TransactionFailedException extends LogicException implements LogicExceptionInterface {}

@@ -18,7 +18,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class TaxTest extends TestCase
 {
-    public function testPay(): void
+    public function test_pay(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -55,7 +55,7 @@ final class TaxTest extends TestCase
         self::assertSame($buyer->balanceInt, 0);
     }
 
-    public function testGift(): void
+    public function test_gift(): void
     {
         /**
          * @var Buyer $santa
@@ -99,7 +99,7 @@ final class TaxTest extends TestCase
         self::assertSame($santa->balanceInt, 0);
     }
 
-    public function testGiftFail(): void
+    public function test_gift_fail(): void
     {
         $this->expectException(InsufficientFunds::class);
         $this->expectExceptionCode(ExceptionInterface::INSUFFICIENT_FUNDS);

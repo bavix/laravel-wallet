@@ -10,6 +10,6 @@ final class ClockService implements ClockServiceInterface
 {
     public function now(): DateTimeImmutable
     {
-        return new DateTimeImmutable();
+        return new DateTimeImmutable;
     }
 }

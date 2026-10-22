@@ -18,48 +18,48 @@ use Illuminate\Database\RecordsNotFoundException;
 interface Confirmable
 {
     /**
-     * @throws BalanceIsEmpty          If the balance is empty.
-     * @throws InsufficientFunds       If there are insufficient funds.
-     * @throws ConfirmedInvalid         If the transaction is already confirmed.
-     * @throws WalletOwnerInvalid      If the transaction does not belong to the wallet.
+     * @throws BalanceIsEmpty If the balance is empty.
+     * @throws InsufficientFunds If there are insufficient funds.
+     * @throws ConfirmedInvalid If the transaction is already confirmed.
+     * @throws WalletOwnerInvalid If the transaction does not belong to the wallet.
      * @throws RecordNotFoundException If the transaction was not found.
      * @throws RecordsNotFoundException If no transactions were found.
      * @throws TransactionFailedException If the transaction failed.
-     * @throws ExceptionInterface       If an exception occurred.
+     * @throws ExceptionInterface If an exception occurred.
      */
     public function confirm(Transaction $transaction): bool;
 
     /**
-     * @throws BalanceIsEmpty          If the balance is empty.
-     * @throws InsufficientFunds       If there are insufficient funds.
-     * @throws ConfirmedInvalid         If the transaction is already confirmed.
-     * @throws WalletOwnerInvalid      If the transaction does not belong to the wallet.
+     * @throws BalanceIsEmpty If the balance is empty.
+     * @throws InsufficientFunds If there are insufficient funds.
+     * @throws ConfirmedInvalid If the transaction is already confirmed.
+     * @throws WalletOwnerInvalid If the transaction does not belong to the wallet.
      * @throws RecordNotFoundException If the transaction was not found.
      * @throws RecordsNotFoundException If no transactions were found.
      * @throws TransactionFailedException If the transaction failed.
-     * @throws ExceptionInterface       If an exception occurred.
+     * @throws ExceptionInterface If an exception occurred.
      */
     public function safeConfirm(Transaction $transaction): bool;
 
     /**
-     * @throws UnconfirmedInvalid       If the transaction is not confirmed.
-     * @throws WalletOwnerInvalid       If the transaction does not belong to the wallet.
-     * @throws RecordNotFoundException  If the transaction was not found.
+     * @throws UnconfirmedInvalid If the transaction is not confirmed.
+     * @throws WalletOwnerInvalid If the transaction does not belong to the wallet.
+     * @throws RecordNotFoundException If the transaction was not found.
      * @throws RecordsNotFoundException If no transactions were found.
      * @throws TransactionFailedException If the transaction failed.
-     * @throws ExceptionInterface        If an exception occurred.
+     * @throws ExceptionInterface If an exception occurred.
      */
     public function resetConfirm(Transaction $transaction): bool;
 
     public function safeResetConfirm(Transaction $transaction): bool;
 
     /**
-     * @throws ConfirmedInvalid         If the transaction is already confirmed.
-     * @throws WalletOwnerInvalid       If the transaction does not belong to the wallet.
+     * @throws ConfirmedInvalid If the transaction is already confirmed.
+     * @throws WalletOwnerInvalid If the transaction does not belong to the wallet.
      * @throws RecordNotFoundException If the transaction was not found.
      * @throws RecordsNotFoundException If no transactions were found.
      * @throws TransactionFailedException If the transaction failed.
-     * @throws ExceptionInterface       If an exception occurred.
+     * @throws ExceptionInterface If an exception occurred.
      */
     public function forceConfirm(Transaction $transaction): bool;
 }

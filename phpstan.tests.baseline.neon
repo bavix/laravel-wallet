@@ -163,7 +163,7 @@ parameters:
 			path: tests/Units/Domain/CartTest.php
 
 		-
-			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:compare\(\) expects float\|int\|non\-empty\-string, string given\.$#'
+			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathService\:\:compare\(\) expects float\|int\|non\-empty\-string, string given\.$#'
 			identifier: argument.type
 			count: 2
 			path: tests/Units/Domain/CartTest.php

@@ -13,7 +13,7 @@ use Illuminate\Contracts\Support\DeferrableProvider;
  */
 final class DeferrableTest extends TestCase
 {
-    public function testCheckDeferrableProvider(): void
+    public function test_check_deferrable_provider(): void
     {
         $walletServiceProvider = app()
             ->resolveProvider(WalletServiceProvider::class);

@@ -21,8 +21,7 @@ final readonly class TransferQueryHandler implements TransferQueryHandlerInterfa
         private TransferServiceInterface $transferService,
         private PrepareServiceInterface $prepareService,
         private AtomicServiceInterface $atomicService
-    ) {
-    }
+    ) {}
 
     public function apply(array $objects): array
     {

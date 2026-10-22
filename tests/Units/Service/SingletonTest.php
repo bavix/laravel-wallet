@@ -17,32 +17,32 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class SingletonTest extends TestCase
 {
-    public function testCart(): void
+    public function test_cart(): void
     {
         self::assertNotSame($this->getRefId(Cart::class), $this->getRefId(Cart::class));
     }
 
-    public function testMathInterface(): void
+    public function test_math_interface(): void
     {
         self::assertSame($this->getRefId(MathServiceInterface::class), $this->getRefId(MathServiceInterface::class));
     }
 
-    public function testTransaction(): void
+    public function test_transaction(): void
     {
         self::assertNotSame($this->getRefId(Transaction::class), $this->getRefId(Transaction::class));
     }
 
-    public function testTransfer(): void
+    public function test_transfer(): void
     {
         self::assertNotSame($this->getRefId(Transfer::class), $this->getRefId(Transfer::class));
     }
 
-    public function testWallet(): void
+    public function test_wallet(): void
     {
         self::assertNotSame($this->getRefId(Wallet::class), $this->getRefId(Wallet::class));
     }
 
-    public function testDatabaseService(): void
+    public function test_database_service(): void
     {
         self::assertSame(
             $this->getRefId(DatabaseServiceInterface::class),

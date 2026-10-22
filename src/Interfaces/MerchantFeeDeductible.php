@@ -28,6 +28,4 @@ namespace Bavix\Wallet\Interfaces;
  * - Customer pays: $100
  * - Merchant receives: $95 ($100 - $5 fee)
  */
-interface MerchantFeeDeductible extends Taxable
-{
-}
+interface MerchantFeeDeductible extends Taxable {}

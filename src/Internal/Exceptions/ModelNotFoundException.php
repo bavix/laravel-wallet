@@ -6,6 +6,4 @@ namespace Bavix\Wallet\Internal\Exceptions;
 
 use RuntimeException;
 
-final class ModelNotFoundException extends RuntimeException implements RuntimeExceptionInterface
-{
-}
+final class ModelNotFoundException extends RuntimeException implements RuntimeExceptionInterface {}

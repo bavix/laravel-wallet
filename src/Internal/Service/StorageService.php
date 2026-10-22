@@ -16,8 +16,7 @@ final readonly class StorageService implements StorageServiceInterface
         private MathServiceInterface $mathService,
         private CacheRepository $cacheRepository,
         private ?int $ttl
-    ) {
-    }
+    ) {}
 
     public function flush(): bool
     {
@@ -62,7 +61,7 @@ final readonly class StorageService implements StorageServiceInterface
     /**
      * @template T of non-empty-array<non-empty-string>
      *
-     * @param T $uuids
+     * @param  T  $uuids
      * @return non-empty-array<value-of<T>, non-empty-string>
      *
      * @throws RecordNotFoundException
@@ -114,7 +113,7 @@ final readonly class StorageService implements StorageServiceInterface
     }
 
     /**
-     * @param non-empty-array<string, float|int|string> $inputs
+     * @param  non-empty-array<string, float|int|string>  $inputs
      */
     public function multiSync(array $inputs): bool
     {
@@ -136,7 +135,7 @@ final readonly class StorageService implements StorageServiceInterface
     /**
      * @template T of non-empty-array<string, float|int|string>
      *
-     * @param T $inputs
+     * @param  T  $inputs
      * @return non-empty-array<key-of<T>, string>
      *
      * @throws RecordNotFoundException

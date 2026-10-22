@@ -13,7 +13,7 @@ use DateTimeImmutable;
 final readonly class TransactionDto implements TransactionDtoInterface
 {
     /**
-     * @param array<mixed>|null $meta
+     * @param  array<mixed>|null  $meta
      */
     public function __construct(
         private string $uuid,
@@ -26,8 +26,7 @@ final readonly class TransactionDto implements TransactionDtoInterface
         private ?array $meta,
         private DateTimeImmutable $createdAt,
         private DateTimeImmutable $updatedAt,
-    ) {
-    }
+    ) {}
 
     /**
      * @return non-empty-string

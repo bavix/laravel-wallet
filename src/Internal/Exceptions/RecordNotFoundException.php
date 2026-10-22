@@ -9,7 +9,7 @@ use UnderflowException;
 final class RecordNotFoundException extends UnderflowException implements UnderflowExceptionInterface
 {
     /**
-     * @param non-empty-array<string> $missingKeys
+     * @param  non-empty-array<string>  $missingKeys
      */
     public function __construct(
         string $message,

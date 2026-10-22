@@ -18,7 +18,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class GiftDiscountTest extends TestCase
 {
-    public function testGift(): void
+    public function test_gift(): void
     {
         /**
          * @var Buyer $first
@@ -55,7 +55,7 @@ final class GiftDiscountTest extends TestCase
         self::assertSame($transfer->status, TransferStatus::Gift);
     }
 
-    public function testRefund(): void
+    public function test_refund(): void
     {
         /**
          * @var Buyer $first

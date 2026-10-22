@@ -14,8 +14,7 @@ final readonly class WalletCreatedEvent implements WalletCreatedEventInterface
         private string $walletUuid,
         private int $walletId,
         private DateTimeImmutable $createdAt
-    ) {
-    }
+    ) {}
 
     public function getHolderType(): string
     {

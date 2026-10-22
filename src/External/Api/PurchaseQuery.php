@@ -15,8 +15,7 @@ final readonly class PurchaseQuery implements PurchaseQueryInterface
         private ProductInterface $product,
         private bool $includeGifts,
         private ?Wallet $receiving
-    ) {
-    }
+    ) {}
 
     public static function create(
         Customer $customer,

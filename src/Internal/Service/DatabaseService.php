@@ -14,8 +14,7 @@ final readonly class DatabaseService implements DatabaseServiceInterface
 {
     public function __construct(
         private ConnectionServiceInterface $connectionService
-    ) {
-    }
+    ) {}
 
     /**
      * @throws RecordsNotFoundException

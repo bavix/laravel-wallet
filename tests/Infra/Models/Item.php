@@ -59,7 +59,7 @@ final class Item extends Model implements ProductLimitedInterface
     }
 
     /**
-     * @param int[] $walletIds
+     * @param  int[]  $walletIds
      * @return HasMany<Transfer>
      */
     public function boughtGoods(array $walletIds): HasMany

@@ -20,8 +20,8 @@ use Illuminate\Database\RecordsNotFoundException;
 interface Wallet
 {
     /**
-     * @param int|non-empty-string $amount
-     * @param array<mixed>|null $meta
+     * @param  int|non-empty-string  $amount
+     * @param  array<mixed>|null  $meta
      *
      * @throws AmountInvalid If the amount is invalid.
      * @throws RecordsNotFoundException If the wallet is not found.
@@ -31,8 +31,8 @@ interface Wallet
     public function deposit(int|string $amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
-     * @param int|non-empty-string $amount
-     * @param array<mixed>|null $meta
+     * @param  int|non-empty-string  $amount
+     * @param  array<mixed>|null  $meta
      *
      * @throws AmountInvalid If the amount is invalid.
      * @throws BalanceIsEmpty If the balance is empty.
@@ -44,8 +44,8 @@ interface Wallet
     public function withdraw(int|string $amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
-     * @param int|non-empty-string $amount
-     * @param array<mixed>|null $meta
+     * @param  int|non-empty-string  $amount
+     * @param  array<mixed>|null  $meta
      *
      * @throws AmountInvalid If the amount is invalid.
      * @throws RecordsNotFoundException If the wallet is not found.
@@ -55,8 +55,8 @@ interface Wallet
     public function forceWithdraw(int|string $amount, ?array $meta = null, bool $confirmed = true): Transaction;
 
     /**
-     * @param int|non-empty-string $amount
-     * @param ExtraDtoInterface|array<mixed>|null $meta
+     * @param  int|non-empty-string  $amount
+     * @param  ExtraDtoInterface|array<mixed>|null  $meta
      *
      * @throws AmountInvalid If the amount is invalid.
      * @throws BalanceIsEmpty If the balance is empty.
@@ -68,8 +68,8 @@ interface Wallet
     public function transfer(self $wallet, int|string $amount, ExtraDtoInterface|array|null $meta = null): Transfer;
 
     /**
-     * @param int|non-empty-string $amount
-     * @param ExtraDtoInterface|array<mixed>|null $meta
+     * @param  int|non-empty-string  $amount
+     * @param  ExtraDtoInterface|array<mixed>|null  $meta
      *
      * @throws AmountInvalid If the amount is invalid.
      * @throws BalanceIsEmpty If the balance is empty.
@@ -85,15 +85,15 @@ interface Wallet
     ): ?Transfer;
 
     /**
-     * @param int|non-empty-string $amount
-     * @param ExtraDtoInterface|array<mixed>|null $meta
+     * @param  int|non-empty-string  $amount
+     * @param  ExtraDtoInterface|array<mixed>|null  $meta
      *
      * @throws AmountInvalid If the amount specified is invalid (e.g., negative values).
      * @throws RecordsNotFoundException If the target wallet cannot be found.
      * @throws TransactionFailedException It indicates that the transfer could not be completed due to a failure
-     * in the underlying transaction system.
+     *                                    in the underlying transaction system.
      * @throws ExceptionInterface A generic exception interface catch-all for any other exceptions that
-     * might occur during the execution of the transfer.
+     *                            might occur during the execution of the transfer.
      */
     public function forceTransfer(
         self $wallet,
@@ -102,7 +102,7 @@ interface Wallet
     ): Transfer;
 
     /**
-     * @param int|non-empty-string $amount
+     * @param  int|non-empty-string  $amount
      */
     public function canWithdraw(int|string $amount, bool $allowZero = false): bool;
 

@@ -25,8 +25,9 @@ use Bavix\Wallet\Services\EagerLoaderServiceInterface;
 use Bavix\Wallet\Services\PrepareServiceInterface;
 use Bavix\Wallet\Services\PurchaseServiceInterface;
 use Bavix\Wallet\Services\TransferServiceInterface;
-use function count;
 use Illuminate\Database\RecordsNotFoundException;
+
+use function count;
 
 /**
  * @psalm-require-extends \Illuminate\Database\Eloquent\Model

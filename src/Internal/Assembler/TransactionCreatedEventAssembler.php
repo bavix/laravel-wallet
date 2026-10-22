@@ -13,8 +13,7 @@ final readonly class TransactionCreatedEventAssembler implements TransactionCrea
 {
     public function __construct(
         private ClockServiceInterface $clockService
-    ) {
-    }
+    ) {}
 
     public function create(Transaction $transaction): TransactionCreatedEventInterface
     {

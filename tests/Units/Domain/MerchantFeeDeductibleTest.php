@@ -22,7 +22,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class MerchantFeeDeductibleTest extends TestCase
 {
-    public function testPay(): void
+    public function test_pay(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -71,7 +71,7 @@ final class MerchantFeeDeductibleTest extends TestCase
         self::assertSame($buyer->balanceInt, 0);
     }
 
-    public function testGift(): void
+    public function test_gift(): void
     {
         /** @var \Illuminate\Database\Eloquent\Collection<int, Buyer> $buyers */
         $buyers = BuyerFactory::times(2)->create();
@@ -125,7 +125,7 @@ final class MerchantFeeDeductibleTest extends TestCase
         self::assertSame($santa->balanceInt, 0);
     }
 
-    public function testGiftFail(): void
+    public function test_gift_fail(): void
     {
         $this->expectException(InsufficientFunds::class);
         $this->expectExceptionCode(ExceptionInterface::INSUFFICIENT_FUNDS);
@@ -156,7 +156,7 @@ final class MerchantFeeDeductibleTest extends TestCase
         self::assertSame($santa->balanceInt, 0);
     }
 
-    public function testPayWithExactAmount(): void
+    public function test_pay_with_exact_amount(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -184,7 +184,7 @@ final class MerchantFeeDeductibleTest extends TestCase
         self::assertSame($product->balanceInt, $expectedMerchantAmount);
     }
 
-    public function testPayMultiWallet(): void
+    public function test_pay_multi_wallet(): void
     {
         /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
@@ -243,7 +243,7 @@ final class MerchantFeeDeductibleTest extends TestCase
         self::assertSame($product->balanceInt, 0);
     }
 
-    public function testTransfer(): void
+    public function test_transfer(): void
     {
         /** @var \Illuminate\Database\Eloquent\Collection<int, Buyer> $buyers */
         $buyers = BuyerFactory::times(2)->create();

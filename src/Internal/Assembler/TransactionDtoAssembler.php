@@ -16,8 +16,7 @@ final readonly class TransactionDtoAssembler implements TransactionDtoAssemblerI
     public function __construct(
         private IdentifierFactoryServiceInterface $identifierFactoryService,
         private ClockServiceInterface $clockService,
-    ) {
-    }
+    ) {}
 
     public function create(
         Model $payable,

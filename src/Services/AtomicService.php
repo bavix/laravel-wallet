@@ -23,11 +23,10 @@ final readonly class AtomicService implements AtomicServiceInterface
         private StateServiceInterface $stateService,
         private LockServiceInterface $lockService,
         private CastServiceInterface $castService
-    ) {
-    }
+    ) {}
 
     /**
-     * @param non-empty-array<Wallet> $objects
+     * @param  non-empty-array<Wallet>  $objects
      *
      * @throws RecordsNotFoundException
      * @throws TransactionFailedException

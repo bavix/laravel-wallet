@@ -19,7 +19,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class ExtraTest extends TestCase
 {
-    public function testExtraTransferWithdraw(): void
+    public function test_extra_transfer_withdraw(): void
     {
         /** @var Buyer $user1 */
         /** @var Buyer $user2 */
@@ -62,7 +62,7 @@ final class ExtraTest extends TestCase
         ], $transfer->extra);
     }
 
-    public function testExtraTransferUuidFixed(): void
+    public function test_extra_transfer_uuid_fixed(): void
     {
         /** @var Buyer $user1 */
         /** @var Buyer $user2 */
@@ -113,7 +113,7 @@ final class ExtraTest extends TestCase
         ], $transfer->withdraw->meta);
     }
 
-    public function testExtraTransferDeposit(): void
+    public function test_extra_transfer_deposit(): void
     {
         /** @var Buyer $user1 */
         /** @var Buyer $user2 */
@@ -150,7 +150,7 @@ final class ExtraTest extends TestCase
         ], $transfer->withdraw->meta);
     }
 
-    public function testExtraExchangeDeposit(): void
+    public function test_extra_exchange_deposit(): void
     {
         /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
@@ -197,7 +197,7 @@ final class ExtraTest extends TestCase
         ], $transfer->withdraw->meta);
     }
 
-    public function testExtraExchangeUuidFixed(): void
+    public function test_extra_exchange_uuid_fixed(): void
     {
         /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
@@ -258,7 +258,7 @@ final class ExtraTest extends TestCase
         ], $transfer->withdraw->meta);
     }
 
-    public function testExtraExchangeWithdraw(): void
+    public function test_extra_exchange_withdraw(): void
     {
         /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
@@ -304,7 +304,7 @@ final class ExtraTest extends TestCase
         ], $transfer->withdraw->meta);
     }
 
-    public function testPendingBalances(): void
+    public function test_pending_balances(): void
     {
         /** @var Buyer $user1 */
         /** @var Buyer $user2 */

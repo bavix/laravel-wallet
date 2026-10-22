@@ -10,15 +10,14 @@ use Bavix\Wallet\Interfaces\Wallet;
 final readonly class TransferQuery implements TransferQueryInterface
 {
     /**
-     * @param array<mixed>|ExtraDtoInterface|null $meta
+     * @param  array<mixed>|ExtraDtoInterface|null  $meta
      */
     public function __construct(
         private Wallet $from,
         private Wallet $to,
         private float|int|string $amount,
         private array|ExtraDtoInterface|null $meta
-    ) {
-    }
+    ) {}
 
     public function getFrom(): Wallet
     {

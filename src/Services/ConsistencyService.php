@@ -22,8 +22,7 @@ final readonly class ConsistencyService implements ConsistencyServiceInterface
         private TranslatorServiceInterface $translatorService,
         private MathServiceInterface $mathService,
         private CastServiceInterface $castService
-    ) {
-    }
+    ) {}
 
     /**
      * @throws AmountInvalid
@@ -77,7 +76,7 @@ final readonly class ConsistencyService implements ConsistencyServiceInterface
     }
 
     /**
-     * @param TransferLazyDtoInterface[] $objects
+     * @param  TransferLazyDtoInterface[]  $objects
      *
      * @throws BalanceIsEmpty
      * @throws InsufficientFunds

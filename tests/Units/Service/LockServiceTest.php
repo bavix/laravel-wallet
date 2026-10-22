@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
  */
 final class LockServiceTest extends TestCase
 {
-    public function testBlock(): void
+    public function test_block(): void
     {
         $blockKey = __METHOD__;
         $lock = app(LockServiceInterface::class);
@@ -27,7 +27,7 @@ final class LockServiceTest extends TestCase
         self::assertTrue(true);
     }
 
-    public function testLockFailed(): void
+    public function test_lock_failed(): void
     {
         $blockKey = __METHOD__;
         $lock = app(LockServiceInterface::class);
@@ -43,7 +43,7 @@ final class LockServiceTest extends TestCase
         self::assertTrue(true);
     }
 
-    public function testLockDeep(): void
+    public function test_lock_deep(): void
     {
         $blockKey = __METHOD__;
         $lock = app(LockServiceInterface::class);
@@ -65,7 +65,7 @@ final class LockServiceTest extends TestCase
         self::assertFalse($lock->isBlocked($blockKey));
     }
 
-    public function testInTransactionLockable(): void
+    public function test_in_transaction_lockable(): void
     {
         $blockKey1 = __METHOD__.'1';
         $blockKey2 = __METHOD__.'2';

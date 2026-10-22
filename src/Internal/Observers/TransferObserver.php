@@ -17,8 +17,7 @@ final readonly class TransferObserver
 {
     public function __construct(
         private AtomicServiceInterface $atomicService
-    ) {
-    }
+    ) {}
 
     /**
      * Handle the deleting event for the Transfer model.
@@ -26,7 +25,7 @@ final readonly class TransferObserver
      * This method is called when a transfer is being deleted.
      * It safely resets the confirmation of the transfer.
      *
-     * @param Transfer $model The transfer model being deleted.
+     * @param  Transfer  $model  The transfer model being deleted.
      *
      * @throws UnconfirmedInvalid If the transfer is not confirmed.
      * @throws WalletOwnerInvalid If the transfer does not belong to the wallet.

@@ -13,8 +13,7 @@ final readonly class BalanceUpdatedEventAssembler implements BalanceUpdatedEvent
 {
     public function __construct(
         private ClockServiceInterface $clockService
-    ) {
-    }
+    ) {}
 
     public function create(Wallet $wallet): BalanceUpdatedEventInterface
     {

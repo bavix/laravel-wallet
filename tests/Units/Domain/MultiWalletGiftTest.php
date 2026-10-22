@@ -19,7 +19,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class MultiWalletGiftTest extends TestCase
 {
-    public function testGiftWalletToUser(): void
+    public function test_gift_wallet_to_user(): void
     {
         /**
          * @var UserMulti $first

@@ -13,8 +13,7 @@ final readonly class WalletRepository implements WalletRepositoryInterface
 {
     public function __construct(
         private Wallet $wallet
-    ) {
-    }
+    ) {}
 
     public function create(array $attributes): Wallet
     {
@@ -25,8 +24,8 @@ final readonly class WalletRepository implements WalletRepositoryInterface
     }
 
     /**
-     * @param non-empty-array<int, string|float|int> $data
-     * @param array<int, array<string, null|bool|float|int|string>> $columnsByWalletId
+     * @param  non-empty-array<int, string|float|int>  $data
+     * @param  array<int, array<string, null|bool|float|int|string>>  $columnsByWalletId
      */
     public function updateBalances(array $data, array $columnsByWalletId = []): int
     {
@@ -156,7 +155,7 @@ final readonly class WalletRepository implements WalletRepositoryInterface
     }
 
     /**
-     * @param array<int|string> $holderIds
+     * @param  array<int|string>  $holderIds
      * @return Wallet[]
      */
     public function findDefaultAll(string $holderType, array $holderIds): array
@@ -170,7 +169,7 @@ final readonly class WalletRepository implements WalletRepositoryInterface
     }
 
     /**
-     * @param non-empty-array<string, int|string> $attributes
+     * @param  non-empty-array<string, int|string>  $attributes
      */
     private function getBy(array $attributes): Wallet
     {

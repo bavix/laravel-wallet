@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\DB;
  */
 final class GiftTest extends TestCase
 {
-    public function testGift(): void
+    public function test_gift(): void
     {
         /**
          * @var Buyer $first
@@ -53,7 +53,7 @@ final class GiftTest extends TestCase
         self::assertSame(TransferStatus::Gift, $transfer->status);
     }
 
-    public function testRefund(): void
+    public function test_refund(): void
     {
         /**
          * @var Buyer $first
@@ -108,7 +108,7 @@ final class GiftTest extends TestCase
         self::assertSame($second->balanceInt, 0);
     }
 
-    public function testGiftFallbackToTransfersWhenLedgerMissing(): void
+    public function test_gift_fallback_to_transfers_when_ledger_missing(): void
     {
         /** @var Buyer $first */
         $first = BuyerFactory::new()->create();

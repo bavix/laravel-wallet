@@ -29,8 +29,8 @@ interface WalletRepositoryInterface
     /**
      * Update the balances of wallets based on the provided data.
      *
-     * @param non-empty-array<int, string|float|int> $data An array containing wallet IDs as keys and new balances as values.
-     * @param array<int, array<string, null|bool|float|int|string>> $columnsByWalletId
+     * @param  non-empty-array<int, string|float|int>  $data  An array containing wallet IDs as keys and new balances as values.
+     * @param  array<int, array<string, null|bool|float|int|string>>  $columnsByWalletId
      * @return int The number of wallets whose balances were successfully updated.
      */
     public function updateBalances(array $data, array $columnsByWalletId = []): int;
@@ -38,7 +38,7 @@ interface WalletRepositoryInterface
     /**
      * Find a wallet by its ID.
      *
-     * @param int $id The ID of the wallet to find.
+     * @param  int  $id  The ID of the wallet to find.
      * @return Wallet|null The wallet with the given ID if found, otherwise null.
      */
     public function findById(int $id): ?Wallet;
@@ -46,7 +46,7 @@ interface WalletRepositoryInterface
     /**
      * Find a wallet by its UUID.
      *
-     * @param string $uuid The UUID of the wallet to find.
+     * @param  string  $uuid  The UUID of the wallet to find.
      * @return Wallet|null The wallet with the given UUID if found, otherwise null.
      */
     public function findByUuid(string $uuid): ?Wallet;
@@ -54,9 +54,9 @@ interface WalletRepositoryInterface
     /**
      * Find a wallet by its holder type, holder ID, and slug.
      *
-     * @param string $holderType The type of the wallet's holder.
-     * @param int|string $holderId The ID of the wallet's holder.
-     * @param string $slug The wallet's slug.
+     * @param  string  $holderType  The type of the wallet's holder.
+     * @param  int|string  $holderId  The ID of the wallet's holder.
+     * @param  string  $slug  The wallet's slug.
      * @return Wallet|null The wallet with the given holder type, holder ID, and slug if found, otherwise null.
      */
     public function findBySlug(string $holderType, int|string $holderId, string $slug): ?Wallet;
@@ -64,8 +64,8 @@ interface WalletRepositoryInterface
     /**
      * Find all wallets that are default wallets for the given holder type and holder IDs.
      *
-     * @param string $holderType The type of the wallet's holder.
-     * @param array<int|string> $holderIds An array of holder IDs.
+     * @param  string  $holderType  The type of the wallet's holder.
+     * @param  array<int|string>  $holderIds  An array of holder IDs.
      * @return Wallet[] An array of default wallets, indexed by their holder IDs.
      */
     public function findDefaultAll(string $holderType, array $holderIds): array;
@@ -73,7 +73,7 @@ interface WalletRepositoryInterface
     /**
      * Retrieve a wallet by its ID.
      *
-     * @param int $id The ID of the wallet to retrieve.
+     * @param  int  $id  The ID of the wallet to retrieve.
      * @return Wallet The wallet with the given ID.
      *
      * @throws ModelNotFoundException If no wallet with the given ID is found.
@@ -83,7 +83,7 @@ interface WalletRepositoryInterface
     /**
      * Retrieve a wallet by its UUID.
      *
-     * @param string $uuid The UUID of the wallet to retrieve.
+     * @param  string  $uuid  The UUID of the wallet to retrieve.
      * @return Wallet The wallet with the given UUID.
      *
      * @throws ModelNotFoundException If no wallet with the given UUID is found.
@@ -93,9 +93,9 @@ interface WalletRepositoryInterface
     /**
      * Retrieve a wallet by its slug.
      *
-     * @param string $holderType The type of the wallet's holder.
-     * @param int|string $holderId The ID of the wallet's holder.
-     * @param string $slug The wallet's slug.
+     * @param  string  $holderType  The type of the wallet's holder.
+     * @param  int|string  $holderId  The ID of the wallet's holder.
+     * @param  string  $slug  The wallet's slug.
      * @return Wallet The wallet with the given holder type, holder ID, and slug.
      *
      * @throws ModelNotFoundException If no wallet with the given holder type, holder ID, and slug is found.

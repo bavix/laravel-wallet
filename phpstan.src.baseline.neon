@@ -91,25 +91,25 @@ parameters:
 			path: src/Models/Wallet.php
 
 		-
-			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:add\(\) expects float\|int\|non\-empty\-string, int\|string given\.$#'
+			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathService\:\:add\(\) expects float\|int\|non\-empty\-string, int\|string given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Models/Wallet.php
 
 		-
-			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:mul\(\) expects float\|int\|non\-empty\-string, int\|string given\.$#'
+			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathService\:\:mul\(\) expects float\|int\|non\-empty\-string, int\|string given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Models/Wallet.php
 
 		-
-			message: '#^Parameter \#2 \$second of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:add\(\) expects float\|int\|non\-empty\-string, string given\.$#'
+			message: '#^Parameter \#2 \$second of method Bavix\\Wallet\\Internal\\Service\\MathService\:\:add\(\) expects float\|int\|non\-empty\-string, string given\.$#'
 			identifier: argument.type
 			count: 3
 			path: src/Models/Wallet.php
 
 		-
-			message: '#^Parameter \#2 \$second of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:mul\(\) expects float\|int\|non\-empty\-string, string given\.$#'
+			message: '#^Parameter \#2 \$second of method Bavix\\Wallet\\Internal\\Service\\MathService\:\:mul\(\) expects float\|int\|non\-empty\-string, string given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Models/Wallet.php
@@ -193,19 +193,25 @@ parameters:
 			path: src/Services/BookkeeperService.php
 
 		-
-			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:compare\(\) expects float\|int\|non\-empty\-string, float\|int\|string given\.$#'
+			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathService\:\:compare\(\) expects float\|int\|non\-empty\-string, float\|int\|string given\.$#'
 			identifier: argument.type
-			count: 4
+			count: 2
 			path: src/Services/ConsistencyService.php
 
 		-
-			message: '#^Parameter \#2 \$second of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:add\(\) expects float\|int\|non\-empty\-string, string given\.$#'
+			message: '#^Parameter \#1 \$first of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:compare\(\) expects float\|int\|non\-empty\-string, float\|int\|string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Services/ConsistencyService.php
+
+		-
+			message: '#^Parameter \#2 \$second of method Bavix\\Wallet\\Internal\\Service\\MathService\:\:compare\(\) expects float\|int\|non\-empty\-string, float\|int\|string given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Services/ConsistencyService.php
 
 		-
-			message: '#^Parameter \#2 \$second of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:compare\(\) expects float\|int\|non\-empty\-string, float\|int\|string given\.$#'
+			message: '#^Parameter \#2 \$second of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:add\(\) expects float\|int\|non\-empty\-string, string given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Services/ConsistencyService.php
@@ -249,6 +255,12 @@ parameters:
 		-
 			message: '#^Parameter \#1 \$number of method Bavix\\Wallet\\Internal\\Service\\MathServiceInterface\:\:negative\(\) expects float\|int\|non\-empty\-string, float\|int\|string given\.$#'
 			identifier: argument.type
+			count: 1
+			path: src/Services/RegulatorService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between non\-empty\-array\<string, Bavix\\Wallet\\Models\\Wallet\> and array\{\} will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
 			count: 1
 			path: src/Services/RegulatorService.php
 

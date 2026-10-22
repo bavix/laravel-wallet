@@ -9,14 +9,13 @@ use Bavix\Wallet\External\Contracts\OptionDtoInterface;
 final readonly class Option implements OptionDtoInterface
 {
     /**
-     * @param null|array<mixed> $meta
+     * @param  null|array<mixed>  $meta
      */
     public function __construct(
         private ?array $meta,
         private bool $confirmed = true,
         private ?string $uuid = null
-    ) {
-    }
+    ) {}
 
     /**
      * @return null|array<mixed>

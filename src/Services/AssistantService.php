@@ -19,11 +19,10 @@ final readonly class AssistantService implements AssistantServiceInterface
     public function __construct(
         private CastServiceInterface $castService,
         private MathServiceInterface $mathService
-    ) {
-    }
+    ) {}
 
     /**
-     * @param non-empty-array<Wallet> $objects
+     * @param  non-empty-array<Wallet>  $objects
      * @return non-empty-array<int, Wallet>
      */
     public function getWallets(array $objects): array
@@ -38,7 +37,7 @@ final readonly class AssistantService implements AssistantServiceInterface
     }
 
     /**
-     * @param non-empty-array<array-key, TransactionDtoInterface|TransferDtoInterface> $objects
+     * @param  non-empty-array<array-key, TransactionDtoInterface|TransferDtoInterface>  $objects
      * @return non-empty-array<array-key, string>
      */
     public function getUuids(array $objects): array
@@ -47,7 +46,7 @@ final readonly class AssistantService implements AssistantServiceInterface
     }
 
     /**
-     * @param non-empty-array<array-key, TransactionDtoInterface> $transactions
+     * @param  non-empty-array<array-key, TransactionDtoInterface>  $transactions
      * @return array<int, string>
      */
     public function getSums(array $transactions): array

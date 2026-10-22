@@ -13,8 +13,7 @@ final readonly class WalletCreatedEventAssembler implements WalletCreatedEventAs
 {
     public function __construct(
         private ClockServiceInterface $clockService
-    ) {
-    }
+    ) {}
 
     public function create(Wallet $wallet): WalletCreatedEventInterface
     {

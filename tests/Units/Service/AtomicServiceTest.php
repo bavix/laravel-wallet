@@ -14,7 +14,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class AtomicServiceTest extends TestCase
 {
-    public function testBlock(): void
+    public function test_block(): void
     {
         $atomic = app(AtomicServiceInterface::class);
 
@@ -45,7 +45,7 @@ final class AtomicServiceTest extends TestCase
         self::assertSame(500, $user2->balanceInt);
     }
 
-    public function testBlockIter3(): void
+    public function test_block_iter3(): void
     {
         $atomicService = app(AtomicServiceInterface::class);
 
@@ -74,7 +74,7 @@ final class AtomicServiceTest extends TestCase
      * withdraw 3000 units from the wallet within an atomic block. Since there are not enough funds,
      * an exception is thrown. The test then checks that the balance of the wallet has not changed.
      */
-    public function testRollback(): void
+    public function test_rollback(): void
     {
         // Create a new instance of the AtomicService
         $atomic = app(AtomicServiceInterface::class);
@@ -100,7 +100,7 @@ final class AtomicServiceTest extends TestCase
                 $user->deposit(5000);
 
                 // Throw an exception to simulate an error
-                throw new \Exception();
+                throw new \Exception;
             });
 
             // This should not be reached

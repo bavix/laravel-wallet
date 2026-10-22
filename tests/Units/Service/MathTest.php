@@ -15,7 +15,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 final class MathTest extends TestCase
 {
     #[DataProvider('invalidProvider')]
-    public function testAbsInvalid(string $value): void
+    public function test_abs_invalid(string $value): void
     {
         $this->expectException(NumberFormatException::class);
 
@@ -24,7 +24,7 @@ final class MathTest extends TestCase
         $provider->abs($value);
     }
 
-    public function testAbs(): void
+    public function test_abs(): void
     {
         /** @var MathServiceInterface $provider */
         $provider = app(MathServiceInterface::class);
@@ -48,7 +48,7 @@ final class MathTest extends TestCase
         self::assertSame(123.11, (float) $provider->abs('-123.11'));
     }
 
-    public function testCompare(): void
+    public function test_compare(): void
     {
         /** @var MathServiceInterface $provider */
         $provider = app(MathServiceInterface::class);
@@ -69,7 +69,7 @@ final class MathTest extends TestCase
         self::assertSame(1, $provider->compare('2', '1.44'));
     }
 
-    public function testAdd(): void
+    public function test_add(): void
     {
         /** @var MathServiceInterface $provider */
         $provider = app(MathServiceInterface::class);
@@ -99,7 +99,7 @@ final class MathTest extends TestCase
         );
     }
 
-    public function testSub(): void
+    public function test_sub(): void
     {
         /** @var MathServiceInterface $provider */
         $provider = app(MathServiceInterface::class);
@@ -129,7 +129,7 @@ final class MathTest extends TestCase
         );
     }
 
-    public function testDiv(): void
+    public function test_div(): void
     {
         /** @var MathServiceInterface $provider */
         $provider = app(MathServiceInterface::class);
@@ -159,7 +159,7 @@ final class MathTest extends TestCase
         );
     }
 
-    public function testMul(): void
+    public function test_mul(): void
     {
         /** @var MathServiceInterface $provider */
         $provider = app(MathServiceInterface::class);
@@ -189,7 +189,7 @@ final class MathTest extends TestCase
         );
     }
 
-    public function testPow(): void
+    public function test_pow(): void
     {
         /** @var MathServiceInterface $provider */
         $provider = app(MathServiceInterface::class);
@@ -219,7 +219,7 @@ final class MathTest extends TestCase
         );
     }
 
-    public function testCeil(): void
+    public function test_ceil(): void
     {
         /** @var MathServiceInterface $provider */
         $provider = app(MathServiceInterface::class);
@@ -258,7 +258,7 @@ final class MathTest extends TestCase
         );
     }
 
-    public function testFloor(): void
+    public function test_floor(): void
     {
         /** @var MathServiceInterface $provider */
         $provider = app(MathServiceInterface::class);
@@ -297,7 +297,7 @@ final class MathTest extends TestCase
         );
     }
 
-    public function testRound(): void
+    public function test_round(): void
     {
         /** @var MathServiceInterface $provider */
         $provider = app(MathServiceInterface::class);

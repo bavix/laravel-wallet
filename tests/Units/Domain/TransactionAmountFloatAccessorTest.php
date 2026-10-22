@@ -16,7 +16,7 @@ final class TransactionAmountFloatAccessorTest extends TestCase
     /**
      * @see https://github.com/bavix/laravel-wallet/pull/533
      */
-    public function testTransactionAmountFloatAccessor(): void
+    public function test_transaction_amount_float_accessor(): void
     {
         /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();

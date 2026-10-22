@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Traits;
 
-use function array_key_exists;
 use Bavix\Wallet\Internal\Exceptions\ModelNotFoundException;
 use Bavix\Wallet\Models\Wallet as WalletModel;
 use Bavix\Wallet\Services\WalletServiceInterface;
-use function config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
+
+use function array_key_exists;
+use function config;
 
 /**
  * Trait HasWallets To use a trait, you must add HasWallet trait.
@@ -33,7 +34,7 @@ trait HasWallets
     /**
      * Get wallet by slug.
      *
-     * @param string $slug The slug of the wallet.
+     * @param  string  $slug  The slug of the wallet.
      * @return WalletModel|null The wallet with the given slug, or null if not found.
      *
      * This method is a wrapper around the getWalletOrFail method. It catches the ModelNotFoundException
@@ -58,7 +59,7 @@ trait HasWallets
      * If the wallet is not found in the cache, it retrieves it from the database,
      * stores it in the cache, and returns it.
      *
-     * @param string $slug The slug of the wallet.
+     * @param  string  $slug  The slug of the wallet.
      * @return WalletModel The wallet with the given slug.
      *
      * @throws ModelNotFoundException If the wallet with the given slug is not found.
@@ -168,7 +169,7 @@ trait HasWallets
      *
      * This method checks if a wallet with the given slug exists for the current model.
      *
-     * @param string $slug The slug of the wallet.
+     * @param  string  $slug  The slug of the wallet.
      */
     public function hasWallet(string $slug): bool
     {

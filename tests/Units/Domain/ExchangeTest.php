@@ -20,7 +20,7 @@ use Illuminate\Support\Str;
  */
 final class ExchangeTest extends TestCase
 {
-    public function testSimple(): void
+    public function test_simple(): void
     {
         /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
@@ -55,7 +55,7 @@ final class ExchangeTest extends TestCase
         self::assertSame(TransferStatus::Exchange, $transfer->status);
     }
 
-    public function testSafe(): void
+    public function test_safe(): void
     {
         /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
@@ -76,7 +76,7 @@ final class ExchangeTest extends TestCase
         self::assertNull($transfer);
     }
 
-    public function testExchangeClass(): void
+    public function test_exchange_class(): void
     {
         $service = app(ExchangeService::class);
 
@@ -85,7 +85,7 @@ final class ExchangeTest extends TestCase
         self::assertSame('27', $service->convertTo('USD', 'EUR', 27));
     }
 
-    public function testRate(): void
+    public function test_rate(): void
     {
         /** @var UserMulti $user */
         $user = UserMultiFactory::new()->create();
@@ -123,7 +123,7 @@ final class ExchangeTest extends TestCase
         self::assertSame(67610., (float) $rate);
     }
 
-    public function testExchange(): void
+    public function test_exchange(): void
     {
         $rate = app(ExchangeServiceInterface::class)
             ->convertTo('USD', 'RUB', 1);
@@ -136,7 +136,7 @@ final class ExchangeTest extends TestCase
         self::assertSame(1 / 67.61, (float) $rate);
     }
 
-    public function testExchangeUsdToBtc(): void
+    public function test_exchange_usd_to_btc(): void
     {
         app()->bind(ExchangeServiceInterface::class, ExchangeUsdToBtcService::class);
 

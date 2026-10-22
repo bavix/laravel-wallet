@@ -10,12 +10,12 @@ use Bavix\Wallet\Models\Transfer;
 interface PurchaseRepositoryInterface
 {
     /**
-     * @param non-empty-array<int, Transfer> $transfers
+     * @param  non-empty-array<int, Transfer>  $transfers
      */
     public function syncByTransfers(array $transfers): void;
 
     /**
-     * @param non-empty-array<int> $transferIds
+     * @param  non-empty-array<int>  $transferIds
      */
     public function updateStatusByTransferIds(TransferStatus $status, array $transferIds): int;
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bavix\Wallet\Test\Units\Api;
 
-use function app;
 use Bavix\Wallet\Enums\TransactionType;
 use Bavix\Wallet\External\Api\TransactionFloatQuery;
 use Bavix\Wallet\External\Api\TransactionQuery;
@@ -13,12 +12,14 @@ use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\TestCase;
 
+use function app;
+
 /**
  * @internal
  */
 final class TransactionHandlerTest extends TestCase
 {
-    public function testWalletNotExists(): void
+    public function test_wallet_not_exists(): void
     {
         /** @var TransactionQueryHandlerInterface $transactionHandler */
         $transactionHandler = app(TransactionQueryHandlerInterface::class);

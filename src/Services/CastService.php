@@ -21,8 +21,7 @@ final readonly class CastService implements CastServiceInterface
         private WalletCreatedEventAssemblerInterface $walletCreatedEventAssembler,
         private DispatcherServiceInterface $dispatcherService,
         private DatabaseServiceInterface $databaseService
-    ) {
-    }
+    ) {}
 
     /**
      * @throws ExceptionInterface

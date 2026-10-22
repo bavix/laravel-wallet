@@ -10,9 +10,9 @@ namespace Bavix\Wallet\Internal\Service;
 interface TransactionStateServiceInterface
 {
     /**
-     * @param non-empty-string $uuid
-     * @param array<string, string> $before
-     * @param array<string, string> $after
+     * @param  non-empty-string  $uuid
+     * @param  array<string, string>  $before
+     * @param  array<string, string>  $after
      */
     public function push(string $uuid, int|string $walletId, array $before, array $after): void;
 
@@ -34,7 +34,7 @@ interface TransactionStateServiceInterface
     public function snapshot(): array;
 
     /**
-     * @param array<non-empty-string, array{walletId: int, before: array<string, string>, after: array<string, string>}> $snapshot
+     * @param  array<non-empty-string, array{walletId: int, before: array<string, string>, after: array<string, string>}>  $snapshot
      */
     public function rollback(array $snapshot): void;
 

@@ -10,6 +10,7 @@ use Bavix\Wallet\Test\Infra\Factories\BuyerFactory;
 use Bavix\Wallet\Test\Infra\Models\Buyer;
 use Bavix\Wallet\Test\Infra\PackageModels\Wallet;
 use Bavix\Wallet\Test\Infra\TestCase;
+
 use function now;
 
 /**
@@ -17,7 +18,7 @@ use function now;
  */
 final class TransactionsFilterTest extends TestCase
 {
-    public function testMetaAccount(): void
+    public function test_meta_account(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -62,7 +63,7 @@ final class TransactionsFilterTest extends TestCase
         self::assertSame(3, $countByPeriods);
     }
 
-    public function testTransferMeta(): void
+    public function test_transfer_meta(): void
     {
         /**
          * @var Buyer $buyer1
@@ -95,7 +96,7 @@ final class TransactionsFilterTest extends TestCase
         self::assertSame(1, $credits2);
     }
 
-    public function testPagination(): void
+    public function test_pagination(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -129,7 +130,7 @@ final class TransactionsFilterTest extends TestCase
     /**
      * @see https://github.com/bavix/laravel-wallet/issues/501
      */
-    public function testPagination2(): void
+    public function test_pagination2(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -142,8 +143,8 @@ final class TransactionsFilterTest extends TestCase
 
         self::assertSame(21, $buyer->transactions()->count());
 
-        $walletTableName = (new Wallet())->getTable();
-        $transactionTableName = (new Transaction())->getTable();
+        $walletTableName = (new Wallet)->getTable();
+        $transactionTableName = (new Transaction)->getTable();
 
         $query = Transaction::query()
             ->where(function ($query) use ($buyer, $walletTableName, $transactionTableName) {

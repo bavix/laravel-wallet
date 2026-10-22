@@ -19,8 +19,8 @@ interface TaxServiceInterface
      * The amount is then multiplied by the fee percentage and divided by 100.
      * The result is then rounded to the wallet's decimal places and formatted as a string.
      *
-     * @param Wallet $wallet The wallet to calculate the fee for.
-     * @param float|int|string $amount The amount to calculate the fee for.
+     * @param  Wallet  $wallet  The wallet to calculate the fee for.
+     * @param  float|int|string  $amount  The amount to calculate the fee for.
      * @return string The fee, formatted as a string with the same decimal places as the wallet.
      *
      * @see \Bavix\Wallet\Interfaces\Taxable::getFeePercent()

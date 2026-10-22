@@ -15,7 +15,7 @@ use Bavix\Wallet\Test\Infra\TestCase;
  */
 final class StorageTest extends TestCase
 {
-    public function testFlush(): void
+    public function test_flush(): void
     {
         $this->expectException(RecordNotFoundException::class);
         $this->expectExceptionCode(ExceptionInterface::RECORD_NOT_FOUND);
@@ -30,7 +30,7 @@ final class StorageTest extends TestCase
         $storage->get('hello'); // record not found
     }
 
-    public function testDecorator(): void
+    public function test_decorator(): void
     {
         $this->expectException(RecordNotFoundException::class);
         $this->expectExceptionCode(ExceptionInterface::RECORD_NOT_FOUND);
@@ -45,7 +45,7 @@ final class StorageTest extends TestCase
         $storage->get('hello'); // record not found
     }
 
-    public function testIncreaseDecorator(): void
+    public function test_increase_decorator(): void
     {
         $storage = app(StorageServiceLockDecorator::class);
 

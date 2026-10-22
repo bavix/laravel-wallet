@@ -51,7 +51,7 @@ final class TransactionStateService implements TransactionStateServiceInterface
     }
 
     /**
-     * @param array<non-empty-string, array{walletId: int|string, before: array<string, string>, after: array<string, string>}> $snapshot
+     * @param  array<non-empty-string, array{walletId: int|string, before: array<string, string>, after: array<string, string>}>  $snapshot
      */
     public function rollback(array $snapshot): void
     {

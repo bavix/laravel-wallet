@@ -19,15 +19,16 @@ use Bavix\Wallet\Test\Infra\Models\Item;
 use Bavix\Wallet\Test\Infra\Models\ItemMeta;
 use Bavix\Wallet\Test\Infra\PackageModels\Transaction;
 use Bavix\Wallet\Test\Infra\TestCase;
-use function count;
 use Illuminate\Database\Eloquent\Collection;
+
+use function count;
 
 /**
  * @internal
  */
 final class CartTest extends TestCase
 {
-    public function testCartClone(): void
+    public function test_cart_clone(): void
     {
         /** @var ItemMeta $product */
         $product = ItemMetaFactory::new()->create([
@@ -57,7 +58,7 @@ final class CartTest extends TestCase
         ], $cartWithMeta->getExtra());
     }
 
-    public function testCartMeta(): void
+    public function test_cart_meta(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -91,14 +92,14 @@ final class CartTest extends TestCase
         }
     }
 
-    public function testCartGetBasketDtoCartEmpty(): void
+    public function test_cart_get_basket_dto_cart_empty(): void
     {
         $this->expectException(CartEmptyException::class);
         $this->expectExceptionCode(ExceptionInterface::CART_EMPTY);
         app(Cart::class)->getBasketDto();
     }
 
-    public function testCartMetaItemNoMeta(): void
+    public function test_cart_meta_item_no_meta(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -131,7 +132,7 @@ final class CartTest extends TestCase
         }
     }
 
-    public function testPay(): void
+    public function test_pay(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -172,7 +173,7 @@ final class CartTest extends TestCase
         }
     }
 
-    public function testCartQuantity(): void
+    public function test_cart_quantity(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -207,7 +208,7 @@ final class CartTest extends TestCase
         }
     }
 
-    public function testModelNotFoundException(): void
+    public function test_model_not_found_exception(): void
     {
         $this->expectException(ModelNotFoundException::class);
         $this->expectExceptionCode(ExceptionInterface::MODEL_NOT_FOUND);
@@ -244,7 +245,7 @@ final class CartTest extends TestCase
         $buyer->refundCart($refundCart);
     }
 
-    public function testBoughtGoods(): void
+    public function test_bought_goods(): void
     {
         /** @var Buyer $buyer */
         $buyer = BuyerFactory::new()->create();
@@ -277,7 +278,7 @@ final class CartTest extends TestCase
     /**
      * @see https://github.com/bavix/laravel-wallet/issues/279
      */
-    public function testWithdrawal(): void
+    public function test_withdrawal(): void
     {
         $transactionLevel = Buyer::query()->getConnection()->transactionLevel();
         self::assertSame(0, $transactionLevel);

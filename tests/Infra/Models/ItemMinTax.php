@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method int getKey()
  */
 #[\Illuminate\Database\Eloquent\Attributes\Fillable(['name', 'quantity', 'price'])]
-final class ItemMinTax extends Model implements ProductLimitedInterface, MinimalTaxable
+final class ItemMinTax extends Model implements MinimalTaxable, ProductLimitedInterface
 {
     use HasWallet;
 

@@ -14,8 +14,9 @@ use Bavix\Wallet\Internal\Exceptions\RecordNotFoundException;
 use Bavix\Wallet\Internal\Exceptions\TransactionFailedException;
 use Bavix\Wallet\Models\Transfer;
 use Bavix\Wallet\Objects\Cart;
-use function current;
 use Illuminate\Database\RecordsNotFoundException;
+
+use function current;
 
 /**
  * @psalm-require-extends \Illuminate\Database\Eloquent\Model
@@ -29,7 +30,7 @@ trait CanPay
     /**
      * Perform a free payment for a product.
      *
-     * @param ProductInterface $product The product for which the payment should be made.
+     * @param  ProductInterface  $product  The product for which the payment should be made.
      * @return Transfer The Transfer instance representing the successfully paid item.
      *
      * @throws ProductEnded If the product is ended.
@@ -59,8 +60,8 @@ trait CanPay
      * the method returns the first Transfer instance from the result of the payment.
      * If the payment fails, the method returns null.
      *
-     * @param ProductInterface $product The product for which the payment should be made.
-     * @param bool $force Whether to force the purchase. Defaults to false.
+     * @param  ProductInterface  $product  The product for which the payment should be made.
+     * @param  bool  $force  Whether to force the purchase. Defaults to false.
      * @return Transfer|null The first Transfer instance representing the successfully paid item, or null if the payment failed.
      *
      * @throws ProductEnded If the product is ended.
@@ -92,8 +93,8 @@ trait CanPay
      * an empty balance, it throws an exception. If the payment fails due to a reason other than the
      * above, it throws a more specific exception.
      *
-     * @param ProductInterface $product The product to pay for.
-     * @param bool $force [optional] Whether to force the payment. Defaults to false.
+     * @param  ProductInterface  $product  The product to pay for.
+     * @param  bool  $force  [optional] Whether to force the payment. Defaults to false.
      * @return Transfer The transfer object representing the payment.
      *
      * @throws ProductEnded If the product is ended.
@@ -122,7 +123,7 @@ trait CanPay
      * empty balance, it throws an exception. If the payment fails due to a reason
      * other than the above, it throws a more specific exception.
      *
-     * @param ProductInterface $product The product for which the payment should be made.
+     * @param  ProductInterface  $product  The product for which the payment should be made.
      * @return Transfer The transfer object representing the successfully paid item.
      *
      * @throws ProductEnded If the product is ended.
@@ -149,9 +150,9 @@ trait CanPay
      * it returns false. If the refund fails due to a reason other than the above, it throws
      * a more specific exception.
      *
-     * @param ProductInterface $product The product for which the refund should be made.
-     * @param bool $force Whether to force the refund even if the balance is empty.
-     * @param bool $gifts Whether to refund gifts as well.
+     * @param  ProductInterface  $product  The product for which the refund should be made.
+     * @param  bool  $force  Whether to force the refund even if the balance is empty.
+     * @param  bool  $gifts  Whether to refund gifts as well.
      * @return bool True if the refund is successful, false otherwise.
      *
      * @throws RecordNotFoundException If the record is not found.
@@ -178,9 +179,9 @@ trait CanPay
      * it returns false. If the refund fails due to a reason other than the above, it throws
      * a more specific exception.
      *
-     * @param ProductInterface $product The product for which the refund should be made.
-     * @param bool $force Whether to force the refund even if the balance is empty.
-     * @param bool $gifts Whether to refund gifts as well.
+     * @param  ProductInterface  $product  The product for which the refund should be made.
+     * @param  bool  $force  Whether to force the refund even if the balance is empty.
+     * @param  bool  $gifts  Whether to refund gifts as well.
      * @return bool True if the refund is successful, false otherwise.
      *
      * @throws BalanceIsEmpty If the balance of the customer is empty.
@@ -209,8 +210,8 @@ trait CanPay
      * it throws an exception. If the refund fails due to a reason other than the above, it throws
      * a more specific exception.
      *
-     * @param ProductInterface $product The product for which the refund should be made.
-     * @param bool $gifts Whether to refund gifts as well.
+     * @param  ProductInterface  $product  The product for which the refund should be made.
+     * @param  bool  $gifts  Whether to refund gifts as well.
      * @return bool True if the refund is successful, false otherwise.
      *
      * @throws BalanceIsEmpty If the balance of the customer is empty.
@@ -237,8 +238,8 @@ trait CanPay
      * This method safely attempts to refund the given gift product. If the refund is successful,
      * it returns true. If the refund fails due to insufficient funds or empty balance, it returns false.
      *
-     * @param ProductInterface $product The gift product to be refunded.
-     * @param bool $force Whether to force the refund even if the balance is empty.
+     * @param  ProductInterface  $product  The gift product to be refunded.
+     * @param  bool  $force  Whether to force the refund even if the balance is empty.
      * @return bool True if the refund is successful, false otherwise.
      *
      * @throws BalanceIsEmpty If the balance of the customer is empty.
@@ -265,8 +266,8 @@ trait CanPay
      * This method attempts to refund the given gift product. If the refund is successful,
      * it returns true. If the refund fails due to insufficient funds or empty balance, it returns false.
      *
-     * @param ProductInterface $product The gift product to be refunded.
-     * @param bool $force Whether to force the refund even if the balance is empty.
+     * @param  ProductInterface  $product  The gift product to be refunded.
+     * @param  bool  $force  Whether to force the refund even if the balance is empty.
      * @return bool True if the refund is successful, false otherwise.
      *
      * @throws BalanceIsEmpty If the balance of the customer is empty.
@@ -297,11 +298,11 @@ trait CanPay
      * refund mechanisms fail, there is a fallback option to attempt the refund, thus providing a robust solution
      * for handling refunds in exceptional circumstances.
      *
-     * @param ProductInterface $product The gift product to be refunded.
+     * @param  ProductInterface  $product  The gift product to be refunded.
      * @return bool True if the refund is successful, false otherwise.
      *
      * @throws BalanceIsEmpty Exception thrown if the customer's balance is empty, indicating
-     *                         that there are no funds available for a refund.
+     *                        that there are no funds available for a refund.
      * @throws InsufficientFunds Exception thrown if the wallet does not have enough funds to cover the refund.
      * @throws RecordNotFoundException Exception thrown if the specified gift product cannot be located.
      * @throws RecordsNotFoundException Exception thrown if no transfer records can be found for the gift product,

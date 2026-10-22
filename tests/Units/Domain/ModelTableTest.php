@@ -17,14 +17,14 @@ use Illuminate\Support\Facades\DB;
  */
 final class ModelTableTest extends TestCase
 {
-    public function testWalletTableName(): void
+    public function test_wallet_table_name(): void
     {
         /** @var User $user */
         $user = UserFactory::new()->create();
         self::assertSame('wallet', $user->wallet->getTable());
     }
 
-    public function testTransactionTableName(): void
+    public function test_transaction_table_name(): void
     {
         /** @var User $user */
         $user = UserFactory::new()->create();
@@ -32,7 +32,7 @@ final class ModelTableTest extends TestCase
         self::assertSame('transaction', $transaction->getTable());
     }
 
-    public function testTransferTableName(): void
+    public function test_transfer_table_name(): void
     {
         /**
          * @var User $user1
@@ -49,12 +49,12 @@ final class ModelTableTest extends TestCase
         self::assertSame(1000, $manager->balanceInt);
     }
 
-    public function testPurchaseTableName(): void
+    public function test_purchase_table_name(): void
     {
         self::assertSame('purchase', app(Purchase::class)->getTable());
     }
 
-    public function testRegularTransferDoesNotWritePurchaseLedger(): void
+    public function test_regular_transfer_does_not_write_purchase_ledger(): void
     {
         /** @var User $from */
         $from = UserFactory::new()->create();
@@ -69,7 +69,7 @@ final class ModelTableTest extends TestCase
         self::assertFalse(DB::table($purchaseTable)->where('transfer_id', $transfer->getKey())->exists());
     }
 
-    public function testPurchaseModelCastsAndRelations(): void
+    public function test_purchase_model_casts_and_relations(): void
     {
         /** @var User $buyer */
         $buyer = UserFactory::new()->create();
