@@ -1,0 +1,2 @@
+providers:
+  - "Bavix\\Wallet\\WalletServiceProvider"

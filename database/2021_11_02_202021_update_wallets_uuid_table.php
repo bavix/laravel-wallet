@@ -42,7 +42,7 @@ return new class() extends Migration
     {
         Schema::table($this->table(), function (Blueprint $table) {
             if (Schema::hasColumn($this->table(), 'uuid')) {
-                $table->dropIndex('wallets_uuid_unique');
+                $table->dropUnique(['uuid']);
                 $table->dropColumn('uuid');
             }
         });

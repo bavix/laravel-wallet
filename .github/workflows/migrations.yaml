@@ -1,0 +1,140 @@
+name: migrations
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  migrations:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - database: sqlite
+            port: 0
+          - database: pgsql
+            port: 5432
+          - database: mysql
+            port: 3306
+          - database: mariadb
+            port: 3307
+
+    services:
+      pgsql:
+        image: postgres:18.3-alpine
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: wallet
+          POSTGRES_DB: wallet
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      mysql:
+        image: mysql:9.6
+        env:
+          MYSQL_ROOT_PASSWORD: wallet
+          MYSQL_DATABASE: wallet
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
+        ports:
+          - 3306:3306
+
+      mariadb:
+        image: mariadb:12.2
+        env:
+          MYSQL_ROOT_PASSWORD: wallet
+          MYSQL_DATABASE: wallet
+        options: >-
+          --health-cmd="mariadb-admin ping -h 127.0.0.1 -uroot -pwallet"
+          --health-start-period 30s
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+        ports:
+          - 3307:3306
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup cache environment
+        id: extcache
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: 8.3
+          extensions: mbstring, pgsql, mysql, sqlite, bcmath
+          key: ${{ runner.os }}-migrations-php-extensions-8.3-${{ hashFiles('**/composer.lock') }}
+
+      - name: Cache extensions
+        uses: actions/cache@v6
+        with:
+          path: ${{ steps.extcache.outputs.dir }}
+          key: ${{ steps.extcache.outputs.key }}
+          restore-keys: ${{ steps.extcache.outputs.key }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: mbstring, pgsql, mysql, sqlite, bcmath
+        env:
+          runner: self-hosted
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Get Composer cache directory
+        id: composer-cache-dir
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer packages
+        uses: actions/cache@v6
+        with:
+          path: vendor
+          key: ${{ runner.os }}-migrations-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Cache Composer cache
+        uses: actions/cache@v6
+        with:
+          path: ${{ steps.composer-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-migrations-composer-cache-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-migrations-composer-cache-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run migrations
+        env:
+          DB_CONNECTION: ${{ matrix.database }}
+          DB_HOST: 127.0.0.1
+          DB_PORT: ${{ matrix.port }}
+          DB_DATABASE: ${{ matrix.database == 'sqlite' && format('{0}/build/migrations.sqlite', github.workspace) || 'wallet' }}
+          DB_USERNAME: root
+          DB_PASSWORD: wallet
+        run: |
+          set -euo pipefail
+
+          mkdir -p build
+          touch build/migrations.sqlite
+
+          vendor/bin/testbench migrate --force
+          vendor/bin/testbench migrate:refresh --force
+          vendor/bin/testbench migrate:rollback --force
+          vendor/bin/testbench migrate --force
+          vendor/bin/testbench migrate:fresh --force
