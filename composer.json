@@ -33,7 +33,7 @@
     "require-dev": {
         "deptrac/deptrac": "^4.2",
         "driftingly/rector-laravel": "2.7.3",
-        "ergebnis/phpstan-rules": "2.18.0",
+        "ergebnis/phpstan-rules": "2.19.0",
         "infection/infection": "~0.27",
         "larastan/larastan": "3.15.0",
         "laravel/cashier": "^16.0",
